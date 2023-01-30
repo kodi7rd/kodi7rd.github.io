@@ -1,0 +1,55 @@
+<settings version="2">
+    <setting id="Email" default="true" />
+    <setting id="Password" default="true" />
+    <setting id="OSuser2" default="true" />
+    <setting id="OSpass2" default="true" />
+    <setting id="KT_email" default="true" />
+    <setting id="KT_enc_pass" default="true" />
+    <setting id="dummy_setting" default="true" />
+    <setting id="ktcode" default="true" />
+    <setting id="local_files" default="true">false</setting>
+    <setting id="subscenter">true</setting>
+    <setting id="wizset">true</setting>
+    <setting id="ktuvitset">true</setting>
+    <setting id="yify">true</setting>
+    <setting id="opensubtitle">true</setting>
+    <setting id="subscene">true</setting>
+    <setting id="aa_subs">true</setting>
+    <setting id="storage_en" default="true">false</setting>
+    <setting id="storage" default="true" />
+    <setting id="English">true</setting>
+    <setting id="arab" default="true">false</setting>
+    <setting id="spanish" default="true">false</setting>
+    <setting id="other_lang" default="true" />
+    <setting id="all_lang" default="true">false</setting>
+    <setting id="auto_translate" default="true">false</setting>
+    <setting id="popup">true</setting>
+    <setting id="nextsub" default="true">no</setting>
+    <setting id="json_cache" default="true">false</setting>
+    <setting id="history_log" default="true">false</setting>
+    <setting id="sort_subs">true</setting>
+    <setting id="autosub" default="true">false</setting>
+    <setting id="force">false</setting>
+    <setting id="pause" default="true">false</setting>
+    <setting id="ExcludeTime">1</setting>
+    <setting id="dummy_setting2" default="true" />
+    <setting id="ExcludeAddosOption" default="true">false</setting>
+    <setting id="ExcludeAddos" default="true" />
+    <setting id="ExcludeAddosOption2" default="true">false</setting>
+    <setting id="ExcludeAddos2" default="true" />
+    <setting id="ExcludeAddosOption3" default="true">false</setting>
+    <setting id="ExcludeAddos3" default="true" />
+    <setting id="ExcludeAddosOption4" default="true">false</setting>
+    <setting id="ExcludeAddos4" default="true" />
+    <setting id="ExcludeAddosOption5" default="true">false</setting>
+    <setting id="ExcludeAddos5" default="true" />
+    <setting id="ExcludeAddosOption6" default="true">false</setting>
+    <setting id="ExcludeAddos6" default="true" />
+    <setting id="Debug" default="true">false</setting>
+    <setting id="enable_font" default="true">false</setting>
+    <setting id="background" default="true">false</setting>
+    <setting id="bold">true</setting>
+    <setting id="size">27</setting>
+    <setting id="color" default="true">0</setting>
+    <setting id="background_level" default="true">0</setting>
+</settings>
