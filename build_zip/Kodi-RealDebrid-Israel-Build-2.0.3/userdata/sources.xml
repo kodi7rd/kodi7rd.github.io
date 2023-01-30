@@ -15,7 +15,7 @@
         <default pathversion="1"></default>
         <source>
             <name>repository.KodiRealDebridIsrael</name>
-            <path pathversion="1">https://kodi7rd.github.io/</path>
+            <path pathversion="1">https://kodi7rd.github.io/repository</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
