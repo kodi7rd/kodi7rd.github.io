@@ -18,7 +18,7 @@ ADDONTITLE = '[COLOR blue]Kodi + Real Debrid Israel Build Wizard[/COLOR]'
 BUILDERNAME = '[COLOR blue]Kodi + Real Debrid Israel[/COLOR]'
 EXCLUDES = [ADDON_ID]
 # Text File with build info in it. Please read https://github.com/a4k-openproject/plugin.program.openwizard/wiki/Installing-Builds
-BUILDFILE = 'https://kodirealdebridisrael.github.io/wizard/assets/build.txt'
+BUILDFILE = 'https://kodi7rd.github.io/wizard/assets/build.txt'
 # How often you would like it to check for build updates in days
 # 0 being every startup of kodi
 UPDATECHECK = 0
@@ -112,7 +112,7 @@ REPOZIPURL = 'https://'
 # Enable Notification screen Yes or No
 ENABLE = 'Yes'
 # Url to notification file
-NOTIFICATION = 'https://kodirealdebridisrael.github.io/wizard/assets/notify.txt'
+NOTIFICATION = 'https://kodi7rd.github.io/wizard/assets/notify.txt'
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Text'
 # Font size of header

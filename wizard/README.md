@@ -7,10 +7,10 @@ http://bit.ly/kodi7rd
 # For Build Wizard:
 Kodi File Manager > Add Source:
 
-https://kodirealdebridisrael.github.io/wizard/
+https://kodi7rd.github.io/wizard/
 
 # Kodi + Real Debrid Israel Repository:
 Kodi File Manager > Add Source:
 
-https://kodirealdebridisrael.github.io/
+https://kodi7rd.github.io/
 

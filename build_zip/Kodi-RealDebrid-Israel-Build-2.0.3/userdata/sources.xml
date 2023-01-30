@@ -15,12 +15,12 @@
         <default pathversion="1"></default>
         <source>
             <name>repository.KodiRealDebridIsrael</name>
-            <path pathversion="1">https://kodirealdebridisrael.github.io/</path>
+            <path pathversion="1">https://kodi7rd.github.io/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>repository.KodiRealDebridIsrael-WIZARD</name>
-            <path pathversion="1">https://kodirealdebridisrael.github.io/wizard/</path>
+            <name>repository.KodiRealDebridIsrael-Wizard</name>
+            <path pathversion="1">https://kodi7rd.github.io/wizard/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
