@@ -8,13 +8,13 @@
     <setting id="dummy_setting" default="true" />
     <setting id="ktcode" default="true" />
     <setting id="local_files" default="true">false</setting>
-    <setting id="subscenter">true</setting>
+    <setting id="subscenter">false</setting>
     <setting id="wizset">true</setting>
     <setting id="ktuvitset">true</setting>
-    <setting id="yify">true</setting>
+    <setting id="yify">false</setting>
     <setting id="opensubtitle">true</setting>
-    <setting id="subscene">true</setting>
-    <setting id="aa_subs">true</setting>
+    <setting id="subscene">false</setting>
+    <setting id="aa_subs">false</setting>
     <setting id="storage_en" default="true">false</setting>
     <setting id="storage" default="true" />
     <setting id="English">true</setting>
