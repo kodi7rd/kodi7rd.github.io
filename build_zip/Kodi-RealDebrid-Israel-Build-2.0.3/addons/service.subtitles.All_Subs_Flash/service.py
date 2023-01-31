@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys,logging,unicodedata,urllib,zlib,json,os,xbmcvfs,zipfile,re,xbmcgui,xbmcaddon,contextlib,xbmc,hashlib,shutil,threading
+import codecs
 
 import linecache
 import PTN,base64
@@ -2172,7 +2173,9 @@ def translate_subs(input_file,output_file,mode_subtitle):
              
              f_sub_pre=f_sub_pre+translation
              xx+=1
-    f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
+    # Fix Kodi 20 Google Translate PC Bug:
+    f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n').replace('\n','')
+    #Original from Kodi 19 addon: f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
     
    
     if KODI_VERSION>18:
