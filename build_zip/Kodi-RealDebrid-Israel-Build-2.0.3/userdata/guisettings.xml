@@ -238,7 +238,7 @@
     <setting id="pvrparental.pin" default="true" />
     <setting id="pvrparental.duration" default="true">300</setting>
     <setting id="pvrtimers.hidedisabledtimers" default="true">false</setting>
-    <setting id="services.devicename" default="true">Kodi</setting>
+    <setting id="services.devicename" default="true">KodiRD-IL</setting>
     <setting id="services.zeroconf" default="true">false</setting>
     <setting id="services.deviceuuid">5a34510b-a951-474b-a859-3d82f27c97aa</setting>
     <setting id="services.webserver">true</setting>
