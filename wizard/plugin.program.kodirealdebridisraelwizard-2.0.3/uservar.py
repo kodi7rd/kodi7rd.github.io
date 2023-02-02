@@ -42,18 +42,18 @@ ADVANCEDFILE = 'http://'
 # Example:  ICONMAINT     = os.path.join(ART, 'mainticon.png')
 #           ICONSETTINGS  = 'https://www.yourhost.com/repo/wizard/settings.png'
 # Leave as http:// for default icon
-ICONBUILDS = os.path.join(CUSTOM_ART, 'builds.jpg')
-ICONMAINT = os.path.join(CUSTOM_ART, 'maintenance.jpg')
-ICONSPEED = os.path.join(CUSTOM_ART, 'speed.jpg')
-ICONAPK = os.path.join(CUSTOM_ART, 'apkinstaller.jpg')
-ICONADDONS = os.path.join(CUSTOM_ART, 'addoninstaller.jpg')
-ICONYOUTUBE = os.path.join(CUSTOM_ART, 'youtube.jpg')
-ICONSAVE = os.path.join(CUSTOM_ART, 'savedata.jpg')
-ICONTRAKT = os.path.join(CUSTOM_ART, 'keeptrakt.jpg')
-ICONREAL = os.path.join(CUSTOM_ART, 'keepdebrid.jpg')
-ICONLOGIN = os.path.join(CUSTOM_ART, 'keeplogin.jpg')
-ICONCONTACT = os.path.join(CUSTOM_ART, 'information.jpg')
-ICONSETTINGS = os.path.join(CUSTOM_ART, 'settings.jpg')
+ICONBUILDS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONMAINT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONSPEED = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONAPK = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONADDONS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONYOUTUBE = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONSAVE = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONTRAKT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONREAL = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONLOGIN = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONCONTACT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONSETTINGS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
 # Hide the section separators 'Yes' or 'No'
 HIDESPACERS = 'No'
 # Character used in separator
