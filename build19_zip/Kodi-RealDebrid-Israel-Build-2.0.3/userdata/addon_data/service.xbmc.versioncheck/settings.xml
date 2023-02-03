@@ -1,6 +1,0 @@
-<settings version="2">
-    <setting id="versioncheck_enable" default="true">true</setting>
-    <setting id="upgrade_system" default="true">false</setting>
-    <setting id="upgrade_apt" default="true">false</setting>
-    <setting id="lastnotified_stable" default="true">19.5 stable</setting>
-</settings>
