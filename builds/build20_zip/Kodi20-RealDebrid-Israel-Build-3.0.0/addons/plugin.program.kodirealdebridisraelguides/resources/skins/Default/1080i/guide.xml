@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <defaultcontrol>202</defaultcontrol>
+    <coordinates>
+        <left>310</left>
+        <top>100</top>
+    </coordinates>
+    
+    <controls>
+        <control type="group">
+            <control type="image">
+                <left>0</left>
+                <top>0</top>
+                <width>1300</width>
+                <height>900</height>
+				<texture border="2">Background/ContentPanel.png</texture>
+            </control>
+            <control type="label" id="102">
+                <description>title label</description>
+                <posx>-200</posx>
+                <posy>20</posy>
+                <width>1660</width>
+                <height>60</height>
+                <font>font14</font>
+                <align>center</align>
+                <aligny>center</aligny>
+            </control>
+            <control type="textbox" id="103">
+                <description>guide text label</description>
+                <left>30</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>650</height>
+                <font>font14</font>
+                <align>right</align>
+                <aligny>top</aligny>
+                <pagecontrol>104</pagecontrol>
+            </control>
+        </control>
+            <control type="scrollbar" id="104">
+                <left>1275</left>
+                <top>110</top>
+                <width>30</width>
+                <height>700</height>
+                <subtype>text</subtype>
+                <visible>true</visible>
+                <texturesliderbackground>Button/scrollbar-V-background.png</texturesliderbackground>
+                <texturesliderbar>Button/scrollbar-V.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="FF12B2E7">Button/scrollbar-V-focus.png</texturesliderbarfocus>
+                <orientation>vertical</orientation>
+                <showonepage>true</showonepage>
+                <onup>202</onup>
+                <ondown>202</ondown>
+                <onleft>202</onleft>
+                <onright>202</onright>
+            </control>
+        <control type="group">
+            <control type="button" id="202">
+                <left>350</left>
+                <top>775</top>
+                <width>310</width>
+                <height>60</height>
+                <font>font12</font>
+                <textcolor>FFF0F0F0</textcolor>
+                <textoffsetx>20</textoffsetx>
+                <label>סגור</label>
+                <align>center</align>
+                <aligny>center</aligny>
+                <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
+                <texturenofocus>Button/testbuttonnf.png</texturenofocus>
+                <onleft>104</onleft>
+                <onright>104</onright>
+                <onup>104</onup>
+                <ondown>104</ondown>
+            </control>
+        </control>
+    </controls>
+</window>
