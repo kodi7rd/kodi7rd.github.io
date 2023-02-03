@@ -4,10 +4,6 @@
     <setting id="gamesgeneral.enableautosave" default="true">true</setting>
     <setting id="gamesgeneral.enablerewind" default="true">true</setting>
     <setting id="gamesgeneral.rewindtime" default="true">60</setting>
-    <setting id="gamesachievements.username" default="true" />
-    <setting id="gamesachievements.password" default="true" />
-    <setting id="gamesachievements.token" default="true" />
-    <setting id="gamesachievements.loggedin" default="true">false</setting>
     <setting id="lookandfeel.skin" default="true">skin.estuary</setting>
     <setting id="lookandfeel.skintheme" default="true">SKINDEFAULT</setting>
     <setting id="lookandfeel.skincolors" default="true">SKINDEFAULT</setting>
@@ -39,8 +35,6 @@
     <setting id="lookandfeel.startupwindow" default="true">10000</setting>
     <setting id="window.width" default="true">720</setting>
     <setting id="window.height" default="true">480</setting>
-    <setting id="window.top" default="true">0</setting>
-    <setting id="window.left" default="true">0</setting>
     <setting id="videolibrary.updateonstartup" default="true">false</setting>
     <setting id="videolibrary.backgroundupdate" default="true">false</setting>
     <setting id="musiclibrary.updateonstartup" default="true">false</setting>
@@ -163,31 +157,18 @@
     <setting id="locale.audiolanguage">English</setting>
     <setting id="videoplayer.preferdefaultflag">false</setting>
     <setting id="locale.subtitlelanguage">Hebrew</setting>
-    <setting id="accessibility.audiovisual" default="true">false</setting>
-    <setting id="accessibility.audiohearing" default="true">false</setting>
-    <setting id="accessibility.subhearing" default="true">false</setting>
-    <setting id="subtitles.align" default="true">2</setting>
-    <setting id="subtitles.fontname" default="true">DEFAULT</setting>
-    <setting id="subtitles.fontsize">62</setting>
-    <setting id="subtitles.style">1</setting>
-    <setting id="subtitles.colorpick" default="true">FFFFFFFF</setting>
-    <setting id="subtitles.opacity" default="true">100</setting>
-    <setting id="subtitles.bordersize">41</setting>
-    <setting id="subtitles.bordercolorpick" default="true">FF000000</setting>
-    <setting id="subtitles.blur" default="true">0</setting>
-    <setting id="subtitles.backgroundtype" default="true">0</setting>
-    <setting id="subtitles.bgcolorpick" default="true">FF000000</setting>
-    <setting id="subtitles.bgopacity" default="true">80</setting>
-    <setting id="subtitles.shadowcolor" default="true">FF000000</setting>
-    <setting id="subtitles.shadowopacity" default="true">100</setting>
-    <setting id="subtitles.shadowsize" default="true">15</setting>
-    <setting id="subtitles.marginvertical">3.2</setting>
-    <setting id="subtitles.overridefonts" default="true">false</setting>
-    <setting id="subtitles.overridestyles" default="true">0</setting>
-    <setting id="subtitles.stereoscopicdepth" default="true">0</setting>
-    <setting id="subtitles.charset">CP1255</setting>
     <setting id="subtitles.parsecaptions" default="true">false</setting>
-    <setting id="subtitles.captionsalign" default="true">0</setting>
+    <setting id="subtitles.align" default="true">0</setting>
+    <setting id="subtitles.stereoscopicdepth" default="true">0</setting>
+    <setting id="subtitles.font" default="true">arial.ttf</setting>
+    <setting id="subtitles.charset">CP1255</setting>
+    <setting id="subtitles.height">42</setting>
+    <setting id="subtitles.style" default="true">1</setting>
+    <setting id="subtitles.color" default="true">1</setting>
+    <setting id="subtitles.opacity" default="true">100</setting>
+    <setting id="subtitles.bgcolor" default="true">0</setting>
+    <setting id="subtitles.bgopacity" default="true">0</setting>
+    <setting id="subtitles.overrideassfonts" default="true">false</setting>
     <setting id="subtitles.languages">Hebrew</setting>
     <setting id="subtitles.storagemode" default="true">0</setting>
     <setting id="subtitles.custompath" default="true" />
@@ -195,11 +176,17 @@
     <setting id="subtitles.downloadfirst">true</setting>
     <setting id="subtitles.tv">service.subtitles.All_Subs_Flash</setting>
     <setting id="subtitles.movie">service.subtitles.All_Subs_Flash</setting>
+    <setting id="accessibility.audiovisual" default="true">false</setting>
+    <setting id="accessibility.audiohearing" default="true">false</setting>
+    <setting id="accessibility.subhearing" default="true">false</setting>
+    <setting id="pvrmanager.preselectplayingchannel" default="true">false</setting>
     <setting id="pvrmanager.syncchannelgroups" default="true">true</setting>
     <setting id="pvrmanager.backendchannelorder" default="true">true</setting>
     <setting id="pvrmanager.usebackendchannelnumbersalways" default="true">false</setting>
     <setting id="pvrmanager.usebackendchannelnumbers" default="true">false</setting>
     <setting id="pvrmanager.startgroupchannelnumbersfromone" default="true">false</setting>
+    <setting id="pvrmenu.displaychannelinfo" default="true">5</setting>
+    <setting id="pvrmenu.closechannelosdonswitch" default="true">true</setting>
     <setting id="pvrmenu.iconpath" default="true" />
     <setting id="epg.pastdaystodisplay" default="true">1</setting>
     <setting id="epg.futuredaystodisplay" default="true">3</setting>
@@ -208,13 +195,10 @@
     <setting id="epg.epgupdate" default="true">120</setting>
     <setting id="epg.preventupdateswhileplayingtv" default="true">false</setting>
     <setting id="pvrplayback.switchtofullscreenchanneltypes" default="true">3</setting>
-    <setting id="pvrmanager.preselectplayingchannel" default="true">false</setting>
-    <setting id="pvrmenu.displaychannelinfo" default="true">5</setting>
-    <setting id="pvrmenu.closechannelosdonswitch" default="true">true</setting>
+    <setting id="pvrplayback.signalquality" default="true">true</setting>
     <setting id="pvrplayback.confirmchannelswitch" default="true">true</setting>
     <setting id="pvrplayback.channelentrytimeout" default="true">0</setting>
     <setting id="pvrplayback.delaymarklastwatched" default="true">0</setting>
-    <setting id="pvrplayback.signalquality" default="true">true</setting>
     <setting id="pvrplayback.fps" default="true">0</setting>
     <setting id="pvrplayback.enableradiords" default="true">true</setting>
     <setting id="pvrplayback.trafficadvisory" default="true">false</setting>
@@ -238,7 +222,7 @@
     <setting id="pvrparental.pin" default="true" />
     <setting id="pvrparental.duration" default="true">300</setting>
     <setting id="pvrtimers.hidedisabledtimers" default="true">false</setting>
-    <setting id="services.devicename" default="true">KodiRD-IL</setting>
+    <setting id="services.devicename">KodiRD-IL</setting>
     <setting id="services.zeroconf" default="true">false</setting>
     <setting id="services.deviceuuid">5a34510b-a951-474b-a859-3d82f27c97aa</setting>
     <setting id="services.webserver">true</setting>
@@ -271,8 +255,6 @@
     <setting id="smb.minprotocol" default="true">0</setting>
     <setting id="smb.maxprotocol" default="true">3</setting>
     <setting id="smb.legacysecurity" default="true">false</setting>
-    <setting id="services.wsdiscovery" default="true">true</setting>
-    <setting id="nfs.version" default="true">3</setting>
     <setting id="weather.currentlocation" default="true">1</setting>
     <setting id="weather.addon" default="true" />
     <setting id="videoscreen.monitor" default="true">Default</setting>
@@ -282,8 +264,6 @@
     <setting id="videoscreen.fakefullscreen" default="true">true</setting>
     <setting id="videoscreen.blankdisplays" default="true">false</setting>
     <setting id="videoscreen.delayrefreshchange" default="true">0</setting>
-    <setting id="videoscreen.guisdrpeakluminance" default="true">60</setting>
-    <setting id="videoscreen.10bitsurfaces" default="true">0</setting>
     <setting id="videoscreen.dither" default="true">false</setting>
     <setting id="videoscreen.ditherdepth" default="true">8</setting>
     <setting id="videoscreen.cmsenabled" default="true">false</setting>
@@ -314,7 +294,6 @@
     <setting id="audiooutput.streamsilence" default="true">1</setting>
     <setting id="audiooutput.streamnoise" default="true">true</setting>
     <setting id="audiooutput.guisoundmode" default="true">1</setting>
-    <setting id="audiooutput.guisoundvolume" default="true">100</setting>
     <setting id="lookandfeel.soundskin" default="true">resource.uisounds.kodi</setting>
     <setting id="audiooutput.passthrough" default="true">false</setting>
     <setting id="audiooutput.passthroughdevice" default="true">DIRECTSOUND:default</setting>
@@ -324,7 +303,6 @@
     <setting id="audiooutput.dtspassthrough" default="true">false</setting>
     <setting id="audiooutput.truehdpassthrough" default="true">false</setting>
     <setting id="audiooutput.dtshdpassthrough" default="true">false</setting>
-    <setting id="audiooutput.dtshdcorefallback" default="true">true</setting>
     <setting id="input.enablemouse" default="true">true</setting>
     <setting id="input.enablejoystick" default="true">true</setting>
     <setting id="input.asknewcontrollers" default="true">true</setting>
@@ -371,7 +349,7 @@
     </audio>
     <resolutions />
     <general>
-        <systemtotaluptime>44</systemtotaluptime>
+        <systemtotaluptime>58</systemtotaluptime>
         <settinglevel>3</settinglevel>
         <eventlog>
             <level>0</level>
