@@ -1,0 +1,11 @@
+כדי לחבר את Fen למנוי הAll Debrid שלכם:
+
+1. לחצו על Fen במסך הבית
+2. לחצו על "Tools"
+3. לחצו על "SETTINGS: Fen"
+4. לחצו על הלשונית "Provider Accounts" (בצד שמאל)
+5. תחת הכותרת "All Debrid" לחצו על Authorize
+6. יופיע לכם קישור לאתר של All Debrid עבור חיבור מכשיר חדש וקוד, הכניסו בקישור הזה את הקוד שקיבלתם.
+
+הקישור שמופיע:
+https://alldebrid.com/pin
