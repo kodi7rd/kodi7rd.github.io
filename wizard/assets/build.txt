@@ -16,7 +16,7 @@ adult="no"
 info="http://"
 description="הבילד תומך בגרסת קודי 20"
 
-name="בילד לקודי 19"
+name="Kodi 19 Real Debrid Israel Build"
 version="3.0.1"
 url="https://kodi7rd.github.io/builds/build19_zip/Kodi19-RealDebrid-Israel-Build-3.0.1.zip"
 minor="https://"
