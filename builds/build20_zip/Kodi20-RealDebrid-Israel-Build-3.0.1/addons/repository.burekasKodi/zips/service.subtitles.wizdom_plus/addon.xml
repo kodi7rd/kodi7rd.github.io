@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="service.subtitles.wizdom_plus" name="Wizdom Plus" version="1.0.0" provider-name="burekas">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+	    <import addon="script.module.requests"/>
+    </requires>
+    <extension point="xbmc.subtitle.module" library="service.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Wizdom Subs</summary>
+        <description lang="en">Wizdom Plus. Be smart use subs!  &#xA;Visit us at http://wizdom.xyz</description>
+        <language>en</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>    
+    </extension>
+</addon>

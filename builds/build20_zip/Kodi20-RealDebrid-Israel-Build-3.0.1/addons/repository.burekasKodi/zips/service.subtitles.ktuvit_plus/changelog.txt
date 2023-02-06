@@ -1,0 +1,10 @@
+1.0.0
+** Ktuvit Plus by Burekas **
+- Forked of Catz 3.0.0
+- Kodi Matrix 19 (python 3) support
+- Fix support for non-englise titles for "playing" [Playback is on]
+- Support for "Offline" subtitles checking ["notPlayinh" = Playback is off]
+- Add support for non-englise Titles & Kodi Library
+- Results are now filtered by IMDB id
+- Fix for Manual Search
+- Bug and code fixes
