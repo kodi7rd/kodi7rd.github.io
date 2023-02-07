@@ -18,4 +18,5 @@
     <favourite name="[B]סדרות - לפי ז&apos;אנר[/B]" thumb="https://i.imgur.com/6QpJbS0.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?iconImage=genres&amp;menu_type=tvshow&amp;mode=navigator.genres&amp;name=32470&quot;,return)</favourite>
     <favourite name="[B]סרטים - לפי ז&apos;אנר[/B]" thumb="https://i.imgur.com/6QpJbS0.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?iconImage=genres&amp;menu_type=movie&amp;mode=navigator.genres&amp;name=32470&quot;,return)</favourite>
     <favourite name="[B]סידור מועדפים[/B]" thumb="special://home/addons/plugin.program.orderfavourites-hebrew/icon.png">RunAddon(plugin.program.orderfavourites-hebrew)</favourite>
+    <favourite name="[COLOR limegreen]Kodi + Real Debrid Israel Build Wizard[/COLOR]" thumb="special://home/addons/plugin.program.kodirealdebridisraelwizard/icon.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
 </favourites>
