@@ -1,0 +1,29 @@
+<settings version="2">
+    <setting id="notify_mode" default="true">false</setting>
+    <setting id="startup.cache">true</setting>
+    <setting id="filesize_alert">200</setting>
+    <setting id="packagenumbers_alert">50</setting>
+    <setting id="filesizethumb_alert">500</setting>
+    <setting id="enable_wiz1" default="true">false</setting>
+    <setting id="name1" default="true">name</setting>
+    <setting id="url1" default="true">https://</setting>
+    <setting id="img1" default="true">special://home/addons/script.ezmaintenanceplus/fanart.jpg</setting>
+    <setting id="enable_wiz2" default="true">false</setting>
+    <setting id="name2" default="true">name</setting>
+    <setting id="url2" default="true">https://</setting>
+    <setting id="img2" default="true">special://home/addons/script.ezmaintenanceplus/fanart.jpg</setting>
+    <setting id="enable_wiz3" default="true">false</setting>
+    <setting id="name3" default="true">name</setting>
+    <setting id="url3" default="true">https://</setting>
+    <setting id="img3" default="true">special://home/addons/script.ezmaintenanceplus/fanart.jpg</setting>
+    <setting id="enable_wiz4" default="true">false</setting>
+    <setting id="name4" default="true">name</setting>
+    <setting id="url4" default="true">https://</setting>
+    <setting id="img4" default="true">special://home/addons/script.ezmaintenanceplus/fanart.jpg</setting>
+    <setting id="enable_wiz5" default="true">false</setting>
+    <setting id="name5" default="true" />
+    <setting id="url5" default="true">http://</setting>
+    <setting id="img5" default="true">special://home/addons/script.ezmaintenanceplus/fanart.jpg</setting>
+    <setting id="download.path"></setting>
+    <setting id="restore.path"></setting>
+</settings>
