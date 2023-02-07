@@ -33,6 +33,7 @@ class Plex():
 			'X-Plex-Model': str(platform_machine()),
 			'X-Plex-Provides': 'player',
 			'X-Plex-Client-Identifier': str(hex(uuid.getnode()))}
+		#log_utils.log('Plex Headers: X-Plex-Platform-Version: %s X-Plex-Device: %s X-Plex-Model: %s X-Plex-Client-Identifier: %s' % (str(kodiVersion), str(platform_machine()), str(platform_system()), str(hex(uuid.getnode()))), __name__, log_utils.LOGWARNING)
 
 	def auth_loop(self):
 		control.sleep(5000)
@@ -84,6 +85,7 @@ class Plex():
 
 	def get_plexshare_resource(self):
 		url = base_url + '/api/v2/resources?includeHttps=1&X-Plex-Client-Identifier=%s&X-Plex-Token=%s' % (self.client_id, self.token)
+		#log_utils.log('plexshare get shares url = %s' % str(url), __name__, level=log_utils.LOGDEBUG)
 		resources = requests.get(url, headers=self.headers)
 		if resources.status_code != 200: return self.plex_error(resources.status_code)
 		resources = re.findall(r'(<resource\s.+?</resource>)', resources.text, flags=re.M | re.S)
@@ -102,8 +104,8 @@ class Plex():
 				if '.plex.direct:' not in share_url or local == '1': continue
 				if share_url:
 					if not control.yesnoDialog('plexshare resource found: %s[CR]Add?' % sourceTitle): continue
-					log_utils.log('plexshare sourceTitle = %s' % sourceTitle, __name__, level=log_utils.LOGDEBUG)
-					log_utils.log('plexshare direct url = %s' % share_url, __name__, level=log_utils.LOGDEBUG)
+					#log_utils.log('plexshare sourceTitle = %s' % sourceTitle, __name__, level=log_utils.LOGDEBUG)
+					#log_utils.log('plexshare direct url = %s' % share_url, __name__, level=log_utils.LOGDEBUG)
 					self.plex_insert(sourceTitle, accessToken, share_url)
 					#control.setSetting('plexshare.sourceTitle', sourceTitle)
 					#control.setSetting('plexshare.accessToken', accessToken)

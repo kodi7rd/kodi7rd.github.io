@@ -72,10 +72,10 @@ class source:
 				hdlr = year
 				url = '%s%s' % (base_link, moviesearch % (quote(title), year))
 				years = [str(int(year)-1), str(year), str(int(year)+1)]
-			from cocoscrapers.modules import log_utils
+			#from cocoscrapers.modules import log_utils
 			#log_utils.log('url = %s' % url)
 
-			try: results = requests.get(url)
+			try: results = requests.get(url,timeout=10)
 			except requests.exceptions.SSLError: results = requests.get(url, verify=False)
 
 			if episode_title: results = re.findall(r'(<Video.+?type="episode".+?</Video>)', results.text, flags=re.M | re.S)

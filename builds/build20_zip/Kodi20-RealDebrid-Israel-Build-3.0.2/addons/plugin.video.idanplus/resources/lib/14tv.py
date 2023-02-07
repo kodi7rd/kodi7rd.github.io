@@ -18,9 +18,9 @@ def GetSeriesList(iconimage):
 	#text = common.OpenURL(baseUrl)
 	text = common.OpenURL('{0}/tochniot_haarutz/%D7%94%D7%9E%D7%94%D7%93%D7%95%D7%A8%D7%94-%D7%94%D7%9E%D7%A8%D7%9B%D7%96%D7%99%D7%AA/'.format(baseUrl))
 	match = re.compile 	('<main class="content vod-content">(.*?)<!-- End Up Section -->', re.S).findall(text)
-	match = re.compile('<div class="mySlides fade">.*?<a href="(.*?)".*?src="\s*(.*?)".*?class="tochnit_name">(.*?)<', re.S).findall(match[0])
+	match = re.compile('<a href="(.*?)" data-id.*?src="(.*?)".*?"tochnit_name">(.*?)</div>', re.S).findall(match[0])
 	grids_arr = []
-	for link, iconimage, name in match:
+	for link, iconimage, name in match[1:]:
 		iconimage = GetQuoteUrl(iconimage)
 		#name = common.unquote(common.encode(link[link.rfind('/')+1:], 'utf-8'))
 		name = common.GetLabelColor(common.UnEscapeXML(name.replace('-', ' ')), keyColor="prColor", bold=True)
@@ -52,17 +52,18 @@ def GetEpisodesList(url, image):
 			link = 'https://cdn.ch20-cdnwiz.com/ch20/player.php?clipid={0}&autoplay=true&automute=false'.format(videoid.strip())
 			common.addDir(name, link, 2, iconimage, infos={"Title": name, "Aired": date}, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=choose&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module)), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=set_14tv_res&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module))], module=module, moreData=bitrate, isFolder=False, isPlayable=True)
 
-def Play(name, url, iconimage, quality='best', live=None):
+def Play(name, url, iconimage, quality='best', live=''):
 	userAgent = common.GetUserAgent()
+	if live != '':
+		common.PlayStream('{0}|User-Agent={1}'.format(live, userAgent), quality, name, iconimage)
+		return
 	headers = {"User-Agent": userAgent}
 	text = common.OpenURL(url, headers=headers)
 	match = re.compile('src:\s*"(.*?)"').findall(text)
-	if len(match) < 0:
+	if len(match) < 1:
 		match = re.compile('source\s*src="(.*?)"').findall(text)
-	if len(match) < 0:
+	if len(match) < 1:
 		match = re.compile("hls.loadSource\('(.*?)'\)").findall(text)
-	if len(match) < 0 and live is not None:
-		match = [live]
 	link = common.GetRedirect(match[0], headers=headers)
 	if link is None:
 		link = match[0]
@@ -72,10 +73,8 @@ def Play(name, url, iconimage, quality='best', live=None):
 	common.PlayStream(final, quality, name, iconimage)
 
 def Watch(name, iconimage, quality='best'):
-	url = '{0}/tochniot_meleot/%D7%A9%D7%99%D7%93%D7%95%D7%A8-%D7%97%D7%99/'.format(baseUrl)
-	text = common.OpenURL(url, headers={"User-Agent": common.GetUserAgent()})
-	match = re.compile('<div id="cdnwizPlayerWrapper.*?<iframe.*?src="(.*?)"', re.S).findall(text)
-	Play(name, match[0], iconimage, quality, live='https://dvr.ch20-cdnwiz.com/hls/live.m3u8')
+	url = 'https://ch14-channel14.akamaized.net/hls/live/2097589/CH14_CHANNEL14/master.m3u8'
+	Play(name, url, iconimage, quality, live=url)
 
 def Run(name, url, mode, iconimage='', moreData=''):
 	global sortBy

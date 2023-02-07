@@ -4,15 +4,15 @@ msgstr ""
 "Project-Id-Version: KODI Main\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-04-08 08:22+0000\n"
+"PO-Revision-Date: 2023-01-30 23:09+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
-"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-core/kodi-main-matrix/he_il/>\n"
+"Language-Team: Hebrew (Israel) <https://kodi.weblate.cloud/projects/kodi-core/kodi-main/he_il/>\n"
 "Language: he_il\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 msgctxt "#0"
 msgid "Programs"
@@ -793,9 +793,10 @@ msgctxt "#213"
 msgid "Calibrate user interface..."
 msgstr "כיול ממשק משתמש..."
 
+#. To open window screen calibration and as window title
 msgctxt "#214"
-msgid "Video calibration..."
-msgstr "כיול וידאו..."
+msgid "Video calibration"
+msgstr "כיול וידאו"
 
 msgctxt "#215"
 msgid "Soften"
@@ -1019,33 +1020,40 @@ msgctxt "#271"
 msgid "Top 100"
 msgstr "מאה הגדולים"
 
+#. Window screen calibration: calibration from the rectangle box
 msgctxt "#272"
-msgid "Top-Left overscan compensation"
-msgstr "פיצוי סריקת יתר משמאל למעלה"
-
-msgctxt "#273"
-msgid "Bottom-Right overscan compensation"
-msgstr "פיצוי סריקת יתר מימין למטה"
-
-msgctxt "#274"
-msgid "Subtitle positioning"
-msgstr "מיקום כתוביות"
-
-msgctxt "#275"
 msgid "Pixel ratio adjustment"
 msgstr "התאמת יחס פיקסל"
 
+#. Window screen calibration: calibration by using the rectangle box
+msgctxt "#273"
+msgid "Adjust the rectangle so it is perfectly square"
+msgstr "יש להפוך את המלבן לריבוע מושלם"
+
+#. Window screen calibration: calibration from the top-left angle
+msgctxt "#274"
+msgid "Top-Left overscan compensation"
+msgstr "פיצוי סריקת יתר משמאל למעלה"
+
+#. Window screen calibration: calibration from the bottom-right angle
+msgctxt "#275"
+msgid "Bottom-Right overscan compensation"
+msgstr "פיצוי סריקת יתר מימין למטה"
+
+#. Window screen calibration: calibration by using the top-left or bottom-right arrows
 msgctxt "#276"
 msgid "Adjust the arrow to change the amount of overscan"
 msgstr "יש להוזיז את הסמן להתאמת סריקת יתר"
 
+#. Window screen calibration: calibration of subtitle bar
 msgctxt "#277"
+msgid "Subtitle positioning"
+msgstr "מיקום כתוביות"
+
+#. Window screen calibration: calibration by using the subtitle bar
+msgctxt "#278"
 msgid "Adjust the bar to change the subtitles position"
 msgstr "יש להוזיז את הסמן לשינוי מיקום הכתוביות"
-
-msgctxt "#278"
-msgid "Adjust the rectangle so it is perfectly square"
-msgstr "יש להפוך את המלבן לריבוע מושלם"
 
 msgctxt "#279"
 msgid "Unable to load settings"
@@ -1080,6 +1088,7 @@ msgctxt "#286"
 msgid "Preferred subtitle language"
 msgstr "שפת כתוביות מועדפת"
 
+#. Title of category and group menu subtitles
 msgctxt "#287"
 msgid "Subtitles"
 msgstr "כתוביות"
@@ -1176,8 +1185,8 @@ msgstr "שפת ממשק משתמש"
 
 #. Setting in international settings
 msgctxt "#310"
-msgid "Keyboard layouts"
-msgstr "מערכי מקלדת"
+msgid "Virtual keyboard layouts"
+msgstr "פריסות מקלדת וירטואלית"
 
 #. Keyboard layout name e.g. "English QWERTY"
 msgctxt "#311"
@@ -1591,6 +1600,10 @@ msgstr "נקודת אידוי"
 msgctxt "#406"
 msgid "Humidity"
 msgstr "לחות"
+
+msgctxt "#407"
+msgid "Hardware keyboard layouts"
+msgstr "פריסות מקלדת פיזית"
 
 msgctxt "#409"
 msgid "Defaults"
@@ -2634,6 +2647,10 @@ msgctxt "#702"
 msgid "This path has been scanned before"
 msgstr "נתיב זה נסרק בעבר"
 
+msgctxt "#703"
+msgid "Can't clean up library while running background tasks"
+msgstr ""
+
 msgctxt "#705"
 msgid "Network"
 msgstr "רשת"
@@ -3040,7 +3057,7 @@ msgctxt "#825"
 msgid "Recording: {0:s}"
 msgstr "הקלטה: {0:s}"
 
-#. Label for a context menu entry to add a reminder timer
+#. Label for buttons to add a PVR reminder timer
 msgctxt "#826"
 msgid "Set reminder"
 msgstr "קבע תזכורת"
@@ -3396,9 +3413,17 @@ msgctxt "#1185"
 msgid "SOCKS5 with remote DNS resolving"
 msgstr "SOCKS5 עם אחזור DNS מרוחק"
 
+msgctxt "#1186"
+msgid "HTTPS"
+msgstr ""
+
 msgctxt "#1200"
 msgid "SMB client"
 msgstr "לקוח SMB"
+
+msgctxt "#1201"
+msgid "NFS Client"
+msgstr ""
 
 msgctxt "#1202"
 msgid "Workgroup"
@@ -3986,6 +4011,15 @@ msgctxt "#2104"
 msgid "Check the log for more information."
 msgstr "למידע נוסף יש לעיין ביומן הרישום."
 
+# empty strings from id 2105 to 2202
+msgctxt "#2203"
+msgid "Use DTS Core"
+msgstr "השתמש בליבת DTS"
+
+msgctxt "#2204"
+msgid "Select this option if you want to passthrough DTS-HD formats as DTS, otherwise, DTS-HD formats will be played via PCM"
+msgstr "בחר אופציה זו אם אתה מעוניין להעביר את האות של DTS-HD כDTS, אחרת, DTS-HD יועבר כאות PCM"
+
 msgctxt "#10000"
 msgid "Home"
 msgstr "בית"
@@ -4023,17 +4057,62 @@ msgctxt "#10008"
 msgid "Play next"
 msgstr "לנגן את הבא"
 
+#. Header label for add-on configuration removal dialog
+msgctxt "#10009"
+msgid "Confirm add-on configuration removal"
+msgstr ""
+
+#. Header label for add-on configuration removal selection dialog
+msgctxt "#10010"
+msgid "Select add-on configuration to remove"
+msgstr ""
+
 msgctxt "#10011"
 msgid "Settings - Videos - Screen calibration"
 msgstr "הגדרות - וידאו - כיול תצוגה"
+
+#. Header label for add-on configuration selection dialog
+msgctxt "#10012"
+msgid "Add-on configurations and settings"
+msgstr ""
+
+#. Item label used in add-on configuration selection dialog
+msgctxt "#10013"
+msgid "Edit add-on settings"
+msgstr ""
+
+#. Item label used in add-on configuration selection dialog
+msgctxt "#10014"
+msgid "Add add-on configuration"
+msgstr ""
+
+#. Item label used in add-on configuration selection dialog
+msgctxt "#10015"
+msgid "Remove add-on configuration"
+msgstr ""
 
 msgctxt "#10016"
 msgid "Settings - System"
 msgstr "הגדרות - מערכת"
 
+#. Settings group label
+msgctxt "#10017"
+msgid "Add-on configuration"
+msgstr ""
+
 msgctxt "#10018"
 msgid "Settings - Service"
 msgstr "הגדרות - שירות"
+
+#. Item label for add-on configuration removal dialog
+msgctxt "#10019"
+msgid "Do you want to remove the add-on configuration \"{0:s}\"?"
+msgstr ""
+
+#. Item label used in add-on setup selection dialog
+msgctxt "#10020"
+msgid "Edit \"{0:s}\" [{1:s}]"
+msgstr ""
 
 msgctxt "#10021"
 msgid "Settings - TV"
@@ -4170,6 +4249,11 @@ msgstr "עריכת מקור קובץ"
 msgctxt "#10058"
 msgid "Remove tag from library"
 msgstr "הסר תגית מהספרייה"
+
+# empty string with id 10059
+msgctxt "#10060"
+msgid "Favourites"
+msgstr "מועדפים"
 
 msgctxt "#10099"
 msgid "Pointer"
@@ -4616,6 +4700,17 @@ msgstr "ניגון מהתחלה"
 msgctxt "#12022"
 msgid "Resume from {0:s}"
 msgstr "המשך מ-{0:s}"
+
+# empty strings from id 12023 to 12307
+#. Label of the show password button in the keyboard dialog
+msgctxt "#12308"
+msgid "Show password"
+msgstr "הצג סיסמה"
+
+#. Label of the hide password button in the keyboard dialog
+msgctxt "#12309"
+msgid "Hide password"
+msgstr "הסתר סיסמה"
 
 msgctxt "#12310"
 msgid "0"
@@ -5193,7 +5288,7 @@ msgctxt "#13205"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#. unused?
+#. Label in the game OSD to overwrite an existing savestate
 msgctxt "#13206"
 msgid "Overwrite"
 msgstr "דריסה"
@@ -5328,6 +5423,11 @@ msgstr "מחובר"
 msgctxt "#13297"
 msgid "Not connected. Check network settings."
 msgstr "לא מחובר. יש לבדוק הגדרות רשת."
+
+#. Label of the button used to disconnect a game controller from the emulated game port
+msgctxt "#13298"
+msgid "Disconnected"
+msgstr "מנותק"
 
 msgctxt "#13299"
 msgid "Target temperature"
@@ -5557,6 +5657,11 @@ msgctxt "#13361"
 msgid "Enable voice"
 msgstr "אפשר דיבור"
 
+#. label for resume context menu item for video folders (like a TV show or a single season of a TV show)
+msgctxt "#13362"
+msgid "Continue watching"
+msgstr ""
+
 msgctxt "#13375"
 msgid "Enable device"
 msgstr "אפשר התקן"
@@ -5722,6 +5827,8 @@ msgctxt "#13415"
 msgid "Render method"
 msgstr "שיטת עיבוד וידאו"
 
+#. Value for setting with label #13415 "Player / Videos / Render method"
+#. Value for setting with label #36098 "System / Display / Use 10 bit for SDR"
 msgctxt "#13416"
 msgid "Auto detect"
 msgstr "זיהוי אוטומטי"
@@ -5925,6 +6032,15 @@ msgctxt "#13467"
 msgid "Unlimited / 1080 (>30Hz)"
 msgstr "לא מוגבל / 1080 (>30Hz)"
 
+msgctxt "#13468"
+msgid "Use AV1 VAAPI"
+msgstr "פענוח VC-1 ע״י AV1"
+
+#. Description of setting with label #13468 "Use AV1 VAAPI"
+msgctxt "#13469"
+msgid "Enable this option to use hardware acceleration for the AV1 codec. If disabled the CPU will be used instead."
+msgstr "מאפשר האצת חומרה לקודק AV1. אם מנוטרל יבוצע שימוש במעבד."
+
 msgctxt "#13505"
 msgid "Resample quality"
 msgstr "איכות דגימה מחדש"
@@ -6052,6 +6168,10 @@ msgstr "השהיית דילוג"
 msgctxt "#13600"
 msgid "Apple Remote"
 msgstr "שלט Apple"
+
+msgctxt "#13601"
+msgid "Apple TV"
+msgstr ""
 
 msgctxt "#13602"
 msgid "Allow start of Kodi using the remote"
@@ -6397,9 +6517,10 @@ msgctxt "#14088"
 msgid "Play DVDs automatically"
 msgstr "נגן DVD אוטומטית"
 
+#. Subtitle font selection setting
 msgctxt "#14089"
-msgid "Font to use for text subtitles"
-msgstr "גופן כתוביות"
+msgid "Font"
+msgstr "גופן"
 
 msgctxt "#14090"
 msgid "International"
@@ -6946,6 +7067,51 @@ msgctxt "#15216"
 msgid "Play in party mode"
 msgstr "נגן במצב מסיבה"
 
+#. Label for actions associated with favourites
+msgctxt "#15217"
+msgid "Action"
+msgstr ""
+
+#. Label for an action associated with a favourite.
+msgctxt "#15218"
+msgid "Play media"
+msgstr ""
+
+#. Label for an action associated with a favourite
+msgctxt "#15219"
+msgid "Show picture"
+msgstr ""
+
+#. Label for an action associated with a favourite. Placeholder will be filled with the name of the window the favourite's content will be displayed in.
+msgctxt "#15220"
+msgid "Show content in \"{}\""
+msgstr ""
+
+#. Label for an action associated with a favourite
+msgctxt "#15221"
+msgid "Execute script"
+msgstr ""
+
+#. Label for an action associated with a favourite
+msgctxt "#15222"
+msgid "Execute Android app"
+msgstr ""
+
+#. Label for an action associated with a favourite
+msgctxt "#15223"
+msgid "Execute add-on"
+msgstr ""
+
+#. Label for an action associated with a favourite
+msgctxt "#15224"
+msgid "Other / Unknown"
+msgstr "אחר / לא ידוע"
+
+#. genric label for 'provider'
+msgctxt "#15225"
+msgid "Provider"
+msgstr "ספק"
+
 msgctxt "#15300"
 msgid "Path not found or invalid"
 msgstr "נתיב לא נמצא או לא חוקי"
@@ -6969,6 +7135,31 @@ msgstr "פותח מקור בעל מספר נתיבים"
 msgctxt "#15311"
 msgid "Path:"
 msgstr "נתיב:"
+
+#. Game settings category name
+msgctxt "#15312"
+msgid "Achievements"
+msgstr ""
+
+#. Group label for Achievements category in game settings
+msgctxt "#15313"
+msgid "Login to RetroAchievements"
+msgstr ""
+
+#. Label for button which creates a new savestate in the in-game savestate manager
+msgctxt "#15314"
+msgid "Save"
+msgstr "שמירה"
+
+#. Caption for "Save" button in the in-game savestate manager
+msgctxt "#15315"
+msgid "Save progress to a new save file"
+msgstr ""
+
+#. Label for savestates created automatically by "Autosave" function
+msgctxt "#15316"
+msgid "Autosave"
+msgstr ""
 
 msgctxt "#16000"
 msgid "General"
@@ -7454,7 +7645,7 @@ msgctxt "#19018"
 msgid "Folder with channel icons"
 msgstr "תיקיית סמלי ערוצים"
 
-#. label for PVR backend number of channels in system information's PVR section
+#. generic label for pvr channels used in different places
 msgctxt "#19019"
 msgid "Channels"
 msgstr "ערוצים"
@@ -7562,6 +7753,16 @@ msgstr "האם להסתיר ערוץ זה?"
 msgctxt "#19040"
 msgid "Timers"
 msgstr "תזמונים"
+
+#. Label for button to refresh the channel logos
+msgctxt "#19041"
+msgid "Refresh channel logos"
+msgstr ""
+
+#. label for PVR backend number of channel groups in system information's PVR section
+msgctxt "#19042"
+msgid "Channel Groups"
+msgstr ""
 
 #. pvr settings "recording" category label
 msgctxt "#19043"
@@ -7686,7 +7887,7 @@ msgctxt "#19068"
 msgid "Recording settings"
 msgstr "הגדרות הקלטה"
 
-#. Electronic program guide
+#. generic label for the electronic program guide (EPG) used in different places
 msgctxt "#19069"
 msgid "Guide"
 msgstr "לוח שידורים"
@@ -8057,6 +8258,7 @@ msgctxt "#19145"
 msgid "Grouped"
 msgstr "בקבוצה"
 
+#. generic label for pvr channel groups used in different places
 msgctxt "#19146"
 msgid "Groups"
 msgstr "קבוצות"
@@ -8258,18 +8460,18 @@ msgstr "איפוס נתונים"
 
 #. message box text for pvr data reset confirmation
 msgctxt "#19186"
-msgid "All your TV related data (channels, groups, guide, timers, clients) will be cleared. Are you sure?"
+msgid "All selected data will be cleared. Some information cannot be restored from the clients afterwards. Proceed anyway?"
 msgstr ""
 
 #. progress dialog text shown while purging pvr data
 msgctxt "#19187"
-msgid "Clearing all related data."
-msgstr "מנקה את כל הנתונים הקשורים."
+msgid "Clearing data."
+msgstr ""
 
 #. message box text for epg data reset confirmation
 msgctxt "#19188"
-msgid "All your guide data will be cleared. Are you sure?"
-msgstr "כל נתוני לוח השידורים יאופסו. האם להמשיך?"
+msgid "All guide data will be cleared. Are you sure?"
+msgstr ""
 
 #. message box text stating that the PVR backend forbids to record a given epg event.
 msgctxt "#19189"
@@ -8285,7 +8487,7 @@ msgctxt "#19191"
 msgid "PVR service"
 msgstr "טלוויזיה חיה"
 
-#. error message box text stating that none of the available pvr clients does support channel scanning
+#. info message box text stating that none of the available pvr clients does support channel scanning
 msgctxt "#19192"
 msgid "None of the connected PVR backends supports scanning for channels."
 msgstr "אף שרת טלוויזיה אחורי שמחובר אינו תומך בסריקת ערוצים."
@@ -8395,7 +8597,7 @@ msgctxt "#19214"
 msgid "Enter a valid URL for the new channel"
 msgstr "יש להזין כתובת רשת תקפה לערוץ החדש"
 
-#. pvr settings "reminders" category label
+#. generic label for PVR reminders used in different places
 msgctxt "#19215"
 msgid "Reminders"
 msgstr "תזכורות"
@@ -8514,10 +8716,10 @@ msgctxt "#19238"
 msgid "Loading recordings from clients"
 msgstr "טוען הקלטות מלקוחות"
 
-#. label 'starting background tasks' for progress dialog text
+#. label for PVR client creation progress control
 msgctxt "#19239"
-msgid "Starting background threads"
-msgstr "מפעיל תהליכים ברקע"
+msgid "Creating PVR clients"
+msgstr ""
 
 #. label for pvr settings client priorities control and client priorities dialog heading.
 msgctxt "#19240"
@@ -8680,8 +8882,8 @@ msgstr "לא נמצאו הרחבות טלוויזיה חיה"
 
 #. label for 'pvr configuration incomplete' information dialog text
 msgctxt "#19272"
-msgid "You need a tuner, backend software, and an add-on for the backend to be able to use PVR. Please visit http://kodi.wiki/view/PVR to learn more."
-msgstr "יש צורך בכרטיס טלוויזיה, תוכנת שרת אחורי והרחבה המאפשרת צפיה בטלוויזיה חיה דרך שרת אחורי. למידע נוסף יש לבקר ב־http://kodi.wiki/view/PVR."
+msgid "To use PVR you need to install, enable and configure a PVR add-on. Please visit http://kodi.wiki/view/PVR to learn more."
+msgstr ""
 
 #. Settings -> Interface -> Other -> Startup window value
 msgctxt "#19273"
@@ -8713,10 +8915,10 @@ msgctxt "#19278"
 msgid "Recording error"
 msgstr "שגיאת הקלטה"
 
-#. pvr settings 'client specific' category label.
+#. pvr settings 'PVR clients' group label.
 msgctxt "#19279"
-msgid "Client specific"
-msgstr "ספציפי ללקוח"
+msgid "PVR clients"
+msgstr "לקוח טלוויזיה חיה"
 
 #. pvr client specific settings 'client specific settings' action control label.
 msgctxt "#19280"
@@ -8988,6 +9190,86 @@ msgctxt "#19333"
 msgid "Switched to channel for auto-closed PVR reminder for channel '{0:s}' at '{1:s}'"
 msgstr ""
 
+#. label for PVR backend number of channel providers in system information's PVR section
+msgctxt "#19334"
+msgid "Providers"
+msgstr ""
+
+#. label for special PVR search window list item
+msgctxt "#19335"
+msgid "New search..."
+msgstr ""
+
+#. label for special PVR search window list item
+msgctxt "#19336"
+msgid "Edit search..."
+msgstr ""
+
+#. label for special PVR search window list item
+msgctxt "#19337"
+msgid "Saved searches"
+msgstr ""
+
+#. delete saved search confirmation message box text
+msgctxt "#19338"
+msgid "Delete this saved search?"
+msgstr ""
+
+#. PVR guide search dialog label
+msgctxt "#19339"
+msgid "Ignore finished broadcasts"
+msgstr ""
+
+#. PVR guide search dialog label
+msgctxt "#19340"
+msgid "Ignore future broadcasts"
+msgstr ""
+
+#. label to ask user to save an EPG search
+msgctxt "#19341"
+msgid "Save the current search?"
+msgstr ""
+
+#. "search not saved" label, used in PVR search window breadcrumb
+msgctxt "#19342"
+msgid "[not saved]"
+msgstr ""
+
+#. "search saved" label, used in PVR search window breadcrumb
+msgctxt "#19343"
+msgid "[saved]"
+msgstr ""
+
+#. text for yes no dialog shown when user selects a future programme in the guide window and default select action is 'smart select'
+msgctxt "#19344"
+msgid "Do you want to set a reminder for the selected programme or to switch to the current programme?"
+msgstr ""
+
+#. settings label to open add-ons manager window with available PVR client add-ons
+msgctxt "#19345"
+msgid "PVR client add-ons"
+msgstr ""
+
+#. help text for setting to open add-ons manager window with available PVR client add-ons
+msgctxt "#19346"
+msgid "Display and manage available PVR client add-ons."
+msgstr ""
+
+#. info message box text stating that none of the available pvr clients does provide client-specific settings
+msgctxt "#19347"
+msgid "None of the active PVR clients provide client-specific settings."
+msgstr ""
+
+#. label for 'by provider' sort method
+msgctxt "#19348"
+msgid "Provider"
+msgstr "ספק"
+
+#. label for 'by user preference' sort method
+msgctxt "#19349"
+msgid "User preference"
+msgstr ""
+
 #. label for epg genre value
 msgctxt "#19499"
 msgid "Other / Unknown"
@@ -9195,11 +9477,16 @@ msgstr "שירי עם / מוזיקה מסורתית"
 
 #. label for "music/ballet/dance" epg subgenre value
 msgctxt "#19584"
+msgid "Jazz"
+msgstr ""
+
+#. label for "music/ballet/dance" epg subgenre value
+msgctxt "#19585"
 msgid "Musical / Opera"
 msgstr "מוזיקלי / אופרה"
 
 #. label for "music/ballet/dance" epg subgenre value
-msgctxt "#19585"
+msgctxt "#19586"
 msgid "Ballet"
 msgstr "בלט"
 
@@ -10397,17 +10684,20 @@ msgctxt "#20324"
 msgid "Play part..."
 msgstr "נגן חלק..."
 
+#. Window screen calibration: as title to reset calibration settings
 msgctxt "#20325"
 msgid "Calibration reset"
 msgstr "איפוס כיול"
 
+#. Window screen calibration: ask to reset calibration settings
 msgctxt "#20326"
-msgid "This will reset the calibration values for {0:s}"
-msgstr "פעולה זו תאפס את ערכי הכיול עבור {0:s}"
+msgid "Do you want reset the calibration to their defaults for \"{0:s}\" resolution?"
+msgstr ""
 
+#. Window screen calibration: the current calibration value
 msgctxt "#20327"
-msgid "to its default values."
-msgstr "לערכי ברירת המחדל."
+msgid "Current value: {}"
+msgstr ""
 
 msgctxt "#20328"
 msgid "Browse for destination"
@@ -10599,6 +10889,7 @@ msgctxt "#20375"
 msgid "Unassign content"
 msgstr "תוכן לא מוקצה"
 
+#. Original title of the movie/tvshow (could differ from local distributor title) (ListItem.OriginalTitle)
 msgctxt "#20376"
 msgid "Original title"
 msgstr "כותרת מקורית"
@@ -10776,7 +11067,8 @@ msgctxt "#20419"
 msgid "Replace file names with library titles"
 msgstr "החלף שם קובץ עם כותרי ספריה"
 
-#. Settings -> PVR -> Playback -> Switch to fullscreen value
+#. Value for setting with label #19171 "PVR & Live TV / Playback / Switch to full screen"
+#. Value for setting with label #36098 "System / Display / Use 10 bit for SDR"
 msgctxt "#20420"
 msgid "Never"
 msgstr "אף פעם"
@@ -10785,6 +11077,8 @@ msgctxt "#20421"
 msgid "If only one season"
 msgstr "אם קיימת עונה בודדת"
 
+#. Value for setting with label #170 "Player / Videos / Adjust display refresh rate"
+#. Value for setting with label #36098 "System / Display / Use 10 bit for SDR"
 msgctxt "#20422"
 msgid "Always"
 msgstr "תמיד"
@@ -10997,6 +11291,15 @@ msgctxt "#20472"
 msgid "Show all performers for music videos"
 msgstr ""
 
+msgctxt "#20473"
+msgid "Premiered"
+msgstr ""
+
+#. Used in smart playlists to select items based on the HDR type (HDR10, HLG, Dolbyvision)
+msgctxt "#20474"
+msgid "HDR type"
+msgstr ""
+
 msgctxt "#21330"
 msgid "Show hidden files and directories"
 msgstr "הצג קבצים ותיקיות מוסתרים"
@@ -11055,13 +11358,23 @@ msgid "Use video tags"
 msgstr "להשתמש בתגיות וידאו"
 
 msgctxt "#21344"
-msgid "If mp4 or mkv files have tags, use this for library metadata"
+msgid "Enable to use embedded tags in mp4 or mkv files for library metadata. Will prevent scrapers from operating correctly."
 msgstr ""
 
 #. Used in AutoPlayNextItem dialogs for not categorized listItem directories
 msgctxt "#21345"
 msgid "Uncategorized"
 msgstr "ללא סיווג"
+
+#. Used to give heading list entry for an file extension description, e.g. to show as 'Extension: ".mp3"'
+msgctxt "#21346"
+msgid "Extension: \"{0:s}\""
+msgstr ""
+
+#. Used to give heading list entry for an mimetype description, e.g. to show as 'MIME type: "audio/mpeg3"'
+msgctxt "#21347"
+msgid "MIME type: \"{0:s}\""
+msgstr ""
 
 msgctxt "#21358"
 msgid "Enable UPnP support"
@@ -11104,8 +11417,8 @@ msgid "Movie & alternate subtitle directory"
 msgstr "תיקיית סרט ותרגום חלופי"
 
 msgctxt "#21368"
-msgid "Override ASS / SSA subtitles fonts"
-msgstr "התעלם מגופן כתוביות ASS / SSA"
+msgid "Override subtitles fonts"
+msgstr ""
 
 msgctxt "#21369"
 msgid "Enable mouse and touch screen support"
@@ -11469,29 +11782,35 @@ msgctxt "#21459"
 msgid "mixed"
 msgstr "מעורבב"
 
+#. Subtitle position on screen setting list
 msgctxt "#21460"
-msgid "Subtitle position on screen"
-msgstr "מיקום כתוביות"
+msgid "Position on screen"
+msgstr ""
 
+#. Item list value of setting with label #21460 "Subtitle position on screen"
 msgctxt "#21461"
-msgid "Fixed"
-msgstr "מקובע"
+msgid "Manual"
+msgstr "ידני"
 
+#. Item list value of setting with label #21460 "Subtitle position on screen"
 msgctxt "#21462"
 msgid "Bottom of video"
 msgstr "תחתית הווידאו"
 
+#. Item list value of setting with label #21460 "Subtitle position on screen"
 msgctxt "#21463"
-msgid "Below video"
-msgstr "מתחת לווידאו"
+msgid "Bottom of screen"
+msgstr ""
 
+#. Item list value of setting with label #21460 "Subtitle position on screen"
 msgctxt "#21464"
 msgid "Top of video"
 msgstr "בראש הווידאו"
 
+#. Item list value of setting with label #21460 "Subtitle position on screen"
 msgctxt "#21465"
-msgid "Above video"
-msgstr "מעל הווידאו"
+msgid "Top of screen"
+msgstr ""
 
 #. Description of setting with label #21416 "Select first unwatched TV show season/episode"
 msgctxt "#21466"
@@ -11576,6 +11895,16 @@ msgstr "מספר כתוביות"
 msgctxt "#21483"
 msgid "View"
 msgstr "תצוגה"
+
+#. Button label to show list of supported types, e.g. supported file extensions
+msgctxt "#21484"
+msgid "Show support"
+msgstr ""
+
+#. Dialog header label to show list of supported types, e.g. supported file extensions
+msgctxt "#21485"
+msgid "Supported file extensions and media types"
+msgstr ""
 
 msgctxt "#21602"
 msgid "(External)"
@@ -12144,6 +12473,7 @@ msgctxt "#24018"
 msgid "Services"
 msgstr "שירותים"
 
+#. generic label to denote the addon type pvr clients, used in different places
 msgctxt "#24019"
 msgid "PVR clients"
 msgstr "לקוח טלוויזיה חיה"
@@ -12735,11 +13065,11 @@ msgid "Enable to make the Siri remote match the normal Apple tvOS behavior"
 msgstr ""
 
 msgctxt "#24154"
-msgid "Idle remote handling after N seconds"
+msgid "Consider Siri remote in idle state after N seconds"
 msgstr ""
 
 msgctxt "#24155"
-msgid "After remote idles, the first tap/swipe received will wake it"
+msgid "Time to wait before considering the Siri remote in idle state"
 msgstr ""
 
 msgctxt "#24156"
@@ -12759,11 +13089,11 @@ msgid "120 Seconds"
 msgstr "120 שניות"
 
 msgctxt "#24160"
-msgid "Enable Siri remote timeout"
+msgid "Ignore first tap/swipe/pan of the Siri remote after a period of inactivity"
 msgstr ""
 
 msgctxt "#24161"
-msgid "Enable remote input timeout for tap/swipe"
+msgid "This prevents you from accidental tap/swipe/pan action when you grab the remote in your hand"
 msgstr ""
 
 msgctxt "#24162"
@@ -12771,9 +13101,10 @@ msgid "Use Kodi virtual keyboard"
 msgstr ""
 
 msgctxt "#24163"
-msgid "Match Apple tvOS Standard (Siri remote)"
+msgid "The higher the value, the more sensitive the pan gesture"
 msgstr ""
 
+# empty string with id 24163
 #. Header text for yes/no dialog about enable of broken add-on
 msgctxt "#24164"
 msgid "Add-on \"{0:s}\" broken"
@@ -12843,6 +13174,12 @@ msgstr ""
 #. used in #24180 - #24183 as {3:s}
 msgctxt "#24184"
 msgid " (optional)"
+msgstr ""
+
+#. The minimum version, only lower versions are available for install
+#. {3:s} reserved for an empty string or the " (optional)" optional string. see #24184
+msgctxt "#24185"
+msgid "Minimum: {0:s} / Not available{3:s}"
 msgstr ""
 
 #. Used as error message in add-on browser when add-on repository data could not be downloaded
@@ -12971,10 +13308,11 @@ msgctxt "#29805"
 msgid "This Blu-ray disc (or file) is encrypted and can't be played."
 msgstr "תקליטור בלו-ריי זה (או הקובץ) מוצפן ולא ניתן לניגון."
 
+# empty strings from id 29806 to 29899
 #. Header string on RDS Radiotext+ Info dialog
 msgctxt "#29900"
-msgid "Radiotext Plus info"
-msgstr "מידע Radiotext Plus"
+msgid "RadioText Plus info"
+msgstr "מידע RadioText Plus"
 
 #. Music band name which make the song (if present)
 msgctxt "#29901"
@@ -13738,6 +14076,18 @@ msgctxt "#34007"
 msgid "Windows media audio 2 (FFmpeg wmav2)"
 msgstr "Windows media audio 2 (FFmpeg wmav2)"
 
+msgctxt "#34008"
+msgid "When you need to enter some text, Kodi virtual keyboard will show up instead of the built-in tvOS keyboard"
+msgstr ""
+
+msgctxt "#34009"
+msgid "Siri remote pan gesture horizontal sensitivity"
+msgstr ""
+
+msgctxt "#34010"
+msgid "Siri remote pan gesture vertical sensitivity"
+msgstr ""
+
 msgctxt "#34100"
 msgid "Number of channels"
 msgstr "מספר ערוצים"
@@ -14271,6 +14621,31 @@ msgctxt "#35109"
 msgid "Keypad"
 msgstr "לוח מקשים"
 
+#. Label for the button that opens the port setup dialog
+msgctxt "#35110"
+msgid "Ports"
+msgstr ""
+
+#. Title of the window for setting up controller ports used by the game
+msgctxt "#35111"
+msgid "Port Setup"
+msgstr ""
+
+#. Label of a port with a numeric identifier. {0:s} is the port ID, e.g. "1" for "Port 1"
+msgctxt "#35112"
+msgid "Port {0:s}"
+msgstr ""
+
+#. Title of the dialog for selecting a game controller
+msgctxt "#35113"
+msgid "Select a Controller"
+msgstr ""
+
+#. Title of the error dialog when changing a controller port fails
+msgctxt "#35114"
+msgid "Failed to change controller"
+msgstr ""
+
 #. Name of keyboard category in the settings category window
 msgctxt "#35150"
 msgid "Keyboard"
@@ -14390,9 +14765,10 @@ msgctxt "#35201"
 msgid "Gameplay"
 msgstr "משחק"
 
+# empty string with id 35202
 msgctxt "#35203"
-msgid "Enable rewind if supported"
-msgstr "אפשר הרצה לאחור אם נתמך"
+msgid "Enable rewind (if supported)"
+msgstr ""
 
 msgctxt "#35204"
 msgid "Enable real-time rewinding during game play, if supported. Press rewind or manually seek backwards using the seek bar."
@@ -14477,8 +14853,8 @@ msgstr "ספקי משחקים"
 
 #. Title of the game OSD menu
 msgctxt "#35221"
-msgid "Game Menu"
-msgstr "תפריט המשחק"
+msgid "Menu"
+msgstr "תפריט"
 
 #. Label of button in the in-game menu for stopping game playback
 msgctxt "#35222"
@@ -14555,6 +14931,12 @@ msgctxt "#35236"
 msgid "In this release, only controllers can be used to play games."
 msgstr ""
 
+# empty strings from id 35237 to 35248
+#. Button to open the savestate manager from the game OSD
+msgctxt "#35249"
+msgid "Save / Load"
+msgstr ""
+
 msgctxt "#35250"
 msgid "Add games..."
 msgstr "הוסף משחקים..."
@@ -14568,7 +14950,7 @@ msgid "Edit game source"
 msgstr "ערוך מקור למשחק"
 
 msgctxt "#35253"
-msgid "Enable autosave if supported"
+msgid "Enable autosave (if supported)"
 msgstr ""
 
 msgctxt "#35254"
@@ -14594,6 +14976,63 @@ msgstr ""
 msgctxt "#35259"
 msgid "Saved"
 msgstr "נשמר"
+
+#. Title of the dialog to select a savestate for the current game
+msgctxt "#35260"
+msgid "Select savestate"
+msgstr ""
+
+#. Button for creating a new save state from the select savestate dialog
+msgctxt "#35261"
+msgid "New"
+msgstr "חדש"
+
+#. Help text for RetroAchievements username input setting
+msgctxt "#35262"
+msgid "Enter your RetroAchievements account username"
+msgstr ""
+
+#. Help text for RetroAchievements password input setting
+msgctxt "#35263"
+msgid "Enter your RetroAchievements account password"
+msgstr ""
+
+#. Label for notification events regarding RetroAchievements login
+msgctxt "#35264"
+msgid "RetroAchievements"
+msgstr ""
+
+#. Description for notification event regarding unsuccessful RetroAchievements login
+msgctxt "#35265"
+msgid "Incorrect User/Password!"
+msgstr ""
+
+#. Description for notification event regarding unsuccessful RetroAchievements login
+msgctxt "#35266"
+msgid "Failed to contact server"
+msgstr ""
+
+#. Description for notification event regarding unsuccessful RetroAchievements login
+msgctxt "#35267"
+msgid "Invalid response from server"
+msgstr ""
+
+#. Setting to show if the user is logged in to RetroAchievements
+#. Settings -> Games -> Achievements -> Logged in
+msgctxt "#35268"
+msgid "Logged in"
+msgstr ""
+
+#. Help text for the setting that shows if the user is logged in to RetroAchievements
+#. Settings -> Games -> Achievements -> Logged in
+msgctxt "#35269"
+msgid "Toggle this setting to log in or out of RetroAchievements."
+msgstr ""
+
+#. Description for notification event regarding unsuccessful RetroAchievements login
+msgctxt "#35270"
+msgid "Your account is not verified. Please check your email to complete your sign up."
+msgstr ""
 
 #. connection state "host unreachable"
 msgctxt "#35505"
@@ -14671,6 +15110,11 @@ msgstr "נכשל בזיהוי פורט com של CEC. יש להגדיר אותו 
 msgctxt "#36012"
 msgid "Couldn't initialise the CEC adapter. Please check your settings."
 msgstr "נכשל באתחול בקר CEC. יש לבדוק הגדרות CEC."
+
+#. CEC adapter setting to set the type of device that libCEC reports to the TV (Recording, Playback or Tuner Device)
+msgctxt "#36013"
+msgid "CEC client device mode"
+msgstr ""
 
 msgctxt "#36015"
 msgid "HDMI port number"
@@ -14819,6 +15263,33 @@ msgstr ""
 msgctxt "#36050"
 msgid "On start"
 msgstr "בהתחלה"
+
+#. Item list value of setting with label #36013 "CEC client device mode"
+msgctxt "#36051"
+msgid "Recording Device"
+msgstr ""
+
+#. Item list value of setting with label #36013 "CEC client device mode"
+msgctxt "#36052"
+msgid "Playback Device"
+msgstr ""
+
+#. Item list value of setting with label #36013 "CEC client device mode"
+msgctxt "#36053"
+msgid "Tuner Device"
+msgstr ""
+
+# empty strings from id 36054 to 36096
+#. Label of setting "System / Display / GUI peak luminance in HDR PQ mode"
+msgctxt "#36097"
+msgid "GUI peak luminance in HDR PQ mode"
+msgstr ""
+
+# empty strings from id 36051 to 36097
+#. Label of setting "System / Display / Use 10 bit for SDR"
+msgctxt "#36098"
+msgid "Use 10 bit for SDR"
+msgstr ""
 
 msgctxt "#36099"
 msgid "Dithering"
@@ -15244,10 +15715,10 @@ msgctxt "#36184"
 msgid "This category contains the settings for how subtitles are handled."
 msgstr "קטגוריה המכילה הגדרות הקשורות לכתוביות."
 
-#. Description of setting with label #14089 "Font to use for text subtitles"
+#. Description of setting with label #14089 "Font"
 msgctxt "#36185"
-msgid "Set the font type to be used for text based (usually downloaded) subtitles."
-msgstr "קביעת סוג גופן לכתוביות טקסט (בד\"כ אלה כתוביות שהורדו)."
+msgid "Set the font type to be used for subtitles."
+msgstr ""
 
 #. Description of setting with label #289 "Size"
 msgctxt "#36186"
@@ -15269,10 +15740,10 @@ msgctxt "#36189"
 msgid "Set the font character set to be used for subtitles."
 msgstr "בחירת ערכת התווים של גופן כתוביות."
 
-#. Description of setting with label #21368 "Override ASS/SSA subtitles fonts"
+#. Description of setting with label #21368 "Override subtitles fonts"
 msgctxt "#36190"
-msgid "Override ASS / SSA subtitles fonts."
-msgstr "שימוש בגופן שהוגדר במקום גופן מובנה בכתוביות ASS/SSA."
+msgid "Override subtitles fonts in subtitle formats such as ASS / SSA."
+msgstr ""
 
 #. Description of setting with label #21366 "Custom subtitle folder"
 msgctxt "#36191"
@@ -15281,8 +15752,8 @@ msgstr "הגדרת תיקיה מותאמת אישית עבור כתוביות. �
 
 #. Description of setting with label #21460 "Subtitle location on screen"
 msgctxt "#36192"
-msgid "Location of subtitles on the screen."
-msgstr "מיקום כתוביות על מסך."
+msgid "Location of subtitles on the screen. [Bottom of video] / [Top of video] When possible the subtitles will be positioned within the video area (depends on video encoding). Please note that some forced positions in the subtitles cannot be changed."
+msgstr ""
 
 #. Description of settings category with label #14087 "DVDs"
 msgctxt "#36193"
@@ -15353,16 +15824,16 @@ msgid "Instruct the backend to search for channels (if supported)."
 msgstr "מנחה את השרת האחורי לסרוק ערוצים (אם נתמך)."
 
 msgctxt "#36209"
-msgid "Delete the databases for channels and guide and reimport the data from the backend afterwards."
-msgstr "מחיקת מסד נתוני ערוצים,ולוח שידורים ויבוא נתונים מחדש משרת אחורי."
+msgid "Clear the databases for PVR data like channels, groups, reminders and guide. Please note that not all data can be restored from the backend afterwards."
+msgstr ""
 
 msgctxt "#36210"
 msgid "Open the client priorities dialog which allows modifying the priority for enabled PVR clients according to your personal preferences, for instance to order channels client by client. Higher value means higher priority."
 msgstr ""
 
 msgctxt "#36211"
-msgid "This category contains the settings for PVR menus and on-screen display (OSD), as well as channel information windows."
-msgstr "קטגוריה המכילה הגדרות תפריטי טלוויזיה חיה והתפריט הצף (OSD), ובנוסף גם מסכי המידע השונים על ערוץ."
+msgid "This category contains the settings for PVR channels and channel groups."
+msgstr ""
 
 msgctxt "#36212"
 msgid "Display programming information when changing channels, such as the current TV show."
@@ -16038,6 +16509,11 @@ msgctxt "#36355"
 msgid "In a multi-screen configuration, the screens not displaying this application are blacked out."
 msgstr "בתצורה מרובת מסכים, המסכים שלא תוצג עליהם תוכנה זו יושחרו."
 
+#. Description of settings category with label #1201 "NFS Client"
+msgctxt "#36356"
+msgid "This category contains the settings for how the NFS client is handled."
+msgstr ""
+
 #. Description of setting with label #214 "Video calibration..."
 msgctxt "#36357"
 msgid "Calibrate the user interface by adjusting the overscan. Use this tool if the image being displayed is too large or small for your display."
@@ -16398,7 +16874,9 @@ msgctxt "#36431"
 msgid "Shows all events in the event log for the current profile with options to only show specific levels."
 msgstr "מציג כל האירועים ביומן הרישום עבור המשתמש הנוכחי עם יכולת לבחור רמות פירוט מסוימות."
 
-#. Description for setting #310: "Keyboard layouts"
+#. Description for setting #310: "Virtual keyboard layouts"
+#. Setting in Interface -> Regional -> Virtual keyboard layouts
+#. Select the layout of a virtual keyboard
 msgctxt "#36432"
 msgid "Select virtual keyboard layouts."
 msgstr "בחירת מערכי המקלדת הווירטואלית."
@@ -16412,10 +16890,13 @@ msgctxt "#36434"
 msgid "If enabled, switch to the channel with the programme to remind when auto-closing the reminder popup."
 msgstr ""
 
-#. Description for setting #310: "Keyboard layouts"
+# empty string with id 36435
+#. Description for setting #407: "Hardware keyboard layouts"
+#. Setting in System -> Input -> Hardware keyboard layouts
+#. Select the layout of a physically attached keyboard
 msgctxt "#36436"
-msgid "Select OS keyboard layout."
-msgstr "לבחור את פריסת המקלדת של מערכת ההפעלה."
+msgid "Select hardware keyboard layout."
+msgstr ""
 
 #. Option for setting "System -> Add-ons -> Update official add-ons from"
 msgctxt "#36437"
@@ -16626,6 +17107,11 @@ msgctxt "#36546"
 msgid "Sets the visual depth of subtitles for stereoscopic 3D videos. The higher the value, the closer the subtitles will appear to the viewer."
 msgstr "קביעת עומק הכתוביות של וידאו 3D סטריאוסקופי. ככל שערך זה גבוה יותר הכתוביות יהיה קרובות יותר לצופה."
 
+#. Description of setting with label #36097 "System / Display / GUI peak luminance in HDR PQ mode"
+msgctxt "#36547"
+msgid "Sets the peak luminance level for GUI elements while the display is in HDR PQ mode. This affects all OSD, subtitles and graphics that are SDR in origin."
+msgstr ""
+
 #. Description of setting with label #37021 "Set GUI resolution limit"
 msgctxt "#36548"
 msgid "Limits resolution of GUI to save memory. Does not affect video playback. Requires restart."
@@ -16761,6 +17247,11 @@ msgstr "גודל טבלת חיפוש"
 msgctxt "#36577"
 msgid "Specify the resolution for the 3D lookup table. Use a lower resolution for quick preview and higher resolution for more accurate picture. Using a high resolution may take seconds to prepare when parameters are changed or a new video is started."
 msgstr "הגדר רזולוציה לטבלת החיפוש בתלת מימד. השתמש ברזולוציה נמוכה לתצוגה מוקדמת מהירה ורזולוציה גבוהה יותר לתמונה מדוייקת. שימוש ברזולוציה גבוהה יכול לקחת מספר שניות להכנה כשהפרמטרים משתנים או כשוידאו חדש מתחיל."
+
+#. Description of setting "System / Display / Use 10 bit for SDR" with label #36098
+msgctxt "#36578"
+msgid "Improves video quality by using 10-bit video surfaces for Standard Dynamic Range (SDR) video.[CR][Auto detect] Enables 10 bit for SDR only if the connected display supports HDR.[CR][Always] Enables 10 bit for SDR even if the connected display doesn't support HDR.[CR][Never] Do not use 10 bit for SDR.[CR]HDR passthrough mode always uses 10-bit regardless of this setting."
+msgstr ""
 
 #. primaries labels
 msgctxt "#36579"
@@ -17033,12 +17524,32 @@ msgctxt "#36636"
 msgid "You must first enter a password before web server authentication can be enabled."
 msgstr ""
 
-#. Text in confirm dialog when installing addon from zip
-msgctxt "#36637"
-msgid "Note that add-ons installed from zip (excluding served repositories) will not auto-update and must be manually updated. Would you like to proceed?"
+#. Menuitem at "Settings -> System -> Add-ons"
+msgctxt "#36638"
+msgid "Remove all orphaned add-ons"
 msgstr ""
 
-# empty strings from id 36638 to 36898
+#. Description of setting with label #36638 "Remove all orphaned dependencies"
+msgctxt "#36639"
+msgid "Remove all modules and support libraries that have been automatically installed and are in an orphaned state."
+msgstr ""
+
+#. Dialog caption
+msgctxt "#36640"
+msgid "Orphaned add-ons"
+msgstr ""
+
+#. Dialog text if orphaned add-ons were found and removed
+msgctxt "#36641"
+msgid "The following orphaned add-ons were removed from your system: {0:s}."
+msgstr ""
+
+#. Dialog text if no more orphaned add-ons left on the system
+msgctxt "#36642"
+msgid "No orphaned add-ons to remove."
+msgstr ""
+
+# empty strings from id 36643 to 36898
 #. Description of setting with label #729 "Enable SSL"
 msgctxt "#36899"
 msgid "Enables SSL encryption in the webserver. Certificate special://userdata/server.pem and Key special://userdata/server.key must be created manually"
@@ -17198,15 +17709,15 @@ msgctxt "#37031"
 msgid "Specifies how Blu-rays should be opened / played back. Note: Some disc menus are not fully supported and may cause problems."
 msgstr "קביעה כיצד מדיית Blu-ray תנוגן. הערה: תפריטי BD-J אינם נתמכים עדיין באופן מלא ולכן יתכנו תקלות בעת פתיחת תפריט BD-J."
 
-#. Title of category #37032 Accessibility
+#. Title of accessibility menu group
 msgctxt "#37032"
 msgid "Accessibility"
 msgstr "נגישות"
 
-#. Description of category #37032 Accessibility
+#. Description of category #287 Subtitles
 msgctxt "#37033"
-msgid "Video playback related accessibility settings, e.g. \"Prefer subtitles for the hearing impaired\"."
-msgstr "הגדרות נגישות הקשורות לניגון וידאו, למשל \"העדף כתוביות ללקויי שמיעה\"."
+msgid "This category contains the settings for subtitles"
+msgstr ""
 
 #. Setting #37034 Accessibility
 msgctxt "#37034"
@@ -17271,6 +17782,35 @@ msgstr "יצירת תמונות פרקים ממוזערות להצגה במסך 
 msgctxt "#37046"
 msgid "1080"
 msgstr "1080"
+
+msgctxt "#37047"
+msgid "WS-Discovery"
+msgstr ""
+
+#. Setting #37048 Enable WS-Discovery Service"
+msgctxt "#37048"
+msgid "Enable WS-Discovery Service"
+msgstr ""
+
+#. Description of setting #37048 Enable WS-Discovery Service"
+msgctxt "#37049"
+msgid "Enable service to search for SMB services using the WS-Discovery protocol"
+msgstr ""
+
+#. Label for component level debug logging setting
+msgctxt "#37050"
+msgid "Verbose logging for the [B]WS-Discovery[/B] component"
+msgstr ""
+
+#. Setting #37051 NFS Protocol Version"
+msgctxt "#37051"
+msgid "NFS Protocol Version"
+msgstr ""
+
+#. Description of setting #37051 NFS Protocol Version"
+msgctxt "#37052"
+msgid "NFS protocol version to use when establishing NFS connections"
+msgstr ""
 
 #. Setting #38011 "Show All Items entry"
 msgctxt "#38011"
@@ -17517,6 +18057,16 @@ msgctxt "#38081"
 msgid "Release status"
 msgstr ""
 
+#. Displayed in a toast notification when music items are added to a playlist
+msgctxt "#38082"
+msgid "Added to end of playlist"
+msgstr ""
+
+#. Displayed in a toast notification when music items are added to a playlist to play next
+msgctxt "#38083"
+msgid "Added to playlist to play next"
+msgstr ""
+
 #. Description of section #14200 "Player""
 msgctxt "#38100"
 msgid "Section that contains the settings for the playback of media"
@@ -17549,8 +18099,8 @@ msgstr "קטגוריה זו מכילה הגדרות להקרנה של תמונו
 
 #. Description of category #14213 "Language"
 msgctxt "#38106"
-msgid "This category contains the settings for audio & subtitle language"
-msgstr "קטגוריה זו מכילה הגדרות לשפת אודיו ושפת כתוביות"
+msgid "This category contains the settings for audio / subtitles language and accessibility"
+msgstr ""
 
 #. Description of category #14210 "Videos"
 msgctxt "#38107"
@@ -18030,6 +18580,11 @@ msgctxt "#39123"
 msgid "Artwork"
 msgstr "גרפיקה"
 
+#. Label for component level debug logging setting
+msgctxt "#39124"
+msgid "Verbose logging for the [B]Add-ons[/B] component"
+msgstr ""
+
 # empty string with id 39124
 msgctxt "#39125"
 msgid "Enable tag reading in file view"
@@ -18155,6 +18710,282 @@ msgctxt "#39153"
 msgid "Windowing system:"
 msgstr "מערכת חלונאית:"
 
+#. Override subtitles styles setting list
+msgctxt "#39154"
+msgid "Override subtitles styles"
+msgstr ""
+
+#. Description of setting with label #39154 "Override subtitles styles"
+msgctxt "#39155"
+msgid "Some subtitle formats such as SSA / ASS / WebVTT can include metadata like font style, colors, size, alignments, positions, etc. you can override the styles with your customizations (please note that side effects may occur in some cases)."
+msgstr ""
+
+#. Item list value of setting with label #39154 "Override subtitles styles"
+msgctxt "#39156"
+msgid "Positions"
+msgstr ""
+
+#. Item list value of setting with label #39154 "Override subtitles styles"
+msgctxt "#39157"
+msgid "Styles"
+msgstr "סגנונות"
+
+#. Item list value of setting with label #39154 "Override subtitles styles"
+msgctxt "#39158"
+msgid "Styles and positions"
+msgstr ""
+
+#. Subtitle border size setting toggle
+msgctxt "#39159"
+msgid "Border size"
+msgstr ""
+
+#. Subtitle border colour setting
+msgctxt "#39160"
+msgid "Border colour"
+msgstr ""
+
+#. CC Subtitles text alignment setting list
+msgctxt "#39161"
+msgid "Text alignment"
+msgstr ""
+
+#. Item list value of setting with label #39161 "Text alignment"
+msgctxt "#39162"
+msgid "Left"
+msgstr "שמאל"
+
+#. Item list value of setting with label #39161 "Text alignment"
+msgctxt "#39163"
+msgid "Center"
+msgstr ""
+
+#. Item list value of setting with label #39161 "Text alignment"
+msgctxt "#39164"
+msgid "Right"
+msgstr "ימין"
+
+#. Type of background for displaying the subtitles
+msgctxt "#39165"
+msgid "Background type"
+msgstr ""
+
+#. Item list value of setting with label #39166 "Background type"
+msgctxt "#39166"
+msgid "Shadow"
+msgstr ""
+
+#. Item list value of setting with label #39166 "Background type"
+msgctxt "#39167"
+msgid "Box"
+msgstr ""
+
+#. Item list value of setting with label #39166 "Background type"
+msgctxt "#39168"
+msgid "Square box"
+msgstr ""
+
+#. Description of setting with label #39166 "Background type"
+msgctxt "#39169"
+msgid "Type of background to apply to subtitles."
+msgstr ""
+
+#. Subtitle shadow size setting
+msgctxt "#39170"
+msgid "Shadow size"
+msgstr ""
+
+#. Subtitle shadow colour setting
+msgctxt "#39171"
+msgid "Shadow colour"
+msgstr ""
+
+#. Subtitle shadow opacity setting
+msgctxt "#39172"
+msgid "Shadow opacity"
+msgstr ""
+
+#. Subtitle blur setting
+msgctxt "#39173"
+msgid "Blur"
+msgstr ""
+
+#. SystemInfo string for the display's supported HDR types
+msgctxt "#39174"
+msgid "Display supported HDR types"
+msgstr ""
+
+#. Progress text on splash screen, to build the font cache
+msgctxt "#39175"
+msgid "Building font cache in progress - please wait"
+msgstr ""
+
+#. Helper text for gui sound volume setting
+msgctxt "#39176"
+msgid "Relative volume for gui sounds"
+msgstr ""
+
+#. Dialog caption related to the speech to text process
+msgctxt "#39177"
+msgid "Speech to text"
+msgstr ""
+
+#. Dialog text to notify that the speech service is not available
+msgctxt "#39178"
+msgid "Speech recognition service not available"
+msgstr ""
+
+#. Dialog text to notify that microphone is listening
+msgctxt "#39179"
+msgid "Listening..."
+msgstr ""
+
+#. Dialog text to notify that there has been no matching recognition result
+msgctxt "#39180"
+msgid "No recognition result matched"
+msgstr ""
+
+#. Dialog text to notify that there has been a speech recognition error
+msgctxt "#39181"
+msgid "Speech recognition error"
+msgstr ""
+
+#. Subtitle vertical margin setting
+msgctxt "#39182"
+msgid "Vertical margin"
+msgstr ""
+
+#. Help text for setting "Vertical margin" of label #39182
+msgctxt "#39183"
+msgid "Allows you to add a margin in top and bottom aligned text. Changing this setting will affect also subtitle position set with the Video calibration."
+msgstr ""
+
+#. Window screen calibration: the current subtitle calibration value with vertical margin
+msgctxt "#39184"
+msgid "Current value: {0:d} (with vertical margin: {1:d})"
+msgstr ""
+
+#. Dialog text to notify that there are insufficient permissions for speech recognition
+msgctxt "#39185"
+msgid "Insufficient permissions for speech recognition"
+msgstr ""
+
+#. Title of group menu subtitles
+msgctxt "#39186"
+msgid "Styles for text based subtitles"
+msgstr ""
+
+#. Title of group menu subtitles
+msgctxt "#39187"
+msgid "Closed caption subtitles"
+msgstr ""
+
+#. Item list value of setting with label #39166 "Background type"
+msgctxt "#39188"
+msgid "No background"
+msgstr ""
+
+#. Window screen calibration: calibration by using the subtitle bar
+msgctxt "#39189"
+msgid "Available only with manual subtitle position"
+msgstr ""
+
+#~ msgctxt "#35203"
+#~ msgid "Enable rewind if supported"
+#~ msgstr "אפשר הרצה לאחור אם נתמך"
+
+#~ msgctxt "#35221"
+#~ msgid "Game Menu"
+#~ msgstr "תפריט המשחק"
+
+#~ msgctxt "#19279"
+#~ msgid "Client specific"
+#~ msgstr "ספציפי ללקוח"
+
+#~ msgctxt "#36211"
+#~ msgid "This category contains the settings for PVR menus and on-screen display (OSD), as well as channel information windows."
+#~ msgstr "קטגוריה המכילה הגדרות תפריטי טלוויזיה חיה והתפריט הצף (OSD), ובנוסף גם מסכי המידע השונים על ערוץ."
+
+#~ msgctxt "#21463"
+#~ msgid "Below video"
+#~ msgstr "מתחת לווידאו"
+
+#~ msgctxt "#21465"
+#~ msgid "Above video"
+#~ msgstr "מעל הווידאו"
+
+#~ msgctxt "#14089"
+#~ msgid "Font to use for text subtitles"
+#~ msgstr "גופן כתוביות"
+
+#~ msgctxt "#21460"
+#~ msgid "Subtitle position on screen"
+#~ msgstr "מיקום כתוביות"
+
+#~ msgctxt "#36185"
+#~ msgid "Set the font type to be used for text based (usually downloaded) subtitles."
+#~ msgstr "קביעת סוג גופן לכתוביות טקסט (בד\"כ אלה כתוביות שהורדו)."
+
+#~ msgctxt "#37033"
+#~ msgid "Video playback related accessibility settings, e.g. \"Prefer subtitles for the hearing impaired\"."
+#~ msgstr "הגדרות נגישות הקשורות לניגון וידאו, למשל \"העדף כתוביות ללקויי שמיעה\"."
+
+#~ msgctxt "#38106"
+#~ msgid "This category contains the settings for audio & subtitle language"
+#~ msgstr "קטגוריה זו מכילה הגדרות לשפת אודיו ושפת כתוביות"
+
+#~ msgctxt "#19239"
+#~ msgid "Starting background threads"
+#~ msgstr "מפעיל תהליכים ברקע"
+
+#~ msgctxt "#214"
+#~ msgid "Video calibration..."
+#~ msgstr "כיול וידאו..."
+
+#~ msgctxt "#272"
+#~ msgid "Top-Left overscan compensation"
+#~ msgstr "פיצוי סריקת יתר משמאל למעלה"
+
+#~ msgctxt "#273"
+#~ msgid "Bottom-Right overscan compensation"
+#~ msgstr "פיצוי סריקת יתר מימין למטה"
+
+#~ msgctxt "#274"
+#~ msgid "Subtitle positioning"
+#~ msgstr "מיקום כתוביות"
+
+#~ msgctxt "#275"
+#~ msgid "Pixel ratio adjustment"
+#~ msgstr "התאמת יחס פיקסל"
+
+#~ msgctxt "#277"
+#~ msgid "Adjust the bar to change the subtitles position"
+#~ msgstr "יש להוזיז את הסמן לשינוי מיקום הכתוביות"
+
+#~ msgctxt "#278"
+#~ msgid "Adjust the rectangle so it is perfectly square"
+#~ msgstr "יש להפוך את המלבן לריבוע מושלם"
+
+#~ msgctxt "#20326"
+#~ msgid "This will reset the calibration values for {0:s}"
+#~ msgstr "פעולה זו תאפס את ערכי הכיול עבור {0:s}"
+
+#~ msgctxt "#20327"
+#~ msgid "to its default values."
+#~ msgstr "לערכי ברירת המחדל."
+
+#~ msgctxt "#19584"
+#~ msgid "Musical / Opera"
+#~ msgstr "מוזיקלי / אופרה"
+
+#~ msgctxt "#19585"
+#~ msgid "Ballet"
+#~ msgstr "בלט"
+
+#~ msgctxt "#19272"
+#~ msgid "You need a tuner, backend software, and an add-on for the backend to be able to use PVR. Please visit http://kodi.wiki/view/PVR to learn more."
+#~ msgstr "יש צורך בכרטיס טלוויזיה, תוכנת שרת אחורי והרחבה המאפשרת צפיה בטלוויזיה חיה דרך שרת אחורי. למידע נוסף יש לבקר ב־http://kodi.wiki/view/PVR."
+
 #~ msgctxt "#24045"
 #~ msgid "Failed to install Add-on from zip file"
 #~ msgstr "נכשל בהתקנת הרחבה מקובץ zip"
@@ -18167,37 +18998,46 @@ msgstr "מערכת חלונאית:"
 #~ msgid "Installing the Add-on from zip file located at {0:s} failed due to an invalid structure."
 #~ msgstr "התקנת ההרחבה מקובץ zip שנמצא ב- {0:s} נכשלה בשל מבנה לא חוקי."
 
+#~ msgctxt "#21368"
+#~ msgid "Override ASS / SSA subtitles fonts"
+#~ msgstr "התעלם מגופן כתוביות ASS / SSA"
+
+#~ msgctxt "#36190"
+#~ msgid "Override ASS / SSA subtitles fonts."
+#~ msgstr "שימוש בגופן שהוגדר במקום גופן מובנה בכתוביות ASS/SSA."
+
+#~ msgctxt "#19187"
+#~ msgid "Clearing all related data."
+#~ msgstr "מנקה את כל הנתונים הקשורים."
+
+#~ msgctxt "#19188"
+#~ msgid "All your guide data will be cleared. Are you sure?"
+#~ msgstr "כל נתוני לוח השידורים יאופסו. האם להמשיך?"
+
+#~ msgctxt "#36209"
+#~ msgid "Delete the databases for channels and guide and reimport the data from the backend afterwards."
+#~ msgstr "מחיקת מסד נתוני ערוצים,ולוח שידורים ויבוא נתונים מחדש משרת אחורי."
+
+#~ msgctxt "#21461"
+#~ msgid "Fixed"
+#~ msgstr "מקובע"
+
+#~ msgctxt "#36192"
+#~ msgid "Location of subtitles on the screen."
+#~ msgstr "מיקום כתוביות על מסך."
+
 #~ msgctxt "#310"
-#~ msgid "Virtual keyboard layouts"
-#~ msgstr "פריסות מקלדת וירטואלית"
+#~ msgid "Keyboard layouts"
+#~ msgstr "מערכי מקלדת"
 
-#~ msgctxt "#407"
-#~ msgid "Hardware keyboard layouts"
-#~ msgstr "פריסות מקלדת פיזית"
-
-# empty strings from id 2105 to 2202
-#~ msgctxt "#2203"
-#~ msgid "Use DTS Core"
-#~ msgstr "השתמש בליבת DTS"
-
-#~ msgctxt "#2204"
-#~ msgid "Select this option if you want to passthrough DTS-HD formats as DTS, otherwise, DTS-HD formats will be played via PCM"
-#~ msgstr "בחר אופציה זו אם אתה מעוניין להעביר את האות של DTS-HD כDTS, אחרת, DTS-HD יועבר כאות PCM"
-
-# empty strings from id 12023 to 12307
-#~ msgctxt "#12308"
-#~ msgid "Show password"
-#~ msgstr "הצג סיסמה"
-
-#~ msgctxt "#12309"
-#~ msgid "Hide password"
-#~ msgstr "הסתר סיסמה"
-
-# empty strings from id 29806 to 29899
-#~ msgctxt "#29900"
-#~ msgid "RadioText Plus info"
-#~ msgstr "מידע RadioText Plus"
+#~ msgctxt "#36436"
+#~ msgid "Select OS keyboard layout."
+#~ msgstr "לבחור את פריסת המקלדת של מערכת ההפעלה."
 
 #~ msgctxt "#36284"
 #~ msgid "Read the information belonging to an audio CD, like song title and artist, from the Internet database freedb.org."
 #~ msgstr "אחזור פרטי דיסק שמע, כמו שם שיר ואמן, ממסד הנתונים האינטרנטי freedb.org."
+
+#~ msgctxt "#29900"
+#~ msgid "Radiotext Plus info"
+#~ msgstr "מידע Radiotext Plus"

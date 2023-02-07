@@ -1,3 +1,6 @@
+[COLOR red][B]Version 1.0.10[/B][/COLOR]
+- Added timeout for Plex Shares (10 Seconds)
+
 [COLOR red][B]Version 1.0.9[/B][/COLOR]
 - added line in plex module to create database if not found.
 

@@ -1,27 +1,44 @@
-1.4.17
-update to support new episode guide JSON format
+1.6.3
+set scraper to resue Python interpreter to increase speed of scraping
 
-1.4.16
+1.6.2
+fix for episode groupings being ignored
+
+1.6.1
+fix for logic error when looking for episodeguide using external ID
+
+1.6.0
+change to use new JSON based episodeguide format to handle multiple providers
+fixes for last minute changes to new Nexus Python bindings
+
+1.5.6
 fix for scraper ignoring NFO files with TVDB artwork URL
 
-1.4.15
-fix for cast list in episodes
-properly classify TMDb logos as clearlogos
-filter out SVG files
+1.5.5
+fix for cast order in episode lists
+remove use of depreciated logos categorization
+filter out SVG artwork
 updated language files
 
-1.4.14
+1.5.4
 unreleased
 
-1.4.13
-fix to properly parse show ID from NFO file
+1.5.3
+fix to properly parse NFO file for show ID
 
-1.4.12
-added episode duration from TMDb API
+1.5.2
+added episode runtime from TMDb API
 updated language files
 
-1.4.11
-added two languages to settings file (kn-IN and te-IN)
+1.5.1
+added two language options to the settings (kn-IN and te-IN)
+updated language files
+added additional error catching for bad JSON from API
+added typing for all calls
+
+1.5.0
+Nexus only updates to use new VideoInfoTag setters
+general code cleanup
 updated language files
 
 1.4.10

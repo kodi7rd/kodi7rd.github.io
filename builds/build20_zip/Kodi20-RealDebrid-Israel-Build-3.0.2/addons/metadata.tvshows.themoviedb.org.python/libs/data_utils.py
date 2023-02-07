@@ -24,12 +24,13 @@ from __future__ import absolute_import, unicode_literals
 
 import re
 import json
-from collections import OrderedDict, namedtuple
+from xbmc import Actor, VideoStreamDetail
+from collections import namedtuple
 from .utils import safe_get, logger
 from . import settings, api_utils
 
 try:
-    from typing import Optional, Text, Dict, List, Any  # pylint: disable=unused-import
+    from typing import Optional, Tuple, Text, Dict, List, Any  # pylint: disable=unused-import
     from xbmcgui import ListItem  # pylint: disable=unused-import
     InfoType = Dict[Text, Any]  # pylint: disable=invalid-name
 except ImportError:
@@ -81,12 +82,12 @@ def _clean_plot(plot):
     return plot
 
 
-def _set_cast(cast_info, list_item):
+def _set_cast(cast_info, vtag):
     # type: (InfoType, ListItem) -> ListItem
     """Save cast info to list item"""
     cast = []
     for item in cast_info:
-        data = {
+        actor = {
             'name': item['name'],
             'role': item.get('character', item.get('character_name', '')),
             'order': item['order'],
@@ -94,11 +95,8 @@ def _set_cast(cast_info, list_item):
         thumb = None
         if safe_get(item, 'profile_path') is not None:
             thumb = settings.IMAGEROOTURL + item['profile_path']
-        if thumb:
-            data['thumbnail'] = thumb
-        cast.append(data)
-    list_item.setCast(cast)
-    return list_item
+        cast.append(Actor(actor['name'], actor['role'], actor['order'], thumb))
+    vtag.setCast(cast)
 
 
 def _get_credits(show_info):
@@ -125,19 +123,25 @@ def _get_directors(episode_info):
     return directors_
 
 
-def _set_unique_ids(ext_ids):
-    # type: (InfoType) -> ListItem
+def _set_unique_ids(ext_ids, vtag):
+    # type: (Dict, ListItem) -> ListItem
     """Extract unique ID in various online databases"""
-    unique_ids = {}
+    return_ids = {}
     for key, value in ext_ids.items():
         if key in VALIDEXTIDS and value:
-            key = key[:-3]
-            unique_ids[key] = str(value)
-    return unique_ids
+            if key == 'tmdb_id':
+                isTMDB = True
+            else:
+                isTMDB = False
+            shortkey = key[:-3]
+            str_value = str(value)
+            vtag.setUniqueID(str_value, type=shortkey, isdefault=isTMDB)
+            return_ids[shortkey] = str_value
+    return return_ids
 
 
-def _set_rating(the_info, list_item, episode=False):
-    # type: (InfoType, ListItem, bool) -> ListItem
+def _set_rating(the_info, vtag):
+    # type: (InfoType, ListItem) -> None
     """Set show/episode rating"""
     first = True
     for rating_type in settings.RATING_TYPES:
@@ -149,36 +153,29 @@ def _set_rating(the_info, list_item, episode=False):
         logger.debug("adding rating of %s and votes of %s" %
                      (str(rating), str(votes)))
         if rating > 0:
-            list_item.setRating(rating_type, rating,
-                                votes=votes, defaultt=first)
+            vtag.setRating(rating, votes=votes,
+                           type=rating_type, isdefault=first)
             first = False
-    return list_item
 
 
-def _add_season_info(show_info, list_item):
-    # type: (InfoType, ListItem) -> ListItem
+def _add_season_info(show_info, vtag):
+    # type: (InfoType, ListItem) -> None
     """Add info for show seasons"""
     for season in show_info['seasons']:
         logger.debug('adding information for season %s to list item' %
                      season['season_number'])
-        list_item.addSeason(season['season_number'],
-                            safe_get(season, 'name', ''))
+        vtag.addSeason(season['season_number'],
+                       safe_get(season, 'name', ''))
         for image_type, image_list in season.get('images', {}).items():
             if image_type == 'posters':
                 destination = 'poster'
             else:
                 destination = image_type
             for image in image_list:
-                if image.get('type') == 'fanarttv':
-                    theurl = image['file_path']
-                    previewurl = theurl.replace(
-                        '.fanart.tv/fanart/', '.fanart.tv/preview/')
-                else:
-                    theurl = settings.IMAGEROOTURL + image['file_path']
-                    previewurl = settings.PREVIEWROOTURL + image['file_path']
-                list_item.addAvailableArtwork(
-                    theurl, art_type=destination, preview=previewurl, season=season['season_number'])
-    return list_item
+                theurl, previewurl = get_image_urls(image)
+                if theurl:
+                    vtag.addAvailableArtwork(
+                        theurl, arttype=destination, preview=previewurl, season=season['season_number'])
 
 
 def get_image_urls(image):
@@ -199,14 +196,15 @@ def get_image_urls(image):
 def set_show_artwork(show_info, list_item):
     # type: (InfoType, ListItem) -> ListItem
     """Set available images for a show"""
+    vtag = list_item.getVideoInfoTag()
     for image_type, image_list in show_info.get('images', {}).items():
         if image_type == 'backdrops':
             fanart_list = []
             for image in image_list:
                 theurl, previewurl = get_image_urls(image)
                 if image.get('iso_639_1') != None and settings.CATLANDSCAPE and theurl:
-                    list_item.addAvailableArtwork(
-                        theurl, art_type="landscape", preview=previewurl)
+                    vtag.addAvailableArtwork(
+                        theurl, arttype="landscape", preview=previewurl)
                 elif theurl:
                     fanart_list.append({'image': theurl})
             if fanart_list:
@@ -221,43 +219,41 @@ def set_show_artwork(show_info, list_item):
             for image in image_list:
                 theurl, previewurl = get_image_urls(image)
                 if theurl:
-                    list_item.addAvailableArtwork(
-                        theurl, art_type=destination, preview=previewurl)
+                    vtag.addAvailableArtwork(
+                        theurl, arttype=destination, preview=previewurl)
     return list_item
 
 
 def add_main_show_info(list_item, show_info, full_info=True):
     # type: (ListItem, InfoType, bool) -> ListItem
     """Add main show info to a list item"""
-    plot = _clean_plot(safe_get(show_info, 'overview', ''))
+    vtag = list_item.getVideoInfoTag()
     original_name = show_info.get('original_name')
     if settings.KEEPTITLE and original_name:
         showname = original_name
     else:
         showname = show_info['name']
-    video = {
-        'plot': plot,
-        'plotoutline': plot,
-        'title': showname,
-        'originaltitle': original_name,
-        'tvshowtitle': showname,
-        'mediatype': 'tvshow'
-    }
+    plot = _clean_plot(safe_get(show_info, 'overview', ''))
+    vtag.setTitle(showname)
+    vtag.setOriginalTitle(original_name)
+    vtag.setTvShowTitle(showname)
+    vtag.setPlot(plot)
+    vtag.setPlotOutline(plot)
+    vtag.setMediaType('tvshow')
     ext_ids = {'tmdb_id': show_info['id']}
     ext_ids.update(show_info.get('external_ids', {}))
-    unique_ids = _set_unique_ids(ext_ids)
-    list_item.setUniqueIDs(unique_ids, 'tmdb')
-    video['episodeguide'] = json.dumps(unique_ids)
+    epguide_ids = _set_unique_ids(ext_ids, vtag)
+    vtag.setEpisodeGuide(json.dumps(epguide_ids))
     if show_info.get('first_air_date'):
-        video['year'] = int(show_info['first_air_date'][:4])
-        video['premiered'] = show_info['first_air_date']
+        vtag.setYear(int(show_info['first_air_date'][:4]))
+        vtag.setPremiered(show_info['first_air_date'])
     if full_info:
-        video['status'] = safe_get(show_info, 'status', '')
+        vtag.setTvShowStatus(safe_get(show_info, 'status', ''))
         genre_list = safe_get(show_info, 'genres', {})
         genres = []
         for genre in genre_list:
             genres.append(genre['name'])
-        video['genre'] = genres
+        vtag.setGenres(genres)
         networks = show_info.get('networks', [])
         if networks:
             network = networks[0]
@@ -266,11 +262,11 @@ def add_main_show_info(list_item, show_info, full_info=True):
             network = None
             country = None
         if network and country and settings.STUDIOCOUNTRY:
-            video['studio'] = '{0} ({1})'.format(network['name'], country)
+            vtag.setStudios(['{0} ({1})'.format(network['name'], country)])
         elif network:
-            video['studio'] = network['name']
+            vtag.setStudios([network['name']])
         if country:
-            video['country'] = country
+            vtag.setCountries([country])
         content_ratings = show_info.get(
             'content_ratings', {}).get('results', {})
         if content_ratings:
@@ -285,69 +281,67 @@ def add_main_show_info(list_item, show_info, full_info=True):
             if not mpaa:
                 mpaa = mpaa_backup
             if mpaa:
-                video['Mpaa'] = settings.CERT_PREFIX + mpaa
-        video['credits'] = video['writer'] = _get_credits(show_info)
+                vtag.setMpaa(settings.CERT_PREFIX + mpaa)
+        vtag.setWriters(_get_credits(show_info))
         if settings.ENABTRAILER:
             trailer = _parse_trailer(show_info.get(
                 'videos', {}).get('results', {}))
             if trailer:
-                video['trailer'] = trailer
+                vtag.setTrailer(trailer)
         list_item = set_show_artwork(show_info, list_item)
-        list_item = _add_season_info(show_info, list_item)
-        list_item = _set_cast(show_info['credits']['cast'], list_item)
-        list_item = _set_rating(show_info, list_item)
+        _add_season_info(show_info, vtag)
+        _set_cast(show_info['credits']['cast'], vtag)
+        _set_rating(show_info, vtag)
     else:
-        image = safe_get(show_info, 'poster_path', '')
-        if image:
+        image = show_info.get('poster_path', '')
+        if image and not image.endswith('.svg'):
             theurl = settings.IMAGEROOTURL + image
             previewurl = settings.PREVIEWROOTURL + image
-            list_item.addAvailableArtwork(
-                theurl, art_type='poster', preview=previewurl)
-    logger.debug('adding tv show information for %s to list item' %
-                 video['tvshowtitle'])
-    list_item.setInfo('video', video)
+            vtag.addAvailableArtwork(
+                theurl, arttype='poster', preview=previewurl)
+    logger.debug('adding tv show information for %s to list item' % showname)
     return list_item
 
 
 def add_episode_info(list_item, episode_info, full_info=True):
     # type: (ListItem, InfoType, bool) -> ListItem
     """Add episode info to a list item"""
-    video = {
-        'title': episode_info.get('name', 'Episode ' + str(episode_info['episode_number'])),
-        'season': episode_info['season_number'],
-        'episode': episode_info['episode_number'],
-        'mediatype': 'episode',
-    }
+    title = episode_info.get('name', 'Episode ' +
+                             str(episode_info['episode_number']))
+    vtag = list_item.getVideoInfoTag()
+    vtag.setTitle(title)
+    vtag.setSeason(episode_info['season_number'])
+    vtag.setEpisode(episode_info['episode_number'])
+    vtag.setMediaType('episode')
     if safe_get(episode_info, 'air_date') is not None:
-        video['aired'] = episode_info['air_date']
+        vtag.setFirstAired(episode_info['air_date'])
     if full_info:
         summary = safe_get(episode_info, 'overview')
         if summary is not None:
-            video['plot'] = video['plotoutline'] = _clean_plot(summary)
+            plot = _clean_plot(summary)
+            vtag.setPlot(plot)
+            vtag.setPlotOutline(plot)
         if safe_get(episode_info, 'air_date') is not None:
-            video['premiered'] = episode_info['air_date']
+            vtag.setPremiered(episode_info['air_date'])
         duration = episode_info.get('runtime')
         if duration:
-            video['duration'] = int(duration) * 60
-        list_item = _set_cast(
-            episode_info['season_cast'] + episode_info['credits']['guest_stars'], list_item)
+            videostream = VideoStreamDetail(duration=int(duration)*60)
+            vtag.addVideoStream(videostream)
+        _set_cast(
+            episode_info['season_cast'] + episode_info['credits']['guest_stars'], vtag)
         ext_ids = {'tmdb_id': episode_info['id']}
         ext_ids.update(episode_info.get('external_ids', {}))
-        unique_ids = _set_unique_ids(ext_ids)
-        list_item.setUniqueIDs(unique_ids, 'tmdb')
-        list_item = _set_rating(episode_info, list_item, episode=True)
+        _set_unique_ids(ext_ids, vtag)
+        _set_rating(episode_info, vtag)
         for image in episode_info.get('images', {}).get('stills', []):
-            img_path = image.get('file_path')
-            if img_path:
-                theurl = settings.IMAGEROOTURL + img_path
-                previewurl = settings.PREVIEWROOTURL + img_path
-                list_item.addAvailableArtwork(
-                    theurl, art_type='thumb', preview=previewurl)
-        video['credits'] = video['writer'] = _get_credits(episode_info)
-        video['director'] = _get_directors(episode_info)
+            theurl, previewurl = get_image_urls(image)
+            if theurl:
+                vtag.addAvailableArtwork(
+                    theurl, arttype='thumb', preview=previewurl)
+        vtag.setWriters(_get_credits(episode_info))
+        vtag.setDirectors(_get_directors(episode_info))
     logger.debug('adding episode information for S%sE%s - %s to list item' %
-                 (video['season'], video['episode'], video['title']))
-    list_item.setInfo('video', video)
+                 (episode_info['season_number'], episode_info['episode_number'], title))
     return list_item
 
 
@@ -377,7 +371,7 @@ def parse_nfo_url(nfo):
                     show_id_match.group(1), show_id_match.group(2))
             if tmdb_id:
                 logger.debug('match group 3: ' + str(ep_grouping))
-                sid_match = UrlParseResult('themoviedb', tmdb_id, ep_grouping)
+                sid_match = UrlParseResult('tmdb', tmdb_id, ep_grouping)
                 break
     return sid_match, ns_match
 
@@ -404,6 +398,8 @@ def _convert_ext_id(ext_provider, ext_id):
 
 
 def parse_media_id(title):
+    # type: (Text) -> Dict
+    """get the ID from a title and return with the type"""
     title = title.lower()
     if title.startswith('tt') and title[2:].isdigit():
         # IMDB ID works alone because it is clear
@@ -420,6 +416,8 @@ def parse_media_id(title):
 
 
 def _parse_trailer(results):
+    # type: (Text) -> Text
+    """create a valid Tubed or YouTube plugin trailer URL"""
     if results:
         if settings.PLAYERSOPT == 'tubed':
             addon_player = 'plugin://plugin.video.tubed/?mode=play&video_id='
@@ -444,6 +442,8 @@ def _parse_trailer(results):
 
 
 def _check_youtube(key):
+    # type: (Text) -> bool
+    """check to see if the YouTube key returns a valid link"""
     chk_link = "https://www.youtube.com/watch?v="+key
     check = api_utils.load_info(chk_link, resp_type='not_json')
     if not check or "Video unavailable" in check:       # video not available

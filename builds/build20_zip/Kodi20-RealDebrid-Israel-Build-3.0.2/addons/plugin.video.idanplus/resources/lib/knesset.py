@@ -13,7 +13,7 @@ def WatchLive(name='', iconimage='', quality='best'):
 		url = 'https://main.knesset.gov.il/_layouts/15/1037/CustomScripts/KnessetMainScripts.js?v=9'
 		text = common.OpenURL(url, headers=headers, verify=False)
 		match = re.compile("playerPlenumLiveMediaElement\.setSrc\('(.*?)'\);").findall(text)
-		url = match[0]
+		url = match[-1]
 	except Exception as ex:
 		xbmc.log(str(ex), 3)
 	if url is None or len(url) < 10:

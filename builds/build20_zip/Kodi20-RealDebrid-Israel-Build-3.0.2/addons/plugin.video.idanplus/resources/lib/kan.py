@@ -349,20 +349,31 @@ def GetArchiveCategoriesList(url, iconimage, catName):
 
 def GetArchiveSeriesList(url, iconimage, catName):
 	text = common.OpenURL(url)
-	matches = re.compile('<div role="main"(.*?)</nav>', re.S).findall(text)
+	series = re.compile('<div class="archiveItem topImg articlePage">\s*<div class="embed-responsive embed-responsive-16by9">.*?"background-image:url\((.*?)\);".*?<a href="(.*?)" title="(.*?)".*?<p class="spoiler">(.*?)</p>', re.S).findall(text)
+	
+	matches = re.compile('<div role="main"(.*?)</section>', re.S).findall(text)
 	if len(matches) == 0:
-		GetArchiveEpisodes(url, iconimage, text, catName)
 		return
 	matches = re.compile('<ul class="navbar-nav categoriesMenu">(.*?)</ul>', re.S).findall(matches[0])
+	if len(matches) == 0:
+		for icon, url, name, description in series:
+			if url == '/main/vod/':
+				continue
+			name = common.GetLabelColor(common.UnEscapeXML(name.strip()), keyColor="prColor", bold=True)
+			icon = 'https://archive.kan.org.il/{0}'.format(icon)
+			description = common.UnEscapeXML(description.strip())
+			#icon = iconimage
+			#description = ''
+			common.addDir(name, 'https://archive.kan.org.il/{0}'.format(url), 43, icon, infos={"Title": name, "Plot": description}, module=module, urlParamsData={'catName': catName})
+		return
 	matches = re.compile('href="/(.*?)" title="(.*?)">', re.S).findall(matches[0])
-	series = re.compile('<div class="archiveItem topImg articlePage">\s*<div class="embed-responsive embed-responsive-16by9">\s*<a href="(.*?)" title="(.*?)".*?"background-image:url\((.*?)\);".*?<p class="spoiler">(.*?)</p>', re.S).findall(text)
 	for url, name in matches:
 		if url == 'main/vod/':
 			continue
 		name = common.GetLabelColor(common.UnEscapeXML(name.strip()), keyColor="prColor", bold=True)
-		serie = [serie for serie in series if serie[0] == '/'+url]
+		serie = [serie for serie in series if serie[1] == '/'+url]
 		if len(serie) > 0:
-			icon = 'https://archive.kan.org.il/{0}'.format(serie[0][2])
+			icon = 'https://archive.kan.org.il/{0}'.format(serie[0][0])
 			description = common.UnEscapeXML(serie[0][3].strip())
 		else:
 			icon = iconimage
@@ -379,7 +390,6 @@ def GetArchiveEpisodes(url, iconimage, text, catName):
 	
 	matches = re.compile('<section class="PageSection categoryPage(.*?)</section>', re.S).findall(text)
 	if len(matches) == 0:
-		#xbmc.log('2222222', 5)
 		return
 	matches = re.compile('<a title="(.*?)" href="(.*?)".*?"background-image:url\((.*?)\);".*?</a>(.*?)</div>\s?</div>', re.S).findall(matches[0])
 	for name, url, image, rest in matches:

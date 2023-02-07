@@ -132,7 +132,7 @@ def VODs():
 	name = common.GetLabelColor("כאן - ארכיון", bold=True, color="none")
 	common.addDir(name, 'https://archive.kan.org.il/', 41,  common.GetIconFullPath("kan.jpg"), infos={"Title": name}, module='kan')
 	name = common.GetLabelColor(common.GetLocaleString(30608), bold=True, color="none")
-	common.addDir(name, 'http://www.mako.co.il/mako-vod-music24', 1, common.GetIconFullPath("24telad.png"), infos={"Title": name}, module='keshet')
+	common.addDir(name, 'https://www.mako.co.il/mako-vod-index?filter=provider&vcmId=3377c13070733210VgnVCM2000002a0c10acRCRD', 1, common.GetIconFullPath("24telad.png"), infos={"Title": name}, module='keshet')
 	name = common.GetLabelColor(common.GetLocaleString(30630), bold=True, color="none")
 	common.addDir(name, '', 0, common.GetIconFullPath("9tv.png"), infos={"Title": name}, module='9tv')
 	name = common.GetLabelColor(common.GetLocaleString(30900), bold=True, color="none")

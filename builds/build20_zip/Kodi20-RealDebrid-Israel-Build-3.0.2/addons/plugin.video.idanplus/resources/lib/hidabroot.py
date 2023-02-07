@@ -8,11 +8,10 @@ module = 'hidabroot'
 def WatchLive(name='', iconimage='', quality='best'):
 	userAgent = common.GetUserAgent()
 	headers={"User-Agent": userAgent}
-	#text = common.OpenURL('https://www.hidabroot.org/live', headers=headers)
-	#match = re.compile('<div id="video_wrapper".*?<iframe src="(.*?)"').findall(text)
-	#text = common.OpenURL(match[0], headers=headers)
-	text = common.OpenURL('https://go.shidur.net/player/testlive.php', headers=headers)
-	match = re.compile('hls\.loadSource\(["\'](.*?)["\']\)').findall(text)
+	text = common.OpenURL('https://www.hidabroot.org/live', headers=headers)
+	match = re.compile("vid_el.*?src: '(.*?)'", re.S).findall(text)
+	#text = common.OpenURL('https://go.shidur.net/player/testlive.php', headers=headers)
+	#match = re.compile('hls\.loadSource\(["\'](.*?)["\']\)').findall(text)
 	link = common.GetStreams(match[0], headers=headers, quality=quality)
 	final = '{0}|User-Agent={1}'.format(link, userAgent)
 	common.PlayStream(final, quality, name, iconimage)

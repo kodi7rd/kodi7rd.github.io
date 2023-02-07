@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcaddon
-import sys, re, json, collections
+import sys, re, json, collections, datetime, time
 import resources.lib.common as common
 
 Addon = xbmcaddon.Addon(common.AddonID)
@@ -20,136 +20,28 @@ def GetCategoriesList(iconimage):
 	result = GetUrlJson('{0}/vod/'.format(baseUrl))
 	if len(result) > 0:
 		name = common.GetLabelColor("כל התכניות", bold=True, color="none")
-		common.addDir(name, '{0}/vod/'.format(baseUrl), 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות רשת 13"}, module=module)
-		#name = common.GetLabelColor(common.UnEscapeXML(common.encode('פרקים אחרונים', 'utf-8')), bold=True, color="none")
-		#common.addDir(name, '{0}/general/programs/signup-auditions/'.format(baseUrl), 1, iconimage, infos={"Title": name, "Plot": "צפיה בפרקים אחרונים מתכניות רשת 13"}, module=module)
-		'''
-		grids = result.get('Content', {}).get('PageGrid', {})
-		for grid in grids:
-			gridType = grid.get('grid_type')
-			if gridType is not None and gridType == 'standard_four':
-				gridTitle = common.encode(grid.get('grid_title').get('text').strip(), 'utf-8')
-				name = common.GetLabelColor(gridTitle, bold=True, color="none")
-				grid_id = grid.get('grid_id', '-1')
-				if grid_id == '-1' or grid_id == 655201 or grid_id == 2015588:
-					continue
-				common.addDir(name, str(grid_id), 6, iconimage, infos={"Title": name}, module=module)
-		'''
+		common.addDir(name, '{0}/all-shows/all-shows-list/'.format(baseUrl), 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות רשת 13"}, module=module)
 	name = common.GetLabelColor("חדשות 13", bold=True, color="none")
 	common.addDir(name, '', 10, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות חדשות 13"}, module=module)
 	name = common.GetLabelColor("ארכיון רשת 13", bold=True, color="none")
-	common.addDir(name, '{0}/general/programs/'.format(baseUrl), 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות מארכיון רשת 13"}, module=module)
+	common.addDir(name, '{0}/general/programs/'.format(baseUrl), 20, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות מארכיון רשת 13"}, module=module)
 
-def GetUrlJson(url):
+def GetUrlJson(url, root=False):
 	result = {}
 	try:
 		html = common.OpenURL(url, headers={'User-Agent': userAgent, 'Accept-encoding': 'gzip, deflate, br'})
 		props = re.compile('"application/json">(.*?)</script>').findall(html)
-		#xbmc.log(props[0], 5)
-		result = json.loads(props[0])['props']['pageProps']['page'] if len(props) > 0 else {}
+		if len(props) == 0:
+			return {}
+		result = json.loads(props[0])
+		if root == False:
+			result = result['props']['pageProps']['page']
 		#xbmc.log(str(result), 5)
 	except Exception as ex:
 		xbmc.log(str(ex), 3)
 	return result
 
-def GetIcon(images, iconimage):
-	if images == None:
-		return iconimage
-	icon = images.get('app_16x9')
-	if icon == None:
-		icon = images.get('src', iconimage)
-	if icon == None or icon == False or icon == '':
-		icon = iconimage
-	return common.encode(icon, 'utf-8')
-
-'''
-def GetGridList(iconimage, grid_id):
-	url = '{0}/vod/'.format(baseUrl)
-	result = GetUrlJson(url)
-	if len(result) < 1:
-		return
-	episodes = []
-	series = []
-	postsIDs = []
-	posts = {}
-	grids = result.get('Content', {}).get('PageGrid', {})
-	for grid in grids:
-		if grid.get('grid_id') != int(grid_id):
-			continue
-		gridType = grid.get('grid_type')
-		if gridType is None or 'grid_content' not in gridType:
-			continue
-		title = grid.get('grid_title')
-		gridTitle = '' if title is None else common.encode(title.get('text', '').strip(), 'utf-8')
-		titleLink = '' if title is None else title.get('link', '')
-		gridLink = '' if titleLink is None else common.encode(str(titleLink).strip(), 'utf-8')
-		if gridLink != '' and gridTitle != '' and gridLink != url:
-			series.append((gridTitle, gridLink, iconimage, '', ''))
-		for post in grid.get('posts', {}):
-			try:
-				#if postsID in postsIDs:
-				#	continue
-				link = post.get('link')
-				title = common.encode(post['title'], 'utf-8')
-				subtitle = common.encode(post['secondaryTitle'], 'utf-8')
-				icon = post.get('image', iconimage)
-				publishDate = post.get('publishDate')
-				postType = post.get('postType', '')
-				if postType == 'item':
-					mode = 3
-					video = post.get('video')
-					if video is None:
-						continue
-					link = ''
-					if video.get('kaltura_videoID') is not None:
-						link = '{0}--kaltura--{1}==='.format(link, video['kaltura_videoID'])
-					if video.get('cst_videoID') is not None:
-						if video['cst_videoID'] == '-1':
-							link = '{0}--cst--{1}==='.format(link, video['cst_videoID'])
-						else:
-							link = '{0}--cst--{1}==='.format(link, video.get('videoRef', link))
-					if video.get('brv_videoID') is not None:
-						link = '{0}--brv--{1}==='.format(link, video['brv_videoID'])	
-					if link == '':
-						continue
-				elif postType != 'page':
-					continue
-				else:
-					mode = 1
-					#categoryLabel = post.get('CategoryLabel', '')
-					#if categoryLabel != '':
-					#	title = common.encode(categoryLabel, 'utf-8')
-					titleForGrid = post.get('gridView', {}).get('titleForGrid', '')
-					if titleForGrid != '':
-						title = common.encode(titleForGrid, 'utf-8')
-				if link == '' or link in posts:
-					continue
-				posts[link] = title
-				postsIDs.append(postsID)
-				
-				if mode == 1:
-					series.append((title, link, icon, subtitle, publishDate))
-				else:
-					episodes.append((title, gridTitle, link, icon, subtitle, publishDate))
-			except Exception as ex:
-				xbmc.log(str(ex), 3)
-		break
-	if sortBy == 1:
-		series = sorted(series,key=lambda series: series[0])
-		#episodes = sorted(episodes,key=lambda episodes: episodes[0])
-	for title, link, icon, subtitle, publishDate in series:
-		name = common.GetLabelColor(title, keyColor="prColor", bold=True)
-		link = str(link)
-		infos= {"Title": name, "Plot": subtitle, "Aired": publishDate}
-		common.addDir(name, link, 1, icon, infos=infos, module=module)
-	for title, gridTitle, link, icon, subtitle, publishDate in episodes:
-		name = common.GetLabelColor(title, keyColor="chColor") if gridTitle is None or gridTitle == '' else common.getDisplayName(gridTitle, title, programNameFormat)
-		link = str(link)
-		infos= {"Title": name, "Plot": subtitle, "Aired": publishDate}
-		common.addDir(name, link, 3, icon, infos=infos, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=3&iconimage={3}&moredata=choose&module=reshet)'.format(sys.argv[0], common.quote_plus(link), common.quote_plus(name), common.quote_plus(icon))), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=3&iconimage={3}&moredata=set_reshet_res&module=reshet)'.format(sys.argv[0], common.quote_plus(link), common.quote_plus(name), common.quote_plus(icon)))], moreData=bitrate, module=module, isFolder=False, isPlayable=True)
-'''
-
-def GetSeriesList(url, iconimage):
+def GetSeriesListOld(url, iconimage):
 	result = GetUrlJson(url)
 	if len(result) < 1:
 		return
@@ -214,21 +106,21 @@ def GetSeriesList(url, iconimage):
 				grids_arr.append((name, link, iconimage, {"Title": name}))
 	grids_sorted = grids_arr if sortBy == 0 else sorted(grids_arr,key=lambda grids_arr: grids_arr[0])
 	for name, link, icon, infos in grids_sorted:
-		common.addDir(name, '{0}{1}'.format(baseUrl, link), 1, str(icon), infos=infos, module=module)
-	
-def GetSeasonList(url, iconimage):
+		common.addDir(name, '{0}{1}'.format(baseUrl, link), 21, str(icon), infos=infos, module=module)
+
+def GetSeasonListOld(url, iconimage):
 	result = GetUrlJson(url)
 	seasons, episodes = GetLinks(url, result, iconimage)
 	if len(seasons) > 0:
 		for link, title in common.items(seasons):
 			name = common.GetLabelColor(title, keyColor="timesColor", bold=True)
-			common.addDir(name, link, 1, iconimage, infos={"Title": name}, module=module)
+			common.addDir(name, link, 21, iconimage, infos={"Title": name}, module=module)
 		if len(episodes) < 1:
 			return
 	ShowEpisodes(episodes, iconimage)
 	ShowPaging(result, iconimage)
 
-def GetEpisodesList(url, iconimage):
+def GetEpisodesListOld(url, iconimage):
 	result = GetUrlJson(url)
 	seasons, episodes = GetLinks(url, result, iconimage)
 	ShowEpisodes(episodes, iconimage)
@@ -311,15 +203,21 @@ def GetLinks(url, result, iconimage):
 					link += '/'
 				ending = link[link.rfind('/', 0, len(link)-1):]
 				link = '{0}{1}'.format(baseUrl, link)
+				#xbmc.log('{0} - {1}'.format(link, title), 5)
 				if ('episodes' in ending or 'season' in ending) and IsLinkNotExist(url, link, seasons):
+				#if IsLinkNotExist(url, link, seasons):
 					#link = GetLink(link)
+					#xbmc.log('added', 5)
 					seasons[link] = common.encode(title.strip(), 'utf-8')
 					#xbmc.log('!! {0} - {1} !!'.format(link, seasons[link]), 5)
 			except Exception as ex:
 				xbmc.log(str(ex), 3)
 	#'''
+	xbmc.log(str(seasons), 5)
 	pageTitle = common.encode(result.get('PageMeta', {}).get('title', '').strip(), 'utf-8')
 	for grid in result.get('Content', {}).get('PageGrid', {}):
+		if grid["grid_type"] == "seven_with_banner_or_iframe":
+			continue
 		gridTitle, gridLink = GetTitleAndLink(grid.get('grid_title'), 'text', 'link')
 		posts = grid.get('posts', [])
 		if posts != []:
@@ -378,9 +276,9 @@ def ShowPaging(result, iconimage):
 	max_page = paginationGrid.get('max_page', 1)
 	if current_page > 1:
 		#prev_page = page_url + str(current_page-1) + '/' if current_page - 1 > 1 else page_url
-		common.addDir(common.GetLabelColor(common.GetLocaleString(30011), color="green"), page_url + str(current_page-1) + '/', 2, iconimage, module=module)
+		common.addDir(common.GetLabelColor(common.GetLocaleString(30011), color="green"), page_url + str(current_page-1) + '/', 22, iconimage, module=module)
 	if max_page > current_page:
-		common.addDir(common.GetLabelColor(common.GetLocaleString(30012), color="green"), page_url + str(current_page+1) + '/', 2, iconimage, module=module)
+		common.addDir(common.GetLabelColor(common.GetLocaleString(30012), color="green"), page_url + str(current_page+1) + '/', 22, iconimage, module=module)
 	if max_page > 2:
 		name = common.GetLabelColor(common.GetLocaleString(30013), color="green")
 		common.addDir(name, '{0}?p={1}&pages={2}'.format(page_url, current_page, max_page), 7, iconimage, infos={"Title": name, "Plot": name}, module=module)
@@ -487,7 +385,74 @@ def GetNewsCategoriesList(iconimage):
 		grids_arr.append((title, link, image, {"Title": title}))
 	grids_sorted = grids_arr if sortBy == 0 else sorted(grids_arr,key=lambda grids_arr: grids_arr[0])
 	for name, link, icon, infos in grids_sorted:
-		common.addDir(name, link, 1, icon, infos=infos, module=module)
+		common.addDir(name, link, 21, icon, infos=infos, module=module)
+
+def GetSeriesList(url, iconimage):
+	result = GetUrlJson(url, root=True)
+	if len(result) < 1:
+		return
+	buildId = result['buildId']
+	result = result['props']['pageProps']['page']
+	grids_arr = []
+	grids = result.get('Content', {}).get('PageGrid', {})
+	for grid in grids:
+		for serie in grid.get('shows', {}):
+			try:
+				if serie['url'] == "":
+					continue
+				name = common.encode(serie['title'], 'utf-8')
+				name = common.GetLabelColor(name, keyColor="prColor", bold=True)
+				grids_arr.append((name, serie['url'], serie['poster'], {"Title": name, "Plot": name,'mediatype': 'movie'}))
+			except Exception as ex:
+				xbmc.log('SerieID: {0}\n{1}'.format(serie['id'], str(ex)), 3)
+	grids_sorted = grids_arr if sortBy == 0 else sorted(grids_arr,key=lambda grids_arr: grids_arr[0])
+	for name, link, icon, infos in grids_sorted:
+		common.addDir(name, '{0}{1}'.format(baseUrl, link), 1, str(icon), infos=infos, moreData=buildId, module=module)
+
+def GetSeasonList(url, iconimage, buildId):
+	if len(url) > 0 and url[-1] != '/':
+		url += '/'
+	serie = url[url.rfind('/', 0, len(url)-1)+1:-1]
+	url = "{0}/_next/data/{1}/he/all-shows/{2}.json?all=all-shows&all={2}".format(baseUrl, buildId, serie)
+	xbmc.log(url, 5)
+	result = common.OpenURL(url, headers={"User-Agent": userAgent}, responseMethod='json')
+	grids = result['pageProps']['page']['Content']['PageGrid']
+	grids_arr = []
+	for grid in grids:
+		if grid["grid_type"] == "VodPlaylist":
+			if type(grid["episodesSeasonsMap"]) is dict:
+				for key, season in common.items(grid["episodesSeasonsMap"]):
+					name = common.GetLabelColor(season["name"], keyColor="timesColor", bold=True)
+					grids_arr.append((key, name, url, iconimage, {"Title": name, "Plot": name}))
+			else:
+				for season in grid["episodesSeasonsMap"]:
+					name = common.GetLabelColor(season["name"], keyColor="timesColor", bold=True)
+					grids_arr.append(("0", name, url, iconimage, {"Title": name, "Plot": name}))
+	grids_sorted = sorted(grids_arr,key=lambda grids_arr: grids_arr[0], reverse=True)
+	for key, name, link, icon, infos in grids_sorted:
+		common.addDir(name, link, 2, icon, infos={"Title": name}, moreData=key, module=module)
+
+def GetEpisodesList(url, iconimage, seasonNum):
+	result = common.OpenURL(url, headers={"User-Agent": userAgent}, responseMethod='json')
+	grids = result['pageProps']['page']['Content']['PageGrid']
+	grids_arr = []
+	for grid in grids:
+		if grid["grid_type"] == "VodPlaylist":
+			season = grid["episodesSeasonsMap"][seasonNum] if type(grid["episodesSeasonsMap"]) is dict else grid["episodesSeasonsMap"][0]
+			for episode in season["episodes"]:
+				name = common.GetLabelColor(episode["title"], keyColor="chColor")
+				link = '--kaltura--{0}==='.format(episode["video"]['kalturaId'])
+				icon = episode["video"]["poster"]
+				air_date = ''
+				frmt = "%d/%m/%Y"
+				try:
+					air_date = datetime.datetime.strptime(episode["air_date"], frmt)
+				except TypeError:
+					air_date = datetime.datetime(*(time.strptime(episode["air_date"], frmt)[0:6]))
+				grids_arr.append((air_date, name, link, icon, {"Title": name, "Plot": episode["secondaryTitle"], "Aired": episode["air_date"]}))
+	grids_sorted = sorted(grids_arr,key=lambda grids_arr: grids_arr[0], reverse=True)
+	for air_date, name, link, icon, infos in grids_sorted:
+		common.addDir(name, link, 3, icon, infos=infos, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=3&iconimage={3}&moredata=choose&module=reshet)'.format(sys.argv[0], common.quote_plus(link), common.quote_plus(name), common.quote_plus(icon))), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=3&iconimage={3}&moredata=set_reshet_res&module=reshet)'.format(sys.argv[0], common.quote_plus(link), common.quote_plus(name), common.quote_plus(icon)))], moreData=bitrate, module=module, isFolder=False, isPlayable=True)
 
 def Run(name, url, mode, iconimage='', moreData=''):
 	global sortBy, bitrate, programNameFormat
@@ -500,9 +465,9 @@ def Run(name, url, mode, iconimage='', moreData=''):
 	elif mode == 0:
 		GetSeriesList(url, moduleIcon)					# Series
 	elif mode == 1:
-		GetSeasonList(url, iconimage)					# Seasons
+		GetSeasonList(url, iconimage, moreData)			# Seasons
 	elif mode == 2:
-		GetEpisodesList(url, iconimage)					# Episodes
+		GetEpisodesList(url, iconimage, moreData)		# Episodes
 	elif mode == 3:
 		Play(url, name, iconimage, moreData)			# Playing episode
 	elif mode == 4:
@@ -518,8 +483,15 @@ def Run(name, url, mode, iconimage='', moreData=''):
 		if page == 0:
 			page = int(prms['p'][0])
 		url = '{0}{1}{2}/'.format(baseUrl, urlp.path, page)
-		GetEpisodesList(url, iconimage)
+		GetEpisodesListOld(url, iconimage)
 	elif mode == 10:
 		GetNewsCategoriesList(moduleIcon)				# News Shows
+	elif mode == 20:
+		GetSeriesListOld(url, moduleIcon)				# Series
+	elif mode == 21:
+		GetSeasonListOld(url, iconimage)				# Seasons
+	elif mode == 22:
+		GetEpisodesListOld(url, iconimage)				# Episodes
 	
-	common.SetViewMode('episodes')
+	if mode != 0 and mode != 1:
+		common.SetViewMode('episodes')
