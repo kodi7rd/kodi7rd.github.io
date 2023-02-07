@@ -9,7 +9,7 @@
     <setting id="homemenunovideosbutton" type="bool">true</setting>
     <setting id="homemenunofavbutton" type="bool">false</setting>
     <setting id="homemenunogamesbutton" type="bool">true</setting>
-    <setting id="circle_rating" type="bool">false</setting>
+    <setting id="circle_rating" type="bool">true</setting>
     <setting id="homemenunomusicbutton" type="bool">true</setting>
     <setting id="homemenunomoviebutton" type="bool">true</setting>
     <setting id="homemenunopicturesbutton" type="bool">true</setting>
