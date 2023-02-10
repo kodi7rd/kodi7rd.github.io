@@ -193,8 +193,8 @@
     <setting id="subtitles.custompath" default="true" />
     <setting id="subtitles.pauseonsearch" default="true">true</setting>
     <setting id="subtitles.downloadfirst">true</setting>
-    <setting id="subtitles.tv">service.subtitles.all_subs_plus</setting>
-    <setting id="subtitles.movie">service.subtitles.all_subs_plus</setting>
+    <setting id="subtitles.tv">service.subtitles.All_Subs_Flash</setting>
+    <setting id="subtitles.movie">service.subtitles.All_Subs_Flash</setting>
     <setting id="pvrmanager.syncchannelgroups" default="true">true</setting>
     <setting id="pvrmanager.backendchannelorder" default="true">true</setting>
     <setting id="pvrmanager.usebackendchannelnumbersalways" default="true">false</setting>

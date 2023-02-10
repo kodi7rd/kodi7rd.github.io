@@ -1,6 +1,7 @@
 # coding:utf-8
 # author LuShan
 # version : 1.1.4
+import xbmc
 import json,requests,random,re,urllib
 try:
     que=urllib.quote
@@ -92,7 +93,7 @@ class google_translator:
     :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
 
     '''
-    def __init__(self,url_suffix="cn",timeout=5,proxies=None):
+    def __init__(self,url_suffix="co.il",timeout=15,proxies=None):
         self.proxies = proxies
         if url_suffix not in URLS_SUFFIX:
             self.url_suffix = URL_SUFFIX_DEFAULT
@@ -121,8 +122,11 @@ class google_translator:
         try:
             lang = LANGUAGES[lang_tgt]
         except :
-            lang_src = 'auto'
-        arr_text=text.split('\n')
+            lang_tgt = 'he'
+        arr_text=text.split('\r\n')
+
+        if len(arr_text) < 2:
+            arr_text=text.split('\n')
         
         arr_data={}
         counter=0
@@ -134,8 +138,10 @@ class google_translator:
             else:
                 all_clean_text.append(line)
             counter+=1
-        text='\n'.join(all_clean_text)
+
+        text='\r\n'.join(all_clean_text)
         text = str(text)
+
         if len(text) >= 5000:
             return "Warning: Can only detect less than 5000 characters"
         if len(text) == 0:
@@ -148,6 +154,7 @@ class google_translator:
                 "Chrome/47.0.2526.106 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
         }
+
         freq = self._package_rpc(text,lang_src,lang_tgt)
         response = requests.Request(method='POST',
                                      url=self.url,
@@ -185,12 +192,16 @@ class google_translator:
                             translate_text = ""
                             for sentence in sentences :
                                 sentence = sentence[0]
-                                translate_text += sentence.strip()
+                                if len(sentence.strip()) > 0:
+                                    #translate_text += sentence.strip()
+                                    translate_text += sentence.strip()+"\r\n" if "\r\n" not in sentence.strip() else sentence.strip()
+                                else:
+                                    translate_text += "\r\n" if "\r\n\r\n" in sentence else ""
                             
                             
                             for items in arr_data:
-                              
-                                translate_text=translate_text.replace(items+'.',arr_data[items])
+                                translate_text=translate_text.replace(items.upper()+"\r",arr_data[items]+"\r")
+
                             if pronounce == False :
                                 return translate_text
                             elif pronounce == True :
@@ -221,6 +232,7 @@ class google_translator:
             return log.debug("Warning: Can only detect less than 5000 characters")
         if len(text) == 0:
             return ""
+
         headers = {
             "Referer": "http://translate.google.{}/".format(self.url_suffix),
             "User-Agent":
@@ -229,8 +241,9 @@ class google_translator:
                 "Chrome/47.0.2526.106 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
         }
+
         freq = self._package_rpc(text)
-       
+
         response = requests.Request(method='POST',
                                     url=self.url,
                                     data=freq,

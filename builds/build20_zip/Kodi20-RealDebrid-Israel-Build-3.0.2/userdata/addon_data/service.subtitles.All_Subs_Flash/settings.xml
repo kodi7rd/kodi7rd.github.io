@@ -26,8 +26,8 @@
     <setting id="history_log" default="true">false</setting>
     <setting id="label3" default="true" />
     <setting id="sort_subs">true</setting>
-    <setting id="force">false</setting>
-    <setting id="autosub">false</setting>
+    <setting id="force" default="true">true</setting>
+    <setting id="autosub" default="true">true</setting>
     <setting id="pause" default="true">false</setting>
     <setting id="ExcludeTime">1</setting>
     <setting id="ExcludeAddosOption" default="true">false</setting>

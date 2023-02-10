@@ -1,7 +1,10 @@
+1.0.4
+** All Subs Plus by Burekas **
+- Fix for subtitles built-in google translate
+
 1.0.2
 ** All Subs Plus by Burekas **
 - Fix for AutoSubs
-- Fix for subtitles built-in google translate
 - Fix for SMB as a playback source
 - Fix for a movie case (When movie doesn't have a year value and title language is not in English)
 - Added support for manual search with these characters (+,-,_,.) as a seperator
@@ -17,9 +20,10 @@
 - Kodi Matrix (python 3) support
 - A New way of finding imdbID based on tmdb
 - New Wizdom API fix
-- Fix support for non-englise titles for "playing" [Playback is on]
-- new logger system 'MyLogger" (Will show only when 'Debug' setting is enabled Or Kodi in Debug mode) 
-- fix for non-englise titles in Kodi Library ("notPlaying" subtitles checking [Playback is off])
-- fix subtitles result lists (Ordering, Counting, Titles and a fix for Kt titles)
-- removed the requirement of script.subskeys
-- some code and bug fix
+- New logger system 'MyLogger" (Will show only when 'Debug' setting is enabled Or Kodi in Debug mode) 
+- Fix for local data playback
+- Fix for non-englise titles for "playing" [Playback is on]
+- Fix for non-englise titles in Kodi Library ("notPlaying" subtitles checking [Playback is off])
+- Fix subtitles result lists (Ordering, Counting, Titles and a fix for Kt titles)
+- Removed the requirement of script.subskeys
+- Some code and bug fix

@@ -1750,6 +1750,18 @@ def FirstPlace_Search(item,mode_subtitle,imdb_id):
             if imdb_id==itt['ImdbID']:
               
                 f_id=itt['ID']
+                
+        #if ids still empty (wrong imdb on ktuvit page) filtered by text                
+        if f_id == '':
+            s_title = regexHelper.sub('', s_title).lower()        
+            for itt in j_data:
+                eng_name = regexHelper.sub('', regexHelper.sub(' ', itt['EngName'])).lower()
+                heb_name = regexHelper.sub('', itt['HebName'])
+
+                if (s_title.startswith(eng_name) or eng_name.startswith(s_title) or
+                        s_title.startswith(heb_name) or heb_name.startswith(s_title)):
+                    f_id=itt["ID"]
+                
         if f_id!='':
             url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
             
@@ -1808,7 +1820,16 @@ def FirstPlace_Search(item,mode_subtitle,imdb_id):
             m=re.compile(regex,re.DOTALL).findall(itt)
             if len(m)==0:
                 continue
-            nm=m[0][0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+                
+            if ('i class' in m[0][0]):    #burekas fix for KT titles
+                regex='כתובית מתוקנת\'></i>(.+?)$'
+                n=re.compile(regex,re.DOTALL).findall(m[0][0])
+                nm=n[0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+            else:
+                nm=m[0][0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')            
+        
+            #nm=m[0][0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+            
             data='{"request":{"FilmID":"%s","SubtitleID":"%s","FontSize":0,"FontColor":"","PredefinedLayout":-1}}'%(f_id,m[0][1])
 
 
@@ -2173,12 +2194,9 @@ def translate_subs(input_file,output_file,mode_subtitle):
              
              f_sub_pre=f_sub_pre+translation
              xx+=1
-             
     # Fix Kodi 20 Google Translate PC Bug:
-    #f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n').replace('\n','')
-    
-    #Original from Kodi 19 addon:
-    f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
+    f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n').replace('\n','')
+    #Original from Kodi 19 addon: f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
     
    
     if KODI_VERSION>18:
@@ -2809,6 +2827,12 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
         #item['preferredlanguage'] = xbmc.convertLanguage(item['preferredlanguage'], xbmc.ISO_639_2)
         item['preferredlanguage'] = 'heb'
         item['rar'] = True
+        if (KODI_VERSION>19):
+            if 'tt' not in imdb_id:
+                tag = xbmc.Player().getVideoInfoTag()
+     
+                imdb_id = tag.getUniqueID('imdb')
+
 
      else:    # Take item params from window when kodi is not playing
         imdb_id = getInfoLabel("ListItem.IMDBNumber")

@@ -1,3 +1,5 @@
+2.5.8
+Support Fen 3.0.41 and above changes on Kodi 20
 1.2.5
 added cache to subtitle results
 added fonts

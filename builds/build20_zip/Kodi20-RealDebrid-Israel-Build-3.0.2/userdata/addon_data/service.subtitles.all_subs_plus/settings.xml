@@ -28,8 +28,8 @@
     <setting id="json_cache" default="true">false</setting>
     <setting id="history_log" default="true">false</setting>
     <setting id="sort_subs">true</setting>
-    <setting id="autosub">true</setting>
-    <setting id="force" default="true">true</setting>
+    <setting id="autosub" default="true">false</setting>
+    <setting id="force">false</setting>
     <setting id="pause" default="true">false</setting>
     <setting id="ExcludeTime">1</setting>
     <setting id="dummy_setting2" default="true" />
