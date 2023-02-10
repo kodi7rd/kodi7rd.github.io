@@ -4,7 +4,7 @@ from modules.meta_lists import oscar_winners
 from modules.metadata import movie_meta, movieset_meta
 from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, adjust_premiered_date, get_current_timestamp
 from modules.watched_status import get_watched_info_movie, get_watched_status_movie, get_bookmarks, get_progress_percent
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 meta_function, get_datetime_function, add_item, select_dialog, fen_clearlogo = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.select_dialog, kodi_utils.addon_clearlogo
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
@@ -166,11 +166,13 @@ class Movies:
 				cm_append((clearprog_str, run_plugin % clearprog_params))
 			cm_append((watchedstr % self.watched_title, run_plugin % watched_status_params))
 			if not self.is_widget: cm_append((exit_str, container_refresh % self.exit_list_params))
+			display = rootname if self.include_year else title
 			if kodi_version >= 20:
 				if self.is_widget: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('movie')
-				info_tag.setTitle(title)
+				info_tag.setTitle(display)
+				info_tag.setOriginalTitle(meta_get('original_title'))
 				info_tag.setPlot(meta_get('plot'))
 				info_tag.setYear(int(year))
 				info_tag.setRating(meta_get('rating'))
@@ -184,6 +186,7 @@ class Movies:
 				info_tag.setTagLine(meta_get('tagline'))
 				info_tag.setStudios((meta_get('studio') or '',))
 				info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
+				info_tag.setIMDBNumber(imdb_id)
 				info_tag.setGenres(meta_get('genre').split(', '))
 				info_tag.setWriters(meta_get('writer').split(', '))
 				info_tag.setDirectors(meta_get('director').split(', '))
@@ -194,7 +197,7 @@ class Movies:
 				listitem.setCast(meta_get('cast', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
 				listitem.setInfo('video', remove_keys(meta, dict_removals))
-			listitem.setLabel(rootname if self.include_year else title)
+			listitem.setLabel(display)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart,
 							'clearlogo': clearlogo, 'landscape': landscape, 'thumb': landscape, 'discart': discart, 'keyart': keyart})
@@ -240,11 +243,16 @@ class Movies:
 			cm_append((addmenu_str, run_plugin % build_url({'mode': 'menu_editor.add_external', 'name': title, 'iconImage': poster})))
 			cm_append((addshortcut_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': title, 'iconImage': poster})))
 			cm_append((add_coll_str, run_plugin % build_url({'mode': 'movie_sets_to_collection_choice', 'collection_id': tmdb_id})))
+			if kodi_version >= 20:
+				if self.is_widget: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('movie')
+				info_tag.setPlot(plot)
+			else: listitem.setInfo('video', {'mediatype': 'movie', 'plot': plot})
 			listitem.setLabel(title)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart,
 							'clearlogo': clearlogo, 'landscape': landscape, 'discart': discart, 'keyart': keyart})
-			listitem.setInfo('video', {'mediatype': 'movie', 'plot': plot})
 			listitem.setProperty('fen.sort_order', string(item_position))
 			listitem.setProperty('fen.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': poster}))
 			self.append((url, listitem, True))

@@ -41,7 +41,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.0.35</setting>
+    <setting id="version_number">3.0.42</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled_menus" default="true">2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="fen.highlight" default="true">FF0166FF</setting>
