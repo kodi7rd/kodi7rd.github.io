@@ -55,7 +55,7 @@
     <setting id="provider.pm_colour" default="true">FFFF3300</setting>
     <setting id="provider.ad_colour" default="true">FFE6B800</setting>
     <setting id="scraper_4k_highlight" default="true">FFFF00FE</setting>
-    <setting id="scraper_1080p_highlight" default="true">FFE6B800</setting>
+    <setting id="scraper_1080p_highlight">FF4CFF4C</setting>
     <setting id="scraper_720p_highlight" default="true">FF3C9900</setting>
     <setting id="scraper_SD_highlight" default="true">FF0166FF</setting>
     <setting id="int_dialog_highlight" default="true">FFAFAFAF</setting>
