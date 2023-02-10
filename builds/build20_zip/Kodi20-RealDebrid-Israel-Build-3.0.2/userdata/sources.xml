@@ -24,6 +24,11 @@
             <allowsharing>true</allowsharing>
         </source>
         <source>
+            <name>repository.burekasKodi</name>
+            <path pathversion="1">https://burekaskodi.github.io/repository.burekasKodi/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
             <name>repository.Fen</name>
             <path pathversion="1">https://tikipeter.github.io/</path>
             <allowsharing>true</allowsharing>
