@@ -216,7 +216,7 @@
     <setting id="autoplay_alert_method" default="true">0</setting>
     <setting id="autoplay_default_action" default="true">0</setting>
     <setting id="autoplay_next_window_percentage" default="true">95</setting>
-    <setting id="autoscrape_next_episode" default="true">false</setting>
+    <setting id="autoscrape_next_episode">true</setting>
     <setting id="auto_resume_episode">1</setting>
     <setting id="playback.watched_percent" default="true">90</setting>
     <setting id="playback.resume_percent" default="true">5</setting>
