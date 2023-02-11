@@ -3,7 +3,7 @@ version="2.0.0"
 zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-2.0.0.zip"
 
 name="Kodi 20 Real Debrid Israel Build"
-version="3.0.2"
+version="3.0.3"
 url="https://kodi7rd.github.io/builds/build20_zip/Kodi20-RealDebrid-Israel-Build-3.0.3.zip"
 minor="https://"
 gui="https://"
