@@ -43,11 +43,6 @@
             <path pathversion="1">https://peno64.github.io/repository.peno64/</path>
             <allowsharing>true</allowsharing>
         </source>
-        <source>
-            <name>repository.Aenemapy</name>
-            <path pathversion="1">https://aenemapy.github.io/repo/</path>
-            <allowsharing>true</allowsharing>
-        </source>
     </files>
     <games>
         <default pathversion="1"></default>

@@ -19,7 +19,7 @@
     <setting id="spanish" default="true">false</setting>
     <setting id="other_lang" default="true" />
     <setting id="all_lang" default="true">false</setting>
-    <setting id="auto_translate" default="true">false</setting>
+    <setting id="auto_translate">true</setting>
     <setting id="translate_p" default="true">0</setting>
     <setting id="popup">true</setting>
     <setting id="nextsub" default="true">no</setting>
