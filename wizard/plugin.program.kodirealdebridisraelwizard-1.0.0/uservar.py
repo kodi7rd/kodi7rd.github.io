@@ -14,8 +14,8 @@ CUSTOM_ART = os.path.join(PATH, 'resources', 'kodi_rd_israel_art')
 #########################################################
 #        User Edit Variables                            #
 #########################################################
-ADDONTITLE = '[COLOR blue]Kodi + Real Debrid Israel Build Wizard[/COLOR]'
-BUILDERNAME = '[COLOR blue]Kodi + Real Debrid Israel[/COLOR]'
+ADDONTITLE = '[COLOR yellow]Kodi + Real Debrid Israel Wizard[/COLOR]'
+BUILDERNAME = '[COLOR yellow]Kodi + Real Debrid Israel[/COLOR]'
 EXCLUDES = [ADDON_ID]
 # Text File with build info in it. Please read https://github.com/a4k-openproject/plugin.program.openwizard/wiki/Installing-Builds
 BUILDFILE = 'https://kodi7rd.github.io/wizard/assets/build.txt'
