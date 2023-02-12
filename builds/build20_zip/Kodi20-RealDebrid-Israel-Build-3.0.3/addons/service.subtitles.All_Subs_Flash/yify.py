@@ -63,7 +63,7 @@ def download(id,mode_subtitle):
 			
 			
 			if not path.exists(archive_file):
-				urlretrieve("https://yifysubtitles.me/subtitle/"+id.replace('yify$$$','').replace('/subtitles/','')+".zip", archive_file)
+				urlretrieve("http://www.yifysubtitles.com/subtitle/"+id.replace('yify$$$','').replace('/subtitles/','')+".zip", archive_file)
 
 
 		#executebuiltin(('XBMC.Extract("%s","%s")' % (archive_file, MySubFolder)).encode('utf-8'), True)
@@ -90,7 +90,7 @@ def download(id,mode_subtitle):
 def get_imdb_subtitles(imdb_id,counter,mode_subtitle):
      socket.setdefaulttimeout(30)
 
-     url = 'https://yifysubtitles.me/movie-imdb/'+imdb_id
+     url = 'http://www.yifysubtitles.com/movie-imdb/'+imdb_id
      html=read_html(url)
      regex='<td class="rating-cell"><span class="label">(.+?)</span></td><td class="flag-cell"><span class="flag flag-il"></span><span class="sub-lang">(.+?)</span></td><td><a href="(.+?)"><span class="text-muted">subtitle</span>(.+?)<'
      match=re.compile(regex).findall(html)
@@ -130,7 +130,7 @@ def search_yify(item,imdb_id,mode_subtitle):
      subtitle_list,counter,subs_id,subtitle=get_imdb_subtitles(imdb_id,counter,mode_subtitle)
      return len(subtitle_list),subtitle,subtitle_list
    else:
-     url='https://yifysubtitles.me/front/search?Search='+urllib.quote_plus(str(item['title']))
+     url='http://www.yifysubtitles.com/ajax_search.php?mov='+urllib.quote_plus(str(item['title']))
      html=read_html(url)
      json_data=json.loads(html)
 

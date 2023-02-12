@@ -58,25 +58,26 @@ class Translator:
                  timeout: Timeout = None,
                  http2=True,
                  proxies= None):
-
+        
         self.client = httpx.Client(http2=http2)
         if proxies is not None:  # pragma: nocover
             self.client.proxies = proxies
-
+        
         self.client.headers.update({
             'User-Agent': user_agent,
         })
-
+        
         if timeout is not None:
             self.client.timeout = timeout
-
+        
         if (service_urls is not None):
             #default way of working: use the defined values from user app
             self.service_urls = service_urls
             self.client_type = 'webapp'
+            
             self.token_acquirer = TokenAcquirer(
                 client=self.client, host=self.service_urls[0])
-
+            
             #if we have a service url pointing to client api we force the use of it as defaut client
             for t in enumerate(service_urls):
                 api_type = re.search('googleapis',service_urls[0])
@@ -84,14 +85,16 @@ class Translator:
                     self.service_urls = ['translate.googleapis.com']
                     self.client_type = 'gtx'
                     break
+            
         else:
+            
             self.service_urls = ['translate.google.com']
             self.client_type = 'webapp'
             self.token_acquirer = TokenAcquirer(
                 client=self.client, host=self.service_urls[0])
 
         self.raise_exception = raise_exception
-
+        
     def _pick_service_url(self):
         if len(self.service_urls) == 1:
             return self.service_urls[0]
@@ -166,7 +169,7 @@ class Translator:
         :rtype: :class:`list` (when a list is passed)
 
         Basic usage:
-            >>> from auto_translate.googletrans import Translator
+            >>> from googletrans import Translator
             >>> translator = Translator()
             >>> translator.translate('안녕하세요.')
             <Translated src=ko dest=en text=Good evening. pronunciation=Good evening.>
@@ -183,6 +186,7 @@ class Translator:
             jumps over  ->  이상 점프
             the lazy dog  ->  게으른 개
         """
+        log.warning('Start g translate')
         dest = dest.lower().split('_', 1)[0]
         src = src.lower().split('_', 1)[0]
 
@@ -201,14 +205,15 @@ class Translator:
                 dest = LANGCODES[dest]
             else:
                 raise ValueError('invalid destination language')
-
+        log.warning('Start g translate 1')
         if isinstance(text, list):
             result = []
             for item in text:
+                log.warning('Start g translate 2')
                 translated = self.translate(item, dest=dest, src=src, **kwargs)
                 result.append(translated)
             return result
-
+        log.warning('Start g translate 3')
         origin = text
         data, response = self._translate(text, dest, src, kwargs)
 
@@ -216,7 +221,7 @@ class Translator:
         translated = ''.join([d[0] if d[0] else '' for d in data[0]])
 
         extra_data = self._parse_extra_data(data)
-
+        log.warning('Start g translate 4')
         # actual source language that will be recognized by Google Translator when the
         # src passed is equal to auto.
         try:
@@ -235,7 +240,7 @@ class Translator:
                 pron = data[0][1][2]
             except:  # pragma: nocover
                 pass
-
+        log.warning('Start g translate 5')
         if dest in EXCLUDES and pron == origin:
             pron = translated
 
@@ -244,7 +249,7 @@ class Translator:
                             text=translated, pronunciation=pron,
                             extra_data=extra_data,
                             response=response)
-
+        log.warning('Start g translate 6')
         return result
 
     def detect(self, text, **kwargs):
@@ -258,7 +263,7 @@ class Translator:
         :rtype: :class:`list` (when a list is passed)
 
         Basic usage:
-            >>> from auto_translate.googletrans import Translator
+            >>> from googletrans import Translator
             >>> translator = Translator()
             >>> translator.detect('이 문장은 한글로 쓰여졌습니다.')
             <Detected lang=ko confidence=0.27041003>

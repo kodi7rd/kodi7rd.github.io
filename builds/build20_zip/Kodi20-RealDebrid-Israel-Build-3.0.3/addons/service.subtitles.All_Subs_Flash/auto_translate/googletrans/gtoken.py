@@ -27,7 +27,7 @@ class TokenAcquirer:
     token from translate.google.com.
 
     Example usage:
-        >>> from auto_translate.googletrans.gtoken import TokenAcquirer
+        >>> from googletrans.gtoken import TokenAcquirer
         >>> acquirer = TokenAcquirer()
         >>> text = 'test'
         >>> tk = acquirer.do(text)
@@ -50,9 +50,11 @@ class TokenAcquirer:
         now = math.floor(int(time.time() * 1000) / 3600000.0)
         if self.tkk and int(self.tkk.split('.')[0]) == now:
             return
-
+        log.warning('Update_Tkk')
+        log.warning(self.host)
+        
         r = self.client.get(self.host)
-
+        log.warning(r.text)
         raw_tkk = self.RE_TKK.search(r.text)
         if raw_tkk:
             self.tkk = raw_tkk.group(1)

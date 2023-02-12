@@ -22,10 +22,10 @@
 		<setting id="subscenter" label="Subscenter [COLOR blue](http://www.subscenter.org)[/COLOR]" type="bool" default="false" visible="false"/>
 		<setting id="wizrad" label="Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
 		<setting id="firstplace" label="Ktuvit [COLOR blue](https://www.ktuvit.me/)[/COLOR]" type="bool" default="true" />
-		<setting id="subscene" label="Jeded_Subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="false" />
+		<setting id="subscene" label="Jeded_Subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="true" />
 		<setting id="yify" label="Yify subtitles [COLOR blue](http://www.yifysubtitles.com/)[/COLOR]" type="bool" default="false" />
 		<setting id="opensubtitle" label="Opensubtitle [COLOR blue](http://www.opensubtitles.org/he)[/COLOR]" type="bool" default="true" />
-		<setting id="subscene" label="subscene [COLOR blue](http://subscene.com/)[/COLOR]" type="bool" default="false" />
+		<setting id="subscene" label="subscene [COLOR blue](http://subscene.com/)[/COLOR]" type="bool" default="true" />
 		<setting id="aa_subs" label="aa_subs [COLOR blue](http://aa_subs.com/)[/COLOR]" type="bool" default="false" />
 		<setting type="action" label="אפס AA קאש" action="RunScript(service.subtitles.All_Subs_Flash, 1,action=clear_aa)" option="close" visible="true"/>
 		<setting id="storage_en" label="תקייה מקומית" type="bool" default="false" />
@@ -47,8 +47,9 @@
 
 		
 		<setting label="32015" type="lsep"/>
-		<setting id="auto_translate" label="תירגום מכונה אוטומטי ?" type="bool" default="false" />
+		<setting id="auto_translate" label="תירגום מכונה אוטומטי ?" type="bool" default="true" />
 		<setting id="translate_p" type="enum" label="מתרגם אוטומטי" values="Google|Yandex" default="0" visible= "eq(-1,true)" enable="eq(-1,true)"/>
+		
 	</category>
     <category label="הגדרות כלליות">
         

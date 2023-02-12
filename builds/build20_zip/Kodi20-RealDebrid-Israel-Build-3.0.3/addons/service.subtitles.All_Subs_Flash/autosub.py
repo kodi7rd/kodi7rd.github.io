@@ -5,21 +5,20 @@ import sys,base64
 import cache,threading
 import xbmc,time,json
 import xbmcaddon,logging,hashlib
-# import sub
 from service import search_all,change_background
 from service import running,action,searchstring
 from service import MyAddon,__settings__,__addon__,MyScriptID,all_setting,download_next,location,last_sub_download,getParams,subtitle_cache_next
 from service import links_wizdom,links_subcenter,links_local,links_first,links_open,imdbid
 from xbmcvfs import  mkdirs
 from shutil import rmtree
+from resources.modules import log
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 if KODI_VERSION<=18:
     xbmc_tranlate_path=xbmc.translatePath
 else:
     import xbmcvfs
     xbmc_tranlate_path=xbmcvfs.translatePath
-base_aa='aHR0cHM6Ly9kaWdpdC5zZWVkaG9zdC5ldS9rb2RpL3dpemFyZC9TUlQv'
-# base_aa='aHR0cHM6Ly9yb2NrLnNlZWRob3N0LmV1L2tjYXQxMjMvSHViLw=='
+base_aa='aHR0cHM6Ly9zZXJ2ZXIxMDkzLnNlZWRob3N0LmV1L2tzdWJzL0h1Yi8='
 __author__ = __addon__.getAddonInfo('author')
 __scriptid__ = __addon__.getAddonInfo('id')
 __scriptname__ = __addon__.getAddonInfo('name')
@@ -38,7 +37,7 @@ ExcludeTime = int((__settings__.getSetting('ExcludeTime')))*60
 
 sys.path.append(__resource__)
 
-#logging.warning(os.path.join(__cwd__,'ignore.txt'))
+log.warning(os.path.join(__cwd__,'ignore.txt'))
 
 
 if KODI_VERSION<=18:
@@ -48,14 +47,13 @@ else:
 excluded_addons_temp=f.readlines()
 excluded_addons=[]
 f.close()
-#logging.warning('Excluded list')
+log.warning('Excluded list')
 for ext in excluded_addons_temp:
   x=(ext).replace('\n','').replace('\r','').lower()
   excluded_addons.append(x)
      
 #except:
 #  excluded_addons=['tenil','reshet','kidsil','movix','mako','rss','sertil','jksp','multidown','sdarot','ebs4_kids_tv']
-
 if KODI_VERSION>18:
     
     class Thread (threading.Thread):
@@ -80,7 +78,7 @@ else:
             
             self._target(*self._args)
 
-#logging.warning('start')
+log.warning('start')
 def get_aa_server(url,it):
     import requests,xbmcvfs
     MyTmp_aa = (xbmc_tranlate_path(os.path.join(__profile__, 'aa_buff')))
@@ -88,8 +86,7 @@ def get_aa_server(url,it):
         shutil.rmtree(MyTmp_aa)
     except: pass
     xbmcvfs.mkdirs(MyTmp_aa)
-    # logging.warning('start333'+str(url))
-    # logging.warning('start5555'+str(it))
+    
     headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0',
             'Accept': '*/*',
@@ -101,16 +98,14 @@ def get_aa_server(url,it):
             'Cache-Control': 'no-cache',
         }
     x=requests.get(url,headers=headers).content.decode('utf-8')
-    # logging.warning('star66666'+str(x))
     if it:
         fi_name='aa_tv.txt'
     else:
         fi_name='aa_movie.txt'
     output_file=os.path.join(MyTmp_aa,fi_name)
-    try:
-        file = open(output_file, 'w', encoding='utf-8')
-    except:
-        file = open(output_file, 'w')
+    
+    file = open(output_file, 'w')
+  
     file.write(x) 
     file.close()
     return output_file
@@ -122,13 +117,13 @@ def PrintException():
     filename = f.f_code.co_filename
     linecache.checkcache(filename)
     line = linecache.getline(filename, lineno, f.f_globals)
-    #logging.warning( 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
+    log.warning( 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
 
 def Debug(msg, force = False):
-    logging.warning(msg)
+    log.warning(msg)
     
 
-# Debug("Loading '%s' version '%s'" % (__scriptname__, __version__))
+Debug("Loading '%s' version '%s'" % (__scriptname__, __version__))
 if action=='search':
   search_all(3,(all_setting))
 # helper function to get string type from settings
@@ -158,9 +153,9 @@ def isExcluded(movieFullPath):
     if (movieFullPath.find("pvr://") > -1) :
         Debug("isExcluded(): Video is playing via Live TV, which is currently set as excluded location.")
         return False
-    #logging.warning('Excluded Check:')
-    #logging.warning(current_list_item.lower())
-    #logging.warning(excluded_addons)
+    log.warning('Excluded Check:')
+    log.warning(current_list_item.lower())
+    log.warning(excluded_addons)
     if (xbmc.getInfoLabel("VideoPlayer.mpaa")=='heb'):
           Debug("isExcluded(): Excluded from list defined!!." )
           return False
@@ -339,7 +334,7 @@ class AutoSubsPlayer(xbmc.Player):
     def onPlayBackStarted(self):
       try:
         global running,subtitle_cache_next
-        #logging.warning('start player')
+        log.warning('start player')
 
         
         if self.run:
@@ -353,15 +348,15 @@ class AutoSubsPlayer(xbmc.Player):
             totalTime = xbmc.Player().getTotalTime()
             totalTime ==0.0
             if xbmc.Player().isPlaying():
-                #logging.warning('Start Playing')
+                log.warning('Start Playing')
                 vidtime = xbmc.Player().getTime()
-                #logging.warning('vidtime:'+str(vidtime))
+                log.warning('vidtime:'+str(vidtime))
                 while 1:
                     vidtime = xbmc.Player().getTime()
-                    #logging.warning('vidtime:'+str(vidtime))
+                    log.warning('vidtime:'+str(vidtime))
                     if vidtime>0:
                         totalTime = xbmc.Player().getTotalTime()
-                        #logging.warning('totalTimeIn:'+str(totalTime))
+                        log.warning('totalTimeIn:'+str(totalTime))
                         break
                     if not xbmc.Player().isPlaying():
                         totalTime ==0.0
@@ -375,13 +370,13 @@ class AutoSubsPlayer(xbmc.Player):
             if  all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
               force_download=False
             res=(isExcluded(movieFullPath))
-            #logging.warning('res')
-            #logging.warning(res)
-            #logging.warning('Is autosub Playing:'+str(xbmc.Player().isPlaying()))
-            #logging.warning('totalTime:'+str(totalTime))
-            #logging.warning('movieFullPath:'+str(movieFullPath))
-            #logging.warning('(isExcluded(movieFullPath)) ):'+str((isExcluded(movieFullPath)) ))
-            #logging.warning('force_download:'+str(force_download) )
+            log.warning('res')
+            log.warning(res)
+            log.warning('Is autosub Playing:'+str(xbmc.Player().isPlaying()))
+            log.warning('totalTime:'+str(totalTime))
+            log.warning('movieFullPath:'+str(movieFullPath))
+            log.warning('(isExcluded(movieFullPath)) ):'+str((isExcluded(movieFullPath)) ))
+            log.warning('force_download:'+str(force_download) )
             if (xbmc.Player().isPlaying() and totalTime > ExcludeTime and force_download==True and (isExcluded(movieFullPath)) ):
                 self.run = False
                 #xbmc.sleep(1000)
@@ -414,13 +409,13 @@ class AutoSubsPlayer(xbmc.Player):
       except:
         pass
 def get_aa_server_ch():
-    # log.warning('-----------------Start Update AA-----------------')
+    log.warning('-----------------Start Update AA-----------------')
     #get_aa_server(base64.b64decode(base_aa).decode('utf-8')+'Movies/',False)
     x_pre_tv=cache.get(get_aa_server,0,base64.b64decode(base_aa).decode('utf-8')+'Movies/',False, table='subs_aa')
     x_pre=cache.get(get_aa_server,0,base64.b64decode(base_aa).decode('utf-8')+'Series/',True, table='subs_aa')
-    # x_pre_tv=str(x_pre_tv)
-    # x_pre=str(x_pre_tv)
-    # log.warning('-----------------Done Update AA TV:%s MV:%s-----------------'%(len(x_pre_tv),len(x_pre)))
+    x_pre_tv=str(x_pre_tv)
+    x_pre=str(x_pre_tv)
+    log.warning('-----------------Done Update AA TV:%s MV:%s-----------------'%(len(x_pre_tv),len(x_pre)))
     return 'OK'
 def refresh_setting():
    global __settings__,__addon__,MyAddon,MyScriptID,all_setting
@@ -481,7 +476,7 @@ def refresh_setting():
    return  json.loads(temp)
    
 xbmc.sleep(100)
-#logging.warning('Action Autosubs:'+str(action))
+log.warning('Action Autosubs:'+str(action))
 if action==None:
   update_time=1
   reset_running=0
@@ -491,7 +486,7 @@ if action==None:
   all_setting=refresh_setting()
   player_monitor = AutoSubsPlayer()
   monitor=MainMonitor()
-  #logging.warning('AutoSubs service_started')
+  log.warning('AutoSubs service_started')
   try:
     rmtree(cache_list_folder)
   except: pass
@@ -533,19 +528,18 @@ if action==None:
       else:
         reset_running=0
     xbmc.sleep(1000)
-    
-    
-    # if counter_2_hr>7200:
-        # thread=[]
+    '''
+    if counter_2_hr>7200:
+        thread=[]
             
-        # thread.append(Thread(get_aa_server_ch))
+        thread.append(Thread(get_aa_server_ch))
                 
             
-        # thread[0].start()
+        thread[0].start()
         
-        # counter_2_hr=0
-    # counter_2_hr+=1
+        counter_2_hr=0
     
-    
+    counter_2_hr+=1
+    '''
   del player_monitor
 
