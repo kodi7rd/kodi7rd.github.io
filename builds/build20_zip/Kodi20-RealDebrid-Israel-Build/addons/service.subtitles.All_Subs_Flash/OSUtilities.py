@@ -9,12 +9,9 @@ import xbmcvfs
 from resources.modules import log
 try:
     import xmlrpclib
-    from xmlrpclib import Transport
 except:
     import xmlrpc.client as xmlrpclib
-    from xmlrpc.client import Transport
 import xbmcaddon
-import http.client as httplib
 import unicodedata,logging
 from xbmcaddon import Addon
 __addon__      = xbmcaddon.Addon()
@@ -24,35 +21,14 @@ __scriptname__ = "XBMC Subtitles Unofficial"
 BASE_URL_XMLRPC = u"https://api.opensubtitles.org/xml-rpc"
 MyAddon = Addon()
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
-class TimeoutTransport(xmlrpclib.Transport):
 
-    def __init__(self, use_datetime=0, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
-                 secure=False):
-        xmlrpclib.Transport.__init__(self, use_datetime)
-        self.timeout = timeout
-        self.secure = secure
-
-    def make_connection(self, host):
-        if self._connection and host == self._connection[0]:
-            return self._connection[1]
-        chost, self._extra_headers, x509 = self.get_host_info(host)
-        if self.secure:
-            self._connection = host, httplib.HTTPSConnection(
-                chost, None, timeout=self.timeout, **(x509 or {})
-            )
-        else:
-            self._connection = host, httplib.HTTPConnection(
-                chost, timeout=self.timeout
-            )
-
-        return self._connection[1]
 class OSDBServer:
   def __init__( self, *args, **kwargs ):
-    socket.setdefaulttimeout(10)
-    self.server = xmlrpclib.Server( BASE_URL_XMLRPC, verbose=0 ,transport=TimeoutTransport())
-     
+    
+    self.server = xmlrpclib.Server( BASE_URL_XMLRPC, verbose=0 )
+    socket.setdefaulttimeout(10) 
     login = self.server.LogIn(__addon__.getSetting( "OSuser2" ), __addon__.getSetting( "OSpass2" ), "en", "%s_v%s" %(__scriptname__.replace(" ","_"),__version__))
-    log.warning(login)
+
     self.osdb_token  = login[ "token" ]
 
   def searchsubtitles( self, item,imdb_id,all_setting):
@@ -79,7 +55,7 @@ class OSDBServer:
          all_lang=all_setting["other_lang"].split(",")
          for items in all_lang:
            lang.append(str(items))
-      log.warning(lang)
+      # logging.warning(lang)
       if len(tvshow) > 0:
          a=1
          OS_search_string = ("%s S%.2dE%.2d" % (tvshow,int(season),int(episode),)).replace(" ","+")
@@ -135,7 +111,7 @@ class OSDBServer:
                        'query'        :OS_search_string,
                        'year'         :year
                       }]
-      log.warning(searchlist)
+      # logging.warning(searchlist)
       search = self.server.SearchSubtitles( self.osdb_token, searchlist )
 
 
@@ -160,7 +136,8 @@ class OSDBServer:
      except:
        return False
 
-
+def log(module, msg):
+  xbmc.log((u"### [%s] - %s" % (module,msg,)),level=xbmc.LOGDEBUG ) 
 
 def hashFile(file_path, rar):
     if rar:

@@ -7,7 +7,7 @@ import logging
 import sys
 import itertools
 import collections
-from resources.modules import log
+
 if sys.version_info < (3,):
     from codecs import open as _open
 else:
@@ -76,7 +76,7 @@ def basic_parser(multi_input=False, no_output=False):
     parser.add_argument(
         '--debug',
         action='store_const', dest='log_level',
-        const=logging.DEBUG, default=log.warning,
+        const=logging.DEBUG, default=logging.WARNING,
         help='enable debug logging',
     )
 

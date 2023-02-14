@@ -18,11 +18,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from resources.modules import log
-import re,hashlib,time,os,logging,sys
-import xbmcvfs
-from urllib.parse import parse_qsl
-xbmc_tranlate_path=xbmcvfs.translatePath
+
+import re,hashlib,time,os,logging,sys,xbmc
+
 try:
     from sqlite3 import dbapi2 as database
 except:
@@ -33,7 +31,12 @@ try:
 except:
     pass
 
-
+KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
+if KODI_VERSION<=18:
+    xbmc_tranlate_path=xbmc.translatePath
+else:
+    import xbmcvfs
+    xbmc_tranlate_path=xbmcvfs.translatePath
 def get(function, timeout, *args, **table):
     import linecache,sys
     try:
@@ -54,9 +57,9 @@ def get(function, timeout, *args, **table):
       linecache.checkcache(filename)
       line = linecache.getline(filename, lineno, fail.f_globals)
       
-      log.warning('CACHE err:'+str(lineno))
-      log.warning('inline:'+line)
-      log.warning(e)
+      logging.warning('CACHE err:'+str(lineno))
+      logging.warning('inline:'+line)
+      logging.warning(e)
       
      
     
@@ -108,9 +111,9 @@ def get(function, timeout, *args, **table):
         linecache.checkcache(filename)
         line = linecache.getline(filename, lineno, fail.f_globals)
       
-        log.warning('CACHE2 err:'+str(lineno))
-        log.warning('inline:'+line)
-        log.warning(e)
+        logging.warning('CACHE2 err:'+str(lineno))
+        logging.warning('inline:'+line)
+        logging.warning(e)
         
         pass
     
@@ -130,9 +133,9 @@ def get(function, timeout, *args, **table):
         linecache.checkcache(filename)
         line = linecache.getline(filename, lineno, fail.f_globals)
       
-        log.warning('CACHE3 err:'+str(lineno))
-        log.warning('inline:'+line)
-        log.warning(e)
+        logging.warning('CACHE3 err:'+str(lineno))
+        logging.warning('inline:'+line)
+        logging.warning(e)
         return
 
     try:
@@ -151,9 +154,9 @@ def get(function, timeout, *args, **table):
         linecache.checkcache(filename)
         line = linecache.getline(filename, lineno, fail.f_globals)
       
-        log.warning('CACHE4 err:'+str(lineno))
-        log.warning('inline:'+line)
-        log.warning(e)
+        logging.warning('CACHE4 err:'+str(lineno))
+        logging.warning('inline:'+line)
+        logging.warning(e)
         pass
 
     try:
@@ -166,9 +169,9 @@ def get(function, timeout, *args, **table):
         linecache.checkcache(filename)
         line = linecache.getline(filename, lineno, fail.f_globals)
       
-        log.warning('CACHE5 err:'+str(lineno))
-        log.warning('inline:'+line)
-        log.warning(e)
+        logging.warning('CACHE5 err:'+str(lineno))
+        logging.warning('inline:'+line)
+        logging.warning(e)
         pass
 
 
@@ -199,7 +202,7 @@ def clear(table=None):
             except:
                 pass
     except Exception as e:
-        log.warning('Error cleaning: '+str(e))
+        logging.warning('Error cleaning: '+str(e))
         
         pass
 

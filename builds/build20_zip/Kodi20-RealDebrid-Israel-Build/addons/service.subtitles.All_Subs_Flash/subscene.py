@@ -2,7 +2,7 @@ import os
 import sys
 import xbmc
 import urllib
-from resources.modules import log
+
 import xbmcvfs
 import xbmcaddon
 import xbmcgui
@@ -127,7 +127,7 @@ if len(MyAddon.getSetting("other_lang"))>0:
      for items in all_lang:
        if items in all_nam_lang:
         subscene_languages.update(all_nam_lang[items])
-###log.warning(subscene_languages)
+###logging.warning(subscene_languages)
 aliases = {
     "marvels agents of shield" : "Agents of Shield",
     "marvels agents of s.h.i.e.l.d" : "Agents of Shield",
@@ -207,12 +207,12 @@ def find_movie(content, title, year):
 def get_language_codes(languages):
     codes = {}
     for lang in subscene_languages:
-        #log.warning(lang)
-        #log.warning(subscene_languages[lang]['3let'] )
+        #logging.warning(lang)
+        #logging.warning(subscene_languages[lang]['3let'] )
         if subscene_languages[lang]['3let'] in languages:
             codes[str(subscene_languages[lang]['id'])] = 1
-            #log.warning('lang')
-            #log.warning(str(subscene_languages[lang]['id']))
+            #logging.warning('lang')
+            #logging.warning(str(subscene_languages[lang]['id']))
     keys = codes.keys()
     return keys
 	
@@ -230,9 +230,9 @@ def prepare_search_string(s):
 
 def search_subscene(item,mode_subtitle):
     filename = os.path.splitext(os.path.basename(item['file_original_path']))[0]
-   # #log.warning(__name__, "Search_subscene='%s', filename='%s', addon_version=%s" % (item, filename, __version__))
+   # #logging.warning(__name__, "Search_subscene='%s', filename='%s', addon_version=%s" % (item, filename, __version__))
 
-    #log.warning(item['tvshow'])
+    #logging.warning(item['tvshow'])
     lang=[]
     lang.append('heb')
     if MyAddon.getSetting("English")== 'true':
@@ -240,7 +240,7 @@ def search_subscene(item,mode_subtitle):
     if item['tvshow']:
         num_of_subs,subtitle,subtitle_list=search_tvshow(item['tvshow'], item['season'], item['episode'], lang, filename,mode_subtitle)
     elif item['title'] and item['year']:
-        #log.warning('movie Subscene')
+        #logging.warning('movie Subscene')
         num_of_subs,subtitle,subtitle_list=search_movie(item['title'], item['year'], lang, filename,mode_subtitle)
     elif item['title']:
         num_of_subs,subtitle,subtitle_list=search_filename(item['title'], lang,mode_subtitle)
@@ -303,7 +303,7 @@ def search_tvshow(tvshow, season, episode, languages, filename,mode_subtitle):
             log(__name__, "Tv show season found in list, getting subs ...")
             url = main_url + tv_show_seasonurl
             epstr = "%d:%d" % (int(season), int(episode))
-            #log.warning('search tv')
+            #logging.warning('search tv')
             num_of_subs,subtitle,subtitle_list=getallsubs(url, languages,mode_subtitle,filename, epstr)
     return num_of_subs,subtitle,subtitle_list
 def search_manual(searchstr, languages, filename,mode_subtitle):
@@ -332,11 +332,11 @@ def search_filename(filename, languages,mode_subtitle):
 
 def search_movie(title, year, languages, filename,mode_subtitle):
     title = prepare_search_string(title)
-    #log.warning(title)
+    #logging.warning(title)
     #log(__name__, "Search movie = %s" % title)
     url = main_url + "/subtitles/title?q=" + que(title) + '&r=true'
     content, response_url = geturl(url)
-    #log.warning(url)
+    #logging.warning(url)
     subtitle=' '
     num_of_subs=0
     subtitle_list=''
@@ -346,9 +346,9 @@ def search_movie(title, year, languages, filename,mode_subtitle):
         if subspage_url is not None:
             log(__name__, "Movie found in list, getting subs ...")
             url = main_url + subspage_url
-            #log.warning('search movie')
+            #logging.warning('search movie')
             num_of_subs,subtitle,subtitle_list=getallsubs(url, languages,mode_subtitle,filename)
-            #log.warning(url)
+            #logging.warning(url)
         else:
             log(__name__, "Movie not found in list: %s" % title)
             if string.find(string.lower(title), "&") > -1:
@@ -358,7 +358,7 @@ def search_movie(title, year, languages, filename,mode_subtitle):
                 if subspage_url is not None:
                     log(__name__, "Movie found in list, getting subs ...")
                     url = main_url + subspage_url
-                    #log.warning('search None')
+                    #logging.warning('search None')
                     num_of_subs,subtitle,subtitle_list=getallsubs(url, languages,mode_subtitle, filename)
                 else:
                     log(__name__, "Movie not found in list: %s" % title)
@@ -415,17 +415,17 @@ def getallsubs(url, allowed_languages,mode_subtitle, filename="", episode=""):
                         "<td class=\"[^\"]+\">\s+(?P<numfiles>[^\r\n\t]*)\s+</td>\s+"
                         "<td class=\"(?P<hiclass>[^\"]+)\">"
                         "(?:.*?)<td class=\"a6\">\s+<div>\s+(?P<comment>[^\"]+)&nbsp;\s*</div>")
-    #log.warning('codes2')
+    #logging.warning('codes2')
     codes = get_language_codes(allowed_languages)
-    #log.warning(codes)
-    #log.warning('codes')
+    #logging.warning(codes)
+    #logging.warning('codes')
     if len(codes) < 1:
         
         xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, __language__(32004))).encode('utf-8'))
         return
     log(__name__, 'LanguageFilter='+','.join(codes))
     content, response_url = geturl(url, 'LanguageFilter='+','.join(codes))
-    #log.warning(url)
+    #logging.warning(url)
 
     if content is None:
         return
@@ -526,24 +526,7 @@ def append_subtitle(item,mode_subtitle,x):
       return subtitle,json_data
      
 
-import requests,ssl,urllib3
-class TLSAdapter(requests.adapters.HTTPAdapter):
-    def init_poolmanager(self, connections, maxsize, block=False):
-        ctx = ssl.create_default_context()
-        ctx.set_ciphers('DEFAULT@SECLEVEL=1')
-        ctx.check_hostname = False
-        self.poolmanager = urllib3.poolmanager.PoolManager(num_pools=connections,
-                                                           maxsize=maxsize,
-                                                           block=block,
-                                                           ssl_version=ssl.PROTOCOL_TLSv1_2,
-                                                           ssl_context=ctx)
-
 def download_subscene(link,mode_subtitle, episode=""):
-    import cloudscraper
-    
-    
-    session = cloudscraper.create_scraper(interpreter='native')
-    session.mount('https://', TLSAdapter())
     subtitle_list = []
     exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass"]
     downloadlink_pattern = "...<a href=\"(.+?)\" rel=\"nofollow\" onclick=\"DownloadSubtitle"
@@ -553,67 +536,44 @@ def download_subscene(link,mode_subtitle, episode=""):
     xbmcvfs.mkdirs(tempdir)
 
     content, response_url = geturl(link)
+    
     match = re.compile(downloadlink_pattern).findall(content)
     if match:
+
         downloadlink = main_url + match[0]
         viewstate = 0
         previouspage = 0
         subtitleid = 0
         typeid = "zip"
         filmid = 0
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Origin': 'https://subscene.com',
-            'Connection': 'keep-alive',
-            'Referer': 'https://subscene.com/subtitles/searchbytitle',
-            # 'Cookie': '_ga=GA1.2.1911444577.1676157427; _gid=GA1.2.826212615.1676157427; __cf_bm=U6vk6_ayA3eGJOawuM5ziO3G0MNx.xmU9bv8n3f63Pk-1676157428-0-Ab5tPbuawh9No7AMAdQzwKFPDv9/ukvntu7svSdPjDMgw1IXkiQq7qVs/j6IeRUCvs9QWAY3KTuyNoOjatY5Sfv495P9U2Z3NqeWvgjekVV20mGbHRBKAe7+fL5+UkQ+6rPL0Uheu/AnTBDTBup1WqM=',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-User': '?1',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-            # Requests doesn't support trailers
-            # 'TE': 'trailers',
-        }
+
         postparams = url_encode(
             {'__EVENTTARGET': 's$lc$bcr$downloadLink', '__EVENTARGUMENT': '', '__VIEWSTATE': viewstate,
              '__PREVIOUSPAGE': previouspage, 'subtitleId': subtitleid, 'typeId': typeid, 'filmId': filmid}).encode('utf-8')
         
         useragent = ("User-Agent=Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) "
                        "Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)")
-        headers2 = {'User-Agent': useragent, 'Referer': link}
+        headers = {'User-Agent': useragent, 'Referer': link}
         log(__name__, "Fetching subtitles using url '%s' with referer header '%s' and post parameters '%s'" % (
             downloadlink, link, postparams))
-        #request = Request(downloadlink, postparams, headers)
-        logging.warning("Data5::")
-        logging.warning(downloadlink)
-        logging.warning(postparams)
+        request = Request(downloadlink, postparams, headers)
         # xbmc.log('bla bla'+str(request), 5)
-        response=session.get(downloadlink,headers=headers,verify=False,stream=True)
-        #response = urlopen(request)
+        response = urlopen(request)
         # request = urllib2.Request(downloadlink, postparams, headers)
         # response = urllib2.urlopen(request)
-        
+        if response.getcode() != 200:
+            log(__name__, "Failed to download subtitle file")
+            return subtitle_list
 
         local_tmp_file = os.path.join(tempdir, "subscene.xxx")
         packed = False
 
         try:
-            '''
             log(__name__, "Saving subtitles to '%s'" % local_tmp_file)
             local_file_handle = xbmcvfs.File(local_tmp_file, "wb")
-            local_file_handle.write(response.text)
+            local_file_handle.write(response.read())
             local_file_handle.close()
-            '''
-            with open(local_tmp_file, "wb") as f:
-                for chunk in response.iter_content(chunk_size=512):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
+
             # Check archive type (rar/zip/else) through the file header (rar=Rar!, zip=PK)
             myfile = xbmcvfs.File(local_tmp_file, "rb")
             myfile.seek(0,0)

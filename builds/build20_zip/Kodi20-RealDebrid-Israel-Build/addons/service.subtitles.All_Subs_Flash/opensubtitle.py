@@ -54,7 +54,7 @@ def Search_opensubtitle( item,imdb_id ,mode_subtitle,all_setting):
   search_data = []
 
    
-  log.warning(imdb_id)
+  # logging.warning(imdb_id)
   search_data = OSDBServer().searchsubtitles(item,imdb_id,all_setting)
 
 
@@ -89,13 +89,13 @@ def Search_opensubtitle( item,imdb_id ,mode_subtitle,all_setting):
   
         try:
             listitem = xbmcgui.ListItem(label          = item_data["LanguageName"],
-                                    label2         = '[B][COLOR khaki][OpenSubtitles][/COLOR][/B] '+item_data["SubFileName"],
+                                    label2         = '[B][COLOR khaki][OpenSubtitles][/COLOR][/B] ' + item_data["SubFileName"],
                                     iconImage      = str(int(round(float(item_data["SubRating"])/2))),
                                     thumbnailImage = item_data["ISO639"]
                                     )
         except:
             listitem = xbmcgui.ListItem(label          = item_data["LanguageName"],
-                                    label2         = '[B][COLOR khaki][OpenSubtitles][/COLOR][/B] '+item_data["SubFileName"],
+                                    label2         = '[B][COLOR khaki][OpenSubtitles][/COLOR][/B] ' + item_data["SubFileName"],
                                     
                                     )
         listitem.setProperty( "sync", ("false", "true")[str(item_data["MatchedBy"]) == "moviehash"] )
@@ -111,7 +111,7 @@ def Search_opensubtitle( item,imdb_id ,mode_subtitle,all_setting):
 
         json_data={'url':url,
                  'label':item_data["LanguageName"],
-                 'label2':'[B][COLOR khaki][OpenSubtitles][/COLOR][/B] '+item_data["SubFileName"],
+                 'label2':'[B][COLOR khaki][OpenSubtitles][/COLOR][/B] ' + item_data["SubFileName"],
                  'iconImage':str(int(round(float(item_data["SubRating"])/2))),
                  'thumbnailImage':item_data["ISO639"],
                  'hearing_imp':("false", "true")[int(item_data["SubHearingImpaired"]) != 0],
@@ -147,11 +147,12 @@ def Download_opensubtitle(id,url,format,mode_subtitle,stack=False):
     subtitle = os.path.join(__temp__, "%s.%s" %(str(uuid.uuid4()), format))
     try:
       result =OSDBServer().download(id, subtitle)
-    except Exception as e:
-      log.warning( __name__, "failed to connect to service for subtitle download")
+    except Exception as e  :
+      log.warning( "failed to connect to service for subtitle download")
       log.warning(str(e))
+      xbmc.executebuiltin((u'Notification(%s,%s)' % ('Allsubs',str(e))))
       return subtitle_list
-  log.warning(result)
+  # log.warning(result)
   if not result:
     try:
      shutil.rmtree(__temp__)
@@ -159,11 +160,11 @@ def Download_opensubtitle(id,url,format,mode_subtitle,stack=False):
     xbmcvfs.mkdirs(__temp__)
     zip = os.path.join( __temp__, "OpenSubtitles.zip")
     f = urlopen(url)
-    log.warning(url)
+    # log.warning(url)
     with open(zip, "wb") as subFile:
       subFile.write(f.read())
     subFile.close()
-    log.warning(subFile)
+    # log.warning(subFile)
     xbmc.sleep(500)
     
     try:
@@ -174,15 +175,15 @@ def Download_opensubtitle(id,url,format,mode_subtitle,stack=False):
             zip_ref.extractall(__temp__)
                     
     
-    log.warning(zip)
+    # log.warning(zip)
     for file in xbmcvfs.listdir(__temp__)[1]:
       file = os.path.join(__temp__, file)
-      log.warning(file)
+      # log.warning(file)
       if (os.path.splitext( file )[1] in exts):
         subtitle_list.append(file)
   else:
     subtitle_list.append(subtitle)
-  log.warning(subtitle_list)
+  # log.warning(subtitle_list)
   if xbmcvfs.exists(subtitle_list[0]):
     if mode_subtitle>1:
       return subtitle_list
