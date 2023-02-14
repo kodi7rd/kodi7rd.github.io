@@ -1,0 +1,10 @@
+# Kodi Media Center language file
+# Addon Name: Subtitles Dialog - Contextmenu
+# Addon id: context.subtitlesdialog.contextmenu
+# Addon Provider: burekas
+msgid ""
+msgstr ""
+
+msgctxt "#32000"
+msgid "[COLOR FFffd800]Check for subtitles...[/COLOR]"
+msgstr ""
