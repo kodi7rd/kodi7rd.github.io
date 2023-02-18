@@ -1,5 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
     <include name="TVShowWidgets">
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=favorites_tvshows&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FR3NEEJl.png"/>
+            <param name="widget_header" value="[B]הסדרות שלי[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8010"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32458&amp;action=trakt_tv_trending&amp;iconImage=trending&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="[B]סדרות פופולריות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8011"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=213&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FjI5c3bw.png"/>
+            <param name="widget_header" value="[B]סדרות נטפליקס[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8012"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=2739&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FDVrPgbM.png"/>
+            <param name="widget_header" value="[B]סדרות דיסני פלוס[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8013"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=49&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FHyu8ZGq.png"/>
+            <param name="widget_header" value="[B]HBO סדרות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8014"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=3186&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FmmRMG75.png"/>
+            <param name="widget_header" value="[B]HBO Max סדרות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8015"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=2552&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FfAQMVNp.png"/>
+            <param name="widget_header" value="[B]Apple TV+ סדרות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8016"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=19&amp;iconImage=https%3A%2F%2Fi.imgur.com%2F6vc0Iov.png"/>
+            <param name="widget_header" value="[B]FOX סדרות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8017"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=tmdb_tv_networks&amp;network_id=1024&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fru9DDlL.png"/>
+            <param name="widget_header" value="[B]Amazon סדרות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8018"/>
+        </include>
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32475&amp;iconImage=watched_1&amp;mode=build_tvshow_list&amp;action=watched_tvshows"/>
+            <param name="widget_header" value="[B]סדרות שסיימתי לצפות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8019"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32470&amp;iconImage=genres&amp;mode=navigator.genres&amp;menu_type=tvshow"/>
+            <param name="widget_header" value="[B]סדרות לפי ז'אנר[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="8020"/>
+        </include>
     </include>
 </includes>
