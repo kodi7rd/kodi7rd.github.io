@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: All Subs\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-09-27 10:42+0300\n"
+"Last-Translator: A. Dambledore\n"
+"Language-Team: Eng2Heb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar_IL\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Generator: Poedit 2.0.4\n"
+
+# Hebrew
+msgctxt "#32001"
+msgid "Error while searching subtitles"
+msgstr "שגיאה בעת חיפוש הכתוביות"
+
+msgctxt "#32002"
+msgid "Cache settings"
+msgstr "הגדרות המטמון"
+
+msgctxt "#32003"
+msgid "Clear addon`s local cache"
+msgstr "אפס את נתוני המטמון של התוסף"
+
+msgctxt "#32004"
+msgid "Addon`s local cache was cleared successfully"
+msgstr "נתוני המטמוןשל התוסף אופסו בהצלחה"
+
+msgctxt "#32005"
+msgid "Email"
+msgstr "אי-מייל של סאבסנטר"
+
+msgctxt "#32006"
+msgid "Password"
+msgstr "סיסמה של סאבסנטר"
+
+msgctxt "#32007"
+msgid "Login Details"
+msgstr "פרטי התחברות"
+
+msgctxt "#32008"
+msgid "Check login details"
+msgstr "בדוק את פרטי ההתחברות לסאבסנטר"
+
+msgctxt "#32009"
+msgid "Wrong email or password"
+msgstr "הזנת פרטי התחברות שגויים"
+
+msgctxt "#32010"
+msgid "Logged in successfully"
+msgstr "התחברת בהצלחה"
+
+msgctxt "#32011"
+msgid "Login User Opensubtitles"
+msgstr "שם משתמש ב-Opensubtitles"
+
+msgctxt "#32012"
+msgid "Password Opensubtitles"
+msgstr "סיסמה ב-Opensubtitle"
+
+msgctxt "#32013"
+msgid "Opensubtitle"
+msgstr "פרטי התחברות ל-Opensubtitle (לא באמת נחוץ)."
+
+msgctxt "#32014"
+msgid "Subscenter"
+msgstr "פרטי התחברות לסאבסנטר"
+
+msgctxt "#32015"
+msgid "Search Providers"
+msgstr "מקורות חיפוש"
+
+msgctxt "#32016"
+msgid "Autosub"
+msgstr "הורדת כתוביות אוטומטית"
+
+msgctxt "#32017"
+msgid "Enable auto sub"
+msgstr "אפשר הורדת כתוביות אוטומטית"
+
+msgctxt "#32018"
+msgid "dont download if shorter"
+msgstr "אל תוריד לסרטון קצר מ-"
+
+msgctxt "#32019"
+msgid "ignore shorts"
+msgstr "אל תכלול הרחבה"
+
+msgctxt "#32020"
+msgid "addon ignore name"
+msgstr "שם ההרחבה"
+
+msgctxt "#32021"
+msgid "Pause"
+msgstr "השהה ווידאו בזמן חיפוש כתוביות"
+
+msgctxt "#32022"
+msgid "custom look"
+msgstr "אפשרויות מראה מתקדמות"
+
+msgctxt "#32023"
+msgid "background"
+msgstr "הפעל רקע לכתוביות"
+
+msgctxt "#32024"
+msgid "bold"
+msgstr "Bold"
+
+msgctxt "#32025"
+msgid "color"
+msgstr "צבע הכתוביות"
+
+msgctxt "#32026"
+msgid "background intensity"
+msgstr "עוצמת הרקע"
+
+msgctxt "#32027"
+msgid "size"
+msgstr "גודל הגופן"
+
+msgctxt "#32028"
+msgid "enabel custom look"
+msgstr "אפשר הגדרות מראה מתקדמות"
+
+msgctxt "#32029"
+msgid "Open setting"
+msgstr "פתח הגדרות הרחבה"
+
+msgctxt "#32030"
+msgid "setting"
+msgstr "הגדרות"
+
+msgctxt "#32031"
+msgid "Clean"
+msgstr "ניקוי"
+
+msgctxt "#32032"
+msgid "subskeys1"
+msgstr "מקשים"
+
+msgctxt "#32033"
+msgid "keyboard shortcuts"
+msgstr "קיצורי מקלדת לכתוביות..."
+
+msgctxt "#32034"
+msgid "Force down"
+msgstr "הורד למרות שיש כתוביות"
+
+msgctxt "#32035"
+msgid "Disable"
+msgstr "בטל כתוביות"
+
+msgctxt "#32036"
+msgid "popup"
+msgstr "אפשר הודעות קופצות"
+
+# New by burekas
+
+msgctxt "#32037"
+msgid "חשבונות"
+msgstr "חשבונות"
+
+msgctxt "#32038"
+msgid "מקורות"
+msgstr "מקורות"
+
+msgctxt "#32039"
+msgid "שפות"
+msgstr "שפות"
+
+msgctxt "#32040"
+msgid "הגדרות כלליות"
+msgstr "הגדרות כלליות"
+
+msgctxt "#32041"
+msgid "הגדרות מראה"
+msgstr "הגדרות מראה"
