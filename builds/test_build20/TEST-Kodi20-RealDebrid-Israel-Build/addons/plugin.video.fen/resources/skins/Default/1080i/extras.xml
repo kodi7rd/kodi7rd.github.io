@@ -32,7 +32,7 @@
                     <left>1590</left>
                     <width max="300">auto</width>
                     <height>20</height>
-                    <font>font37</font> <!-- FEN_38 -->
+                    <font>font16</font> <!-- FEN_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -118,7 +118,7 @@
                     <left>70</left>
                     <width max="1130">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>lyr4b</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>

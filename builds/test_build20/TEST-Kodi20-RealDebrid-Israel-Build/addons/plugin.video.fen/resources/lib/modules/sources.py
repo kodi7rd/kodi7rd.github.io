@@ -575,7 +575,7 @@ class Sources():
 						if not self.monitor_playback:
 							self._kill_progress_dialog()
 							return player.run(url, self)
-						player.run(url, self)
+						player.run(url, self,link_name=item['display_name'].upper())
 						while playback_successful is None:
 							if self.progress_dialog.iscanceled() or monitor.abortRequested():
 								playback_successful = False

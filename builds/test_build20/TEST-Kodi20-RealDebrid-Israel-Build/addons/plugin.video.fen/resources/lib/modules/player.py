@@ -24,10 +24,10 @@ class FenPlayer(xbmc_player):
 		xbmc_player.__init__(self)
 		self.playback_successful = None
 
-	def run(self, url=None, obj=None):
+	def run(self, url=None, obj=None, link_name=None):
 		hide_busy_dialog()
 		if not url: return self.run_error()
-		try: return self.play_video(url, obj)
+		try: return self.play_video(url, obj,link_name)
 		except: return self.run_error()
 
 	def monitor(self):
@@ -84,7 +84,7 @@ class FenPlayer(xbmc_player):
 			clear_local_bookmarks()
 		except: self.kill_dialog()
 
-	def make_listing(self):
+	def make_listing(self,link_name):
 		listitem = make_listitem()
 		listitem.setPath(self.url)
 		if self.disable_lookup: listitem.setContentLookup(False)
@@ -134,7 +134,8 @@ class FenPlayer(xbmc_player):
 					info_tag.setCountries(country)
 					info_tag.setTrailer(trailer)
 					info_tag.setPremiered(premiered)
-					info_tag.setTagLine(tagline)
+					# info_tag.setTagLine(tagline)
+					info_tag.setTagLine(link_name)
 					info_tag.setStudios((studio or '',))
 					info_tag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
 					info_tag.setIMDBNumber(self.imdb_id)
@@ -162,6 +163,7 @@ class FenPlayer(xbmc_player):
 					info_tag.setEpisode(self.episode)
 					info_tag.setPlot(plot)
 					info_tag.setYear(int(self.year))
+					info_tag.setTagLine(link_name)
 					info_tag.setRating(rating)
 					info_tag.setVotes(votes)
 					info_tag.setMpaa(mpaa)
@@ -190,11 +192,11 @@ class FenPlayer(xbmc_player):
 			except: pass
 		return listitem
 
-	def play_video(self, url, obj):
+	def play_video(self, url, obj,link_name):
 		self.set_constants(url, obj)
 		self.suppress_widget_content()
 		volume_checker()
-		self.play(self.url, self.make_listing())
+		self.play(self.url, self.make_listing(link_name))
 		if not self.is_generic:
 			self.playback_successful = self.check_playback_start()
 			if self.playback_successful: self.start_monitor()

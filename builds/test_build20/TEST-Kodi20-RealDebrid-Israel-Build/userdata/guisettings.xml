@@ -8,7 +8,7 @@
     <setting id="gamesachievements.password" default="true" />
     <setting id="gamesachievements.token" default="true" />
     <setting id="gamesachievements.loggedin" default="true">false</setting>
-    <setting id="lookandfeel.skin" default="true">skin.estuary</setting>
+    <setting id="lookandfeel.skin">skin.fenstruary</setting>
     <setting id="lookandfeel.skintheme" default="true">SKINDEFAULT</setting>
     <setting id="lookandfeel.skincolors" default="true">SKINDEFAULT</setting>
     <setting id="lookandfeel.font" default="true">Default</setting>

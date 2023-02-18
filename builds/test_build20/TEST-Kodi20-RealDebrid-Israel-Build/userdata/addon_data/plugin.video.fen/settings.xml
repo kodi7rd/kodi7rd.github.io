@@ -74,7 +74,7 @@
     <setting id="show_unaired" default="true">true</setting>
     <setting id="suppress_episode_plot" default="true">false</setting>
     <setting id="show_unaired_watchlist" default="true">true</setting>
-    <setting id="include_year_in_title" default="true">0</setting>
+    <setting id="include_year_in_title">3</setting>
     <setting id="default_all_episodes" default="true">0</setting>
     <setting id="single_ep_display" default="true">0</setting>
     <setting id="single_ep_format" default="true">0</setting>

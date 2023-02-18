@@ -34,6 +34,11 @@
             <allowsharing>true</allowsharing>
         </source>
         <source>
+            <name>repository.FenTest</name>
+            <path pathversion="1">https://tikipeter.github.io/Test/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
             <name>repository.FishenzonIdanPlus</name>
             <path pathversion="1">https://fishenzon.github.io/</path>
             <allowsharing>true</allowsharing>
