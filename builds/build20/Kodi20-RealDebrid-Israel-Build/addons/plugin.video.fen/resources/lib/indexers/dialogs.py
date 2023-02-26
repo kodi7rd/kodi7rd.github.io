@@ -4,7 +4,7 @@ from windows import open_window
 from caches import refresh_cached_data
 from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 ok_dialog, container_content, close_all_dialog, external_browse = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external_browse
 get_property, open_settings, set_property, get_icon, dialog = kodi_utils.get_property, kodi_utils.open_settings, kodi_utils.set_property, kodi_utils.get_icon, kodi_utils.dialog
@@ -36,7 +36,7 @@ def custom_skins_choice(params):
 	currently_enabled = '32859' in get_setting('custom_skins.enable')
 	new_setting_value = '32860' if currently_enabled else '32859'
 	if not currently_enabled:
-		if path_exists(translate_path(custom_skin_path[:-2])) and current_version != '0.0.0': success = True
+		if path_exists(translate_path(custom_skin_path)) and current_version != '0.0.0': success = True
 		else:
 			show_busy_dialog()
 			from windows import download_custom_xmls, get_custom_xmls_version
@@ -324,7 +324,7 @@ def trailer_choice(media_type, poster, tmdb_id, trailer_url, all_trailers=[]):
 				return full_trailers + features
 			sorted_trailers = _sort_trailers()
 			list_items = [{'line1': clean_file_name(i['name']), 'icon': poster} for i in sorted_trailers]
-			kwargs = {'items': json.dumps(list_items), 'window_xml': 'media_select.xml'}
+			kwargs = {'items': json.dumps(list_items)}
 			video_id = select_dialog([i['key'] for i in sorted_trailers], **kwargs)
 			if video_id == None: return 'canceled'
 		trailer_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % video_id
@@ -347,7 +347,7 @@ def genres_choice(media_type, genres, poster, return_genres=False):
 		return None
 	mode = 'build_%s_list' % meta_type
 	list_items = [{'line1': i['genre'], 'icon': poster} for i in genre_list]
-	kwargs = {'items': json.dumps(list_items), 'window_xml': 'media_select.xml'}
+	kwargs = {'items': json.dumps(list_items)}
 	return select_dialog([{'mode': mode, 'action': action, 'genre_id': i['value'][0]} for i in genre_list], **kwargs)
 
 def imdb_keywords_choice(media_type, imdb_id, poster):
@@ -361,7 +361,7 @@ def imdb_keywords_choice(media_type, imdb_id, poster):
 	meta_type = 'movie' if media_type == 'movies' else 'tvshow'
 	mode = 'build_%s_list' % meta_type
 	list_items = [{'line1': i, 'icon': poster} for i in keywords_info]
-	kwargs = {'items': json.dumps(list_items), 'enable_context_menu': 'true', 'media_type': media_type, 'window_xml': 'media_select.xml'}
+	kwargs = {'items': json.dumps(list_items), 'enable_context_menu': 'true', 'media_type': media_type}
 	hide_busy_dialog()
 	return select_dialog([{'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': i, 'media_type': media_type} for i in keywords_info], **kwargs)
 
@@ -370,15 +370,15 @@ def imdb_videos_choice(videos, poster):
 	except: pass
 	videos.sort(key=lambda x: x['quality_rank'])
 	list_items = [{'line1': i['quality'], 'icon': poster} for i in videos]
-	kwargs = {'items': json.dumps(list_items), 'window_xml': 'media_select.xml'}
+	kwargs = {'items': json.dumps(list_items)}
 	return select_dialog([i['url'] for i in videos], **kwargs)
 
 def random_choice(params):
-	meta, poster, return_choice, window_xml = params.get('meta'), params.get('poster'), params.get('return_choice', 'false'), params.get('window_xml', 'select.xml')
+	meta, poster, return_choice = params.get('meta'), params.get('poster'), params.get('return_choice', 'false')
 	meta = params.get('meta', None)	
 	list_items = [{'line1': ls(32541), 'icon': poster}, {'line1': ls(32542), 'icon': poster}]
 	choices = ['play_random', 'play_random_continual']
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(32540), 'window_xml': window_xml}
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(32540)}
 	choice = select_dialog(choices, **kwargs)
 	if return_choice == 'true': return choice
 	if choice == None: return
@@ -390,14 +390,14 @@ def trakt_manager_choice(params):
 	icon = params.get('icon', None) or get_icon('trakt')
 	choices = [('%s %s...' % (ls(32602), ls(32199)), 'Add'), ('%s %s...' % (ls(32603), ls(32199)), 'Remove')]
 	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(32198).replace('[B]', '').replace('[/B]', ''), 'window_xml': params.get('window_xml', 'select.xml')}
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(32198).replace('[B]', '').replace('[/B]', '')}
 	choice = select_dialog([i[1] for i in choices], **kwargs)
 	if choice == None: return
 	from apis import trakt_api
 	if choice == 'Add': trakt_api.trakt_add_to_list(params)
 	else: trakt_api.trakt_remove_from_list(params)
 
-def playback_choice(media_type, poster, meta, season, episode, window_xml):
+def playback_choice(media_type, poster, meta, season, episode):
 	aliases = get_aliases_titles(make_alias_dict(meta, meta['title']))
 	items = []
 	items += [{'line': ls(32014), 'function': 'clear_and_rescrape'}]
@@ -407,15 +407,18 @@ def playback_choice(media_type, poster, meta, season, episode, window_xml):
 	if aliases: items += [{'line': ls(32212), 'function': 'scrape_with_aliases'}]
 	items += [{'line': ls(32135), 'function': 'scrape_with_custom_values'}]
 	list_items = [{'line1': i['line'], 'icon': poster} for i in items]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(32174), 'window_xml': window_xml}
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(32174)}
 	choice = select_dialog([i['function'] for i in items], **kwargs)
 	if choice == None: return notification(32736, 2500)
-	if choice == 'clear_and_rescrape':
+	def clear_caches():
+		from caches import clear_cache
 		from caches.providers_cache import ExternalProvidersCache
 		show_busy_dialog()
-		deleted = ExternalProvidersCache().delete_cache_single(media_type, str(meta['tmdb_id']))
+		clear_cache('internal_scrapers', silent=True)
+		ExternalProvidersCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 		hide_busy_dialog()
-		if not deleted: return notification(32574)
+	if choice == 'clear_and_rescrape':
+		clear_caches()
 		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
 		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
 	elif choice == 'scrape_with_default':
@@ -440,7 +443,7 @@ def playback_choice(media_type, poster, meta, season, episode, window_xml):
 			poster_main, poster_backup = get_art_provider()[0:2]
 			poster = meta.get('custom_poster') or meta.get(poster_main) or meta.get(poster_backup) or poster_empty
 			list_items = [{'line1': i, 'icon': poster} for i in aliases]
-			kwargs = {'items': json.dumps(list_items), 'window_xml': 'media_select.xml'}
+			kwargs = {'items': json.dumps(list_items)}
 			custom_title = select_dialog(aliases, **kwargs)
 			if custom_title == None: return notification(32736, 2500)
 		custom_title = dialog.input(ls(32228), defaultt=custom_title)
@@ -450,19 +453,22 @@ def playback_choice(media_type, poster, meta, season, episode, window_xml):
 		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode,
 							'custom_title': custom_title, 'prescrape': 'false'}
 	else:
+		clear_caches()
 		default_title, default_year = meta['title'], str(meta['year'])
 		allscrapers_str, def_scrapers_str = '%s?' % ls(32006), '%s?' % ls(32185)
 		title_str, year_str, season_str, episode_str = ls(32228), ls(32543), ls(32537), ls(32203).lower().capitalize()
 		if media_type in ('movie', 'movies'): play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'prescrape': 'false'}
 		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'prescrape': 'false'}
 		if aliases:
+			if len(aliases) == 1: alias_title = aliases[0]
 			poster_main, poster_backup = get_art_provider()[0:2]
 			poster = meta.get('custom_poster') or meta.get(poster_main) or meta.get(poster_backup) or poster_empty
 			list_items = [{'line1': i, 'icon': poster} for i in aliases]
-			kwargs = {'items': json.dumps(list_items), 'window_xml': 'media_select.xml'}
+			kwargs = {'items': json.dumps(list_items)}
 			alias_title = select_dialog(aliases, **kwargs)
-			if alias_title: default_title = alias_title
-		custom_title = dialog.input(title_str, defaultt=default_title)
+			if alias_title: custom_title = dialog.input(title_str, defaultt=alias_title)
+			else: custom_title = dialog.input(title_str, defaultt=default_title)
+		else: custom_title = dialog.input(title_str, defaultt=default_title)
 		if not custom_title: return notification(32736, 2500)
 		def _process_params(default_value, custom_value, param_value):
 			if custom_value and custom_value != default_value: play_params[param_value] = custom_value
@@ -493,12 +499,13 @@ def playback_choice(media_type, poster, meta, season, episode, window_xml):
 
 def set_quality_choice(params):
 	quality_setting = params.get('quality_setting')
+	icon = params.get('icon', None) or get_icon('fen')
 	include = ls(32188)
 	dl = ['%s SD' % include, '%s 720p' % include, '%s 1080p' % include, '%s 4K' % include]
 	fl = ['SD', '720p', '1080p', '4K']
 	try: preselect = [fl.index(i) for i in get_setting(quality_setting).split(', ')]
 	except: preselect = []
-	list_items = [{'line1': item} for item in dl]
+	list_items = [{'line1': item, 'icon': icon} for item in dl]
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
 	choice = select_dialog(fl, **kwargs)
 	if choice is None: return
@@ -574,11 +581,12 @@ def easynews_server_choice(params={}):
 	clear_media_results_database()
 
 def enable_scrapers_choice(params={}):
+	icon = params.get('icon', None) or get_icon('fen')
 	scrapers = ['external', 'furk', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'folders']
 	cloud_scrapers = {'rd_cloud': 'rd.enabled', 'pm_cloud': 'pm.enabled', 'ad_cloud': 'ad.enabled'}
 	scraper_names = [ls(32118).upper(), ls(32069).upper(), ls(32070).upper(), ls(32098).upper(), ls(32097).upper(), ls(32099).upper(), ls(32108).upper()]
 	preselect = [scrapers.index(i) for i in active_internal_scrapers()]
-	list_items = [{'line1': item} for item in scraper_names]
+	list_items = [{'line1': item, 'icon': icon} for item in scraper_names]
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
 	choice = select_dialog(scrapers, **kwargs)
 	if choice is None: return
@@ -684,14 +692,6 @@ def favorites_choice(params):
 		notification(32576, 3500)
 	else: notification(32574, 3500)
 
-def scraper_dialog_color_choice(params):
-	setting = params.get('setting')
-	default_setting = get_setting(setting)
-	chosen_color = color_choice({'default_setting': default_setting})
-	if chosen_color:
-		set_setting('%s_dialog_highlight' % setting, chosen_color)
-		set_setting('%s_dialog_highlight_name' % setting, '[COLOR=%s]%s[/COLOR]' % (chosen_color, chosen_color))
-
 def scraper_quality_color_choice(params):
 	setting = params.get('setting')
 	default_setting = get_setting(setting)
@@ -710,7 +710,9 @@ def scraper_color_choice(params):
 				('torrent', 'torrent.identify'),
 				('rd', 'provider.rd_colour'),
 				('pm', 'provider.pm_colour'),
-				('ad', 'provider.ad_colour')]
+				('ad', 'provider.ad_colour'),
+				('scraper_flag', 'scraper_flag_identify_colour'),
+				('scraper_result', 'scraper_result_identify_colour')]
 	setting = [i[1] for i in choices if i[0] == setting][0]
 	default_setting = get_setting(setting)
 	chosen_color = color_choice({'default_setting': default_setting})
@@ -787,7 +789,7 @@ def options_menu_choice(params, meta=None):
 		for item in listing: yield {'line1': item[0], 'line2': item[1] or item[0], 'icon': poster}
 	pause_settings_change()
 	params_get = params.get
-	tmdb_id, content, poster, window_xml = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None), params_get('window_xml', 'select.xml')
+	tmdb_id, content, poster = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None)
 	is_widget, from_extras = params_get('is_widget') in (True, 'True', 'true'), params_get('from_extras', 'false') == 'true'
 	season, episode = params_get('season', ''), params_get('episode', '')
 	if not content: content = container_content()[:-1]
@@ -869,7 +871,7 @@ def options_menu_choice(params, meta=None):
 	listing_append(('%s %s %s' % (ls(32641), ls(32036), ls(32247)), '', 'open_fen_settings'))
 	list_items = list(_builder())
 	heading = rootname or strip_bold(ls(32646))
-	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true', 'window_xml': window_xml}
+	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([i[2] for i in listing], **kwargs)
 	if choice in closing_options: unpause_settings_change()
 	if choice == None: return
@@ -907,7 +909,7 @@ def options_menu_choice(params, meta=None):
 	elif choice == 'open_fen_settings':
 		return open_settings('0.0')
 	elif choice == 'playback_choice':
-		return playback_choice(content, poster, meta, season, episode, window_xml)
+		return playback_choice(content, poster, meta, season, episode)
 	elif choice == 'browse':
 		return execute_builtin(window_action % build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id}))
 	elif choice == 'browse_season':
@@ -922,8 +924,7 @@ def options_menu_choice(params, meta=None):
 		close_all_dialog()
 		return random_choice({'meta': meta, 'poster': poster})
 	elif choice == 'trakt_manager':
-		return trakt_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': meta_get('imdb_id'), 'tvdb_id': meta_get('tvdb_id', 'None'),
-									'media_type': content, 'window_xml': window_xml, 'icon': poster})
+		return trakt_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': meta_get('imdb_id'), 'tvdb_id': meta_get('tvdb_id', 'None'), 'media_type': content, 'icon': poster})
 	elif choice == 'favorites_choice':
 		return favorites_choice({'media_type': content, 'tmdb_id': tmdb_id, 'title': meta_get('title')})
 	elif choice == 'exit_menu':
@@ -935,7 +936,7 @@ def options_menu_choice(params, meta=None):
 	elif choice == 'toggle_autoscrape_next':
 		set_setting('autoscrape_next_episode', autoscrape_next_toggle)
 	elif choice == 'set_quality':
-		set_quality_choice({'quality_setting': 'autoplay_quality_%s' % content if autoplay_status == on_str else 'results_quality_%s' % content})
+		set_quality_choice({'quality_setting': 'autoplay_quality_%s' % content if autoplay_status == on_str else 'results_quality_%s' % content, 'icon': poster})
 	elif choice == 'enable_scrapers':
 		enable_scrapers_choice()
 	make_settings_dict()

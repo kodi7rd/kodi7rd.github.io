@@ -32,7 +32,7 @@
                     <left>1590</left>
                     <width max="300">auto</width>
                     <height>20</height>
-                    <font>font37</font> <!-- FEN_38 -->
+                    <font>font_midi</font> <!-- FEN_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -43,7 +43,7 @@
                     <left>1540</left>
                     <width max="350">auto</width>
                     <height>20</height>
-                    <font>font10</font> <!-- FEN_21 -->
+                    <font>font_tiny</font> <!-- FEN_21 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -65,7 +65,7 @@
                 <control type="label">
                     <width max="500">auto</width>
                     <height>20</height>
-                    <font>font12</font> <!-- FEN_26 -->
+                    <font>font_mini</font> <!-- FEN_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>top</aligny>
@@ -75,7 +75,7 @@
                 <control type="label">
                     <width max="500">auto</width>
                     <height>20</height>
-                    <font>font12</font> <!-- FEN_26 -->
+                    <font>font_mini</font> <!-- FEN_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>top</aligny>
@@ -118,7 +118,7 @@
                     <left>70</left>
                     <width max="1130">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -136,123 +136,134 @@
             <animation effect="fade" start="100" end="0" time="200" tween="sine" condition="!Control.HasFocus(10) + !Control.HasFocus(11) + !Control.HasFocus(12) + !Control.HasFocus(13) + !Control.HasFocus(14) + !Control.HasFocus(15) + !Control.HasFocus(16) + !Control.HasFocus(17)">Conditional</animation>
             <top>295</top>
             <left>50</left>
+            <!-- Line 1 -->
             <control type="label">
                 <width max="1150">auto</width>
                 <height>25</height>
-                <font>font14</font> <!-- FEN_33 -->
+                <font>font_midi</font> <!-- FEN_33 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <align>center</align>
                 <label>[I]$INFO[Window.Property(genre)][/I]</label>
             </control>
-            <control type="grouplist">
+            <!-- Line 2 -->
+            <control type="label" id="2001">
                 <top>55</top>
-                <itemgap>0</itemgap>
-                <align>center</align>
-                <orientation>horizontal</orientation>
                 <width max="1150">auto</width>
-                <control type="label">
-                    <width min="29" max="200">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(year),,  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(year))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="200">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(rating),,  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(rating))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="240">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(mpaa),,  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(mpaa))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="280">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(duration),,  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(duration))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="400">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(status)]</label>
-                    <visible>!String.IsEmpty(Window.Property(status))</visible>
-                </control>
+                <height>25</height>
+                <font>font_midi</font> <!-- FEN_33 -->
+                <textcolor>FFCCCCCC</textcolor>
+                <align>center</align>
             </control>
-            <control type="grouplist">
-                <visible>String.IsEqual(Window.Property(media_type),movie)</visible>
+            <!-- Line 3 -->
+            <control type="label" id="3001">
                 <top>105</top>
-                <itemgap>0</itemgap>
-                <align>center</align>
-                <orientation>horizontal</orientation>
                 <width max="1150">auto</width>
-                <control type="label">
-                    <width min="29" max="420">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(progress),,  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(progress))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="820">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(finish_watching)]</label>
-                    <visible>!String.IsEmpty(Window.Property(finish_watching))</visible>
-                </control>
+                <height>25</height>
+                <font>font_midi</font> <!-- FEN_33 -->
+                <textcolor>FFCCCCCC</textcolor>
+                <align>center</align>
             </control>
+            <!-- Line 4 -->
             <control type="grouplist">
-                <visible>String.IsEqual(Window.Property(media_type),tvshow)</visible>
-                <top>105</top>
-                <itemgap>0</itemgap>
-                <align>center</align>
+                <top>190</top>
+                <width max="1075">auto</width>
                 <orientation>horizontal</orientation>
-                <width max="1150">auto</width>
-                <control type="label">
-                    <width min="29" max="800">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(next_episode)]</label>
-                    <visible>!String.IsEmpty(Window.Property(next_episode))</visible>
+                <itemgap>120</itemgap>
+                <align>center</align>
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(metascore_rating),true)</visible>
+                    <control type="image" id="4101">
+                        <width>32</width>
+                        <height>32</height>
+                        <aspectratio>crop</aspectratio>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="label" id="4001">
+                        <left>40</left>
+                        <width max="75">auto</width>
+                        <height>32</height>
+                        <font>font13</font> <!-- FEN_30 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                    </control>
                 </control>
-                <control type="label">
-                    <width min="29" max="800">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(last_aired_episode),  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(last_aired_episode)) + !String.IsEmpty(Window.Property(next_episode))</visible>
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(tomatometer_rating),true)</visible>
+                    <control type="image" id="4102">
+                        <width>32</width>
+                        <height>32</height>
+                        <aspectratio>crop</aspectratio>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="label" id="4002">
+                        <left>40</left>
+                        <width max="75">auto</width>
+                        <height>32</height>
+                        <font>font13</font> <!-- FEN_30 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                    </control>
                 </control>
-                <control type="label">
-                    <width min="29" max="800">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(last_aired_episode)]</label>
-                    <visible>!String.IsEmpty(Window.Property(last_aired_episode)) + String.IsEmpty(Window.Property(next_episode))</visible>
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(tomatousermeter_rating),true)</visible>
+                    <control type="image" id="4103">
+                        <width>32</width>
+                        <height>32</height>
+                        <aspectratio>crop</aspectratio>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="label" id="4003">
+                        <left>40</left>
+                        <width max="75">auto</width>
+                        <height>32</height>
+                        <font>font13</font> <!-- FEN_30 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                    </control>
                 </control>
-                <control type="label">
-                    <width min="29" max="800">auto</width>
-                    <height>25</height>
-                    <font>font14</font> <!-- FEN_33 -->
-                    <textcolor>FFCCCCCC</textcolor>
-                    <label>$INFO[Window.Property(next_aired_episode),  •  ]</label>
-                    <visible>!String.IsEmpty(Window.Property(next_aired_episode))</visible>
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(imdb_rating),true)</visible>
+                    <control type="image" id="4104">
+                        <width>32</width>
+                        <height>32</height>
+                        <aspectratio>crop</aspectratio>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="label" id="4004">
+                        <left>40</left>
+                        <width max="75">auto</width>
+                        <height>32</height>
+                        <font>font13</font> <!-- FEN_30 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual(Window.Property(tmdb_rating),true)</visible>
+                    <control type="image" id="4105">
+                        <width>32</width>
+                        <height>32</height>
+                        <aspectratio>crop</aspectratio>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                    </control>
+                    <control type="label" id="4005">
+                        <left>40</left>
+                        <width max="75">auto</width>
+                        <height>32</height>
+                        <font>font13</font> <!-- FEN_30 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                    </control>
                 </control>
             </control>
         </control>
@@ -262,7 +273,8 @@
                 <effect type="fade" start="0" end="100" time="600" tween="sine" delay="450" easing="in" />
                 <effect type="slide" start="-1200" end="0" time="600" center="auto" tween="quadratic" delay="450" easing="out" />
             </animation>
-            <animation effect="slide" end="0,200" time="300" reversible="true" condition="Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(12) | Control.HasFocus(13) | Control.HasFocus(14) | Control.HasFocus(15) | Control.HasFocus(16) | Control.HasFocus(17)">Conditional</animation>
+            <animation effect="slide" end="0,200" time="200" reversible="true" condition="[Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(12) | Control.HasFocus(13) | Control.HasFocus(14) | Control.HasFocus(15) | Control.HasFocus(16) | Control.HasFocus(17)] + !String.IsEqual(Window.Property(extra_ratings),true)">Conditional</animation>
+            <animation effect="slide" end="0,285" time="200" reversible="true" condition="[Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(12) | Control.HasFocus(13) | Control.HasFocus(14) | Control.HasFocus(15) | Control.HasFocus(16) | Control.HasFocus(17)] + String.IsEqual(Window.Property(extra_ratings),true)">Conditional</animation>
             <top>300</top>
             <left>50</left>
             <width>1920</width>
@@ -286,7 +298,7 @@
                         <onup>2062</onup>
                         <ondown>14</ondown>
                         <label>$INFO[Window.Property(button10.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -304,7 +316,7 @@
                         <onup>2062</onup>
                         <ondown>15</ondown>
                         <label>$INFO[Window.Property(button11.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -322,7 +334,7 @@
                         <onup>2062</onup>
                         <ondown>16</ondown>
                         <label>$INFO[Window.Property(button12.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -340,7 +352,7 @@
                         <onup>2062</onup>
                         <ondown>17</ondown>
                         <label>$INFO[Window.Property(button13.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -361,7 +373,7 @@
                         <onup>10</onup>
                         <ondown>50</ondown>
                         <label>$INFO[Window.Property(button14.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -379,7 +391,7 @@
                         <onup>11</onup>
                         <ondown>50</ondown>
                         <label>$INFO[Window.Property(button15.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -397,7 +409,7 @@
                         <onup>12</onup>
                         <ondown>50</ondown>
                         <label>$INFO[Window.Property(button16.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -415,7 +427,7 @@
                         <onright>14</onright>
                         <ondown>50</ondown>
                         <label>$INFO[Window.Property(button17.label)]</label>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
                         <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
@@ -432,7 +444,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -457,6 +469,7 @@
                         <aligny>center</aligny>
                         <textcolor>FFB7B4BB</textcolor>
                         <label>$INFO[Window.Property(plot)]</label>
+                        <autoscroll>false</autoscroll>
                         <visible>!Control.HasFocus(50)</visible>
                     </control>
                     <control type="textbox">
@@ -469,7 +482,7 @@
                         <aligny>center</aligny>
                         <textcolor>FF302F2F</textcolor>
                         <label>$INFO[Window.Property(plot)]</label>
-                        <autoscroll time="2000" delay="12000" repeat="5000">true</autoscroll>
+                        <autoscroll>false</autoscroll>
                         <visible>Control.HasFocus(50)</visible>
                     </control>
                 </control>
@@ -482,7 +495,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32664][/B] $INFO[Window.Property(cast.number),(x,)]</label>
                         <visible>!Control.HasFocus(2050)</visible>
@@ -490,7 +503,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32664][/B]  |  [I]$INFO[Container(2050).ListItem.Property(name)]$INFO[Container(2050).ListItem.Property(role), as ][/I]</label>
                         <visible>Control.HasFocus(2050)</visible>
@@ -530,7 +543,7 @@
                                 <top>310</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -541,7 +554,7 @@
                                 <top>335</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -584,7 +597,7 @@
                                     <top>310</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -595,7 +608,7 @@
                                     <top>335</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -645,7 +658,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32503][/B] $INFO[Window.Property(recommended.number),(x,)]</label>
                         <visible>!Control.HasFocus(2051)</visible>
@@ -653,7 +666,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32503][/B]  |  [I]$INFO[Container(2051).ListItem.Property(name)] • $INFO[Container(2051).ListItem.Property(release_date)] • $INFO[Container(2051).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2051)</visible>
@@ -692,7 +705,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -733,7 +746,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -782,7 +795,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -808,11 +821,12 @@
                                 <left>15</left>
                                 <width>540</width>
                                 <height>308</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>top</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(text)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
@@ -829,7 +843,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font12</font> <!-- FEN_26 -->
+                                    <font>font_mini</font> <!-- FEN_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -877,7 +891,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -903,11 +917,12 @@
                                 <left>15</left>
                                 <width>540</width>
                                 <height>308</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>top</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(text)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
@@ -924,7 +939,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font12</font> <!-- FEN_26 -->
+                                    <font>font_mini</font> <!-- FEN_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -972,7 +987,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -998,11 +1013,12 @@
                                 <left>15</left>
                                 <width>540</width>
                                 <height>308</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>top</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(text)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
@@ -1019,7 +1035,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font12</font> <!-- FEN_26 -->
+                                    <font>font_mini</font> <!-- FEN_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1067,7 +1083,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -1100,22 +1116,24 @@
                                 <top>6</top>
                                 <width>224</width>
                                 <height>75</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(name)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                             <control type="textbox">
                                 <left>6</left>
                                 <top>280</top>
                                 <width>224</width>
                                 <height>75</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(ranking)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="236">
@@ -1140,22 +1158,24 @@
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- FEN_26 -->
+                                    <font>font_mini</font> <!-- FEN_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
                                     <label>$INFO[ListItem.Property(name)]</label>
+                                    <autoscroll>false</autoscroll>
                                 </control>
                                 <control type="textbox">
                                     <left>6</left>
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- FEN_26 -->
+                                    <font>font_mini</font> <!-- FEN_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
                                     <label>$INFO[ListItem.Property(ranking)]</label>
+                                    <autoscroll>false</autoscroll>
                                 </control>
                             </control>
                         </focusedlayout>
@@ -1170,7 +1190,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 33032][/B] $INFO[Window.Property(imdb_videos.number),(x,)]</label>
                     </control>
@@ -1207,7 +1227,7 @@
                                 <top>305</top>
                                 <width>355</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <textcolor>FFB7B4BB</textcolor>
                                 <label>$INFO[ListItem.Property(name)]</label>
@@ -1245,7 +1265,7 @@
                                     <top>305</top>
                                     <width>355</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <textcolor>FF302F2F</textcolor>
                                     <label>$INFO[ListItem.Property(name)]</label>
@@ -1293,7 +1313,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -1333,7 +1353,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -1374,7 +1394,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1423,7 +1443,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -1461,7 +1481,7 @@
                                 <top>330</top>
                                 <width>578</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -1492,7 +1512,7 @@
                                     <top>330</top>
                                     <width>578</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1541,7 +1561,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B] $INFO[Window.Property(more_from_year.number),(x,)]</label>
                         <visible>!Control.HasFocus(2059)</visible>
@@ -1549,7 +1569,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B]  |  [I]$INFO[Container(2059).ListItem.Property(name)] • $INFO[Container(2059).ListItem.Property(release_date)] • $INFO[Container(2059).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2059)</visible>
@@ -1588,7 +1608,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -1629,7 +1649,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1678,7 +1698,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B] $INFO[Window.Property(more_from_genres.number),(x,)]</label>
                         <visible>!Control.HasFocus(2060)</visible>
@@ -1686,7 +1706,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B]  |  [I]$INFO[Container(2060).ListItem.Property(name)] • $INFO[Container(2060).ListItem.Property(release_date)] • $INFO[Container(2060).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2060)</visible>
@@ -1725,7 +1745,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -1766,7 +1786,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1815,7 +1835,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B] $INFO[Window.Property(more_from_networks.number),(x,)]</label>
                         <visible>!Control.HasFocus(2061)</visible>
@@ -1823,7 +1843,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B]  |  [I]$INFO[Container(2061).ListItem.Property(name)] • $INFO[Container(2061).ListItem.Property(release_date)] • $INFO[Container(2061).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2061)</visible>
@@ -1862,7 +1882,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -1903,7 +1923,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>
@@ -1952,7 +1972,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$INFO[Window.Property(more_from_collection.name)][/B] $INFO[Window.Property(more_from_collection.number),(x,)]</label>
                         <visible>!Control.HasFocus(2062)</visible>
@@ -1960,7 +1980,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$INFO[Window.Property(more_from_collection.name)][/B]  |  [I]$INFO[Container(2062).ListItem.Property(name)] • $INFO[Container(2062).ListItem.Property(release_date)] • $INFO[Container(2062).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2062)</visible>
@@ -1992,7 +2012,7 @@
                             <top>6</top>
                             <width>218</width>
                             <height>348</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFB7B4BB</textcolor>
@@ -2034,7 +2054,7 @@
                                 <top>330</top>
                                 <width>226</width>
                                 <height>20</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -2075,7 +2095,7 @@
                                     <top>330</top>
                                     <width>226</width>
                                     <height>20</height>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF302F2F</textcolor>

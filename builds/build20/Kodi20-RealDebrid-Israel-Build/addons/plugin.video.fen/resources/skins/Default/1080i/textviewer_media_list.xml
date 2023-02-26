@@ -55,7 +55,7 @@
                                 <left>20</left>
                                 <width>1120</width>
                                 <height>715</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -95,7 +95,7 @@
                                 <left>20</left>
                                 <width>1120</width>
                                 <height>715</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFB7B4BB</textcolor>

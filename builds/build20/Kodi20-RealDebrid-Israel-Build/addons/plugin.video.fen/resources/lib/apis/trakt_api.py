@@ -14,14 +14,14 @@ requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, ko
 set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
 pause_settings_change, unpause_settings_change, progress_dialog = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.progress_dialog
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
-get_infolabel = kodi_utils.get_infolabel
+get_infolabel, get_icon = kodi_utils.get_infolabel, kodi_utils.get_icon
 ignore_articles, lists_sort_order, paginate, page_limit = settings.ignore_articles, settings.lists_sort_order, settings.paginate, settings.page_limit
 show_unaired_watchlist, metadata_user_info,  = settings.show_unaired_watchlist, settings.metadata_user_info, 
 clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cache.clear_all_trakt_cache_data, trakt_cache.cache_trakt_object, trakt_cache.clear_trakt_calendar
 TraktWatched, reset_activity, clear_trakt_list_contents_data = trakt_cache.TraktWatched, trakt_cache.reset_activity, trakt_cache.clear_trakt_list_contents_data
 clear_trakt_collection_watchlist_data, clear_trakt_hidden_data = trakt_cache.clear_trakt_collection_watchlist_data, trakt_cache.clear_trakt_hidden_data
 clear_trakt_recommendations, clear_trakt_list_data = trakt_cache.clear_trakt_recommendations, trakt_cache.clear_trakt_list_data
-trakt_icon, trakt_str = kodi_utils.get_icon('trakt'), ls(32037)
+trakt_icon, trakt_str = get_icon('trakt'), ls(32037)
 res_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 API_ENDPOINT = 'https://api.trakt.tv/%s'
 timeout = 20
@@ -93,7 +93,7 @@ def trakt_get_device_token(device_codes):
 		sleep_interval = device_codes['interval']
 		content = '[CR]%s[CR]%s' % (ls(32700) % str(device_codes['verification_url']), ls(32701) % '[COLOR red]%s[/COLOR]' % str(device_codes['user_code']))
 		current_highlight = set_temp_highlight('red')
-		progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), trakt_icon)
+		progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), get_icon('trakt_qrcode'))
 		progressDialog.update(content, 0)
 		try:
 			time_passed = 0
@@ -289,7 +289,7 @@ def trakt_watchlist(media_type, page_no):
 	sort_order = lists_sort_order('watchlist')
 	if sort_order == 0: original_list = sort_for_article(original_list, 'title', ignore_articles())
 	elif sort_order == 1: original_list.sort(key=lambda k: k['collected_at'], reverse=True)
-	else: original_list.sort(key=lambda k: k['released'], reverse=True)
+	else: original_list.sort(key=lambda k: k.get('released'), reverse=True)
 	if paginate(): final_list, all_pages, total_pages = paginate_list(original_list, page_no, page_limit())
 	else: final_list, all_pages, total_pages = original_list, [], 1
 	return final_list, all_pages, total_pages
@@ -298,7 +298,8 @@ def trakt_fetch_collection_watchlist(list_type, media_type):
 	def _process(params):
 		data = get_trakt(params)
 		if list_type == 'watchlist': data = [i for i in data if i['type'] == key]
-		return [{'media_ids': i[key]['ids'], 'title': i[key]['title'], 'collected_at': i.get(collected_at), 'released': i[key].get(release_key, '2050-01-01')} for i in data]
+		return [{'media_ids': i[key]['ids'], 'title': i[key]['title'], 'collected_at': i.get(collected_at),
+		'released': i[key].get(release_key) if i[key].get(release_key) else '2050-01-01'} for i in data]
 	key, string_insert, release_key = ('movie', 'movie', 'released') if media_type in ('movie', 'movies') else ('show', 'tvshow', 'first_aired')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
 	string = 'trakt_%s_%s' % (list_type, string_insert)

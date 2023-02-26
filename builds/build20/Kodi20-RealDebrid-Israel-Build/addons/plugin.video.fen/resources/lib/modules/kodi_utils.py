@@ -29,7 +29,7 @@ empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
 custom_skins_version_path = 'https://github.com/Tikipeter/custom_skins/raw/main/version.txt'
 custom_xml_path = 'special://profile/addon_data/plugin.video.fen/custom_skins/%s/resources/skins/Default/1080i/%s'
-custom_skin_path = 'special://profile/addon_data/plugin.video.fen/custom_skins/%s'
+custom_skin_path = 'special://profile/addon_data/plugin.video.fen/custom_skins/'
 default_skin_path = 'special://home/addons/plugin.video.fen'
 database_path_raw = 'special://profile/addon_data/plugin.video.fen/databases/%s'
 current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
@@ -37,7 +37,7 @@ fen_settings_str, menu_cache_prop, highlight_prop, meta_filter_prop = 'fen_setti
 view_type_prop, props_made_prop, pause_settings_prop, build_content_prop = 'fen.view_type_%s', 'fen.window_properties_made', 'fen.pause_settings', 'fen.build_content'
 custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'fen.custom_main_menu_context', 'fen.custom_context_menu', 'fen.custom_info_dialog'
 current_skin_prop, use_skin_fonts_prop = 'fen.current_skin', 'fen.use_skin_fonts'
-int_window_prop, pause_services_prop = 'fen.internal_results.%s', 'fen.pause_services'
+int_window_prop, pause_services_prop, suppress_sett_dict_prop = 'fen.internal_results.%s', 'fen.pause_services', 'fen.suppress_settings_dict'
 userdata_path = translatePath('special://profile/addon_data/plugin.video.fen/')
 addon_settings = translatePath('special://home/addons/plugin.video.fen/resources/settings.xml')
 user_settings = translatePath('special://profile/addon_data/plugin.video.fen/settings.xml')
@@ -54,7 +54,7 @@ maincache_db = translatePath(database_path_raw % current_dbs[5])
 metacache_db = translatePath(database_path_raw % current_dbs[6])
 debridcache_db = translatePath(database_path_raw % current_dbs[7])
 external_db = translatePath(database_path_raw % current_dbs[8])
-myvideos_db_paths = {19: '119', 20: '121'}
+myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
 extras_button_label_values = {'movie': {'movies_play': 32174, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798,  'show_extrainfo': 32605,
@@ -85,11 +85,11 @@ video_extensions = ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', '
 					'bdmv', 'bdm', 'wtv', 'trp', 'f4v', 'pvr', 'disc')
 image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'png', 'gif', 'webp', 'tiff', 'tif',
 					'psd', 'raw', 'arw', 'cr2', 'nrw', 'k25', 'jp2', 'j2k', 'jpf', 'jpx', 'jpm', 'mj2')
-default_highlights = (('hoster.identify', 'FF005C99'), ('torrent.identify', 'FFFF00FE'), ('provider.rd_colour', 'FF3C9900'), ('provider.pm_colour', 'FFFF3300'),
+default_highlights = (('hoster.identify', 'FF0166FF'), ('torrent.identify', 'FFFF00FE'), ('provider.rd_colour', 'FF3C9900'), ('provider.pm_colour', 'FFFF3300'),
 					('provider.ad_colour', 'FFE6B800'), ('provider.furk_colour', 'FFE6002E'), ('provider.easynews_colour', 'FF00B3B2'),
 					('provider.debrid_cloud_colour', 'FF7A01CC'), ('provider.folders_colour', 'FFB36B00'), ('scraper_4k_highlight', 'FFFF00FE'),
-					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'),
-					('int_dialog_highlight', 'FFAFAFAF'), ('ext_dialog_highlight', 'FFAFAFAF'), ('fen.highlight', 'FF0166FF'))
+					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('fen.highlight', 'FF008EB2'),
+					('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
 
 def get_icon(image_name):
 	return img_url % getattr(icons, image_name, 'I1JJhji')
@@ -307,14 +307,14 @@ def make_global_list():
 	global global_list
 	global_list = []
 
-def progress_dialog(heading=32036, icon=addon_icon):
+def progress_dialog(heading='', icon=addon_icon):
 	from windows import create_window
 	if isinstance(heading, int): heading = local_string(heading)
 	progress_dialog = create_window(('windows.progress', 'Progress'), 'progress.xml', heading=heading, icon=icon)
 	Thread(target=progress_dialog.run).start()
 	return progress_dialog
 
-def ok_dialog(heading=32036, text=32760, ok_label=32839):
+def ok_dialog(heading='', text=32760, ok_label=32839):
 	from windows import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
@@ -322,7 +322,7 @@ def ok_dialog(heading=32036, text=32760, ok_label=32839):
 	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
 	return open_window(('windows.select_ok', 'OK'), 'ok.xml', **kwargs)
 
-def confirm_dialog(heading=32036, text=32580, ok_label=32839, cancel_label=32840, default_control=11):
+def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, default_control=11):
 	from windows import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
@@ -333,23 +333,24 @@ def confirm_dialog(heading=32036, text=32580, ok_label=32839, cancel_label=32840
 
 def select_dialog(function_list, **kwargs):
 	from windows import open_window
-	window_xml = kwargs.get('window_xml', 'select.xml')
-	selection = open_window(('windows.select_ok', 'Select'), window_xml, **kwargs)
+	selection = open_window(('windows.select_ok', 'Select'), 'select.xml', **kwargs)
 	if selection in (None, []): return selection
 	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
 	return function_list[selection]
 
-def confirm_progress_media(meta, text='', enable_fullscreen=False, enable_buttons=False, true_button=32824, false_button=32828, focus_button=11, percent=0):
+def confirm_progress_media(meta, text='', enable_fullscreen=False, enable_buttons=False, true_button=32824, false_button=32828, focus_button=11, percent=0, flags_direction=0):
 	if enable_buttons:
 		from windows import open_window
 		if isinstance(text, int): text = local_string(text)
 		if isinstance(true_button, int): true_button = local_string(true_button)
 		if isinstance(false_button, int): false_button = local_string(false_button)
 		return open_window(('windows.confirm_progress_media', 'ConfirmProgressMedia'), 'confirm_progress_media.xml',
-							meta=meta, text=text, enable_buttons=enable_buttons, true_button=true_button, false_button=false_button, focus_button=focus_button, percent=percent)
+							meta=meta, text=text, enable_buttons=enable_buttons, true_button=true_button, false_button=false_button,
+							focus_button=focus_button, percent=percent)
 	else:
 		from windows import create_window
-		progress_dialog = create_window(('windows.confirm_progress_media', 'ConfirmProgressMedia'), 'confirm_progress_media.xml', meta=meta, enable_fullscreen=enable_fullscreen)
+		progress_dialog = create_window(('windows.confirm_progress_media', 'ConfirmProgressMedia'), 'confirm_progress_media.xml',
+										meta=meta, enable_fullscreen=enable_fullscreen, flags_direction=flags_direction)
 		Thread(target=progress_dialog.run).start()
 		return progress_dialog
 
@@ -439,12 +440,14 @@ def volume_checker():
 		if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
 	except: pass
 
-def focus_index(index, sleep_time=100):
+def focus_index(index, sleep_time=1000):
+	show_busy_dialog()
 	sleep(sleep_time)
 	current_window = current_window_id()
 	focus_id = current_window.getFocusId()
 	try: current_window.getControl(focus_id).selectItem(index)
 	except: pass
+	hide_busy_dialog()
 
 def clear_settings_window_properties():
 	clear_property('fen_settings')
@@ -554,11 +557,14 @@ def set_setting(setting_id, value):
 
 def get_setting(setting_id, fallback=None):
 	try: settings_dict = json.loads(get_property(fen_settings_str))
-	except: settings_dict = make_settings_dict()
+	except:
+		if get_property('fen.suppress_settings_dict'): return Addon().getSetting(setting_id)
+		settings_dict = make_settings_dict()
 	if settings_dict is None or setting_id not in settings_dict:
 		settings_dict = get_setting_fallback(setting_id)
-		make_settings_dict()
-		make_window_properties()
+		if not get_property(suppress_sett_dict_prop) == 'true':
+			make_settings_dict()
+			make_window_properties()
 	value = settings_dict.get(setting_id, '')
 	if value == '':
 		if fallback is None: return value
@@ -572,19 +578,22 @@ def make_settings_dict():
 	from xml.dom.minidom import parse as mdParse
 	settings_dict = None
 	clear_property(fen_settings_str)
-	try:
-		if not path_exists(userdata_path): make_directories(userdata_path)
-		settings_dict = {}
-		dict_update = settings_dict.update
-		for item in mdParse(user_settings).getElementsByTagName('setting'):
-			setting_id = item.getAttribute('id')
-			try: setting_value = item.firstChild.data
-			except: setting_value = None
-			if setting_value is None: setting_value = ''
-			dict_item = {setting_id: setting_value}
-			dict_update(dict_item)
-		set_property(fen_settings_str, json.dumps(settings_dict))
-	except Exception as e: logger('error in make_settings_dict', str(e))
+	if not get_property('fen.suppress_settings_dict'):
+		try:
+			if not path_exists(userdata_path): make_directories(userdata_path)
+			settings_dict = {}
+			dict_update = settings_dict.update
+			for item in mdParse(user_settings).getElementsByTagName('setting'):
+				setting_id = item.getAttribute('id')
+				try: setting_value = item.firstChild.data
+				except: setting_value = None
+				if setting_value is None: setting_value = ''
+				dict_item = {setting_id: setting_value}
+				dict_update(dict_item)
+			set_property(fen_settings_str, json.dumps(settings_dict))
+		except Exception as e:
+			set_property(suppress_sett_dict_prop, 'true')
+			logger('error in make_settings_dict', str(e))
 	return settings_dict
 
 def make_window_properties(override=False):

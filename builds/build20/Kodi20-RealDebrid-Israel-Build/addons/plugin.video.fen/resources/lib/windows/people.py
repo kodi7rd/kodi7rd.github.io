@@ -6,7 +6,7 @@ from indexers import dialogs
 from indexers.images import Images
 from modules.utils import calculate_age, get_datetime
 from modules.kodi_utils import json, notification, show_busy_dialog, hide_busy_dialog, get_icon, addon_fanart, Thread, empty_poster, execute_builtin, local_string as ls
-from modules.settings import extras_enable_animation, extras_enable_scrollbars, extras_exclude_non_acting, get_resolution
+from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution
 # from modules.kodi_utils import logger
 
 tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
@@ -71,7 +71,7 @@ class People(BaseDialog):
 				return dialogs.extras_menu_choice(params)
 			elif self.control_id == trivia_id:
 				end_index = self.show_text_media_list(chosen_var)
-				self.getControl(self.control_id).selectItem(end_index)
+				self.select_item(self.control_id, end_index)
 			elif self.control_id == videos_id:
 				thumb = chosen_listitem.getProperty('thumbnail')
 				chosen = dialogs.imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], thumb)
@@ -81,8 +81,22 @@ class People(BaseDialog):
 	def make_person_data(self):
 		show_busy_dialog()
 		if self.kwargs['query']:
-			try: self.person_id = tmdb_people_info(self.kwargs['query'])[0]['id']
-			except: self.person_id = None; notification(32760)
+			self.reference_tmdb_id = self.kwargs.get('reference_tmdb_id', None)
+			self.person_id = None
+			try:
+				data = tmdb_people_info(self.kwargs['query'])
+				if len(data) > 1 and self.reference_tmdb_id:
+					for item in data:
+						known_for = item.get('known_for', [])
+						if known_for:
+							known_for_tmdb_ids = [i['id'] for i in known_for]
+							if self.reference_tmdb_id in known_for_tmdb_ids:
+								self.person_id = item['id']
+								break
+				if not self.person_id:
+					try: self.person_id = data[0]['id']
+					except: pass
+			except: pass
 		else: self.person_id = self.kwargs['actor_id']
 		hide_busy_dialog()
 		if not self.person_id:
@@ -205,9 +219,6 @@ class People(BaseDialog):
 				yield listitem
 			except: pass
 
-	def add_items(self,_id, items):
-		self.getControl(_id).addItems(items)
-
 	def sort_items_by_release(self, data, key):
 		blank = [i for i in data if not i.get(key, None)]
 		data = [i for i in data if not i in blank]
@@ -224,7 +235,6 @@ class People(BaseDialog):
 
 	def set_starting_constants(self):
 		self.item_action_dict = {}
-		self.enable_animation = extras_enable_animation()
 		self.enable_scrollbars = extras_enable_scrollbars()
 		self.exclude_non_acting = extras_exclude_non_acting()
 		self.poster_resolution = get_resolution()['poster']
@@ -241,4 +251,3 @@ class People(BaseDialog):
 		self.setProperty('deathday', self.person_deathday)
 		self.setProperty('age', str(self.person_age))
 		self.setProperty('enable_scrollbars', self.enable_scrollbars)
-		self.setProperty('enable_animation', self.enable_animation)

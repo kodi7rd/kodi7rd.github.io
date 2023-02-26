@@ -41,73 +41,73 @@ class TVShows:
 	def fetch_list(self):
 		handle = int(sys.argv[1])
 		if build_content():
-			try:
-				mode = self.params_get('mode')
-				try: page_no = int(self.params_get('new_page', '1'))
-				except ValueError: page_no = self.params_get('new_page')
-				if self.action in personal: var_module, import_function = personal[self.action]
-				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
-				try: function = manual_function_import(var_module, import_function)
-				except: pass
-				if self.action in tmdb_main:
-					data = function(page_no)
-					self.list = [i['id'] for i in data['results']]
-					if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1)}
-				elif self.action in tmdb_special:
-					key = tmdb_special[self.action]
-					function_var = self.params_get(key, None)
-					if not function_var: return
-					data = function(function_var, page_no)
-					self.list = [i['id'] for i in data['results']]
-					if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1), key: function_var}
-				elif self.action in personal:
-					data, all_pages, total_pages = function('tvshow', page_no)
-					self.list = [i['media_id'] for i in data]
-					if total_pages > 2: self.total_pages = total_pages
+			# try:
+			mode = self.params_get('mode')
+			try: page_no = int(self.params_get('new_page', '1'))
+			except ValueError: page_no = self.params_get('new_page')
+			if self.action in personal: var_module, import_function = personal[self.action]
+			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+			try: function = manual_function_import(var_module, import_function)
+			except: pass
+			if self.action in tmdb_main:
+				data = function(page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in tmdb_special:
+				key = tmdb_special[self.action]
+				function_var = self.params_get(key, None)
+				if not function_var: return
+				data = function(function_var, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1), key: function_var}
+			elif self.action in personal:
+				data, all_pages, total_pages = function('tvshow', page_no)
+				self.list = [i['media_id'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in trakt_main:
+				self.id_type = 'trakt_dict'
+				data = function(page_no)
+				try: self.list = [i['show']['ids'] for i in data]
+				except: self.list = [i['ids'] for i in data]
+				if self.action != 'trakt_recommendations': self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in trakt_personal:
+				self.id_type = 'trakt_dict'
+				data, all_pages, total_pages = function('shows', page_no)
+				self.list = [i['media_ids'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				try:
 					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
-				elif self.action in trakt_main:
-					self.id_type = 'trakt_dict'
-					data = function(page_no)
-					try: self.list = [i['show']['ids'] for i in data]
-					except: self.list = [i['ids'] for i in data]
-					if self.action != 'trakt_recommendations': self.new_page = {'new_page': string(page_no + 1)}
-				elif self.action in trakt_personal:
-					self.id_type = 'trakt_dict'
-					data, all_pages, total_pages = function('shows', page_no)
-					self.list = [i['media_ids'] for i in data]
-					if total_pages > 2: self.total_pages = total_pages
-					try:
-						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
-					except: pass
-				elif self.action in imdb_personal:
-					self.id_type = 'imdb_id'
-					list_id = self.params_get('list_id', None)
-					data, next_page = function('tvshow', list_id, page_no)
-					self.list = [i['imdb_id'] for i in data]
-					if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
-				elif self.action == 'tmdb_tv_discover':
-					from indexers.discover import set_history
-					name, query = self.params['name'], self.params['query']
-					if page_no == 1: set_history('tvshow', name, query)
-					data = function(query, page_no)
-					self.list = [i['id'] for i in data['results']]
-					if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
-				elif self.action == 'trakt_tv_certifications':
-					self.id_type = 'trakt_dict'
-					data = function(self.params['certification'], page_no)
-					self.list = [i['show']['ids'] for i in data]
-					self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
-				if self.total_pages and not self.is_widget:
-					page_ref = page_reference()
-					if page_ref != 3:
-						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
-						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
-				add_items(handle, self.worker())
-				if self.new_page and not self.widget_hide_next_page:
+				except: pass
+			elif self.action in imdb_personal:
+				self.id_type = 'imdb_id'
+				list_id = self.params_get('list_id', None)
+				data, next_page = function('tvshow', list_id, page_no)
+				self.list = [i['imdb_id'] for i in data]
+				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
+			elif self.action == 'tmdb_tv_discover':
+				from indexers.discover import set_history
+				name, query = self.params['name'], self.params['query']
+				if page_no == 1: set_history('tvshow', name, query)
+				data = function(query, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
+			elif self.action == 'trakt_tv_certifications':
+				self.id_type = 'trakt_dict'
+				data = function(self.params['certification'], page_no)
+				self.list = [i['show']['ids'] for i in data]
+				self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
+			if self.total_pages and not self.is_widget:
+				page_ref = page_reference()
+				if page_ref != 3:
+					url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
+								'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
+					add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
+			add_items(handle, self.worker())
+			if self.new_page and not self.widget_hide_next_page:
 						self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params})
 						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
-			except: pass
+			# except: pass
 		else: add_items(handle, make_placeholder())
 		set_content(handle, content_type)
 		end_directory(handle, False if self.is_widget else None)
@@ -128,7 +128,7 @@ class TVShows:
 			cm_append = cm.append
 			listitem = make_listitem()
 			set_properties = listitem.setProperties
-			rootname, title, year, trailer = meta_get('rootname'), meta_get('title'), meta_get('year'), meta_get('trailer')
+			rootname, trailer, title, year = meta_get('rootname'), meta_get('trailer'), meta_get('title'), meta_get('year') or '2050'
 			tvdb_id, imdb_id = meta_get('tvdb_id'), meta_get('imdb_id')
 			poster = meta_get('custom_poster') or meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
 			fanart = meta_get('custom_fanart') or meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
@@ -179,7 +179,6 @@ class TVShows:
 				info_tag.setMpaa(meta_get('mpaa'))
 				info_tag.setDuration(meta_get('duration'))
 				info_tag.setCountries(meta_get('country'))
-				info_tag.setPlaycount(playcount)
 				info_tag.setTrailer(meta_get('trailer'))
 				info_tag.setPremiered(meta_get('premiered'))
 				info_tag.setTagLine(meta_get('tagline'))
@@ -190,7 +189,7 @@ class TVShows:
 				info_tag.setWriters(meta_get('writer').split(', '))
 				info_tag.setDirectors(meta_get('director').split(', '))
 				info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
-				if self.is_widget: listitem.setInfo('video', {'overlay': overlay})# needs to stay until setPlaycount works
+				info_tag.setPlaycount(playcount)
 			else:
 				meta.update({'playcount': playcount, 'overlay': overlay})
 				listitem.setCast(meta_get('cast', []))

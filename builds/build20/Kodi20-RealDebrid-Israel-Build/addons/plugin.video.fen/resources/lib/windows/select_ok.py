@@ -13,7 +13,7 @@ class Select(BaseDialog):
 		self.multi_line = self.kwargs.get('multi_line', 'false')
 		self.preselect = self.kwargs.get('preselect', [])
 		self.items = json.loads(self.kwargs['items'])
-		self.heading = self.kwargs.get('heading', ls(32036))
+		self.heading = self.kwargs.get('heading', '')
 		self.media_type = self.kwargs.get('media_type', '')
 		self.enable_context_menu = self.kwargs.get('enable_context_menu', 'false') == 'true'
 		self.item_list = []
@@ -24,8 +24,7 @@ class Select(BaseDialog):
 		self.make_menu()
 
 	def onInit(self):
-		self.win = self.getControl(self.window_id)
-		self.win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		if self.preselect:
 			for index in self.preselect:
 				self.item_list[index].setProperty('check_status', 'checked')
@@ -158,8 +157,7 @@ class SelectContextMenu(BaseDialog):
 		self.make_menu()
 
 	def onInit(self):
-		win = self.getControl(self.window_id)
-		win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
 
 	def run(self):

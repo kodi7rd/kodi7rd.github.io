@@ -5,6 +5,7 @@
     <setting id="max_threads" default="true">60</setting>
     <setting id="fen.highlight_name">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
     <setting id="use_skin_fonts" default="true">true</setting>
+    <setting id="custom_skins.enable" default="true">$ADDON[plugin.video.fen 32860]</setting>
     <setting id="trakt.indicators_active" default="true">false</setting>
     <setting id="watched_indicators" default="true">0</setting>
     <setting id="amble.indicators" default="true" />
@@ -22,7 +23,7 @@
     <setting id="rd.refresh" default="true" />
     <setting id="rd.secret" default="true" />
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1674075177</setting>
+    <setting id="database.maintenance.due">1677701190</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -41,7 +42,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.0.42</setting>
+    <setting id="version_number">3.0.46</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled_menus" default="true">2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="fen.highlight" default="true">FF0166FF</setting>
@@ -58,15 +59,44 @@
     <setting id="scraper_1080p_highlight">FF4CFF4C</setting>
     <setting id="scraper_720p_highlight" default="true">FF3C9900</setting>
     <setting id="scraper_SD_highlight" default="true">FF0166FF</setting>
-    <setting id="int_dialog_highlight" default="true">FFAFAFAF</setting>
-    <setting id="ext_dialog_highlight" default="true">FFAFAFAF</setting>
+    <setting id="scraper_flag_identify_colour" default="true">FF7C7C7C</setting>
+    <setting id="scraper_result_identify_colour" default="true">FFFFFFFF</setting>
     <setting id="image_resolutions" default="true">2</setting>
+    <setting id="extras.tvshow.button10" default="true">tvshow_browse</setting>
+    <setting id="extras.tvshow.button11" default="true">show_trailers</setting>
+    <setting id="extras.tvshow.button12" default="true">show_keywords</setting>
+    <setting id="extras.tvshow.button13" default="true">show_images</setting>
+    <setting id="extras.tvshow.button14" default="true">show_extrainfo</setting>
+    <setting id="extras.tvshow.button15" default="true">show_genres</setting>
+    <setting id="extras.tvshow.button16" default="true">play_nextep</setting>
+    <setting id="extras.tvshow.button17" default="true">show_options</setting>
+    <setting id="extras.movie.button10" default="true">movies_play</setting>
+    <setting id="extras.movie.button11" default="true">show_trailers</setting>
+    <setting id="extras.movie.button12" default="true">show_keywords</setting>
+    <setting id="extras.movie.button13" default="true">show_images</setting>
+    <setting id="extras.movie.button14" default="true">show_extrainfo</setting>
+    <setting id="extras.movie.button15" default="true">show_genres</setting>
+    <setting id="extras.movie.button16" default="true">show_director</setting>
+    <setting id="extras.movie.button17" default="true">show_options</setting>
+    <setting id="custom_skins.version" default="true">0.0.0</setting>
+    <setting id="extras.open_action" default="true">0</setting>
+    <setting id="extras.manage" default="true">$ADDON[plugin.video.fen 32652]</setting>
+    <setting id="extras.button_choice" default="true">$ADDON[plugin.video.fen 32652]</setting>
+    <setting id="extras.restore_default" default="true">$ADDON[plugin.video.fen 32652]</setting>
+    <setting id="extras.enable_extra_ratings" default="true">true</setting>
+    <setting id="extras.ratings_icons_type" default="true">0</setting>
+    <setting id="extras.enable_scrollbars" default="true">false</setting>
+    <setting id="extras.exclude_non_acting_roles" default="true">true</setting>
+    <setting id="custom_context_main_menu" default="true">false</setting>
+    <setting id="custom_context_menu" default="true">false</setting>
+    <setting id="custom_info_dialog" default="true">false</setting>
     <setting id="sort.progress" default="true">0</setting>
     <setting id="sort.watched" default="true">0</setting>
     <setting id="sort.collection" default="true">0</setting>
     <setting id="sort.watchlist" default="true">0</setting>
     <setting id="ignore_articles" default="true">true</setting>
     <setting id="paginate.lists" default="true">false</setting>
+    <setting id="paginate.widget_only" default="true">false</setting>
     <setting id="paginate.limit" default="true">40</setting>
     <setting id="paginate.reference" default="true">0</setting>
     <setting id="show_specials" default="true">false</setting>
@@ -78,13 +108,6 @@
     <setting id="default_all_episodes" default="true">0</setting>
     <setting id="single_ep_display" default="true">0</setting>
     <setting id="single_ep_format" default="true">0</setting>
-    <setting id="extras.open_action" default="true">0</setting>
-    <setting id="extras.manage" default="true">$ADDON[plugin.video.fen 32652]</setting>
-    <setting id="extras.enable_scrollbars" default="true">false</setting>
-    <setting id="extras.exclude_non_acting_roles" default="true">true</setting>
-    <setting id="custom_context_main_menu" default="true">false</setting>
-    <setting id="custom_context_menu" default="true">false</setting>
-    <setting id="custom_info_dialog" default="true">false</setting>
     <setting id="trakt.calendar_sort_order" default="true">0</setting>
     <setting id="trakt.calendar_previous_days" default="true">0</setting>
     <setting id="trakt.calendar_future_days" default="true">7</setting>
@@ -107,6 +130,7 @@
     <setting id="tmdb_api" default="true">b370b60447737762ca38457bd77579b3</setting>
     <setting id="fanart_amble1" default="true" />
     <setting id="fanart_client_key" default="true">fa836e1c874ba95ab08a14ee88e05565</setting>
+    <setting id="omdb_api" default="true" />
     <setting id="imdb_user" default="true" />
     <setting id="imdb_lists.sort_type" default="true">0</setting>
     <setting id="imdb_lists.sort_direction" default="true">0</setting>
@@ -170,6 +194,7 @@
     <setting id="results.timeout" default="true">20</setting>
     <setting id="results.format">MediaList</setting>
     <setting id="results.use_contrast">false</setting>
+    <setting id="results.progress_flags_direction">1</setting>
     <setting id="search.enable.yearcheck" default="true">false</setting>
     <setting id="search.finish.early" default="true">false</setting>
     <setting id="torrent.display.uncached" default="true">false</setting>
@@ -180,7 +205,7 @@
     <setting id="results.size.auto" default="true">20</setting>
     <setting id="results.size.manual" default="true">10000</setting>
     <setting id="results.include.unknown.size" default="true">true</setting>
-    <setting id="include_prerelease_results" default="true">true</setting>
+    <setting id="include_prerelease_results">false</setting>
     <setting id="include_3d_results">false</setting>
     <setting id="filter_hevc" default="true">0</setting>
     <setting id="filter_hevc.max_quality" default="true">4K</setting>
@@ -203,8 +228,8 @@
     <setting id="scraper_1080p_highlight_name" default="true">[COLOR=FFE6B800]FFE6B800[/COLOR]</setting>
     <setting id="scraper_720p_highlight_name" default="true">[COLOR=FF3C9900]FF3C9900[/COLOR]</setting>
     <setting id="scraper_SD_highlight_name" default="true">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
-    <setting id="int_dialog_highlight_name" default="true">[COLOR=FFAFAFAF]FFAFAFAF[/COLOR]</setting>
-    <setting id="ext_dialog_highlight_name" default="true">[COLOR=FFAFAFAF]FFAFAFAF[/COLOR]</setting>
+    <setting id="scraper_flag_identify_colour_name" default="true">[COLOR=FF7C7C7C]FF7C7C7C[/COLOR]</setting>
+    <setting id="scraper_result_identify_colour_name" default="true">[COLOR=FFFFFFFF]FFFFFFFF[/COLOR]</setting>
     <setting id="auto_play_movie" default="true">false</setting>
     <setting id="results_quality_movie" default="true">SD, 720p, 1080p, 4K</setting>
     <setting id="autoplay_quality_movie" default="true">SD, 720p, 1080p, 4K</setting>
@@ -220,9 +245,12 @@
     <setting id="auto_resume_episode">1</setting>
     <setting id="playback.watched_percent" default="true">90</setting>
     <setting id="playback.resume_percent" default="true">5</setting>
+    <setting id="playback.monitor_success" default="true">true</setting>
+    <setting id="playback.pause_start" default="true">1500</setting>
     <setting id="playback.widget_load_empty" default="true">true</setting>
     <setting id="playback.limit_resolve" default="true">false</setting>
     <setting id="playback.disable_content_lookup" default="true">false</setting>
+    <setting id="playback.easynews_max_retries" default="true">1</setting>
     <setting id="playback.volumecheck_enabled" default="true">false</setting>
     <setting id="playback.volumecheck_percent" default="true">50</setting>
     <setting id="subtitles.subs_action" default="true">2</setting>

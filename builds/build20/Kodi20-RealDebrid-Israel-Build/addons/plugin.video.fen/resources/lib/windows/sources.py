@@ -53,8 +53,7 @@ class SourceResults(BaseDialog):
 	def onInit(self):
 		self.filter_applied = False
 		if self.make_poster: Thread(target=self.set_poster).start()
-		self.win = self.getControl(self.window_id)
-		self.win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
 
 	def run(self):
@@ -191,14 +190,14 @@ class SourceResults(BaseDialog):
 	def set_poster(self):
 		if self.current_poster:
 			image_control = 200 if self.window_format == 'list' else 205
-			self.getControl(image_control).setImage(self.current_poster)
-			self.getControl(210).setImage(self.poster)
+			self.set_image(image_control, self.current_poster)
+			self.set_image(210, self.poster)
 			total_time = 0
 			while not self.check_poster_cached(self.poster):
 				if total_time >= 200: break
 				total_time += 1
 				self.sleep(50)
-			self.getControl(image_control).setImage(self.poster)
+			self.set_image(image_control, self.poster)
 
 	def check_poster_cached(self, poster):
 		try:
@@ -252,13 +251,13 @@ class SourceResults(BaseDialog):
 		else: filtered_list = self.make_items(self.uncached_torrents)# show_uncached
 		if not filtered_list: return ok_dialog(text=32760)
 		self.filter_applied = True
-		self.win.reset()
-		self.win.addItems(filtered_list)
+		self.reset_window(self.window_id)
+		self.add_items(self.window_id, filtered_list)
 		self.setFocusId(self.window_id)
 		self.setProperty('total_results', string(len(filtered_list)))
 
 	def clear_filter(self):
-		self.win.reset()
+		self.reset_window(self.window_id)
 		self.setProperty('total_results', self.total_results)
 		self.onInit()
 
@@ -315,8 +314,7 @@ class ResultsContextMenu(BaseDialog):
 		self.make_menu()
 
 	def onInit(self):
-		win = self.getControl(self.window_id)
-		win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
 
 	def run(self):
@@ -378,8 +376,7 @@ class SourceResultsChooser(BaseDialog):
 		self.make_items()
 
 	def onInit(self):
-		self.win = self.getControl(self.window_id)
-		self.win.addItems(self.xml_items)
+		self.add_items(self.window_id, self.xml_items)
 		self.setFocusId(self.window_id)
 
 	def run(self):

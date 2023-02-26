@@ -21,11 +21,7 @@
                 <width>1335</width>
                 <control type="image">
                     <height>945</height>
-                    <texture colordiffuse="FF4a4347">common/gradients/gradient-underlayer-horizontal-flipped.png</texture>
-                </control>
-                <control type="image">
-                    <height>100</height>
-                    <texture colordiffuse="$INFO[Window.Property(highlight)]">common/gradients/gradient-underlayer-horizontal-flipped.png</texture>
+                    <texture colordiffuse="FF302F2F">common/white.png</texture>
                 </control>
                 <control type="image">
                     <left>15</left>
@@ -40,7 +36,7 @@
             </control>
             <control type="image">
                 <left>-20</left>
-                <top>50</top>
+                <top>30</top>
                 <width>400</width>
                 <height>400</height>
                 <align>top</align>
@@ -49,12 +45,12 @@
                 <texture colordiffuse="$INFO[Window.Property(highlight)]">$INFO[Window.Property(provider_icon)]</texture>
             </control>
             <control type="image">
-                <left>1160</left>
-                <top>100</top>
-                <width>150</width>
-                <height>150</height>
+                <left>1080</left>
+                <top>130</top>
+                <width>200</width>
+                <height>200</height>
                 <align>top</align>
-                <aligny>left</aligny>
+                <aligny>right</aligny>
                 <aspectratio>keep</aspectratio>
                 <texture colordiffuse="$INFO[Window.Property(highlight)]">$INFO[Window.Property(quality_icon)]</texture>
             </control>
@@ -64,7 +60,7 @@
                 <control type="label">
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -74,7 +70,7 @@
                     <top>50</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -84,7 +80,7 @@
                     <top>100</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -94,7 +90,7 @@
                     <top>150</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -104,7 +100,7 @@
                     <top>200</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -114,7 +110,7 @@
                     <top>250</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -124,7 +120,7 @@
                     <top>300</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
@@ -134,7 +130,7 @@
                     <top>350</top>
                     <width max="1275">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- FEN_33 -->
+                    <font>font_midi</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>

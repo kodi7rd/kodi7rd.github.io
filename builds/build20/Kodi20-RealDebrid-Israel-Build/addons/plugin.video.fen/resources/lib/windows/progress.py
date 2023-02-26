@@ -26,12 +26,12 @@ class Progress(BaseDialog):
 			self.close()
 
 	def set_controls(self):
-		self.getControl(200).setImage(self.icon)
-		self.getControl(2000).setLabel(self.heading)
+		self.set_image(200, self.icon)
+		self.set_label(2000, self.heading)
 
 	def update(self, content='', percent=0, icon=None):
 		try:
-			self.getControl(2001).setText(content)
-			self.getControl(5000).setPercent(percent)
-			if icon: self.getControl(200).setImage(icon)
+			self.set_text(2001, content)
+			self.set_percent(5000, percent)
+			if icon: self.set_image(200, icon)
 		except: pass

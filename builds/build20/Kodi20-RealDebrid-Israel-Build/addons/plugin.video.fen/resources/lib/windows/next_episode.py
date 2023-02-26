@@ -57,7 +57,7 @@ class NextEpisode(BaseDialog):
 		return self.fanart
 
 	def monitor(self):
-		progress_bar = self.getControl(5000)
+		progress_bar = self.get_control(5000)
 		total_time = self.player.getTotalTime()
 		total_remaining = total_time - self.player.getTime()
 		while self.player.isPlaying():

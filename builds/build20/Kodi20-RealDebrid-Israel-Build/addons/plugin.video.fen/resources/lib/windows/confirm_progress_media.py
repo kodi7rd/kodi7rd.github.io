@@ -4,23 +4,26 @@ from modules.settings import get_art_provider, suppress_episode_plot
 from modules.kodi_utils import empty_poster, addon_fanart
 # from modules.kodi_utils import logger
 
+string = str
+flag_total, flag_remaining = 'TOTAL', 'PROGRESS'
+flag_properties = {0: ('SD', '720', '1080', '4K'), 1: ('4K', '1080', '720', 'SD')}
+
 class ConfirmProgressMedia(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
-		self.is_canceled = False
-		self.enable_fullscreen = False
-		self.skip_resolve = False
-		self.resolver_enabled = False
-		self.selected = None
-		self.meta = kwargs['meta']
+		self.is_canceled, self.enable_fullscreen, self.skip_resolve, self.resolver_enabled, self.selected = False, False, False, False, None
+		self.meta = kwargs.get('meta')
 		self.meta_get = self.meta.get
+		self.flags_direction = kwargs.get('flags_direction', 0)
 		self.text = kwargs.get('text', '')
 		self.enable_buttons = kwargs.get('enable_buttons', False)
-		if self.enable_buttons: self.true_button, self.false_button, self.focus_button = kwargs.get('true_button', ''), kwargs.get('false_button', ''), kwargs.get('focus_button', 10)
+		if self.enable_buttons:
+			self.true_button, self.false_button, self.focus_button = kwargs.get('true_button', ''), kwargs.get('false_button', ''), kwargs.get('focus_button', 10)
 		else: self.enable_fullscreen = kwargs.get('enable_fullscreen', True)
 		self.percent = float(kwargs.get('percent', 0))
 		self.make_text()
 		self.set_properties()
+		if self.enable_fullscreen and not self.resolver_enabled: self.set_quality_flags()
 
 	def onInit(self):
 		if self.enable_buttons: self.setup_buttons()
@@ -41,12 +44,11 @@ class ConfirmProgressMedia(BaseDialog):
 		return status
 
 	def onAction(self, action):
-		if not self.enable_buttons:
-			if action in self.closing_actions:
-				self.is_canceled = True
-				if self.resolver_enabled: self.close()
-			if self.resolver_enabled:
-				if action == self.right_action: self.skip_resolve = True
+		if action in self.closing_actions:
+			self.is_canceled = True
+			if self.enable_buttons: self.close()
+		if self.resolver_enabled:
+			if action == self.right_action: self.skip_resolve = True
 
 	def reset_is_cancelled(self):
 		self.is_canceled = False
@@ -67,7 +69,7 @@ class ConfirmProgressMedia(BaseDialog):
 	def make_text(self):
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
 		self.title = self.meta_get('title')
-		self.year = str(self.meta_get('year'))
+		self.year = string(self.meta_get('year'))
 		self.poster = self.meta_get('custom_poster') or self.meta_get(self.poster_main) or self.meta_get(self.poster_backup) or empty_poster
 		self.fanart = self.meta_get('custom_fanart') or self.meta_get(self.fanart_main) or self.meta_get(self.fanart_backup) or addon_fanart
 		self.clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or ''
@@ -89,8 +91,20 @@ class ConfirmProgressMedia(BaseDialog):
 		self.setProperty('clearlogo', self.clearlogo)
 		self.setProperty('year', self.year)
 		self.setProperty('poster', self.poster)
-		self.setProperty('percent_label', self.make_percent_label(self.percent))
-		self.setProperty('enable_fullscreen', str(self.enable_fullscreen))
+		self.setProperty('enable_fullscreen', string(self.enable_fullscreen))
+
+	def set_quality_flags(self):
+		flag_props = flag_properties[self.flags_direction]
+		flag_highlight = self.get_setting('scraper_flag_identify_colour', 'FF7C7C7C')
+		result_highlight = self.get_setting('scraper_result_identify_colour', 'FFFFFFFF')
+		self.setProperty('flag_0', flag_props[0])
+		self.setProperty('flag_1', flag_props[1])
+		self.setProperty('flag_2', flag_props[2])
+		self.setProperty('flag_3', flag_props[3])
+		self.setProperty('flag_total', flag_total)
+		self.setProperty('flag_remaining', flag_remaining)
+		self.setProperty('flag_highlight', flag_highlight)
+		self.setProperty('result_highlight', result_highlight)
 
 	def set_resolver_properties(self):
 		self.setProperty('enable_resolver', 'true')
@@ -99,17 +113,28 @@ class ConfirmProgressMedia(BaseDialog):
 	def update(self, content='', percent=0):
 		try:
 			if self.enable_fullscreen:
-				self.getControl(2001).setText(content)
-				self.setProperty('percent', str(percent))
-				self.setProperty('percent_label', self.make_percent_label(percent))
+				self.set_text(2001, content)
+				self.setProperty('percent', string(percent))
+				if not self.resolver_enabled and content: self.setProperty('show_remaining', 'true')
 			else:
-				self.getControl(2000).setText(content)
-				self.getControl(5000).setPercent(percent)
+				self.set_text(2000, content)
+				self.set_percent(5000, percent)
 		except: pass
 
-	def update_resolver(self, content=''):
-		try: self.getControl(2002).setText('••••  %s  ••••[CR]••••  %s  ••••' % content)
-		except: self.getControl(2002).setText('')
+	def update_results_count(self, results_sd, results_720p, results_1080p, results_4k, results_total, content='', percent=0):
+		if self.flags_direction == 0:
+			self.setProperty('results_0', string(results_sd))
+			self.setProperty('results_1', string(results_720p))
+			self.setProperty('results_2', string(results_1080p))
+			self.setProperty('results_3', string(results_4k))
+		else:
+			self.setProperty('results_0', string(results_4k))
+			self.setProperty('results_1', string(results_1080p))
+			self.setProperty('results_2', string(results_720p))
+			self.setProperty('results_3', string(results_sd))
+		self.setProperty('results_total', string(results_total))
+		self.update(content, percent)
 
-	def make_percent_label(self, percent):
-		return '[B]%s%%[/B]' % str(min(round(percent), 99)) if percent > 0 else ''
+	def update_resolver(self, content=''):
+		try: self.set_text(2002, '••••  %s  ••••[CR]••••  %s  ••••' % content)
+		except: self.set_text(2002, '')

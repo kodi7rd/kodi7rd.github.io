@@ -18,9 +18,9 @@ def person_data_dialog(params):
 	if 'query' in params: query = unquote(params['query'])
 	else: query = None
 	open_window(('windows.people', 'People'), 'people.xml', query=query, actor_name=params.get('actor_name'), actor_image=params.get('actor_image'),
-				actor_id=params.get('actor_id'), is_widget=params.get('is_widget', 'false'))
+				actor_id=params.get('actor_id'), reference_tmdb_id=params.get('reference_tmdb_id'), is_widget=params.get('is_widget', 'false'))
 
-def person_search(query=None, window_xml='select.xml'):
+def person_search(query=None):
 	show_busy_dialog()
 	query = unquote(query)
 	try: people = tmdb_people_info(query)
@@ -42,7 +42,7 @@ def person_search(query=None, window_xml='select.xml'):
 				image = tmdb_image_url % item['profile_path'] if item['profile_path'] else default_image
 				yield {'line1': item['name'], 'line2': ', '.join(known_for_list) if known_for_list else '', 'icon': image}
 		list_items = list(_builder())
-		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'multi_line': 'true', 'window_xml': window_xml}
+		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'multi_line': 'true'}
 		person = select_dialog(people, **kwargs)
 		if person == None: return None, None, None
 		actor_id = int(person['id'])

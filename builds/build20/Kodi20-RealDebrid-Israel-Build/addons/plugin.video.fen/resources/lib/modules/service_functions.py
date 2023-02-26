@@ -19,8 +19,20 @@ trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_fen = settings.trakt
 make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
 current_skin_prop, use_skin_fonts_prop, custom_skin_path = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.custom_skin_path
 fen_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
-media_windows = (10000, 10025)
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
+media_windows = (10000, 10025)
+
+class SysExitPause:
+	def run(self):
+		logger(fen_str, 'SysExitPause Service Starting')
+		monitor = xbmc_monitor()
+		wait_for_abort = monitor.waitForAbort
+		set_property('fen.check_sysexit', 'false')
+		wait_for_abort(30)
+		set_property('fen.check_sysexit', 'true')
+		try: del monitor
+		except: pass
+		return logger(fen_str, 'SysExitPause Service Finished')
 
 class SetKodiVersion:
 	def run(self):
@@ -28,6 +40,7 @@ class SetKodiVersion:
 		kodi_version = get_infolabel('System.BuildVersion')
 		set_property('fen.kodi_version', kodi_version)
 		return logger(fen_str, 'SetKodiVersion Service Finished - Kodi Version Detected: %s' % kodi_version)
+
 
 class InitializeDatabases:
 	def run(self):
@@ -219,7 +232,7 @@ class CheckCustomXMLs:
 		if '32859' in get_setting('custom_skins.enable', '$ADDON[plugin.video.fen 32860]'):
 			current_version = get_setting('custom_skins.version', '0.0.0')
 			latest_version = get_custom_xmls_version()
-			if current_version != latest_version or not path_exists(translate_path(custom_skin_path[:-2])):
+			if current_version != latest_version or not path_exists(translate_path(custom_skin_path)):
 				success = download_custom_xmls()
 				if success: set_setting('custom_skins.version', latest_version)
 				logger(fen_str, 'CheckCustomXMLs Service - Attempted XMLs Update. Success? %s' % success)

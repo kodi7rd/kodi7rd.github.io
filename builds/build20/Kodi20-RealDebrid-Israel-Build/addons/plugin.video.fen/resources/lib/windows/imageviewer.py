@@ -41,7 +41,7 @@ class ThumbImageViewer(BaseDialog):
 				if thumb_params['mode'] == 'slideshow_image':
 					thumb_params['current_index'] = position
 					ending_position = self.ImagesInstance.run(thumb_params)
-					self.win.selectItem(ending_position)
+					self.select_item(self.window_id, ending_position)
 				elif thumb_params['mode'] == 'person_data_dialog':
 					person_data_dialog({'query': thumb_params['actor_name']})
 		elif action in self.context_actions:
@@ -54,8 +54,7 @@ class ThumbImageViewer(BaseDialog):
 		try:
 			self.set_properties()
 			if self.next_page_params.get('page_no', 'final_page') != 'final_page': self.make_next_page()
-			self.win = self.getControl(self.window_id)
-			self.win.addItems(self.list_items)
+			self.add_items(self.window_id, self.list_items)
 			self.setFocusId(self.window_id)
 		except: pass
 
@@ -64,7 +63,7 @@ class ThumbImageViewer(BaseDialog):
 			self.current_page += 1
 			self.next_page_params['in_progress'] = 'true'
 			self.list_items, self.next_page_params = self.ImagesInstance.run(self.next_page_params)
-			self.win.reset()
+			self.reset_window(self.window_id)
 			self.make_page()
 		except: self.close()
 
@@ -74,7 +73,7 @@ class ThumbImageViewer(BaseDialog):
 			self.next_page_params['page_no'] = self.current_page
 			self.next_page_params['in_progress'] = 'true'
 			self.list_items, self.next_page_params = self.ImagesInstance.run(self.next_page_params)
-			self.win.reset()
+			self.reset_window(self.window_id)
 			self.make_page()
 		except: self.close()
 
@@ -91,10 +90,10 @@ class ThumbImageViewer(BaseDialog):
 		self.set_home_property('delete_image_finished', 'false')
 		self.execute_code(choice)
 		while not self.get_home_property('delete_image_finished') == 'true': self.sleep(10)
-		self.win.reset()
+		self.reset_window(self.window_id)
 		self.list_items = self.ImagesInstance.browser_image(download_directory('image'), return_items=True)
 		self.make_page()
-		self.win.selectItem(position)
+		self.select_item(self.window_id, position)
 
 	def set_properties(self):
 		self.setProperty('page_no', str(self.current_page))
@@ -110,8 +109,7 @@ class ThumbContextMenu(BaseDialog):
 		self.make_context_menu()
 
 	def onInit(self):
-		win = self.getControl(self.window_id)
-		win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
 
 	def run(self):
@@ -133,7 +131,7 @@ class ThumbContextMenu(BaseDialog):
 		path = self.list_item.getProperty('path')
 		thumb = self.list_item.getProperty('thumb')
 		if enable_delete:
-			delete_file_params = {'mode': 'delete_image', 'image_url': path, 'thumb_url': thumb}#, 'in_progress': 'true'}
+			delete_file_params = {'mode': 'delete_image', 'image_url': path, 'thumb_url': thumb}
 			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % ls(32785), 'RunPlugin(%s)', delete_file_params))
 		else:
 			name = self.list_item.getProperty('name')
@@ -150,9 +148,8 @@ class SlideShow(BaseDialog):
 		self.make_items()
 
 	def onInit(self):
-		self.win = self.getControl(self.window_id)
-		self.win.addItems(self.item_list)
-		self.win.selectItem(self.index)
+		self.add_items(self.window_id, self.item_list)
+		self.select_item(self.window_id, self.index)
 		self.setFocusId(self.window_id)
 
 	def run(self):

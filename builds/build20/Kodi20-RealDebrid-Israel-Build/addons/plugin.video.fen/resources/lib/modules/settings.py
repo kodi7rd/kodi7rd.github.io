@@ -25,9 +25,9 @@ resolution_tuple = (
 	{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original', 'clearlogo': 'original'})
 
 def skin_location(skin_xml):
-	if '32860' in get_setting('custom_skins.enable'): return translate_path(default_skin_path)
 	user_skin = current_skin()
-	if path_exists(translate_path(custom_xml_path % (user_skin, skin_xml))): return translate_path(custom_skin_path % user_skin)
+	if '32860' in get_setting('custom_skins.enable'): return translate_path(default_skin_path)
+	if path_exists(translate_path(custom_xml_path % (user_skin, skin_xml))): return translate_path(custom_skin_path + user_skin)
 	return translate_path(default_skin_path)
 
 def use_skin_fonts():
@@ -58,6 +58,9 @@ def enabled_debrids_check(debrid_service):
 def monitor_playback():
 	return get_setting('playback.monitor_success', 'true') == 'true'
 
+def playback_attempt_pause():
+	return int(get_setting('playback.pause_start', '1500'))
+
 def limit_resolve():
 	return get_setting('playback.limit_resolve', 'false') == 'true'
 
@@ -66,6 +69,9 @@ def disable_content_lookup():
 
 def widget_load_empty():
 	return get_setting('playback.widget_load_empty', 'true') == 'true'
+
+def easynews_max_retries():
+	return int(get_setting('playback.easynews_max_retries', '1'))
 
 def display_sleep_time():
 	return 100
@@ -77,8 +83,7 @@ def show_unaired_watchlist():
 	return get_setting('show_unaired_watchlist', 'false') == 'true'
 
 def include_year_in_title(media_type):
-	setting = int(get_setting('include_year_in_title', '0'))
-	return setting in year_in_title_dict[media_type]
+	return int(get_setting('include_year_in_title', '0')) in year_in_title_dict[media_type]
 	
 def movies_directory():
 	return translate_path(get_setting('movies_directory'))
@@ -151,6 +156,9 @@ def auto_nextep_settings():
 	default_action = default_action_dict[int(get_setting('autoplay_default_action', '1'))] if alert_method == 0 else 'cancel'
 	return {'scraper_time': scraper_time, 'window_percentage': window_percentage, 'alert_method': alert_method, 'default_action': default_action}
 
+def progress_flags_direction():
+	return int(get_setting('results.progress_flags_direction', '0'))
+
 def filter_status(filter_type):
 	return int(get_setting('filter_%s' % filter_type, '0'))
 
@@ -208,11 +216,15 @@ def widget_hide_watched():
 def extras_open_action(media_type):
 	return int(get_setting('extras.open_action', '0')) in extras_open_action_dict[media_type]
 
+def extras_enable_extra_ratings():
+	return get_setting('extras.enable_extra_ratings', 'true') == 'true'
+
+def extras_ratings_icons_type():
+	icon_setting = int(get_setting('extras.ratings_icons_type', '0'))
+	return 'color' if icon_setting == 0 else 'mono'
+
 def extras_enable_scrollbars():
 	return get_setting('extras.enable_scrollbars', 'true')
-
-def extras_enable_animation():
-	return get_setting('extras.enable_animation', 'false')
 
 def extras_exclude_non_acting():
 	return get_setting('extras.exclude_non_acting_roles', 'true') == 'true'
@@ -335,6 +347,9 @@ def fanarttv_client_key():
 
 def tmdb_api_key():
 	return get_setting('tmdb_api', tmdb_default_api)
+
+def omdb_api_key():
+	return get_setting('omdb_api', '')
 
 def fanarttv_default():
 	return get_setting('fanarttv.default', 'false') == 'true'

@@ -35,7 +35,7 @@
                 <top>22</top>
                 <width max="355">auto</width>
                 <height>20</height>
-                <font>font10</font> <!-- FEN_21 -->
+                <font>font_tiny</font> <!-- FEN_21 -->
                 <textcolor>FFFFFFFF</textcolor>
                 <align>left</align>
                 <aligny>center</aligny>
@@ -67,7 +67,7 @@
                     <left>355</left>
                     <width max="1210">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>top</aligny>
@@ -92,7 +92,7 @@
                     <top>862</top>
                     <width>486</width>
                     <height>188</height>
-                    <font>font12</font> <!-- FEN_26 -->
+                    <font>font_mini</font> <!-- FEN_26 -->
                     <align>justify</align>
                     <aligny>top</aligny>
                     <label>$INFO[Window.Property(plot)]</label>
@@ -133,17 +133,19 @@
                             <left>20</left>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             <control type="label">
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>left</align>
                                 <aligny>bottom</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                             <control type="label">
                                 <top>35</top>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>left</align>
                                 <aligny>top</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(provider)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                         </control>
                         <control type="label">
@@ -151,10 +153,11 @@
                             <left>210</left>
                             <width max="1070">auto</width>
                             <height>12</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
+                            <scroll>false</scroll>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
@@ -163,11 +166,12 @@
                             <left>210</left>
                             <width max="1070">auto</width>
                             <height>12</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -175,11 +179,12 @@
                             <left>210</left>
                             <width max="1070">auto</width>
                             <height>12</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="image">
@@ -197,11 +202,12 @@
                             <left>210</left>
                             <width max="860">auto</width>
                             <height>40</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>center</aligny>
                             <label>$ADDON[plugin.video.fen 33023]</label>
+                            <scroll>false</scroll>
                             <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                     </itemlayout>
@@ -231,7 +237,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -239,7 +245,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -251,7 +257,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -263,7 +269,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -275,7 +281,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -297,7 +303,7 @@
                                 <left>210</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -323,7 +329,7 @@
                                 <control type="image">
                                     <width>1300</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -333,7 +339,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -341,7 +347,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -353,7 +359,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -365,7 +371,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -377,7 +383,7 @@
                                 <left>210</left>
                                 <width max="1070">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -399,7 +405,7 @@
                                 <left>210</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -470,7 +476,7 @@
                     <left>355</left>
                     <width max="1210">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -519,78 +525,85 @@
                     <control type="label">
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32583]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(provider)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>50</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(source_type)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>100</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(source_site)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>150</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32241]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(quality)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>200</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(size_label)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>250</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(extra_info)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="label">
                         <top>300</top>
                         <width max="750">auto</width>
                         <height>20</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(highlight)]][B]$ADDON[plugin.video.fen 32106]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(hash)][/UPPERCASE]</label>
+                        <scroll>false</scroll>
                     </control>
                     <control type="textbox">
                         <top>345</top>
                         <left>0</left>
                         <width>750</width>
                         <height>97</height>
-                        <font>font12</font> <!-- FEN_26 -->
+                        <font>font_mini</font> <!-- FEN_26 -->
                         <align>left</align>
                         <aligny>top</aligny>
                         <textcolor>FFCCCCCC</textcolor>
@@ -641,17 +654,19 @@
                             <left>20</left>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             <control type="label">
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>left</align>
                                 <aligny>bottom</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                             <control type="label">
                                 <top>35</top>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>left</align>
                                 <aligny>top</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(provider)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                         </control>
                         <control type="label">
@@ -659,11 +674,12 @@
                             <left>185</left>
                             <width max="835">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -671,11 +687,12 @@
                             <left>185</left>
                             <width max="835">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -683,11 +700,12 @@
                             <left>185</left>
                             <width max="835">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="image">
@@ -705,11 +723,12 @@
                             <left>135</left>
                             <width max="860">auto</width>
                             <height>40</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>center</aligny>
                             <label>$ADDON[plugin.video.fen 33023]</label>
+                            <scroll>false</scroll>
                             <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                     </itemlayout>
@@ -739,7 +758,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -747,7 +766,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -759,7 +778,7 @@
                                 <left>185</left>
                                 <width max="835">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -771,7 +790,7 @@
                                 <left>185</left>
                                 <width max="835">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -783,7 +802,7 @@
                                 <left>185</left>
                                 <width max="835">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -805,7 +824,7 @@
                                 <left>135</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -831,7 +850,7 @@
                                 <control type="image">
                                     <width>1030</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -841,7 +860,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -849,7 +868,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -861,7 +880,7 @@
                                 <left>185</left>
                                 <width max="820">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -873,7 +892,7 @@
                                 <left>185</left>
                                 <width max="820">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -885,7 +904,7 @@
                                 <left>185</left>
                                 <width max="820">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -907,7 +926,7 @@
                                 <left>135</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -979,7 +998,7 @@
                     <left>70</left>
                     <width max="1130">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -1033,17 +1052,19 @@
                             <left>20</left>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             <control type="label">
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>left</align>
                                 <aligny>bottom</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                             <control type="label">
                                 <top>35</top>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>left</align>
                                 <aligny>top</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(provider)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                         </control>
                         <control type="label">
@@ -1051,11 +1072,12 @@
                             <left>210</left>
                             <width max="950">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -1063,11 +1085,12 @@
                             <left>210</left>
                             <width max="950">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -1075,11 +1098,12 @@
                             <left>210</left>
                             <width max="950">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="image">
@@ -1097,11 +1121,12 @@
                             <left>210</left>
                             <width max="860">auto</width>
                             <height>40</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>center</aligny>
                             <label>$ADDON[plugin.video.fen 33023]</label>
+                            <scroll>false</scroll>
                             <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                     </itemlayout>
@@ -1131,7 +1156,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -1139,7 +1164,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -1151,7 +1176,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1163,7 +1188,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1175,7 +1200,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1197,7 +1222,7 @@
                                 <left>210</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -1223,7 +1248,7 @@
                                 <control type="image">
                                     <width>1180</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -1233,7 +1258,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -1241,7 +1266,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -1253,7 +1278,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1265,7 +1290,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1277,7 +1302,7 @@
                                 <left>210</left>
                                 <width max="950">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1299,7 +1324,7 @@
                                 <left>210</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -1370,7 +1395,7 @@
                     <left>355</left>
                     <width max="1210">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -1409,17 +1434,19 @@
                             <left>20</left>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             <control type="label">
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <align>left</align>
                                 <aligny>bottom</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                             <control type="label">
                                 <top>35</top>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <align>left</align>
                                 <aligny>top</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(provider)][/B][/COLOR]</label>
+                                <scroll>false</scroll>
                             </control>
                         </control>
                         <control type="label">
@@ -1427,11 +1454,12 @@
                             <left>185</left>
                             <width max="725">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -1439,11 +1467,12 @@
                             <left>185</left>
                             <width max="725">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="label">
@@ -1451,11 +1480,12 @@
                             <left>185</left>
                             <width max="725">auto</width>
                             <height>12</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
                             <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <scroll>false</scroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="image">
@@ -1473,11 +1503,12 @@
                             <left>135</left>
                             <width max="770">auto</width>
                             <height>40</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>center</aligny>
                             <label>$ADDON[plugin.video.fen 33023]</label>
+                            <scroll>false</scroll>
                             <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                     </itemlayout>
@@ -1507,7 +1538,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -1515,7 +1546,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FF4a4347</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -1527,7 +1558,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1539,7 +1570,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1551,7 +1582,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1573,7 +1604,7 @@
                                 <left>135</left>
                                 <width max="770">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -1599,7 +1630,7 @@
                                 <control type="image">
                                     <width>925</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -1609,7 +1640,7 @@
                                 <left>20</left>
                                 <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 <control type="label">
-                                    <font>font14</font> <!-- FEN_33 -->
+                                    <font>font_midi</font> <!-- FEN_33 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>bottom</aligny>
@@ -1617,7 +1648,7 @@
                                 </control>
                                 <control type="label">
                                     <top>35</top>
-                                    <font>font10</font> <!-- FEN_21 -->
+                                    <font>font_tiny</font> <!-- FEN_21 -->
                                     <textcolor>FFdedad1</textcolor>
                                     <align>left</align>
                                     <aligny>top</aligny>
@@ -1629,7 +1660,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1641,7 +1672,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1653,7 +1684,7 @@
                                 <left>185</left>
                                 <width max="725">auto</width>
                                 <height>12</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -1675,7 +1706,7 @@
                                 <left>135</left>
                                 <width max="770">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
@@ -1746,7 +1777,7 @@
                     <left>355</left>
                     <width max="1210">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -1825,11 +1856,12 @@
                             <left>20</left>
                             <width>340</width>
                             <height>430</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>top</aligny>
                             <label>[UPPERCASE][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32583]: [/B][/COLOR]$INFO[ListItem.Property(provider)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32241]: [/B][/COLOR]$INFO[ListItem.Property(quality)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <autoscroll>false</autoscroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="textbox">
@@ -1837,7 +1869,7 @@
                             <left>20</left>
                             <width>340</width>
                             <height>185</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>center</align>
                             <aligny>top</aligny>
@@ -1891,11 +1923,12 @@
                             <left>20</left>
                             <width>340</width>
                             <height>430</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>left</align>
                             <aligny>top</aligny>
                             <label>[UPPERCASE][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32583]: [/B][/COLOR]$INFO[ListItem.Property(provider)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32241]: [/B][/COLOR]$INFO[ListItem.Property(quality)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][CR][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <autoscroll>false</autoscroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="textbox">
@@ -1903,7 +1936,7 @@
                             <left>20</left>
                             <width>340</width>
                             <height>185</height>
-                            <font>font14</font> <!-- FEN_33 -->
+                            <font>font_midi</font> <!-- FEN_33 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>top</aligny>
@@ -1967,7 +2000,7 @@
                                 <left>20</left>
                                 <width>340</width>
                                 <height>430</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>top</aligny>
@@ -1979,7 +2012,7 @@
                                 <left>20</left>
                                 <width>340</width>
                                 <height>185</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>top</aligny>
@@ -2003,7 +2036,7 @@
                                 <control type="image">
                                     <width>380</width>
                                     <height>720</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -2044,7 +2077,7 @@
                                 <left>20</left>
                                 <width>340</width>
                                 <height>430</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>top</aligny>
@@ -2056,7 +2089,7 @@
                                 <left>20</left>
                                 <width>340</width>
                                 <height>185</height>
-                                <font>font14</font> <!-- FEN_33 -->
+                                <font>font_midi</font> <!-- FEN_33 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>top</aligny>
@@ -2127,7 +2160,7 @@
                     <left>355</left>
                     <width max="1210">auto</width>
                     <height>30</height>
-                    <font>font60</font> <!-- FEN_60_BOLD -->
+                    <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
@@ -2203,11 +2236,12 @@
                             <left>20</left>
                             <width>380</width>
                             <height>251</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>top</aligny>
                             <label>[UPPERCASE][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32583]: [/B][/COLOR]$INFO[ListItem.Property(provider)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32241]: [/B][/COLOR]$INFO[ListItem.Property(quality)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <autoscroll>false</autoscroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="textbox">
@@ -2215,7 +2249,7 @@
                             <left>20</left>
                             <width>380</width>
                             <height>185</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>center</align>
                             <aligny>top</aligny>
@@ -2269,11 +2303,12 @@
                             <left>20</left>
                             <width>380</width>
                             <height>251</height>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>left</align>
                             <aligny>top</aligny>
                             <label>[UPPERCASE][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32583]: [/B][/COLOR]$INFO[ListItem.Property(provider)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32241]: [/B][/COLOR]$INFO[ListItem.Property(quality)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[ListItem.Property(extra_info)][CR][B][COLOR $INFO[ListItem.Property(highlight)]]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
+                            <autoscroll>false</autoscroll>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                         </control>
                         <control type="textbox">
@@ -2281,7 +2316,7 @@
                             <left>20</left>
                             <width>380</width>
                             <height>185</height>
-                            <font>font12</font> <!-- FEN_26 -->
+                            <font>font_mini</font> <!-- FEN_26 -->
                             <textcolor>FF9c9a9b</textcolor>
                             <align>center</align>
                             <aligny>top</aligny>
@@ -2345,7 +2380,7 @@
                                 <left>20</left>
                                 <width>380</width>
                                 <height>251</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>left</align>
                                 <aligny>top</aligny>
@@ -2357,7 +2392,7 @@
                                 <left>20</left>
                                 <width>380</width>
                                 <height>185</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FF4a4347</textcolor>
                                 <align>center</align>
                                 <aligny>top</aligny>
@@ -2381,7 +2416,7 @@
                                 <control type="image">
                                     <width>420</width>
                                     <height>420</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradients/gradient-diffuse-horizontal.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]">common/gradient-diffuse-horizontal.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -2422,7 +2457,7 @@
                                 <left>20</left>
                                 <width>380</width>
                                 <height>251</height>
-                                <font>font10</font> <!-- FEN_21 -->
+                                <font>font_tiny</font> <!-- FEN_21 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>left</align>
                                 <aligny>top</aligny>
@@ -2434,7 +2469,7 @@
                                 <left>20</left>
                                 <width>380</width>
                                 <height>185</height>
-                                <font>font12</font> <!-- FEN_26 -->
+                                <font>font_mini</font> <!-- FEN_26 -->
                                 <textcolor>FFFFFFFF</textcolor>
                                 <align>center</align>
                                 <aligny>top</aligny>

@@ -71,7 +71,7 @@ class SelectArtwork(BaseDialog):
 			self.setProperty(count_name % image_type, count_insert % len(item_list))
 			self.set_attribute(self, '%s_listitems' % image_type, item_list)
 			self.add_items(list_id, item_list)
-			self.set_focus(list_id)
+			self.select_item(list_id, self.focus_index)
 			self.add_active(list_id)
 		except: pass
 
@@ -85,12 +85,6 @@ class SelectArtwork(BaseDialog):
 		self.landscape = self.meta_get('custom_landscape') or self.meta_get('landscape') or ''
 		self.discart = self.meta_get('custom_discart') or self.meta_get('discart') or ''
 		self.keyart = self.meta_get('custom_keyart') or self.meta_get('keyart') or ''
-
-	def add_items(self, _id, items):
-		self.getControl(_id).addItems(items)
-
-	def set_focus(self, _id):
-		self.getControl(_id).selectItem(self.focus_index)
 
 	def add_active(self, _id):
 		self.active_items.append(_id)

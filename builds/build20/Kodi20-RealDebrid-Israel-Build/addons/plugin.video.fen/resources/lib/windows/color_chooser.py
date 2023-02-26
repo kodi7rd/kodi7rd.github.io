@@ -30,10 +30,9 @@ class SelectColor(BaseDialog):
 		if not self.palette_status:
 			self.notification(33111, duration=5000)
 			self.close()
-		self.win = self.getControl(self.window_id)
-		self.win.addItems(self.item_list)
+		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
-		self.win.selectItem(self.start_index)
+		self.select_item(self.window_id, self.start_index)
 
 	def run(self):
 		self.doModal()

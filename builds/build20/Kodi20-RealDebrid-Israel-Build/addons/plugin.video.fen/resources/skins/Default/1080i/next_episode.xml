@@ -50,7 +50,7 @@
                         <height>20</height>
                         <aligny>center</aligny>
                         <align>left</align>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32811]... $INFO[Player.TimeRemaining()][/B]</label>
                     </control>
@@ -62,7 +62,7 @@
                         <height>20</height>
                         <aligny>center</aligny>
                         <align>left</align>
-                        <font>font14</font> <!-- FEN_33 -->
+                        <font>font_midi</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 33086]?[/B]</label>
                     </control>
@@ -71,7 +71,7 @@
                         <left>20</left>
                         <width>510</width>
                         <height>95</height>
-                        <font>font10</font> <!-- FEN_21 -->
+                        <font>font_tiny</font> <!-- FEN_21 -->
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFB7B4BB</textcolor>
@@ -96,7 +96,7 @@
                             <onleft>12</onleft>
                             <onright>11</onright>
                             <label>$ADDON[plugin.video.fen 32614]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>
@@ -112,7 +112,7 @@
                             <onleft>10</onleft>
                             <onright>12</onright>
                             <label>$ADDON[plugin.video.fen 32764]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>
@@ -128,7 +128,7 @@
                             <onleft>11</onleft>
                             <onright>10</onright>
                             <label>$ADDON[plugin.video.fen 32840]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>
@@ -154,7 +154,7 @@
                             <onleft>10</onleft>
                             <onright>12</onright>
                             <label>$ADDON[plugin.video.fen 33090]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>
@@ -170,7 +170,7 @@
                             <onleft>12</onleft>
                             <onright>11</onright>
                             <label>$ADDON[plugin.video.fen 32824]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>
@@ -186,7 +186,7 @@
                             <onleft>11</onleft>
                             <onright>10</onright>
                             <label>$ADDON[plugin.video.fen 32828]</label>
-                            <font>font10</font> <!-- FEN_21 -->
+                            <font>font_tiny</font> <!-- FEN_21 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="'FFB7B4BB'">common/white.png</texturefocus>

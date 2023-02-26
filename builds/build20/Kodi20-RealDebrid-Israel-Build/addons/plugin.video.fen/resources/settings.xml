@@ -39,7 +39,7 @@
 				</setting>
 				<setting id="fen.highlight_name" type="string" label="32124" help="">
 					<level>0</level>
-					<default>[COLOR=FF005C99]FF005C99[/COLOR]</default>
+					<default>[COLOR=FF008EB2]FF008EB2[/COLOR]</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=highlight_color_choice)</data>
 					</control>
@@ -546,7 +546,7 @@
 				</setting>
 				<setting id="fen.highlight" type="string" help="">
 					<level>0</level>
-					<default>FF0166FF</default>
+					<default>FF008EB2</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -712,9 +712,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="int_dialog_highlight" type="string" help="">
+				<setting id="scraper_flag_identify_colour" type="string" help="">
 					<level>0</level>
-					<default>FFAFAFAF</default>
+					<default>FF7C7C7C</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -724,9 +724,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="ext_dialog_highlight" type="string" help="">
+				<setting id="scraper_result_identify_colour" type="string" help="">
 					<level>0</level>
-					<default>FFAFAFAF</default>
+					<default>FFFFFFFF</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -1048,6 +1048,34 @@
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=default_extras_buttons_choice)</data>
 					</control>
+				</setting>
+				<setting id="extras.enable_extra_ratings" type="boolean" label="33061" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="omdb_api"/>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="extras.ratings_icons_type" type="integer" label="33129" help="" parent="extras.enable_extra_ratings">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="33130">0</option>
+							<option label="33131">1</option>
+						</options>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="extras.enable_extra_ratings">true</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="spinner" format="string"/>
 				</setting>
 				<setting id="extras.enable_scrollbars" type="boolean" label="32846" help="">
 					<level>0</level>
@@ -1517,8 +1545,21 @@
 					</control>
 				</setting>
 			</group>
+			<!-- OMDb -->
+			<group id="4" label="32578">
+				<setting id="omdb_api" type="string" label="32579" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string">
+						<heading>32579</heading>
+					</control>
+				</setting>
+			</group>
 			<!-- IMDb -->
-			<group id="4" label="32064">
+			<group id="5" label="32064">
 				<setting id="imdb_user" type="string" label="32065" help="">
 					<level>0</level>
 					<default/>
@@ -2183,6 +2224,19 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
+				<setting id="provider.ad_cloud" type="boolean" label="32748" help="">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+								<condition operator="!is" setting="ad.token"/>
+								<condition operator="is" setting="ad.enabled">true</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 				<setting id="ad.priority" type="integer" label="32011" help="">
 					<level>0</level>
 					<default>10</default>
@@ -2532,6 +2586,17 @@
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
+				</setting>
+				<setting id="results.progress_flags_direction" type="integer" label="32209" help="">
+					<level>0</level>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="32167">0</option>
+							<option label="32168">1</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
 				</setting>
 			</group>
 			<!--General -->
@@ -2932,19 +2997,19 @@
 				</setting>
 			</group>
 			<!-- Progress Color Highlights -->
-			<group id="5" label="32209">
-				<setting id="int_dialog_highlight_name" type="string" label="32167" help="">
+			<group id="5" label="32829">
+				<setting id="scraper_flag_identify_colour_name" type="string" label="32830" help="" parent="highlight.type">
 					<level>0</level>
-					<default>[COLOR=FFAFAFAF]FFAFAFAF[/COLOR]</default>
+					<default>[COLOR=FF7C7C7C]FF7C7C7C[/COLOR]</default>
 					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.fen/?mode=scraper_dialog_color_choice&amp;setting=int)</data>
+						<data>RunPlugin(plugin://plugin.video.fen/?mode=scraper_color_choice&amp;setting=scraper_flag)</data>
 					</control>
 				</setting>
-				<setting id="ext_dialog_highlight_name" type="string" label="32168" help="">
+				<setting id="scraper_result_identify_colour_name" type="string" label="33050" help="" parent="highlight.type">
 					<level>0</level>
-					<default>[COLOR=FFAFAFAF]FFAFAFAF[/COLOR]</default>
+					<default>[COLOR=FFFFFFFF]FFFFFFFF[/COLOR]</default>
 					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.fen/?mode=scraper_dialog_color_choice&amp;setting=ext)</data>
+						<data>RunPlugin(plugin://plugin.video.fen/?mode=scraper_color_choice&amp;setting=scraper_result)</data>
 					</control>
 				</setting>
 			</group>
@@ -3149,6 +3214,23 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="playback.pause_start" type="integer" label="32677" help="" parent="playback.monitor_success">
+					<level>0</level>
+					<default>1500</default>
+					<constraints>
+						<minimum>500</minimum>
+						<step>500</step>
+						<maximum>5000</maximum>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="playback.monitor_success">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
 				<setting id="playback.widget_load_empty" type="boolean" label="33103" help="">
 					<level>0</level>
 					<default>true</default>
@@ -3163,6 +3245,27 @@
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
+				</setting>
+				<setting id="playback.easynews_max_retries" type="integer" label="33126" help="">
+					<level>0</level>
+					<default>1</default>
+					<constraints>
+						<minimum>0</minimum>
+						<step>1</step>
+						<maximum>5</maximum>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="playback.monitor_success">true</condition>
+								<condition operator="is" setting="provider.easynews">true</condition>
+								<condition operator="!is" setting="easynews_password"/>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
 				</setting>
 				<setting id="playback.volumecheck_enabled" type="boolean" label="33064" help="">
 					<level>0</level>

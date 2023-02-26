@@ -101,6 +101,7 @@ class MenuEditor:
 		list_name =  main_list_name_dict[active_list]
 		try: choice_items = self._get_removed_items(active_list)
 		except: return notification(32760, 1500)
+		if not choice_items: return notification(32760, 1500)
 		browse_item = self._menu_select(choice_items, list_name)
 		if browse_item == None: return
 		browse_item = choice_items[browse_item]
@@ -239,7 +240,7 @@ class MenuEditor:
 			except: pass
 			list_items = [{'line1': i if i != 'folder' else 'folder (default)', 'icon': get_icon(i)} for i in all_icons]
 		else: list_items = [{'line1': i, 'icon': get_icon(i)} for i in all_icons]
-		kwargs = {'items': json.dumps(list_items), 'heading': fen_str, 'window_xml': 'select.xml'}
+		kwargs = {'items': json.dumps(list_items), 'heading': fen_str}
 		icon_choice = select_dialog(all_icons, **kwargs) or 'folder'
 		return icon_choice
 
