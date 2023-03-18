@@ -48,5 +48,5 @@
     <setting id="WeatherFanart.name" type="string"></setting>
     <setting id="HomeFanart.ext" type="string"></setting>
     <setting id="homefanart.path" type="string"></setting>
-    <setting id="osdautoclosetime" type="string">5</setting>
+    <setting id="osdautoclosetime" type="string">4</setting>
 </settings>
