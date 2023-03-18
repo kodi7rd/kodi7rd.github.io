@@ -12,11 +12,11 @@ from modules.utils import clean_file_name, clean_title, safe_string, remove_acce
 json, Thread, ls, urlparse, parse_qsl, notification = kodi_utils.json, kodi_utils.Thread, kodi_utils.local_string, kodi_utils.urlparse, kodi_utils.parse_qsl, kodi_utils.notification
 video_extensions, image_extensions, get_icon, dialog, unquote = kodi_utils.video_extensions, kodi_utils.image_extensions, kodi_utils.get_icon, kodi_utils.dialog, kodi_utils.unquote
 add_items, set_sort_method, set_content, end_directory, sys = kodi_utils.add_items, kodi_utils.set_sort_method, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.sys
-confirm_progress_media, poster_empty, get_setting, select_dialog = kodi_utils.confirm_progress_media, kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 player, confirm_dialog, ok_dialog, addon_fanart, build_url = kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.addon_fanart, kodi_utils.build_url
 show_busy_dialog, hide_busy_dialog, make_directory, open_file = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.make_directory, kodi_utils.open_file
 external_browse, set_view_mode, make_listitem, list_dirs = kodi_utils.external_browse, kodi_utils.set_view_mode, kodi_utils.make_listitem, kodi_utils.list_dirs
-fen_clearlogo, sleep, kodi_version = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.kodi_version
+fen_clearlogo, sleep, kodi_version, set_category = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.set_category
+poster_empty, get_setting, select_dialog = kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 sources = Sources()
 ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 levels =['../../../..', '../../..', '../..', '..']
@@ -120,7 +120,7 @@ class Downloader:
 		if self.url in (None, 'None', ''): return self.return_notification(_notification=32692)
 		self.get_filename()
 		self.get_extension()
-		self.download_check()
+		if not self.download_check(): return self.return_notification(_ok_dialog=32490)
 		if not self.confirm_download(): return self.return_notification(_notification=32736)
 		self.get_download_folder()
 		if not self.get_destination_folder(): return self.return_notification(_notification=32736)
@@ -156,6 +156,7 @@ class Downloader:
 		if url in (None, 'None', ''):
 			if self.action == 'meta.single':
 				source = json.loads(self.source)
+				if source.get('scrape_provider', '') == 'easynews': source['url_dl'] = source['down_url']
 				url = sources.resolve_sources(source, meta=self.meta)
 			elif self.action == 'meta.pack':
 				if self.provider == 'Real-Debrid':
@@ -248,16 +249,17 @@ class Downloader:
 
 	def download_check(self):
 		self.resp = self.get_response(self.url, self.headers, 0)
-		if not self.resp: self.return_notification(_ok_dialog=32490)
+		if not self.resp: return False
 		try: self.content = int(self.resp.headers['Content-Length'])
 		except: self.content = 0
 		try: self.resumable = 'bytes' in self.resp.headers['Accept-Ranges'].lower()
 		except: self.resumable = False
-		if self.content < 1: self.return_notification(_ok_dialog=32490)
+		if self.content < 1: return False
 		self.size = 1024 * 1024
 		self.mb = self.content / (1024 * 1024)
 		if self.content < self.size: self.size = self.content
 		hide_busy_dialog()
+		return True
 
 	def start_download(self, url, dest):
 		if self.action not in ('image', 'meta.pack'):
@@ -354,13 +356,7 @@ class Downloader:
 			if not downloaded or not playing: ok_dialog(text=text)
 
 	def confirm_download(self):
-		choice = True
-		if self.action not in ('image', 'meta.pack'):
-			text = '%s[CR]%s' % (ls(32688) % self.mb, ls(32689))
-			if self.action == 'meta.single':
-				choice = confirm_progress_media(meta=self.meta, text=text, enable_buttons=True, focus_button=10)
-			else: choice = confirm_dialog(text=text)
-		return choice
+		return True if self.action in ('image', 'meta.pack') else confirm_dialog(heading=self.final_name, text='%s[CR]%s' % (ls(32688) % self.mb, ls(32689)))
 
 	def return_notification(self, _notification=None, _ok_dialog=None):
 		hide_busy_dialog()
@@ -392,5 +388,6 @@ def download_manager(params):
 	add_items(handle, item_list)
 	set_sort_method(handle, 'files')
 	set_content(handle, '')
+	set_category(handle, params.get('name'))
 	end_directory(handle)
 	if not external_browse(): set_view_mode('view.main', '')

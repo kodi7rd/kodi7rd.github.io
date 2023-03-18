@@ -21,7 +21,7 @@ clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cac
 TraktWatched, reset_activity, clear_trakt_list_contents_data = trakt_cache.TraktWatched, trakt_cache.reset_activity, trakt_cache.clear_trakt_list_contents_data
 clear_trakt_collection_watchlist_data, clear_trakt_hidden_data = trakt_cache.clear_trakt_collection_watchlist_data, trakt_cache.clear_trakt_hidden_data
 clear_trakt_recommendations, clear_trakt_list_data = trakt_cache.clear_trakt_recommendations, trakt_cache.clear_trakt_list_data
-trakt_icon, trakt_str = get_icon('trakt'), ls(32037)
+trakt_str = ls(32037)
 res_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 API_ENDPOINT = 'https://api.trakt.tv/%s'
 timeout = 20
@@ -299,7 +299,7 @@ def trakt_fetch_collection_watchlist(list_type, media_type):
 		data = get_trakt(params)
 		if list_type == 'watchlist': data = [i for i in data if i['type'] == key]
 		return [{'media_ids': i[key]['ids'], 'title': i[key]['title'], 'collected_at': i.get(collected_at),
-		'released': i[key].get(release_key) if i[key].get(release_key) else '2050-01-01'} for i in data]
+		'released': i[key].get(release_key) if i[key].get(release_key) else ('2050-01-01' if media_type in ('movie', 'movies') else '2050-01-01T01:00:00.000Z')} for i in data]
 	key, string_insert, release_key = ('movie', 'movie', 'released') if media_type in ('movie', 'movies') else ('show', 'tvshow', 'first_aired')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
 	string = 'trakt_%s_%s' % (list_type, string_insert)
@@ -425,8 +425,8 @@ def get_trakt_list_selection(list_choice=None):
 	else:
 		my_lists.insert(0, {'name': 'Collection', 'display': '[B][I]%s [/I][/B]' % ls(32499).upper(), 'user': 'Collection', 'slug': 'Collection'})
 		my_lists.insert(0, {'name': 'Watchlist', 'display': '[B][I]%s [/I][/B]' % ls(32500).upper(),  'user': 'Watchlist', 'slug': 'Watchlist'})
-	list_items = [{'line1': item['display'], 'icon': trakt_icon} for item in my_lists]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(32193), 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
+	list_items = [{'line1': item['display']} for item in my_lists]
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(32193), 'narrow_window': 'true'}
 	selection = select_dialog(my_lists, **kwargs)
 	if selection == None: return None
 	return selection

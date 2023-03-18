@@ -25,7 +25,8 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 		elif media_id.get('imdb', None): id_type, media_id = 'imdb_id', media_id['imdb']
 		else: id_type, media_id = None, None
 	if media_id == None: return None
-	language, extra_fanart_enabled, fanart_client_key = user_info['language'], user_info['extra_fanart_enabled'], user_info['fanart_client_key']
+	extra_fanart_enabled, fanart_client_key = user_info['extra_fanart_enabled'], user_info['fanart_client_key']
+	language, mpaa_prefix = user_info['language'], user_info['mpaa_prefix']
 	meta, custom_artwork = metacache_get('movie', id_type, media_id, current_time)
 	if meta:
 		if not meta.get('fanart_added', False) and extra_fanart_enabled:
@@ -125,8 +126,9 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 		release_dates = data_get('release_dates')
 		if release_dates:
 			try: mpaa = [x['certification'] for i in release_dates['results'] for x in i['release_dates'] \
-						if i['iso_3166_1'] == 'US' and x['certification'] != '' and x['note'] == ''][0]
+						if i['iso_3166_1'] == user_info['mpaa_region'] and x['certification'] != '' and x['note'] == ''][0]
 			except: pass
+			if mpaa and mpaa_prefix: mpaa = '%s %s' % (mpaa_prefix, mpaa)
 		credits = data_get('credits')
 		if credits:
 			all_cast = credits.get('cast', None)
@@ -181,7 +183,8 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		elif media_id.get('tvdb', None): id_type, media_id = 'tvdb_id', media_id['tvdb']
 		else: id_type, media_id = None, None
 	if media_id == None: return None
-	language, extra_fanart_enabled, fanart_client_key = user_info['language'], user_info['extra_fanart_enabled'], user_info['fanart_client_key']
+	extra_fanart_enabled, fanart_client_key = user_info['extra_fanart_enabled'], user_info['fanart_client_key']
+	language, mpaa_prefix = user_info['language'], user_info['mpaa_prefix']
 	meta, custom_artwork = metacache_get('tvshow', id_type, media_id, current_time)
 	if meta:
 		if not meta.get('fanart_added', False) and extra_fanart_enabled:
@@ -284,11 +287,12 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		content_ratings = data_get('content_ratings', None)
 		release_dates = data_get('release_dates', None)
 		if content_ratings:
-			try: mpaa = [i['rating'] for i in content_ratings['results'] if i['iso_3166_1'] == 'US'][0]
+			try: mpaa = [i['rating'] for i in content_ratings['results'] if i['iso_3166_1'] == user_info['mpaa_region']][0]
 			except: pass
 		elif release_dates:
-			try: mpaa = [i['release_dates'][0]['certification'] for i in release_dates['results'] if i['iso_3166_1'] == 'US'][0]
+			try: mpaa = [i['release_dates'][0]['certification'] for i in release_dates['results'] if i['iso_3166_1'] == user_info['mpaa_region']][0]
 			except: pass
+		if mpaa and mpaa_prefix: mpaa = '%s %s' % (mpaa_prefix, mpaa)
 		credits = data_get('credits')
 		if credits:
 			all_cast = credits.get('cast', None)

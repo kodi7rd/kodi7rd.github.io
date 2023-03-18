@@ -2,23 +2,13 @@
 from windows import BaseDialog
 from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data, suppress_episode_plot
 from modules.kodi_utils import json, Thread, dialog, select_dialog, ok_dialog, hide_busy_dialog, addon_fanart, empty_poster, fetch_kodi_imagecache, get_icon, local_string as ls
-from modules.kodi_utils import logger
+# from modules.kodi_utils import logger
 
-info_icons_dict = {'furk': get_icon('provider_furk'),
-					'easynews': get_icon('provider_easynews'),
-					'alldebrid': get_icon('provider_alldebrid'),
-					'real-debrid': get_icon('provider_realdebrid'),
-					'premiumize': get_icon('provider_premiumize'),
-					'ad_cloud': get_icon('provider_alldebrid'),
-					'rd_cloud': get_icon('provider_realdebrid'),
-					'pm_cloud': get_icon('provider_premiumize')}
-info_quality_dict = {'4k': get_icon('flag_4k'),
-					'1080p': get_icon('flag_1080p'),
-					'720p': get_icon('flag_720p'),
-					'sd': get_icon('flag_sd'),
-					'cam': get_icon('flag_sd'),
-					'tele': get_icon('flag_sd'),
-					'scr': get_icon('flag_sd')}
+info_icons_dict = {'furk': get_icon('provider_furk'), 'easynews': get_icon('provider_easynews'), 'alldebrid': get_icon('provider_alldebrid'),
+				'real-debrid': get_icon('provider_realdebrid'), 'premiumize': get_icon('provider_premiumize'), 'ad_cloud': get_icon('provider_alldebrid'),
+				'rd_cloud': get_icon('provider_realdebrid'), 'pm_cloud': get_icon('provider_premiumize')}
+info_quality_dict = {'4k': get_icon('flag_4k'), '1080p': get_icon('flag_1080p'), '720p': get_icon('flag_720p'), 'sd': get_icon('flag_sd'),
+					'cam': get_icon('flag_sd'), 'tele': get_icon('flag_sd'), 'scr': get_icon('flag_sd')}
 extra_info_choices = (('PACK', 'PACK'), ('DOLBY VISION', 'D/VISION'), ('HIGH DYNAMIC RANGE (HDR)', 'HDR'), ('HYBRID', 'HYBRID'), ('AV1', 'AV1'),
 					('HEVC (X265)', 'HEVC'), ('REMUX', 'REMUX'), ('BLURAY', 'BLURAY'), ('SDR', 'SDR'), ('3D', '3D'), ('DOLBY ATMOS', 'ATMOS'), ('DOLBY TRUEHD', 'TRUEHD'),
 					('DOLBY DIGITAL EX', 'DD-EX'), ('DOLBY DIGITAL PLUS', 'DD+'), ('DOLBY DIGITAL', 'DD'), ('DTS-HD MASTER AUDIO', 'DTS-HD MA'), ('DTS-X', 'DTS-X'),
@@ -37,7 +27,7 @@ class SourceResults(BaseDialog):
 		self.window_format = kwargs.get('window_format', 'list')
 		self.window_style = kwargs.get('window_style', 'contrast')
 		self.make_poster = self.window_format in ('list', 'medialist')
-		self.window_id = kwargs.get('window_id')
+		self.window_id = kwargs.get('window_id', 2000)
 		self.results = kwargs.get('results')
 		self.uncached_torrents = kwargs.get('uncached_torrents', [])
 		self.meta = kwargs.get('meta')
@@ -76,20 +66,24 @@ class SourceResults(BaseDialog):
 		if action == self.info_action:
 			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
 		elif action in self.selection_actions:
-			if self.prescrape:
-				if chosen_listitem.getProperty('perform_full_search') == 'true':
-					self.selected = ('perform_full_search', '')
-					return self.close()
-			self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
+			if self.prescrape and chosen_listitem.getProperty('perform_full_search') == 'true':
+				self.selected = ('perform_full_search', '')
+				return self.close()
+			chosen_source = json.loads(chosen_listitem.getProperty('source'))
+			if 'Uncached' in chosen_source.get('cache_provider', ''):
+				from modules.sources import Sources
+				return Thread(target=Sources().resolve_uncached_torrents, args=(chosen_source['debrid'], chosen_source['url'], 'package' in chosen_source)).start()
+			self.selected = ('play', chosen_source)
 			return self.close()
 		elif action in self.context_actions:
 			source = json.loads(chosen_listitem.getProperty('source'))
-			choice = self.open_window(('windows.sources', 'ResultsContextMenu'), 'contextmenu.xml', item=source, meta=self.meta, filter_applied=self.filter_applied)
+			choice = self.context_menu(source)
 			if choice:
-				if 'results_info' in choice: self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
-				elif 'clear_results_filter' in choice: return self.clear_filter()
-				elif 'results_filter' in choice: return self.filter_results()
-				else: self.execute_code(choice)
+				if isinstance(choice, dict): return self.execute_code(run_plugin_str % self.build_url(choice))
+				if choice == 'results_info': return self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
+				if choice == 'clear_results_filter': return self.clear_filter()
+				if choice == 'show_uncached': return self.set_filter(self.make_items(self.uncached_torrents))
+				return self.filter_results()#results_filter
 		elif action in self.closing_actions:
 			if self.filter_applied: return self.clear_filter()
 			self.selected = (None, '')
@@ -210,10 +204,49 @@ class SourceResults(BaseDialog):
 		fanart = self.meta_get('custom_fanart') or self.meta_get(self.fanart_main) or self.meta_get(self.fanart_backup) or addon_fanart
 		return fanart
 
+	def context_menu(self, item):
+		down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params, add_files_to_furk_params = None, None, None, None, None
+		item_get = item.get
+		item_id, name, magnet_url, info_hash = item_get('id', None), item_get('name'), item_get('url', 'None'), item_get('hash', 'None')
+		provider_source, scrape_provider, cache_provider = item_get('source'), item_get('scrape_provider'), item_get('cache_provider', 'None')
+		uncached_torrent = 'Uncached' in cache_provider
+		source, meta_json = json.dumps(item), json.dumps(self.meta)
+		choices = []
+		choices_append = choices.append
+		if not uncached_torrent and scrape_provider != 'folders':
+			down_file_params = {'mode': 'downloader', 'action': 'meta.single', 'name': self.meta.get('rootname', ''), 'source': source,
+								'url': None, 'provider': scrape_provider, 'meta': meta_json}
+		if 'package' in item:
+			if scrape_provider == 'furk':
+				add_files_to_furk_params = {'mode': 'furk.add_to_files', 'item_id': item_id}
+				if item_get('package', 'false') == 'true':                 
+					browse_pack_params = {'mode': 'furk.browse_packs', 'file_name': name, 'file_id': item_id}
+					down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source,
+										'url': None, 'provider': scrape_provider, 'meta': meta_json, 'file_name': name, 'file_id': item_id}
+			elif not uncached_torrent:
+				browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
+									'magnet_url': magnet_url, 'info_hash': info_hash}
+				down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
+									'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
+		if provider_source == 'torrent' and not uncached_torrent:
+			add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
+		if self.filter_applied: choices_append((clr_filter_str, 'clear_results_filter'))
+		else: choices_append((filter_str, 'results_filter'))
+		choices_append((extra_info_str, 'results_info'))
+		if add_magnet_to_cloud_params: choices_append((cloud_str, add_magnet_to_cloud_params))
+		if add_files_to_furk_params: choices_append((furk_addto_str, add_files_to_furk_params))
+		if browse_pack_params: choices_append((browse_pack_str, browse_pack_params))
+		if down_pack_params: choices_append((down_pack_str, down_pack_params))
+		if down_file_params: choices_append((down_file_str, down_file_params))
+		if self.uncached_torrents: choices_append((show_uncached_str, 'show_uncached'))
+		list_items = [{'line1': i[0], 'icon': self.poster} for i in choices]
+		kwargs = {'items': json.dumps(list_items)}
+		choice = select_dialog([i[1] for i in choices], **kwargs)
+		return choice
+
 	def filter_results(self):
 		choices = [(filter_quality, 'quality'), (filter_provider, 'provider'), (filter_title, 'keyword_title'), (filter_extraInfo, 'extra_info')]
-		if self.uncached_torrents: choices.append((show_uncached_str, 'show_uncached'))
-		list_items = [{'line1': item[0]} for item in choices]
+		list_items = [{'line1': item[0], 'icon': self.poster} for item in choices]
 		kwargs = {'items': json.dumps(list_items), 'heading': filter_str}
 		main_choice = select_dialog([i[1] for i in choices], **kwargs)
 		if main_choice == None: return
@@ -229,7 +262,7 @@ class SourceResults(BaseDialog):
 						if not (i.getProperty(main_choice) in duplicates or duplicates.add(i.getProperty(main_choice))) \
 						and not i.getProperty(main_choice) == '']
 			provider_choices.sort(key=choice_sorter.index)
-			list_items = [{'line1': item} for item in provider_choices]
+			list_items = [{'line1': item, 'icon': self.poster} for item in provider_choices]
 			kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'multi_choice': 'true'}
 			choice = select_dialog(provider_choices, **kwargs)
 			if choice == None: return
@@ -242,14 +275,16 @@ class SourceResults(BaseDialog):
 			choice = [upper(i) for i in keywords]
 			filtered_list = [i for i in self.item_list if all(x in i.getProperty('name') for x in choice)]
 		elif main_choice == 'extra_info':
-			list_items = [{'line1': item[0]} for item in extra_info_choices]
+			list_items = [{'line1': item[0], 'icon': self.poster} for item in extra_info_choices]
 			kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'multi_choice': 'true'}
 			choice = select_dialog(extra_info_choices, **kwargs)
 			if choice == None: return
 			choice = [i[1] for i in choice]
 			filtered_list = [i for i in self.item_list if all(x in i.getProperty('extra_info') for x in choice)]
-		else: filtered_list = self.make_items(self.uncached_torrents)# show_uncached
 		if not filtered_list: return ok_dialog(text=32760)
+		self.set_filter(filtered_list)
+
+	def set_filter(self, filtered_list):
 		self.filter_applied = True
 		self.reset_window(self.window_id)
 		self.add_items(self.window_id, filtered_list)
@@ -300,72 +335,6 @@ class ResultsInfo(BaseDialog):
 		self.setProperty('quality', quality)
 		self.setProperty('provider_icon', provider_path)
 		self.setProperty('quality_icon', quality_path)
-
-class ResultsContextMenu(BaseDialog):
-	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
-		self.window_id = 2020
-		self.item = kwargs['item']
-		self.meta = kwargs['meta']
-		self.filter_applied = kwargs['filter_applied']
-		self.item_get = self.item.get
-		self.item_list = []
-		self.selected = None
-		self.make_menu()
-
-	def onInit(self):
-		self.add_items(self.window_id, self.item_list)
-		self.setFocusId(self.window_id)
-
-	def run(self):
-		self.doModal()
-		return self.selected
-
-	def onAction(self, action):
-		if action in self.selection_actions:
-			chosen_listitem = self.get_listitem(self.window_id)
-			self.selected = chosen_listitem.getProperty('action')
-			return self.close()
-		elif action in self.context_actions: return self.close()
-		elif action in self.closing_actions: return self.close()
-
-	def make_menu(self):  
-		meta_json = json.dumps(self.meta)
-		item_id = self.item_get('id', None)
-		name = self.item_get('name')
-		down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params, add_files_to_furk_params = None, None, None, None, None
-		provider_source = self.item_get('source')
-		scrape_provider = self.item_get('scrape_provider')
-		cache_provider = self.item_get('cache_provider', 'None')
-		magnet_url = self.item_get('url', 'None')
-		info_hash = self.item_get('hash', 'None')
-		uncached_torrent = 'Uncached' in cache_provider
-		source = json.dumps(self.item)
-		if not uncached_torrent and scrape_provider != 'folders':
-			down_file_params = {'mode': 'downloader', 'action': 'meta.single', 'name': self.meta.get('rootname', ''), 'source': source,
-								'url': None, 'provider': scrape_provider, 'meta': meta_json}
-		if 'package' in self.item:
-			if scrape_provider == 'furk':
-				add_files_to_furk_params = {'mode': 'furk.add_to_files', 'item_id': item_id}
-				if self.item_get('package', 'false') == 'true':                 
-					browse_pack_params = {'mode': 'furk.browse_packs', 'file_name': name, 'file_id': item_id}
-					down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source,
-										'url': None, 'provider': scrape_provider, 'meta': meta_json, 'file_name': name, 'file_id': item_id}
-			elif not uncached_torrent:
-				browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
-									'magnet_url': magnet_url, 'info_hash': info_hash}
-				down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
-									'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
-		if provider_source == 'torrent' and not uncached_torrent:
-			add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
-		if self.filter_applied: self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
-		else: self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % filter_str, run_plugin_str, {'mode': 'results_filter'}))
-		self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % extra_info_str, run_plugin_str, {'mode': 'results_info'}))
-		if add_magnet_to_cloud_params: self.item_list.append(self.make_contextmenu_item(cloud_str, run_plugin_str, add_magnet_to_cloud_params))
-		if add_files_to_furk_params: self.item_list.append(self.make_contextmenu_item(furk_addto_str, run_plugin_str, add_files_to_furk_params))
-		if browse_pack_params: self.item_list.append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, browse_pack_params))
-		if down_pack_params: self.item_list.append(self.make_contextmenu_item(down_pack_str, run_plugin_str, down_pack_params))
-		if down_file_params: self.item_list.append(self.make_contextmenu_item(down_file_str, run_plugin_str, down_file_params))
 
 class SourceResultsChooser(BaseDialog):
 	def __init__(self, *args, **kwargs):

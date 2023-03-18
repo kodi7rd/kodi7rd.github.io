@@ -17,10 +17,10 @@ from modules.episode_tools import EpisodeTools
 json, Thread, get_icon, close_all_dialog, ok_dialog = kodi_utils.json, kodi_utils.Thread, kodi_utils.get_icon, kodi_utils.close_all_dialog, kodi_utils.ok_dialog
 addon_icon, ls, get_icon, backup_cast_thumbnail = kodi_utils.addon_icon, kodi_utils.local_string, kodi_utils.get_icon, get_icon('genre_family')
 fetch_kodi_imagecache, addon_fanart, empty_poster = kodi_utils.fetch_kodi_imagecache, kodi_utils.addon_fanart, kodi_utils.empty_poster
-extras_button_label_values = kodi_utils.extras_button_label_values
+extras_button_label_values, show_busy_dialog, hide_busy_dialog = kodi_utils.extras_button_label_values, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
 extras_enable_scrollbars, get_resolution, omdb_api_key, date_offset = settings.extras_enable_scrollbars, settings.get_resolution, settings.omdb_api_key, settings.date_offset
 default_all_episodes, metadata_user_info, extras_enabled_menus = settings.default_all_episodes, settings.metadata_user_info, settings.extras_enabled_menus
-ratings_icons_type, enable_extra_ratings = settings.extras_ratings_icons_type, settings.extras_enable_extra_ratings
+enable_extra_ratings, extras_enabled_ratings = settings.extras_enable_extra_ratings, settings.extras_enabled_ratings
 watched_indicators, get_art_provider = settings.watched_indicators, settings.get_art_provider
 options_menu_choice, extras_menu_choice, imdb_videos_choice = dialogs.options_menu_choice, dialogs.extras_menu_choice, dialogs.imdb_videos_choice
 get_progress_percent, get_bookmarks, get_watched_info_movie = watched_status.get_progress_percent, watched_status.get_bookmarks, watched_status.get_watched_info_movie
@@ -35,7 +35,7 @@ imdb_reviews, imdb_trivia, imdb_blunders = imdb_api.imdb_reviews, imdb_api.imdb_
 imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_videos
 fetch_ratings_info = omdb_api.fetch_ratings_info
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
-setting_base, label_base = 'extras.%s.button', 'button%s.label'
+setting_base, label_base, ratings_base = 'extras.%s.button', 'button%s.label', 'flags/ratings/%s.png'
 separator = '  •  '
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
 cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2050, 2051, 2052, 2053, 2054, 2055
@@ -48,6 +48,9 @@ parentsguide_levels = {'mild': ls(32996), 'moderate': ls(32997), 'severe': ls(32
 parentsguide_inputs = {'Sex & Nudity': (ls(32990), get_icon('sex_nudity')), 'Violence & Gore': (ls(32991), get_icon('genre_war')),
 						'Profanity': (ls(32992),get_icon('bad_language')), 'Alcohol, Drugs & Smoking': (ls(32993), get_icon('drugs_alcohol')),
 						'Frightening & Intense Scenes': (ls(32994), get_icon('genre_horror'))}
+ratings_icon_base = 'flags/ratings/%s'
+meta_ratings_values = (('Meta', 'metascore', 1), ('Tom/Critic', 'tomatometer', 2), ('Tom/User', 'tomatousermeter', 3), ('IMDb', 'imdb', 4), ('TMDb', 'tmdb', 5))
+ratings_null = ('', '%')
 _images = Images()
 
 class Extras(BaseDialog):
@@ -77,8 +80,17 @@ class Extras(BaseDialog):
 
 	def onAction(self, action):
 		if action in self.closing_actions: return self.close()
-		if action == self.info_action: self.close()
-		if action in self.context_actions:
+		if action == self.info_action:
+			focus_id = self.getFocusId()
+			if not focus_id in tmdb_list_ids: return
+			show_busy_dialog()
+			from modules.metadata import movie_meta, tvshow_meta
+			chosen_listitem = self.get_listitem(focus_id)
+			function = movie_meta if self.media_type == 'movie' else tvshow_meta
+			meta = function('tmdb_id', chosen_listitem.getProperty('tmdb_id'), metadata_user_info(), get_datetime())
+			hide_busy_dialog()
+			self.show_extrainfo(self.media_type, meta, meta.get('poster', empty_poster))
+		elif action in self.context_actions:
 			focus_id = self.getFocusId()
 			if focus_id in (posters_id, fanarts_id):
 				chosen_listitem = self.get_listitem(focus_id)
@@ -115,50 +127,21 @@ class Extras(BaseDialog):
 				self.select_item(self.control_id, end_index)
 			else: return
 
-	def make_ratings(self):
-		if not self.display_extra_ratings: return
-		data = fetch_ratings_info(self.imdb_id, self.omdb_api)
+	def make_ratings(self, win_prop=4000):
+		data, current_settings = self.get_extra_ratings(self.imdb_id)
 		if not data: return
-		def make_icon(value): return 'common/flags/ratings/%s/%s.png' % (icon_type, value)
-		icon_type = ratings_icons_type()
 		active_extra_ratings = False
-		metascore_rating = data.get('metascore_rating', '')
-		tomatometer_rating = data.get('tomatometer_rating', '')
-		tomatousermeter_rating = data.get('tomatousermeter_rating', '')
-		tomato_image = data.get('tomato_image', 'fresh')
-		imdb_rating = data.get('imdb_rating', '')
-		tmdb_rating = self.rating or ''
-		if metascore_rating:
-			active_extra_ratings = True
-			self.setProperty('metascore_rating', 'true')
-			self.set_label(4001, '%s%%' % metascore_rating)
-			self.set_image(4101, make_icon('metacritic'))
-		if tomatometer_rating:
-			active_extra_ratings = True
-			image = 'rtcertified' if tomato_image == 'certified' \
-					else 'rtfresh' if (tomato_image == 'fresh' or int(tomatometer_rating) > 59) \
-					else 'rtrotten'
-			self.setProperty('tomatometer_rating', 'true')
-			self.set_label(4002, '%s%%' % tomatometer_rating)
-			self.set_image(4102, make_icon(image))
-		if tomatousermeter_rating:
-			active_extra_ratings = True
-			image = 'popcorn' if int(tomatousermeter_rating) > 59 else 'popcorn_spilt'
-			self.setProperty('tomatousermeter_rating', 'true')
-			self.set_label(4003, '%s%%' % tomatousermeter_rating)
-			self.set_image(4103, make_icon(image))
-		if imdb_rating:
-			active_extra_ratings = True
-			self.setProperty('imdb_rating', 'true')
-			self.set_label(4004, imdb_rating)
-			self.set_image(4104, make_icon('imdb'))
-		if tmdb_rating:
-			if active_extra_ratings:
-				self.setProperty('tmdb_rating', 'true')
-				self.set_label(4005, tmdb_rating)
-				self.set_image(4105, make_icon('tmdb'))
-		if active_extra_ratings:
+		if self.rating: data['tmdb']['rating'] = self.rating
+		for check, prop, _id in meta_ratings_values:
+			if check in current_settings:
+				rating, icon = data[prop]['rating'], data[prop]['icon']
+				if rating in ratings_null: continue
+				if check == 'TMDb' and not active_extra_ratings: continue
+				self.setProperty('%s_rating' % prop, 'true'), self.set_label(win_prop + _id, rating), self.set_image(win_prop + 100 + _id, ratings_icon_base % icon)
+				active_extra_ratings = True
+		if win_prop == 4000 and active_extra_ratings:
 			self.setProperty('extra_ratings', 'true')
+			self.set_infoline1(remove_rating=True)
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -374,6 +357,14 @@ class Extras(BaseDialog):
 			self.add_items(collection_id, item_list)
 		except: pass
 
+	def get_extra_ratings(self, imdb_id):
+		if not self.display_extra_ratings: return None, None
+		current_settings = extras_enabled_ratings()
+		if not current_settings: return None, None
+		data = fetch_ratings_info(imdb_id, self.omdb_api)
+		if not data: return None, None
+		return data, current_settings
+
 	def get_release_year(self, release_data):
 		try:
 			if release_data in ('', None): release_data = 'N/A'
@@ -382,21 +373,27 @@ class Extras(BaseDialog):
 		return release_data
 
 	def get_finish(self):
-		label = ls(32791) if self.percent_watched == '100' else ls(33062)
-		if self.listitem_check() and self.percent_watched in ('0', '100'): finished = self.get_infolabel('ListItem.EndTime')
-		else:
+		finish_str = ls(33058)
+		if self.duration_data:
+			label = ls(32791) if self.percent_watched == '100' else ls(33062)
 			kodi_clock = self.get_infolabel('System.Time')
 			if any(i in kodi_clock for i in ('AM', 'PM')): _format = '%I:%M %p'
 			else: _format = '%H:%M'
-			if self.percent_watched == '100': remaining_time = self.duration_data
+			if self.percent_watched in ('0', '100'): remaining_time = self.duration_data
 			else: remaining_time = ((100 - int(self.percent_watched))/100) * self.duration_data
 			current_time = datetime.now()
 			finish_time = current_time + timedelta(minutes=remaining_time)
 			finished = finish_time.strftime(_format)
-		return '%s: %s' % (label, finished)
+			finish_str = '%s: %s' % (label, finished)
+		return finish_str
 
 	def get_duration(self):
-		return ls(33058) % self.duration_data
+		time_str = ''
+		if self.duration_data:
+			hour, minute = divmod(self.duration_data, 60)
+			if hour: time_str += '%dh' % hour
+			if minute: time_str += '%s%sm' % (' ' if hour else '', '%d' % minute if minute < 10 else '%02d' % minute)
+		return time_str
 
 	def get_progress(self):
 		self.percent_watched = get_progress_percent(get_bookmarks(self.watched_indicators, 'movie'), self.tmdb_id)
@@ -496,9 +493,6 @@ class Extras(BaseDialog):
 				yield listitem
 			except: pass
 
-	def listitem_check(self):
-		return self.get_infolabel('ListItem.Title') == self.meta_get('title')
-
 	def set_poster(self):
 		if self.current_poster:
 			self.set_image(200, self.current_poster)
@@ -517,9 +511,8 @@ class Extras(BaseDialog):
 			return False
 		except: return True
 
-	def show_text_media(self, text=''):
-		if not text: text = self.plot
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=self.poster)
+	def show_text_media(self, text='', poster=None):
+		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text or self.plot, poster=poster or self.poster)
 
 	def show_text_media_list(self, chosen_var):
 		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media_list.xml',
@@ -552,9 +545,9 @@ class Extras(BaseDialog):
 	def show_images(self):
 		return _images.run({'mode': 'imdb_image_results', 'imdb_id': self.imdb_id, 'media_title': self.rootname, 'page_no': 1, 'rolling_count_list': [0]})
 
-	def show_extrainfo(self):
-		text = media_extra_info({'media_type': self.media_type, 'meta': self.meta})
-		return self.show_text_media(text)
+	def show_extrainfo(self, media_type=None, meta=None, poster=None):
+		text = media_extra_info({'media_type': media_type or self.media_type, 'meta': meta or self.meta})
+		return self.show_text_media(text, poster)
 
 	def show_genres(self):
 		if not self.genre: return
@@ -598,7 +591,8 @@ class Extras(BaseDialog):
 		self.close()
 
 	def playback_choice(self):
-		playback_choice(self.media_type, self.poster, self.meta, None, None)
+		params = {'media_type': self.media_type, 'poster': self.poster, 'meta': self.meta, 'season': None, 'episode': None}
+		playback_choice(params)
 
 	def assign_buttons(self):
 		setting_id_base = setting_base % self.media_type
@@ -609,57 +603,37 @@ class Extras(BaseDialog):
 		self.button_action_dict[50] = 'show_text_media'
 
 	def set_starting_constants(self, kwargs):
-		self.item_action_dict = {}
-		self.button_action_dict = {}
+		self.item_action_dict, self.button_action_dict = {}, {}
 		self.selected = None
 		self.meta = kwargs['meta']
 		self.meta_get = self.meta.get
-		self.media_type = self.meta_get('mediatype')#movie, tvshow
-		self.options_media_type = kwargs['options_media_type']
-		self.tmdb_id = self.meta_get('tmdb_id')
-		self.imdb_id = self.meta_get('imdb_id')
 		self.extra_info = self.meta_get('extra_info')
 		self.extra_info_get = self.extra_info.get
+		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
+		self.tmdb_id, self.imdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id')
 		self.is_widget = kwargs['is_widget'].lower()
 		if self.is_widget == 'true': self.folder_runner = 'ActivateWindow(Videos,%s,return)'
 		else: self.folder_runner = 'Container.Update(%s)'
-		self.meta_user_info = metadata_user_info()
-		self.enabled_lists = extras_enabled_menus()
-		self.enable_scrollbars = extras_enable_scrollbars()
-		self.poster_resolution = get_resolution()['poster']
-		self.watched_indicators = watched_indicators()
-		self.omdb_api = omdb_api_key()
+		self.meta_user_info, self.enabled_lists, self.enable_scrollbars = metadata_user_info(), extras_enabled_menus(), extras_enable_scrollbars()
+		self.poster_resolution, self.watched_indicators, self.omdb_api = get_resolution()['poster'], watched_indicators(), omdb_api_key()
 		self.display_extra_ratings = self.imdb_id and self.omdb_api and enable_extra_ratings()
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-		self.title = self.meta_get('title')
-		self.year = str(self.meta_get('year'))
-		self.rootname = self.meta_get('rootname')
-		self.poster = self.original_poster()
-		self.fanart = self.original_fanart()
+		self.title, self.year, self.rootname = self.meta_get('title'), str(self.meta_get('year')), self.meta_get('rootname')
+		self.poster, self.fanart = self.original_poster(), self.original_fanart()
 		self.clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or ''
 		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '')
-		self.rating = str(round(self.meta_get('rating'), 1))
-		self.mpaa = self.meta_get('mpaa')
-		self.status = self.extra_info_get('status', '').replace('Series', '')
-		self.genre = self.meta_get('genre')
-		self.network = self.meta_get('studio') or 'N/A'
-		if not self.network: self.network = ''
-		self.duration_data = int(float(self.meta_get('duration'))/60)
+		self.rating = str(round(self.meta_get('rating'), 1)) if self.meta_get('rating') not in (0, 0.0, None) else None
+		self.mpaa, self.genre, self.network = self.meta_get('mpaa'), self.meta_get('genre'), self.meta_get('studio') or ''
+		self.status, self.duration_data = self.extra_info_get('status', '').replace('Series', ''), int(float(self.meta_get('duration'))/60)
 
 	def set_properties(self):
 		self.assign_buttons()
-		self.setProperty('media_type', self.media_type)
-		self.setProperty('fanart', self.fanart)
-		self.setProperty('clearlogo', self.clearlogo)
-		self.setProperty('title', self.title)
-		self.setProperty('plot', self.plot)
-		self.setProperty('year', self.year)
-		self.setProperty('genre', self.genre)
-		self.setProperty('network', self.network)
-		self.setProperty('enable_scrollbars', self.enable_scrollbars)
+		self.setProperty('media_type', self.media_type), self.setProperty('fanart', self.fanart), self.setProperty('clearlogo', self.clearlogo)
+		self.setProperty('title', self.title), self.setProperty('plot', self.plot), self.setProperty('year', self.year)
+		self.setProperty('genre', self.genre), self.setProperty('network', self.network), self.setProperty('enable_scrollbars', self.enable_scrollbars)
 
-	def set_infoline1(self):
-		self.set_label(2001, separator.join([i for i in (self.year,  self.rating,  self.mpaa,  self.get_duration(),  self.status) if i]))
+	def set_infoline1(self, remove_rating=False):
+		self.set_label(2001, separator.join([i for i in (self.year, None if remove_rating else self.rating, self.mpaa, self.get_duration(), self.status) if i]))
 
 	def set_infoline2(self):
 		if self.media_type == 'movie': line2 = separator.join([self.get_progress(), self.get_finish()])

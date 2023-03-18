@@ -73,15 +73,17 @@ class EasyNewsAPI:
 					elif 'virus' in item and item['virus']: continue
 					if re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): short_vid = True
 					else: short_vid = False
-					stream_url = down_url + quote('/%s/%s/%s%s/%s%s' % (dl_farm, dl_port, post_hash, ext, post_title, ext))
-					file_dl = stream_url + '|Authorization=%s' % self.auth_quoted
+					url_add = quote('/%s/%s/%s%s/%s%s' % (dl_farm, dl_port, post_hash, ext, post_title, ext))
+					stream_url = streaming_url + url_add
+					file_dl = down_url + url_add + '|Authorization=%s' % self.auth_quoted
 					thumbnail = 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (post_hash[0:3], post_hash)
 					result = {'name': post_title,
 							  'size': size,
 							  'rawSize': item['rawSize'],
 							  'width': int(item['width']),
 							  'runtime': int(item['runtime']/60.0),
-							  'url_dl': file_dl,
+							  'url_dl': stream_url,
+							  'down_url': file_dl,
 							  'version': 'version2',
 							  'short_vid': short_vid,
 							  'language': language,
@@ -91,6 +93,7 @@ class EasyNewsAPI:
 					from modules.kodi_utils import logger
 					logger('FEN easynews API Exception', str(e))
 		down_url = files.get('downURL')
+		streaming_url = 'https://%s:%s@members.easynews.com/dl' % (quote(self.username), quote(self.password))
 		dl_farm, dl_port = self.get_farm_and_port(files)
 		files = files.get('data', [])
 		results = list(_process())

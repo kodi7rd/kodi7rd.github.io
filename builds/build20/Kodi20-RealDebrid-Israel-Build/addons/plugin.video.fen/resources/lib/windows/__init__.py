@@ -19,7 +19,7 @@ addon_skins_folder = 'special://home/addons/plugin.video.fen/resources/skins/Def
 
 def open_window(import_info, skin_xml, **kwargs):
 	'''
-	import_info: tuple with ('module', 'function')
+	import_info: ('module', 'function')
 	'''
 	try:
 		xml_window = create_window(import_info, skin_xml, **kwargs)
@@ -31,16 +31,16 @@ def open_window(import_info, skin_xml, **kwargs):
 
 def create_window(import_info, skin_xml, **kwargs):
 	'''
-	import_info: tuple with ('module', 'function')
+	import_info: ('module', 'function')
 	'''
-	try:
-		function = manual_function_import(*import_info)
-		args = (skin_xml, skin_location(skin_xml))
-		xml_window = function(*args, **kwargs)
-		return xml_window
-	except Exception as e:
-		logger('error in create_window', str(e))
-		return notification(32574)
+	# try:
+	function = manual_function_import(*import_info)
+	args = (skin_xml, skin_location(skin_xml))
+	xml_window = function(*args, **kwargs)
+	return xml_window
+	# except Exception as e:
+		# logger('error in create_window', str(e))
+		# return notification(32574)
 
 def get_custom_xmls_version():
 	try:
@@ -162,16 +162,23 @@ class BaseDialog(window_xml_dialog):
 class FontUtils:
 	def execute_custom_fonts(self):
 		if not self.skin_change_check(): return
-		self.replacement_values = []
-		self.replacement_values_append = self.replacement_values.append
-		try: self.skin_font_xml = translate_path('special://skin/%s/Font.xml' % [i for i in list_dirs(translate_path('special://skin'))[0] if i in folder_options][0])
-		except: self.skin_font_xml = None
-		self.all_addon_xmls = list_dirs(translate_path(addon_skins_folder))[1]
-		if self.use_skin_fonts == 'true': self.skin_font_info = self.get_font_info() or self.default_font_info()
+		replacement_values, skin_font_xml = [], ''
+		replacement_values_append = replacement_values.append
+		skin_folder = self.get_skin_folder()
+		if skin_folder: skin_font_xml = translate_path('special://skin/%s/Font.xml' % skin_folder)
+		if skin_font_xml and self.use_skin_fonts == 'true': self.skin_font_info = self.get_font_info(skin_font_xml) or self.default_font_info()
 		else: self.skin_font_info = self.default_font_info()
-		for item in needed_font_values: self.replacement_values_append(self.match_font(*item))
-		for item in self.all_addon_xmls: self.replace_font(item)
+		for item in needed_font_values: replacement_values_append(self.match_font(*item))
+		for item in list_dirs(translate_path(addon_skins_folder))[1]: self.replace_font(item, replacement_values)
 		for item in ((current_skin_prop, self.current_skin), (use_skin_fonts_prop, self.use_skin_fonts)): set_property(*item)
+
+	def get_skin_folder(self):
+		skin_folder = None
+		try:
+			skin_folder = mdParse(translate_path('special://skin/addon.xml')).getElementsByTagName('extension')[0].getElementsByTagName('res')[0].getAttribute('folder')
+			if not skin_folder: skin_folder = [i for i in list_dirs(translate_path('special://skin'))[0] if i in folder_options][0]
+		except Exception as e: logger('error', str(e))
+		return skin_folder
 
 	def skin_change_check(self):
 		self.current_skin, self.use_skin_fonts = current_skin(), use_skin_fonts()
@@ -191,11 +198,12 @@ class FontUtils:
 				or [i for i in sized_fonts if not i['extra_styles']] or sized_fonts
 		return (font_tag, [i['name'] for i in fonts if i['size'] == min([i['size'] for i in fonts], key=lambda k: abs(k-size))][0])
 
-	def get_font_info(self):
+	def get_font_info(self, skin_font_xml):
 		results = []
+		if not skin_font_xml: return results
 		results_append = results.append
 		try:
-			for item in mdParse(self.skin_font_xml).getElementsByTagName('fontset')[0].getElementsByTagName('font'):
+			for item in mdParse(skin_font_xml).getElementsByTagName('fontset')[0].getElementsByTagName('font'):
 				try: name = item.getElementsByTagName('name')[0].firstChild.data
 				except: continue
 				name_compare = name.lower()
@@ -210,10 +218,10 @@ class FontUtils:
 		except: pass
 		return results
 
-	def replace_font(self, window):
+	def replace_font(self, window, replacement_values):
 		file = translate_path(addon_skins_folder + window)
 		with open_file(file) as f: content = f.read()
-		for item in self.replacement_values:
+		for item in replacement_values:
 			try: content = re.sub(r'<font>(.*?)</font> <\!-- %s -->' % item[0], '<font>%s</font> <!-- %s -->' % (item[1], item[0]), content)
 			except: pass
 		with open_file(translate_path(file), 'w') as f: f.write(content)

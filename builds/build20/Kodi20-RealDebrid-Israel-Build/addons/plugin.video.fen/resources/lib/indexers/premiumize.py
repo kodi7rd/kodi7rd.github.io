@@ -11,7 +11,7 @@ add_items, set_content, end_directory, external_browse = kodi_utils.add_items, k
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
 confirm_dialog, ok_dialog, kodi_refresh, dialog = kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.kodi_refresh, kodi_utils.dialog
 default_pm_icon, fanart, fen_clearlogo, kodi_version = kodi_utils.get_icon('premiumize'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
-folder_str, file_str, down_str = ls(32742).upper(), ls(32743).upper(), ls(32747)
+folder_str, file_str, down_str = ls(32742).upper(), ls(32743).upper(), '[B]%s[/B]' % ls(32747)
 extensions = supported_video_extensions()
 Premiumize = PremiumizeAPI()
 
@@ -34,7 +34,7 @@ def pm_torrent_cloud(folder_id=None, folder_name=None):
 					if url_link.startswith('/'): url_link = 'https' + url_link
 					display_size = float(int(size))/1073741824
 					display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, display_size, name)
-					url_params = {'mode': 'playback.video', 'url': url_link, 'obj': 'video', 'name': item['name']}
+					url_params = {'mode': 'playback.video', 'url': url_link, 'obj': 'video'}
 					down_file_params = {'mode': 'downloader', 'name': item['name'], 'url': url_link, 'action': 'cloud.premiumize', 'image': default_pm_icon}
 					cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 					listitem.setProperty('fen.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': default_pm_icon,

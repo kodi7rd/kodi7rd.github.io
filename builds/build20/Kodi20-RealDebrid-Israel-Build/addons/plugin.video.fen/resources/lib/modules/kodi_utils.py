@@ -18,7 +18,7 @@ get_infolabel, get_visibility, execute_JSON, window_xml_dialog = xbmc.getInfoLab
 executebuiltin, xbmc_sleep, convertLanguage, getSupportedMedia, PlayList = xbmc.executebuiltin, xbmc.sleep, xbmc.convertLanguage, xbmc.getSupportedMedia, xbmc.PlayList
 monitor, window, dialog, progressDialog, progressDialogBG = xbmc_monitor(), Window(10000), xbmcgui.Dialog(), xbmcgui.DialogProgress(), xbmcgui.DialogProgressBG()
 endOfDirectory, addSortMethod, listdir, mkdir, mkdirs = xbmcplugin.endOfDirectory, xbmcplugin.addSortMethod, xbmcvfs.listdir, xbmcvfs.mkdir, xbmcvfs.mkdirs
-addDirectoryItem, addDirectoryItems, setContent = xbmcplugin.addDirectoryItem, xbmcplugin.addDirectoryItems, xbmcplugin.setContent
+addDirectoryItem, addDirectoryItems, setContent, setCategory = xbmcplugin.addDirectoryItem, xbmcplugin.addDirectoryItems, xbmcplugin.setContent, xbmcplugin.setPluginCategory
 window_xml_left_action, window_xml_right_action, window_xml_up_action, window_xml_down_action, window_xml_info_action = 1, 2, 3, 4, 11
 window_xml_selection_actions, window_xml_closing_actions, window_xml_context_actions = (7, 100), (9, 10, 13, 92), (101, 108, 117)
 kodi_version = int(get_infolabel('System.BuildVersion')[0:2])
@@ -37,6 +37,7 @@ fen_settings_str, menu_cache_prop, highlight_prop, meta_filter_prop = 'fen_setti
 view_type_prop, props_made_prop, pause_settings_prop, build_content_prop = 'fen.view_type_%s', 'fen.window_properties_made', 'fen.pause_settings', 'fen.build_content'
 custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'fen.custom_main_menu_context', 'fen.custom_context_menu', 'fen.custom_info_dialog'
 current_skin_prop, use_skin_fonts_prop = 'fen.current_skin', 'fen.use_skin_fonts'
+services_finished_prop, services_refresh_after_run_prop = 'fen.services_run', 'fen.services_refresh_after'
 int_window_prop, pause_services_prop, suppress_sett_dict_prop = 'fen.internal_results.%s', 'fen.pause_services', 'fen.suppress_settings_dict'
 userdata_path = translatePath('special://profile/addon_data/plugin.video.fen/')
 addon_settings = translatePath('special://home/addons/plugin.video.fen/resources/settings.xml')
@@ -122,13 +123,24 @@ def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None,
 
 def make_placeholder_listitem():
 	listitem = make_listitem()
-	listitem.setLabel('Placeholder')
-	listitem.setArt({'icon': addon_icon, 'poster': addon_icon, 'thumb': addon_icon, 'fanart': addon_fanart, 'banner': addon_icon, 'clearlogo': addon_clearlogo})
+	listitem.setLabel('Empty')
+	listitem.setArt({'icon': empty_poster, 'poster': empty_poster, 'thumb': empty_poster, 'fanart': addon_fanart, 'banner': empty_poster, 'clearlogo': addon_clearlogo})
 	if kodi_version >= 20:
 		info_tag = listitem.getVideoInfoTag()
-		info_tag.setPlot('this is a placeholder')
-	else: listitem.setInfo('video', {'plot': 'this is a placeholder'})
+		info_tag.setPlot(' ')
+	else: listitem.setInfo('video', {'plot': ' '})
 	return [('', listitem, False)]
+
+def make_fake_widget():
+	fake_widget_made = False
+	if addon().getSetting('wait_for_services') == 'true':
+		fake_widget_made = True
+		handle = int(sys.argv[1])
+		set_property(services_refresh_after_run_prop, 'true')
+		add_items(handle, make_placeholder_listitem())
+		end_directory(handle, False)
+	else: set_property(services_finished_prop, 'true')
+	return fake_widget_made
 
 def make_listitem():
 	return ListItem(offscreen=True)
@@ -141,6 +153,9 @@ def add_items(handle, item_list):
 
 def set_content(handle, content):
 	setContent(handle, content)
+
+def set_category(handle, label):
+	setCategory(handle, label)
 
 def end_directory(handle, cacheToDisc=None):
 	if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
@@ -279,6 +294,9 @@ def run_addon(addon='plugin.video.fen'):
 def external_browse():
 	return 'fen' not in get_infolabel('Container.PluginName')
 
+def reload_skin():
+	execute_builtin('ReloadSkin()')
+
 def kodi_refresh():
 	execute_builtin('UpdateLibrary(video,special://skin/foo)')
 
@@ -314,13 +332,12 @@ def progress_dialog(heading='', icon=addon_icon):
 	Thread(target=progress_dialog.run).start()
 	return progress_dialog
 
-def ok_dialog(heading='', text=32760, ok_label=32839):
+def select_dialog(function_list, **kwargs):
 	from windows import open_window
-	if isinstance(heading, int): heading = local_string(heading)
-	if isinstance(text, int): text = local_string(text)
-	if isinstance(ok_label, int): ok_label = local_string(ok_label)
-	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
-	return open_window(('windows.select_ok', 'OK'), 'ok.xml', **kwargs)
+	selection = open_window(('windows.default_dialogs', 'Select'), 'select.xml', **kwargs)
+	if selection in (None, []): return selection
+	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
+	return function_list[selection]
 
 def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, default_control=11):
 	from windows import open_window
@@ -329,30 +346,15 @@ def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, d
 	if isinstance(ok_label, int): ok_label = local_string(ok_label)
 	if isinstance(cancel_label, int): cancel_label = local_string(cancel_label)
 	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control}
-	return open_window(('windows.select_ok', 'Confirm'), 'confirm.xml', **kwargs)
+	return open_window(('windows.default_dialogs', 'Confirm'), 'confirm.xml', **kwargs)
 
-def select_dialog(function_list, **kwargs):
+def ok_dialog(heading='', text=32760, ok_label=32839):
 	from windows import open_window
-	selection = open_window(('windows.select_ok', 'Select'), 'select.xml', **kwargs)
-	if selection in (None, []): return selection
-	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
-	return function_list[selection]
-
-def confirm_progress_media(meta, text='', enable_fullscreen=False, enable_buttons=False, true_button=32824, false_button=32828, focus_button=11, percent=0, flags_direction=0):
-	if enable_buttons:
-		from windows import open_window
-		if isinstance(text, int): text = local_string(text)
-		if isinstance(true_button, int): true_button = local_string(true_button)
-		if isinstance(false_button, int): false_button = local_string(false_button)
-		return open_window(('windows.confirm_progress_media', 'ConfirmProgressMedia'), 'confirm_progress_media.xml',
-							meta=meta, text=text, enable_buttons=enable_buttons, true_button=true_button, false_button=false_button,
-							focus_button=focus_button, percent=percent)
-	else:
-		from windows import create_window
-		progress_dialog = create_window(('windows.confirm_progress_media', 'ConfirmProgressMedia'), 'confirm_progress_media.xml',
-										meta=meta, enable_fullscreen=enable_fullscreen, flags_direction=flags_direction)
-		Thread(target=progress_dialog.run).start()
-		return progress_dialog
+	if isinstance(heading, int): heading = local_string(heading)
+	if isinstance(text, int): text = local_string(text)
+	if isinstance(ok_label, int): ok_label = local_string(ok_label)
+	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
+	return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	from windows import open_window
@@ -495,7 +497,7 @@ def upload_logfile():
 	if not path_exists(log_file): return ok_dialog(text=33039)
 	try:
 		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'Fen %s' % Addon().getAddonInfo('version')
+		UserAgent = 'Fen %s' % addon().getAddonInfo('version')
 		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
 		if 'key' in response: ok_dialog(text='%s%s' % (url, response['key']))
 		else: ok_dialog(text=33039)
@@ -553,12 +555,12 @@ def clean_settings(silent=False):
 		notification('%s - Removed %s %s' % (local_string(32576), removed, 'Setting' if removed == '1' else 'Settings'), 2500)
 
 def set_setting(setting_id, value):
-	Addon().setSetting(setting_id, value)
+	addon().setSetting(setting_id, value)
 
 def get_setting(setting_id, fallback=None):
 	try: settings_dict = json.loads(get_property(fen_settings_str))
 	except:
-		if get_property('fen.suppress_settings_dict'): return Addon().getSetting(setting_id)
+		if get_property('fen.suppress_settings_dict'): return addon().getSetting(setting_id)
 		settings_dict = make_settings_dict()
 	if settings_dict is None or setting_id not in settings_dict:
 		settings_dict = get_setting_fallback(setting_id)
@@ -572,7 +574,7 @@ def get_setting(setting_id, fallback=None):
 	return value
 
 def get_setting_fallback(setting_id):
-	return {setting_id: Addon().getSetting(setting_id)}
+	return {setting_id: addon().getSetting(setting_id)}
 
 def make_settings_dict():
 	from xml.dom.minidom import parse as mdParse
@@ -600,7 +602,7 @@ def make_window_properties(override=False):
 	if override: make_properties = True
 	else: make_properties = get_property(props_made_prop) != 'true'
 	if make_properties:
-		__addon__ = Addon()
+		__addon__ = addon()
 		set_view_properties()
 		set_property(menu_cache_prop, __addon__.getSetting('kodi_menu_cache'))
 		set_property(highlight_prop, __addon__.getSetting('fen.highlight'))

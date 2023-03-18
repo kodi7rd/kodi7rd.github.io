@@ -2,6 +2,39 @@
 
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.1.03[/B][/COLOR]
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.1.02[/B][/COLOR]
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.1.01[/B][/COLOR]
+- Added Settings->General->General->"Wait for Fen Services to Initiate Before Making Widgets". More for Kodi 20 users, this setting will stop widgets being made until after Fen services has run. It is important for Fen's services to run before widgets are made, as some services check Fen's settings file is created, Fen's databases are made and correct etc. This is OFF by default.
+- Added "Playback Options..." to context menu for Movies and Episodes. No need to navigate to "Options..." first anymore.
+- Added quite a few "Category" values whilst browsing Fen. This will show as breadcrumbs on supprting skins.
+- A fair few under the hood changes and fixes that I lost track of before writing this changelog.
+
+[COLOR dodgerblue][B]Version 3.0.52[/B][/COLOR]
+- Couple more quick fixes.
+
+[COLOR dodgerblue][B]Version 3.0.51[/B][/COLOR]
+- Couple more quick fixes.
+
+[COLOR dodgerblue][B]Version 3.0.50[/B][/COLOR]
+- Couple more quick fixes.
+
+[COLOR dodgerblue][B]Version 3.0.49[/B][/COLOR]
+- Couple more quick fixes.
+
+[COLOR dodgerblue][B]Version 3.0.48[/B][/COLOR]
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.0.47[/B][/COLOR]
+- Added "Minimum Size (MB)" to Results->Sorting & Filtering. Available to set when "Filter Results by Size" is set to "Use Line Speed" or "Use Size". Filters source results lower than the set size.
+- Added "MPAA Region" and "MPAA Prefix" settings to Metadata->Language. Set your region and optionally a prefix string (appears before the rating).
+- Added "Ratings to Display" to Settings->Features->Extras->Enable Extra Ratings. Choose which extra ratings you want to have displayed. You must choose at least 1 rating.
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.0.46[/B][/COLOR]
 - Fixed issue with Trakt Watchlist items with no release date.
 - Reworked most custom Fen windows.

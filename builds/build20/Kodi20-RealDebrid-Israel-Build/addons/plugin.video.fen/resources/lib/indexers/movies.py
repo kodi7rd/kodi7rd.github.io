@@ -2,14 +2,14 @@
 from modules import kodi_utils, settings
 from modules.meta_lists import oscar_winners
 from modules.metadata import movie_meta, movieset_meta
-from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, adjust_premiered_date, get_current_timestamp
+from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, adjust_premiered_date, get_current_timestamp
 from modules.watched_status import get_watched_info_movie, get_watched_status_movie, get_bookmarks, get_progress_percent
 # logger = kodi_utils.logger
 
-meta_function, get_datetime_function, add_item, select_dialog, fen_clearlogo = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.select_dialog, kodi_utils.addon_clearlogo
+meta_function, get_datetime_function, add_item, fen_clearlogo = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.addon_clearlogo
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
 set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
-kodi_version, xbmc_actor = kodi_utils.kodi_version, kodi_utils.xbmc_actor
+kodi_version, xbmc_actor, set_category = kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.movie_dict_removals
 poster_empty, fanart_empty, build_content, make_placeholder = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, kodi_utils.make_placeholder_listitem
@@ -18,7 +18,7 @@ sleep, extras_open_action, get_art_provider, get_resolution = kodi_utils.sleep, 
 max_threads, widget_hide_next_page, include_year_in_title = settings.max_threads, settings.widget_hide_next_page, settings.include_year_in_title
 fen_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32645), ls(32646)
 hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
-addmenu_str, addshortcut_str, add_coll_str, refr_widg_str = ls(32730), ls(32731), ls(33081), ls(40001)
+addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), ls(40001), '[B]%s...[/B]' % ls(32187)
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
 tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
@@ -35,10 +35,12 @@ class Movies:
 	def __init__(self, params):
 		self.params = params
 		self.params_get = self.params.get
+		self.category_name = self.params_get('category_name', None) or self.params_get('name', None) or 32028
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
 		self.items, self.new_page, self.total_pages, self.is_widget, self.max_threads = [], {}, None, external_browse(), max_threads()
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
 		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
+		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.append = self.items.append
 
 	def fetch_list(self):
@@ -112,16 +114,17 @@ class Movies:
 						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
 				add_items(handle, builder())
 				if self.new_page and not self.widget_hide_next_page:
-					self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params})
+					self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'category_name': self.category_name})
 					add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
 			except: pass
 		else: add_items(handle, make_placeholder())
 		set_content(handle, content_type)
+		set_category(handle, ls(self.category_name))
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
 			set_view_mode(view_mode, content_type)
-
+		
 	def build_movie_content(self, item_position, _id):
 		try:
 			meta = meta_function(self.id_type, _id, self.meta_user_info, self.current_date, self.current_time)
@@ -133,7 +136,7 @@ class Movies:
 			listitem = make_listitem()
 			set_properties = listitem.setProperties
 			clearprog_params, watched_status_params = '', ''
-			rootname, title, year = meta_get('rootname'), meta_get('title'), meta_get('year')
+			rootname, title, year = meta_get('rootname'), meta_get('title'), meta_get('year') or '2050'
 			tmdb_id, imdb_id = meta_get('tmdb_id'), meta_get('imdb_id')
 			poster = meta_get('custom_poster') or meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
 			fanart = meta_get('custom_fanart') or meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
@@ -150,19 +153,20 @@ class Movies:
 			else: watched_action, watchedstr = 'mark_as_watched', watched_str
 			watched_status_params = build_url({'mode': 'watched_status.mark_movie', 'action': watched_action, 'tmdb_id': tmdb_id, 'title': title, 'year': year})
 			play_params = build_url({'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': tmdb_id})
-			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'movie', 'is_widget': self.is_widget})
+			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
+			play_options_params = build_url({'mode': 'playback_choice', 'media_type': 'movie', 'poster': poster, 'meta': tmdb_id})
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id, 'poster': poster, 'playcount': playcount,
 										'progress': progress, 'exit_menu': self.exit_list_params, 'is_widget': self.is_widget})
 			if self.open_extras:
-				url = extras_params
+				url_params = extras_params
 				cm_append((play_str, run_plugin % play_params))
 			else:
-				url = play_params
+				url_params = play_params
 				cm_append((extras_str, run_plugin % extras_params))
 			cm_append((options_str, run_plugin % options_params))
+			cm_append((play_options_str, run_plugin % play_options_params))
 			if progress:
 				clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'})
-				set_properties({'WatchedProgress': progress, 'resumetime': progress, 'fen.in_progress': 'true'})
 				cm_append((clearprog_str, run_plugin % clearprog_params))
 			cm_append((watchedstr % self.watched_title, run_plugin % watched_status_params))
 			if not self.is_widget: cm_append((exit_str, container_refresh % self.exit_list_params))
@@ -191,8 +195,11 @@ class Movies:
 				info_tag.setDirectors(meta_get('director').split(', '))
 				info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
 				info_tag.setPlaycount(playcount)
-				if progress: info_tag.setResumePoint(float(progress))
+				if progress:
+					info_tag.setResumePoint(float(progress))
+					set_properties({'WatchedProgress': progress, 'fen.in_progress': 'true'})
 			else:
+				if progress: set_properties({'WatchedProgress': progress, 'resumetime': progress, 'fen.in_progress': 'true'})
 				meta.update({'playcount': playcount, 'overlay': overlay})
 				listitem.setCast(meta_get('cast', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
@@ -204,7 +211,8 @@ class Movies:
 			set_properties({'fen.sort_order': string(item_position), 'fen.playcount': string(playcount), 'fen.extras_params': extras_params, 'fen.clearprog_params': clearprog_params,
 							'fen.options_params': options_params, 'fen.unwatched_params': watched_status_params, 'fen.watched_params': watched_status_params})
 			if self.is_widget: set_properties({'fen.widget': 'true'})
-			self.append((url, listitem, False))
+			if self.custom_order: self.append(((url_params, listitem, False), item_position))
+			else: self.append((url_params, listitem, False))
 		except: pass
 
 	def worker(self):
@@ -214,9 +222,11 @@ class Movies:
 		self.open_extras, self.watched_title = extras_open_action('movie'), trakt_str if self.watched_indicators == 1 else fen_str
 		self.fanart_enabled, self.widget_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_widget and self.meta_user_info['widget_hide_watched']
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-		threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, self.max_threads))
+		if self.custom_order: threads = list(make_thread_list_multi_arg(self.build_movie_content, self.list, self.max_threads))
+		else: threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, self.max_threads))
 		[i.join() for i in threads]
-		self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
+		try: self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
+		except: pass
 		return self.items
 
 	def build_movie_sets_content(self, item_position, _id):

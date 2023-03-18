@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from modules import kodi_utils, settings
 from modules.metadata import tvshow_meta
-from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, get_current_timestamp
+from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, get_current_timestamp
 from modules.watched_status import get_watched_info_tv, get_watched_status_tvshow
 # logger = kodi_utils.logger
 
-meta_function, get_datetime_function, add_item, select_dialog, xbmc_actor = tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.select_dialog, kodi_utils.xbmc_actor
-kodi_version, get_watched_function, get_watched_info_function = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv
+meta_function, get_datetime_function, add_item, xbmc_actor = tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor
+kodi_version, get_watched_function, get_watched_info_function, set_category = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category
 set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.tvshow_dict_removals
@@ -15,7 +15,7 @@ sleep, extras_open_action, get_art_provider, default_all_episodes = kodi_utils.s
 poster_empty, fanart_empty, build_content, include_year_in_title = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, settings.include_year_in_title
 max_threads, widget_hide_next_page, fen_clearlogo = settings.max_threads, settings.widget_hide_next_page, kodi_utils.addon_clearlogo
 make_placeholder = kodi_utils.make_placeholder_listitem
-fen_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jumpto_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(32652), ls(32964)
+fen_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jumpto_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
 extras_str, options_str, refr_widg_str = ls(32645), ls(32646), ls(40001)
 run_plugin, container_update, container_refresh = 'RunPlugin(%s)', 'Container.Update(%s)', 'Container.Refresh(%s)'
 tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air','tmdb_tv_upcoming')
@@ -32,84 +32,87 @@ class TVShows:
 	def __init__(self, params):
 		self.params = params
 		self.params_get = self.params.get
+		self.category_name = self.params_get('category_name', None) or self.params_get('name', None) or 32029
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
 		self.items, self.new_page, self.total_pages, self.is_widget, self.max_threads = [], {}, None, external_browse(), max_threads()
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
 		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
+		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.append = self.items.append
 	
 	def fetch_list(self):
 		handle = int(sys.argv[1])
 		if build_content():
-			# try:
-			mode = self.params_get('mode')
-			try: page_no = int(self.params_get('new_page', '1'))
-			except ValueError: page_no = self.params_get('new_page')
-			if self.action in personal: var_module, import_function = personal[self.action]
-			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
-			try: function = manual_function_import(var_module, import_function)
-			except: pass
-			if self.action in tmdb_main:
-				data = function(page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action in tmdb_special:
-				key = tmdb_special[self.action]
-				function_var = self.params_get(key, None)
-				if not function_var: return
-				data = function(function_var, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1), key: function_var}
-			elif self.action in personal:
-				data, all_pages, total_pages = function('tvshow', page_no)
-				self.list = [i['media_id'] for i in data]
-				if total_pages > 2: self.total_pages = total_pages
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action in trakt_main:
-				self.id_type = 'trakt_dict'
-				data = function(page_no)
-				try: self.list = [i['show']['ids'] for i in data]
-				except: self.list = [i['ids'] for i in data]
-				if self.action != 'trakt_recommendations': self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action in trakt_personal:
-				self.id_type = 'trakt_dict'
-				data, all_pages, total_pages = function('shows', page_no)
-				self.list = [i['media_ids'] for i in data]
-				if total_pages > 2: self.total_pages = total_pages
-				try:
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+			try:
+				mode = self.params_get('mode')
+				try: page_no = int(self.params_get('new_page', '1'))
+				except ValueError: page_no = self.params_get('new_page')
+				if self.action in personal: var_module, import_function = personal[self.action]
+				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+				try: function = manual_function_import(var_module, import_function)
 				except: pass
-			elif self.action in imdb_personal:
-				self.id_type = 'imdb_id'
-				list_id = self.params_get('list_id', None)
-				data, next_page = function('tvshow', list_id, page_no)
-				self.list = [i['imdb_id'] for i in data]
-				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
-			elif self.action == 'tmdb_tv_discover':
-				from indexers.discover import set_history
-				name, query = self.params['name'], self.params['query']
-				if page_no == 1: set_history('tvshow', name, query)
-				data = function(query, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
-			elif self.action == 'trakt_tv_certifications':
-				self.id_type = 'trakt_dict'
-				data = function(self.params['certification'], page_no)
-				self.list = [i['show']['ids'] for i in data]
-				self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
-			if self.total_pages and not self.is_widget:
-				page_ref = page_reference()
-				if page_ref != 3:
-					url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-								'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
-					add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
-			add_items(handle, self.worker())
-			if self.new_page and not self.widget_hide_next_page:
-						self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params})
+				if self.action in tmdb_main:
+					data = function(page_no)
+					self.list = [i['id'] for i in data['results']]
+					if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1)}
+				elif self.action in tmdb_special:
+					key = tmdb_special[self.action]
+					function_var = self.params_get(key, None)
+					if not function_var: return
+					data = function(function_var, page_no)
+					self.list = [i['id'] for i in data['results']]
+					if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1), key: function_var}
+				elif self.action in personal:
+					data, all_pages, total_pages = function('tvshow', page_no)
+					self.list = [i['media_id'] for i in data]
+					if total_pages > 2: self.total_pages = total_pages
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+				elif self.action in trakt_main:
+					self.id_type = 'trakt_dict'
+					data = function(page_no)
+					try: self.list = [i['show']['ids'] for i in data]
+					except: self.list = [i['ids'] for i in data]
+					if self.action != 'trakt_recommendations': self.new_page = {'new_page': string(page_no + 1)}
+				elif self.action in trakt_personal:
+					self.id_type = 'trakt_dict'
+					data, all_pages, total_pages = function('shows', page_no)
+					self.list = [i['media_ids'] for i in data]
+					if total_pages > 2: self.total_pages = total_pages
+					try:
+						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+					except: pass
+				elif self.action in imdb_personal:
+					self.id_type = 'imdb_id'
+					list_id = self.params_get('list_id', None)
+					data, next_page = function('tvshow', list_id, page_no)
+					self.list = [i['imdb_id'] for i in data]
+					if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
+				elif self.action == 'tmdb_tv_discover':
+					from indexers.discover import set_history
+					name, query = self.params['name'], self.params['query']
+					if page_no == 1: set_history('tvshow', name, query)
+					data = function(query, page_no)
+					self.list = [i['id'] for i in data['results']]
+					if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
+				elif self.action == 'trakt_tv_certifications':
+					self.id_type = 'trakt_dict'
+					data = function(self.params['certification'], page_no)
+					self.list = [i['show']['ids'] for i in data]
+					self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
+				if self.total_pages and not self.is_widget:
+					page_ref = page_reference()
+					if page_ref != 3:
+						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
+									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
+						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
+				add_items(handle, self.worker())
+				if self.new_page and not self.widget_hide_next_page:
+						self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'category_name': self.category_name})
 						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
-			# except: pass
+			except: pass
 		else: add_items(handle, make_placeholder())
 		set_content(handle, content_type)
+		set_category(handle, ls(self.category_name))
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
@@ -197,7 +200,8 @@ class TVShows:
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 			set_properties({'fen.sort_order': string(item_position), 'fen.playcount': string(playcount), 'fen.extras_params': extras_params, 'fen.options_params': options_params})
 			if self.is_widget: set_properties({'fen.widget': 'true'})
-			self.append((url_params, listitem, self.is_folder))
+			if self.custom_order: self.append(((url_params, listitem, self.is_folder), item_position))
+			else: self.append((url_params, listitem, self.is_folder))
 		except: pass
 
 	def worker(self):
@@ -208,7 +212,9 @@ class TVShows:
 		self.fanart_enabled, self.widget_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_widget and self.meta_user_info['widget_hide_watched']
 		self.is_folder, self.watched_title = False if self.open_extras else True, trakt_str if self.watched_indicators == 1 else fen_str
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-		threads = list(make_thread_list_enumerate(self.build_tvshow_content, self.list, self.max_threads))
+		if self.custom_order: threads = list(make_thread_list_multi_arg(self.build_tvshow_content, self.list, self.max_threads))
+		else: threads = list(make_thread_list_enumerate(self.build_tvshow_content, self.list, self.max_threads))
 		[i.join() for i in threads]
-		self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
+		try: self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
+		except: pass
 		return self.items

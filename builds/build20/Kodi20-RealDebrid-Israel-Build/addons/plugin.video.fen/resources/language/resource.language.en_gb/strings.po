@@ -31,7 +31,7 @@ msgid "Scrape with ALL External Scrapers"
 msgstr ""
 
 msgctxt "#32007"
-msgid "[B]Download Pack[/B]"
+msgid "Download Pack"
 msgstr ""
 
 msgctxt "#32008"
@@ -67,7 +67,7 @@ msgid "Always"
 msgstr ""
 
 msgctxt "#32016"
-msgid "[B]Add to Cloud[/B]"
+msgid "Add to Cloud"
 msgstr ""
 
 msgctxt "#32017"
@@ -507,7 +507,7 @@ msgid "Use Line Speed"
 msgstr ""
 
 msgctxt "#32126"
-msgid "Use Max Size"
+msgid "Use Size"
 msgstr ""
 
 msgctxt "#32127"
@@ -583,7 +583,7 @@ msgid "Choose Notifications"
 msgstr ""
 
 msgctxt "#32145"
-msgid "Set Metadata Language"
+msgid "Metadata Language"
 msgstr ""
 
 msgctxt "#32146"
@@ -1251,7 +1251,7 @@ msgid "Manager"
 msgstr ""
 
 msgctxt "#32514"
-msgid "Shortcut Folders"
+msgid "Shortcut Folders Manager"
 msgstr ""
 
 msgctxt "#32515"
@@ -1803,7 +1803,7 @@ msgid "[B]Clear Progress[/B]"
 msgstr ""
 
 msgctxt "#32652"
-msgid "[B]Browse...[/B]"
+msgid "..."
 msgstr ""
 
 msgctxt "#32653"
@@ -2182,7 +2182,7 @@ msgid "Hide Next Page Item in Widgets"
 msgstr ""
 
 msgctxt "#32747"
-msgid "[B]Download File[/B]"
+msgid "Download File"
 msgstr ""
 
 msgctxt "#32748"
@@ -2270,7 +2270,7 @@ msgid "[B]Unprotect File[/B]"
 msgstr ""
 
 msgctxt "#32769"
-msgid "[B]Add to My Files[/B]"
+msgid "Add to My Files"
 msgstr ""
 
 msgctxt "#32770"
@@ -2354,7 +2354,7 @@ msgid "Multiselect..."
 msgstr ""
 
 msgctxt "#32790"
-msgid "Resume from [B]%s[/B]?"
+msgid "Resume from [B]%s%%[/B]?"
 msgstr ""
 
 msgctxt "#32791"
@@ -3210,7 +3210,7 @@ msgid "Enable Season/Show Pack Search"
 msgstr ""
 
 msgctxt "#33004"
-msgid "[B]Browse Pack[/B]"
+msgid "Browse Pack"
 msgstr ""
 
 msgctxt "#33005"
@@ -3266,7 +3266,7 @@ msgid "Set Language Invoker (ADVANCED!!)"
 msgstr ""
 
 msgctxt "#33018"
-msgid "[B]Reuse Langauage Invoker[/B] is currently set to %s.\n\nDo you wish to change this setting to %s?"
+msgid "[B]Reuse Langauage Invoker[/B] is currently set to %s.\nDo you wish to change this setting to %s?"
 msgstr ""
 
 msgctxt "#33019"
@@ -3426,7 +3426,7 @@ msgid "Sci-Fi & Fantasy"
 msgstr ""
 
 msgctxt "#33058"
-msgid "%smins"
+msgid "No Finish Time"
 msgstr ""
 
 msgctxt "#33059"
@@ -3687,7 +3687,7 @@ msgid "Choose Action For %s"
 msgstr ""
 
 msgctxt "#33123"
-msgid "Choose Which Media Type to Set Back to Default"
+msgid "Choose to Set Back to Default"
 msgstr ""
 
 msgctxt "#33124"
@@ -3711,15 +3711,59 @@ msgid "[B]Please Wait...[/B]"
 msgstr ""
 
 msgctxt "#33129"
-msgid "Rating Icons Type"
+msgid "Press Info Button for more Info..."
 msgstr ""
 
 msgctxt "#33130"
-msgid "Color"
+msgid "Before Playback Starts"
 msgstr ""
 
 msgctxt "#33131"
-msgid "Monochrome"
+msgid "After Playback Starts"
+msgstr ""
+
+msgctxt "#33132"
+msgid "MPAA Region"
+msgstr ""
+
+msgctxt "#33133"
+msgid "MPAA Prefix"
+msgstr ""
+
+msgctxt "#33134"
+msgid "Minimum Size (MB)"
+msgstr ""
+
+msgctxt "#33135"
+msgid "Ratings to Display"
+msgstr ""
+
+msgctxt "#33136"
+msgid "You must select at least 1 Ratings Provider"
+msgstr ""
+
+msgctxt "#33137"
+msgid "Choose Icon"
+msgstr ""
+
+msgctxt "#33137"
+msgid "[B]Browse...[/B]"
+msgstr ""
+
+msgctxt "#33138"
+msgid "Press BACK to Exit"
+msgstr ""
+
+msgctxt "#33139"
+msgid "Press RIGHT to Skip"
+msgstr ""
+
+msgctxt "#33140"
+msgid "Wait for Fen Services to Initiate Before Making Widgets"
+msgstr ""
+
+msgctxt "#33141"
+msgid "Resume Playback Method"
 msgstr ""
 
 msgctxt "#40001"

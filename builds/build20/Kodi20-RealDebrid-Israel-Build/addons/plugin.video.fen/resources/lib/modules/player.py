@@ -7,22 +7,22 @@ from apis.trakt_api import make_trakt_slug
 from modules import kodi_utils as ku, settings as st, watched_status as ws
 from modules.meta_lists import language_choices
 from modules.utils import sec2time
-# logger = ku.logger
+logger = ku.logger
 
 set_property, clear_property, convert_language, get_visibility, hide_busy_dialog = ku.set_property, ku.clear_property, ku.convert_language, ku.get_visibility, ku.hide_busy_dialog
 Thread, json, ls, xbmc_player, translate_path, execute_builtin, sleep = ku.Thread, ku.json, ku.local_string, ku.xbmc_player, ku.translate_path, ku.execute_builtin, ku.sleep
-make_listitem, volume_checker, list_dirs, get_setting, confirm_progress_media = ku.make_listitem, ku.volume_checker, ku.list_dirs, ku.get_setting, ku.confirm_progress_media
+make_listitem, volume_checker, list_dirs, get_setting = ku.make_listitem, ku.volume_checker, ku.list_dirs, ku.get_setting
 close_all_dialog, notification, select_dialog, poster_empty, fanart_empty = ku.close_all_dialog, ku.notification, ku.select_dialog, ku.empty_poster, ku.addon_fanart
+auto_nextep_settings, disable_content_lookup, widget_load_empty, playback_settings = st.auto_nextep_settings, st.disable_content_lookup, st.widget_load_empty, st.playback_settings
 get_art_provider, get_fanart_data, watched_indicators, auto_resume = st.get_art_provider, st.get_fanart_data, st.watched_indicators, st.auto_resume
-auto_nextep_settings, disable_content_lookup, widget_load_empty = st.auto_nextep_settings, st.disable_content_lookup, st.widget_load_empty
-get_progress_percent, get_bookmarks, erase_bookmark, clear_local_bookmarks = ws.get_progress_percent, ws.get_bookmarks, ws.erase_bookmark, ws.clear_local_bookmarks
-set_bookmark, mark_movie, mark_episode = ws.set_bookmark, ws.mark_movie, ws.mark_episode
+clear_local_bookmarks, set_bookmark, mark_movie, mark_episode = ws.clear_local_bookmarks, ws.set_bookmark, ws.mark_movie, ws.mark_episode
 build_content_prop, kodi_version, xbmc_actor = ku.build_content_prop, ku.kodi_version, ku.xbmc_actor
+total_time_errors = ('0.0', '', 0.0, None)
 
 class FenPlayer(xbmc_player):
 	def __init__ (self):
 		xbmc_player.__init__(self)
-		self.playback_successful = None
+		self.playback_successful, self.cancel_all_playback = None, False
 
 	def run(self, url=None, obj=None):
 		hide_busy_dialog()
@@ -31,69 +31,19 @@ class FenPlayer(xbmc_player):
 		try: return self.play_video(url, obj)
 		except: return self.run_error()
 
-	def monitor(self):
-		try:
-			ensure_dialog_dead, bookmark_set = False, False
-			if self.media_type == 'episode':
-				play_random_continual = self.sources_object.random_continual
-				play_random = self.sources_object.random
-				disable_autoplay_next_episode = self.sources_object.disable_autoplay_next_episode
-				if disable_autoplay_next_episode: notification('%s - %s %s' % (ls(32135), ls(32178), ls(32736)), 4500)
-				if any((play_random_continual, play_random, disable_autoplay_next_episode)):
-					self.autoplay_nextep = False
-					self.autoscrape_nextep = False
-				else:
-					self.autoplay_nextep = self.sources_object.autoplay_nextep
-					self.autoscrape_nextep = self.sources_object.autoscrape_nextep
-			else: play_random_continual, self.autoplay_nextep, self.autoscrape_nextep = False, False, False
-			if not self.monitor_playback:
-				current_time = time.time()
-				end_time = current_time + 28
-				while current_time < end_time and not self.isPlayingVideo():
-					current_time = time.time()
-					sleep(500)
-			hide_busy_dialog()
-			sleep(1000)
-			count = 0
-			while self.isPlayingVideo():
-				try:
-					sleep(1000)
-					if self.monitor_playback:
-						if self.playback_successful is None:
-							count += 1
-							if count == 5:
-								self.playback_successful = False
-								return self.stop()
-					self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
-					if self.monitor_playback:
-						self.playback_successful = True
-						if not ensure_dialog_dead:
-							ensure_dialog_dead = True
-							self.kill_dialog()
-							sleep(200)
-							close_all_dialog()
-					if not bookmark_set and self.total_time:
-						bookmark_set = True
-						if self.media_type == 'episode' and any((play_random_continual, play_random)): bookmark = 0
-						else: bookmark = self.get_bookmark()
-						self.set_bookmark(bookmark)
-					self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
-					if self.current_point >= self.set_watched:
-						if play_random_continual and not self.random_continual_started: self.run_random_continual()
-						if not self.media_marked: self.media_watched_marker()
-					if self.autoplay_nextep or self.autoscrape_nextep:
-						if not self.nextep_info_gathered: self.info_next_ep()
-						self.remaining_time = round(self.total_time - self.curr_time)
-						if self.remaining_time <= self.start_prep:
-							if not self.nextep_started: self.run_next_ep()
-					if not self.subs_searched: self.run_subtitles()
-				except: pass
-			hide_busy_dialog()
-			self.set_build_content('true')
-			if not self.media_marked: self.media_watched_marker()
-			clear_local_bookmarks()
-			self.clear_playback_properties()
-		except: self.kill_dialog()
+	def play_video(self, url, obj):
+		self.set_constants(url, obj)
+		self.suppress_widget_content()
+		volume_checker()
+		self.play(self.url, self.make_listing())
+		if not self.is_generic:
+			self.check_playback_start()
+			if self.playback_successful == True: self.start_monitor()
+			else:
+				self.set_build_content('true')
+				self.stop()
+			try: del self.kodi_monitor
+			except: pass
 
 	def make_listing(self):
 		listitem = make_listitem()
@@ -193,22 +143,69 @@ class FenPlayer(xbmc_player):
 						'season': self.season, 'episode': self.episode, 'duration': duration, 'rating': rating, 'director': director, 'writer': writer})
 					listitem.setCast(cast)
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-			# listitem.setProperty('StartPercent', str('15'))
+			if self.resume_method == 0: self.set_resume_listitem(listitem)
 			self.set_playback_properties()
 		return listitem
 
-	def play_video(self, url, obj):
-		self.set_constants(url, obj)
-		self.suppress_widget_content()
-		volume_checker()
-		self.play(self.url, self.make_listing())
-		if not self.is_generic:
-			if self.check_playback_start(): self.start_monitor()
-			else:
-				self.set_build_content('true')
-				self.stop()
-			try: del self.kodi_monitor
-			except: pass
+	def set_resume_listitem(self, listitem):
+		self.resume_set = True
+		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))
+
+	def set_resume_playback(self):
+		self.resume_set = True
+		if self.playback_percent > 0.0:
+			self.seekTime(int((self.playback_percent/100) * self.total_time))
+			if get_visibility('Player.Paused'): self.pause()
+
+	def monitor(self):
+		try:
+			ensure_dialog_dead = False
+			if self.media_type == 'episode':
+				play_random_continual = self.sources_object.random_continual
+				play_random = self.sources_object.random
+				disable_autoplay_next_episode = self.sources_object.disable_autoplay_next_episode
+				if disable_autoplay_next_episode: notification('%s - %s %s' % (ls(32135), ls(32178), ls(32736)), 4500)
+				if any((play_random_continual, play_random, disable_autoplay_next_episode)): self.autoplay_nextep, self.autoscrape_nextep = False, False
+				else: self.autoplay_nextep, self.autoscrape_nextep = self.sources_object.autoplay_nextep, self.sources_object.autoscrape_nextep
+			else: play_random_continual, self.autoplay_nextep, self.autoscrape_nextep = False, False, False
+			if not self.monitor_playback:
+				current_time = time.time()
+				end_time = current_time + 28
+				while current_time < end_time and not self.isPlayingVideo():
+					current_time = time.time()
+					sleep(500)
+			hide_busy_dialog()
+			sleep(1000)
+			while self.isPlayingVideo():
+				try:
+					sleep(1000)
+					self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
+					if not ensure_dialog_dead:
+						ensure_dialog_dead = True
+						if self.monitor_playback:
+							self.playback_successful = True
+							self.kill_dialog()
+							sleep(200)
+							close_all_dialog()
+						else: close_all_dialog()
+					if not self.resume_set and self.total_time: self.set_resume_playback()
+					self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
+					if self.current_point >= self.set_watched:
+						if play_random_continual and not self.random_continual_started: self.run_random_continual()
+						if not self.media_marked: self.media_watched_marker()
+					if self.autoplay_nextep or self.autoscrape_nextep:
+						if not self.nextep_info_gathered: self.info_next_ep()
+						self.remaining_time = round(self.total_time - self.curr_time)
+						if self.remaining_time <= self.start_prep:
+							if not self.nextep_started: self.run_next_ep()
+					if not self.subs_searched: self.run_subtitles()
+				except: pass
+			hide_busy_dialog()
+			self.set_build_content('true')
+			if not self.media_marked: self.media_watched_marker()
+			clear_local_bookmarks()
+			self.clear_playback_properties()
+		except: return self.kill_dialog()
 
 	def media_watched_marker(self):
 		self.media_marked = True
@@ -249,20 +246,24 @@ class FenPlayer(xbmc_player):
 		except: pass
 
 	def check_playback_start(self):
-		if not self.monitor_playback: return True
+		if not self.monitor_playback: self.playback_successful = True
+		resolve_percent = 0
 		while self.playback_successful is None:
 			hide_busy_dialog()
-			if self.isPlayingVideo(): return True
-			if not self.sources_object.progress_dialog: return False
-			if self.sources_object.progress_dialog.iscanceled() or self.kodi_monitor.abortRequested(): return False
-			if self.sources_object.progress_dialog.skip_resolved(): return False
+			if not self.sources_object.progress_dialog: self.playback_successful = True
+			if self.sources_object.progress_dialog.skip_resolved(): self.playback_successful = False
+			if self.sources_object.progress_dialog.iscanceled() or self.kodi_monitor.abortRequested(): self.cancel_all_playback, self.playback_successful = True, False
 			if get_visibility('Window.IsTopMost(okdialog)'):
 				execute_builtin("SendClick(okdialog, 11)")
-				return False
-			sleep(20)
-		self.playback_successful = False
+				self.playback_successful = False
+			if self.isPlayingVideo():
+				try:
+					if self.getTotalTime() not in total_time_errors and get_visibility('Window.IsActive(VideoFullScreen.xml)'): self.playback_successful = True
+				except: pass
+			resolve_percent = round(resolve_percent + 26.0/100, 1)
+			self.sources_object.progress_dialog.update_resolver(percent=round(resolve_percent))
+			sleep(100)
 		self.set_build_content('true')
-		return False
 
 	def suppress_widget_content(self):
 		if widget_load_empty(): Thread(target=self.set_suppress).start()
@@ -274,25 +275,6 @@ class FenPlayer(xbmc_player):
 		self.set_build_content('false')
 		sleep(10000)
 		self.set_build_content('true')
-
-	def get_bookmark(self):
-		percent = get_progress_percent(get_bookmarks(watched_indicators(), self.media_type), self.tmdb_id, self.season, self.episode)
-		if percent:
-			bookmark = self.get_resume_status(percent)
-			if bookmark == 0: erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
-		else: bookmark = 0
-		return bookmark
-
-	def set_bookmark(self, bookmark):
-		if bookmark != 0: self.seekTime(int(float(int(bookmark)/100) * self.total_time))
-		if get_visibility('Player.Paused'): self.pause()
-
-	def get_resume_status(self, percent):
-		if self.auto_resume: return percent
-		self.pause()
-		resume_time = sec2time((float(int(percent)/100) * self.total_time), n_msec=0)
-		confirm = confirm_progress_media(meta=self.meta, text=ls(32790) % resume_time, enable_buttons=True, true_button=32832, false_button=32833, focus_button=10, percent=percent)
-		return percent if confirm == True else 0
 
 	def set_build_content(self, prop):
 		set_property(build_content_prop, prop)
@@ -321,13 +303,11 @@ class FenPlayer(xbmc_player):
 		self.is_generic = self.sources_object == 'video'
 		if not self.is_generic:
 			self.meta = self.sources_object.meta
-			self.monitor_playback = self.sources_object.monitor_playback
-			self.playing_filename = self.sources_object.playing_filename
-			self.meta_get = self.meta.get
-			self.kodi_monitor = ku.monitor
-			self.media_marked, self.subs_searched, self.nextep_info_gathered = False, False, False
-			self.nextep_started, self.random_continual_started = False, False
-			self.set_resume, self.set_watched = int(get_setting('playback.resume_percent', '5')), int(get_setting('playback.watched_percent', '90'))
+			self.meta_get, self.kodi_monitor, self.playback_percent = self.meta.get, ku.monitor, self.sources_object.playback_percent or 0.0
+			self.monitor_playback, self.playing_filename = self.sources_object.monitor_playback, self.sources_object.playing_filename
+			self.playback_successful, self.cancel_all_playback, self.resume_set, self.subs_searched = None, False, False, False
+			self.media_marked, self.nextep_info_gathered, self.nextep_started, self.random_continual_started = False, False, False, False
+			self.set_watched, self.set_resume, self.resume_method = playback_settings()
 
 	def set_playback_properties(self):
 		try:
@@ -347,9 +327,6 @@ class FenPlayer(xbmc_player):
 		self.clear_playback_properties()
 		notification(32121, 3500)
 		return False
-
-	def onAVStarted(self):
-		if self.monitor_playback: self.playback_successful = True
 
 	def onPlayBackStopped(self):
 		if self.monitor_playback: self.playback_successful = False
@@ -410,7 +387,7 @@ class Subtitles(xbmc_player):
 				if len(choices) == 0: return False
 				dialog_list = ['[B]%s[/B] | [I]%s[/I]' % (i['SubLanguageID'].upper(), i['MovieReleaseName']) for i in choices]
 				list_items = [{'line1': item} for item in dialog_list]
-				kwargs = {'items': json.dumps(list_items), 'heading': video_path.replace('%20', ' '), 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'false'}
+				kwargs = {'items': json.dumps(list_items), 'heading': video_path.replace('%20', ' '), 'enumerate': 'true', 'narrow_window': 'true'}
 				chosen_sub = select_dialog(choices, **kwargs)
 				self.pause()
 				if not chosen_sub: return False

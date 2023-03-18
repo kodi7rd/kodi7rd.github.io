@@ -187,12 +187,11 @@ def toggle_all(folder, setting, silent=False):
 
 def enable_disable(folder):
 	try:
-		icon = translate_path('special://home/addons/script.module.cocoscrapers/icon.png')
 		enabled, disabled = scrapers_status(folder)
 		all_sources = sorted(enabled + disabled)
 		preselect = [all_sources.index(i) for i in enabled]
-		list_items = [{'line1': i.upper(), 'icon': icon} for i in all_sources]
-		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false', 'preselect': preselect}
+		list_items = [{'line1': i.upper()} for i in all_sources]
+		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'multi_choice': 'true', 'preselect': preselect}
 		chosen = select_dialog(all_sources, **kwargs)
 		if chosen == None: return
 		for i in all_sources:

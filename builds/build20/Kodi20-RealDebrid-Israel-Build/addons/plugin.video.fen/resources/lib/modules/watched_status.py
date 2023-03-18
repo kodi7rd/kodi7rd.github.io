@@ -338,7 +338,7 @@ def mark_episode(params):
 	tmdb_id = params.get('tmdb_id')
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
-	season, episode, title, year = int(params.get('season')), int(params.get('episode')), params.get('title'), params.get('year')
+	season, episode, title = int(params.get('season')), int(params.get('episode')), params.get('title')
 	watched_indicators = watched_indicators_function()
 	if season == 0: notification(32490); return
 	if watched_indicators == 1:

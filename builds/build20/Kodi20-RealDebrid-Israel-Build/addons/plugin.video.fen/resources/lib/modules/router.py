@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import external_browse, parse_qsl, get_property
+from modules.kodi_utils import external_browse, parse_qsl, get_property, services_finished_prop, make_fake_widget
 # from modules.kodi_utils import logger
 
 def exit_system_check():
-	if external_browse(): return get_property('fen.check_sysexit') == 'true'
+	if external_browse(): return True
+
+def services_finished():
+	return get_property(services_finished_prop) == 'true'
 
 def routing(sys):
+	if not services_finished():
+		from modules.kodi_utils import make_fake_widget
+		if make_fake_widget(): return
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	_get = params.get
 	mode = _get('mode', 'navigator.main')

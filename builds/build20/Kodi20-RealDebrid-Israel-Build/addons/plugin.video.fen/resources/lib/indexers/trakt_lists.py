@@ -152,13 +152,12 @@ def get_trakt_trending_popular_lists(params):
 	if not external_browse(): set_view_mode('view.main')
 
 def build_trakt_list(params):
-	def _process(function, _list, comparer):
-		try:
-			result = function({'list': [i['media_ids'] for i in _list], 'id_type': 'trakt_dict'}).worker()
-			item_list.extend([(i, x['order']) for i in result for x in _list if [str(x['media_ids']['tmdb']) == i[1].getUniqueID('tmdb') and x['type'] == comparer][0]])
-		except: pass
-	handle, is_widget, content, threads, item_list = int(sys.argv[1]), external_browse(), 'movies', [], []
+	def _process(function, _list): item_list_extend(function(_list).worker())
+	handle, is_widget, content, build = int(sys.argv[1]), external_browse(), 'movies', False
 	if build_content():
+		build = True
+		threads, item_list = [], []
+		item_list_extend = item_list.extend
 		user, slug, list_type, page_no = params.get('user'), params.get('slug'), params.get('list_type'), int(params.get('new_page', '1'))
 		result = get_trakt_list_contents(list_type, user, slug)
 		trakt_list = [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(result)]
@@ -170,11 +169,11 @@ def build_trakt_list(params):
 					add_dir({'mode': 'navigate_to_page_choice', 'media_type': 'Media', 'user': user, 'slug': slug, 'current_page': page_no, 'total_pages': total_pages,
 							'transfer_mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'all_pages': all_pages, 'page_reference': page_ref},
 							jump2_str, handle, 'item_jump', isFolder=False)
-		movie_list = [i for i in process_list if i['type'] == 'movie']
-		tvshow_list = [i for i in process_list if i['type'] == 'show']
+		movie_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'movie'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
+		tvshow_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'show'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
 		content = 'movies' if len(movie_list) > len(tvshow_list) else 'tvshows'
-		for item in ((Movies, movie_list, 'movie'), (TVShows, tvshow_list, 'show')):
-			if not item[1]: continue
+		for item in ((Movies, movie_list), (TVShows, tvshow_list)):
+			if not item[1]['list']: continue
 			threaded_object = Thread(target=_process, args=item)
 			threaded_object.start()
 			threads.append(threaded_object)
@@ -187,7 +186,7 @@ def build_trakt_list(params):
 	else: add_items(handle, make_placeholder())
 	set_content(handle, content)
 	end_directory(handle, False if is_widget else None)
-	if not is_widget:
+	if not is_widget and build:
 		if params.get('refreshed') == 'true': sleep(1000)
 		set_view_mode('view.%s' % content, content)
 

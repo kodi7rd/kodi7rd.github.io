@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
     <controls>
+        <!-- Background -->
         <control type="image">
             <left>0</left>
             <top>0</top>
             <width>1920</width>
             <height>1080</height>
-            <texture>common/black.png</texture>
+            <texture colordiffuse="FF000000">common/white.png</texture>
             <animation type="WindowOpen" reversible="false">
                 <effect type="fade" start="0" end="80" />
             </animation>
@@ -22,12 +23,12 @@
                 <width>1660</width>
                 <control type="image">
                     <height>900</height>
-                    <texture colordiffuse="FF302F2F">common/white.png</texture>
+                    <texture border="16" colordiffuse="FF302F2F">common/dialog.png</texture>
                 </control>
                 <control type="image">
                     <left>30</left>
                     <top>30</top>
-                    <width>70</width>230
+                    <width>70</width>
                     <height>70</height>
                     <align>left</align>
                     <aligny>top</aligny>
@@ -39,7 +40,7 @@
                     <left>5</left>
                     <width max="1650">auto</width>
                     <height>20</height>
-                    <font>font_midi</font> <!-- FEN_33 -->
+                    <font>font14</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -126,11 +127,11 @@
                     <onleft>2000</onleft>
                     <onright>2000</onright>
                     <label>[B]$ADDON[plugin.video.fen 32839][/B]</label>
-                    <font>font_mini</font> <!-- FEN_26 -->
+                    <font>font12</font> <!-- FEN_26 -->
                     <textcolor>FFB7B4BB</textcolor>
                     <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                    <texturefocus colordiffuse="FFCCCCCC">common/white.png</texturefocus>
-                    <texturenofocus colordiffuse="FF4a4347">common/white.png</texturenofocus>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
                     <align>center</align>
                 </control>
                 <control type="button" id="11">
@@ -141,13 +142,13 @@
                     <onup>10</onup>
                     <ondown>10</ondown>
                     <onleft>2000</onleft>
-                    <onright>2000d</onright>
+                    <onright>2000</onright>
                     <label>[B]$ADDON[plugin.video.fen 32840][/B]</label>
-                    <font>font_mini</font> <!-- FEN_26 -->
+                    <font>font12</font> <!-- FEN_26 -->
                     <textcolor>FFB7B4BB</textcolor>
                     <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                    <texturefocus colordiffuse="FFCCCCCC">common/white.png</texturefocus>
-                    <texturenofocus colordiffuse="FF4a4347">common/white.png</texturenofocus>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
                     <align>center</align>
                 </control>
             </control>

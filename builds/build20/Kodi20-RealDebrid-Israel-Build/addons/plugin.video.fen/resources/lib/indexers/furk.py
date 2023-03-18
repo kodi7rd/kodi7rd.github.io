@@ -9,7 +9,8 @@ show_busy_dialog, hide_busy_dialog, set_view_mode, end_directory = kodi_utils.sh
 confirm_dialog, notification, kodi_refresh, kodi_version = kodi_utils.confirm_dialog, kodi_utils.notification, kodi_utils.kodi_refresh, kodi_utils.kodi_version
 ls, sys, build_url, make_listitem = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem
 furk_icon, fanart, fen_clearlogo = kodi_utils.get_icon('furk'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
-remove_str, prot_str, unprot_str, speed_str, files_str, down_str, add_str = ls(32766), ls(32767), ls(32768), ls(32775), ls(32493).upper(), ls(32747), ls(32769)
+remove_str, prot_str, unprot_str, speed_str, files_str = ls(32766), ls(32767), ls(32768), ls(32775), ls(32493).upper()
+down_str, add_str = '[B]%s[/B]' % ls(32747), '[B]%s[/B]' % ls(32769)
 Furk = FurkAPI()
 
 def search_furk(params):
@@ -141,13 +142,14 @@ def myfiles_protect_unprotect(action, name, item_id):
 def resolve_furk(item_id, media_type, season, episode):
 	from modules.source_utils import seas_ep_filter
 	from modules.utils import clean_title, normalize
+	url = None
 	t_files = [i for i in Furk.t_files(item_id) if 'video' in i['ct'] and not any(x in i['name'].lower() for x in ('furk320', 'sample'))]
 	if media_type == 'movie':
 		try: url = [i['url_dl'] for i in t_files if 'is_largest' in i][0]
-		except: url = None
+		except: pass
 	else:
 		try: url = [i['url_dl'] for i in t_files if seas_ep_filter(season, episode, normalize(i['name']))][0]
-		except: url = None
+		except: pass
 	return url
 
 def account_info(params):

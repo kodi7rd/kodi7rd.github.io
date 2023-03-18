@@ -6,8 +6,8 @@ from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
-show_busy_dialog, kodi_utils.confirm_dialog, database, clear_property = kodi_utils.show_busy_dialog, kodi_utils.confirm_dialog, kodi_utils.database, kodi_utils.clear_property
-progress_dialog, notification, kodi_utils.hide_busy_dialog, monitor = kodi_utils.progress_dialog, kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.monitor
+show_busy_dialog, confirm_dialog, database, clear_property = kodi_utils.show_busy_dialog, kodi_utils.confirm_dialog, kodi_utils.database, kodi_utils.clear_property
+progress_dialog, notification, hide_busy_dialog, monitor = kodi_utils.progress_dialog, kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.monitor
 ls, get_setting, set_setting, sleep, ok_dialog = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.sleep, kodi_utils.ok_dialog
 set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
 pause_settings_change, unpause_settings_change, get_icon = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.get_icon
@@ -197,18 +197,20 @@ class AllDebridAPI:
 		line1 = '%s...' % (ls(32732) % ls(32063))
 		line2 = transfer_info['filename']
 		line3 = transfer_info['status']
+		status_code = transfer_info['statusCode']
 		progressDialog = progress_dialog(ls(32733), icon)
 		progressDialog.update(line % (line1, line2, line3), 0)
-		while not transfer_info['statusCode'] == 4:
+		while not status_code == 4:
 			sleep(1000 * interval)
 			transfer_info = self.list_transfer(transfer_id)
+			status_code = transfer_info['statusCode']
 			file_size = transfer_info['size']
 			line2 = transfer_info['filename']
-			if transfer_info['statusCode'] == 1:
+			if status_code == 1:
 				download_speed = round(float(transfer_info['downloadSpeed']) / (1000**2), 2)
 				progress = int(float(transfer_info['downloaded']) / file_size * 100) if file_size > 0 else 0
 				line3 = ls(32734) % (download_speed, transfer_info['seeders'], progress, round(float(file_size) / (1000 ** 3), 2))
-			elif transfer_info['statusCode'] == 3:
+			elif status_code == 3:
 				upload_speed = round(float(transfer_info['uploadSpeed']) / (1000 ** 2), 2)
 				progress = int(float(transfer_info['uploaded']) / file_size * 100) if file_size > 0 else 0
 				line3 = ls(32735) % (upload_speed, progress, round(float(file_size) / (1000 ** 3), 2))
@@ -222,7 +224,7 @@ class AllDebridAPI:
 					return _return_failed(32736, cancelled=True)
 			except Exception:
 				pass
-			if 5 <= transfer_info['statusCode'] <= 10:
+			if 5 <= status_code <= 10:
 				return _return_failed()
 		sleep(1000 * interval)
 		try: progressDialog.close()

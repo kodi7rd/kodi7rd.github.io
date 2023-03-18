@@ -28,7 +28,7 @@ class FurkAPI:
 		return result.get('status', 'not_ok') == 'ok'
 
 	def get_api(self):
-		api_key = get_setting('furk_api_key')
+		api_key = get_setting('furk_api_key', '')
 		if not api_key:
 			try:
 				user_name, user_pass = get_setting('furk_login'), get_setting('furk_password')

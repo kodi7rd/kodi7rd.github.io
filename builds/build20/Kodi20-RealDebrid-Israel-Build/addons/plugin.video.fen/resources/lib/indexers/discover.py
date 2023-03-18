@@ -14,14 +14,16 @@ ls, build_url, make_listitem, set_property, set_content = kodi_utils.local_strin
 end_directory, external_browse, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.external_browse, kodi_utils.set_view_mode, kodi_utils.maincache_db
 clear_property, confirm_dialog, numeric_input, kodi_version = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input, kodi_utils.kodi_version
 default_icon, fanart, default_poster, default_cast, fen_clearlogo = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family', kodi_utils.addon_clearlogo
+set_category = kodi_utils.set_category
 years_movies, years_tvshows, movie_genres, tvshow_genres = meta_lists.years_movies, meta_lists.years_tvshows, meta_lists.movie_genres, meta_lists.tvshow_genres
 languages, regions, movie_certifications, networks = meta_lists.languages, meta_lists.regions, meta_lists.movie_certifications, meta_lists.networks
-position = {'recommended': 0, 'year_start': 2, 'year_end': 3, 'with_genres': 4, 'without_genres': 5, 'with_keywords': 6, 'without_keywords': 7, 'language': 8,
-			'region': 9, 'network': 9, 'companies': 10, 'rating': 10, 'certification': 11, 'rating_votes': 11, 'rating_movie': 12, 'sort_by': 12, 'rating_votes_movie': 13,
-			'cast': 14, 'sort_by_movie': 15, 'adult': 16}
 inc_str, ex_str, heading_base = '%s %s' % (ls(32188), '%s'), '%s %s' % (ls(32189), '%s'), '%s %s - %s' % (ls(32036), ls(32451), '%s')
 add_menu_str, add_folder_str, remove_str, clear_str = ls(32730), ls(32731), ls(32698), ls(32699)
 base_str, window_prop = '[B]%s:[/B]  [I]%s[/I]', 'fen.%s_discover_params'
+lower_certs = ('PG', 'PG-13', 'R', 'NC-17')
+position = {'recommended': 0, 'year_start': 2, 'year_end': 3, 'with_genres': 4, 'without_genres': 5, 'with_keywords': 6, 'without_keywords': 7, 'language': 8,
+			'region': 9, 'network': 9, 'companies': 10, 'rating': 10, 'certification': 11, 'rating_votes': 11, 'rating_movie': 12, 'sort_by': 12, 'rating_votes_movie': 13,
+			'cast': 14, 'sort_by_movie': 15, 'adult': 16}
 url_params = ('year_start', 'year_end', 'with_genres', 'without_genres', 'with_keywords', 'without_keywords', 'companies', 'language', 'region', 'rating', 'rating_votes',
 			'certification', 'cast', 'network', 'adult', 'sort_by')
 tmdb_url = 'https://api.themoviedb.org/3/%s'
@@ -30,6 +32,7 @@ class Discover:
 	def __init__(self, params):
 		self.params = params
 		self.media_type = self.params.get('media_type', None)
+		self.category_name = self.params.get('name', None)
 		self.key = self.params.get('key', None)
 		if self.media_type: self.window_prop = window_prop % self.media_type.upper()
 		else: self.window_prop = ''
@@ -201,10 +204,11 @@ class Discover:
 	def certification(self):
 		key = 'certification'
 		if self._action(key) in ('clear', None): return
-		certifications_list = [i.upper() for i in movie_certifications]
-		certification = self._selection_dialog(certifications_list, movie_certifications, heading_base % ls(32473))
+		cert_list = [(i, '=%s' % i) for i in movie_certifications]
+		[cert_list.insert(cert_list.index((item, '=%s' % item)) + 1, ('%s (and lower)' % item, '.lte=%s' % item)) for item in lower_certs]
+		certification = self._selection_dialog([i[0] for i in cert_list], cert_list, heading_base % ls(32473))
 		if certification != None:
-			values = ('&certification_country=US&certification=%s' % certification, certification.upper())
+			values = ('&certification_country=US&certification%s' % certification[1], certification[0])
 			self._process(key, values)
 
 	def cast(self):
@@ -447,17 +451,18 @@ class Discover:
 	def _end_directory(self):
 		handle = int(sys.argv[1])
 		set_content(handle, '')
+		set_category(handle, self.category_name)
 		end_directory(handle, cacheToDisc=False)
 		if not external_browse(): set_view_mode(self.view, '')
 
 	def _selection_dialog(self, dialog_list, function_list, string):
-		list_items = [{'line1': item, 'icon': default_icon} for item in dialog_list]
-		kwargs = {'items': json.dumps(list_items), 'heading': string, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
+		list_items = [{'line1': item} for item in dialog_list]
+		kwargs = {'items': json.dumps(list_items), 'heading': string, 'narrow_window': 'true'}
 		return select_dialog(function_list, **kwargs)
 
 	def _multiselect_dialog(self, string, dialog_list, function_list=None, preselect= []):
 		if not function_list: function_list = dialog_list
-		list_items = [{'line1': item, 'icon': default_icon} for item in dialog_list]
+		list_items = [{'line1': item} for item in dialog_list]
 		kwargs = {'items': json.dumps(list_items), 'heading': string, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false', 'preselect': preselect}
 		return select_dialog(function_list, **kwargs)
 

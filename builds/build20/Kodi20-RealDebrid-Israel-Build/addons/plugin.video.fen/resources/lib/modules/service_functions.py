@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import xbmc, xbmcgui, xbmcplugin, xbmcvfs
 import time
 import datetime
 from xml.dom.minidom import parse as mdParse
@@ -18,21 +19,10 @@ get_property, set_property, clear_property, get_visibility = kodi_utils.get_prop
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_fen = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_fen
 make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
 current_skin_prop, use_skin_fonts_prop, custom_skin_path = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.custom_skin_path
+notification = kodi_utils.notification
 fen_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025)
-
-class SysExitPause:
-	def run(self):
-		logger(fen_str, 'SysExitPause Service Starting')
-		monitor = xbmc_monitor()
-		wait_for_abort = monitor.waitForAbort
-		set_property('fen.check_sysexit', 'false')
-		wait_for_abort(30)
-		set_property('fen.check_sysexit', 'true')
-		try: del monitor
-		except: pass
-		return logger(fen_str, 'SysExitPause Service Finished')
 
 class SetKodiVersion:
 	def run(self):
@@ -40,7 +30,6 @@ class SetKodiVersion:
 		kodi_version = get_infolabel('System.BuildVersion')
 		set_property('fen.kodi_version', kodi_version)
 		return logger(fen_str, 'SetKodiVersion Service Finished - Kodi Version Detected: %s' % kodi_version)
-
 
 class InitializeDatabases:
 	def run(self):
@@ -112,7 +101,8 @@ class ReuseLanguageInvokerCheck:
 	def run(self):
 		logger(fen_str, 'ReuseLanguageInvokerCheck Service Starting')
 		addon_xml = translate_path('special://home/addons/plugin.video.fen/addon.xml')
-		current_addon_setting = get_setting('reuse_language_invoker', 'true')
+		current_addon_setting = get_setting('reuse_language_invoker', None)
+		if current_addon_setting is None: return logger(fen_str, 'ReuseLanguageInvokerCheck Service Error. No current setting detected. Finished')
 		root = mdParse(addon_xml)
 		invoker_instance = root.getElementsByTagName('reuselanguageinvoker')[0].firstChild
 		if invoker_instance.data != current_addon_setting:
@@ -187,6 +177,7 @@ class CustomActions:
 				else:
 					run_custom = False
 					self.wait_for_abort(1)
+					continue
 				context_visible, info_visible = get_visibility(window_top_str % contextmenu_str), get_visibility(window_top_str % movieinformation_str)
 			try:
 				if run_custom and any([custom_context_params, custom_main_context_params, custom_info_params]):
@@ -206,7 +197,11 @@ class CustomActions:
 	def run_custom_action(self, action, window):
 		close_dialog(window)
 		run_plugin(action)
-		while get_visibility(window_top_str % window): self.wait_for_abort(0.25)
+		count = 0
+		while get_visibility(window_top_str % window):
+			if count == 5: break
+			self.wait_for_abort(0.25)
+			count += 0.25
 
 class CustomFonts:
 	def run(self):
@@ -232,9 +227,12 @@ class CheckCustomXMLs:
 		if '32859' in get_setting('custom_skins.enable', '$ADDON[plugin.video.fen 32860]'):
 			current_version = get_setting('custom_skins.version', '0.0.0')
 			latest_version = get_custom_xmls_version()
+			logger(fen_str, 'CheckCustomXMLs Service - Current: %s Latest: %s' % (current_version, latest_version))
 			if current_version != latest_version or not path_exists(translate_path(custom_skin_path)):
 				success = download_custom_xmls()
-				if success: set_setting('custom_skins.version', latest_version)
+				if success:
+					set_setting('custom_skins.version', latest_version)
+					notification(ls(33125) % latest_version, 5000)
 				logger(fen_str, 'CheckCustomXMLs Service - Attempted XMLs Update. Success? %s' % success)
 		logger(fen_str, 'CheckCustomXMLs Service Finished')
 

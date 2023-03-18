@@ -3,7 +3,7 @@ from apis.tmdb_api import tmdb_popular_people
 from windows import BaseDialog
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
-from modules.kodi_utils import json, addon_fanart, item_next, local_string as ls
+from modules.kodi_utils import json, select_dialog, addon_fanart, item_next, local_string as ls
 # from modules.kodi_utils import logger
 
 nextpage_str = ls(32799)
@@ -45,10 +45,13 @@ class ThumbImageViewer(BaseDialog):
 				elif thumb_params['mode'] == 'person_data_dialog':
 					person_data_dialog({'query': thumb_params['actor_name']})
 		elif action in self.context_actions:
-			choice = self.open_window(('windows.imageviewer', 'ThumbContextMenu'), 'contextmenu.xml', list_item=chosen_listitem)
+			choice = self.make_context_menu(enable_delete=chosen_listitem.getProperty('delete') == 'true')
 			if choice:
-				if 'delete_image' in choice: self.reset_after_delete(choice, position)
-				else: self.execute_code(choice)
+				if choice == 'delete_image': return self.reset_after_delete(chosen_listitem, position)
+				#donwload
+				name, thumb, path = chosen_listitem.getProperty('name'), chosen_listitem.getProperty('thumb'), chosen_listitem.getProperty('path')
+				params = {'mode': 'downloader', 'action': 'image', 'name': name, 'thumb_url': thumb, 'image_url': path, 'media_type': 'image', 'image': thumb}
+				self.execute_code('RunPlugin(%s)' % self.build_url(params))
 
 	def make_page(self):
 		try:
@@ -57,6 +60,16 @@ class ThumbImageViewer(BaseDialog):
 			self.add_items(self.window_id, self.list_items)
 			self.setFocusId(self.window_id)
 		except: pass
+
+	def make_context_menu(self, enable_delete):
+		choices = []
+		choices_append = choices.append
+		if enable_delete: choices_append((ls(32785), 'delete_image'))
+		else: choices_append((ls(32747), 'download_image'))
+		list_items = [{'line1': i[0]} for i in choices]
+		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
+		choice = select_dialog([i[1] for i in choices], **kwargs)
+		return choice
 
 	def new_page(self):
 		try:
@@ -88,7 +101,7 @@ class ThumbImageViewer(BaseDialog):
 
 	def reset_after_delete(self, choice, position):
 		self.set_home_property('delete_image_finished', 'false')
-		self.execute_code(choice)
+		self.ImagesInstance.run({'mode': 'delete_image', 'image_url': choice.getProperty('path'), 'thumb_url': choice.getProperty('thumb')})
 		while not self.get_home_property('delete_image_finished') == 'true': self.sleep(10)
 		self.reset_window(self.window_id)
 		self.list_items = self.ImagesInstance.browser_image(download_directory('image'), return_items=True)
@@ -98,45 +111,6 @@ class ThumbImageViewer(BaseDialog):
 	def set_properties(self):
 		self.setProperty('page_no', str(self.current_page))
 		self.setProperty('fanart', addon_fanart)
-
-class ThumbContextMenu(BaseDialog):
-	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
-		self.window_id = 2020
-		self.list_item = kwargs['list_item']
-		self.item_list = []
-		self.selected = None
-		self.make_context_menu()
-
-	def onInit(self):
-		self.add_items(self.window_id, self.item_list)
-		self.setFocusId(self.window_id)
-
-	def run(self):
-		self.doModal()
-		return self.selected
-
-	def onAction(self, action):
-		if action in self.selection_actions:
-			chosen_listitem = self.get_listitem(self.window_id)
-			self.selected = chosen_listitem.getProperty('action')
-			return self.close()
-		if action in self.context_actions:
-			return self.close()
-		if action in self.closing_actions:
-			return self.close()
-
-	def make_context_menu(self):
-		enable_delete = self.list_item.getProperty('delete') == 'true'
-		path = self.list_item.getProperty('path')
-		thumb = self.list_item.getProperty('thumb')
-		if enable_delete:
-			delete_file_params = {'mode': 'delete_image', 'image_url': path, 'thumb_url': thumb}
-			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % ls(32785), 'RunPlugin(%s)', delete_file_params))
-		else:
-			name = self.list_item.getProperty('name')
-			down_file_params = {'mode': 'downloader', 'action': 'image', 'name': name, 'thumb_url': thumb, 'image_url': path, 'media_type': 'image', 'image': thumb}
-			self.item_list.append(self.make_contextmenu_item(ls(32747), 'RunPlugin(%s)', down_file_params))
 
 class SlideShow(BaseDialog):
 	def __init__(self, *args, **kwargs):

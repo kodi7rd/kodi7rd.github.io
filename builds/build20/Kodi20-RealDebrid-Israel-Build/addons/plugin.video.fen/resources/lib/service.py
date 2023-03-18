@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from modules import service_functions
-from modules.kodi_utils import Thread, xbmc_monitor, logger, local_string as ls
+from modules.kodi_utils import Thread, xbmc_monitor, get_property, set_property, kodi_refresh, services_finished_prop, \
+								services_refresh_after_run_prop, logger, local_string as ls
 
 fen_str = ls(32036).upper()
-OnNotificationActions = service_functions.OnNotificationActions()
-OnSettingsChangedActions = service_functions.OnSettingsChangedActions()
+on_notification_actions = service_functions.OnNotificationActions()
+on_settings_changed_actions = service_functions.OnSettingsChangedActions()
 
 class FenMonitor(xbmc_monitor):
 	def __init__ (self):
@@ -12,7 +13,6 @@ class FenMonitor(xbmc_monitor):
 		self.startUpServices()
 	
 	def startUpServices(self):
-		Thread(target=service_functions.SysExitPause().run).start()
 		try: service_functions.SetKodiVersion().run()
 		except: pass
 		try: service_functions.InitializeDatabases().run()
@@ -35,12 +35,15 @@ class FenMonitor(xbmc_monitor):
 		except: pass
 		try: service_functions.AutoRun().run()
 		except: pass
+		set_property(services_finished_prop, 'true')
+		if get_property(services_refresh_after_run_prop) == 'true': kodi_refresh()
+			
 
 	def onSettingsChanged(self):
-		OnSettingsChangedActions.run()
+		on_settings_changed_actions.run()
 
 	def onNotification(self, sender, method, data):
-		OnNotificationActions.run(sender, method, data)
+		on_notification_actions.run(sender, method, data)
 
 logger(fen_str, 'Main Monitor Service Starting')
 logger(fen_str, 'Settings Monitor Service Starting')

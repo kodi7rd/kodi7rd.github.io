@@ -14,7 +14,7 @@ move_str, remove_str, add_org_str, fol_add_str, orig_add_str, fol_menu_str, trak
 res_str, brws_str, upd_str, reload_str, emove_str, eremove_str, eclear_str = ls(32722), ls(32706), ls(32723), ls(32724), ls(32712), ls(32713), '%s %s' % (ls(32671), ls(32129))
 eedelete_str, eeremove_str, eeclear_str, eefadd_str, eefadde_str, eesets_str, trlike_str = ls(32703), ls(32786), ls(32699), ls(32731), ls(32730), ls(33081), ls(32776)
 trunlike_str, trnew_str, trdel_str, eerem_disc_str, down_str, furk_add_str, furk_remove_str = ls(32783), ls(32780), ls(32781), ls(32698), ls(32747), ls(32769), ls(32766)
-furk_p_str, furk_up_str, cloud_link_str, cloud_unlink_str = ls(32767), ls(32768), ls(33078), ls(33079)
+furk_p_str, furk_up_str, cloud_link_str, cloud_unlink_str, choose_icon_str = ls(32767), ls(32768), ls(33078), ls(33079), ls(33137)
 
 class MenuEditor:
 	def __init__(self, params):
@@ -23,7 +23,6 @@ class MenuEditor:
 		if 'menu_item' in self.params: self.menu_item = json.loads(self.params.get('menu_item'))
 		else: self.menu_item = dict(parse_qsl(get_infolabel('ListItem.FileNameAndPath').replace('plugin://plugin.video.fen/?','')))
 		self.menu_item_get = self.menu_item.get
-		self.icon = get_icon('edit')
 
 	def edit_menu(self):
 		active_list, position = self.params_get('active_list'), int(self.params_get('position', '0'))
@@ -45,8 +44,8 @@ class MenuEditor:
 		listing.append((res_str % list_name, self.restore))
 		listing.append((upd_str % list_name, self.check_update_list))
 		if not external_list_item: listing.append((reload_str % menu_name_translated_display, self.reload_menu_item))
-		list_items = [{'line1': i[0], 'icon': self.icon} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': fen_str}
+		list_items = [{'line1': i[0]} for i in listing]
+		kwargs = {'items': json.dumps(list_items), 'heading': fen_str, 'narrow_window': 'true'}
 		function = select_dialog([i[1] for i in listing], **kwargs)
 		if function == None: return
 		self.params = {'active_list': active_list, 'list_name': list_name, 'menu_name': menu_name, 'menu_name_translated': menu_name_translated, 'position': position}
@@ -55,8 +54,8 @@ class MenuEditor:
 
 	def edit_menu_shortcut_folder(self):
 		listing = [(emove_str, 'move'), (eremove_str, 'remove'), (eclear_str, 'clear_all')]
-		list_items = [{'line1': i[0], 'icon': self.icon} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': fen_str}
+		list_items = [{'line1': i[0]} for i in listing]
+		kwargs = {'items': json.dumps(list_items), 'heading': fen_str, 'narrow_window': 'true'}
 		self.action = select_dialog([i[1] for i in listing], **kwargs)
 		if self.action == None: return
 		return self.shortcut_folder_contents_adjust()
@@ -90,8 +89,8 @@ class MenuEditor:
 					listing.append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
 			elif list_type == 'discover_history':
 				listing.extend([(self.remove_bold(eerem_disc_str), self.remove_single_discover_history), (self.remove_bold(eeclear_str), self.remove_all_discover_history)])
-		list_items = [{'line1': i[0], 'icon': self.icon} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': fen_str}
+		list_items = [{'line1': i[0]} for i in listing]
+		kwargs = {'items': json.dumps(list_items), 'heading': fen_str, 'narrow_window': 'true'}
 		function = select_dialog([i[1] for i in listing], **kwargs)
 		if function == None: return
 		return function()
@@ -228,7 +227,7 @@ class MenuEditor:
 		list_items = list(_builder())
 		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': get_icon('top')})
 		index_list = [list_items.index(i) for i in list_items]
-		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': multi_line}
+		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': multi_line}
 		return select_dialog(index_list, **kwargs)
 
 	def _icon_select(self, folder_first=True):
@@ -240,7 +239,7 @@ class MenuEditor:
 			except: pass
 			list_items = [{'line1': i if i != 'folder' else 'folder (default)', 'icon': get_icon(i)} for i in all_icons]
 		else: list_items = [{'line1': i, 'icon': get_icon(i)} for i in all_icons]
-		kwargs = {'items': json.dumps(list_items), 'heading': fen_str}
+		kwargs = {'items': json.dumps(list_items), 'heading': choose_icon_str}
 		icon_choice = select_dialog(all_icons, **kwargs) or 'folder'
 		return icon_choice
 

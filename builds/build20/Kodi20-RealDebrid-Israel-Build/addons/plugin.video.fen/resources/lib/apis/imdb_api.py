@@ -455,6 +455,25 @@ def clear_imdb_cache(silent=False):
 		return True
 	except: return False
 
+def refresh_imdb_meta_data(imdb_id):
+	from modules.kodi_utils import path_exists, clear_property, database, maincache_db
+	try:
+		if not path_exists(maincache_db): return
+		imdb_results = []
+		insert1, insert2 = '%%_%s' % imdb_id, '%%_%s_%%' % imdb_id
+		dbcon = database.connect(maincache_db, timeout=40.0, isolation_level=None)
+		dbcur = dbcon.cursor()
+		dbcur.execute('''PRAGMA synchronous = OFF''')
+		dbcur.execute('''PRAGMA journal_mode = OFF''')
+		for item in (insert1, insert2):
+			dbcur.execute("SELECT id FROM maincache WHERE id LIKE ?", (item,))
+			imdb_results += [str(i[0]) for i in dbcur.fetchall()]
+		if not imdb_results: return True
+		dbcur.execute("DELETE FROM maincache WHERE id LIKE ?", (insert1,))
+		dbcur.execute("DELETE FROM maincache WHERE id LIKE ?", (insert2,))
+		for i in imdb_results: clear_property(i)
+	except: pass
+
 
 
 

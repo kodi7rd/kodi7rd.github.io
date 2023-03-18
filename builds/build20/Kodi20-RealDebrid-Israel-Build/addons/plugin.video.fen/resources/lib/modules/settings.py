@@ -7,7 +7,7 @@ download_directories_dict = {'movie': 'movie_download_directory', 'episode': 'tv
 							'image_url': 'image_download_directory','image': 'image_download_directory', 'premium': 'premium_download_directory',
 							None: 'premium_download_directory', 'None': False}
 results_style_dict = {'true': 'contrast', 'false': 'non_contrast'}
-results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002, 'rows': 2003, 'shift': 2004, 'thumbs': 2005}
+results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002, 'rows': 2003}
 year_in_title_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
 default_action_dict = {0: 'play', 1: 'cancel'}
 extras_open_action_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
@@ -37,14 +37,14 @@ def date_offset():
 	return int(get_setting('datetime.offset', '0')) + 5
 
 def results_format():
-	return str(get_setting('results.format', 'List').lower())
+	return str(get_setting('results.list_format', 'List').lower())
 
 def results_style():
 	return results_style_dict[get_setting('results.use_contrast', 'true')]
 
 def results_xml_window_number(window_format=None):
 	if not window_format: window_format = results_format()
-	return results_window_numbers_dict[window_format.split(' ')[0]]
+	return results_window_numbers_dict.get(window_format.split(' ')[0], 2000)
 
 def store_resolved_torrent_to_cloud(debrid_service, pack):
 	setting_value = int(get_setting('store_resolved_torrent.%s' % debrid_service.lower(), '0'))
@@ -54,6 +54,9 @@ def enabled_debrids_check(debrid_service):
 	if not get_setting('%s.enabled' % debrid_service) == 'true': return False
 	if get_setting('%s.token' % debrid_service) in (None, ''): return False
 	return True
+
+def playback_settings():
+	return (int(get_setting('playback.watched_percent', '90')), int(get_setting('playback.resume_percent', '5')), int(get_setting('playback.resume_method', '0')))
 
 def monitor_playback():
 	return get_setting('playback.monitor_success', 'true') == 'true'
@@ -219,9 +222,8 @@ def extras_open_action(media_type):
 def extras_enable_extra_ratings():
 	return get_setting('extras.enable_extra_ratings', 'true') == 'true'
 
-def extras_ratings_icons_type():
-	icon_setting = int(get_setting('extras.ratings_icons_type', '0'))
-	return 'color' if icon_setting == 0 else 'mono'
+def extras_enabled_ratings():
+	return get_setting('extras.enabled_ratings', 'Meta, Tom/Critic, Tom/User, IMDb, TMDb').split(', ')
 
 def extras_enable_scrollbars():
 	return get_setting('extras.enable_scrollbars', 'true')
@@ -360,6 +362,12 @@ def get_resolution():
 def get_language():
 	return get_setting('meta_language', 'en')
 
+def get_mpaa_region():
+	return get_setting('meta_mpaa_region', 'US')
+
+def get_mpaa_prefix():
+	return get_setting('meta_mpaa_prefix', '')
+
 def get_art_provider():
 	if not get_fanart_data(): return default_art_provider_tuple
 	return art_provider_dict[fanarttv_default()]
@@ -369,8 +377,10 @@ def metadata_user_info():
 	extra_fanart_enabled = get_fanart_data()
 	image_resolution = get_resolution()
 	meta_language = get_language()
+	mpaa_region = get_mpaa_region()
+	mpaa_prefix = get_mpaa_prefix()
 	hide_watched = widget_hide_watched()
 	if extra_fanart_enabled: fanart_client_key = fanarttv_client_key()
 	else: fanart_client_key = ''
-	return {'extra_fanart_enabled': extra_fanart_enabled, 'image_resolution': image_resolution , 'language': meta_language,
-			'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched}
+	return {'extra_fanart_enabled': extra_fanart_enabled, 'image_resolution': image_resolution , 'language': meta_language, 'mpaa_region': mpaa_region,
+			'mpaa_prefix': mpaa_prefix, 'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched}

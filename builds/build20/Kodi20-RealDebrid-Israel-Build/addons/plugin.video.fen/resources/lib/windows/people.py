@@ -6,7 +6,7 @@ from indexers import dialogs
 from indexers.images import Images
 from modules.utils import calculate_age, get_datetime
 from modules.kodi_utils import json, notification, show_busy_dialog, hide_busy_dialog, get_icon, addon_fanart, Thread, empty_poster, execute_builtin, local_string as ls
-from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution
+from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution, metadata_user_info
 # from modules.kodi_utils import logger
 
 tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
@@ -16,6 +16,7 @@ button_ids = [10, 11, 50]
 genres_exclude = (10763, 10764, 10767)		
 gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: 'N/A'}
 more_from_movies_id, more_from_tvshows_id, trivia_id, videos_id, more_from_director_id = 2050, 2051, 2052, 2053, 2054
+tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
 
 class People(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -26,12 +27,22 @@ class People(BaseDialog):
 		self.set_starting_constants()
 		self.make_person_data()
 		self.set_properties()
-		self.tasks = (self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
+		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
 
 	def onInit(self):
-		[Thread(target=i).start() for i in self.tasks]
+		for i in self.tasks: Thread(target=i).start()
 		try:self.setFocusId(10)
 		except: self.close()
+
+	def set_infoline1(self):
+		label = '[B]%s: [/B] %s ' % (ls(32845), self.person_gender) if self.person_gender else ''
+		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_gender else '', ls(32827), self.person_age) if self.person_age else ''
+		self.set_label(2001, '[I]%s[/I]' % label)
+
+	def set_infoline2(self):
+		label = '[B]%s: [/B] %s ' % (ls(32825), self.person_birthday) if self.person_birthday else ''
+		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_birthday else '', ls(32826), self.person_deathday) if self.person_deathday else ''
+		self.set_label(3001, '[I]%s[/I]' % label)
 
 	def make_movies(self):
 		self.make_more_from('movie')
@@ -60,6 +71,18 @@ class People(BaseDialog):
 
 	def onAction(self, action):
 		if action in self.closing_actions: self.close()
+		if action == self.info_action:
+			focus_id = self.getFocusId()
+			tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
+			if not focus_id in tmdb_list_ids: return
+			show_busy_dialog()
+			from modules.metadata import movie_meta, tvshow_meta
+			chosen_listitem = self.get_listitem(focus_id)
+			media_type = 'movie' if focus_id in (more_from_movies_id, more_from_director_id) else 'tvshow'
+			function = movie_meta if media_type == 'movie' else tvshow_meta
+			meta = function('tmdb_id', chosen_listitem.getProperty('tmdb_id'), metadata_user_info(), get_datetime())
+			hide_busy_dialog()
+			self.show_extrainfo(media_type, meta, meta.get('poster', empty_poster))
 		if not self.control_id: return
 		if action in self.selection_actions:
 			chosen_listitem = self.get_listitem(self.control_id)
@@ -77,6 +100,10 @@ class People(BaseDialog):
 				chosen = dialogs.imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], thumb)
 				if not chosen: return
 				return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
+
+	def show_extrainfo(self, media_type, meta, poster):
+		text = dialogs.media_extra_info_choice({'media_type': media_type, 'meta': meta})
+		return self.show_text_media(text, poster)
 
 	def make_person_data(self):
 		show_busy_dialog()
@@ -226,8 +253,8 @@ class People(BaseDialog):
 		present = sorted([i for i in data if i[key] and i not in future], key=lambda x: x[key], reverse=True)
 		return present + future + blank
 
-	def show_text_media(self, text):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=self.person_image)
+	def show_text_media(self, text, poster=None):
+		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=poster or self.person_image)
 
 	def show_text_media_list(self, chosen_var):
 		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media_list.xml',

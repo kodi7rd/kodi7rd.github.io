@@ -31,6 +31,14 @@ def make_thread_list(_target, _list, _max_threads=None):
 		threaded_object.start()
 		yield threaded_object
 
+def make_thread_list_multi_arg(_target, _list, _max_threads=None):
+	if not _max_threads: _max_threads = max_threads()
+	for item in _list:
+		while activeCount() > _max_threads: sleep(1)
+		threaded_object = Thread(target=_target, args=item)
+		threaded_object.start()
+		yield threaded_object
+
 def make_thread_list_enumerate(_target, _list, _max_threads=None):
 	if not _max_threads: _max_threads = max_threads()
 	for count, item in enumerate(_list):
@@ -294,5 +302,8 @@ def download_github_zip(url_insert, destination):
 		zipfile.extractall(path=userdata_path)
 		if path_exists(destination): status = True
 		else: status = False
-	except: status = False
+	except Exception as e:
+		from modules.kodi_utils import logger
+		logger('download_github_zip error', str(e))
+		status = False
 	return status

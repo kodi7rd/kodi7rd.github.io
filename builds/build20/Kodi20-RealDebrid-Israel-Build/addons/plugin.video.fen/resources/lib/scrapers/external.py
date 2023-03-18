@@ -11,7 +11,7 @@ from modules.settings import display_sleep_time, date_offset
 ls, sleep, monitor, get_property, set_property = kodi_utils.local_string, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.get_property, kodi_utils.set_property
 json, Thread, notification, hide_busy_dialog = kodi_utils.json, kodi_utils.Thread, kodi_utils.notification, kodi_utils.hide_busy_dialog
 normalize, get_file_info, pack_enable_check, def_host_dict = source_utils.normalize, source_utils.get_file_info, source_utils.pack_enable_check, source_utils.def_host_dict
-int_window_prop, get_setting = kodi_utils.int_window_prop, kodi_utils.get_setting
+close_all_dialog, int_window_prop, get_setting = kodi_utils.close_all_dialog, kodi_utils.int_window_prop, kodi_utils.get_setting
 season_display, show_display, remain_str, pack_display = ls(32537), ls(32089), ls(32676), '%s (%s)'
 pack_check = (season_display, show_display)
 debrid_runners = {'Real-Debrid': ('Real-Debrid', RD_check), 'Premiumize.me': ('Premiumize.me', PM_check), 'AllDebrid': ('AllDebrid', AD_check)}
@@ -20,42 +20,44 @@ class source:
 	def __init__(self, meta, source_dict, debrid_torrents, debrid_hosters, internal_scrapers, prescrape_sources, progress_dialog, disabled_ext_ignored=False):
 		self.scrape_provider = 'external'
 		self.progress_dialog = progress_dialog
+		self.meta = meta
+		self.background = self.meta.get('background', False)
 		self.debrid_torrents, self.debrid_hosters = debrid_torrents, debrid_hosters
 		self.source_dict, self.host_dict = source_dict, self.make_host_dict()
 		self.internal_scrapers, self.prescrape_sources = internal_scrapers, prescrape_sources
 		self.internal_activated, self.internal_prescraped = len(self.internal_scrapers) > 0, len(self.prescrape_sources) > 0
 		self.processed_prescrape, self.threads_completed = False, False
-		self.sources, self.final_sources, self.processed_internal_scrapers, self.processed_torrents, self.processed_hosters = [], [], [], [], []
+		self.sources, self.non_torrent_sources, self.final_sources, self.processed_internal_scrapers, self.processed_torrents, self.processed_hosters = [], [], [], [], [], []
 		self.processed_internal_scrapers_append = self.processed_internal_scrapers.append
 		self.sleep_time = display_sleep_time()
 		self.finish_early = get_setting('search.finish.early') == 'true'
 		self.timeout = 60 if disabled_ext_ignored else int(get_setting('results.timeout', '20'))
-		self.meta = meta
-		self.background = self.meta.get('background', False)
-		self.reset_quality_count()
-		self.non_torrent_sources = []
+		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
+		self.final_total = self.final_4k = self.final_1080p = self.final_720p = self.final_sd = 0
 
 	def results(self, info):
-		if not self.source_dict: return 
-		self.media_type, self.tmdb_id, self.orig_title = info['media_type'], str(info['tmdb_id']), info['title']
-		self.season, self.episode, self.total_seasons = info['season'], info['episode'], info['total_seasons']
-		self.title, self.year = normalize(info['title']), info['year']
-		ep_name, aliases = normalize(info['ep_name']), info['aliases']
-		self.single_expiry, self.season_expiry, self.show_expiry = info['expiry_times']
-		if self.media_type == 'movie':
-			self.season_divider, self.show_divider = 0, 0
-			self.data = {'imdb': info['imdb_id'], 'title': self.title, 'aliases': aliases, 'year': self.year}
-		else:
-			self.season_divider = [int(x['episode_count']) for x in self.meta['season_data'] if int(x['season_number']) == int(self.meta['season'])][0]
-			self.show_divider = int(self.meta['total_aired_eps'])
-			self.data = {'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'aliases': aliases,'year': self.year,
-						'title': ep_name, 'season': str(self.season), 'episode': str(self.episode)}
+		if not self.source_dict: return
+		try:
+			self.media_type, self.tmdb_id, self.orig_title = info['media_type'], str(info['tmdb_id']), info['title']
+			self.season, self.episode, self.total_seasons = info['season'], info['episode'], info['total_seasons']
+			self.title, self.year = normalize(info['title']), info['year']
+			ep_name, aliases = normalize(info['ep_name']), info['aliases']
+			self.single_expiry, self.season_expiry, self.show_expiry = info['expiry_times']
+			if self.media_type == 'movie':
+				self.season_divider, self.show_divider = 0, 0
+				self.data = {'imdb': info['imdb_id'], 'title': self.title, 'aliases': aliases, 'year': self.year}
+			else:
+				try: self.season_divider = [int(x['episode_count']) for x in self.meta['season_data'] if int(x['season_number']) == int(self.meta['season'])][0]
+				except: self.season_divider = 1
+				self.show_divider = int(self.meta['total_aired_eps'])
+				self.data = {'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'aliases': aliases,'year': self.year,
+							'title': ep_name, 'season': str(self.season), 'episode': str(self.episode)}
+		except: return []
 		return self.get_sources()
 
 	def get_sources(self):
 		def _scraperDialog():
 			hide_busy_dialog()
-			line1 = ''
 			start_time = time.time()
 			while not self.progress_dialog.iscanceled() and not monitor.abortRequested():
 				try:
@@ -63,10 +65,8 @@ class source:
 					if self.internal_activated or self.internal_prescraped: alive_threads.extend(self.process_internal_results())
 					len_alive_threads = len(alive_threads)
 					line1 =  ', '.join(alive_threads).upper()
-					current_time = time.time()
-					current_progress = max((time.time() - start_time), 0)
-					percent = (current_progress/float(self.timeout))*100
-					self.progress_dialog.update_results_count(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
+					percent = (max((time.time() - start_time), 0)/float(self.timeout))*100
+					self.progress_dialog.update_scraper(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
 					if self.threads_completed:
 						if len_alive_threads == 0 or percent >= 100: break
 						elif self.finish_early and percent >= 50:
@@ -186,12 +186,9 @@ class source:
 		if len(self.final_sources) > 0: self.final_sources = list(_process(self.final_sources))
 
 	def process_results(self):
-		self.reset_quality_count()
 		self.processed_hosters = self.process_hosters([i for i in self.final_sources if not 'hash' in i])
 		self.non_torrent_sources += self.processed_hosters
-		if not self.background: 
-			if self.non_torrent_sources: self.process_quality_count(self.non_torrent_sources)
-			self.progress_dialog.update_results_count(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, '', 0)
+		if not self.background and self.non_torrent_sources: self.process_quality_count_final(self.non_torrent_sources)
 		self.processed_torrents = self.process_torrents([i for i in self.final_sources if 'hash' in i])
 		self.final_sources = self.processed_torrents + self.processed_hosters
 
@@ -229,6 +226,15 @@ class source:
 			elif quality == '720p': self.sources_720p += 1
 			else: self.sources_sd += 1
 			self.sources_total += 1
+	
+	def process_quality_count_final(self, sources):
+		for i in sources:
+			quality = i['quality']
+			if quality == '4K': self.final_4k += 1
+			elif quality == '1080p': self.final_1080p += 1
+			elif quality == '720p': self.final_720p += 1
+			else: self.final_sd += 1
+			self.final_total += 1
 
 	def process_hosters(self, hoster_sources):
 		if not hoster_sources or not self.debrid_hosters: return []
@@ -241,7 +247,7 @@ class source:
 		if not torrent_sources or not self.debrid_torrents: return []
 		def _process(provider, function):
 			cached = function(hash_list, cached_hashes)
-			if not self.background: self.process_quality_count([i for i in torrent_sources if i['hash'] in cached])
+			if not self.background: self.process_quality_count_final([i for i in torrent_sources if i['hash'] in cached])
 			torrent_results.extend([dict(i, **{'cache_provider': provider if i['hash'] in cached else 'Uncached %s' % provider, 'debrid':provider}) for i in torrent_sources])
 		def _debrid_check_dialog():
 			self.progress_dialog.reset_is_cancelled()
@@ -252,7 +258,7 @@ class source:
 					current_progress = max((time.time() - start_time), 0)
 					line1 = ', '.join(remaining_debrids).upper()
 					percent = int((current_progress/float(timeout))*100)
-					self.progress_dialog.update_results_count(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
+					self.progress_dialog.update_scraper(self.final_sd, self.final_720p, self.final_1080p, self.final_4k, self.final_total, line1, percent)
 					sleep(self.sleep_time)
 					if len(remaining_debrids) == 0: break
 					if percent >= 100: break
@@ -292,5 +298,9 @@ class source:
 			return list(set(pr_list))
 		except: return def_host_dict
 
-	def reset_quality_count(self):
-		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
+	def _kill_progress_dialog(self):
+		try: self.progress_dialog.close()
+		except: close_all_dialog()
+		try: del self.progress_dialog
+		except: pass
+		self.progress_dialog = None

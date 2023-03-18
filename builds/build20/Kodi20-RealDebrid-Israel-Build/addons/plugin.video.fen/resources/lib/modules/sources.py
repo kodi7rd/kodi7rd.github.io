@@ -2,17 +2,16 @@
 import time
 from windows import open_window, create_window
 from scrapers import external, folders
-from modules import debrid, kodi_utils, settings, metadata
+from modules import debrid, kodi_utils, settings, metadata, watched_status
 from modules.player import FenPlayer
 from modules.source_utils import internal_sources, external_sources, internal_folders_import, scraper_names, get_cache_expiry, make_alias_dict
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, manual_function_import
 # logger = kodi_utils.logger
 
-json, show_busy_dialog, hide_busy_dialog, confirm_progress_media = kodi_utils.json, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.confirm_progress_media
 select_dialog, confirm_dialog, get_setting, close_all_dialog = kodi_utils.select_dialog, kodi_utils.confirm_dialog, kodi_utils.get_setting, kodi_utils.close_all_dialog
-ls, get_icon, notification, sleep, execute_builtin = kodi_utils.local_string, kodi_utils.get_icon, kodi_utils.notification, kodi_utils.sleep, kodi_utils.execute_builtin
+json, show_busy_dialog, hide_busy_dialog, xbmc_player = kodi_utils.json, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.xbmc_player
 Thread, get_property, set_property, clear_property = kodi_utils.Thread, kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
-xbmc_player, progress_flags_direction = kodi_utils.xbmc_player, settings.progress_flags_direction
+ls, get_icon, notification, sleep = kodi_utils.local_string, kodi_utils.get_icon, kodi_utils.notification, kodi_utils.sleep
 display_uncached_torrents, check_prescrape_sources, source_folders_directory = settings.display_uncached_torrents, settings.check_prescrape_sources, settings.source_folders_directory
 auto_play, active_internal_scrapers, provider_sort_ranks, audio_filters = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks, settings.audio_filters
 results_format, results_style, results_xml_window_number, filter_status = settings.results_format, settings.results_style, settings.results_xml_window_number, settings.filter_status
@@ -20,6 +19,8 @@ metadata_user_info, quality_filter, sort_to_top, monitor_playback = settings.met
 display_sleep_time, scraping_settings, include_prerelease_results = settings.display_sleep_time, settings.scraping_settings, settings.include_prerelease_results
 ignore_results_filter, results_sort_order, easynews_max_retries = settings.ignore_results_filter, settings.results_sort_order, settings.easynews_max_retries
 autoplay_next_episode, autoscrape_next_episode, limit_resolve = settings.autoplay_next_episode, settings.autoscrape_next_episode, settings.limit_resolve
+get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watched_status.get_bookmarks
+erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
 playback_attempt_pause = settings.playback_attempt_pause
 rd_info, pm_info, ad_info = ('apis.real_debrid_api', 'RealDebridAPI'), ('apis.premiumize_api', 'PremiumizeAPI'), ('apis.alldebrid_api', 'AllDebridAPI')
@@ -38,7 +39,7 @@ class Sources():
 		self.prescrape_scrapers, self.prescrape_threads, self.prescrape_sources, self.uncached_torrents = [], [], [], []
 		self.threads, self.providers, self.sources, self.internal_scraper_names, self.remove_scrapers = [], [], [], [], ['external']
 		self.clear_properties, self.filters_ignored, self.active_folders, self.resolve_dialog_made = True, False, False, False
-		self._reset_quality_count()
+		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.prescrape, self.disabled_ext_ignored, self.default_ext_only = 'true', 'false', 'false'
 		self.progress_dialog = None
 		self.playing_filename = ''
@@ -82,7 +83,7 @@ class Sources():
 		self.filter_hevc, self.filter_hdr = filter_status('hevc'), filter_status('hdr')
 		self.filter_dv, self.filter_av1, self.filter_audio = filter_status('dv'), filter_status('av1'), 3
 		self.hevc_filter_key, self.hdr_filter_key, self.dolby_vision_filter_key, self.av1_filter_key = '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]', '[B]AV1[/B]'
-		self.audio_filter_key, self.progress_flags_direction = audio_filters(), progress_flags_direction()
+		self.audio_filter_key = audio_filters()
 		self.sort_function, self.display_uncached_torrents, self.quality_filter = results_sort_order(), display_uncached_torrents(), self._quality_filter()
 		self.hybrid_allowed, self.filter_size_method = self.filter_hdr in (0, 2), int(get_setting('results.filter_size_method', '0'))
 		self.include_unknown_size, self.include_3D_results = get_setting('results.include.unknown.size', 'false') == 'true', get_setting('include_3d_results', 'true') == 'true'
@@ -164,11 +165,6 @@ class Sources():
 			results = self._special_filter(results, self.av1_filter_key, self.filter_av1)
 			results = self._special_filter(results, self.hevc_filter_key, self.filter_hevc)
 			results = self._sort_first(results)
-		if not self.background:
-			self._reset_quality_count()
-			self._sources_quality_count(results)
-			self.progress_dialog.update_results_count(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, '', 0)
-			sleep(200)
 		return results
 
 	def filter_results(self, results):
@@ -179,13 +175,14 @@ class Sources():
 		results = [i for i in results if i['quality'] in self.quality_filter]
 		if not self.include_3D_results: results = [i for i in results if not '3D' in i['extraInfo']]
 		if self.filter_size_method:
+			min_size = string_to_float(get_setting('results.size.min_manual', '0'), '0') / 1000
+			if min_size == 0.0 and not self.include_unknown_size: min_size = 0.02
 			if self.filter_size_method == 1:
 				duration = self.meta['duration'] or (5400 if self.media_type == 'movie' else 2400)
 				max_size = ((0.125 * (0.90 * string_to_float(get_setting('results.size.auto', '20'), '20'))) * duration)/1000
 			elif self.filter_size_method == 2:
 				max_size = string_to_float(get_setting('results.size.manual', '10000'), '10000') / 1000
-			if self.include_unknown_size: results = [i for i in results if i['scrape_provider'] == 'folders' or i['size'] <= max_size]
-			else: results = [i for i in results if i['scrape_provider'] == 'folders' or 0.01 < i['size'] <= max_size]
+			results = [i for i in results if i['scrape_provider'] == 'folders' or min_size <= i['size'] <= max_size]
 		results += folder_results
 		return results
 
@@ -270,12 +267,11 @@ class Sources():
 					current_progress = max((time.time() - start_time), 0)
 					line1 = ', '.join(remaining_providers).upper()
 					percent = int((current_progress/float(scraper_timeout))*100)
-					self.progress_dialog.update_results_count(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total,
-																line1, percent)
+					self.progress_dialog.update_scraper(self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total, line1, percent)
 					sleep(self.sleep_time)
 					if len(remaining_providers) == 0: break
 					if percent >= 100: break
-				except: pass
+				except: self._kill_progress_dialog()
 		if self.prescrape: scraper_list, _threads = self.prescrape_scrapers, self.prescrape_threads
 		else: scraper_list, _threads = self.providers, self.threads
 		self.internal_scrapers = self._get_active_scraper_names(scraper_list)
@@ -302,7 +298,7 @@ class Sources():
 		if self.orig_results and not self.background:
 			if self.display_uncached_torrents and not self.autoplay: return self.play_source(self.uncached_torrents)
 			if self.ignore_results_filter == 0: return self._no_results()
-			if self.ignore_results_filter == 1 or confirm_progress_media(meta=self.meta, text=32021, enable_buttons=True): return self._process_ignore_filters()
+			if self.ignore_results_filter == 1 or confirm_dialog(heading=self.meta.get('rootname', ''), text=32021): return self._process_ignore_filters()
 		return self._no_results()
 
 	def _process_ignore_filters(self):
@@ -371,11 +367,15 @@ class Sources():
 
 	def get_season(self):
 		season = self.meta.get('custom_season', None) or self.meta.get('season')
-		return int(season) if season else None
+		try: season = int(season)
+		except: season = None
+		return season
 
 	def get_episode(self):
 		episode = self.meta.get('custom_episode', None) or self.meta.get('episode')
-		return int(episode) if episode else None
+		try: episode = int(episode)
+		except: episode = None
+		return episode
 
 	def get_ep_name(self):
 		ep_name = None
@@ -477,13 +477,18 @@ class Sources():
 			for item in self.folder_info: clear_property(int_window_prop % item[0])
 
 	def _make_progress_dialog(self):
-		self.progress_dialog = confirm_progress_media(meta=self.meta, enable_fullscreen=True, flags_direction=self.progress_flags_direction)
-		self.progress_dialog.update_results_count(0, 0, 0, 0, 0, '', 0)
+		self.progress_dialog = create_window(('windows.sources_playback', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
+		Thread(target=self.progress_dialog.run).start()
 
 	def _make_resolve_dialog(self):
 		self.resolve_dialog_made = True
 		if not self.progress_dialog: self._make_progress_dialog()
 		self.progress_dialog.enable_resolver()
+
+	def _make_resume_dialog(self, percent):
+		if not self.progress_dialog: self._make_progress_dialog()
+		self.progress_dialog.enable_resume(text=ls(32790) % percent)
+		return self.progress_dialog.resume_choice
 
 	def _make_nextep_dialog(self, default_action='cancel', play_type='autoplay_nextep', focus_button=10):
 		try: action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml',
@@ -498,9 +503,6 @@ class Sources():
 		except: pass
 		self.progress_dialog = None
 
-	def _reset_quality_count(self):
-		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
-
 	def furkPacks(self, name, file_id, download=False):
 		from apis.furk_api import FurkAPI
 		show_busy_dialog()
@@ -509,19 +511,19 @@ class Sources():
 		t_files.sort(key=lambda k: k['name'].lower())
 		hide_busy_dialog()
 		if download: return t_files
-		default_furk_icon = get_icon('furk')
-		list_items = [{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['name']).upper()), 'icon': default_furk_icon} for item in t_files]
-		kwargs = {'items': json.dumps(list_items), 'heading': name, 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'false'}
+		list_items = [{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['name']).upper())} for item in t_files]
+		kwargs = {'items': json.dumps(list_items), 'heading': name, 'enumerate': 'true', 'narrow_window': 'true'}
 		chosen_result = select_dialog(t_files, **kwargs)
 		if chosen_result is None: return None
 		link = chosen_result['url_dl']
 		name = chosen_result['name']
+		self._kill_progress_dialog()
 		return FenPlayer().run(link, 'video')
 
 	def debridPacks(self, debrid_provider, name, magnet_url, info_hash, download=False):
 		show_busy_dialog()
-		debrid_info = {'Real-Debrid': ('rd_browse', 'realdebrid'), 'Premiumize.me': ('pm_browse', 'premiumize'), 'AllDebrid': ('ad_browse', 'alldebrid')}[debrid_provider]
-		debrid_function = self.debrid_importer(debrid_info[0])
+		debrid_info = {'Real-Debrid': 'rd_browse', 'Premiumize.me': 'pm_browse', 'AllDebrid': 'ad_browse'}[debrid_provider]
+		debrid_function = self.debrid_importer(debrid_info)
 		try: debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
 		except: debrid_files = None
 		debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
@@ -529,108 +531,112 @@ class Sources():
 		if not debrid_files: return notification(32574)
 		debrid_files.sort(key=lambda k: k['filename'].lower())
 		if download: return debrid_files, debrid_function
-		icon = get_icon(debrid_info[1])
-		list_items = [{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['filename']).upper()), 'icon': icon} for item in debrid_files]
-		kwargs = {'items': json.dumps(list_items), 'heading': name, 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'false'}
+		list_items = [{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['filename']).upper())} for item in debrid_files]
+		kwargs = {'items': json.dumps(list_items), 'heading': name, 'enumerate': 'true', 'narrow_window': 'true'}
 		chosen_result = select_dialog(debrid_files, **kwargs)
 		if chosen_result is None: return None
-		link = self.resolve_internal_sources(debrid_info[0], chosen_result['link'], '')
+		link = self.resolve_internal_sources(debrid_info, chosen_result['link'], '')
 		name = chosen_result['filename']
+		self._kill_progress_dialog()
 		return FenPlayer().run(link, 'video')
 
 	def play_file(self, results, source={}):
 		hide_busy_dialog()
+		url, playback_successful = None, None
 		try:
-			if self.autoplay: items = [i for i in results if not 'Uncached' in i.get('cache_provider', '')]
-			elif source:
-				items = [source]
-				if not self.limit_resolve: 
-					results = [i for i in results if not 'Uncached' in i.get('cache_provider', '') or i == source]
-					source_index = results.index(source)
-					leading_index = max(source_index-3, 0)
-					items_prev = results[leading_index:source_index]
-					trailing_index = 7 - len(items_prev)
-					items_next = results[source_index+1:source_index+trailing_index]
-					items = items + items_next + items_prev
-			else: items = results
-			first_item = items[0]
-			if 'Uncached' in first_item.get('cache_provider', ''):
-				self._kill_progress_dialog()
-				return self.resolve_uncached_torrents(first_item['debrid'], first_item['url'], 'package' in first_item)
+			results = [i for i in results if not 'Uncached' in i.get('cache_provider', '')]
+			if not source: source = results[0]
+			items = [source]
+			if not self.limit_resolve: 
+				source_index = results.index(source)
+				results.remove(source)
+				leading_index = max(source_index-3, 0)
+				items_prev = results[leading_index:source_index]
+				trailing_index = 7 - len(items_prev)
+				items_next = results[source_index+1:source_index+trailing_index]
+				items = items + items_next + items_prev
+			processed_items = []
+			processed_items_append = processed_items.append
+			for count, item in enumerate(items, 1):
+				resolve_item = dict(item)
+				provider = item['scrape_provider']
+				if provider == 'external': provider = item['debrid'].replace('.me', '')
+				elif provider == 'folders': provider = item['source']
+				provider_text = provider.upper()
+				display_name = item['display_name'].upper()
+				resolve_item['resolve_display'] = ('%02d. [B]%s[/B]'% (count, provider_text), display_name)
+				processed_items_append(resolve_item)
+				if provider == 'easynews' and self.monitor_playback and self.easynews_max_retries:
+					for retry in range(1, self.easynews_max_retries + 1):
+						resolve_item = dict(item)
+						resolve_item['resolve_display'] = ('%02d. [B]%s (RETRYx%s)[/B]' % (count, provider_text, retry), display_name)
+						processed_items_append(resolve_item)
+			items = list(processed_items)
 			if not self.continue_resolve_check(): return self._kill_progress_dialog()
-			if not self.resolve_dialog_made: self._make_resolve_dialog()
 			hide_busy_dialog()
+			self.playback_percent = self.get_playback_percent()
+			if not self.resolve_dialog_made: self._make_resolve_dialog()
 			if self.background: sleep(1000)
 			monitor = kodi_utils.monitor
 			url = None
 			for count, item in enumerate(items, 1):
-				hide_busy_dialog()
-				if count > 1:
-					del player
-					sleep(self.playback_attempt_pause)
-				player = FenPlayer()
-				easynews_retries, url, playback_successful = 0, None, None
-				if not self.progress_dialog: break
-				self.progress_dialog.reset_is_cancelled()
-				self.playing_filename = item['name']
-				provider = item['scrape_provider']
-				try:
-					if provider == 'external': provider = item['debrid'].replace('.me', '').upper()
-					elif provider == 'folders': provider = item['source'].upper()
-					else: provider = provider.upper()
-					text = ('%02d. [B]%s[/B]'% (count, provider), item['display_name'].upper())
-					if self.progress_dialog.iscanceled() or monitor.abortRequested(): break
-					try: self.progress_dialog.update_resolver(text)
-					except: pass
-					url = self.resolve_sources(item)
-					if url:
-						if not self.monitor_playback:
-							self._kill_progress_dialog()
-							return player.run(url, self)
-						player.run(url, self)
-						while playback_successful is None:
-							if self.progress_dialog.iscanceled() or monitor.abortRequested():
-								return self.playback_failed_action()
-							playback_successful = player.playback_successful
-							sleep(100)
-				except: pass
-				if playback_successful: break
-				if provider == 'EASYNEWS':
-					while easynews_retries < self.easynews_max_retries:
-						del player
+					hide_busy_dialog()
+					if not self.progress_dialog: break
+					self.progress_dialog.reset_is_cancelled()
+					self.progress_dialog.update_resolver(text=item['resolve_display'])
+					self.progress_dialog.busy_spinner()
+					if count > 1:
 						sleep(self.playback_attempt_pause)
-						try:
-							self.progress_dialog.reset_is_cancelled()
-							text = ('%02d. [B]%s (RETRYx%s)[/B]' % (count, provider, easynews_retries + 1), item['display_name'].upper())
-							try: self.progress_dialog.update_resolver(text)
-							except: pass
-							url = self.resolve_sources(item)
-							if url:
-								playback_successful = None
-								player = FenPlayer()
-								player.run(url, self)
-								while playback_successful is None:
-									if self.progress_dialog.iscanceled() or monitor.abortRequested():
-										return self.playback_failed_action()
-									playback_successful = player.playback_successful
-									sleep(100)
-							if playback_successful: break
+						try: del player
 						except: pass
-						easynews_retries +=1
-				if count == len(items):
-					player.stop()
-					break
+					player = FenPlayer()
+					url, playback_successful = None, None
+					self.playing_filename = item['name']
+					try:
+						if self.progress_dialog.iscanceled() or monitor.abortRequested(): break
+						url = self.resolve_sources(item)
+						if url:
+							if not self.monitor_playback:
+								self._kill_progress_dialog()
+								sleep(100)
+								close_all_dialog()
+								return player.run(url, self)
+							resolve_percent = 0
+							self.progress_dialog.busy_spinner('false')
+							self.progress_dialog.update_resolver(percent=resolve_percent)
+							sleep(200)
+							player.run(url, self)
+							playback_successful = player.playback_successful
+							if player.cancel_all_playback: return self.playback_failed_action()
+					except: pass
+					if playback_successful: break
+					if count == len(items):
+						player.stop()
+						break
 		except: self._kill_progress_dialog()
 		if not playback_successful or not url: self.playback_failed_action()
 		try: del monitor
 		except: pass
+
+	def get_playback_percent(self):
+		if self.media_type == 'episode' and any((self.random, self.random_continual)): return 0
+		percent = get_progress_percent(get_bookmarks(settings.watched_indicators(), self.media_type), self.tmdb_id, self.season, self.episode)
+		if percent:
+			percent = self.get_resume_status(percent)
+			if percent == 0: erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
+		else: percent = 0
+		return percent
+
+	def get_resume_status(self, percent):
+		if settings.auto_resume(self.media_type): return float(percent)
+		confirm = self._make_resume_dialog(percent)
+		return float(percent) if confirm == True else 0
 
 	def playback_failed_action(self):
 		self._kill_progress_dialog()
 		if self.prescrape and self.autoplay:
 			self.resolve_dialog_made, self.prescrape, self.prescrape_sources = False, False, []
 			self.get_sources()
-		else: notification(32121, 3500)
 
 	def continue_resolve_check(self):
 		try:
@@ -690,8 +696,12 @@ class Sources():
 				self.display_results(results)
 		else: return
 
+	def debrid_importer(self, debrid_provider):
+		return manual_function_import(*debrids[debrid_provider])
+
 	def resolve_sources(self, item, meta=None):
 		if meta: self.meta = meta
+		url = None
 		try:
 			if 'cache_provider' in item:
 				cache_provider = item['cache_provider']
@@ -700,23 +710,13 @@ class Sources():
 						title, season, episode, pack = self.search_info['title'], self.search_info['season'], self.search_info['episode'], 'package' in item
 					else: title, season, episode, pack = self.get_ep_name(), self.get_season(), self.get_episode(), 'package' in item
 				else: title, season, episode, pack = self.get_search_title(), None, None, False
-				if cache_provider in debrid_providers:
-					url = self.resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode, pack)
-					return url
-			if item.get('scrape_provider', None) in default_internal_scrapers:
+				if cache_provider in debrid_providers: url = self.resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode, pack)
+			elif item.get('scrape_provider', None) in default_internal_scrapers:
 				url = self.resolve_internal_sources(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False))
-				return url
-			if item.get('debrid') in debrid_providers and not item['source'].lower() == 'torrent':
-				url = self.resolve_debrid(item['debrid'], item['provider'], item['url'])
-				if url is not None: return url
-				else: return None
-			else:
-				url = item['url']
-				return url
-		except: return
-
-	def debrid_importer(self, debrid_provider):
-		return manual_function_import(*debrids[debrid_provider])
+			elif item.get('debrid') in debrid_providers and not item['source'].lower() == 'torrent': url = self.resolve_debrid(item['debrid'], item['provider'], item['url'])
+			else: url = item['url']
+		except: pass
+		return url
 
 	def resolve_cached_torrents(self, debrid_provider, item_url, _hash, title, season, episode, pack):
 		url = None
@@ -742,14 +742,13 @@ class Sources():
 	def resolve_internal_sources(self, scrape_provider, item_id, url_dl, direct_debrid_link=False):
 		url = None
 		try:
-			if direct_debrid_link: return url_dl
-			if scrape_provider == 'furk':
+			if direct_debrid_link or scrape_provider == 'folders': url = url_dl
+			elif scrape_provider == 'furk':
 				from indexers.furk import resolve_furk
 				url = resolve_furk(item_id, self.meta['media_type'], self.meta['season'], self.meta['episode'])
 			elif scrape_provider == 'easynews':
 				from indexers.easynews import resolve_easynews
 				url = resolve_easynews({'url_dl': url_dl, 'play': 'false'})
-			elif scrape_provider == 'folders': url = url_dl
 			else:
 				debrid_function = self.debrid_importer(scrape_provider)
 				if any(i in scrape_provider for i in ('rd_', 'ad_')):

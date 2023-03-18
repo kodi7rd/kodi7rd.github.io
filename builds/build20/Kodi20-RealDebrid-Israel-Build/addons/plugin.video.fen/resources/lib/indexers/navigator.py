@@ -6,19 +6,19 @@ from modules.watched_status import get_recently_watched
 # logger = k.logger
 
 tp, ls, sys, build_url, notification, addon, make_listitem, list_dirs = k.translate_path, k.local_string, k.sys, k.build_url, k.notification, k.addon, k.make_listitem, k.list_dirs
-add_item, set_content, end_directory_function, set_view_mode, add_items, get_setting = k.add_item, k.set_content, k.end_directory, k.set_view_mode, k.add_items, k.get_setting
+add_item, set_content, end_directory, set_view_mode, add_items, get_setting = k.add_item, k.set_content, k.end_directory, k.set_view_mode, k.add_items, k.get_setting
 json, external_browse, close_all_dialog, sleep, execute_builtin, external_browse = k.json, k.external_browse, k.close_all_dialog, k.sleep, k.execute_builtin, k.external_browse
 download_directory, furk_active, easynews_active, source_folders_directory, get_icon = s.download_directory, s.furk_active, s.easynews_active, s.source_folders_directory, k.get_icon
 get_shortcut_folders, currently_used_list, get_shortcut_folder_contents, fanart = nc.get_shortcut_folders, nc.currently_used_list, nc.get_shortcut_folder_contents, k.addon_fanart
-set_sort_method, kodi_version = k.set_sort_method, k.kodi_version
+set_sort_method, kodi_version, set_category = k.set_sort_method, k.kodi_version, k.set_category
 vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092)
-tools_str, manager_str, changelog_str, ext_str, short_str, source_str, cl_dbs_str, langinv_str = ls(32456), ls(32513), ls(32508), ls(32118), ls(32514), ls(32515), ls(32512), ls(33017)
+tools_str, changelog_str, ext_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str = ls(32456), ls(32508), ls(32118), ls(32515), ls(32512), ls(33017), ls(32514)
 user_str, ml_str, ll_str, rec_str, cal_str, lv_str, lu_str, k_str, genre_select_str = ls(32065), ls(32454), ls(32502), ls(32503), ls(32081), ls(32509), ls(32853), ls(32538), ls(32847)
 recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, multi_str, coco_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32789), ls(32522)
 log_utils_str, tips_use_str, views_str, updates_str, fen_str, all_str, cache_str, clean_str = ls(32777), ls(32518), ls(32510), ls(32196), ls(32036), ls(32129), ls(32524), ls(32526)
 discover_str, history_str, help_str, furk_str, easy_str, rd_str, pm_str, ad_str = ls(32451), ls(32486), ls(32487), ls(32069), ls(32070), ls(32054), ls(32061), ls(32063)
 cloud_str, clca_str, trakt_str, imdb_str, coll_str, wlist_str, ls_str, fav_str = ls(32496), ls(32497), ls(32037), ls(32064), ls(32499), ls(32500), ls(32501), ls(32453)
-root_str, season_str, images_str, make_short_str, delete_str, mcol_str, brow_str, res_hc = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(32652), ls(33107)
+root_str, season_str, images_str, make_short_str, delete_str, mcol_str, res_hc = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(33107)
 _in_str, mov_str, tv_str, edit_str, add_menu_str, s_folder_str, mset_str, local_str = ls(32484), ls(32028), ls(32029), ls(32705), ls(32730), ls(32731), ls(33080), ls(33104)
 new_str, spot_str, tips_str = ls(32857).upper(), ls(32858).upper(), ls(32546).upper()
 clean_set_cache_str, search_str = '[B]%s:[/B] %s %s %s' % (settings_str.upper(), clean_str, settings_str, cache_str), '%s %s' % (se_str, history_str)
@@ -30,7 +30,7 @@ movh_str, tvh_str, tips_ins = '%s %s' % (mov_str, history_str), '%s %s' % (tv_st
 corrupt_databases_str, clean_databases_str, clean_all_str = ls(32179), '%s %s' % (clean_str, ls(32003)), '[B]%s:[/B] %s %s' % (settings_str.upper(), clean_str, settings_str)
 kw_mov, kw_tv = '%s %s (%s)' % (imdb_str, keywords_str, mov_str), '%s %s (%s)' % (imdb_str, keywords_str, tv_str)
 clear_imdb_str, clint_str, clext_str, clear_rd_str, clear_pm_str = clca_str % imdb_str, clca_str % ls(32096), clca_str % ext_str, clca_str % rd_str, clca_str % pm_str
-mrec_str, mran_str, shortcut_manager_str = '%s %s' % (recent_added_str, mov_str), '%s %s' % (random_str, mov_str), '%s %s' % (short_str, manager_str)
+mrec_str, mran_str,  = '%s %s' % (recent_added_str, mov_str), '%s %s' % (random_str, mov_str)
 tvrec_str, tvran_str, ra_str = '%s %s' % (recent_added_str, tv_str), '%s %s' % (random_str, tv_str), '%s %s' % (recently_aired_str, episodes_str)
 tu_str, pu_str, sea_str = '%s %s %s' % (ls(32458), user_str, ls_str), '%s %s %s' % (ls(32459), user_str, ls_str), '%s %s' % (ls(32477), ls_str)
 klv_h_str, klu_h_str = '[B]%s[/B]: %s %s' % (log_utils_str.upper(), k_str, lv_str), '[B]%s[/B]: %s' % (log_utils_str.upper(), lu_str)
@@ -55,18 +55,19 @@ class Navigator:
 	def __init__(self, params):
 		self.params = params
 		self.params_get = self.params.get
+		self.category_name = ls(self.params_get('name', 32036))
 		self.list_name = self.params_get('action', 'RootList')
+		self.handle = int(sys.argv[1])
 
 	def main(self):
-		handle = int(sys.argv[1])
-		add_items(handle, list(self.build_main_list(currently_used_list(self.list_name))))
-		self.end_directory(handle)
+		add_items(self.handle, list(self.build_main_list(currently_used_list(self.list_name))))
+		self.end_directory()
 
 	def discover_main(self):
-		self.add({'mode': 'discover.movie', 'media_type': 'movie'}, discover_main_ins % mov_str, 'discover')
-		self.add({'mode': 'discover.tvshow', 'media_type': 'tvshow'}, discover_main_ins % tv_str, 'discover')
-		self.add({'mode': 'discover.history', 'media_type': 'movie'}, discover_main_ins % movh_str, 'discover')
-		self.add({'mode': 'discover.history', 'media_type': 'tvshow'}, discover_main_ins % tvh_str, 'discover')
+		self.add({'mode': 'discover.movie', 'media_type': 'movie', 'name': mov_str}, discover_main_ins % mov_str, 'discover')
+		self.add({'mode': 'discover.tvshow', 'media_type': 'tvshow', 'name': tv_str}, discover_main_ins % tv_str, 'discover')
+		self.add({'mode': 'discover.history', 'media_type': 'movie', 'name': movh_str}, discover_main_ins % movh_str, 'discover')
+		self.add({'mode': 'discover.history', 'media_type': 'tvshow', 'name': tvh_str}, discover_main_ins % tvh_str, 'discover')
 		self.add({'mode': 'discover.help', 'isFolder': 'false'}, discover_main_ins % help_str, 'information')
 		self.end_directory()
 
@@ -109,8 +110,8 @@ class Navigator:
 		self.end_directory()
 
 	def favorites(self):
-		self.add({'mode': 'build_movie_list', 'action': 'favorites_movies'}, favorites_ins % mov_str, 'movies')
-		self.add({'mode': 'build_tvshow_list', 'action': 'favorites_tvshows'}, favorites_ins % tv_str, 'tv')
+		self.add({'mode': 'build_movie_list', 'action': 'favorites_movies', 'name': mov_str}, favorites_ins % mov_str, 'movies')
+		self.add({'mode': 'build_tvshow_list', 'action': 'favorites_tvshows', 'name': tv_str}, favorites_ins % tv_str, 'tv')
 		self.end_directory()
 
 	def favourites(self):
@@ -171,18 +172,18 @@ class Navigator:
 		self.end_directory()
 
 	def search(self):
-		self.add({'mode': 'history.search', 'action': 'movie'}, _in_str % (se_str.upper(), mov_str), 'search_movie')
-		self.add({'mode': 'history.search', 'action': 'tvshow'}, _in_str % (se_str.upper(), tv_str), 'search_tv')
-		self.add({'mode': 'history.search', 'action': 'people'}, _in_str % (se_str.upper(), people_str), 'search_people')
-		self.add({'mode': 'history.search', 'action': 'tmdb_movie_sets'}, _in_str % (se_str.upper(), mset_str), 'search_tmdb')
-		self.add({'mode': 'history.search', 'action': 'imdb_keyword_movie'}, _in_str % (se_str.upper(), kw_mov), 'search_imdb')
-		self.add({'mode': 'history.search', 'action': 'imdb_keyword_tvshow'}, _in_str % (se_str.upper(), kw_tv), 'search_imdb')
+		self.add({'mode': 'history.search', 'action': 'movie', 'name': mov_str}, _in_str % (se_str.upper(), mov_str), 'search_movie')
+		self.add({'mode': 'history.search', 'action': 'tvshow', 'name': tv_str}, _in_str % (se_str.upper(), tv_str), 'search_tv')
+		self.add({'mode': 'history.search', 'action': 'people', 'name': people_str}, _in_str % (se_str.upper(), people_str), 'search_people')
+		self.add({'mode': 'history.search', 'action': 'tmdb_movie_sets', 'name': mset_str}, _in_str % (se_str.upper(), mset_str), 'search_tmdb')
+		self.add({'mode': 'history.search', 'action': 'imdb_keyword_movie', 'name': kw_mov}, _in_str % (se_str.upper(), kw_mov), 'search_imdb')
+		self.add({'mode': 'history.search', 'action': 'imdb_keyword_tvshow', 'name': kw_tv}, _in_str % (se_str.upper(), kw_tv), 'search_imdb')
 		self.end_directory()
 
 	def downloads(self):
-		self.add({'mode': 'download_manager', 'folder_type': 'movie'}, downloads_ins % mov_str, 'movies')
-		self.add({'mode': 'download_manager', 'folder_type': 'episode'}, downloads_ins % tv_str, 'tv')
-		self.add({'mode': 'download_manager', 'folder_type': 'premium'}, downloads_ins % premium_files_str, 'premium')
+		self.add({'mode': 'download_manager', 'folder_type': 'movie', 'name': mov_str}, downloads_ins % mov_str, 'movies')
+		self.add({'mode': 'download_manager', 'folder_type': 'episode', 'name': tv_str}, downloads_ins % tv_str, 'tv')
+		self.add({'mode': 'download_manager', 'folder_type': 'premium', 'name': premium_files_str}, downloads_ins % premium_files_str, 'premium')
 		self.add({'mode': 'browser_image', 'folder_path': download_directory('image'), 'isFolder': 'false'}, downloads_ins % images_str, 'people')
 		self.end_directory()
 
@@ -244,29 +245,29 @@ class Navigator:
 	def certifications(self):
 		if self.params_get('menu_type') == 'movie': mode, action, certifications = 'build_movie_list', 'tmdb_movies_certifications', ml.movie_certifications
 		else: mode, action, certifications = 'build_tvshow_list', 'trakt_tv_certifications', ml.tvshow_certifications
-		for cert in certifications: self.add({'mode': mode, 'action': action, 'certification': cert}, cert.upper(), 'certifications')
+		for cert in certifications: self.add({'mode': mode, 'action': action, 'certification': cert, 'name': cert.upper()}, cert.upper(), 'certifications')
 		self.end_directory()
 
 	def languages(self):
 		mode, action = ('build_movie_list', 'tmdb_movies_languages') if self.params_get('menu_type') == 'movie' else ('build_tvshow_list', 'tmdb_tv_languages')
-		for lang in ml.languages: self.add({'mode': mode, 'action': action, 'language': lang[1]}, lang[0], 'languages')
+		for lang in ml.languages: self.add({'mode': mode, 'action': action, 'language': lang[1], 'name': lang[0]}, lang[0], 'languages')
 		self.end_directory()
 
 	def years(self):
 		if self.params_get('menu_type') == 'movie': mode, action, years = 'build_movie_list', 'tmdb_movies_year', ml.years_movies
 		else: mode, action, years = 'build_tvshow_list', 'tmdb_tv_year', ml.years_tvshows
-		for i in years: self.add({'mode': mode, 'action': action, 'year': str(i)}, str(i), 'calender')
+		for i in years: self.add({'mode': mode, 'action': action, 'year': str(i), 'name': '%s.' % str(i)}, str(i), 'calender')
 		self.end_directory()
 
 	def decades(self):
 		if self.params_get('menu_type') == 'movie': mode, action, decades = 'build_movie_list', 'tmdb_movies_decade', ml.decades_movies
 		else: mode, action, decades = 'build_tvshow_list', 'tmdb_tv_decade', ml.decades_tvshows
-		for i in decades: self.add({'mode': mode, 'action': action, 'decade': str(i)}, '%ss' % str(i), 'calendar_decades')
+		for i in decades: self.add({'mode': mode, 'action': action, 'decade': str(i), 'name': '%ss' % str(i)}, '%ss' % str(i), 'calendar_decades')
 		self.end_directory()
 
 	def networks(self):
 		for item in sorted(ml.networks, key=lambda k: k['name']):
-			self.add({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_networks', 'network_id': item['id']}, item['name'], item['logo'])
+			self.add({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_networks', 'network_id': item['id'], 'name': item['name']}, item['name'], item['logo'])
 		self.end_directory()
 
 	def genres(self):
@@ -274,7 +275,7 @@ class Navigator:
 		if menu_type == 'movie': genre_list, mode, action = ml.movie_genres, 'build_movie_list', 'tmdb_movies_genres'
 		else: genre_list, mode, action = ml.tvshow_genres, 'build_tvshow_list', 'tmdb_tv_genres'
 		self.add({'mode': 'navigator.multiselect_genres', 'genre_list': json.dumps(genre_list), 'menu_type': menu_type, 'isFolder': 'false'}, multi_str, 'genres', False)
-		for genre, value in sorted(genre_list.items()): self.add({'mode': mode, 'action': action, 'genre_id': value[0]}, genre, value[1])
+		for genre, value in sorted(genre_list.items()): self.add({'mode': mode, 'action': action, 'genre_id': value[0], 'name': genre}, genre, value[1])
 		self.end_directory()
 
 	def multiselect_genres(self):
@@ -287,7 +288,7 @@ class Navigator:
 		function_list_append = function_list.append
 		genre_list = json.loads(genre_list)
 		list_items = list(_builder())
-		kwargs = {'items': json.dumps(list_items), 'heading': genre_select_str, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
+		kwargs = {'items': json.dumps(list_items), 'heading': genre_select_str, 'multi_choice': 'true'}
 		genre_ids = k.select_dialog(function_list, **kwargs)
 		if genre_ids == None: return
 		genre_id = ','.join(genre_ids)
@@ -332,17 +333,15 @@ class Navigator:
 										'service': 'FOLDERS', 'id': link_id}))
 					yield (url, listitem, info[1])
 				except: pass
-		handle = int(sys.argv[1])
 		folder_path, setting_id = self.params_get('folder_path'), self.params_get('setting_id')
 		assigned_content = gather_assigned_content("'FEN_FOLDERS_%s" % setting_id + "_%'")
 		icon = get_icon('folder')
 		dirs, files = list_dirs(folder_path)
 		results = [(i, True) for i in dirs] + [(i, False) for i in files]
 		item_list = list(_process())
-		add_items(handle, item_list)
-		set_sort_method(handle, 'files')
-		set_content(handle, '')
-		end_directory_function(handle)
+		add_items(self.handle, item_list)
+		set_sort_method(self.handle, 'files')
+		self.end_directory()
 		if not external_browse(): set_view_mode('view.main', '')
 	
 	def sources_folders(self):
@@ -368,9 +367,8 @@ class Navigator:
 					else: listitem.setInfo('video', {'plot': ' '})
 					yield (url, listitem, False)
 		icon = get_icon('folder')
-		handle = int(sys.argv[1])
-		add_items(handle, list(_builder()))
-		self.end_directory(handle)
+		add_items(self.handle, list(_builder()))
+		self.end_directory()
 
 	def shortcut_folders(self):
 		def _make_new_item():
@@ -384,7 +382,7 @@ class Navigator:
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
 			else: listitem.setInfo('video', {'plot': ' '})
-			add_item(handle, url, listitem, False)
+			add_item(self.handle, url, listitem, False)
 		def _builder():
 			icon = get_icon('folder')
 			for i in folders:
@@ -396,7 +394,7 @@ class Navigator:
 									'external_list_item': 'True'})
 					cm.append((delete_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_delete'})))
 					listitem.addContextMenuItems(cm)
-					listitem.setLabel('[B]%s : [/B] %s ' % (short_str.upper(), name))
+					listitem.setLabel(name)
 					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': fen_clearlogo})
 					if kodi_version >= 20:
 						info_tag = listitem.getVideoInfoTag()
@@ -406,11 +404,10 @@ class Navigator:
 					listitem.setProperty('fen.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': icon}))
 					yield (url, listitem, True)
 				except: pass
-		handle = int(sys.argv[1])
 		_make_new_item()
 		folders = get_shortcut_folders()
-		if folders: add_items(handle, list(_builder()))
-		self.end_directory(handle)
+		if folders: add_items(self.handle, list(_builder()))
+		self.end_directory()
 
 	def tips(self):
 		tips_location = 'special://home/addons/plugin.video.fen/resources/text/tips'
@@ -466,11 +463,10 @@ class Navigator:
 					isFolder = item.get('isFolder', 'true') == 'true'
 					yield (build_url(item), listitem, isFolder)
 				except: pass
-		handle = int(sys.argv[1])
 		list_name = self.params_get('name')
 		contents = get_shortcut_folder_contents(list_name)
-		add_items(handle, list(_process()))
-		self.end_directory(handle)
+		add_items(self.handle, list(_process()))
+		self.end_directory()
 
 	def build_main_list(self, list_items):
 		for item_position, item in enumerate(list_items):
@@ -517,8 +513,8 @@ class Navigator:
 		isFolder = url_params.get('isFolder', 'true') == 'true'
 		add_item(int(sys.argv[1]), url, listitem, isFolder)
 
-	def end_directory(self, handle=None):
-		handle = handle or int(sys.argv[1])
-		set_content(handle, '')
-		end_directory_function(handle)
+	def end_directory(self):
+		set_content(self.handle, '')
+		set_category(self.handle, self.category_name)
+		end_directory(self.handle)
 		if not external_browse(): set_view_mode('view.main', '')

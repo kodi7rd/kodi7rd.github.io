@@ -6,14 +6,14 @@
             <width>1920</width>
             <height>1080</height>
             <control type="image">
-                <texture>common/black.png</texture>
+                <texture colordiffuse="FF000000">common/white.png</texture>
             </control>
             <control type="image">
                 <texture>$INFO[Window.Property(fanart)]</texture>
                 <animation effect="fade" start="80" end="20" time="1000" tween="sine">WindowOpen</animation>
             </control>
         </control>
-        <!-- Fen Logo and Clock & Date -->
+        <!-- Fen Logo and Tips/Clock & Date -->
         <control type="group">
             <animation effect="fade" start="0" end="100" delay="800" time="450">WindowOpen</animation>
             <control type="image">
@@ -24,30 +24,56 @@
                 <aspectratio aligny="top">keep</aspectratio>
                 <texture>common/fen.png</texture>
             </control>
-            <control type="label">
-                <top>20</top>
-                <left>1590</left>
-                <width max="300">auto</width>
-                <height>20</height>
-                <font>font_midi</font> <!-- FEN_38 -->
-                <textcolor>FFCCCCCC</textcolor>
-                <align>right</align>
-                <aligny>center</aligny>
-                <label>[B]$INFO[System.Time][/B]</label>
+            <control type="group">
+                <visible>!Control.HasFocus(2050) + !Control.HasFocus(2051) + !Control.HasFocus(2054)</visible>
+                <control type="label">
+                    <top>20</top>
+                    <left>1590</left>
+                    <width max="300">auto</width>
+                    <height>20</height>
+                    <font>font37</font> <!-- FEN_38 -->
+                    <textcolor>FFCCCCCC</textcolor>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>[B]$INFO[System.Time][/B]</label>
+                </control>
+                <control type="label">
+                    <top>50</top>
+                    <left>1540</left>
+                    <width max="350">auto</width>
+                    <height>20</height>
+                    <font>font10</font> <!-- FEN_21 -->
+                    <textcolor>FFCCCCCC</textcolor>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[System.Date]</label>
+                </control>
             </control>
-            <control type="label">
-                <top>50</top>
-                <left>1540</left>
-                <width max="350">auto</width>
-                <height>20</height>
-                <font>font_tiny</font> <!-- FEN_21 -->
-                <textcolor>FFCCCCCC</textcolor>
-                <align>right</align>
-                <aligny>center</aligny>
-                <label>$INFO[System.Date]</label>
+            <control type="group">
+                <visible>Control.HasFocus(2050) | Control.HasFocus(2051) | Control.HasFocus(2054)</visible>
+                <left>1335</left>
+                <top>25</top>
+                <control type="image">
+                    <top>0</top>
+                    <left>510</left>
+                    <width>35</width>
+                    <height>35</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>common/info.png</texture>
+                </control>
+                <control type="label">
+                    <width max="500">auto</width>
+                    <height>20</height>
+                    <font>font12</font> <!-- FEN_26 -->
+                    <textcolor>FFCCCCCC</textcolor>
+                    <align>right</align>
+                    <aligny>top</aligny>
+                    <label>[I]$ADDON[plugin.video.fen 33129][/I]</label>
+                    <visible>Control.HasFocus(2050) | Control.HasFocus(2051) | Control.HasFocus(2054)</visible>
+                </control>
             </control>
         </control>
-        <!-- Top Heading & Right Poster -->
+        <!-- Top Heading & Poster -->
         <control type="group">
             <control type="label">
                 <animation type="WindowOpen" reversible="false">
@@ -58,7 +84,7 @@
                 <left>55</left>
                 <width max="1150">auto</width>
                 <height>30</height>
-                <font>font_huge_bold</font> <!-- FEN_60_BOLD -->
+                <font>font60</font> <!-- FEN_60_BOLD -->
                 <textcolor>FFCCCCCC</textcolor>
                 <align>center</align>
                 <aligny>bottom</aligny>
@@ -74,7 +100,7 @@
                 <width>650</width>
                 <height>1000</height>
                 <aspectratio aligny="top">stretch</aspectratio>
-                <texture background="true">$INFO[Window.Property(image)]</texture>
+                <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[Window.Property(image)]</texture>
             </control>
         </control>
         <!-- Top 3 Lines Info -->
@@ -86,59 +112,32 @@
             <animation effect="fade" start="100" end="0" time="200" tween="sine" condition="!Control.HasFocus(10) + !Control.HasFocus(11)">conditional</animation>
             <top>260</top>
             <left>50</left>
+            <!-- Line 1 -->
             <control type="label">
                 <width max="1150">auto</width>
                 <height>25</height>
-                <font>font_midi</font> <!-- FEN_33 -->
+                <font>font14</font> <!-- FEN_33 -->
                 <textcolor>FFB7B4BB</textcolor>
                 <align>center</align>
                 <label>[I]$INFO[Window.Property(place_of_birth)][/I]</label>
             </control>
-            <control type="grouplist">
+            <!-- Line 2 -->
+            <control type="label" id="2001">
                 <top>70</top>
-                <itemgap>0</itemgap>
-                <align>center</align>
-                <orientation>horizontal</orientation>
                 <width max="1150">auto</width>
-                <control type="label">
-                    <width min="29" max="575">auto</width>
-                    <height>25</height>
-                    <font>font_midi</font> <!-- FEN_33 -->
-                    <textcolor>FFF1F1F1</textcolor>
-                    <label>[I]$INFO[Window.Property(gender),[B]$ADDON[plugin.video.fen 32845]: [/B]][/I]</label>
-                    <visible>!String.IsEmpty(Window.Property(gender))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="575">auto</width>
-                    <height>25</height>
-                    <font>font_midi</font> <!-- FEN_33 -->
-                    <textcolor>FFF1F1F1</textcolor>
-                    <label>[I]$INFO[Window.Property(age),  •  [B]$ADDON[plugin.video.fen 32827]: [/B]][/I]</label>
-                    <visible>!String.IsEmpty(Window.Property(age))</visible>
-                </control>
+                <height>25</height>
+                <font>font14</font> <!-- FEN_33 -->
+                <textcolor>FFCCCCCC</textcolor>
+                <align>center</align>
             </control>
-            <control type="grouplist">
+            <!-- Line 3 -->
+            <control type="label" id="3001">
                 <top>130</top>
-                <itemgap>0</itemgap>
-                <align>center</align>
-                <orientation>horizontal</orientation>
                 <width max="1150">auto</width>
-                <control type="label">
-                    <width min="29" max="575">auto</width>
-                    <height>25</height>
-                    <font>font_midi</font> <!-- FEN_33 -->
-                    <textcolor>FFF1F1F1</textcolor>
-                    <label>[I]$INFO[Window.Property(birthday),[B]$ADDON[plugin.video.fen 32825]:[/B] ][/I]</label>
-                    <visible>!String.IsEmpty(Window.Property(birthday))</visible>
-                </control>
-                <control type="label">
-                    <width min="29" max="575">auto</width>
-                    <height>25</height>
-                    <font>font_midi</font> <!-- FEN_33 -->
-                    <textcolor>FFF1F1F1</textcolor>
-                    <label>[I]$INFO[Window.Property(deathday),  •  [B]$ADDON[plugin.video.fen 32826]:[/B] ][/I]</label>
-                    <visible>!String.IsEmpty(Window.Property(deathday))</visible>
-                </control>
+                <height>25</height>
+                <font>font14</font> <!-- FEN_33 -->
+                <textcolor>FFCCCCCC</textcolor>
+                <align>center</align>
             </control>
         </control>
         <!-- Body -->
@@ -163,8 +162,6 @@
                 <control type="group">
                     <control type="button" id="10">
                         <description>Images</description>
-                        <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="487,58">Focus</animation>
-                        <animation effect="zoom" start="102" end="100" time="100" tween="sine" easing="inout" center="487,58">Unfocus</animation>
                         <left>300</left>
                         <width>275</width>
                         <height>70</height>
@@ -173,18 +170,16 @@
                         <onup>2054</onup>
                         <ondown>50</ondown>
                         <label>$ADDON[plugin.video.fen 32798]</label>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
-                        <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
-                        <texturenofocus colordiffuse="FF302F2F">common/white.png</texturenofocus>
+                        <texturefocus colordiffuse="FFB7B4BB" border="30">common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF302F2F" border="30">common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                     <control type="button" id="11">
                         <description>Tagged Images</description>
                         <left>600</left>
-                        <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="787,58">Focus</animation>
-                        <animation effect="zoom" start="102" end="100" time="100" tween="sine" easing="inout" center="787,58">Unfocus</animation>
                         <width>275</width>
                         <height>70</height>
                         <onleft>10</onleft>
@@ -192,11 +187,11 @@
                         <onup>2054</onup>
                         <ondown>50</ondown>
                         <label>$ADDON[plugin.video.fen 33045] $ADDON[plugin.video.fen 32798]</label>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
-                        <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
-                        <texturenofocus colordiffuse="FF302F2F">common/white.png</texturenofocus>
+                        <texturefocus colordiffuse="FFB7B4BB" border="30">common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF302F2F" border="30">common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                 </control>
@@ -208,7 +203,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -220,8 +215,8 @@
                         <height>390</height>
                         <onup>10</onup>
                         <ondown>2050</ondown>
-                        <texturefocus colordiffuse="FFB7B4BB">common/white.png</texturefocus>
-                        <texturenofocus colordiffuse="FF302F2F">common/white.png</texturenofocus>
+                        <texturefocus colordiffuse="FFB7B4BB" border="30">common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF302F2F" border="30">common/circle.png</texturenofocus>
                     </control>
                     <control type="textbox">
                         <top>65</top>
@@ -259,7 +254,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32028][/B] $INFO[Window.Property(more_from_movie.number)]</label>
                         <visible>!Control.HasFocus(2050)</visible>
@@ -267,7 +262,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32028][/B]  |  [I]$INFO[Container(2050).ListItem.Property(name)] • $INFO[Container(2050).ListItem.Property(release_date)] • $INFO[Container(2050).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2050)</visible>
@@ -288,70 +283,31 @@
                         <itemlayout height="360" width="236">
                             <control type="image">
                                 <left>6</left>
-                                <top>320</top>
-                                <height>40</height>
-                                <width>224</width>
-                                <texture colordiffuse="FF302F2F">common/white.png</texture>
-                            </control>
-                            <control type="image">
-                                <left>6</left>
                                 <top>6</top>
-                                <height max="314">auto</height>
+                                <height max="348">auto</height>
                                 <width max="224">auto</width>
                                 <aspectratio>scale</aspectratio>
-                                <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                            </control>
-                            <control type="label">
-                                <left>6</left>
-                                <top>330</top>
-                                <width>226</width>
-                                <height>20</height>
-                                <font>font_tiny</font> <!-- FEN_21 -->
-                                <align>center</align>
-                                <aligny>center</aligny>
-                                <textcolor>FFB7B4BB</textcolor>
-                                <label>$INFO[ListItem.Property(name)]</label>
+                                <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="236">
                             <control type="group">
-                                <animation effect="zoom" start="100" end="102" time="150" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="102" end="100" time="150" tween="sine" easing="inout" center="auto">Unfocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4050)">Conditional</animation>
                                 <control type="image">
                                     <left>0</left>
                                     <top>0</top>
-                                    <height>320</height>
+                                    <height>360</height>
                                     <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
-                                    <visible>Control.HasFocus(2050) | Control.HasFocus(4050)</visible>
-                                </control>
-                                <control type="image">
-                                    <left>0</left>
-                                    <top>320</top>
-                                    <height>40</height>
-                                    <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
+                                    <texture colordiffuse="FFB7B4BB" border="12" background="true">common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2050) | Control.HasFocus(4050)</visible>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
                                     <top>6</top>
-                                    <height max="314">auto</height>
+                                    <height max="348">auto</height>
                                     <width max="224">auto</width>
                                     <aspectratio>scale</aspectratio>
-                                    <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                                <control type="label">
-                                    <left>6</left>
-                                    <top>330</top>
-                                    <width>226</width>
-                                    <height>20</height>
-                                    <font>font_tiny</font> <!-- FEN_21 -->
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(name)]</label>
+                                    <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
                             </control>
                         </focusedlayout>
@@ -376,7 +332,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2050) | Control.HasFocus(4050)] + Container(2050).HasPrevious</visible>
-                        <texture>common/arrow_left.png</texture>
+                        <texture background="true">common/arrow_left.png</texture>
                     </control>
                     <control type="image">
                         <top>200</top>
@@ -384,7 +340,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2050) | Control.HasFocus(4050)] + Container(2050).HasNext</visible>
-                        <texture>common/arrow_right.png</texture>
+                        <texture flipx="true" background="true">common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
@@ -396,7 +352,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32029][/B] $INFO[Window.Property(more_from_tvshow.number)]</label>
                         <visible>!Control.HasFocus(2051)</visible>
@@ -404,7 +360,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32029][/B]  |  [I]$INFO[Container(2051).ListItem.Property(name)] • $INFO[Container(2051).ListItem.Property(release_date)] • $INFO[Container(2051).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2051)</visible>
@@ -425,70 +381,31 @@
                         <itemlayout height="360" width="236">
                             <control type="image">
                                 <left>6</left>
-                                <top>320</top>
-                                <height>40</height>
-                                <width>224</width>
-                                <texture colordiffuse="FF302F2F">common/white.png</texture>
-                            </control>
-                            <control type="image">
-                                <left>6</left>
                                 <top>6</top>
-                                <height max="314">auto</height>
+                                <height max="348">auto</height>
                                 <width max="224">auto</width>
                                 <aspectratio>scale</aspectratio>
-                                <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                            </control>
-                            <control type="label">
-                                <left>6</left>
-                                <top>330</top>
-                                <width>226</width>
-                                <height>20</height>
-                                <font>font_tiny</font> <!-- FEN_21 -->
-                                <align>center</align>
-                                <aligny>center</aligny>
-                                <textcolor>FFB7B4BB</textcolor>
-                                <label>$INFO[ListItem.Property(name)]</label>
+                                <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="236">
                             <control type="group">
-                                <animation effect="zoom" start="100" end="102" time="150" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="102" end="100" time="150" tween="sine" easing="inout" center="auto">Unfocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4051)">Conditional</animation>
                                 <control type="image">
                                     <left>0</left>
                                     <top>0</top>
-                                    <height>320</height>
+                                    <height>360</height>
                                     <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
-                                    <visible>Control.HasFocus(2051) | Control.HasFocus(4051)</visible>
-                                </control>
-                                <control type="image">
-                                    <left>0</left>
-                                    <top>320</top>
-                                    <height>40</height>
-                                    <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
+                                    <texture colordiffuse="FFB7B4BB" border="12" background="true">common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2051) | Control.HasFocus(4051)</visible>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
                                     <top>6</top>
-                                    <height max="314">auto</height>
+                                    <height max="348">auto</height>
                                     <width max="224">auto</width>
                                     <aspectratio>scale</aspectratio>
-                                    <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                                <control type="label">
-                                    <left>6</left>
-                                    <top>330</top>
-                                    <width>226</width>
-                                    <height>20</height>
-                                    <font>font_tiny</font> <!-- FEN_21 -->
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(name)]</label>
+                                    <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
                             </control>
                         </focusedlayout>
@@ -513,7 +430,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2051) | Control.HasFocus(4050)] + Container(2051).HasPrevious</visible>
-                        <texture>common/arrow_left.png</texture>
+                        <texture background="true">common/arrow_left.png</texture>
                     </control>
                     <control type="image">
                         <top>200</top>
@@ -521,7 +438,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2051) | Control.HasFocus(4051)] + Container(2051).HasNext</visible>
-                        <texture>common/arrow_right.png</texture>
+                        <texture flipx="true" background="true">common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
@@ -533,7 +450,7 @@
                     <control type="label">
                         <width max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
@@ -548,18 +465,18 @@
                         <ondown>4052</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">350</scrolltime>
-                        <itemlayout height="380" width="590">
+                        <itemlayout height="360" width="590">
                             <control type="image">
-                                <height>380</height>
+                                <height>360</height>
                                 <width>570</width>
-                                <texture colordiffuse="FF302F2F">common/white.png</texture>
+                                <texture colordiffuse="FF302F2F" border="30" background="true">common/circle.png</texture>
                             </control>
                             <control type="textbox">
                                 <top>15</top>
                                 <left>15</left>
                                 <width>540</width>
                                 <height>308</height>
-                                <font>font_mini</font> <!-- FEN_26 -->
+                                <font>font12</font> <!-- FEN_26 -->
                                 <align>center</align>
                                 <aligny>top</aligny>
                                 <textcolor>FFB7B4BB</textcolor>
@@ -567,26 +484,22 @@
                                 <autoscroll>false</autoscroll>
                             </control>
                         </itemlayout>
-                        <focusedlayout height="380" width="590">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="102" time="150" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="102" end="100" time="150" tween="sine" easing="inout" center="auto">Unfocus</animation>
-                                <control type="image">
-                                    <height>380</height>
-                                    <width>570</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
-                                </control>
-                                <control type="textbox">
-                                    <top>15</top>
-                                    <left>15</left>
-                                    <width>540</width>
-                                    <height>308</height>
-                                    <font>font_mini</font> <!-- FEN_26 -->
-                                    <align>center</align>
-                                    <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(text)]</label>
-                                </control>
+                        <focusedlayout height="360" width="590">
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FFB7B4BB" border="30" background="true">common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
                             </control>
                         </focusedlayout>
                     </control>
@@ -609,7 +522,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2052) | Control.HasFocus(4052)] + Container(2052).HasPrevious</visible>
-                        <texture>common/arrow_left.png</texture>
+                        <texture background="true">common/arrow_left.png</texture>
                     </control>
                     <control type="image">
                         <top>210</top>
@@ -617,7 +530,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2052) | Control.HasFocus(4052)] + Container(2052).HasNext</visible>
-                        <texture>common/arrow_right.png</texture>
+                        <texture flipx="true" background="true">common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
@@ -629,7 +542,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 33032][/B] $INFO[Window.Property(imdb_videos.number)]</label>
                         <visible>!Control.HasFocus(2053)</visible>
@@ -637,7 +550,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 33032][/B]  |  [I]$INFO[Container(2053).ListItem.Property(name)][/I]</label>
                         <visible>Control.HasFocus(2053)</visible>
@@ -661,35 +574,16 @@
                                 <height>348</height>
                                 <width>380</width>
                                 <aspectratio>scale</aspectratio>
-                                <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                            </control>
-                            <control type="image">
-                                <left>6</left>
-                                <top>280</top>
-                                <height>80</height>
-                                <width>380</width>
-                                <texture colordiffuse="FF302F2F">common/white.png</texture>
-                            </control>
-                            <control type="label">
-                                <left>15</left>
-                                <top>305</top>
-                                <width>355</width>
-                                <height>20</height>
-                                <font>font_tiny</font> <!-- FEN_21 -->
-                                <align>center</align>
-                                <textcolor>FFB7B4BB</textcolor>
-                                <label>$INFO[ListItem.Property(name)]</label>
+                                <texture diffuse="diffuse/square_w320_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="392">
                             <control type="group">
-                                <animation effect="zoom" start="100" end="102" time="150" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="102" end="100" time="150" tween="sine" easing="inout" center="auto">Unfocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4053)">Conditional</animation>
                                 <control type="image">
                                     <width>392</width>
                                     <height>360</height>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
+                                    <texture colordiffuse="FFB7B4BB" border="12" background="true">common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2053) | Control.HasFocus(4053)</visible>
                                 </control>
                                 <control type="image">
@@ -698,25 +592,7 @@
                                     <height>348</height>
                                     <width>380</width>
                                     <aspectratio>scale</aspectratio>
-                                    <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                                <control type="image">
-                                    <left>6</left>
-                                    <top>280</top>
-                                    <height>74</height>
-                                    <width>380</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
-                                    <visible>Control.HasFocus(2053) | Control.HasFocus(4053)</visible>
-                                </control>
-                                <control type="label">
-                                    <left>15</left>
-                                    <top>305</top>
-                                    <width>355</width>
-                                    <height>20</height>
-                                    <font>font_tiny</font> <!-- FEN_21 -->
-                                    <align>center</align>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(name)]</label>
+                                    <texture diffuse="diffuse/square_w320_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
                             </control>
                         </focusedlayout>
@@ -741,7 +617,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2053) | Control.HasFocus(4053)] + Container(2053).HasPrevious</visible>
-                        <texture>common/arrow_left.png</texture>
+                        <texture background="true">common/arrow_left.png</texture>
                     </control>
                     <control type="image">
                         <top>200</top>
@@ -749,7 +625,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2053) | Control.HasFocus(4053)] + Container(2053).HasNext</visible>
-                        <texture>common/arrow_right.png</texture>
+                        <texture flipx="true" background="true">common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
@@ -761,7 +637,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32028] $ADDON[plugin.video.fen 32796][/B] $INFO[Window.Property(more_from_director.number)]</label>
                         <visible>!Control.HasFocus(2054)</visible>
@@ -769,7 +645,7 @@
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FEN_33 -->
+                        <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 32028] $ADDON[plugin.video.fen 32796][/B]  |  [I]$INFO[Container(2054).ListItem.Property(name)] • $INFO[Container(2054).ListItem.Property(release_date)] • $INFO[Container(2054).ListItem.Property(vote_average)][/I]</label>
                         <visible>Control.HasFocus(2054)</visible>
@@ -790,70 +666,31 @@
                         <itemlayout height="360" width="236">
                             <control type="image">
                                 <left>6</left>
-                                <top>320</top>
-                                <height>40</height>
-                                <width>224</width>
-                                <texture colordiffuse="FF302F2F">common/white.png</texture>
-                            </control>
-                            <control type="image">
-                                <left>6</left>
                                 <top>6</top>
-                                <height max="314">auto</height>
+                                <height max="348">auto</height>
                                 <width max="224">auto</width>
                                 <aspectratio>scale</aspectratio>
-                                <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                            </control>
-                            <control type="label">
-                                <left>6</left>
-                                <top>330</top>
-                                <width>226</width>
-                                <height>20</height>
-                                <font>font_tiny</font> <!-- FEN_21 -->
-                                <align>center</align>
-                                <aligny>center</aligny>
-                                <textcolor>FFB7B4BB</textcolor>
-                                <label>$INFO[ListItem.Property(name)]</label>
+                                <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="236">
                             <control type="group">
-                                <animation effect="zoom" start="100" end="102" time="150" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="102" end="100" time="150" tween="sine" easing="inout" center="auto">Unfocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4054)">Conditional</animation>
                                 <control type="image">
                                     <left>0</left>
                                     <top>0</top>
-                                    <height>320</height>
+                                    <height>360</height>
                                     <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
-                                    <visible>Control.HasFocus(2054) | Control.HasFocus(4054)</visible>
-                                </control>
-                                <control type="image">
-                                    <left>0</left>
-                                    <top>320</top>
-                                    <height>40</height>
-                                    <width>236</width>
-                                    <texture colordiffuse="FFB7B4BB">common/white.png</texture>
+                                    <texture colordiffuse="FFB7B4BB" border="12" background="true">common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2054) | Control.HasFocus(4054)</visible>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
                                     <top>6</top>
-                                    <height max="314">auto</height>
+                                    <height max="348">auto</height>
                                     <width max="224">auto</width>
                                     <aspectratio>scale</aspectratio>
-                                    <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                                <control type="label">
-                                    <left>6</left>
-                                    <top>330</top>
-                                    <width>226</width>
-                                    <height>20</height>
-                                    <font>font_tiny</font> <!-- FEN_21 -->
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(name)]</label>
+                                    <texture diffuse="diffuse/poster_w217_h320.png" background="true">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
                             </control>
                         </focusedlayout>
@@ -878,7 +715,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2054) | Control.HasFocus(4054)] + Container(2054).HasPrevious</visible>
-                        <texture>common/arrow_left.png</texture>
+                        <texture background="true">common/arrow_left.png</texture>
                     </control>
                     <control type="image">
                         <top>200</top>
@@ -886,7 +723,7 @@
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2054) | Control.HasFocus(4054)] + Container(2054).HasNext</visible>
-                        <texture>common/arrow_right.png</texture>
+                        <texture flipx="true" background="true">common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
