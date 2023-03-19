@@ -177,7 +177,7 @@
 					</control>
 					<control type="button" id="700451">
 						<description>DarkSubs Subtitles Window Button</description>
-						<width>275</width>
+						<width>230</width>
 						<height>77</height>
 						<texturenofocus colordiffuse="grey_a">choose_subs.png</texturenofocus>
 						<texturefocus colordiffuse="button_focus">choose_subs.png</texturefocus>
