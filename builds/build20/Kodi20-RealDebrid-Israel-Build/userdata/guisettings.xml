@@ -167,7 +167,7 @@
     <setting id="accessibility.audiohearing" default="true">false</setting>
     <setting id="accessibility.subhearing" default="true">false</setting>
     <setting id="subtitles.align" default="true">2</setting>
-    <setting id="subtitles.fontname" default="true">DEFAULT</setting>
+    <setting id="subtitles.fontname">Arial</setting>
     <setting id="subtitles.fontsize">58</setting>
     <setting id="subtitles.style">1</setting>
     <setting id="subtitles.colorpick" default="true">FFFFFFFF</setting>
