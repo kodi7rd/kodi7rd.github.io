@@ -1,3 +1,11 @@
 {
-  "favourites": true
+  "CONFIG.KEEPTRAKT": true,
+  "CONFIG.KEEPDEBRID": true,
+  "CONFIG.KEEPFENDATA": true,
+  "CONFIG.KEEPFAVS": true,
+  "CONFIG.KEEPSOURCES": false,
+  "CONFIG.KEEPGUISETTINGS": false,
+  "CONFIG.KEEPREPOS": false,
+  "CONFIG.KEEPWHITELIST": false
+  
 }
