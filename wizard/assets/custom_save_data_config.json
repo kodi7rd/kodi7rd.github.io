@@ -1,5 +1,5 @@
 {
   "trakt": false,
-  "guisettings": false,
+  "guisettings": true,
   "sources": false
 }
