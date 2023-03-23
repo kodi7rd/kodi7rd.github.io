@@ -52,7 +52,7 @@ def wipe():
     from resources.libs import skin
     from resources.libs.common import tools
     from resources.libs import update
-    
+
     # Verify that Fen addon is installed.
     isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
     logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Is CONFIG.KEEPFENDATA Enabled: {0} | isFenExists: {1}".format(CONFIG.KEEPFENDATA, isFenExists))

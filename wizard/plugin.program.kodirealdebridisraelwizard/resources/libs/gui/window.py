@@ -255,7 +255,7 @@ def show_save_data_settings():
             self.sources = 304
             #self.profiles = 305
             #self.playercore = 314
-            #self.guisettings = 315
+            self.guisettings = 315
             self.advanced = 306
             self.favourites = 307
             self.fendata = 316
@@ -267,14 +267,14 @@ def show_save_data_settings():
             self.thumbs = 313
             self.show_dialog()
             # KODI_RD_ISRAEL Comment - Removed the following controls (commented in FirstRunSaveData.xml):
-            # self.login, self.profiles, self.playercore, self.guisettings, self.superfav
+            # self.login, self.profiles, self.playercore, self.superfav
             self.controllist = [self.trakt, self.debrid,
-                                    self.sources, self.advanced,
+                                    self.sources, self.advanced, self.guisettings,
                                     self.favourites, self.fendata, self.repo,
                                     self.whitelist, self.cache, self.packages,
                                     self.thumbs]
             self.controlsettings = ['keeptrakt', 'keepdebrid',
-                                    'keepsources', 'keepadvanced',
+                                    'keepsources', 'keepadvanced', 'keepguisettings',
                                     'keepfavourites', 'keepfendata', 'keeprepos',
                                     'keepwhitelist', 'clearcache', 'clearpackages',
                                     'clearthumbs']
