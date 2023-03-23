@@ -1,4 +1,4 @@
 {
-  "trakt": false,
-  "guisettings": false
+  "trakt": "true",
+  "guisettings": "false"
 }
