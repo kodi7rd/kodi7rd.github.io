@@ -15,9 +15,10 @@ extra_info_choices = (('PACK', 'PACK'), ('DOLBY VISION', 'D/VISION'), ('HIGH DYN
 					('DTS-HD', 'DTS-HD'), ('DTS', 'DTS'), ('AAC', 'AAC'), ('OPUS', 'OPUS'), ('MP3', 'MP3'), ('8CH AUDIO', '8CH'), ('7CH AUDIO', '7CH'), ('6CH AUDIO', '6CH'),
 					('2CH AUDIO', '2CH'), ('DVD SOURCE', 'DVD'), ('WEB SOURCE', 'WEB'), ('MULTIPLE LANGUAGES', 'MULTI-LANG'), ('SUBTITLES', 'SUBS'))
 quality_choices = ('4K', '1080P', '720P', 'SD', 'TELE', 'CAM', 'SCR')
+poster_lists, pack_check = ('list', 'medialist'), ('true', 'show', 'season')
 filter_str, clr_filter_str, extra_info_str, down_file_str, browse_pack_str, down_pack_str, furk_addto_str = ls(32152), ls(32153), ls(32605), ls(32747), ls(33004), ls(32007), ls(32769)
 filter_quality, filter_provider, filter_title, filter_extraInfo, cloud_str, filters_ignored, start_scrape = ls(32154), ls(32157), ls(32679), ls(32169), ls(32016), ls(32686), ls(33023)
-show_uncached_str, spoilers_str, pack_check, run_plugin_str = ls(32088), ls(33105), ('true', 'show', 'season'), 'RunPlugin(%s)'
+show_uncached_str, spoilers_str, run_plugin_str = ls(32088), ls(33105), 'RunPlugin(%s)'
 string = str
 upper, lower = string.upper, string.lower
 
@@ -26,7 +27,7 @@ class SourceResults(BaseDialog):
 		BaseDialog.__init__(self, args)
 		self.window_format = kwargs.get('window_format', 'list')
 		self.window_style = kwargs.get('window_style', 'contrast')
-		self.make_poster = self.window_format in ('list', 'medialist')
+		self.make_poster = self.window_format in poster_lists
 		self.window_id = kwargs.get('window_id', 2000)
 		self.results = kwargs.get('results')
 		self.uncached_torrents = kwargs.get('uncached_torrents', [])
@@ -64,7 +65,7 @@ class SourceResults(BaseDialog):
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
 		if action == self.info_action:
-			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
+			self.open_window(('windows.sources_results', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
 		elif action in self.selection_actions:
 			if self.prescrape and chosen_listitem.getProperty('perform_full_search') == 'true':
 				self.selected = ('perform_full_search', '')
@@ -80,7 +81,7 @@ class SourceResults(BaseDialog):
 			choice = self.context_menu(source)
 			if choice:
 				if isinstance(choice, dict): return self.execute_code(run_plugin_str % self.build_url(choice))
-				if choice == 'results_info': return self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
+				if choice == 'results_info': return self.open_window(('windows.sources_results', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
 				if choice == 'clear_results_filter': return self.clear_filter()
 				if choice == 'show_uncached': return self.set_filter(self.make_items(self.uncached_torrents))
 				return self.filter_results()#results_filter

@@ -20,8 +20,6 @@ class FenMonitor(xbmc_monitor):
 		Thread(target=service_functions.DatabaseMaintenance().run).start()
 		try: service_functions.CheckSettings().run()
 		except: pass
-		try: service_functions.CleanSettings().run()
-		except: pass
 		try: service_functions.FirstRunActions().run()
 		except: pass
 		try: service_functions.ReuseLanguageInvokerCheck().run()

@@ -3,7 +3,7 @@ import datetime
 from caches.main_cache import cache_object
 from caches.meta_cache import cache_function
 from modules.settings import tmdb_api_key, get_language
-from modules.kodi_utils import make_session, get_property, meta_filter_prop, data_dict_removals, remove_keys
+from modules.kodi_utils import make_session, get_property, meta_filter_prop, tmdb_dict_removals, remove_keys
 # from modules.kodi_utils import logger
 
 EXPIRY_4_HOURS, EXPIRY_2_DAYS, EXPIRY_1_WEEK = 4, 48, 168
@@ -295,7 +295,7 @@ def get_dates(days, reverse=True):
 
 def get_data(url):
 	data = get_tmdb(url).json()
-	data['results'] = [remove_keys(i, data_dict_removals) for i in data['results']]
+	data['results'] = [remove_keys(i, tmdb_dict_removals) for i in data['results']]
 	return data
 
 def get_tmdb_api(tmdb_api=None):

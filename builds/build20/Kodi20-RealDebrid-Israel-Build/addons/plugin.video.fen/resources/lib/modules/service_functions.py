@@ -12,7 +12,7 @@ disable_enable_addon, update_local_addons, get_infolabel, run_plugin = kodi_util
 ls, path_exists, translate_path, custom_context_main_menu_prop = kodi_utils.local_string, kodi_utils.path_exists, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop
 custom_context_prop, custom_info_prop, pause_settings_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.pause_settings_prop, kodi_utils.addon
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
-get_window_id, clean_settings, Thread, make_window_properties = kodi_utils.get_window_id, kodi_utils.clean_settings, kodi_utils.Thread, kodi_utils.make_window_properties
+get_window_id, Thread, make_window_properties = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.make_window_properties
 get_setting, set_setting, make_settings_dict, external_browse = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.external_browse
 logger, json, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.json, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
@@ -71,12 +71,6 @@ class CheckSettings:
 		try: del monitor
 		except: pass
 		return logger(fen_str, 'CheckSettingsFile Service Finished')
-
-class CleanSettings:
-	def run(self):
-		logger(fen_str, 'CleanSettings Service Starting')
-		clean_settings(silent=True)
-		return logger(fen_str, 'CleanSettings Service Finished')
 
 class FirstRunActions:
 	def run(self):

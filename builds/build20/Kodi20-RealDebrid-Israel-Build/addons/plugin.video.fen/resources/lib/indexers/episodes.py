@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from apis.trakt_api import trakt_fetch_collection_watchlist, trakt_get_hidden_items, trakt_get_my_calendar
+from apis.trakt_api import trakt_watchlist, trakt_get_hidden_items, trakt_get_my_calendar
 from caches.favorites import favorites
 from modules import kodi_utils, settings, watched_status as ws
 from modules.metadata import tvshow_meta, episodes_meta, all_episodes_meta
-from modules.utils import jsondate_to_datetime, adjust_premiered_date, make_day, get_datetime, title_key, date_difference, make_thread_list_enumerate, sort_for_article
+from modules.utils import jsondate_to_datetime, adjust_premiered_date, make_day, get_datetime, title_key, date_difference, make_thread_list_enumerate
 # logger = kodi_utils.logger
 
 remove_keys, set_view_mode, external_browse, sys = kodi_utils.remove_keys, kodi_utils.set_view_mode, kodi_utils.external_browse, kodi_utils.sys
@@ -12,7 +12,7 @@ ls, make_listitem, build_url, dict_removals, sys = kodi_utils.local_string, kodi
 kodi_version, xbmc_actor, set_category = kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 get_art_provider, show_specials, calendar_sort_order, ignore_articles = settings.get_art_provider, settings.show_specials, settings.calendar_sort_order, settings.ignore_articles
 metadata_user_info, watched_indicators_info, show_unaired_info = settings.metadata_user_info, settings.watched_indicators, settings.show_unaired
-nextep_content_settings, nextep_display_settings, lists_sort_order = settings.nextep_content_settings, settings.nextep_display_settings, settings.lists_sort_order
+nextep_content_settings, nextep_display_settings = settings.nextep_content_settings, settings.nextep_display_settings
 date_offset_info, default_all_episodes = settings.date_offset, settings.default_all_episodes
 single_ep_display_title, single_ep_format = settings.single_ep_display_title, settings.single_ep_format
 tv_meta_function, episodes_meta_function, all_episodes_meta_function = tvshow_meta, episodes_meta, all_episodes_meta
@@ -21,7 +21,7 @@ date_difference_function, make_day_function, title_key_function, get_datetime_fu
 get_progress_percent, get_watched_status, get_watched_info, get_bookmarks = ws.get_progress_percent, ws.get_watched_status_episode, ws.get_watched_info_tv, ws.get_bookmarks
 get_in_progress_episodes, get_next_episodes, get_recently_watched = ws.get_in_progress_episodes, ws.get_next_episodes, ws.get_recently_watched
 string, fen_str, trakt_str, watched_str, unwatched_str, season_str, episodes_str =  str, ls(32036), ls(32037), ls(32642), ls(32643), ls(32537), ls(32506)
-extras_str, options_str, clearprog_str, refr_widg_str, play_options_str = ls(32645), ls(32646), ls(32651), ls(40001), '[B]%s...[/B]' % ls(32187)
+extras_str, options_str, clearprog_str, refr_widg_str, play_options_str = ls(32645), ls(32646), ls(32651), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 build_content, poster_empty, fanart_empty, make_placeholder = kodi_utils.build_content, kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.make_placeholder_listitem
 run_plugin, unaired_label, tmdb_poster_prefix = 'RunPlugin(%s)', '[COLOR red][I]%s[/I][/COLOR]', 'https://image.tmdb.org/t/p/'
 upper = string.upper
@@ -367,11 +367,7 @@ def build_single_episode(list_type, params={}):
 			if include_unwatched != 0:
 				if include_unwatched in (1, 3):
 					try:
-						original_list = trakt_fetch_collection_watchlist('watchlist', 'tvshow')
-						sort_order = lists_sort_order('watchlist')
-						if sort_order == 0: original_list = sort_for_article(original_list, 'title', ignore_articles_setting)
-						elif sort_order == 1: original_list.sort(key=lambda k: k['collected_at'], reverse=True)
-						else: original_list.sort(key=lambda k: k.get('released'), reverse=True)
+						original_list = trakt_watchlist('watchlist', 'tcshow')
 						unwatched.extend([{'media_ids': i['media_ids'], 'season': 1, 'episode': 0, 'unwatched': True, 'title': i['title']} \
 									for i in original_list])
 					except: pass
@@ -398,23 +394,21 @@ def build_single_episode(list_type, params={}):
 				else: return function
 			sort_key = nextep_settings['sort_key']
 			sort_direction = nextep_settings['sort_direction']
-			sorting_list = [i for i in item_list if not i[1].getProperty('fen.unwatched') == 'True']
-			unwatched = [i for i in item_list if not i in sorting_list]
 			if nextep_settings['sort_airing_today_to_top']:
-				airing_today = [i for i in sorting_list
+				airing_today = [i for i in item_list
 								if date_difference_function(current_date, jsondate_to_datetime_function(i[1].getProperty('fen.first_aired'), '%Y-%m-%d').date(), 0)]
 				airing_today = sorted(airing_today, key=lambda i: i[1].getProperty('fen.first_aired'))
-				remainder = [i for i in sorting_list if not i in airing_today]
+				remainder = [i for i in item_list if not i in airing_today]
 				remainder = sorted(remainder, key=lambda i: func(i[1].getProperty(sort_key)), reverse=sort_direction)
 				unaired = [i for i in remainder if i[1].getProperty('fen.unaired') == 'true']
 				aired = [i for i in remainder if not i in unaired]
 				remainder = aired + unaired
-				item_list = airing_today + remainder + unwatched
+				item_list = airing_today + remainder
 			else:
-				sorting_list = sorted(sorting_list, key=lambda i: func(i[1].getProperty(sort_key)), reverse=sort_direction)
-				unaired = [i for i in sorting_list if i[1].getProperty('fen.unaired') == 'true']
-				aired = [i for i in sorting_list if not i in unaired]
-				item_list = aired + unaired + unwatched
+				item_list = sorted(item_list, key=lambda i: func(i[1].getProperty(sort_key)), reverse=sort_direction)
+				unaired = [i for i in item_list if i[1].getProperty('fen.unaired') == 'true']
+				aired = [i for i in item_list if not i in unaired]
+				item_list = aired + unaired
 		else:
 			item_list.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
 			if list_type_compare in ('trakt_calendar', 'trakt_recently_aired'):

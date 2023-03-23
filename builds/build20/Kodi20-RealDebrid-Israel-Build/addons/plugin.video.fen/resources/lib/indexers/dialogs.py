@@ -4,17 +4,17 @@ from windows import open_window
 from caches import refresh_cached_data
 from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
-# logger = kodi_utils.logger
+logger = kodi_utils.logger
 
 ok_dialog, container_content, close_all_dialog, external_browse = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external_browse
 get_property, open_settings, set_property, get_icon, dialog = kodi_utils.get_property, kodi_utils.open_settings, kodi_utils.set_property, kodi_utils.get_icon, kodi_utils.dialog
 show_busy_dialog, hide_busy_dialog, notification, confirm_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification, kodi_utils.confirm_dialog
 pause_settings_change, unpause_settings_change, img_url, sleep = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.img_url, kodi_utils.sleep
-get_setting, set_setting, make_settings_dict, execute_builtin = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.execute_builtin
+get_setting, set_setting, make_settings_dict, kodi_refresh = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.kodi_refresh
 json, ls, build_url, translate_path, select_dialog = kodi_utils.json, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.translate_path, kodi_utils.select_dialog
 run_plugin, metadata_user_info, autoplay_next_episode, quality_filter = kodi_utils.run_plugin, settings.metadata_user_info, settings.autoplay_next_episode, settings.quality_filter
-make_window_properties, get_infolabel, kodi_refresh = kodi_utils.make_window_properties, kodi_utils.get_infolabel, kodi_utils.kodi_refresh
-numeric_input, container_update = kodi_utils.numeric_input, kodi_utils.container_update
+make_window_properties, get_infolabel, container_refresh_input = kodi_utils.make_window_properties, kodi_utils.get_infolabel, kodi_utils.container_refresh_input
+numeric_input, container_update, activate_window = kodi_utils.numeric_input, kodi_utils.container_update, kodi_utils.activate_window
 poster_empty, fanart_empty, clear_property, highlight_prop = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.clear_property, kodi_utils.highlight_prop
 fen_str, addon_icon, database, maincache_db, custom_context_prop = ls(32036), kodi_utils.addon_icon, kodi_utils.database, kodi_utils.maincache_db, kodi_utils.custom_context_prop
 movie_extras_buttons_defaults, tvshow_extras_buttons_defaults = kodi_utils.movie_extras_buttons_defaults, kodi_utils.tvshow_extras_buttons_defaults
@@ -26,10 +26,7 @@ toggle_all, enable_disable, set_default_scrapers = source_utils.toggle_all, sour
 autoscrape_next_episode, audio_filters, extras_enabled_ratings = settings.autoscrape_next_episode, settings.audio_filters, settings.extras_enabled_ratings
 quality_filter, watched_indicators = settings.quality_filter, settings.watched_indicators
 default_highlights = kodi_utils.default_highlights
-closing_options = (None, 'trakt_manager', 'favorites_choice', 'playback_choice', 'clear_media_cache', 'set_media_artwork', 'clear_scrapers_cache', 'open_external_scrapers_choice',
-					'open_fen_settings', 'browse', 'browse_season', 'nextep_manager', 'recommended', 'random', 'playback', 'extras', 'mark_movie',
-					'mark_episode', 'mark_watched_tvshow', 'mark_unwatched_tvshow', 'mark_watched_season', 'mark_unwatched_season', 'clear_progress',
-					'refresh_widgets', 'exit_menu')
+pause_settings_options = ('toggle_autoplay_next', 'toggle_autoscrape_next', 'set_quality', 'enable_scrapers')
 
 def custom_skins_choice(params):
 	current_version = get_setting('custom_skins.version', '0.0.0')
@@ -273,30 +270,36 @@ def navigate_to_page_choice(params):
 	def _builder():
 		for i in start_list:
 			try:
-				if page_ref == 0: line1 = '%s %s' % (ls(32022), str(i))
+				if i == 1 and widget_content:
+					line1 = from_widget_str
+				elif jump_to == 0: line1 = '%s %s' % (page_str, str(i))
 				else:
 					page_contents = all_pages[i-1]
 					first_entry, last_entry = page_contents[0]['title'], page_contents[-1]['title']
 					first_alpha, last_alpha = title_key(first_entry, ignore).replace(' ', '')[0:3], title_key(last_entry, ignore).replace(' ', '')[0:3]
 					if first_entry == last_entry: line_end = first_alpha
 					else: line_end = '%s - %s' % (first_alpha, last_alpha)
-					if page_ref == 1: line1 = line_end
-					else: line1 = '%s %s   |   %s' % (ls(32022), str(i), line_end)
+					if jump_to == 1: line1 = line_end
+					else: line1 = '%s %s   |   %s' % (page_str, str(i), line_end)
 					if i == current_page: line1 = '[COLOR %s][B]%s   |   %s[/B][/COLOR]' % (get_property(highlight_prop), line1, current_page_str)
 			except: line1 = ''
 			yield {'line1': line1}
 	try:
-		media_type, total_pages, all_pages, current_page_str = params.get('media_type'), int(params.get('total_pages')), json.loads(params.get('all_pages')), ls(32995)
-		ignore, page_ref = ignore_articles(), int(params.get('page_reference', '0'))
-		start_list = [i for i in range(1, int(params.get('total_pages'))+1)]
-		current_page = int(params.get('current_page'))
+		total_pages, all_pages = int(params.get('total_pages')), json.loads(params.get('all_pages'))
+		page_str, current_page_str, from_widget_str = ls(32022), ls(32995), ls(32020)
+		if all_pages[0] == []: widget_content = True
+		else: widget_content = False
+		start_list = [i for i in range(1, total_pages+1)]
+		ignore, jump_to, current_page = ignore_articles(), int(params.get('jump_to_enabled', '0')), int(params.get('current_page'))
 		list_items = list(_builder())
 		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'narrow_window': 'true'}
 		new_page = select_dialog(start_list, **kwargs)
 		if new_page == None or new_page == current_page: return
+		if new_page == 1 and widget_content: function, paginate_start = container_refresh_input, '0'
+		else: function, paginate_start = container_update, params.get('paginate_start', '0')
 		url_params = {'mode': params.get('transfer_mode', ''), 'action': params.get('transfer_action', ''), 'new_page': new_page, 'media_type': params.get('media_type', ''),
-					'query': params.get('query', ''), 'user': params.get('user', ''), 'slug': params.get('slug', ''), 'refreshed': 'true'}
-		container_update(url_params)
+					'query': params.get('query', ''), 'user': params.get('user', ''), 'slug': params.get('slug', ''), 'paginate_start': paginate_start, 'refreshed': 'true'}
+		function(url_params)
 	except: return
 
 def media_artwork_choice(meta, changed_artwork=False):
@@ -563,18 +566,22 @@ def extras_lists_choice(params={}):
 def set_language_filter_choice(params):
 	from modules.meta_lists import language_choices
 	filter_setting = params.get('filter_setting')
+	multi_choice = params.get('multi_choice', 'false')
+	include_none = params.get('include_none', 'false')
 	lang_choices = language_choices
-	lang_choices.pop('None')
+	if include_none == 'false': lang_choices.pop('None')
 	dl = list(lang_choices.keys())
 	fl = list(lang_choices.values())
 	try: preselect = [fl.index(i) for i in get_setting(filter_setting).split(', ')]
 	except: preselect = []
 	list_items = [{'line1': item} for item in dl]
-	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
+	kwargs = {'items': json.dumps(list_items), 'multi_choice': multi_choice, 'preselect': preselect}
 	choice = select_dialog(fl, **kwargs)
 	if choice == None: return
-	if choice == []: return set_setting(filter_setting, 'eng')
-	set_setting(filter_setting, ', '.join(choice))
+	if multi_choice == 'true':
+		if choice == []: set_setting(filter_setting, 'eng')
+		else: set_setting(filter_setting, ', '.join(choice))
+	else: set_setting(filter_setting, choice)
 
 def easynews_use_custom_farm_choice(params={}):
 	from apis.easynews_api import clear_media_results_database
@@ -674,7 +681,7 @@ def results_format_choice(params={}):
 					('MediaList',            img_url % 'xXWixYv'),
 					('Rows',                 img_url % '44OzIVW')
 					]
-	choice = open_window(('windows.sources', 'SourceResultsChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
+	choice = open_window(('windows.sources_results', 'SourceResultsChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
 	if choice: set_setting('results.list_format', choice)
 
 def set_subtitle_choice():
@@ -822,7 +829,6 @@ def options_menu_choice(params, meta=None):
 		return _str.replace('[B]', '').replace('[/B]', '')
 	def _builder():
 		for item in listing: yield {'line1': item[0], 'line2': item[1] or item[0], 'icon': poster}
-	pause_settings_change()
 	params_get = params.get
 	tmdb_id, content, poster = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None)
 	is_widget, from_extras = params_get('is_widget') in (True, 'True', 'true'), params_get('from_extras', 'false') == 'true'
@@ -836,7 +842,7 @@ def options_menu_choice(params, meta=None):
 		meta = function('tmdb_id', tmdb_id, metadata_user_info(), get_datetime())
 	meta_get = meta.get
 	rootname = meta_get('rootname', None)
-	window_action = 'ActivateWindow(Videos,%s,return)' if is_widget else 'Container.Update(%s)'
+	window_function = activate_window if is_widget else container_update
 	title, year, imdb_id, tvdb_id = meta_get('title'), meta_get('year'), meta_get('imdb_id', None), meta_get('tvdb_id', None)
 	listing = []
 	listing_append = listing.append
@@ -905,14 +911,15 @@ def options_menu_choice(params, meta=None):
 		listing_append((ls(32604) % (ls(32028) if menu_type == 'movie' else ls(32029)), ls(32497) % rootname, 'clear_media_cache'))
 		listing_append((ls(33043), ls(33066) % rootname, 'set_media_artwork'))
 	if menu_type in ('movie', 'episode') or menu_type in single_ep_list: listing_append((ls(32637), '', 'clear_scrapers_cache'))
-	if not from_extras: listing_append(('%s %s' % (ls(32118), ls(32513)), '', 'open_external_scrapers_choice'))
-	listing_append(('%s %s %s' % (ls(32641), ls(32036), ls(32247)), '', 'open_fen_settings'))
+	listing_append(('%s %s' % (ls(32118), ls(32513)), '', 'open_external_scrapers_choice'))
+	if not from_extras: listing_append(('%s %s' % (ls(32641), ls(32456)), '', 'open_tools'))
+	listing_append(('%s %s' % (ls(32641), ls(32247)), '', 'open_settings'))
 	list_items = list(_builder())
 	heading = rootname or strip_bold(ls(32646))
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([i[2] for i in listing], **kwargs)
-	if choice in closing_options: unpause_settings_change()
 	if choice == None: return
+	if choice in pause_settings_options: pause_settings_change()
 	if choice == 'playback':
 		return run_plugin({'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': tmdb_id})
 	elif choice == 'extras':
@@ -944,20 +951,23 @@ def options_menu_choice(params, meta=None):
 		return clear_scrapers_cache()
 	elif choice == 'open_external_scrapers_choice':
 		return external_scrapers_choice()
-	elif choice == 'open_fen_settings':
+	elif choice == 'open_settings':
 		return open_settings('0.0')
+	elif choice == 'open_tools':
+		close_all_dialog()
+		return window_function({'mode': 'navigator.tools'})
 	elif choice == 'playback_choice':
 		return playback_choice({'media_type': content, 'poster': poster, 'meta': meta, 'season': season, 'episode': episode})
 	elif choice == 'browse':
-		return execute_builtin(window_action % build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id}))
+		return window_function({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
 	elif choice == 'browse_season':
-		return execute_builtin(window_action % build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season}))
+		return window_function({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season})
 	elif choice == 'nextep_manager':
-		return execute_builtin(window_action % build_url({'mode': 'build_next_episode_manager'}))
+		return window_function({'mode': 'build_next_episode_manager'})
 	elif choice == 'recommended':
 		close_all_dialog()
 		mode, action = ('build_movie_list', 'tmdb_movies_recommendations') if menu_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_recommendations')
-		return execute_builtin(window_action % build_url({'mode': mode, 'action': action, 'tmdb_id': tmdb_id}))
+		return window_function({'mode': mode, 'action': action, 'tmdb_id': tmdb_id})
 	elif choice == 'random':
 		close_all_dialog()
 		return random_choice({'meta': meta, 'poster': poster})
@@ -966,7 +976,7 @@ def options_menu_choice(params, meta=None):
 	elif choice == 'favorites_choice':
 		return favorites_choice({'media_type': content, 'tmdb_id': tmdb_id, 'title': meta_get('title')})
 	elif choice == 'exit_menu':
-		return execute_builtin('Container.Refresh(%s)' % params_get('exit_menu', ''))
+		return container_refresh_input(params_get('exit_menu', ''))
 	elif choice == 'toggle_autoplay':
 		set_setting('auto_play_%s' % content, autoplay_toggle)
 	elif choice == 'toggle_autoplay_next':
@@ -977,6 +987,7 @@ def options_menu_choice(params, meta=None):
 		set_quality_choice({'quality_setting': 'autoplay_quality_%s' % content if autoplay_status == on_str else 'results_quality_%s' % content, 'icon': poster})
 	elif choice == 'enable_scrapers':
 		enable_scrapers_choice({'icon': poster})
+	unpause_settings_change()
 	make_settings_dict()
 	make_window_properties(override=True)
 	options_menu_choice(params, meta=meta)

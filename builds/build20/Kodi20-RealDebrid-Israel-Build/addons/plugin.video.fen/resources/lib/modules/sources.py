@@ -282,7 +282,7 @@ class Sources():
 
 	def display_results(self, results):
 		window_format = results_format()
-		action, chosen_item = open_window(('windows.sources', 'SourceResults'), 'sources_results.xml',
+		action, chosen_item = open_window(('windows.sources_results', 'SourceResults'), 'sources_results.xml',
 				window_format=window_format, window_style=results_style(), window_id=results_xml_window_number(window_format), results=results, meta=self.meta,
 				scraper_settings=self.scraper_settings, prescrape=self.prescrape, filters_ignored=self.filters_ignored, uncached_torrents=self.uncached_torrents)
 		if not action: self._kill_progress_dialog()
@@ -563,8 +563,8 @@ class Sources():
 				if provider == 'external': provider = item['debrid'].replace('.me', '')
 				elif provider == 'folders': provider = item['source']
 				provider_text = provider.upper()
-				display_name = item['display_name'].upper()
-				resolve_item['resolve_display'] = ('%02d. [B]%s[/B]'% (count, provider_text), display_name)
+				display_name = '%s | %s | %s' % (item['quality'], item['size_label'], item['display_name'].upper())
+				resolve_item['resolve_display'] = ('%02d. [B]%s[/B]' % (count, provider_text), display_name)
 				processed_items_append(resolve_item)
 				if provider == 'easynews' and self.monitor_playback and self.easynews_max_retries:
 					for retry in range(1, self.easynews_max_retries + 1):
@@ -580,6 +580,7 @@ class Sources():
 			monitor = kodi_utils.monitor
 			url = None
 			for count, item in enumerate(items, 1):
+				try:
 					hide_busy_dialog()
 					if not self.progress_dialog: break
 					self.progress_dialog.reset_is_cancelled()
@@ -607,13 +608,17 @@ class Sources():
 							sleep(200)
 							player.run(url, self)
 							playback_successful = player.playback_successful
-							if player.cancel_all_playback: return self.playback_failed_action()
+							cancel_all_playback = player.cancel_all_playback
+						if playback_successful: break
+						if cancel_all_playback: break
+						if count == len(items):
+							player.stop()
+							break
 					except: pass
-					if playback_successful: break
-					if count == len(items):
-						player.stop()
-						break
+				except: pass
 		except: self._kill_progress_dialog()
+		
+		if cancel_all_playback: return self._kill_progress_dialog()
 		if not playback_successful or not url: self.playback_failed_action()
 		try: del monitor
 		except: pass

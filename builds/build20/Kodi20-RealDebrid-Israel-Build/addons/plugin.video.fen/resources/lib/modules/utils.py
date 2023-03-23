@@ -287,9 +287,17 @@ def imdb_sort_list():
 	sort_string = imdb_sort + imdb_sort_order
 	return sort_string
 
-def paginate_list(item_list, page, limit=20):
-	pages = list(chunks(item_list, limit))
-	return pages[page - 1], json.dumps(pages), len(pages)
+def paginate_list(item_list, page, limit=20, paginate_start=0):
+	if paginate_start:
+		all_pages = json.dumps(list(chunks(item_list, limit)))
+		item_list = item_list[paginate_start:]
+		pages = list(chunks(item_list, limit))
+		pages.insert(0, [])
+	else:
+		pages = list(chunks(item_list, limit))
+		all_pages = json.dumps(pages)
+	all_pages = json.dumps(pages)
+	return pages[page - 1], all_pages, len(pages)
 
 def download_github_zip(url_insert, destination):
 	from io import BytesIO

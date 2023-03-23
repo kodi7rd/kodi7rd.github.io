@@ -2,29 +2,29 @@
 from modules import kodi_utils, settings
 from modules.meta_lists import oscar_winners
 from modules.metadata import movie_meta, movieset_meta
-from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, adjust_premiered_date, get_current_timestamp
+from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, adjust_premiered_date, get_current_timestamp, paginate_list
 from modules.watched_status import get_watched_info_movie, get_watched_status_movie, get_bookmarks, get_progress_percent
 # logger = kodi_utils.logger
 
 meta_function, get_datetime_function, add_item, fen_clearlogo = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.addon_clearlogo
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
 set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
-kodi_version, xbmc_actor, set_category = kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
+sleep, kodi_version, xbmc_actor, set_category = kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.movie_dict_removals
 poster_empty, fanart_empty, build_content, make_placeholder = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, kodi_utils.make_placeholder_listitem
-metadata_user_info, watched_indicators, page_reference, date_offset = settings.metadata_user_info, settings.watched_indicators, settings.page_reference, settings.date_offset
-sleep, extras_open_action, get_art_provider, get_resolution = kodi_utils.sleep, settings.extras_open_action, settings.get_art_provider, settings.get_resolution
-max_threads, widget_hide_next_page, include_year_in_title = settings.max_threads, settings.widget_hide_next_page, settings.include_year_in_title
+metadata_user_info, watched_indicators, jump_to_enabled, date_offset = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.date_offset
+extras_open_action, get_art_provider, get_resolution, page_limit = settings.extras_open_action, settings.get_art_provider, settings.get_resolution, settings.page_limit
+max_threads, widget_hide_next_page, include_year_in_title, paginate = settings.max_threads, settings.widget_hide_next_page, settings.include_year_in_title, settings.paginate
 fen_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32645), ls(32646)
 hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
-addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), ls(40001), '[B]%s...[/B]' % ls(32187)
+addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
 tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
 				'tmdb_movies_certifications': 'certification', 'tmdb_movies_recommendations': 'tmdb_id', 'tmdb_movies_genres': 'genre_id', 'tmdb_movies_search': 'query',
 				'tmdb_movies_search_sets': 'query'}
-personal = {'in_progress_movies': ('modules.watched_status', 'get_in_progress_movies'), 'favorites_movies': ('modules.favorites', 'get_favorites'),
+personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_progress_movies': ('modules.watched_status', 'get_in_progress_movies'), 
 				'watched_movies': ('modules.watched_status', 'get_watched_items'), 'recent_watched_movies': ('modules.watched_status', 'get_recently_watched')}
 trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_top10_boxoffice', 'trakt_recommendations')
 trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
@@ -41,6 +41,7 @@ class Movies:
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
 		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
+		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.append = self.items.append
 
 	def fetch_list(self):
@@ -67,10 +68,12 @@ class Movies:
 					self.list = [i['id'] for i in data['results']]
 					if data['total_pages'] > page_no: self.new_page = {'new_page': string(data['page'] + 1), key: function_var}
 				elif self.action in personal:
-					data, all_pages, total_pages = function('movie', page_no)
+					data = function('movie', page_no)
+					if self.action == 'recent_watched_movies': all_pages, total_pages = '', 1
+					else: data, all_pages, total_pages = self.paginate_list(data, page_no)
 					self.list = [i['media_id'] for i in data]
 					if total_pages > 2: self.total_pages = total_pages
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 				elif self.action in trakt_main:
 					self.id_type = 'trakt_dict'
 					data = function(page_no)
@@ -79,11 +82,13 @@ class Movies:
 					if self.action not in ('trakt_movies_top10_boxoffice', 'trakt_recommendations'): self.new_page = {'new_page': string(page_no + 1)}
 				elif self.action in trakt_personal:
 					self.id_type = 'trakt_dict'
-					data, all_pages, total_pages = function('movies', page_no)
+					data = function('movies', page_no)
+					if self.action == 'trakt_collection_lists': all_pages, total_pages = '', 1
+					else: data, all_pages, total_pages = self.paginate_list(data, page_no)
 					self.list = [i['media_ids'] for i in data]
 					if total_pages > 2: self.total_pages = total_pages
 					try:
-						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 					except: pass
 				elif self.action in imdb_personal:
 					self.id_type = 'imdb_id'
@@ -107,10 +112,11 @@ class Movies:
 					self.list = data[page_no-1]
 					if len(data) > page_no: self.new_page = {'new_page': string(page_no + 1)}
 				if self.total_pages and not self.is_widget:
-					page_ref = page_reference()
-					if page_ref != 3:
+					jump_to = jump_to_enabled()
+					if jump_to != 3:
 						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
+									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
+									'paginate_start': self.paginate_start}
 						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
 				add_items(handle, builder())
 				if self.new_page and not self.widget_hide_next_page:
@@ -276,3 +282,11 @@ class Movies:
 		[i.join() for i in threads]
 		self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
 		return self.items
+
+	def paginate_list(self, data, page_no):
+		if paginate(self.is_widget):
+			limit = page_limit(self.is_widget)
+			data, all_pages, total_pages = paginate_list(data, page_no, limit, self.paginate_start)
+			if self.is_widget: self.paginate_start = limit
+		else: all_pages, total_pages = '', 1
+		return data, all_pages, total_pages

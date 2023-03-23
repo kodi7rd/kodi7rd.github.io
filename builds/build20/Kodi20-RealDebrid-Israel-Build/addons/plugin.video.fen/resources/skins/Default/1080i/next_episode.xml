@@ -8,23 +8,30 @@
     <controls>
         <control type="image">
             <height>550</height>
-            <texture>common/dim-top.png</texture>
+            <texture>fen_common/dim-top.png</texture>
         </control>
         <control type="group">
             <left>20</left>
             <top>20</top>
             <height>160</height>
-            <control type="group">
+            <control type="image">
                 <width>284</width>
-                <control type="image">
-                    <texture>$INFO[Window.Property(fanart)]</texture>
-                    <aspectratio>scale</aspectratio>
-                </control>
-                <control type="progress" id="5000">
-                    <bottom>0</bottom>
-                    <height>8</height>
-                    <visible>false</visible>
-                </control>
+                <texture colordiffuse="FF000000" diffuse="fen_diffuse/landscape_w284_h160.png">fen_common/white.png</texture>
+            </control>
+            <control type="image">
+                <width>284</width>
+                <aspectratio>scale</aspectratio>
+                <texture diffuse="fen_diffuse/landscape_w284_h160.png">$INFO[Window.Property(fanart)]</texture>
+                <animation effect="fade" start="100" end="40" time="0">WindowOpen</animation>
+            </control>
+            <control type="image">
+                <top>75</top>
+                <left>42</left>
+                <height max="80">auto</height>
+                <width max="200">auto</width>
+                <texture>$INFO[Window.Property(clearlogo)]</texture>
+                <aspectratio>keep</aspectratio>
+                <animation effect="fade" start="100" end="80" time="0">WindowOpen</animation>
             </control>
             <control type="image">
                 <left>5</left>
@@ -34,7 +41,8 @@
                 <align>left</align>
                 <aligny>top</aligny>
                 <aspectratio aligny="top">keep</aspectratio>
-                <texture colordiffuse="B3CCCCCC">common/fen.png</texture>
+                <texture colordiffuse="B3CCCCCC">fen_common/fen.png</texture>
+                <animation effect="fade" start="100" end="50" time="0">WindowOpen</animation>
             </control>
             <control type="group">
                 <left>275</left>
@@ -43,7 +51,7 @@
                     <left>35</left>
                     <aligny>center</aligny>
                     <height>40</height>
-                    <label>[B]$ADDON[plugin.video.fen 32811] [COLOR $INFO[Window(10000).Property(fen.highlight)]]$INFO[Player.TimeRemaining()][/COLOR][/B]</label>
+                    <label>[B][COLOR $INFO[Window(10000).Property(fen.highlight)]]$ADDON[plugin.video.fen 32811][/COLOR] $INFO[Player.TimeRemaining()][/B]</label>
                     <font>font14</font> <!-- FEN_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
@@ -52,7 +60,7 @@
                     <left>35</left>
                     <aligny>center</aligny>
                     <height>40</height>
-                    <label>[B]$ADDON[plugin.video.fen 33086]?[/B]</label>
+                    <label>[B][COLOR $INFO[Window(10000).Property(fen.highlight)]]$ADDON[plugin.video.fen 33086]?[/COLOR][/B]</label>
                     <font>font14</font> <!-- FEN_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
@@ -63,7 +71,7 @@
                     <width>auto</width>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>$INFO[Window.Property(next_ep_title)][B][COLOR $INFO[Window(10000).Property(fen.highlight)]]  |  [/COLOR][/B]$INFO[Window.Property(next_ep_season)]x$INFO[Window.Property(next_ep_episode)][B][COLOR $INFO[Window(10000).Property(fen.highlight)]]  |  [/COLOR][/B]$INFO[Window.Property(next_ep_ep_name)]</label>
+                    <label>$INFO[Window.Property(next_ep_title)][B][COLOR $INFO[Window(10000).Property(fen.highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_season)]x$INFO[Window.Property(next_ep_episode)][B][COLOR $INFO[Window(10000).Property(fen.highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_ep_name)]</label>
                     <font>font10</font> <!-- FEN_21 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
@@ -85,8 +93,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                     <control type="button" id="11">
@@ -99,8 +107,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                     <control type="button" id="12">
@@ -113,8 +121,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                 </control>
@@ -136,8 +144,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                     <control type="button" id="11">
@@ -150,8 +158,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                     <control type="button" id="12">
@@ -164,8 +172,8 @@
                         <font>font10</font> <!-- FEN_21 -->
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                        <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                        <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                        <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                        <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                         <align>center</align>
                     </control>
                 </control>

@@ -10,7 +10,7 @@
             <top>0</top>
             <width>1920</width>
             <height>1080</height>
-            <texture colordiffuse="FF000000">common/white.png</texture>
+            <texture colordiffuse="FF000000">fen_common/white.png</texture>
         </control>
         <control type="image">
             <left>0</left>
@@ -29,7 +29,7 @@
                 <width>60</width>
                 <height>60</height>
                 <aspectratio aligny="top">keep</aspectratio>
-                <texture>common/fen.png</texture>
+                <texture>fen_common/fen.png</texture>
             </control>
             <control type="label">
                 <top>20</top>
@@ -86,7 +86,7 @@
             <ondown>2000</ondown>
             <onleft>noop</onleft>
             <onright>2060</onright>
-            <scrolltime tween="sine">200</scrolltime>
+            <scrolltime tween="sine">350</scrolltime>
             <itemlayout height="320" width="320">
                 <control type="image">
                     <left>10</left>
@@ -110,12 +110,14 @@
             </itemlayout>
             <focusedlayout height="320" width="320">
                 <control type="group">
+                    <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
+                    <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                     <control type="image">
                         <left>0</left>
                         <top>0</top>
                         <width>300</width>
                         <height>320</height>
-                        <texture colordiffuse="FFB7B4BB" border="12">common/panel-256-box.png</texture>
+                        <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
                     </control>
                     <control type="image">
                         <left>10</left>
@@ -146,9 +148,9 @@
             <height>960</height>
             <onleft>2000</onleft>
             <onright>2000</onright>
-            <texturesliderbackground colordiffuse="FF302F2F">common/white.png</texturesliderbackground>
-            <texturesliderbar colordiffuse="FF555556">common/white.png</texturesliderbar>
-            <texturesliderbarfocus colordiffuse="FFB7B4BB">common/white.png</texturesliderbarfocus>
+            <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+            <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+            <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
             <showonepage>false</showonepage>
             <orientation>vertical</orientation>
             <visible>Control.IsVisible(2000)</visible>

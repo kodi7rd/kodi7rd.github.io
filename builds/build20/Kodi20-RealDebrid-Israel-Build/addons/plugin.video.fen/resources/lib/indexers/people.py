@@ -24,9 +24,9 @@ def person_search(query=None):
 	show_busy_dialog()
 	query = unquote(query)
 	try: people = tmdb_people_info(query)
-	except: pass
+	except: people = []
 	hide_busy_dialog()
-	if not people: return notification(ls(32760))
+	if not people: return notification(32760)
 	if len(people) == 1:
 		person = people[0]
 		actor_id, actor_name = person['id'], person['name']

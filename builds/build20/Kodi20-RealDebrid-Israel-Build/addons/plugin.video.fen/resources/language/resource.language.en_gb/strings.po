@@ -83,7 +83,7 @@ msgid "Paginate Lists When Available"
 msgstr ""
 
 msgctxt "#32020"
-msgid "Max. List items"
+msgid "Include Widget Items..."
 msgstr ""
 
 msgctxt "#32021"
@@ -671,11 +671,11 @@ msgid "Original"
 msgstr ""
 
 msgctxt "#32167"
-msgid "SD - 4K"
+msgid "Within Addon Only"
 msgstr ""
 
 msgctxt "#32168"
-msgid "4K - SD"
+msgid "Widgets Only"
 msgstr ""
 
 msgctxt "#32169"
@@ -836,10 +836,6 @@ msgstr ""
 
 msgctxt "#32208"
 msgid "All Debrid Color"
-msgstr ""
-
-msgctxt "#32209"
-msgid "Progress Results Quality Direction"
 msgstr ""
 
 msgctxt "#32210"
@@ -1243,7 +1239,7 @@ msgid "Set Sources Folders (My Services->Sources Folders)"
 msgstr ""
 
 msgctxt "#32512"
-msgid "Clear Databases and Clean Settings Files"
+msgid "Clear Databases"
 msgstr ""
 
 msgctxt "#32513"
@@ -3646,10 +3642,6 @@ msgctxt "#33112"
 msgid "Features"
 msgstr ""
 
-msgctxt "#33113"
-msgid "Widgets Only"
-msgstr ""
-
 msgctxt "#33114"
 msgid "Monitor For Successful Playback"
 msgstr ""
@@ -3711,15 +3703,15 @@ msgid "[B]Please Wait...[/B]"
 msgstr ""
 
 msgctxt "#33129"
-msgid "Press Info Button for more Info..."
+msgid "Press Info Button for More Info..."
 msgstr ""
 
 msgctxt "#33130"
-msgid "Before Playback Starts"
+msgid "Mark Watched"
 msgstr ""
 
 msgctxt "#33131"
-msgid "After Playback Starts"
+msgid "Mark Unwatched"
 msgstr ""
 
 msgctxt "#33132"
@@ -3763,33 +3755,25 @@ msgid "Wait for Fen Services to Initiate Before Making Widgets"
 msgstr ""
 
 msgctxt "#33141"
-msgid "Resume Playback Method"
+msgid "Open Tools Menu"
 msgstr ""
 
-msgctxt "#40001"
-msgid "[B]Refresh Widgets[/B]"
+msgctxt "#33142"
+msgid "Addon Item Limit"
 msgstr ""
 
-msgctxt "#40003"
-msgid "[B]Mark Watched[/B]"
+msgctxt "#33143"
+msgid "Widgets Item Limit"
 msgstr ""
 
-msgctxt "#40004"
-msgid "[B]Mark Unwatched[/B]"
+#############################################
+
+msgctxt "#32209"
+msgid ""
 msgstr ""
 
-msgctxt "#40006"
-msgid "[B]Extras...[/B]"
+msgctxt "#33113"
+msgid ""
 msgstr ""
 
-msgctxt "#40007"
-msgid "[B]Options...[/B]"
-msgstr ""
-
-msgctxt "#40008"
-msgid "[B]Favorites Manager[/B]"
-msgstr ""
-
-msgctxt "#40009"
-msgid "[B]Clear Progress[/B]"
-msgstr ""
+#############################################

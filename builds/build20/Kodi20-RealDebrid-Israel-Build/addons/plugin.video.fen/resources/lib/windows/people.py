@@ -37,12 +37,12 @@ class People(BaseDialog):
 	def set_infoline1(self):
 		label = '[B]%s: [/B] %s ' % (ls(32845), self.person_gender) if self.person_gender else ''
 		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_gender else '', ls(32827), self.person_age) if self.person_age else ''
-		self.set_label(2001, '[I]%s[/I]' % label)
+		self.set_label(2001, label)
 
 	def set_infoline2(self):
 		label = '[B]%s: [/B] %s ' % (ls(32825), self.person_birthday) if self.person_birthday else ''
 		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_birthday else '', ls(32826), self.person_deathday) if self.person_deathday else ''
-		self.set_label(3001, '[I]%s[/I]' % label)
+		self.set_label(3001, label)
 
 	def make_movies(self):
 		self.make_more_from('movie')

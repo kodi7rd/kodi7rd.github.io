@@ -5,9 +5,8 @@ import time
 from apis.opensubtitles_api import OpenSubtitlesAPI
 from apis.trakt_api import make_trakt_slug
 from modules import kodi_utils as ku, settings as st, watched_status as ws
-from modules.meta_lists import language_choices
 from modules.utils import sec2time
-logger = ku.logger
+# logger = ku.logger
 
 set_property, clear_property, convert_language, get_visibility, hide_busy_dialog = ku.set_property, ku.clear_property, ku.convert_language, ku.get_visibility, ku.hide_busy_dialog
 Thread, json, ls, xbmc_player, translate_path, execute_builtin, sleep = ku.Thread, ku.json, ku.local_string, ku.xbmc_player, ku.translate_path, ku.execute_builtin, ku.sleep
@@ -22,7 +21,6 @@ total_time_errors = ('0.0', '', 0.0, None)
 class FenPlayer(xbmc_player):
 	def __init__ (self):
 		xbmc_player.__init__(self)
-		self.playback_successful, self.cancel_all_playback = None, False
 
 	def run(self, url=None, obj=None):
 		hide_busy_dialog()
@@ -41,9 +39,30 @@ class FenPlayer(xbmc_player):
 			if self.playback_successful == True: self.start_monitor()
 			else:
 				self.set_build_content('true')
+				if self.cancel_all_playback: self.kill_dialog()
 				self.stop()
 			try: del self.kodi_monitor
 			except: pass
+
+	def check_playback_start(self):
+		if not self.monitor_playback: self.playback_successful = True
+		resolve_percent = 0
+		while self.playback_successful is None:
+			hide_busy_dialog()
+			if not self.sources_object.progress_dialog: self.playback_successful = True
+			if self.sources_object.progress_dialog.skip_resolved(): self.playback_successful = False
+			if self.sources_object.progress_dialog.iscanceled() or self.kodi_monitor.abortRequested(): self.cancel_all_playback, self.playback_successful = True, False
+			if get_visibility('Window.IsTopMost(okdialog)'):
+				execute_builtin("SendClick(okdialog, 11)")
+				self.playback_successful = False
+			if self.isPlayingVideo():
+				try:
+					if self.getTotalTime() not in total_time_errors and get_visibility('Window.IsActive(VideoFullScreen.xml)'): self.playback_successful = True
+				except: pass
+			resolve_percent = round(resolve_percent + 26.0/100, 1)
+			self.sources_object.progress_dialog.update_resolver(percent=round(resolve_percent))
+			sleep(100)
+		self.set_build_content('true')
 
 	def make_listing(self):
 		listitem = make_listitem()
@@ -143,19 +162,9 @@ class FenPlayer(xbmc_player):
 						'season': self.season, 'episode': self.episode, 'duration': duration, 'rating': rating, 'director': director, 'writer': writer})
 					listitem.setCast(cast)
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-			if self.resume_method == 0: self.set_resume_listitem(listitem)
+			self.set_resume_point(listitem)
 			self.set_playback_properties()
 		return listitem
-
-	def set_resume_listitem(self, listitem):
-		self.resume_set = True
-		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))
-
-	def set_resume_playback(self):
-		self.resume_set = True
-		if self.playback_percent > 0.0:
-			self.seekTime(int((self.playback_percent/100) * self.total_time))
-			if get_visibility('Player.Paused'): self.pause()
 
 	def monitor(self):
 		try:
@@ -188,7 +197,6 @@ class FenPlayer(xbmc_player):
 							sleep(200)
 							close_all_dialog()
 						else: close_all_dialog()
-					if not self.resume_set and self.total_time: self.set_resume_playback()
 					self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
 					if self.current_point >= self.set_watched:
 						if play_random_continual and not self.random_continual_started: self.run_random_continual()
@@ -245,25 +253,8 @@ class FenPlayer(xbmc_player):
 		try: Thread(target=Subtitles().get, args=(self.title, self.imdb_id, self.season or None, self.episode or None)).start()
 		except: pass
 
-	def check_playback_start(self):
-		if not self.monitor_playback: self.playback_successful = True
-		resolve_percent = 0
-		while self.playback_successful is None:
-			hide_busy_dialog()
-			if not self.sources_object.progress_dialog: self.playback_successful = True
-			if self.sources_object.progress_dialog.skip_resolved(): self.playback_successful = False
-			if self.sources_object.progress_dialog.iscanceled() or self.kodi_monitor.abortRequested(): self.cancel_all_playback, self.playback_successful = True, False
-			if get_visibility('Window.IsTopMost(okdialog)'):
-				execute_builtin("SendClick(okdialog, 11)")
-				self.playback_successful = False
-			if self.isPlayingVideo():
-				try:
-					if self.getTotalTime() not in total_time_errors and get_visibility('Window.IsActive(VideoFullScreen.xml)'): self.playback_successful = True
-				except: pass
-			resolve_percent = round(resolve_percent + 26.0/100, 1)
-			self.sources_object.progress_dialog.update_resolver(percent=round(resolve_percent))
-			sleep(100)
-		self.set_build_content('true')
+	def set_resume_point(self, listitem):
+		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))
 
 	def suppress_widget_content(self):
 		if widget_load_empty(): Thread(target=self.set_suppress).start()
@@ -305,9 +296,9 @@ class FenPlayer(xbmc_player):
 			self.meta = self.sources_object.meta
 			self.meta_get, self.kodi_monitor, self.playback_percent = self.meta.get, ku.monitor, self.sources_object.playback_percent or 0.0
 			self.monitor_playback, self.playing_filename = self.sources_object.monitor_playback, self.sources_object.playing_filename
-			self.playback_successful, self.cancel_all_playback, self.resume_set, self.subs_searched = None, False, False, False
+			self.playback_successful, self.cancel_all_playback, self.subs_searched = None, False, False
 			self.media_marked, self.nextep_info_gathered, self.nextep_started, self.random_continual_started = False, False, False, False
-			self.set_watched, self.set_resume, self.resume_method = playback_settings()
+			self.set_watched, self.set_resume = playback_settings()
 
 	def set_playback_properties(self):
 		try:
@@ -343,7 +334,7 @@ class Subtitles(xbmc_player):
 		self.os = OpenSubtitlesAPI()
 		self.auto_enable = get_setting('subtitles.auto_enable')
 		self.subs_action = get_setting('subtitles.subs_action')
-		self.language = language_choices[get_setting('subtitles.language')]
+		self.language = get_setting('subtitles.language_primary')
 		self.quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webdl', 'webrip', 'webcap', 'web', 'hdtv', 'hdrip']
 
 	def get(self, query, imdb_id, season, episode, secondary_search=False):
@@ -428,7 +419,7 @@ class Subtitles(xbmc_player):
 		subtitle = _searched_subs()
 		if subtitle: return self.setSubtitles(subtitle)
 		if secondary_search: return _notification(32793)
-		secondary_language = language_choices[get_setting('subtitles.secondary_language')]
+		secondary_language = get_setting('subtitles.language_secondary')
 		if secondary_language in (self.language, None, 'None', ''): return _notification(32793)
 		self.language = secondary_language
 		self.get(query, imdb_id, season, episode, secondary_search=True)

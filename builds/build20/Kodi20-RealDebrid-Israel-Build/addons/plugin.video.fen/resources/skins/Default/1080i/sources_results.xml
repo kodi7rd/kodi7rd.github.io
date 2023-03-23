@@ -8,7 +8,7 @@
                 <top>0</top>
                 <width>1920</width>
                 <height>1080</height>
-                <texture colordiffuse="FF000000">common/white.png</texture>
+                <texture colordiffuse="FF000000">fen_common/white.png</texture>
             </control>
             <control type="image">
                 <left>0</left>
@@ -28,7 +28,7 @@
                 <width>60</width>
                 <height>60</height>
                 <aspectratio aligny="top">keep</aspectratio>
-                <texture>common/fen.png</texture>
+                <texture>fen_common/fen.png</texture>
             </control>
             <control type="label">
                 <left>70</left>
@@ -42,6 +42,14 @@
                 <label>[UPPERCASE][B]$INFO[Window.Property(total_results)][/B] $ADDON[plugin.video.fen 32139] [COLOR=$INFO[Window(10000).Property(fen.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
                 <animation effect="slide" start="0,0" end="0,-15" time="0" center="auto" condition="String.StartsWith(Window.Property(window_format),media) + !String.IsEmpty(Window.Property(clearlogo))">Conditional</animation>
             </control>
+        </control>
+        <!-- Hidden Poster Load -->
+        <control type="image" id="210">
+            <description>Dummy load of Original Quality Image</description>
+            <left>-1000</left>
+            <top>-1000</top>
+            <width>630</width>
+            <aspectratio aligny="top">keep</aspectratio>
         </control>
         <!-- List -->
         <control type="group">
@@ -86,7 +94,7 @@
                     <width>486</width>
                     <height>729</height>
                     <aspectratio aligny="top">keep</aspectratio>
-                    <texture diffuse="diffuse/poster_w217_h320.png" />
+                    <texture diffuse="fen_diffuse/poster_w217_h320.png" />
                 </control>
                 <control type="textbox">
                     <left>1395</left>
@@ -115,7 +123,7 @@
                     <onup>2000</onup>
                     <ondown>2000</ondown>
                     <onright>2060</onright>
-                    <scrolltime tween="sine">350</scrolltime>
+                    <scrolltime tween="cubic" easing="out">500</scrolltime>
                     <orientation>Vertical</orientation>
                     <focusposition>3</focusposition>
                     <movement>4</movement>
@@ -125,7 +133,7 @@
                             <top>15</top>
                             <width>1300</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                            <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -196,7 +204,7 @@
                                 <left>55</left>
                                 <align>left</align>
                                 <aligny>top</aligny>
-                                <texture colordiffuse="FF9c9a9b">common/info.png</texture>
+                                <texture colordiffuse="FF9c9a9b">fen_common/info.png</texture>
                             </control>
                             <control type="label">
                                 <top>50</top>
@@ -214,17 +222,18 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1300">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2000)">Conditional</animation>
                                 <top>15</top>
                                 <height>110</height>
                                 <control type="image">
                                     <width>1300</width>
-                                    <texture colordiffuse="FFCCCCCC" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texture>
                                 </control>
                                 <control type="image">
                                     <width>200</width>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/left-circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/left-circle.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -293,7 +302,7 @@
                                     <left>55</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">common/info.png</texture>
+                                    <texture colordiffuse="FF4a4347">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -311,19 +320,20 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1300">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
                                 <control type="image">
                                     <width>1300</width>
                                     <height>110</height>
-                                    <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="!Control.HasFocus(2000)">Conditional</animation>
                                 </control>
                                 <control type="image">
                                     <width>1300</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="true">Conditional</animation>
                                 </control>
                             </control>
@@ -393,7 +403,7 @@
                                     <left>55</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FFFFFFFF">common/info.png</texture>
+                                    <texture colordiffuse="FFFFFFFF">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -415,9 +425,9 @@
                     <top>0</top>
                     <width>1920</width>
                     <height>1080</height>
-                    <texture colordiffuse="FF000000">common/white.png</texture>
+                    <texture colordiffuse="FF000000">fen_common/white.png</texture>
                     <visible>Control.HasFocus(2060)</visible>
-                    <animation effect="fade" start="0" end="40" time="200" tween="sine">Visible</animation>
+                    <animation effect="fade" start="0" end="60" time="200" tween="sine">Visible</animation>
                 </control>
                 <control type="image">
                     <left>565</left>
@@ -427,7 +437,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="$INFO[Container(2000).ListItem.Property(highlight)]">$INFO[Container(2000).ListItem.Property(quality_icon)]</texture>
+                    <texture colordiffuse="FF9c9a9b">$INFO[Container(2000).ListItem.Property(quality_icon)]</texture>
                     <visible>Control.HasFocus(2060)</visible>
                     <animation effect="fade" start="0" end="100" time="200" tween="sine">Visible</animation>
                 </control>
@@ -438,9 +448,9 @@
                     <height>945</height>
                     <onleft>2000</onleft>
                     <onright>2000</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">common/white.png</texturesliderbackground>
-                    <texturesliderbar colordiffuse="FF555556">common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="FFB7B4BB">common/white.png</texturesliderbarfocus>
+                    <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                    <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                    <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
                     <orientation>vertical</orientation>
                     <visible>Control.IsVisible(2000)</visible>
@@ -490,7 +500,7 @@
                     <control type="image">
                         <width>770</width>
                         <height>825</height>
-                        <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                        <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                     </control>
                     <control type="image">
                         <left>-40</left>
@@ -612,7 +622,7 @@
                     <left>250</left>
                     <align>left</align>
                     <aligny>top</aligny>
-                    <texture>common/info.png</texture>
+                    <texture>fen_common/info.png</texture>
                     <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                 </control>
             </control>
@@ -630,7 +640,7 @@
                     <onup>2001</onup>
                     <ondown>2001</ondown>
                     <onright>2061</onright>
-                    <scrolltime tween="sine">200</scrolltime>
+                    <scrolltime tween="cubic" easing="out">500</scrolltime>
                     <orientation>Vertical</orientation>
                     <focusposition>2</focusposition>
                     <movement>4</movement>
@@ -640,7 +650,7 @@
                             <top>15</top>
                             <width>1030</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                            <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -711,7 +721,7 @@
                                 <left>45</left>
                                 <align>left</align>
                                 <aligny>top</aligny>
-                                <texture colordiffuse="FF9c9a9b">common/info.png</texture>
+                                <texture colordiffuse="FF9c9a9b">fen_common/info.png</texture>
                             </control>
                             <control type="label">
                                 <top>50</top>
@@ -728,17 +738,18 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1030">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2001)">Conditional</animation>
                                 <top>15</top>
                                 <height>110</height>
                                 <control type="image">
                                     <width>1035</width>
-                                    <texture colordiffuse="FFCCCCCC" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texture>
                                 </control>
                                 <control type="image">
                                     <width>175</width>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/left-circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/left-circle.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -807,7 +818,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">common/info.png</texture>
+                                    <texture colordiffuse="FF4a4347">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -825,19 +836,20 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1030">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
                                 <control type="image">
                                     <width>1030</width>
                                     <height>110</height>
-                                    <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="!Control.HasFocus(2001)">Conditional</animation>
                                 </control>
                                 <control type="image">
                                     <width>1030</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="true">Conditional</animation>
                                 </control>
                             </control>
@@ -907,7 +919,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FFFFFFFF">common/info.png</texture>
+                                    <texture colordiffuse="FFFFFFFF">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -929,9 +941,9 @@
                     <top>0</top>
                     <width>1920</width>
                     <height>1080</height>
-                    <texture colordiffuse="FF000000">common/white.png</texture>
+                    <texture colordiffuse="FF000000">fen_common/white.png</texture>
                     <visible>Control.HasFocus(2061)</visible>
-                    <animation effect="fade" start="0" end="40" time="200" tween="sine">Visible</animation>
+                    <animation effect="fade" start="0" end="60" time="200" tween="sine">Visible</animation>
                 </control>
                 <control type="image">
                     <left>432</left>
@@ -941,7 +953,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="$INFO[Container(2001).ListItem.Property(highlight)]">$INFO[Container(2001).ListItem.Property(quality_icon)]</texture>
+                    <texture colordiffuse="FF9c9a9b">$INFO[Container(2001).ListItem.Property(quality_icon)]</texture>
                     <visible>Control.HasFocus(2061)</visible>
                     <animation effect="fade" start="0" end="100" time="200" tween="sine">Visible</animation>
                 </control>
@@ -952,9 +964,9 @@
                     <height>825</height>
                     <onleft>2001</onleft>
                     <onright>2001</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">common/white.png</texturesliderbackground>
-                    <texturesliderbar colordiffuse="FF555556">common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="FFB7B4BB">common/white.png</texturesliderbarfocus>
+                    <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                    <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                    <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
                     <orientation>vertical</orientation>
                     <visible>Control.IsVisible(2001)</visible>
@@ -1005,7 +1017,7 @@
                     <width>650</width>
                     <height>1000</height>
                     <aspectratio aligny="top">stretch</aspectratio>
-                    <texture diffuse="diffuse/poster_w217_h320.png" />
+                    <texture diffuse="fen_diffuse/poster_w217_h320.png" />
                 </control>
             </control>
             <control type="group">
@@ -1022,7 +1034,7 @@
                     <onup>2002</onup>
                     <ondown>2002</ondown>
                     <onright>2062</onright>
-                    <scrolltime tween="sine">350</scrolltime>
+                    <scrolltime tween="cubic" easing="out">500</scrolltime>
                     <orientation>Vertical</orientation>
                     <focusposition>2</focusposition>
                     <movement>3</movement>
@@ -1032,7 +1044,7 @@
                             <top>15</top>
                             <width>1180</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                            <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <height max="100">auto</height>
@@ -1104,7 +1116,7 @@
                                 <left>60</left>
                                 <align>left</align>
                                 <aligny>top</aligny>
-                                <texture colordiffuse="FF9c9a9b">common/info.png</texture>
+                                <texture colordiffuse="FF9c9a9b">fen_common/info.png</texture>
                             </control>
                             <control type="label">
                                 <top>50</top>
@@ -1123,17 +1135,18 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1180">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <top>15</top>
                                 <height>110</height>
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2002)">Conditional</animation>
                                 <control type="image">
                                     <width>1180</width>
-                                    <texture colordiffuse="FFCCCCCC" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texture>
                                 </control>
                                 <control type="image">
                                     <width>200</width>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/left-circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/left-circle.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -1202,7 +1215,7 @@
                                     <left>60</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">common/info.png</texture>
+                                    <texture colordiffuse="FF4a4347">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1220,19 +1233,20 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1180">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
                                 <control type="image">
                                     <width>1180</width>
                                     <height>110</height>
-                                    <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="!Control.HasFocus(2002)">Conditional</animation>
                                 </control>
                                 <control type="image">
                                     <width>1180</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="true">Conditional</animation>
                                 </control>
                             </control>
@@ -1302,7 +1316,7 @@
                                     <left>60</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FFFFFFFF">common/info.png</texture>
+                                    <texture colordiffuse="FFFFFFFF">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1325,9 +1339,9 @@
                     <top>-20</top>
                     <width>1920</width>
                     <height>1080</height>
-                    <texture colordiffuse="FF000000">common/white.png</texture>
+                    <texture colordiffuse="FF000000">fen_common/white.png</texture>
                     <visible>Control.HasFocus(2062)</visible>
-                    <animation effect="fade" start="0" end="40" time="200" tween="sine">Visible</animation>
+                    <animation effect="fade" start="0" end="60" time="200" tween="sine">Visible</animation>
                 </control>
                 <control type="image">
                     <left>502</left>
@@ -1337,7 +1351,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="$INFO[Container(2002).ListItem.Property(highlight)]">$INFO[Container(2002).ListItem.Property(quality_icon)]</texture>
+                    <texture colordiffuse="FF9c9a9b">$INFO[Container(2002).ListItem.Property(quality_icon)]</texture>
                     <visible>Control.HasFocus(2062)</visible>
                     <animation effect="fade" start="0" end="100" time="200" tween="sine">Visible</animation>
                 </control>
@@ -1348,9 +1362,9 @@
                     <height>705</height>
                     <onleft>2002</onleft>
                     <onright>2002</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">common/white.png</texturesliderbackground>
-                    <texturesliderbar colordiffuse="FF555556">common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="FFB7B4BB">common/white.png</texturesliderbarfocus>
+                    <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                    <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                    <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
                     <orientation>vertical</orientation>
                     <visible>Control.IsVisible(2002)</visible>
@@ -1403,7 +1417,7 @@
                     <onup>2003</onup>
                     <ondown>2003</ondown>
                     <onright>2063</onright>
-                    <scrolltime tween="sine">200</scrolltime>
+                    <scrolltime tween="cubic" easing="out">500</scrolltime>
                     <orientation>Vertical</orientation>
                     <itemlayout height="120" width="935">
                         <control type="image">
@@ -1411,7 +1425,7 @@
                             <top>15</top>
                             <width>925</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                            <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -1482,7 +1496,7 @@
                                 <left>45</left>
                                 <align>left</align>
                                 <aligny>top</aligny>
-                                <texture colordiffuse="FF9c9a9b">common/info.png</texture>
+                                <texture colordiffuse="FF9c9a9b">fen_common/info.png</texture>
                             </control>
                             <control type="label">
                                 <top>50</top>
@@ -1501,17 +1515,18 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="935">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2003)">Conditional</animation>
                                 <top>15</top>
                                 <height>110</height>
                                 <control type="image">
                                     <width>925</width>
-                                    <texture colordiffuse="FFCCCCCC" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texture>
                                 </control>
                                 <control type="image">
                                     <width>175</width>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/left-circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/left-circle.png</texture>
                                 </control>
                             </control>
                             <control type="group">
@@ -1580,7 +1595,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">common/info.png</texture>
+                                    <texture colordiffuse="FF4a4347">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1600,19 +1615,20 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="935">
                         <control type="group">
+                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
                                 <control type="image">
                                     <width>925</width>
                                     <height>110</height>
-                                    <texture colordiffuse="FF4a4347" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="FF4a4347" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="!Control.HasFocus(2003)">Conditional</animation>
                                 </control>
                                 <control type="image">
                                     <width>925</width>
                                     <height>110</height>
-                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">common/circle.png</texture>
+                                    <texture colordiffuse="$INFO[ListItem.Property(highlight)]" border="30">fen_common/circle.png</texture>
                                     <animation effect="fade" start="100" end="30" time="0" condition="true">Conditional</animation>
                                 </control>
                             </control>
@@ -1682,7 +1698,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FFFFFFFF">common/info.png</texture>
+                                    <texture colordiffuse="FFFFFFFF">fen_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1705,9 +1721,9 @@
                     <top>0</top>
                     <width>1920</width>
                     <height>1080</height>
-                    <texture colordiffuse="FF000000">common/white.png</texture>
+                    <texture colordiffuse="FF000000">fen_common/white.png</texture>
                     <visible>Control.HasFocus(2063)</visible>
-                    <animation effect="fade" start="0" end="40" time="200" tween="sine">Visible</animation>
+                    <animation effect="fade" start="0" end="60" time="200" tween="sine">Visible</animation>
                 </control>
                 <control type="image">
                     <left>845</left>
@@ -1717,7 +1733,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="$INFO[Container(2003).ListItem.Property(highlight)]">$INFO[Container(2003).ListItem.Property(quality_icon)]</texture>
+                    <texture colordiffuse="FF9c9a9b">$INFO[Container(2003).ListItem.Property(quality_icon)]</texture>
                     <visible>Control.HasFocus(2063)</visible>
                     <animation effect="fade" start="0" end="100" time="200" tween="sine">Visible</animation>
                 </control>
@@ -1728,21 +1744,14 @@
                     <height>825</height>
                     <onleft>2003</onleft>
                     <onright>2003</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">common/white.png</texturesliderbackground>
-                    <texturesliderbar colordiffuse="FF555556">common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="FFB7B4BB">common/white.png</texturesliderbarfocus>
+                    <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                    <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                    <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
                     <orientation>vertical</orientation>
                     <visible>Control.IsVisible(2003)</visible>
                 </control>
             </control>
-        </control>
-        <control type="image" id="210">
-            <description>Dummy load of Original Quality Image</description>
-            <left>-1000</left>
-            <top>-1000</top>
-            <width>630</width>
-            <aspectratio aligny="top">keep</aspectratio>
         </control>
     </controls>
 </window>

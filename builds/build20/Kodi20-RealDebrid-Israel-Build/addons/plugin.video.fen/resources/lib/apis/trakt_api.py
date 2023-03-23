@@ -5,7 +5,7 @@ from caches import check_databases, trakt_cache
 from caches.main_cache import cache_object
 from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movie_meta_external_id, tvshow_meta_external_id
-from modules.utils import sort_list, sort_for_article, make_thread_list, paginate_list, get_datetime, timedelta, jsondate_to_datetime as js2date, title_key
+from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, jsondate_to_datetime as js2date, title_key
 
 CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af', '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
@@ -14,14 +14,15 @@ requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, ko
 set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
 pause_settings_change, unpause_settings_change, progress_dialog = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.progress_dialog
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
-get_infolabel, get_icon = kodi_utils.get_infolabel, kodi_utils.get_icon
-ignore_articles, lists_sort_order, paginate, page_limit = settings.ignore_articles, settings.lists_sort_order, settings.paginate, settings.page_limit
-show_unaired_watchlist, metadata_user_info,  = settings.show_unaired_watchlist, settings.metadata_user_info, 
+get_infolabel, get_icon, remove_keys, trakt_dict_removals = kodi_utils.get_infolabel, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
+ignore_articles, lists_sort_order = settings.ignore_articles, settings.lists_sort_order
+show_unaired_watchlist, metadata_user_info = settings.show_unaired_watchlist, settings.metadata_user_info
 clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cache.clear_all_trakt_cache_data, trakt_cache.cache_trakt_object, trakt_cache.clear_trakt_calendar
 TraktWatched, reset_activity, clear_trakt_list_contents_data = trakt_cache.TraktWatched, trakt_cache.reset_activity, trakt_cache.clear_trakt_list_contents_data
 clear_trakt_collection_watchlist_data, clear_trakt_hidden_data = trakt_cache.clear_trakt_collection_watchlist_data, trakt_cache.clear_trakt_hidden_data
 clear_trakt_recommendations, clear_trakt_list_data = trakt_cache.clear_trakt_recommendations, trakt_cache.clear_trakt_list_data
 trakt_str = ls(32037)
+standby_date = '2050-01-01T01:00:00.000Z'
 res_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 API_ENDPOINT = 'https://api.trakt.tv/%s'
 timeout = 20
@@ -260,47 +261,42 @@ def trakt_progress(action, media, media_id, percent, season=None, episode=None, 
 	if refresh_trakt: trakt_sync_activities()
 
 def trakt_collection_lists(media_type, list_type):
+	logger('list_type', list_type)
 	limit = 20
-	string_insert = 'movie' if media_type in ('movie', 'movies') else 'tvshow'
 	data = trakt_fetch_collection_watchlist('collection', media_type)
 	if list_type == 'recent': data.sort(key=lambda k: k['collected_at'], reverse=True)
 	elif list_type == 'random': random.shuffle(data)
 	data = data[:limit]
-	return data, [], 1
+	return data
 
-def trakt_collection(media_type, page_no):
-	string_insert = 'movie' if media_type in ('movie', 'movies') else 'tvshow'
-	original_list = trakt_fetch_collection_watchlist('collection', media_type)
+def trakt_collection(media_type, dummy_arg):
+	data = trakt_fetch_collection_watchlist('collection', media_type)
 	sort_order = lists_sort_order('collection')
-	if sort_order == 0: original_list = sort_for_article(original_list, 'title', ignore_articles())
-	elif sort_order == 1: original_list.sort(key=lambda k: k['collected_at'], reverse=True)
-	else: original_list.sort(key=lambda k: k['released'], reverse=True)
-	if paginate(): final_list, all_pages, total_pages = paginate_list(original_list, page_no, page_limit())
-	else: final_list, all_pages, total_pages = original_list, [], 1
-	return final_list, all_pages, total_pages
+	if sort_order == 0: data = sort_for_article(data, 'title', ignore_articles())
+	elif sort_order == 1: data.sort(key=lambda k: k['collected_at'], reverse=True)
+	else: data.sort(key=lambda k: k['released'], reverse=True)
+	return [remove_keys(i, trakt_dict_removals) for i in data]
 
-def trakt_watchlist(media_type, page_no):
-	string_insert = 'movie' if media_type in ('movie', 'movies') else 'tvshow'
-	original_list = trakt_fetch_collection_watchlist('watchlist', media_type)
+def trakt_watchlist(media_type, dummy_arg):
+	data = trakt_fetch_collection_watchlist('watchlist', media_type)
 	if not show_unaired_watchlist():
 		current_date = get_datetime()
 		str_format = '%Y-%m-%d' if media_type in ('movie', 'movies') else res_format
-		original_list = [i for i in original_list if i.get('released', None) and js2date(i.get('released'), str_format, remove_time=True) <= current_date]
+		data = [i for i in data if i.get('released', None) and js2date(i.get('released'), str_format, remove_time=True) <= current_date]
 	sort_order = lists_sort_order('watchlist')
-	if sort_order == 0: original_list = sort_for_article(original_list, 'title', ignore_articles())
-	elif sort_order == 1: original_list.sort(key=lambda k: k['collected_at'], reverse=True)
-	else: original_list.sort(key=lambda k: k.get('released'), reverse=True)
-	if paginate(): final_list, all_pages, total_pages = paginate_list(original_list, page_no, page_limit())
-	else: final_list, all_pages, total_pages = original_list, [], 1
-	return final_list, all_pages, total_pages
+	if sort_order == 0: data = sort_for_article(data, 'title', ignore_articles())
+	elif sort_order == 1: data.sort(key=lambda k: k['collected_at'], reverse=True)
+	else: data.sort(key=lambda k: k.get('released'), reverse=True)
+	return [remove_keys(i, trakt_dict_removals) for i in data]
 
 def trakt_fetch_collection_watchlist(list_type, media_type):
 	def _process(params):
 		data = get_trakt(params)
 		if list_type == 'watchlist': data = [i for i in data if i['type'] == key]
-		return [{'media_ids': i[key]['ids'], 'title': i[key]['title'], 'collected_at': i.get(collected_at),
-		'released': i[key].get(release_key) if i[key].get(release_key) else ('2050-01-01' if media_type in ('movie', 'movies') else '2050-01-01T01:00:00.000Z')} for i in data]
-	key, string_insert, release_key = ('movie', 'movie', 'released') if media_type in ('movie', 'movies') else ('show', 'tvshow', 'first_aired')
+		return [{'media_ids': {'tmdb': i[key]['ids'].get('tmdb', ''), 'imdb': i[key]['ids'].get('imdb', ''), 'tvdb': i[key]['ids'].get('tvdb', '')}, 'title': i[key]['title'],
+				'collected_at': i.get(collected_at), 'released': i[key].get(r_key) if i[key].get(r_key) else ('2050-01-01' if media_type in ('movie', 'movies') else standby_date)}
+				for i in data]
+	key, r_key, string_insert = ('movie', 'released', 'movie') if media_type in ('movie', 'movies') else ('show', 'first_aired', 'tvshow')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
 	string = 'trakt_%s_%s' % (list_type, string_insert)
 	path = 'sync/%s/%s?extended=full'
@@ -310,9 +306,12 @@ def trakt_fetch_collection_watchlist(list_type, media_type):
 def trakt_fetch_movie_sets():
 	from caches import trakt_cache
 	def _process_metadata(media_id):
-		extra_info = movie_meta('trakt_dict', media_id, meta_user_info, current_date)['extra_info']
-		collection_id = extra_info['collection_id']
-		if collection_id: collection_info_append({'title': extra_info['collection_name'], 'id': collection_id})
+		try:
+			meta = movie_meta('trakt_dict', media_id, meta_user_info, current_date)
+			extra_info = meta.get('extra_info', None)
+			collection_id = extra_info.get('collection_id', None)
+			if collection_id: collection_info_append({'title': extra_info.get('collection_name', None), 'id': collection_id})
+		except: pass
 	def _process(collection_info):
 		media_ids = [i['media_ids'] for i in trakt_fetch_collection_watchlist('collection', 'movies')]
 		threads = list(make_thread_list(_process_metadata, media_ids))

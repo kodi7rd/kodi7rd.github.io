@@ -1,6 +1,16 @@
-[COLOR dodgerblue][B]All forks are free to use any new code if they so wish.[CR]At your own risk of it breaking your fork of course.[/B][/COLOR]
-
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
+
+[COLOR red][B]Fen users looking for a lightweight, fast skin with a customizable home page for widgets are encouraged to try out ivarbrandt's mod of Estuary: "FENtastic". Use "https://ivarbrandt.github.io/repository.ivarbrandt/" in Kodi's File Manager to download his repo. He has done a great job making many modifications to Estuary, and the skin is geared towards Fen users.[/B][/COLOR]
+
+[COLOR dodgerblue][B]Version 3.1.05[/B][/COLOR]
+- Added ability to set different item limits for widget and within-addon lists where supported.
+- Watchlist items within Next Episodes (if enabled) will now honor next episode sorting.
+- Cosmetic changes throughout xmls.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.04[/B][/COLOR]
+- Language Choices for Subtitles will need to be reset this update.
+- Couple of quick fixes.
 
 [COLOR dodgerblue][B]Version 3.1.03[/B][/COLOR]
 - Couple of quick fixes.

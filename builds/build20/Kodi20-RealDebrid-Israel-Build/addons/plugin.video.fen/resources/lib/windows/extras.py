@@ -18,6 +18,7 @@ json, Thread, get_icon, close_all_dialog, ok_dialog = kodi_utils.json, kodi_util
 addon_icon, ls, get_icon, backup_cast_thumbnail = kodi_utils.addon_icon, kodi_utils.local_string, kodi_utils.get_icon, get_icon('genre_family')
 fetch_kodi_imagecache, addon_fanart, empty_poster = kodi_utils.fetch_kodi_imagecache, kodi_utils.addon_fanart, kodi_utils.empty_poster
 extras_button_label_values, show_busy_dialog, hide_busy_dialog = kodi_utils.extras_button_label_values, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
+container_update, activate_window = kodi_utils.container_update, kodi_utils.activate_window
 extras_enable_scrollbars, get_resolution, omdb_api_key, date_offset = settings.extras_enable_scrollbars, settings.get_resolution, settings.omdb_api_key, settings.date_offset
 default_all_episodes, metadata_user_info, extras_enabled_menus = settings.default_all_episodes, settings.metadata_user_info, settings.extras_enabled_menus
 enable_extra_ratings, extras_enabled_ratings = settings.extras_enable_extra_ratings, settings.extras_enabled_ratings
@@ -35,7 +36,7 @@ imdb_reviews, imdb_trivia, imdb_blunders = imdb_api.imdb_reviews, imdb_api.imdb_
 imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_videos
 fetch_ratings_info = omdb_api.fetch_ratings_info
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
-setting_base, label_base, ratings_base = 'extras.%s.button', 'button%s.label', 'flags/ratings/%s.png'
+setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'fen_flags/ratings/%s'
 separator = '  •  '
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
 cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2050, 2051, 2052, 2053, 2054, 2055
@@ -48,7 +49,6 @@ parentsguide_levels = {'mild': ls(32996), 'moderate': ls(32997), 'severe': ls(32
 parentsguide_inputs = {'Sex & Nudity': (ls(32990), get_icon('sex_nudity')), 'Violence & Gore': (ls(32991), get_icon('genre_war')),
 						'Profanity': (ls(32992),get_icon('bad_language')), 'Alcohol, Drugs & Smoking': (ls(32993), get_icon('drugs_alcohol')),
 						'Frightening & Intense Scenes': (ls(32994), get_icon('genre_horror'))}
-ratings_icon_base = 'flags/ratings/%s'
 meta_ratings_values = (('Meta', 'metascore', 1), ('Tom/Critic', 'tomatometer', 2), ('Tom/User', 'tomatousermeter', 3), ('IMDb', 'imdb', 4), ('TMDb', 'tmdb', 5))
 ratings_null = ('', '%')
 _images = Images()
@@ -521,7 +521,7 @@ class Extras(BaseDialog):
 	def tvshow_browse(self):
 		close_all_dialog()
 		url_params = self.make_tvshow_browse_params()
-		self.selected = self.folder_runner % self.build_url(url_params)
+		self.selected = self.folder_runner(url_params)
 		self.close()
 
 	def movies_play(self):
@@ -539,7 +539,7 @@ class Extras(BaseDialog):
 		keyword_params = imdb_keywords_choice(base_media, self.imdb_id, self.poster)
 		if not keyword_params: return
 		close_all_dialog()
-		self.selected = self.folder_runner % self.build_url(keyword_params)
+		self.selected = self.folder_runner(keyword_params)
 		self.close()
 
 	def show_images(self):
@@ -555,7 +555,7 @@ class Extras(BaseDialog):
 		genre_params = genres_choice(base_media, self.genre, self.poster)
 		if not genre_params: return
 		close_all_dialog()
-		self.selected = self.folder_runner % self.build_url(genre_params)
+		self.selected = self.folder_runner(genre_params)
 		self.close()
 
 	def play_nextep(self):
@@ -574,7 +574,7 @@ class Extras(BaseDialog):
 
 	def show_recommended(self):
 		mode, action = ('build_movie_list', 'tmdb_movies_recommendations') if self.media_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_recommendations')
-		self.selected = self.folder_runner % self.build_url({'mode': mode, 'action': action, 'tmdb_id': self.tmdb_id})
+		self.selected = self.folder_runner({'mode': mode, 'action': action, 'tmdb_id': self.tmdb_id})
 		self.close()
 
 	def show_trakt_manager(self):
@@ -612,8 +612,7 @@ class Extras(BaseDialog):
 		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
 		self.tmdb_id, self.imdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id')
 		self.is_widget = kwargs['is_widget'].lower()
-		if self.is_widget == 'true': self.folder_runner = 'ActivateWindow(Videos,%s,return)'
-		else: self.folder_runner = 'Container.Update(%s)'
+		self.folder_runner = activate_window if self.is_widget == 'true' else container_update
 		self.meta_user_info, self.enabled_lists, self.enable_scrollbars = metadata_user_info(), extras_enabled_menus(), extras_enable_scrollbars()
 		self.poster_resolution, self.watched_indicators, self.omdb_api = get_resolution()['poster'], watched_indicators(), omdb_api_key()
 		self.display_extra_ratings = self.imdb_id and self.omdb_api and enable_extra_ratings()

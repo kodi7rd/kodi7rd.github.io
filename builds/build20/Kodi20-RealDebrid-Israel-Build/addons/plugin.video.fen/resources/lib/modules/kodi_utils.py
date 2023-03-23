@@ -79,7 +79,8 @@ tvshow_dict_removals = ('fanart_added', 'cast', 'poster', 'rootname', 'imdb_id',
 						'season_summary', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'total_aired_eps', 'fanart2', 'poster2', 'keyart', 'images', 'custom_poster',
 						'custom_fanart', 'custom_clearlogo', 'custom_banner', 'custom_clearart', 'custom_landscape', 'custom_discart', 'custom_keyart', 'season_art')
 episode_dict_removals = ('thumb', 'guest_stars')
-data_dict_removals = ('adult', 'backdrop_path', 'genre_ids', 'original_language', 'original_title', 'overview', 'popularity', 'vote_count', 'video', 'origin_country', 'original_name')
+tmdb_dict_removals = ('adult', 'backdrop_path', 'genre_ids', 'original_language', 'original_title', 'overview', 'popularity', 'vote_count', 'video', 'origin_country', 'original_name')
+trakt_dict_removals = ('collected_at', 'released')
 video_extensions = ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', 'rmvb', 'mpd', 'ifo', 'mov', 'qt', 'divx', 'xvid', 'bivx', 'vob', 'nrg', 'img', 'iso', 'udf', 'pva',
 					'wmv', 'asf', 'asx', 'ogm', 'm2v', 'avi', 'bin', 'dat', 'mpg', 'mpeg', 'mp4', 'mkv', 'mk3d', 'avc', 'vp3', 'svq3', 'nuv', 'viv', 'dv', 'fli', 'flv', 'wpl',
 					'xspf', 'vdr', 'dvr-ms', 'xsp', 'mts', 'm2t', 'm2ts', 'evo', 'ogv', 'sdp', 'avs', 'rec', 'url', 'pxml', 'vc1', 'h264', 'rcv', 'rss', 'mpls', 'mpl', 'webm',
@@ -308,8 +309,20 @@ def container_update(params):
 	if isinstance(params, dict): params = build_url(params)
 	return execute_builtin('Container.Update(%s)' % params)
 
+def activate_window(params):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('ActivateWindow(Videos,%s,return)' % params)
+
 def container_refresh():
 	return execute_builtin('Container.Refresh')
+
+def container_refresh_input(params):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('Container.Refresh(%s)' % params)
+
+def replace_window(params):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('ReplaceWindow(Videos,%s)' % params)
 
 def disable_enable_addon(addon_name='plugin.video.fen'):
 	try:
@@ -516,52 +529,13 @@ def open_settings(query, addon='plugin.video.fen'):
 		except: execute_builtin('Addon.OpenSettings(%s)' % addon)
 	else: execute_builtin('Addon.OpenSettings(%s)' % addon)
 
-def clean_settings(silent=False):
-	from xml.dom.minidom import parse as mdParse
-	def _make_content(dict_object):
-		content = '<settings version="2">'
-		new_line = '\n    '
-		for item in dict_object:
-			_id = item['id']
-			if _id in active_settings:
-				if 'default' in item and 'value' in item: content += '%s<setting id="%s" default="%s">%s</setting>' % (new_line, _id, item['default'], item['value'])
-				elif 'default' in item: content += '%s<setting id="%s" default="%s"></setting>' % (new_line, _id, item['default'])
-				elif 'value' in item: content += '%s<setting id="%s">%s</setting>' % (new_line, _id, item['value'])
-				else: content += '%s<setting id="%s"></setting>' % new_line
-				content = content.replace('></setting>', ' />')
-			else: removed_settings_append(item)
-		content += '\n</settings>'
-		return content
-	close_all_dialog()
-	active_settings, current_user_settings, removed_settings = [], [], []
-	active_append, current_append, removed_settings_append = active_settings.append, current_user_settings.append, removed_settings.append
-	for i in mdParse(addon_settings).getElementsByTagName('setting'):
-		setting_id = i.getAttribute('id')
-		if setting_id: active_append(setting_id)
-	for i in mdParse(user_settings).getElementsByTagName('setting'):
-		dict_item = {}
-		setting_id = i.getAttribute('id')
-		setting_default = i.getAttribute('default')
-		try: setting_value = i.firstChild.data
-		except: setting_value = None
-		dict_item['id'] = setting_id
-		if setting_value: dict_item['value'] = setting_value
-		if setting_default: dict_item['default'] = setting_default
-		current_append(dict_item)
-	new_content = _make_content(current_user_settings)
-	with open_file(user_settings, 'w') as f: f.write(new_content)
-	if not silent:
-		removed = len(removed_settings)
-		notification('%s - Removed %s %s' % (local_string(32576), removed, 'Setting' if removed == '1' else 'Settings'), 2500)
-
 def set_setting(setting_id, value):
 	addon().setSetting(setting_id, value)
 
 def get_setting(setting_id, fallback=None):
+	if get_property(suppress_sett_dict_prop): return addon().getSetting(setting_id)
 	try: settings_dict = json.loads(get_property(fen_settings_str))
-	except:
-		if get_property('fen.suppress_settings_dict'): return addon().getSetting(setting_id)
-		settings_dict = make_settings_dict()
+	except: settings_dict = make_settings_dict()
 	if settings_dict is None or setting_id not in settings_dict:
 		settings_dict = get_setting_fallback(setting_id)
 		if not get_property(suppress_sett_dict_prop) == 'true':
@@ -577,10 +551,10 @@ def get_setting_fallback(setting_id):
 	return {setting_id: addon().getSetting(setting_id)}
 
 def make_settings_dict():
-	from xml.dom.minidom import parse as mdParse
 	settings_dict = None
 	clear_property(fen_settings_str)
-	if not get_property('fen.suppress_settings_dict'):
+	if not get_property(suppress_sett_dict_prop) == 'true':
+		from xml.dom.minidom import parse as mdParse
 		try:
 			if not path_exists(userdata_path): make_directories(userdata_path)
 			settings_dict = {}
@@ -594,6 +568,7 @@ def make_settings_dict():
 				dict_update(dict_item)
 			set_property(fen_settings_str, json.dumps(settings_dict))
 		except Exception as e:
+			settings_dict = None
 			set_property(suppress_sett_dict_prop, 'true')
 			logger('error in make_settings_dict', str(e))
 	return settings_dict

@@ -1,4 +1,4 @@
-<addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.1.03">
+<addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.1.05">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.19.1"/>
@@ -12,27 +12,27 @@
     <extension point="kodi.context.item">
         <menu id="kodi.core.main">
             <item library="resources/contextmenu/refresh_widgets.py">
-                <label>40001</label>
+                <label>[B]$ADDON[plugin.video.fen 32611][/B]</label>
                 <visible>String.IsEqual(ListItem.Property(fen.widget),true) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
             <item library="resources/contextmenu/mark_watched.py">
-                <label>40003</label>
+                <label>[B]$ADDON[plugin.video.fen 33130][/B]</label>
                 <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(fen.widget),true) + String.IsEqual(ListItem.Property(fen.playcount),0) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
             <item library="resources/contextmenu/mark_unwatched.py">
-                <label>40004</label>
+                <label>[B]$ADDON[plugin.video.fen 33131][/B]</label>
                 <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(fen.widget),true) + String.IsEqual(ListItem.Property(fen.playcount),1) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
             <item library="resources/contextmenu/clear_progress.py">
-                <label>40009</label>
+                <label>32651</label>
                 <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(fen.widget),true) + String.IsEqual(ListItem.Property(fen.in_progress),true) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
             <item library="resources/contextmenu/options.py">
-                <label>40007</label>
+                <label>32646</label>
                 <visible>String.IsEqual(ListItem.Property(fen.widget),true) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
             <item library="resources/contextmenu/extras.py">
-                <label>40006</label>
+                <label>32645</label>
                 <visible>String.IsEqual(ListItem.Property(fen.widget),true) + !String.StartsWith(Window(home).Property(fen.kodi_version),20)</visible>
             </item>
         </menu>

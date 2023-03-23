@@ -146,7 +146,7 @@ networks = (
 	)
 
 language_choices =  {
-		'None': None,              'Afrikaans': 'afr',            'Albanian': 'alb',             'Arabic': 'ara',
+		'None': 'None',              'Afrikaans': 'afr',            'Albanian': 'alb',             'Arabic': 'ara',
 		'Armenian': 'arm',         'Basque': 'baq',               'Bengali': 'ben',              'Bosnian': 'bos',
 		'Breton': 'bre',           'Bulgarian': 'bul',            'Burmese': 'bur',              'Catalan': 'cat',
 		'Chinese': 'chi',          'Croatian': 'hrv',             'Czech': 'cze',                'Danish': 'dan',

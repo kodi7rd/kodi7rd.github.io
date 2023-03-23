@@ -187,9 +187,6 @@ def routing(sys):
 		if mode == 'open_settings':
 			from modules.kodi_utils import open_settings
 			return open_settings(_get('query', '0.0'), _get('addon', 'plugin.video.fen'))
-		elif mode == 'clean_settings':
-			from modules.kodi_utils import clean_settings
-			return clean_settings()
 		elif mode == 'clear_settings_window_properties':
 			from modules.kodi_utils import clear_settings_window_properties
 			return clear_settings_window_properties()

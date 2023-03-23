@@ -11,6 +11,7 @@ results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002
 year_in_title_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
 default_action_dict = {0: 'play', 1: 'cancel'}
 extras_open_action_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
+paginate_dict = {True: 'paginate.limit_widgets', False: 'paginate.limit_addon'}
 prescrape_scrapers_tuple = ('furk', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud')
 sort_to_top_dict = {'folders': 'results.sort_folders_first', 'rd_cloud': 'results.sort_rdcloud_first',
 					'pm_cloud': 'results.sort_pmcloud_first', 'ad_cloud': 'results.sort_adcloud_first'}
@@ -56,7 +57,7 @@ def enabled_debrids_check(debrid_service):
 	return True
 
 def playback_settings():
-	return (int(get_setting('playback.watched_percent', '90')), int(get_setting('playback.resume_percent', '5')), int(get_setting('playback.resume_method', '0')))
+	return (int(get_setting('playback.watched_percent', '90')), int(get_setting('playback.resume_percent', '5')))
 
 def monitor_playback():
 	return get_setting('playback.monitor_success', 'true') == 'true'
@@ -105,21 +106,16 @@ def source_folders_directory(media_type, source):
 def suppress_episode_plot():
 	return get_setting('suppress_episode_plot', 'false') == 'true'
 
-def paginate(is_widget=None):
-	if not get_setting('paginate.lists', 'false') == 'true': return False
-	if paginate_widget_only():
-		is_widget = is_widget or external_browse()
-		return True if is_widget else False
-	return True
+def paginate(is_widget):
+	paginate_lists = int(get_setting('paginate.lists', '0'))
+	if is_widget: return paginate_lists in (2, 3)
+	else: return paginate_lists in (1, 3)
 
-def paginate_widget_only():
-	return get_setting('paginate.widget_only', 'false') == 'true'
+def page_limit(is_widget):	
+	return int(get_setting(paginate_dict[is_widget], '20'))
 
-def page_limit():
-	return int(get_setting('paginate.limit', '20'))
-
-def page_reference():
-	return int(get_setting('paginate.reference', '0'))
+def jump_to_enabled():
+	return int(get_setting('paginate.jump_to', '0'))
 
 def ignore_articles():
 	return get_setting('ignore_articles', 'false') == 'true'
@@ -158,9 +154,6 @@ def auto_nextep_settings():
 	alert_method = int(get_setting('autoplay_alert_method', '0'))
 	default_action = default_action_dict[int(get_setting('autoplay_default_action', '1'))] if alert_method == 0 else 'cancel'
 	return {'scraper_time': scraper_time, 'window_percentage': window_percentage, 'alert_method': alert_method, 'default_action': default_action}
-
-def progress_flags_direction():
-	return int(get_setting('results.progress_flags_direction', '0'))
 
 def filter_status(filter_type):
 	return int(get_setting('filter_%s' % filter_type, '0'))

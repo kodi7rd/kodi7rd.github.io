@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 from windows import BaseDialog
-from modules.settings import get_art_provider, suppress_episode_plot, progress_flags_direction
+from modules.settings import get_art_provider, suppress_episode_plot
 from modules.kodi_utils import empty_poster, addon_fanart
 # from modules.kodi_utils import logger
 
 string = str
-flag_total = 'TOTAL'
-flag_properties = {0: ('SD', '720', '1080', '4K'), 1: ('4K', '1080', '720', 'SD')}
 resume_timeout = 10000
 
 class SourcesPlayback(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
 		self.meta = kwargs.get('meta')
-		self.flags_direction = progress_flags_direction()
 		self.is_canceled, self.skip_resolve, self.resume_choice = False, False, None
 		self.meta_get = self.meta.get
 		self.enable_scraper()
@@ -58,9 +55,6 @@ class SourcesPlayback(BaseDialog):
 		self.setProperty('enable_busy_spinner', toggle)
 
 	def set_scraper_properties(self):
-		flag_props = flag_properties[self.flags_direction]
-		flag_highlight = self.get_setting('scraper_flag_identify_colour', 'FF7C7C7C')
-		result_highlight = self.get_setting('scraper_result_identify_colour', 'FFFFFFFF')
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
 		self.title, self.year, self.genre = self.meta_get('title'), string(self.meta_get('year')), self.meta_get('genre', '')
 		self.poster = self.meta_get('custom_poster') or self.meta_get(self.poster_main) or self.meta_get(self.poster_backup) or empty_poster
@@ -73,13 +67,8 @@ class SourcesPlayback(BaseDialog):
 		self.setProperty('year', self.year)
 		self.setProperty('poster', self.poster)
 		self.setProperty('genre', self.genre)
-		self.setProperty('flag_0', flag_props[0])
-		self.setProperty('flag_1', flag_props[1])
-		self.setProperty('flag_2', flag_props[2])
-		self.setProperty('flag_3', flag_props[3])
-		self.setProperty('flag_total', flag_total)
-		self.setProperty('flag_highlight', flag_highlight)
-		self.setProperty('result_highlight', result_highlight)
+		self.setProperty('flag_highlight', self.get_setting('scraper_flag_identify_colour', 'FF7C7C7C'))
+		self.setProperty('result_highlight', self.get_setting('scraper_result_identify_colour', 'FFFFFFFF'))
 
 	def set_resolver_properties(self):
 		if self.meta_get('media_type') == 'movie': self.text = self.meta_get('plot')
@@ -97,16 +86,10 @@ class SourcesPlayback(BaseDialog):
 		self.update_resumer()
 
 	def update_scraper(self, results_sd, results_720p, results_1080p, results_4k, results_total, content='', percent=0):
-		if self.flags_direction == 0:
-			self.setProperty('results_0', string(results_sd))
-			self.setProperty('results_1', string(results_720p))
-			self.setProperty('results_2', string(results_1080p))
-			self.setProperty('results_3', string(results_4k))
-		else:
-			self.setProperty('results_0', string(results_4k))
-			self.setProperty('results_1', string(results_1080p))
-			self.setProperty('results_2', string(results_720p))
-			self.setProperty('results_3', string(results_sd))
+		self.setProperty('results_4k', string(results_4k))
+		self.setProperty('results_1080p', string(results_1080p))
+		self.setProperty('results_720p', string(results_720p))
+		self.setProperty('results_sd', string(results_sd))
 		self.setProperty('results_total', string(results_total))
 		self.setProperty('percent', string(percent))
 		self.set_text(2001, content)

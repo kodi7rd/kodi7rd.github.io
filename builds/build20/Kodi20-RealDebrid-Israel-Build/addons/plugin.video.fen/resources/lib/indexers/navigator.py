@@ -27,7 +27,7 @@ sources_folders_str, downloads_ins, because_str = '[B]%s (%s): %s[/B]\n     [COL
 premium_files_str, ep_lists_str, clear_all_amble = ls(32485), '%s %s' % (episodes_str, ls_str), '[B][I][COLOR=grey] (%s %s & %s)[/COLOR][/I][/B]' % (ls(32189), fav_str, search_str)
 clear_ad_str, clear_fav_str, clear_search_str, clear_all = clca_str % ad_str, clca_str % fav_str, clca_str % search_str, '[B]%s:[/B] %s' % (clear_all_str.upper(), clear_all_amble)
 movh_str, tvh_str, tips_ins = '%s %s' % (mov_str, history_str), '%s %s' % (tv_str, history_str), '[B]%s[/B]: %s'  % (tips_str, '%s')
-corrupt_databases_str, clean_databases_str, clean_all_str = ls(32179), '%s %s' % (clean_str, ls(32003)), '[B]%s:[/B] %s %s' % (settings_str.upper(), clean_str, settings_str)
+corrupt_databases_str, clean_databases_str = ls(32179), '%s %s' % (clean_str, ls(32003))
 kw_mov, kw_tv = '%s %s (%s)' % (imdb_str, keywords_str, mov_str), '%s %s (%s)' % (imdb_str, keywords_str, tv_str)
 clear_imdb_str, clint_str, clext_str, clear_rd_str, clear_pm_str = clca_str % imdb_str, clca_str % ls(32096), clca_str % ext_str, clca_str % rd_str, clca_str % pm_str
 mrec_str, mran_str,  = '%s %s' % (recent_added_str, mov_str), '%s %s' % (random_str, mov_str)
@@ -201,7 +201,6 @@ class Navigator:
 		self.end_directory()
 
 	def maintenance(self):
-		self.add({'mode': 'clean_settings', 'isFolder': 'false'}, clean_all_str, 'settings2')
 		self.add({'mode': 'clear_settings_window_properties', 'isFolder': 'false'}, clean_set_cache_str, 'settings2')
 		self.add({'mode': 'clean_databases_cache', 'isFolder': 'false'}, clear_info_ins % clean_databases_str, 'settings2')
 		self.add({'mode': 'check_corrupt_databases_cache', 'isFolder': 'false'}, clear_info_ins % corrupt_databases_str, 'settings2')

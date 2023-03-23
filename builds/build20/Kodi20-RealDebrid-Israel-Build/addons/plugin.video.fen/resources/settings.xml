@@ -191,844 +191,6 @@
 						<heading>33005</heading>
 					</control>
 				</setting>
-			<!-- Hidden -->
-				<setting id="trakt.expires" type="string" help="">
-					<level>0</level>
-					<default>0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="trakt.refresh" type="string" help="">
-					<level>0</level>
-					<default>0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="trakt.token" type="string" help="">
-					<level>0</level>
-					<default>0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="rd.client_id" type="string" label="rd client_id" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>rd client_id</heading>
-					</control>
-				</setting>
-				<setting id="rd.refresh" type="string" label="rd refresh" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>rd refresh</heading>
-					</control>
-				</setting>
-				<setting id="rd.secret" type="string" label="rd secret" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>rd secret</heading>
-					</control>
-				</setting>
-				<setting id="meta_language" type="string" label="meta_language" help="">
-					<level>0</level>
-					<default>en</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">hidden</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>meta_language</heading>
-					</control>
-				</setting>
-				<setting id="meta_mpaa_region" type="string" label="meta_language" help="">
-					<level>0</level>
-					<default>US</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">hidden</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>meta_mpaa_region</heading>
-					</control>
-				</setting>
-				<setting id="results.sort_order" type="string" help="">
-					<level>0</level>
-					<default>1</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">hidden</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="database.maintenance.due" type="string" help="">
-					<level>0</level>
-					<default>0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">hidden</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="reuse_language_invoker" type="string" help="">
-					<level>0</level>
-					<default>true</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">hidden</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder1.display_name" type="string" help="">
-					<level>0</level>
-					<default>Folder 1</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder1.movies_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder1.tv_shows_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder2.display_name" type="string" help="">
-					<level>0</level>
-					<default>Folder 2</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder2.movies_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder2.tv_shows_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder3.display_name" type="string" help="">
-					<level>0</level>
-					<default>Folder 3</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder3.movies_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder3.tv_shows_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder4.display_name" type="string" help="">
-					<level>0</level>
-					<default>Folder 4</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder4.movies_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder4.tv_shows_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder5.display_name" type="string" help="">
-					<level>0</level>
-					<default>Folder 5</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder5.movies_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="folder5.tv_shows_directory" type="string" help="">
-					<level>0</level>
-					<default>None</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="easynews.farm" type="string" help="">
-					<level>0</level>
-					<default>auto</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="easynews.port" type="string" help="">
-					<level>0</level>
-					<default>443</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="version_number" type="string" help="">
-					<level>0</level>
-					<default>0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="dummy_setting" type="string" help="">
-					<level>0</level>
-					<default>foo</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="extras.enabled_menus" type="string" help="">
-					<level>0</level>
-					<default>2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="fen.highlight" type="string" help="">
-					<level>0</level>
-					<default>FF008EB2</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.furk_colour" type="string" help="">
-					<level>0</level>
-					<default>FFE6002E</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.easynews_colour" type="string" help="">
-					<level>0</level>
-					<default>FF00B3B2</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.debrid_cloud_colour" type="string" help="">
-					<level>0</level>
-					<default>FF7A01CC</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.folders_colour" type="string" help="">
-					<level>0</level>
-					<default>FFB36B00</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="hoster.identify" type="string" help="">
-					<level>0</level>
-					<default>FF0166FF</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="torrent.identify" type="string" help="">
-					<level>0</level>
-					<default>FFFF00FE</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.rd_colour" type="string" help="">
-					<level>0</level>
-					<default>FF3C9900</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.pm_colour" type="string" help="">
-					<level>0</level>
-					<default>FFFF3300</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="provider.ad_colour" type="string" help="">
-					<level>0</level>
-					<default>FFE6B800</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_4k_highlight" type="string" help="">
-					<level>0</level>
-					<default>FFFF00FE</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_1080p_highlight" type="string" help="">
-					<level>0</level>
-					<default>FFE6B800</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_720p_highlight" type="string" help="">
-					<level>0</level>
-					<default>FF3C9900</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_SD_highlight" type="string" help="">
-					<level>0</level>
-					<default>FF0166FF</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_flag_identify_colour" type="string" help="">
-					<level>0</level>
-					<default>FF7C7C7C</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="scraper_result_identify_colour" type="string" help="">
-					<level>0</level>
-					<default>FFFFFFFF</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="image_resolutions" type="string" help="">
-					<level>0</level>
-					<default>2</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button10" type="string" label="tvshow.button10" help="">
-					<level>0</level>
-					<default>tvshow_browse</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button10</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button11" type="string" label="tvshow.button11" help="">
-					<level>0</level>
-					<default>show_trailers</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button11</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button12" type="string" label="tvshow.button12" help="">
-					<level>0</level>
-					<default>show_keywords</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button12</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button13" type="string" label="tvshow.button13" help="">
-					<level>0</level>
-					<default>show_images</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button13</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button14" type="string" label="tvshow.button14" help="">
-					<level>0</level>
-					<default>show_extrainfo</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button14</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button15" type="string" label="tvshow.button15" help="">
-					<level>0</level>
-					<default>show_genres</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button15</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button16" type="string" label="tvshow.button16" help="">
-					<level>0</level>
-					<default>play_nextep</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button16</heading>
-					</control>
-				</setting>
-				<setting id="extras.tvshow.button17" type="string" label="tvshow.button17" help="">
-					<level>0</level>
-					<default>show_options</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>tvshow.button17</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button10" type="string" label="movie.button10" help="">
-					<level>0</level>
-					<default>movies_play</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button10</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button11" type="string" label="movie.button11" help="">
-					<level>0</level>
-					<default>show_trailers</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button11</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button12" type="string" label="movie.button12" help="">
-					<level>0</level>
-					<default>show_keywords</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button12</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button13" type="string" label="movie.button13" help="">
-					<level>0</level>
-					<default>show_images</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button13</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button14" type="string" label="movie.button14" help="">
-					<level>0</level>
-					<default>show_extrainfo</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button14</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button15" type="string" label="movie.button15" help="">
-					<level>0</level>
-					<default>show_genres</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button15</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button16" type="string" label="movie.button16" help="">
-					<level>0</level>
-					<default>show_director</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button16</heading>
-					</control>
-				</setting>
-				<setting id="extras.movie.button17" type="string" label="movie.button17" help="">
-					<level>0</level>
-					<default>show_options</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>movie.button17</heading>
-					</control>
-				</setting>
-				<setting id="custom_skins.version" type="string" help="">
-					<level>0</level>
-					<default>0.0.0</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
 			</group>
 		</category>
 		<!-- Features -->
@@ -1185,34 +347,50 @@
 			</group>
 			<!-- Content -->
 			<group id="2" label="32693">
-				<setting id="paginate.lists" type="boolean" label="32019" help="">
+				<setting id="paginate.lists" type="integer" label="32019" help="">
 					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
+					<default>0</default>
+					<constraints>
+						<options>
+							<option label="32027">0</option>
+							<option label="32167">1</option>
+							<option label="32168">2</option>
+							<option label="32030">3</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
 				</setting>
-				<setting id="paginate.limit" type="integer" label="32020" help="" parent="paginate.lists">
+				<setting id="paginate.limit_addon" type="integer" label="33142" help="" parent="paginate.lists">
 					<level>0</level>
-					<default>40</default>
+					<default>20</default>
 					<dependencies>
 						<dependency type="visible">
-							<condition operator="is" setting="paginate.lists">true</condition>
+							<or>
+								<condition operator="is" setting="paginate.lists">1</condition>
+								<condition operator="is" setting="paginate.lists">3</condition>
+							</or>
 						</dependency>
 					</dependencies>
 					<control type="edit" format="integer">
 						<heading>32020</heading>
 					</control>
 				</setting>
-				<setting id="paginate.widget_only" type="boolean" label="33113" help="" parent="paginate.lists">
+				<setting id="paginate.limit_widgets" type="integer" label="33143" help="" parent="paginate.lists">
 					<level>0</level>
-					<default>false</default>
+					<default>20</default>
 					<dependencies>
 						<dependency type="visible">
-							<condition operator="is" setting="paginate.lists">true</condition>
+							<or>
+								<condition operator="is" setting="paginate.lists">2</condition>
+								<condition operator="is" setting="paginate.lists">3</condition>
+							</or>
 						</dependency>
 					</dependencies>
-					<control type="toggle"/>
+					<control type="edit" format="integer">
+						<heading>32020</heading>
+					</control>
 				</setting>
-				<setting id="paginate.reference" type="integer" label="32585" help="" parent="paginate.lists">
+				<setting id="paginate.jump_to" type="integer" label="32585" help="" parent="paginate.lists">
 					<level>0</level>
 					<default>0</default>
 					<constraints>
@@ -1225,10 +403,10 @@
 					</constraints>
 					<dependencies>
 						<dependency type="visible">
-							<and>
-								<condition operator="is" setting="paginate.lists">true</condition>
-								<condition operator="!is" setting="paginate.widget_only">true</condition>
-							</and>
+							<or>
+								<condition operator="is" setting="paginate.lists">1</condition>
+								<condition operator="is" setting="paginate.lists">3</condition>
+							</or>
 						</dependency>
 					</dependencies>
 					<control type="spinner" format="string"/>
@@ -2500,7 +1678,7 @@
 						</dependency>
 					</dependencies>
 					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.fen/?mode=set_language_filter_choice&amp;filter_setting=easynews.lang_filters)</data>
+						<data>RunPlugin(plugin://plugin.video.fen/?mode=set_language_filter_choice&amp;filter_setting=easynews.lang_filters&amp;multi_choice=true)</data>
 					</control>
 				</setting>
 				<setting id="check.easynews" type="boolean" label="32104" help="">
@@ -2619,17 +1797,6 @@
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
-				</setting>
-				<setting id="results.progress_flags_direction" type="integer" label="32209" help="">
-					<level>0</level>
-					<default>0</default>
-					<constraints>
-						<options>
-							<option label="32167">0</option>
-							<option label="32168">1</option>
-						</options>
-					</constraints>
-					<control type="spinner" format="string"/>
 				</setting>
 			</group>
 			<!--General -->
@@ -3275,17 +2442,6 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="playback.resume_method" type="integer" label="33141" help="">
-					<level>0</level>
-					<default>0</default>
-					<constraints>
-						<options>
-							<option label="33130">0</option>
-							<option label="33131">1</option>
-						</options>
-					</constraints>
-					<control type="spinner" format="string"/>
-				</setting>
 				<setting id="playback.monitor_success" type="boolean" label="33114" help="">
 					<level>0</level>
 					<default>true</default>
@@ -3366,173 +2522,28 @@
 					</constraints>
 					<control type="spinner" format="string"/>
 				</setting>
-				<setting id="subtitles.language" type="string" label="32184" help="" parent="subtitles.subs_action">
+				<setting id="subtitles.language_primary" type="string" label="32184" help="" parent="subtitles.subs_action">
 					<level>0</level>
-					<default>English</default>
-					<constraints>
-						<options>
-							<option>Afrikaans</option>
-							<option>Albanian</option>
-							<option>Arabic</option>
-							<option>Armenian</option>
-							<option>Basque</option>
-							<option>Bengali</option>
-							<option>Bosnian</option>
-							<option>Breton</option>
-							<option>Bulgarian</option>
-							<option>Burmese</option>
-							<option>Catalan</option>
-							<option>Chinese</option>
-							<option>Croatian</option>
-							<option>Czech</option>
-							<option>Danish</option>
-							<option>Dutch</option>
-							<option>English</option>
-							<option>Esperanto</option>
-							<option>Estonian</option>
-							<option>Finnish</option>
-							<option>French</option>
-							<option>Galician</option>
-							<option>Georgian</option>
-							<option>German</option>
-							<option>Greek</option>
-							<option>Hebrew</option>
-							<option>Hindi</option>
-							<option>Hungarian</option>
-							<option>Icelandic</option>
-							<option>Indonesian</option>
-							<option>Italian</option>
-							<option>Japanese</option>
-							<option>Kazakh</option>
-							<option>Khmer</option>
-							<option>Korean</option>
-							<option>Latvian</option>
-							<option>Lithuanian</option>
-							<option>Luxembourgish</option>
-							<option>Macedonian</option>
-							<option>Malay</option>
-							<option>Malayalam</option>
-							<option>Manipuri</option>
-							<option>Mongolian</option>
-							<option>Montenegrin</option>
-							<option>Norwegian</option>
-							<option>Occitan</option>
-							<option>Persian</option>
-							<option>Polish</option>
-							<option>Portuguese</option>
-							<option>Portuguese(Brazil)</option>
-							<option>Romanian</option>
-							<option>Russian</option>
-							<option>Serbian</option>
-							<option>Sinhalese</option>
-							<option>Slovak</option>
-							<option>Slovenian</option>
-							<option>Spanish</option>
-							<option>Swahili</option>
-							<option>Swedish</option>
-							<option>Syriac</option>
-							<option>Tagalog</option>
-							<option>Tamil</option>
-							<option>Telugu</option>
-							<option>Thai</option>
-							<option>Turkish</option>
-							<option>Ukrainian</option>
-							<option>Urdu</option>
-							<option>Vietnamese</option>
-						</options>
-					</constraints>
+					<default>eng</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="!is" setting="subtitles.subs_action">2</condition>
 						</dependency>
 					</dependencies>
-					<control type="list" format="string">
-						<heading>32184</heading>
+					<control type="button" format="action">
+						<data>RunPlugin(plugin://plugin.video.fen/?mode=set_language_filter_choice&amp;filter_setting=subtitles.language_primary&amp;include_none=true)</data>
 					</control>
 				</setting>
-				<setting id="subtitles.secondary_language" type="string" label="32466" help="" parent="subtitles.subs_action">
+				<setting id="subtitles.language_secondary" type="string" label="32466" help="" parent="subtitles.subs_action">
 					<level>0</level>
 					<default>None</default>
-					<constraints>
-						<options>
-							<option>None</option>
-							<option>Afrikaans</option>
-							<option>Albanian</option>
-							<option>Arabic</option>
-							<option>Armenian</option>
-							<option>Basque</option>
-							<option>Bengali</option>
-							<option>Bosnian</option>
-							<option>Breton</option>
-							<option>Bulgarian</option>
-							<option>Burmese</option>
-							<option>Catalan</option>
-							<option>Chinese</option>
-							<option>Croatian</option>
-							<option>Czech</option>
-							<option>Danish</option>
-							<option>Dutch</option>
-							<option>English</option>
-							<option>Esperanto</option>
-							<option>Estonian</option>
-							<option>Finnish</option>
-							<option>French</option>
-							<option>Galician</option>
-							<option>Georgian</option>
-							<option>German</option>
-							<option>Greek</option>
-							<option>Hebrew</option>
-							<option>Hindi</option>
-							<option>Hungarian</option>
-							<option>Icelandic</option>
-							<option>Indonesian</option>
-							<option>Italian</option>
-							<option>Japanese</option>
-							<option>Kazakh</option>
-							<option>Khmer</option>
-							<option>Korean</option>
-							<option>Latvian</option>
-							<option>Lithuanian</option>
-							<option>Luxembourgish</option>
-							<option>Macedonian</option>
-							<option>Malay</option>
-							<option>Malayalam</option>
-							<option>Manipuri</option>
-							<option>Mongolian</option>
-							<option>Montenegrin</option>
-							<option>Norwegian</option>
-							<option>Occitan</option>
-							<option>Persian</option>
-							<option>Polish</option>
-							<option>Portuguese</option>
-							<option>Portuguese(Brazil)</option>
-							<option>Romanian</option>
-							<option>Russian</option>
-							<option>Serbian</option>
-							<option>Sinhalese</option>
-							<option>Slovak</option>
-							<option>Slovenian</option>
-							<option>Spanish</option>
-							<option>Swahili</option>
-							<option>Swedish</option>
-							<option>Syriac</option>
-							<option>Tagalog</option>
-							<option>Tamil</option>
-							<option>Telugu</option>
-							<option>Thai</option>
-							<option>Turkish</option>
-							<option>Ukrainian</option>
-							<option>Urdu</option>
-							<option>Vietnamese</option>
-						</options>
-					</constraints>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="!is" setting="subtitles.subs_action">2</condition>
 						</dependency>
 					</dependencies>
-					<control type="list" format="string">
-						<heading>32466</heading>
+					<control type="button" format="action">
+						<data>RunPlugin(plugin://plugin.video.fen/?mode=set_language_filter_choice&amp;filter_setting=subtitles.language_secondary&amp;include_none=true)</data>
 					</control>
 				</setting>
 				<setting id="subtitles.auto_enable" type="boolean" label="32186" help="" parent="subtitles.subs_action">
@@ -3544,6 +2555,860 @@
 						</dependency>
 					</dependencies>
 					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
+		<!-- Tools & Hidden -->
+		<category id="hidden" label="32456" help="">
+			<!-- Tools -->
+			<group id="1" label="32456">
+				<setting id="open_fen_tools" type="action" label="33141" help="">
+					<level>0</level>
+					<data>ReplaceWindow(Videos,plugin://plugin.video.fen/?mode=navigator.tools)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+			<!-- Hidden -->
+				<setting id="trakt.expires" type="string" help="">
+					<level>0</level>
+					<default>0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="trakt.refresh" type="string" help="">
+					<level>0</level>
+					<default>0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="trakt.token" type="string" help="">
+					<level>0</level>
+					<default>0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="rd.client_id" type="string" label="rd client_id" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>rd client_id</heading>
+					</control>
+				</setting>
+				<setting id="rd.refresh" type="string" label="rd refresh" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>rd refresh</heading>
+					</control>
+				</setting>
+				<setting id="rd.secret" type="string" label="rd secret" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>rd secret</heading>
+					</control>
+				</setting>
+				<setting id="meta_language" type="string" label="meta_language" help="">
+					<level>0</level>
+					<default>en</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">hidden</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>meta_language</heading>
+					</control>
+				</setting>
+				<setting id="meta_mpaa_region" type="string" label="meta_language" help="">
+					<level>0</level>
+					<default>US</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">hidden</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>meta_mpaa_region</heading>
+					</control>
+				</setting>
+				<setting id="results.sort_order" type="string" help="">
+					<level>0</level>
+					<default>1</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">hidden</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="database.maintenance.due" type="string" help="">
+					<level>0</level>
+					<default>0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">hidden</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="reuse_language_invoker" type="string" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">hidden</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder1.display_name" type="string" help="">
+					<level>0</level>
+					<default>Folder 1</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder1.movies_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder1.tv_shows_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder2.display_name" type="string" help="">
+					<level>0</level>
+					<default>Folder 2</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder2.movies_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder2.tv_shows_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder3.display_name" type="string" help="">
+					<level>0</level>
+					<default>Folder 3</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder3.movies_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder3.tv_shows_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder4.display_name" type="string" help="">
+					<level>0</level>
+					<default>Folder 4</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder4.movies_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder4.tv_shows_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder5.display_name" type="string" help="">
+					<level>0</level>
+					<default>Folder 5</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder5.movies_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="folder5.tv_shows_directory" type="string" help="">
+					<level>0</level>
+					<default>None</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="easynews.farm" type="string" help="">
+					<level>0</level>
+					<default>auto</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="easynews.port" type="string" help="">
+					<level>0</level>
+					<default>443</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="version_number" type="string" help="">
+					<level>0</level>
+					<default>0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="dummy_setting" type="string" help="">
+					<level>0</level>
+					<default>foo</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="extras.enabled_menus" type="string" help="">
+					<level>0</level>
+					<default>2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="fen.highlight" type="string" help="">
+					<level>0</level>
+					<default>FF008EB2</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.furk_colour" type="string" help="">
+					<level>0</level>
+					<default>FFE6002E</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.easynews_colour" type="string" help="">
+					<level>0</level>
+					<default>FF00B3B2</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.debrid_cloud_colour" type="string" help="">
+					<level>0</level>
+					<default>FF7A01CC</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.folders_colour" type="string" help="">
+					<level>0</level>
+					<default>FFB36B00</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="hoster.identify" type="string" help="">
+					<level>0</level>
+					<default>FF0166FF</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="torrent.identify" type="string" help="">
+					<level>0</level>
+					<default>FFFF00FE</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.rd_colour" type="string" help="">
+					<level>0</level>
+					<default>FF3C9900</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.pm_colour" type="string" help="">
+					<level>0</level>
+					<default>FFFF3300</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="provider.ad_colour" type="string" help="">
+					<level>0</level>
+					<default>FFE6B800</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_4k_highlight" type="string" help="">
+					<level>0</level>
+					<default>FFFF00FE</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_1080p_highlight" type="string" help="">
+					<level>0</level>
+					<default>FFE6B800</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_720p_highlight" type="string" help="">
+					<level>0</level>
+					<default>FF3C9900</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_SD_highlight" type="string" help="">
+					<level>0</level>
+					<default>FF0166FF</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_flag_identify_colour" type="string" help="">
+					<level>0</level>
+					<default>FF7C7C7C</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_result_identify_colour" type="string" help="">
+					<level>0</level>
+					<default>FFFFFFFF</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="image_resolutions" type="string" help="">
+					<level>0</level>
+					<default>2</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button10" type="string" label="tvshow.button10" help="">
+					<level>0</level>
+					<default>tvshow_browse</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button10</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button11" type="string" label="tvshow.button11" help="">
+					<level>0</level>
+					<default>show_trailers</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button11</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button12" type="string" label="tvshow.button12" help="">
+					<level>0</level>
+					<default>show_keywords</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button12</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button13" type="string" label="tvshow.button13" help="">
+					<level>0</level>
+					<default>show_images</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button13</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button14" type="string" label="tvshow.button14" help="">
+					<level>0</level>
+					<default>show_extrainfo</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button14</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button15" type="string" label="tvshow.button15" help="">
+					<level>0</level>
+					<default>show_genres</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button15</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button16" type="string" label="tvshow.button16" help="">
+					<level>0</level>
+					<default>play_nextep</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button16</heading>
+					</control>
+				</setting>
+				<setting id="extras.tvshow.button17" type="string" label="tvshow.button17" help="">
+					<level>0</level>
+					<default>show_options</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>tvshow.button17</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button10" type="string" label="movie.button10" help="">
+					<level>0</level>
+					<default>movies_play</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button10</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button11" type="string" label="movie.button11" help="">
+					<level>0</level>
+					<default>show_trailers</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button11</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button12" type="string" label="movie.button12" help="">
+					<level>0</level>
+					<default>show_keywords</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button12</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button13" type="string" label="movie.button13" help="">
+					<level>0</level>
+					<default>show_images</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button13</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button14" type="string" label="movie.button14" help="">
+					<level>0</level>
+					<default>show_extrainfo</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button14</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button15" type="string" label="movie.button15" help="">
+					<level>0</level>
+					<default>show_genres</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button15</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button16" type="string" label="movie.button16" help="">
+					<level>0</level>
+					<default>show_director</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button16</heading>
+					</control>
+				</setting>
+				<setting id="extras.movie.button17" type="string" label="movie.button17" help="">
+					<level>0</level>
+					<default>show_options</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>movie.button17</heading>
+					</control>
+				</setting>
+				<setting id="custom_skins.version" type="string" help="">
+					<level>0</level>
+					<default>0.0.0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
 				</setting>
 			</group>
 		</category>

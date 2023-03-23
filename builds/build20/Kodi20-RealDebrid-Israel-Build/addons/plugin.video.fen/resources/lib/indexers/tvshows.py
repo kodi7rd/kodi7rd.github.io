@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 from modules import kodi_utils, settings
 from modules.metadata import tvshow_meta
-from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, get_current_timestamp
+from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, get_current_timestamp, paginate_list
 from modules.watched_status import get_watched_info_tv, get_watched_status_tvshow
 # logger = kodi_utils.logger
 
-meta_function, get_datetime_function, add_item, xbmc_actor = tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor
+sleep, meta_function, get_datetime_function, add_item, xbmc_actor = kodi_utils.sleep, tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor
 kodi_version, get_watched_function, get_watched_info_function, set_category = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category
 set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.tvshow_dict_removals
-metadata_user_info, watched_indicators, page_reference = settings.metadata_user_info, settings.watched_indicators, settings.page_reference
-sleep, extras_open_action, get_art_provider, default_all_episodes = kodi_utils.sleep, settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes
+metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.paginate
+extras_open_action, get_art_provider, default_all_episodes, page_limit = settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes, settings.page_limit
 poster_empty, fanart_empty, build_content, include_year_in_title = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, settings.include_year_in_title
 max_threads, widget_hide_next_page, fen_clearlogo = settings.max_threads, settings.widget_hide_next_page, kodi_utils.addon_clearlogo
 make_placeholder = kodi_utils.make_placeholder_listitem
 fen_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jumpto_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
-extras_str, options_str, refr_widg_str = ls(32645), ls(32646), ls(40001)
+extras_str, options_str, refr_widg_str = ls(32645), ls(32646), '[B]%s[/B]' % ls(32611)
 run_plugin, container_update, container_refresh = 'RunPlugin(%s)', 'Container.Update(%s)', 'Container.Refresh(%s)'
 tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air','tmdb_tv_upcoming')
 tmdb_special = {'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year', 'tmdb_tv_decade': 'decade', 'tmdb_tv_recommendations': 'tmdb_id',
@@ -38,6 +38,7 @@ class TVShows:
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
 		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
+		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.append = self.items.append
 	
 	def fetch_list(self):
@@ -63,10 +64,11 @@ class TVShows:
 					self.list = [i['id'] for i in data['results']]
 					if data['total_pages'] > page_no: self.new_page = {'new_page': string(page_no + 1), key: function_var}
 				elif self.action in personal:
-					data, all_pages, total_pages = function('tvshow', page_no)
+					data = function('tvshow', page_no)
+					data, all_pages, total_pages = self.paginate_list(data, page_no)
 					self.list = [i['media_id'] for i in data]
 					if total_pages > 2: self.total_pages = total_pages
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 				elif self.action in trakt_main:
 					self.id_type = 'trakt_dict'
 					data = function(page_no)
@@ -75,11 +77,13 @@ class TVShows:
 					if self.action != 'trakt_recommendations': self.new_page = {'new_page': string(page_no + 1)}
 				elif self.action in trakt_personal:
 					self.id_type = 'trakt_dict'
-					data, all_pages, total_pages = function('shows', page_no)
+					data = function('shows', page_no)
+					if self.action == 'trakt_collection_lists': all_pages, total_pages = '', 1
+					else: data, all_pages, total_pages = self.paginate_list(data, page_no)
 					self.list = [i['media_ids'] for i in data]
 					if total_pages > 2: self.total_pages = total_pages
 					try:
-						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1)}
+						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 					except: pass
 				elif self.action in imdb_personal:
 					self.id_type = 'imdb_id'
@@ -100,15 +104,16 @@ class TVShows:
 					self.list = [i['show']['ids'] for i in data]
 					self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
 				if self.total_pages and not self.is_widget:
-					page_ref = page_reference()
-					if page_ref != 3:
+					jump_to = jump_to_enabled()
+					if jump_to != 3:
 						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'page_reference': page_ref}
+									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
+									'paginate_start': self.paginate_start}
 						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
 				add_items(handle, self.worker())
 				if self.new_page and not self.widget_hide_next_page:
-						self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'category_name': self.category_name})
-						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
+							self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'category_name': self.category_name})
+							add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
 			except: pass
 		else: add_items(handle, make_placeholder())
 		set_content(handle, content_type)
@@ -218,3 +223,11 @@ class TVShows:
 		try: self.items.sort(key=lambda k: int(k[1].getProperty('fen.sort_order')))
 		except: pass
 		return self.items
+
+	def paginate_list(self, data, page_no):
+		if paginate(self.is_widget):
+			limit = page_limit(self.is_widget)
+			data, all_pages, total_pages = paginate_list(data, page_no, limit, self.paginate_start)
+			if self.is_widget: self.paginate_start = limit
+		else: all_pages, total_pages = '', 1
+		return data, all_pages, total_pages

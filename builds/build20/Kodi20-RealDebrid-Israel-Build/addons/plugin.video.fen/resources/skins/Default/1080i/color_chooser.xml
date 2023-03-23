@@ -7,7 +7,7 @@
             <top>0</top>
             <width>1920</width>
             <height>1080</height>
-            <texture colordiffuse="FF000000">common/white.png</texture>
+            <texture colordiffuse="FF000000">fen_common/white.png</texture>
             <animation type="WindowOpen" reversible="false">
                 <effect type="fade" start="0" end="80" />
             </animation>
@@ -23,7 +23,7 @@
                 <width>1660</width>
                 <control type="image">
                     <height>900</height>
-                    <texture border="16" colordiffuse="FF302F2F">common/dialog.png</texture>
+                    <texture border="16" colordiffuse="FF302F2F">fen_common/dialog.png</texture>
                 </control>
                 <control type="image">
                     <left>30</left>
@@ -33,7 +33,7 @@
                     <align>left</align>
                     <aligny>top</aligny>
                     <aspectratio aligny="top">keep</aspectratio>
-                    <texture colordiffuse="FFCCCCCC">common/fen.png</texture>
+                    <texture colordiffuse="FFCCCCCC">fen_common/fen.png</texture>
                 </control>
                 <control type="label">
                     <top>55</top>
@@ -71,7 +71,7 @@
                             <top>0</top>
                             <width>44</width>
                             <height>44</height>
-                            <texture colordiffuse="FF302F2F">common/white.png</texture>
+                            <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
                         </control>
                         <control type="image">
                             <left>2</left>
@@ -103,7 +103,7 @@
                     <top>45</top>
                     <width>210</width>
                     <height>210</height>
-                    <texture colordiffuse="FF302F2F">common/white.png</texture>
+                    <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
                 </control>
                 <control type="image">
                     <left>5</left>
@@ -130,8 +130,8 @@
                     <font>font12</font> <!-- FEN_26 -->
                     <textcolor>FFB7B4BB</textcolor>
                     <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                    <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                    <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                     <align>center</align>
                 </control>
                 <control type="button" id="11">
@@ -147,8 +147,8 @@
                     <font>font12</font> <!-- FEN_26 -->
                     <textcolor>FFB7B4BB</textcolor>
                     <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
-                    <texturefocus colordiffuse="FFCCCCCC" border="30">common/circle.png</texturefocus>
-                    <texturenofocus colordiffuse="FF4a4347" border="30">common/circle.png</texturenofocus>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                     <align>center</align>
                 </control>
             </control>
