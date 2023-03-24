@@ -1,5 +1,5 @@
 {
-  "USE_JSON_FILE": false,
+  "USE_JSON_FILE": true,
   "CONFIG.KEEPTRAKT": true,
   "CONFIG.KEEPDEBRID": true,
   "CONFIG.KEEPFENDATA": true,
