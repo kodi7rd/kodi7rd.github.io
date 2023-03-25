@@ -32,7 +32,6 @@ from resources.libs.common import logging
 from resources.libs.common import tools
 from resources.libs.common.config import CONFIG
 
-
 ACTION_PREVIOUS_MENU = 10  # ESC action
 ACTION_NAV_BACK = 92  # Backspace action
 ACTION_MOVE_LEFT = 1  # Left arrow key
@@ -249,6 +248,7 @@ def show_save_data_settings():
         def onInit(self):
             self.title = 101
             self.okbutton = 201
+            self.github_custom_save_data_config = 317
             self.trakt = 301
             self.debrid = 302
             #self.login = 303
@@ -268,12 +268,12 @@ def show_save_data_settings():
             self.show_dialog()
             # KODI_RD_ISRAEL Comment - Removed the following controls (commented in FirstRunSaveData.xml):
             # self.login, self.profiles, self.playercore, self.superfav
-            self.controllist = [self.trakt, self.debrid,
+            self.controllist = [self.github_custom_save_data_config, self.trakt, self.debrid,
                                     self.sources, self.advanced, self.guisettings,
                                     self.favourites, self.fendata, self.repo,
                                     self.whitelist, self.cache, self.packages,
                                     self.thumbs]
-            self.controlsettings = ['keeptrakt', 'keepdebrid',
+            self.controlsettings = ['use_github_custom_save_data_config', 'keeptrakt', 'keepdebrid',
                                     'keepsources', 'keepadvanced', 'keepguisettings',
                                     'keepfavourites', 'keepfendata', 'keeprepos',
                                     'keepwhitelist', 'clearcache', 'clearpackages',

@@ -29,6 +29,45 @@ except ImportError:  # Python 2
 from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import tools
+from resources.libs.common import custom_save_data_config
+
+# KODI RD ISRAEL - Custom Save Data Config
+
+logging.log("################################", level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+
+# Set variables value from JSON file + addons whitelist, only if NOT first install.    
+if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
+    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
+    if CONFIG.get_setting('installed') not in ('false', 'ignored'):
+        logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
+        custom_save_data_config.main()
+    else:
+        logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
+else:
+    if CONFIG.KEEPWHITELIST == 'false':
+        custom_save_data_config.delete_addons_whitelist_file()
+    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
+
+logging.log("################################", level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+logging.log("EXTRACT.PY AFTER: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+logging.log("################################", level=xbmc.LOGINFO)
 
 
 def all(_in, _out, ignore=None, title=None):
