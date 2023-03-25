@@ -36,20 +36,6 @@ except ImportError:  # Python 2
 from resources.libs.common import directory
 from resources.libs.common.config import CONFIG
 
-
-######################################################################
-#        KODI_RD_ISRAEL Save Data Menu Imports                       #
-import json
-import urllib.request
-from urllib.parse import urljoin
-import ssl
-
-# Create an SSL context that allows SSL verification to be skipped
-context = ssl.create_default_context()
-context.check_hostname = False
-context.verify_mode = ssl.CERT_NONE
-######################################################################
-
 ###########################
 #      Menu Items         #
 ###########################
@@ -323,7 +309,8 @@ def save_menu():
     
     on = '[COLOR springgreen]ON[/COLOR]'
     off = '[COLOR red]OFF[/COLOR]'
-
+    
+    github_custom_save_data_config = 'true' if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true' else 'false'
     trakt = 'true' if CONFIG.KEEPTRAKT == 'true' else 'false'
     debrid = 'true' if CONFIG.KEEPDEBRID == 'true' else 'false'
     login = 'true' if CONFIG.KEEPLOGIN == 'true' else 'false'
@@ -337,7 +324,6 @@ def save_menu():
     repos = 'true' if CONFIG.KEEPREPOS == 'true' else 'false'
     super = 'true' if CONFIG.KEEPSUPER == 'true' else 'false'
     whitelist = 'true' if CONFIG.KEEPWHITELIST == 'true' else 'false'
-    github_custom_save_data_config = 'true' if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true' else 'false'
         
     directory.add_dir('שמורים Trakt נתוני', {'mode': 'trakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_dir('שמורים Debrid נתוני', {'mode': 'realdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)

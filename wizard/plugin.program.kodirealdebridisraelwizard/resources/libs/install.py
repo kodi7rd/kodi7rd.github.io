@@ -30,30 +30,43 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import custom_save_data_config
 
+########################################################################################################################################################
 # KODI RD ISRAEL - Custom Save Data Config
-logging.log("################################", level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
-logging.log("INSTALL.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+try:
+    logging.log("################################", level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
 
-# Set variables value from JSON file + addons whitelist, only if NOT first install.    
-if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
-    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
-    if CONFIG.get_setting('installed') not in ('false', 'ignored'):
-        logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
-        custom_save_data_config.main()
+    # Set variables value from JSON file + addons whitelist, only if NOT first install.    
+    if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
+        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
+        
+        if CONFIG.get_setting('installed') not in ('false', 'ignored'):
+            logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
+            custom_save_data_config.main()
+        else:
+            logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
     else:
-        logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
-else:
-    if CONFIG.KEEPWHITELIST == 'false':
-        custom_save_data_config.delete_addons_whitelist_file()
-    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
+        if CONFIG.KEEPWHITELIST == 'false':
+            custom_save_data_config.delete_addons_whitelist_file()
+        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
+        
+except Exception: 
+    pass
+    
+########################################################################################################################################################
 
 ###########################
 #      Fresh Install      #
@@ -268,11 +281,16 @@ def wipe():
         logging.log("INSTALL.PY AFTER: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
         logging.log("################################", level=xbmc.LOGINFO)
         
