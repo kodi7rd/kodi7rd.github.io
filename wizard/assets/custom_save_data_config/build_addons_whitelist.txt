@@ -1,6 +1,6 @@
-['plugin.video.fen', 'plugin.video.fen', 'plugin.video.fen']
-['script.module.cocoscrapers', 'script.module.cocoscrapers', 'script.module.cocoscrapers']
-['service.subtitles.All_Subs', 'service.subtitles.All_Subs', 'service.subtitles.All_Subs']
-['service.subtitles.all_subs_plus', 'service.subtitles.all_subs_plus', 'service.subtitles.all_subs_plus']
-['plugin.video.idanplus', 'plugin.video.idanplus', 'plugin.video.idanplus']
-['script.ezmaintenanceplus', 'script.ezmaintenanceplus', 'script.ezmaintenanceplus']
+plugin.video.fen
+script.module.cocoscrapers
+service.subtitles.All_Subs
+service.subtitles.all_subs_plus
+plugin.video.idanplus
+script.ezmaintenanceplus
