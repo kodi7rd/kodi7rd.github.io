@@ -1,0 +1,6 @@
+plugin.video.fen
+script.module.cocoscrapers
+service.subtitles.All_Subs
+service.subtitles.all_subs_plus
+plugin.video.idanplus
+script.ezmaintenanceplus
