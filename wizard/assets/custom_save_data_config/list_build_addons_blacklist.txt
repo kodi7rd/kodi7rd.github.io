@@ -25,4 +25,3 @@ script.subskeys
 service.subtitles.All_Subs
 service.subtitles.all_subs_plus
 skin.estuary
-peripheral.joystick
