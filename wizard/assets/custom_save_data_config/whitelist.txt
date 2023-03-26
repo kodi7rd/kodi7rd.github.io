@@ -3,3 +3,4 @@
 ['service.subtitles.All_Subs', 'service.subtitles.All_Subs', 'service.subtitles.All_Subs']
 ['service.subtitles.all_subs_plus', 'service.subtitles.all_subs_plus', 'service.subtitles.all_subs_plus']
 ['plugin.video.idanplus', 'plugin.video.idanplus', 'plugin.video.idanplus']
+['script.ezmaintenanceplus', 'script.ezmaintenanceplus', 'script.ezmaintenanceplus']
