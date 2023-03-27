@@ -32,9 +32,13 @@ from resources.libs.common import custom_save_data_config
 
 ########################################################################################################################################################
 # KODI RD ISRAEL - Custom Save Data Config
-try:
+#try:
+is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
+if 1==2:
+    is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
+    
     logging.log("################################", level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
+    logging.log("INSTALL.PY BEFORE: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
     logging.log("INSTALL.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
     logging.log("INSTALL.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
     logging.log("INSTALL.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
@@ -53,18 +57,20 @@ try:
     if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
         logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
         
-        if CONFIG.get_setting('installed') not in ('false', 'ignored'):
+        if is_first_install == 'true':
+            logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
+        else:
             logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
             custom_save_data_config.main()
-        else:
-            logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
+            
     else:
         if CONFIG.KEEPWHITELIST == 'false':
             custom_save_data_config.delete_addons_whitelist_file()
         logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
+
         
-except Exception: 
-    pass
+#except Exception: 
+#    pass
     
 ########################################################################################################################################################
 
@@ -72,9 +78,7 @@ except Exception:
 #      Fresh Install      #
 ###########################
 
-def backup_fendata():
-    from resources.libs.common import logging
-    
+def backup_fendata():    
     # Verify that Fen addon is installed.
     isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
     logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Is CONFIG.KEEPFENDATA Enabled: {0} | isFenExists: {1}".format(CONFIG.KEEPFENDATA, isFenExists))
@@ -105,9 +109,7 @@ def backup_fendata():
         logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Skipping Saving Fen Favorites & Data.")
         
         
-def restore_fendata():
-    from resources.libs.common import logging
-    
+def restore_fendata():    
     # Verify that Fen addon is installed.
     isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
     
@@ -136,7 +138,7 @@ def restore_fendata():
         # Remove empty My_Builds/fen_db_files dir after .db files move.
         if not os.listdir(kodi_my_builds_fen_db_files_dir):
             os.rmdir(kodi_my_builds_fen_db_files_dir)
-            logging.log("Custom KODI_RD_ISRAEL LOG: Deleting unnecessary {0} directory.".format(item, kodi_my_builds_fen_db_files_dir))
+            logging.log("Custom KODI_RD_ISRAEL LOG: Deleting unnecessary {0} directory.".format(kodi_my_builds_fen_db_files_dir))
             
     else:
         logging.log("Custom KODI_RD_ISRAEL LOG: AFTER Wipe - Skipping Saving Fen Favorites & Data.")
@@ -278,7 +280,7 @@ def wipe():
     
     try:        
         logging.log("################################", level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.installed: " + CONFIG.get_setting('installed'), level=xbmc.LOGINFO)
+        logging.log("INSTALL.PY AFTER: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
         logging.log("INSTALL.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
