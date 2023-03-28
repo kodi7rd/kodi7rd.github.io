@@ -6,7 +6,7 @@
     <setting id="max_threads" default="true">60</setting>
     <setting id="fen.highlight_name">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
     <setting id="use_skin_fonts" default="true">true</setting>
-    <setting id="custom_skins.enable" default="true">$ADDON[plugin.video.fen 32860]</setting>
+    <setting id="custom_skins.enable" default="true">False</setting>
     <setting id="trakt.indicators_active" default="true">false</setting>
     <setting id="watched_indicators" default="true">0</setting>
     <setting id="amble.indicators" default="true" />
@@ -18,9 +18,9 @@
     <setting id="premium_download_directory" default="true">special://profile/addon_data/plugin.video.fen/Premium Downloads/</setting>
     <setting id="image_download_directory" default="true">special://profile/addon_data/plugin.video.fen/Image Downloads/</setting>
     <setting id="extras.open_action" default="true">0</setting>
-    <setting id="extras.manage" default="true">$ADDON[plugin.video.fen 32652]</setting>
-    <setting id="extras.button_choice" default="true">$ADDON[plugin.video.fen 32652]</setting>
-    <setting id="extras.restore_default" default="true">$ADDON[plugin.video.fen 32652]</setting>
+    <setting id="extras.manage" default="true">...</setting>
+    <setting id="extras.button_choice" default="true">...</setting>
+    <setting id="extras.restore_default" default="true">...</setting>
     <setting id="extras.enable_extra_ratings" default="true">true</setting>
     <setting id="extras.enabled_ratings" default="true">Meta, Tom/Critic, Tom/User, IMDb, TMDb</setting>
     <setting id="extras.enable_scrollbars" default="true">false</setting>
@@ -59,7 +59,7 @@
     <setting id="widget_hide_next_page" default="true">false</setting>
     <setting id="get_fanart_data">true</setting>
     <setting id="fanarttv.default" default="true">false</setting>
-    <setting id="image_resolutions_name" default="true">$ADDON[plugin.video.fen 32164]</setting>
+    <setting id="image_resolutions_name" default="true">Medium</setting>
     <setting id="meta_language_display">Hebrew</setting>
     <setting id="meta_mpaa_region_display" default="true">United States</setting>
     <setting id="meta_mpaa_prefix" default="true" />
@@ -125,7 +125,7 @@
     <setting id="check.easynews" default="true">false</setting>
     <setting id="en.priority" default="true">7</setting>
     <setting id="provider.folders" default="true">false</setting>
-    <setting id="browse.folders" default="true">$ADDON[plugin.video.fen 32652]</setting>
+    <setting id="browse.folders" default="true">...</setting>
     <setting id="folders.title_filter" default="true">true</setting>
     <setting id="check.folders" default="true">false</setting>
     <setting id="results.sort_folders_first" default="true">true</setting>
