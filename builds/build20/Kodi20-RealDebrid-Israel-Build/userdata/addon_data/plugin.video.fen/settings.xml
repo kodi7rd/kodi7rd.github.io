@@ -64,7 +64,7 @@
     <setting id="meta_mpaa_region_display" default="true">United States</setting>
     <setting id="meta_mpaa_prefix" default="true" />
     <setting id="meta_use_year_in_search" default="true">false</setting>
-    <setting id="meta_filter" default="true">true</setting>
+    <setting id="meta_filter">false</setting>
     <setting id="trakt.user" default="true" />
     <setting id="tmdb_api" default="true">b370b60447737762ca38457bd77579b3</setting>
     <setting id="fanart_amble1" default="true" />
