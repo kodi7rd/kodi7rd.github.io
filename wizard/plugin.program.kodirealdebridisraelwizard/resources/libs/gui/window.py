@@ -256,27 +256,28 @@ def show_save_data_settings():
             #self.profiles = 305
             #self.playercore = 314
             self.guisettings = 315
-            self.advanced = 306
+            #self.advanced = 306
             self.favourites = 307
             self.fendata = 316
             #self.superfav = 308
             self.repo = 309
             self.whitelist = 310
+            self.addons33db = 318
             self.cache = 311
             self.packages = 312
             self.thumbs = 313
             self.show_dialog()
             # KODI_RD_ISRAEL Comment - Removed the following controls (commented in FirstRunSaveData.xml):
-            # self.login, self.profiles, self.playercore, self.superfav
+            # self.login, self.profiles, self.playercore, self.superfav, self.advanced
             self.controllist = [self.github_custom_save_data_config, self.trakt, self.debrid,
-                                    self.sources, self.advanced, self.guisettings,
+                                    self.sources, self.guisettings,
                                     self.favourites, self.fendata, self.repo,
-                                    self.whitelist, self.cache, self.packages,
+                                    self.whitelist, self.addons33db, self.cache, self.packages,
                                     self.thumbs]
             self.controlsettings = ['use_github_custom_save_data_config', 'keeptrakt', 'keepdebrid',
-                                    'keepsources', 'keepadvanced', 'keepguisettings',
+                                    'keepsources', 'keepguisettings',
                                     'keepfavourites', 'keepfendata', 'keeprepos',
-                                    'keepwhitelist', 'clearcache', 'clearpackages',
+                                    'keepwhitelist', 'keepaddons33db', 'clearcache', 'clearpackages',
                                     'clearthumbs']
             for item in self.controllist:
                 if CONFIG.get_setting(self.controlsettings[self.controllist.index(item)]) == 'true':

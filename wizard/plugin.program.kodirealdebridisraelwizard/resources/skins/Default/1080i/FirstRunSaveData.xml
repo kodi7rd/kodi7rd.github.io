@@ -198,24 +198,6 @@
                 <textureradioofffocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioofffocus>
                 <textureradiooffnofocus>RadioButton/radiobutton-nofocus.png</textureradiooffnofocus>
             </control>
-            <control type="radiobutton" id="306">
-                <width>610</width>
-                <height>40</height>
-                <textwidth>565</textwidth>
-                <align>right</align>
-                <textoffsetx>45</textoffsetx>
-                <radioheight>45</radioheight>
-                <radioposx>530</radioposx>
-                <label>שמירת AdvancedSettings.xml</label>
-                <font>font13</font>
-				<textcolor>FFCCCC00</textcolor>
-                <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
-                <texturenofocus>RadioButton/MenuItemNF.png</texturenofocus>
-                <textureradioonfocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonnofocus>
-                <textureradioofffocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioofffocus>
-                <textureradiooffnofocus>RadioButton/radiobutton-nofocus.png</textureradiooffnofocus>
-            </control>
             <control type="radiobutton" id="309">
                 <width>610</width>
                 <height>40</height>
@@ -243,6 +225,24 @@
                 <radioheight>45</radioheight>
                 <radioposx>530</radioposx>
                 <label>שמירת הרחבות מותקנות (נדרשת הגדרה)</label>
+                <font>font13</font>
+				<textcolor>FFCCCC00</textcolor>
+                <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
+                <texturenofocus>RadioButton/MenuItemNF.png</texturenofocus>
+                <textureradioonfocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonnofocus>
+                <textureradioofffocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioofffocus>
+                <textureradiooffnofocus>RadioButton/radiobutton-nofocus.png</textureradiooffnofocus>
+            </control>
+            <control type="radiobutton" id="318">
+                <width>610</width>
+                <height>40</height>
+                <textwidth>565</textwidth>
+                <align>right</align>
+                <textoffsetx>45</textoffsetx>
+                <radioheight>45</radioheight>
+                <radioposx>530</radioposx>
+                <label>שמירת Addons33.db</label>
                 <font>font13</font>
 				<textcolor>FFCCCC00</textcolor>
                 <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
@@ -336,6 +336,26 @@
                 <radioposx>530</radioposx>
                 <label>Keep My Profiles.xml</label>
                 <font>font13</font>
+                <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
+                <texturenofocus>RadioButton/MenuItemNF.png</texturenofocus>
+                <textureradioonfocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonnofocus>
+                <textureradioofffocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioofffocus>
+                <textureradiooffnofocus>RadioButton/radiobutton-nofocus.png</textureradiooffnofocus>
+            </control>
+			-->
+			<!--
+            <control type="radiobutton" id="306">
+                <width>610</width>
+                <height>40</height>
+                <textwidth>565</textwidth>
+                <align>right</align>
+                <textoffsetx>45</textoffsetx>
+                <radioheight>45</radioheight>
+                <radioposx>530</radioposx>
+                <label>שמירת AdvancedSettings.xml</label>
+                <font>font13</font>
+				<textcolor>FFCCCC00</textcolor>
                 <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
                 <texturenofocus>RadioButton/MenuItemNF.png</texturenofocus>
                 <textureradioonfocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonfocus>

@@ -217,6 +217,7 @@ class Config:
         # View variables
         self.SHOW19 = self.get_setting('show19')
         self.SHOW20 = self.get_setting('show20')
+        self.SHOW21 = self.get_setting('show21')
         self.SHOWADULT = self.get_setting('adult')
         self.SEPARATE = self.get_setting('separate')
         self.DEVELOPER = self.get_setting('developer')
@@ -262,6 +263,7 @@ class Config:
         self.KEEPREPOS = self.get_setting('keeprepos')
         self.KEEPSUPER = self.get_setting('keepsuper')
         self.KEEPWHITELIST = self.get_setting('keepwhitelist')
+        self.KEEPADDONS33DB = self.get_setting('keepaddons33db')
         self.KEEPTRAKT = self.get_setting('keeptrakt')
         self.KEEPDEBRID = self.get_setting('keepdebrid')
         self.KEEPLOGIN = self.get_setting('keeplogin')

@@ -11,6 +11,7 @@
         <setting type="lsep" label="Show Builds:"/>
         <setting id="show19" type="bool" label="Show Matrix (v19.0) Builds" default="true"/>
         <setting id="show20" type="bool" label="Show Nexus (v20.0) Builds" default="true"/>
+        <setting id="show21" type="bool" label="Show Omega (v21.0) Builds" default="true"/>
         <setting id="separate" type="bool" label="Do not separate based off version" default="false"/>
         
         <!-- Hidden Settings -->
@@ -178,6 +179,7 @@
         <setting id="keeprepos" type="bool" label="Keep Installed Repositories" default="false"/>
         <setting id="keepsuper" type="bool" label="Keep Super Favourites" default="false"/>
         <setting id="keepwhitelist" type="bool" label="Keep My Whitelist Addons" default="false"/>
+        <setting id="keepaddons33db" type="bool" label="Keep My Addons33.db" default="false"/>
     </category>
 
     <category label="View Settings">

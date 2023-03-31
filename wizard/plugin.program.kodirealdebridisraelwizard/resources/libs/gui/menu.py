@@ -324,25 +324,20 @@ def save_menu():
     repos = 'true' if CONFIG.KEEPREPOS == 'true' else 'false'
     super = 'true' if CONFIG.KEEPSUPER == 'true' else 'false'
     whitelist = 'true' if CONFIG.KEEPWHITELIST == 'true' else 'false'
+    addons33db = 'true' if CONFIG.KEEPADDONS33DB == 'true' else 'false'
         
     directory.add_dir('שמורים Trakt נתוני', {'mode': 'trakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_dir('שמורים Debrid נתוני', {'mode': 'realdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)
-    #directory.add_dir('Keep Login Info', {'mode': 'login'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
     directory.add_file('ייבוא נתונים שמורים', {'mode': 'managedata', 'name': 'import'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('ייצוא נתונים שמורים', {'mode': 'managedata', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('- לחץ להפעלה או ביטול של ההגדרה -', themeit=CONFIG.THEME3)
     directory.add_file('GitHub-קבל הגדרות שמירת נתונים מ: {0}'.format(github_custom_save_data_config.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'use_github_custom_save_data_config'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Trakt שמירת חשבון: {0}'.format(trakt.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptrakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_file('Debrid שמירת חשבון: {0}'.format(debrid.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)
-    #directory.add_file('Save Login Info: {0}'.format(login.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeplogin'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
     directory.add_file('(הסרטים/הסדרות שלי) Fen שמירת מועדפי: {0}'.format(fendata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfendata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('שמירת הגדרות קודי פנימיות: {0}'.format(guisettings.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepguisettings'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Favourites.xml שמירת מועדפים קודי: {0}'.format(favourites.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfavourites'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Sources.xml שמירת: {0}'.format(sources.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepsources'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-    #directory.add_file('Profiles.xml שמירת': {0}'.format(profiles.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepprofiles'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-    #directory.add_file('playercorefactory.xml שמירת': {0}'.format(playercore.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepplayercore'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-    directory.add_file('Advancedsettings.xml שמירת: {0}'.format(advanced.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepadvanced'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-    #directory.add_file('Keep Super Favourites: {0}'.format(super.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepsuper'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('שמירת מאגרי הרחבות: {0}'.format(repos.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeprepos'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('שמירת הרחבות מותקנות: {0}'.format(whitelist.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepwhitelist'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     if whitelist == 'true':
@@ -351,6 +346,13 @@ def save_menu():
         directory.add_file('ניקוי רשימת הרחבות שמורות', {'mode': 'whitelist', 'name': 'clear'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
         directory.add_file('ייבוא רשימת הרחבות לשמירה', {'mode': 'whitelist', 'name': 'import'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
         directory.add_file('ייצוא רשימת הרחבות שמורות', {'mode': 'whitelist', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    directory.add_file('Addons33.db שמירת: {0}'.format(addons33db.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepaddons33db'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_dir('Keep Login Info', {'mode': 'login'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
+    #directory.add_file('Save Login Info: {0}'.format(login.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeplogin'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
+    #directory.add_file('Profiles.xml שמירת': {0}'.format(profiles.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepprofiles'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_file('playercorefactory.xml שמירת': {0}'.format(playercore.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepplayercore'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_file('Advancedsettings.xml שמירת: {0}'.format(advanced.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepadvanced'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_file('Keep Super Favourites: {0}'.format(super.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepsuper'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
 
 
 def trakt_menu():

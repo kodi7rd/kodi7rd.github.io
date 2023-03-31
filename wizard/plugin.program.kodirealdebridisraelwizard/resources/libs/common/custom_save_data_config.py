@@ -51,6 +51,7 @@ def set_custom_save_data_variables_from_github():
     CONFIG.KEEPGUISETTINGS = str(custom_save_data_config.get('CONFIG.KEEPGUISETTINGS', CONFIG.KEEPGUISETTINGS)).lower() if 'CONFIG.KEEPGUISETTINGS' in custom_save_data_config else CONFIG.KEEPGUISETTINGS
     CONFIG.KEEPREPOS = str(custom_save_data_config.get('CONFIG.KEEPREPOS', CONFIG.KEEPREPOS)).lower() if 'CONFIG.KEEPREPOS' in custom_save_data_config else CONFIG.KEEPREPOS
     CONFIG.KEEPSUPER = str(custom_save_data_config.get('CONFIG.KEEPSUPER', CONFIG.KEEPSUPER)).lower() if 'CONFIG.KEEPSUPER' in custom_save_data_config else CONFIG.KEEPSUPER
+    CONFIG.KEEPADDONS33DB = str(custom_save_data_config.get('CONFIG.KEEPADDONS33DB', CONFIG.KEEPADDONS33DB)).lower() if 'CONFIG.KEEPADDONS33DB' in custom_save_data_config else CONFIG.KEEPADDONS33DB
     logging.log("custom_save_data_config.py | Finished overriding CONFIG.KEEP variables.", level=xbmc.LOGINFO)    
 
 
@@ -180,18 +181,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
-
-
-# Unused functions
-
-def overwrite_addons_whitelist_file():
-
-    # Fetch whitelist.txt from GitHub.
-    with urllib.request.urlopen(build_addons_whitelist_github_url, context=context) as response:
-        github_addons_whitelist_file = response.read().decode('utf-8')
-    logging.log("custom_save_data_config.py | GitHub whitelist.txt contents: " + github_addons_whitelist_file, level=xbmc.LOGINFO)
-
-    with open(CONFIG.WHITELIST, 'w', encoding='utf-8') as f:
-        for line in github_addons_whitelist_file.splitlines():
-            f.write(line + '\n')

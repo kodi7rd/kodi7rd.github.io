@@ -28,51 +28,7 @@ import shutil
 
 from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
-from resources.libs.common import custom_save_data_config
 
-########################################################################################################################################################
-# KODI RD ISRAEL - Custom Save Data Config
-#try:
-is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
-if 1==2:
-    is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
-    
-    logging.log("################################", level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
-    logging.log("INSTALL.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
-
-    # Set variables value from JSON file + addons whitelist, only if NOT first install.    
-    if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
-        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
-        
-        if is_first_install == 'true':
-            logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
-        else:
-            logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
-            custom_save_data_config.main()
-            
-    else:
-        if CONFIG.KEEPWHITELIST == 'false':
-            custom_save_data_config.delete_addons_whitelist_file()
-        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
-
-        
-#except Exception: 
-#    pass
-    
-########################################################################################################################################################
 
 ###########################
 #      Fresh Install      #
@@ -173,7 +129,7 @@ def wipe():
     exclude_dirs.append('My_Builds')
     
     progress_dialog = xbmcgui.DialogProgress()
-    
+      
     skin.skin_to_default('Fresh Install')
     
     update.addon_updates('set')
@@ -235,6 +191,8 @@ def wipe():
                 logging.log("Keep guisettings.xml: {0}".format(os.path.join(root, name)))
             elif name == 'advancedsettings.xml' and fold[-1] == 'userdata' and CONFIG.KEEPADVANCED == 'true':
                 logging.log("Keep advancedsettings.xml: {0}".format(os.path.join(root, name)))
+            elif name == 'Addons33.db' and fold[-1] == 'Database'  and fold[-2] == 'userdata' and CONFIG.KEEPADDONS33DB == 'true':
+                logging.log("Keep Addons33.db: {0} - CONFIG.KEEPADDONS33DB is: {1}".format(os.path.join(root, name), CONFIG.KEEPADDONS33DB))
             elif name in CONFIG.LOGFILES:
                 logging.log("Keep Log File: {0}".format(name))
             elif name.endswith('.db'):
@@ -278,27 +236,7 @@ def wipe():
     # KODI_RD_ISRAEL
     restore_fendata()
     
-    try:        
-        logging.log("################################", level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
-        logging.log("INSTALL.PY AFTER: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
-        logging.log("################################", level=xbmc.LOGINFO)
-        
-    except Exception: 
-        pass
-
+    
 def fresh_start(install=None, over=False):
     from resources.libs.common import logging
     from resources.libs.common import tools

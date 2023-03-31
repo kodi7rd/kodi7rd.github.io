@@ -33,59 +33,64 @@ from resources.libs.common import custom_save_data_config
 
 ########################################################################################################################################################
 # KODI RD ISRAEL - Custom Save Data Config
-#try:
+try:
 
-is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
+    is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
 
-logging.log("################################", level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+    logging.log("################################", level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPADDONS33DB: " + CONFIG.KEEPADDONS33DB, level=xbmc.LOGINFO)
 
-# Set variables value from JSON file + addons whitelist, only if NOT first install.    
-if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
-    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
-    
-    if is_first_install == 'true':
-        logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
-    else:
-        logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
-        custom_save_data_config.main()
-        
-else:
+    # Delete whitelist.txt if CONFIG.KEEPWHITELIST is false to avoid addons deletion.
     if CONFIG.KEEPWHITELIST == 'false':
         custom_save_data_config.delete_addons_whitelist_file()
-    logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
+        
+    # Set variables value from JSON file + addons whitelist, only if NOT first install.    
+    if CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG == 'true':
+        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Checking if not first install..", level=xbmc.LOGINFO)
+        
+        if is_first_install == 'true':
+            logging.log("Looks like first install. Skipping custom_save_data_config..", level=xbmc.LOGINFO)
+        else:
+            logging.log("Not first install. Starting custom_save_data_config..", level=xbmc.LOGINFO)
+            custom_save_data_config.main()
+            
+    else:
+        logging.log("CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG is: " + CONFIG.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG + ". Skipping..", level=xbmc.LOGINFO)
 
-logging.log("################################", level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
-logging.log("EXTRACT.PY AFTER: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
-logging.log("################################", level=xbmc.LOGINFO)
-#except Exception: 
-#    pass
+    logging.log("################################", level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: IS FIRST INSTALL: " + is_first_install, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPTRAKT: " + CONFIG.KEEPTRAKT, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPDEBRID: " + CONFIG.KEEPDEBRID, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPPROFILES: " + CONFIG.KEEPPROFILES, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPPLAYERCORE: " + CONFIG.KEEPPLAYERCORE, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPGUISETTINGS: " + CONFIG.KEEPGUISETTINGS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPREPOS: " + CONFIG.KEEPREPOS, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSUPER: " + CONFIG.KEEPSUPER, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPWHITELIST: " + CONFIG.KEEPWHITELIST, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPADDONS33DB: " + CONFIG.KEEPADDONS33DB, level=xbmc.LOGINFO)
+    logging.log("################################", level=xbmc.LOGINFO)
+    
+except Exception: 
+    pass
     
 ########################################################################################################################################################
 
@@ -171,9 +176,9 @@ def all_with_progress(_in, _out, dp, ignore, title):
             skip = True
         elif item.filename == 'userdata/advancedsettings.xml' and CONFIG.KEEPADVANCED == 'true':
             skip = True
-        # KODI RD ISRAEL - Skip Addons33.db if whitelist is configured - and NOT first install.
-        elif item.filename == 'userdata/Database/Addons33.db' and CONFIG.KEEPWHITELIST == 'true' and is_first_install == 'false':
-            logging.log("KODI RD ISRAEL - EXTRACT.PY: Skipping Addons33.db - CONFIG.KEEPWHITELIST is: {0} | IS_FIRST_INSTALL: {1}".format(CONFIG.KEEPWHITELIST, is_first_install))
+        # KODI RD ISRAEL - Skip Addons33.db if CONFIG.KEEPADDONS33DB is enabled.
+        elif item.filename == 'userdata/Database/Addons33.db' and CONFIG.KEEPADDONS33DB == 'true':
+            logging.log("KODI RD ISRAEL - EXTRACT.PY: Skipping Addons33.db - CONFIG.KEEPADDONS33DB is: {0}".format(CONFIG.KEEPADDONS33DB))
             skip = True
         elif file[0] == 'addons' and file[1] in excludes:
             skip = True
