@@ -31,9 +31,13 @@ from resources.libs.common import logging
 from resources.libs.common import tools
 from resources.libs.common import custom_save_data_config
 
+
+                       
 ########################################################################################################################################################
 # KODI RD ISRAEL - Custom Save Data Config
 try:
+    logging.log_notify(CONFIG.ADDONTITLE,
+                       '[COLOR {0}]המתן רגע..[/COLOR]'.format(CONFIG.COLOR2))
 
     is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
 

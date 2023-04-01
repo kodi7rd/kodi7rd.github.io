@@ -30,6 +30,7 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 
 
+
 ###########################
 #      Fresh Install      #
 ###########################
@@ -105,7 +106,6 @@ def wipe():
     from resources.libs import skin
     from resources.libs.common import tools
     from resources.libs import update
-    
     # KODI_RD_ISRAEL
     backup_fendata()
     
