@@ -118,7 +118,7 @@
     <setting id="scrapers.musicvideosdefault" default="true">metadata.local</setting>
     <setting id="videoplayer.autoplaynextitem" default="true" />
     <setting id="videoplayer.seeksteps">-30,-10,10,30</setting>
-    <setting id="videoplayer.seekdelay" default="true">750</setting>
+    <setting id="videoplayer.seekdelay">500</setting>
     <setting id="videoplayer.adjustrefreshrate" default="true">0</setting>
     <setting id="videoplayer.usedisplayasclock" default="true">false</setting>
     <setting id="videoplayer.errorinaspect" default="true">0</setting>
