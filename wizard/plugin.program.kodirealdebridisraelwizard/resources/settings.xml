@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="Build Options">
-        <setting type="lsep" label="Current Build:"/>
-        <setting id="buildname" type="text" label="Installed Build: " enable="false" default=""/>
-        <setting id="buildversion" type="text" label="Installed Version: " enable="false" default=""/>
-        <setting id="buildtheme" type="text" label="Current Theme: " enable="false" default=""/>
-        <setting id="latestversion" type="text" label="Latest Version: " enable="false" default=""/>
-        <setting id="nextbuildcheck" type="text" label="Next check for build update: " enable="false" default="2019-01-01 00:00:00" />
-        <setting id="disableupdate" type="bool" label="Disable Update Notification" default="false"/>
-        <setting type="lsep" label="Show Builds:"/>
-        <setting id="show19" type="bool" label="Show Matrix (v19.0) Builds" default="true"/>
-        <setting id="show20" type="bool" label="Show Nexus (v20.0) Builds" default="true"/>
-        <setting id="show21" type="bool" label="Show Omega (v21.0) Builds" default="true"/>
-        <setting id="separate" type="bool" label="Do not separate based off version" default="false"/>
+    <category label="הגדרות בילד">
+        <setting type="lsep" label="בילד נוכחי:"/>
+        <setting id="buildname" type="text" label="שם הבילד שמותקן:" enable="false" default=""/>
+        <setting id="buildversion" type="text" label="גרסת בילד נוכחית:" enable="false" default=""/>
+        <setting id="buildtheme" type="text" label="ערכה נוכחית:" enable="false" default=""/>
+        <setting id="latestversion" type="text" label="גרסת בילד אחרונה:" enable="false" default=""/>
+        <setting id="nextbuildcheck" type="text" label="בדיקת עדכון גרסה מתוזמנת ל:" enable="false" default="2019-01-01 00:00:00" />
+        <setting id="disableupdate" type="bool" label="כבה הודעות עדכון בילד" default="false"/>
+        <setting type="lsep" label="הצג בילדים:"/>
+        <setting id="show19" type="bool" label="הצג בילדים לקודי 19 (Matrix)" default="true"/>
+        <setting id="show20" type="bool" label="הצג בילדים לקודי 20 (Nexus)" default="true"/>
+        <setting id="show21" type="bool" label="הצג בילדים לקודי 21 (Omega)" default="true"/>
+        <setting id="separate" type="bool" label="בטל הפרדה לפי גרסה" default="false"/>
         
         <!-- Hidden Settings -->
         <setting id="first_install" type="bool" label="First Install" visible="false" default="true" />
@@ -36,23 +36,23 @@
         <setting id="default.addonupdate" type="text" label="Default general.addonupdate:" enable="false" default="" visible="false"/>
     </category>
 
-    <category label="Maintenance">
-        <setting type="lsep" label="Upload Log: "/>
-        <setting id="oldlog" type="bool" label="Include Kodi.Old.Log" default="false"/>
-        <setting id="wizlog" type="bool" label="Include Wizard Logs" default="false"/>
-        <setting id="crashlog" type="bool" label="Include Kodi Crash Logs" default="false"/>
-        <setting type="lsep" label="Maintenance Menu: "/>
-        <setting id="path" type="folder" label="Choose Backup Storage Location" default="special://home/"/>
-        <setting type="lsep" label="Auto Clean On Startup:"/>
-        <setting id="autoclean" type="bool" label="Enable Auto Clean" default="false"/>
-        <setting id="clearcache" type="bool" label="Clear Cache on Startup" default="false" enable="!eq(-1,false)"/>
-        <setting id="clearpackages" type="bool" label="Clear Packages on Startup" default="false" enable="!eq(-2,false)"/>
-        <setting id="clearthumbs" type="bool" label="Clear Week Old Thumbnails on Startup" default="false" enable="!eq(-3,false)"/>
-        <setting id="autocleanfreq" type="enum" label="How often would you like to Auto Clean on Startup?" values="Always|Daily|3 Days|Weekly|Monthly" default="3" enable="!eq(-4,false)"/>
-        <setting id="nextautocleanup" type="text" label="Next Auto Clean Up: " enable="false" visible="false" default="2019-01-01 00:00:00" />
-        <setting type="lsep" label="Clearing Video Cache:"/>
-        <setting id="includevideo" type="bool" label="Include Video Addons in Clear Cache: " default="true"/>
-        <setting id="includeall" type="bool" label="Include All Addons: " default="true" enable="!eq(-1,false)"/>
+    <category label="תחזוקה">
+        <setting type="lsep" label="העלאת לוג"/>
+        <setting id="oldlog" type="bool" label="כלול Kodi.Old.Log" default="false"/>
+        <setting id="wizlog" type="bool" label="כלול לוג Wizard" default="false"/>
+        <setting id="crashlog" type="bool" label="כלול לוג קריסה של קודי" default="false"/>
+        <setting type="lsep" label="תפריט תחזוקה"/>
+        <setting id="path" type="folder" label="בחר מיקום גיבוי" default="special://home/"/>
+        <setting type="lsep" label="ניקוי אוטומטי בהפעלה"/>
+        <setting id="autoclean" type="bool" label="אפשר ניקוי אוטומטי" default="false"/>
+        <setting id="clearcache" type="bool" label="נקה מטמון בהפעלה" default="false" enable="!eq(-1,false)"/>
+        <setting id="clearpackages" type="bool" label="נקה חבילות בהפעלה" default="false" enable="!eq(-2,false)"/>
+        <setting id="clearthumbs" type="bool" label="ניקוי שבועי - תמונות בהפעלה" default="false" enable="!eq(-3,false)"/>
+        <setting id="autocleanfreq" type="enum" label="תזמון ניקוי אוטומטי בהפעלה" values="תמיד|יומי|3 ימים|שבועי|חודשי" default="3" enable="!eq(-4,false)"/>
+        <setting id="nextautocleanup" type="text" label="Next Auto Clean Up:" enable="false" visible="false" default="2019-01-01 00:00:00" />
+        <setting type="lsep" label="ניקוי מטמון וידאו"/>
+        <setting id="includevideo" type="bool" label="כלול ניקוי מטמון בהרחבות וידאו" default="true"/>
+        <setting id="includeall" type="bool" label="כלול את כל ההרחבות " default="true" enable="!eq(-1,false)"/>
         <setting id="includeexodusredux" type="bool" label="Include Exodus Redux DB: " default="true" enable="eq(-1,false)" visible="System.HasAddon(plugin.video.exodusredux)"/>
         <setting id="includegaia" type="bool" label="Include Gaia Cache DB: " default="true" enable="eq(-2,false)" visible="System.HasAddon(plugin.video.gaia)"/>
         <setting id="includenumbers" type="bool" label="Include NuMb3r5 Cache DB: " default="true" enable="eq(-3,false)" visible="System.HasAddon(plugin.video.numbersbynumbers)"/>
@@ -156,52 +156,52 @@
         <setting id="ws-wonderfulsubs" type="text" default="" visible="false"/>
     </category>
 
-    <category label="Install Settings">
+    <category label="הגדרות התקנה">
         <setting type="lsep" label="APKs" />
         <setting type="action" label="Open Kodi Android Updater Settings" action="RunPlugin(plugin://plugin.program.openwizard/?mode=fmchoose)" option="close" />
-        <setting id="apk_path" type="folder" label="Choose Download Location" default="/storage/emulated/0/Download/"/>
-        <setting type="lsep" label="Save Data When Installing Build:"/>
+        <setting id="apk_path" type="folder" label="בחר מיקום הורדה" default="/storage/emulated/0/Download/"/>
+        <setting type="lsep" label="שמירת נתונים בזמן התקנת בילד:"/>
         <setting id="use_github_custom_save_data_config" type="bool" label="קבל הגדרות שמירת נתונים מ-GitHub" default="true"/>
-        <setting id="keeptrakt" type="bool" label="Keep My Trakt Data" default="true"/>
-        <setting id="traktnextsave" type="text" label="Last Time Trakt Data Saved:" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
-        <setting id="keepdebrid" type="bool" label="Keep My Debrid Data" default="true"/>
-        <setting id="debridnextsave" type="text" label="Last Time Debrid Data Saved:" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
-        <setting id="keeplogin" type="bool" label="Keep My Login Data" default="false"/>
-        <setting id="loginnextsave" type="text" label="Last Time Login Data Saved:" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
-        <setting type="lsep" label="Keep Settings When Installing Build:"/>
-        <setting id="keepfavourites" type="bool" label="Keep My Favourites" default="false"/>
-        <setting id="keepfendata" type="bool" label="Keep My Fen Favorites & Data" default="true"/>
-        <setting id="keepsources" type="bool" label="Keep My Sources" default="false"/>
-        <setting id="keepprofiles" type="bool" label="Keep My Profiles" default="false"/>
-        <setting id="keepplayercore" type="bool" label="Keep My playercorefactory.xml" default="false"/>
-        <setting id="keepguisettings" type="bool" label="Keep My guisettings.xml" default="false"/>
-        <setting id="keepadvanced" type="bool" label="Keep My AdvancedSettings.xml" default="false"/>
-        <setting id="keeprepos" type="bool" label="Keep Installed Repositories" default="false"/>
-        <setting id="keepsuper" type="bool" label="Keep Super Favourites" default="false"/>
-        <setting id="keepwhitelist" type="bool" label="Keep My Whitelist Addons" default="false"/>
-        <setting id="keepaddons33db" type="bool" label="Keep My Addons33.db" default="false"/>
+        <setting id="keeptrakt" type="bool" label="Trakt שמירת חשבון" default="true"/>
+        <setting id="traktnextsave" type="text" label="נשמר לאחרונה - Trakt" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
+        <setting id="keepdebrid" type="bool" label="Debrid שמירת חשבון" default="true"/>
+        <setting id="debridnextsave" type="text" label="נשמר לאחרונה - Debrid" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
+        <setting id="keeplogin" type="bool" label="שמירת התחברות" default="false"/>
+        <setting id="loginnextsave" type="text" label="נשמר לאחרונה - התחברות" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
+        <setting type="lsep" label="שמירת הגדרות בזמן התקנת הבילד:"/>
+        <setting id="keepfavourites" type="bool" label="Favourites.xml שמירת מועדפים קודי" default="false"/>
+        <setting id="keepfendata" type="bool" label="שמירת מועדפי Fen (הסרטים/הסדרות שלי)" default="true"/>
+        <setting id="keepsources" type="bool" label="Sources.xml שמירת" default="false"/>
+        <setting id="keepprofiles" type="bool" label="שמירת פרופילים" default="false"/>
+        <setting id="keepplayercore" type="bool" label="שמירת My playercorefactory.xml" default="false"/>
+        <setting id="keepguisettings" type="bool" label="שמירת הגדרות קודי פנימיות" default="false"/>
+        <setting id="keepadvanced" type="bool" label="שמירת My AdvancedSettings.xml" default="false"/>
+        <setting id="keeprepos" type="bool" label="שמירת מאגרי הרחבות" default="false"/>
+        <setting id="keepsuper" type="bool" label="שמירת Super Favourites" default="false"/>
+        <setting id="keepwhitelist" type="bool" label="שמירת הרחבות מותקנות" default="false"/>
+        <setting id="keepaddons33db" type="bool" label="שמירת Addons33.db" default="false"/>
     </category>
 
-    <category label="View Settings">
-        <setting id="developer" type="bool" label="Show Developer Menu: " enable="true" default=""/>
-        <setting id="adult" type="bool" label="Show Adult Addons: " enable="true" default="false"/>
-        <setting id="auto-view" type="bool" label="Enable Auto View" default="false"/>
-        <setting id="viewType" type="number" label="View Type" default="50" visible="!eq(-1, false)" enable="!eq(-1,false)"/>
-        <setting type="lsep" label="Notification Window on Startup:"/>
-        <setting id="notify" type="bool" label="Disable Notification on Startup" default="false" />
-        <setting id="noteid" type="number" label="Latest Notification" visible="false" default="0" />
-        <setting id="notedismiss" type="bool" label="Dismiss or Remind me later" visible="false" />
+    <category label="הגדרות תצוגה">
+        <setting id="developer" type="bool" label="הצג אפשרויות מפתח" enable="true" default=""/>
+        <setting id="adult" type="bool" label="הצג הרחבות למבוגרים" enable="true" default="false"/>
+        <setting id="auto-view" type="bool" label="הפעל Auto View" default="false"/>
+        <setting id="viewType" type="number" label="סוג View" default="50" visible="!eq(-1, false)" enable="!eq(-1,false)"/>
+        <setting type="lsep" label="חלון התראות בהפעלה:"/>
+        <setting id="notify" type="bool" label="כבה התראות בהפעלה" default="false" />
+        <setting id="noteid" type="number" label="התראה אחרונה" visible="false" default="0" />
+        <setting id="notedismiss" type="bool" label="הזכר מאוחר יותר" visible="false" />
     </category>
 
-    <category label="Logging Settings">
-        <setting type="lsep" label="Event Logging in the Wizard:"/>
-        <setting id="debuglevel" type="enum" label="What level would you like the wizard to log?" values="No Logging|Normal Logging|Full Logging" default="1"/>
-        <setting id="wizardlog" type="bool" label="Enable Wizard Logging:" default="true"/>
-        <setting id="autocleanwiz" type="bool" label="Automatically Clean up Wizard Log: " visible="!eq(-1,false)" default="true"/>
-        <setting id="wizlogcleanby" type="enum" label="How would you like to clean up wizard.log?" visible="!eq(-2,false)+!eq(-1,false)" values="By Days|By Size|By Lines" default="1"/>
-        <setting id="wizlogcleandays" type="enum" subsetting="true" label="Keep how many days of wizard.log?" enable="!eq(-2,false)" visible="eq(-1,0)+!eq(-2,false)+!eq(-3,false)" values="1 Day|2 Days|3 Days|7 Days" default="2"/>
-        <setting id="wizlogcleansize" type="enum" subsetting="true" label="Max file size for wizard.log?" enable="!eq(-3,false)" visible="eq(-2,1)+!eq(-3,false)+!eq(-4,false)" values="100 KB|200 KB|300 KB|400 KB|500 KB|1 MB" default="1"/>
-        <setting id="wizlogcleanlines" type="enum" subsetting="true" label="Keep how many lines of wizard.log?" enable="!eq(-4,false)" visible="eq(-3,2)+!eq(-4,false)+!eq(-5,false)" values="100|200|300|400|500" default="2"/>
-        <setting id="nextwizcleandate" type="text" label="Next Time Wizard Log Cleaned:" visible="false" default="2019-01-01 00:00:00"/>
+    <category label="הגדרות לוג">
+        <setting type="lsep" label="אירועי לוג ב-Wizard"/>
+        <setting id="debuglevel" type="enum" label="בחר Wizard Log Level" values="ללא|רגיל|מלא" default="1"/>
+        <setting id="wizardlog" type="bool" label="הפעל לוגים מה-Wizard" default="true"/>
+        <setting id="autocleanwiz" type="bool" label="ניקוי לוג אוטומטי ב-Wizard" visible="!eq(-1,false)" default="true"/>
+        <setting id="wizlogcleanby" type="enum" label="על פי מה לנקות לוג Wizard?" visible="!eq(-2,false)+!eq(-1,false)" values="ימים|גודל|שורות" default="1"/>
+        <setting id="wizlogcleandays" type="enum" subsetting="true" label="בחירת ימים לשמירת הלוג" enable="!eq(-2,false)" visible="eq(-1,0)+!eq(-2,false)+!eq(-3,false)" values="1|2|3|7" default="2"/>
+        <setting id="wizlogcleansize" type="enum" subsetting="true" label="גודל מקסימלי עבור  wizard.log" enable="!eq(-3,false)" visible="eq(-2,1)+!eq(-3,false)+!eq(-4,false)" values="100 KB|200 KB|300 KB|400 KB|500 KB|1 MB" default="1"/>
+        <setting id="wizlogcleanlines" type="enum" subsetting="true" label="מספר שורות מקסימלי בשמירת wizard.log" enable="!eq(-4,false)" visible="eq(-3,2)+!eq(-4,false)+!eq(-5,false)" values="100|200|300|400|500" default="2"/>
+        <setting id="nextwizcleandate" type="text" label="ניקוי הבא של לוג ה-Wizard" visible="false" default="2019-01-01 00:00:00"/>
     </category>
 </settings>
