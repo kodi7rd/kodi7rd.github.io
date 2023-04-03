@@ -20,5 +20,5 @@
     <favourite name="[B]סדרות - לפי ז&apos;אנר[/B]" thumb="https://i.imgur.com/6QpJbS0.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?iconImage=genres&amp;menu_type=tvshow&amp;mode=navigator.genres&amp;name=32470&quot;,return)</favourite>
     <favourite name="[B][COLOR limegreen]Kodi + Real Debrid Israel Wizard[/COLOR][/B]" thumb="https://i.imgur.com/qaLKGdB.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
     <favourite name="[B]סידור מועדפים[/B]" thumb="special://home/addons/plugin.program.orderfavourites-hebrew/icon.png">RunAddon(plugin.program.orderfavourites-hebrew)</favourite>
-    <favourite name="[B]Fen123[/B]" thumb="special://home/addons/plugin.video.fen/resources/media/fen_icon.png">RunAddon(plugin.video.fen)</favourite>
+    <favourite name="Wizdom Plus" thumb="C:\Users\barro\AppData\Roaming\Kodi\addons\service.subtitles.wizdom_plus\icon.png">RunAddon(&quot;service.subtitles.wizdom_plus&quot;)</favourite>
 </favourites>
