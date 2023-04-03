@@ -1,5 +1,5 @@
 <settings version="2">
-    <setting id="json_cache">true</setting>
+    <setting id="json_cache">false</setting>
     <setting id="Debug" default="true">false</setting>
-    <setting id="uploadAP">true</setting>
+    <setting id="uploadAP">false</setting>
 </settings>
