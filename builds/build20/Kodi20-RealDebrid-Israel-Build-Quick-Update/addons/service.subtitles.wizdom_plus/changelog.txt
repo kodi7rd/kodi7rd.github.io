@@ -1,0 +1,11 @@
+1.0.1
+** Wizdom Plus by Burekas **
+- Added support for manual search with these characters (+,-,_,.) as a seperator
+- Kodi Nexus 20 support
+
+1.0.0
+** Wizdom Plus by Burekas **
+- Forked of GuyKh (Based on 3.0.2)
+- Kodi Matrix (python 3) support
+- New Wizdom API fix (Changes are based on version 2.0.6)
+- Manual Search bug fix

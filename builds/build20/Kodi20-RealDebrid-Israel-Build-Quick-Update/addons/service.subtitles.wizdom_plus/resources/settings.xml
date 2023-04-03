@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32002">
+		<setting type="action" label="32003" action="RunScript(service.subtitles.wizdom_plus, 1,action=clean)"/>
+		<setting id="json_cache" label="שמירת json cache" type="bool" default="false" />        
+		<setting id="Debug" label="Debug" type="bool" default="false" />
+		<setting id="uploadAP" label="AP Upload Subtitles" type="bool" default="false" />
+    </category>
+</settings>
