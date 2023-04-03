@@ -18,6 +18,7 @@
     <favourite name="[B]Hulu סדרות[/B]" thumb="https://i.imgur.com/uSD2Cdw.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?action=tmdb_tv_networks&amp;iconImage=https%3a%2f%2fi.imgur.com%2fuSD2Cdw.png&amp;mode=build_tvshow_list&amp;name=Hulu&amp;network_id=453&quot;,return)</favourite>
     <favourite name="[B]סרטים - לפי ז&apos;אנר[/B]" thumb="https://i.imgur.com/6QpJbS0.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?iconImage=genres&amp;menu_type=movie&amp;mode=navigator.genres&amp;name=32470&quot;,return)</favourite>
     <favourite name="[B]סדרות - לפי ז&apos;אנר[/B]" thumb="https://i.imgur.com/6QpJbS0.png">ActivateWindow(10025,&quot;plugin://plugin.video.fen/?iconImage=genres&amp;menu_type=tvshow&amp;mode=navigator.genres&amp;name=32470&quot;,return)</favourite>
-    <favourite name="[B][COLOR limegreen]Kodi + Real Debrid Israel Wizard[/COLOR][/B]" thumb="https://i.imgur.com/qaLKGdB.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
     <favourite name="[B]סידור מועדפים[/B]" thumb="special://home/addons/plugin.program.orderfavourites-hebrew/icon.png">RunAddon(plugin.program.orderfavourites-hebrew)</favourite>
+    <favourite name="[B][COLOR limegreen]Kodi + Real Debrid Israel Wizard[/COLOR][/B]" thumb="https://i.imgur.com/qaLKGdB.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
+    <favourite name="[B][COLOR yellow]עדכון מהיר[/COLOR][/B]" thumb="https://i.imgur.com/aK8DRyP.png">PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=gui&amp;name=Kodi+20+Real+Debrid+Israel+Build&quot;)</favourite>
 </favourites>
