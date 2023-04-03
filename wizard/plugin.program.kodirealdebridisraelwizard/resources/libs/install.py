@@ -35,70 +35,80 @@ from resources.libs.common import logging
 #      Fresh Install      #
 ###########################
 
-def backup_fendata():    
-    # Verify that Fen addon is installed.
-    isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
-    logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Is CONFIG.KEEPFENDATA Enabled: {0} | isFenExists: {1}".format(CONFIG.KEEPFENDATA, isFenExists))
+def backup_fendata():
+    try:
+    
+        # Verify that Fen addon is installed.
+        isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
+        logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Is CONFIG.KEEPFENDATA Enabled: {0} | isFenExists: {1}".format(CONFIG.KEEPFENDATA, isFenExists))
 
-    if CONFIG.KEEPFENDATA == 'true' and isFenExists:
+        if CONFIG.KEEPFENDATA == 'true' and isFenExists:
 
-        # Fen .db files directory Path
-        fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.ADDON_DATA), 'plugin.video.fen', 'databases')
-        logging.log("Custom KODI_RD_ISRAEL LOG: Fen .db files SRC: {0}".format(fen_db_files_dir))
-        
-        # My_Builds/fen_db_files directory Path        
-        kodi_my_builds_fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.HOME), 'My_Builds', 'fen_db_files')
-        logging.log("Custom KODI_RD_ISRAEL LOG: Fen .db files DEST: {0}".format(kodi_my_builds_fen_db_files_dir))
-        
-        # Create the destination directory if it does not exist
-        os.makedirs(kodi_my_builds_fen_db_files_dir, exist_ok=True)
-        
-        # Copy all .db files, except views.db, to My_Builds/fen_db_files dir for temp location - before wipe
-        for item in os.listdir(fen_db_files_dir):
-            if item in ["views.db", "navigator.db"]:
-                logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from copy.".format(item))
-                continue
-            src_path = os.path.join(fen_db_files_dir, item)
-            dst_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
-            shutil.copy2(src_path, dst_path)
-            logging.log("Custom KODI_RD_ISRAEL LOG: Copying Fen {0} file to {1}".format(item, dst_path))
-    else:
-        logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Skipping Saving Fen Favorites & Data.")
-        
-        
-def restore_fendata():    
-    # Verify that Fen addon is installed.
-    isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
-    
-    # AFTER WIPE    
-    if CONFIG.KEEPFENDATA == 'true' and isFenExists:
-    
-        # Fen .db files directory Path
-        fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.ADDON_DATA), 'plugin.video.fen', 'databases')
-        
-        # My_Builds/fen_db_files directory Path
-        kodi_my_builds_fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.HOME), 'My_Builds', 'fen_db_files')
-        
-        # Create userdata/addons_data/plugin.video.fen/databases directory (doesn't exist after wipe)
-        os.makedirs(fen_db_files_dir, exist_ok=True)
-        
-        # Move all .db files, except views.db, from My_Builds/fen_db_files to fen databases dir    
-        for item in os.listdir(kodi_my_builds_fen_db_files_dir):
-            if item in ["views.db", "navigator.db"]:
-                logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from move.".format(item))
-                continue
-            src_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
-            dst_path = os.path.join(fen_db_files_dir, item)
-            shutil.move(src_path, dst_path)
-            logging.log("Custom KODI_RD_ISRAEL LOG: Moving Fen {0} file to {1}".format(item, dst_path))
-    
-        # Remove empty My_Builds/fen_db_files dir after .db files move.
-        if not os.listdir(kodi_my_builds_fen_db_files_dir):
-            os.rmdir(kodi_my_builds_fen_db_files_dir)
-            logging.log("Custom KODI_RD_ISRAEL LOG: Deleting unnecessary {0} directory.".format(kodi_my_builds_fen_db_files_dir))
+            # Fen .db files directory Path
+            fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.ADDON_DATA), 'plugin.video.fen', 'databases')
+            logging.log("Custom KODI_RD_ISRAEL LOG: Fen .db files SRC: {0}".format(fen_db_files_dir))
             
-    else:
-        logging.log("Custom KODI_RD_ISRAEL LOG: AFTER Wipe - Skipping Saving Fen Favorites & Data.")
+            # My_Builds/fen_db_files directory Path        
+            kodi_my_builds_fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.HOME), 'My_Builds', 'fen_db_files')
+            logging.log("Custom KODI_RD_ISRAEL LOG: Fen .db files DEST: {0}".format(kodi_my_builds_fen_db_files_dir))
+            
+            # Create the destination directory if it does not exist
+            os.makedirs(kodi_my_builds_fen_db_files_dir, exist_ok=True)
+            
+            # Copy all .db files, except views.db, to My_Builds/fen_db_files dir for temp location - before wipe
+            for item in os.listdir(fen_db_files_dir):
+                if item in ["views.db", "navigator.db"]:
+                    logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from copy.".format(item))
+                    continue
+                src_path = os.path.join(fen_db_files_dir, item)
+                dst_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
+                shutil.copy2(src_path, dst_path)
+                logging.log("Custom KODI_RD_ISRAEL LOG: Copying Fen {0} file to {1}".format(item, dst_path))
+        else:
+            logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Skipping Saving Fen Favorites & Data.")
+            
+    except Exception:
+        pass
+        
+        
+def restore_fendata(): 
+    try:
+       
+        # Verify that Fen addon is installed.
+        isFenExists = xbmc.getCondVisibility('System.HasAddon(plugin.video.fen)')
+        
+        # AFTER WIPE    
+        if CONFIG.KEEPFENDATA == 'true' and isFenExists:
+        
+            # Fen .db files directory Path
+            fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.ADDON_DATA), 'plugin.video.fen', 'databases')
+            
+            # My_Builds/fen_db_files directory Path
+            kodi_my_builds_fen_db_files_dir = os.path.join(os.path.abspath(CONFIG.HOME), 'My_Builds', 'fen_db_files')
+            
+            # Create userdata/addons_data/plugin.video.fen/databases directory (doesn't exist after wipe)
+            os.makedirs(fen_db_files_dir, exist_ok=True)
+            
+            # Move all .db files, except views.db, from My_Builds/fen_db_files to fen databases dir    
+            for item in os.listdir(kodi_my_builds_fen_db_files_dir):
+                if item in ["views.db", "navigator.db"]:
+                    logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from move.".format(item))
+                    continue
+                src_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
+                dst_path = os.path.join(fen_db_files_dir, item)
+                shutil.move(src_path, dst_path)
+                logging.log("Custom KODI_RD_ISRAEL LOG: Moving Fen {0} file to {1}".format(item, dst_path))
+        
+            # Remove empty My_Builds/fen_db_files dir after .db files move.
+            if not os.listdir(kodi_my_builds_fen_db_files_dir):
+                os.rmdir(kodi_my_builds_fen_db_files_dir)
+                logging.log("Custom KODI_RD_ISRAEL LOG: Deleting unnecessary {0} directory.".format(kodi_my_builds_fen_db_files_dir))
+                
+        else:
+            logging.log("Custom KODI_RD_ISRAEL LOG: AFTER Wipe - Skipping Saving Fen Favorites & Data.")
+            
+    except Exception:
+        pass
     
 def wipe():
     from resources.libs import db
