@@ -182,7 +182,7 @@ class Wizard:
             response = tools.open_url(guizip, check=True)
             if not response:
                 logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]GuiFix: Invalid Zip Url![/COLOR]'.format(CONFIG.COLOR2))
+                                   '[COLOR {0}]לא קיים עדכון![/COLOR]'.format(CONFIG.COLOR2))
                 return
 
             self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading GuiFix:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name))
@@ -218,7 +218,7 @@ class Wizard:
             tools.kill_kodi(over=True)
         else:
             logging.log_notify(CONFIG.ADDONTITLE,
-                               '[COLOR {0}]GuiFix: Cancelled![/COLOR]'.format(CONFIG.COLOR2))
+                               '[COLOR {0}]עדכון מהיר: בוטל![/COLOR]'.format(CONFIG.COLOR2))
 
     def theme(self, name, theme='', over=False):
         installtheme = False
