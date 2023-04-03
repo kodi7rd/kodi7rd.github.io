@@ -434,7 +434,7 @@ def show_update_window(name='Testing Window', current='1.0', new='1.1', icon=CON
     # update = UpdateWindow("build_update_prompt.xml", CONFIG.ADDON_PATH, 'Default', name=name, current=current, new=new, icon=icon, fanart=fanart)
     # update.doModal()
     # del update
-    msgcurrent = 'Running latest version of installed build: '
+    msgcurrent = 'שם הבילד המותקן: '
     msgupdate = 'גרסה חדשה זמינה לבילד: '
     build_name = '[COLOR {0}]{1}[/COLOR]'.format(CONFIG.COLOR1, name)
     current_version = 'גרסת בילד נוכחית: v[COLOR {0}]{1}[/COLOR]'.format(CONFIG.COLOR1, current)

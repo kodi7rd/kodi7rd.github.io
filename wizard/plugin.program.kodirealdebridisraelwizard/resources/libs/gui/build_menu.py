@@ -190,10 +190,19 @@ class BuildMenu:
                 build = '{0} [COLOR red][CURRENT v{1}][/COLOR]'.format(build, CONFIG.BUILDVERSION)
                 
             directory.add_file(build, description=description, fanart=fanart, icon=icon, themeit=CONFIG.THEME4)
-            directory.add_separator('INSTALL')
-            directory.add_file('התקנה', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
+            
+            directory.add_separator('התקנה מלאה')
+            
+            directory.add_file('התקנה ראשונה של הבילד? לחץ כאן', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
                                icon=icon, themeit=CONFIG.THEME1)
+                               
+            if guicheck:
+                directory.add_separator('עדכון מהיר')
+                directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
+                                   icon=icon, themeit=CONFIG.THEME1)
+                                   
             directory.add_separator()
+            
             directory.add_dir('תפריט שמירת נתונים', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME3)
             directory.add_file('מידע על הבילד', {'mode': 'buildinfo', 'name': name}, description=description, fanart=fanart,
                                icon=icon, themeit=CONFIG.THEME3)
@@ -206,10 +215,6 @@ class BuildMenu:
                 directory.add_file(
                     '[I]Build designed for Kodi v{0} (installed: v{1})[/I]'.format(str(kodi), str(CONFIG.KODIV)),
                     fanart=fanart, icon=icon, themeit=CONFIG.THEME3)
-                                           
-            if guicheck:
-                directory.add_file('Apply guiFix', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
-                                   icon=icon, themeit=CONFIG.THEME1)
                                    
             if themecheck:
                 directory.add_separator('THEMES', fanart=fanart, icon=icon)

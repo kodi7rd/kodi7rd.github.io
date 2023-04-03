@@ -167,14 +167,14 @@ class Wizard:
                 yes_pressed = 1
             else:
                 yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]Would you like to apply the guifix for:'.format(CONFIG.COLOR2) + '\n' + '[COLOR {0}]{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, name),
-                                   nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]',
-                                   yeslabel='[B][COLOR springgreen]Apply Fix[/COLOR][/B]')
+                                   '[COLOR {0}]האם ברצונך לבצע עדכון מהיר עבור:'.format(CONFIG.COLOR2) + '\n' + '[COLOR {0}]{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, name),
+                                   nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
+                                   yeslabel='[B][COLOR springgreen]עדכון מהיר[/COLOR][/B]')
         else:
-            yes_pressed = self.dialog.yesno("{0} - [COLOR red]WARNING!![/COLOR]".format(CONFIG.ADDONTITLE),
-                               "[COLOR {0}][COLOR {1}]{2}[/COLOR] community build is not currently installed.".format(CONFIG.COLOR2, CONFIG.COLOR1, name) + '\n' + "Would you like to apply the guiFix anyways?.[/COLOR]",
-                               nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]',
-                               yeslabel='[B][COLOR springgreen]Apply Fix[/COLOR][/B]')
+            yes_pressed = self.dialog.yesno("{0} - [COLOR red]!שים לב[/COLOR]".format(CONFIG.ADDONTITLE),
+                               "[COLOR {0}][COLOR {1}]{2}[/COLOR] - הבילד עדיין לא מותקן".format(CONFIG.COLOR2, CONFIG.COLOR1, name) + '\n' + "יש קודם כל לבצע התקנה מלאה של הבילד![/COLOR]",
+                               nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
+                               yeslabel='[B][COLOR springgreen]המשך בכל זאת[/COLOR][/B]')
         if yes_pressed:
             guizip = check.check_build(name, 'gui')
             zipname = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
@@ -185,7 +185,7 @@ class Wizard:
                                    '[COLOR {0}]GuiFix: Invalid Zip Url![/COLOR]'.format(CONFIG.COLOR2))
                 return
 
-            self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading GuiFix:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name), '', 'Please Wait')
+            self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading GuiFix:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name))
 
             lib = os.path.join(CONFIG.PACKAGES, '{0}_guisettings.zip'.format(zipname))
             
@@ -207,14 +207,14 @@ class Wizard:
             
             title = '[COLOR {0}][B]Installing:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name)
             self.dialogProgress.update(0, title + '\n' + 'Please Wait')
-            extract.all(lib, CONFIG.USERDATA, title=title)
+            extract.all(lib, CONFIG.HOME, title=title)
             self.dialogProgress.close()
             skin.skin_to_default('Build Install')
             skin.look_and_feel_data('save')
             installed = db.grab_addons(lib)
             db.addon_database(installed, 1, True)
 
-            self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]To save changes you now need to force close Kodi, Press OK to force close Kodi[/COLOR]".format(CONFIG.COLOR2))
+            self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]עדכון מהיר הסתיים. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
             tools.kill_kodi(over=True)
         else:
             logging.log_notify(CONFIG.ADDONTITLE,
