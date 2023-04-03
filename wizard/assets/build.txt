@@ -31,7 +31,7 @@ info="http://"
 description="לבעלי אפל טיוי בלבד!"
 
 name="test fast update"
-version="3.0.8"
+version="3.0.9"
 url="https://kodi7rd.github.io/builds/build20/Kodi20-RealDebrid-Israel-Build-3.0.8.zip"
 minor="https://"
 gui="https://kodi7rd.github.io/builds/build20/Kodi20-RealDebrid-Israel-Build-Quick-Update-3.0.8.zip"
