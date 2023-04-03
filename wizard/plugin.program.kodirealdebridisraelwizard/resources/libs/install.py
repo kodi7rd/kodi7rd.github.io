@@ -55,7 +55,7 @@ def backup_fendata():
         
         # Copy all .db files, except views.db, to My_Builds/fen_db_files dir for temp location - before wipe
         for item in os.listdir(fen_db_files_dir):
-            if item == "views.db":
+            if item in ["views.db", "navigator.db"]:
                 logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from copy.".format(item))
                 continue
             src_path = os.path.join(fen_db_files_dir, item)
@@ -84,7 +84,7 @@ def restore_fendata():
         
         # Move all .db files, except views.db, from My_Builds/fen_db_files to fen databases dir    
         for item in os.listdir(kodi_my_builds_fen_db_files_dir):
-            if item == "views.db":
+            if item in ["views.db", "navigator.db"]:
                 logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from move.".format(item))
                 continue
             src_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
