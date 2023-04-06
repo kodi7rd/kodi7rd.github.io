@@ -10,7 +10,7 @@
     <setting id="gamesachievements.loggedin" default="true">false</setting>
     <setting id="lookandfeel.skin" default="true">skin.estuary</setting>
     <setting id="lookandfeel.skintheme" default="true">SKINDEFAULT</setting>
-    <setting id="lookandfeel.skincolors">midnight blue</setting>
+    <setting id="lookandfeel.skincolors">midnight_blue</setting>
     <setting id="lookandfeel.font" default="true">Default</setting>
     <setting id="lookandfeel.skinzoom" default="true">0</setting>
     <setting id="lookandfeel.stereostrength" default="true">5</setting>
