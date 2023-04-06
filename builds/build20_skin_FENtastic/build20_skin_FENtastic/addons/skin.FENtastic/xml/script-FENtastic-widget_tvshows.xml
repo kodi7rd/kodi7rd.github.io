@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="TVShowWidgets">
+        <include content="WidgetListLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=build_tvshow_list&amp;action=favorites_tvshows&amp;name=TV+Shows&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FR3NEEJl.png"/>
+            <param name="widget_header" value="[B]הסדרות שלי[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22010"/>
+        </include>
+        <include content="WidgetListLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32481&amp;action=in_progress_tvshows&amp;iconImage=in_progress_tvshow&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="[B]סדרות להמשך צפייה[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22011"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32458&amp;action=trakt_tv_trending&amp;iconImage=trending&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="[B]סדרות פופולריות[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22012"/>
+        </include>
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=navigator.build_shortcut_folder_list&amp;name=%D7%A1%D7%93%D7%A8%D7%95%D7%AA+-+%D7%9C%D7%A4%D7%99+%D7%A8%D7%A9%D7%AA%D7%95%D7%AA&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]רשתות סטרימינג[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22013"/>
+        </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.idanplus"/>
+            <param name="widget_header" value="[B]עידן+ פלוס[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22014"/>
+        </include>
+    </include>
+</includes>

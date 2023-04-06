@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="TVShowCategoryWidgetBottom">
+        <include content="WidgetListCategories">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=navigator.build_shortcut_folder_list&amp;name=%D7%A1%D7%93%D7%A8%D7%95%D7%AA+-+%D7%9C%D7%A4%D7%99+%D7%96%27%D7%90%D7%A0%D7%A8&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]ז'אנרים[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22025"/>
+        </include>
+    </include>
+</includes>
