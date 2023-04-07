@@ -33,10 +33,10 @@
     <setting id="homemenunomoviesbutton" type="bool">false</setting>
     <setting id="show_musicvideoposter" type="bool">false</setting>
     <setting id="background_overlay" type="string">2</setting>
-    <setting id="widgetlimitmain" type="string"></setting>
+    <setting id="widgetlimitmain" type="string">21</setting>
     <setting id="MovieGenreFanart.path" type="string"></setting>
     <setting id="HomeFanart.ext" type="string"></setting>
-    <setting id="widgetlimitepisodes" type="string"></setting>
+    <setting id="widgetlimitepisodes" type="string">10</setting>
     <setting id="HomeFanart.name" type="string"></setting>
     <setting id="osdautoclosetime" type="string"></setting>
     <setting id="WeatherFanart.path" type="string"></setting>

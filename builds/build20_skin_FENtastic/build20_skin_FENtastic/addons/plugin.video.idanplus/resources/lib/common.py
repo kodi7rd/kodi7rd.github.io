@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
-import sys, gzip, os, io, random, re, json, urllib, time, collections, xml.parsers.expat as expat
-import requests, xmltodict
+import sys, gzip, os, io, random, re, json, urllib, requests, time, collections, xml.parsers.expat as expat
 #import zipfile
 
 try:
@@ -193,6 +192,13 @@ def EnableAddon(addonid):
 
 def DisableAddon(addonid):
 	xbmc.executeJSONRPC('{{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled","params":{{"addonid":"{0}","enabled":false}},"id":1}}'.format(addonid))
+
+def GetTextFile(filename):
+	content = ''
+	if os.path.isfile(filename):
+		with io.open(filename, 'r', encoding="utf-8") as f:
+			content = f.read()
+	return content
 
 def ReadList(fileName):
 	try:
@@ -405,9 +411,6 @@ def UnEscapeXML(st):
 	if want_unicode:
 		es = u""
 	return es.join(list)
-
-def XmlToDict(text):
-	return xmltodict.parse(text)
 
 def GetLabelColor(text, keyColor=None, bold=False, color=None):
 	if not color:

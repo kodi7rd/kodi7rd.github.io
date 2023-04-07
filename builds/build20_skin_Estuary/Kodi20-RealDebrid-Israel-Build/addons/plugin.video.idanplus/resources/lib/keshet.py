@@ -7,7 +7,7 @@ module = 'keshet'
 moduleIcon = common.GetIconFullPath("mako.png")
 baseUrl = 'https://www.mako.co.il'
 endings = 'platform=responsive'
-programUrl = "{0}/_next/data/4.3.0/{{0}}/{{1}}.json?mako_vod_channel={{0}}&program={{1}}".format(baseUrl)
+programUrl = "{0}/_next/data/4.7.0/{{0}}/{{1}}.json?mako_vod_channel={{0}}&program={{1}}".format(baseUrl)
 entitlementsServices = 'https://mass.mako.co.il/ClicksStatistics/entitlementsServicesV2.jsp'
 UA = common.GetUserAgent()
 
@@ -33,7 +33,7 @@ def GetCategoriesList(iconimage):
 	resultJSON = json.loads(match[0])
 	if resultJSON is None or len(resultJSON) < 1:
 		return
-	for menuItem in resultJSON.get("props", {}).get("pageProps", {}).get("menu", {}).get("menuItems", []):
+	for menuItem in resultJSON.get("props", {}).get("pageProps", {}).get("menuPrograms", {}).get("menuItems", []):
 		name = common.GetLabelColor(menuItem["title"], bold=True, color="none")
 		common.addDir(name, "{0}{1}".format(baseUrl, menuItem["url"]), 1, iconimage, infos={"Title": name}, module=module)
 
@@ -59,29 +59,39 @@ def GetSeriesList(url, iconimage):
 		xbmcplugin.addSortMethod(common.GetHandle(), xbmcplugin.SORT_METHOD_LABEL)
 #'''
 
+def GetProgramUrl(url):
+	#urlParts = url[len(baseUrl)+1:].split("/")
+	i = url[8:].find("/")
+	urlParts = url[9+i:].split("/")
+	return programUrl.format(urlParts[0], urlParts[1])
+
 def GetSeasonsList(url, iconimage):
-	urlParts = url[len(baseUrl)+1:].split("/")
-	data = GetJson(programUrl.format(urlParts[0], urlParts[1]))["pageProps"]["data"]
+	data = GetJson(GetProgramUrl(url))["pageProps"]["data"]
 	#if iconimage == common.GetIconFullPath('search.jpg'):
 	iconimage = data["seo"]["image"]
 	seasons = data.get("seasons", [])
 	if len(seasons) < 1:
 		GetEpisodesList(url, iconimage, data)
 		return
+	grids_arr = []
+	index = 0
 	for season in seasons:
 		try:
 			name = common.GetLabelColor(common.encode(season.get('seasonTitle', ''), "utf-8"), keyColor="timesColor", bold=True)
 			url = "{0}{1}".format(baseUrl, season["pageUrl"])
-			infos = {"Title": name, "Plot": name}
-			common.addDir(name, url, 3, iconimage, infos, module=module)
+			grids_arr.append((index, name, url))
+			index += 1
 		except Exception as ex:
 			xbmc.log(str(ex), 3)
+	grids_sorted = sorted(grids_arr,key=lambda grids_arr: grids_arr[0], reverse=True)
+	for index, name, link in grids_sorted:
+		common.addDir(name, link, 3, iconimage, infos={"Title": name, "Plot": name}, module=module)
 
 def GetEpisodesList(url, icon, data=None):
 	if data is None:
-		urlParts = url[len(baseUrl)+1:].split("/")
-		data = GetJson(programUrl.format(urlParts[0], urlParts[1]))["pageProps"]["data"]
+		data = GetJson(GetProgramUrl(url))["pageProps"]["data"]
 	videoChannelId = data["channelId"]
+	isEpisodes = False
 	for menu in data["menu"]:
 		if menu is None or "vods" not in menu:
 			continue
@@ -92,6 +102,7 @@ def GetEpisodesList(url, icon, data=None):
 			try:
 				if vod["componentLayout"] != "vod":
 					continue
+				isEpisodes = True
 				vcmid = vod["itemVcmId"]
 				title = vod["title"]
 				subtitle = vod.get("extraInfo", "").replace("@", " * ")
@@ -106,6 +117,17 @@ def GetEpisodesList(url, icon, data=None):
 				common.addDir(name, url, 4, iconimage, infos, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=4&iconimage={3}&moredata=choose&module=keshet)'.format(sys.argv[0], common.quote_plus(url), common.quote_plus(name), common.quote_plus(iconimage))), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=4&iconimage={3}&moredata=set_mako_res&module=keshet)'.format(sys.argv[0], common.quote_plus(url), common.quote_plus(name), common.quote_plus(iconimage)))], moreData=bitrate, module='keshet', isFolder=False, isPlayable=True)
 			except Exception as ex:
 				xbmc.log(str(ex), 3)
+	if isEpisodes == False:
+		vod = data.get("vod") 
+		if vod != None:
+			vcmid = vod["itemVcmId"]
+			title = data["seo"]["title"]
+			subtitle = data["seo"]["description"]
+			name = common.getDisplayName(common.encode(subtitle, "utf-8"), common.encode(title, "utf-8"), programNameFormat) if makoShowShortSubtitle else common.GetLabelColor(common.encode(subtitle, "utf-8"), keyColor="prColor", bold=False)
+			url = "{0}/VodPlaylist?vcmid={1}&videoChannelId={2}".format(baseUrl, vcmid, videoChannelId)
+			iconimage = data["seo"]["image"]
+			infos = {"Title": name, "Plot": name}
+			common.addDir(name, url, 4, iconimage, infos, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=4&iconimage={3}&moredata=choose&module=keshet)'.format(sys.argv[0], common.quote_plus(url), common.quote_plus(name), common.quote_plus(iconimage))), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=4&iconimage={3}&moredata=set_mako_res&module=keshet)'.format(sys.argv[0], common.quote_plus(url), common.quote_plus(name), common.quote_plus(iconimage)))], moreData=bitrate, module='keshet', isFolder=False, isPlayable=True)
 
 def GetChannels(url, iconimage):
 	html = common.OpenURL(url, headers={"User-Agent": UA})

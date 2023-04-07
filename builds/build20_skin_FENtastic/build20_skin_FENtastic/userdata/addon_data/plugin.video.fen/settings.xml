@@ -32,9 +32,9 @@
     <setting id="sort.watched" default="true">0</setting>
     <setting id="sort.collection" default="true">0</setting>
     <setting id="sort.watchlist" default="true">0</setting>
-    <setting id="paginate.lists" default="true">0</setting>
-    <setting id="paginate.limit_addon" default="true">20</setting>
-    <setting id="paginate.limit_widgets" default="true">20</setting>
+    <setting id="paginate.lists">3</setting>
+    <setting id="paginate.limit_addon">7</setting>
+    <setting id="paginate.limit_widgets">7</setting>
     <setting id="paginate.jump_to" default="true">0</setting>
     <setting id="ignore_articles" default="true">true</setting>
     <setting id="show_specials" default="true">false</setting>

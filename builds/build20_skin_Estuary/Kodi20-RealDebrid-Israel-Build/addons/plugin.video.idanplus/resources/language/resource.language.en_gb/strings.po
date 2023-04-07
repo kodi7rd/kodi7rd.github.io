@@ -232,7 +232,7 @@ msgid "רשת 13"
 msgstr ""
 
 msgctxt "#30606"
-msgid "14 עכשיו"
+msgid "עכשיו 14"
 msgstr ""
 
 msgctxt "#30607"
@@ -525,6 +525,10 @@ msgstr ""
 
 msgctxt "#30802"
 msgid "יצירת קבצים לטלויזיה חיה"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Timeshift"
 msgstr ""
 
 msgctxt "#30804"

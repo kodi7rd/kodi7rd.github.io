@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 import xbmc, xbmcaddon
-import os, io, sys, time, datetime
+import os, io, sys, time, datetime, glob, re
 import resources.lib.common as common
 
 module = 'iptv'
@@ -11,6 +11,7 @@ def MakeIPTVlist(channels):
 	if common.GetAddonSetting('useIPTV') != 'true':
 		return
 	iptvList = '#EXTM3U\n'
+	timeshift  = '' if common.GetAddonSetting('useIPTVtimeshift') != 'true' else '\n#KODIPROP:inputstream=inputstream.ffmpegdirect\n#KODIPROP:inputstream.ffmpegdirect.stream_mode=timeshift\n#KODIPROP:inputstream.ffmpegdirect.is_realtime_stream=true\n#KODIPROP:mimetype=video/mp2t'
 	for channel in channels:
 		try:
 			type = channel.get('type', '')
@@ -26,7 +27,7 @@ def MakeIPTVlist(channels):
 				radio = ''
 				group = ' group-title="TV"'
 			url = '{0}?mode=5&url={1}'.format(sys.argv[0], channel['ch'])
-			iptvList += '\n#EXTINF:-1 tvg-id="{0}"{1} tvg-logo="{2}"{3},{4}\n{5}\n'.format(tvg_id, group, tvg_logo, radio, view_name, url)
+			iptvList += '{0}\n#EXTINF:-1 tvg-id="{1}"{2} tvg-logo="{3}"{4},{5}\n{6}\n'.format(timeshift, tvg_id, group, tvg_logo, radio, view_name, url)
 		except Exception as ex:
 			xbmc.log("{0}".format(ex), 3)
 	iptvListOld = ''
@@ -100,10 +101,60 @@ def SetIptvClientSettings():
 			"epgPath": os.path.join(common.Addon.getAddonInfo("profile"),'epg.xml')
 		}
 		iptvAddon = xbmcaddon.Addon('pvr.iptvsimple')
-		for key, val in common.items(settings):
-			if iptvAddon.getSetting(key) != val:
-				iptvAddon.setSetting(key, val)
-		if common.GetKodiVer() >= 18:
+		kodiVer = common.GetKodiVer()
+		if kodiVer >= 20:
+			iptvAddonProfileDir = common.decode(common.translatePath(iptvAddon.getAddonInfo("profile")), "utf-8")
+			settingsFiles = sorted(glob.glob(os.path.join(iptvAddonProfileDir, 'instance-settings-*.xml')), reverse=True)
+			settingsFile = settingsFiles[0]
+			j = settingsFile.rfind('.')
+			i = settingsFile[:j].rfind('-')
+			index = int(settingsFile[i+1:j])
+			settingsNewFile = '{0}{1}{2}'.format(settingsFile[:i+1], str(index+1), settingsFile[j:])
+			content = common.GetTextFile(settingsFile)
+			for sFile in settingsFiles:
+				theFile = True
+				for key, val in common.items(settings):
+					patern = '<setting id="{0}".*?>(.*?)</setting>'.format(key)
+					oldVal = re.compile(patern).findall(content)
+					if len(oldVal) < 1:
+						patern = '<setting id="{0}".*?/>'.format(key)
+						oldVal = re.compile(patern).findall(content)
+					else:
+						oldVal = oldVal[0]
+					if oldVal != val:
+						theFile = False
+						break
+				if theFile == True:
+					settingsNewFile = sFile
+					settingsFile = sFile
+					content = common.GetTextFile(settingsFile)
+					break
+
+			settings["kodi_addon_instance_name"] = "Idan+ Plus"
+			settings["kodi_addon_instance_enabled"] = "true"
+
+			isChange = False
+			for key, val in common.items(settings):
+				patern = '<setting id="{0}".*?>(.*?)</setting>'.format(key)
+				a = re.compile(patern).findall(content)
+				if len(a) < 1:
+					patern = '<setting id="{0}".*?/>'.format(key)
+					a = re.compile(patern).findall(content)
+				else:
+					a = a[0]
+				l = re.search(patern, content)
+				if a != val:
+					content = content.replace(content[l.start():l.end()], '<setting id="{0}" default="true">{1}</setting>'.format(key, val))
+					isChange = True
+
+			if isChange == True:
+				with io.open(settingsNewFile, 'w', encoding="utf-8") as f:
+					f.write(common.uni_code(content))
+		else:
+			for key, val in common.items(settings):
+				if iptvAddon.getSetting(key) != val:
+					iptvAddon.setSetting(key, val)
+		if kodiVer >= 18:
 			common.DisableAddon('pvr.iptvsimple')
 			common.EnableAddon('pvr.iptvsimple')
 

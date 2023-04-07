@@ -12,7 +12,7 @@ def GetCategoriesList(iconimage):
 	name = "{0}: {1}".format(common.GetLocaleString(30001), sortString)
 	common.addDir(name, "toggleSortingMethod", 4, iconimage, {"Title": name, "Plot": "{0}[CR]{1}[CR]{2} / {3}".format(name, common.GetLocaleString(30004), common.GetLocaleString(30002), common.GetLocaleString(30003))}, module=module, isFolder=False)
 	name = common.GetLabelColor("כל התכניות", bold=True, color="none")
-	common.addDir(name, '', 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות ערוץ 14 עכשיו"}, module=module)
+	common.addDir(name, '', 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות ערוץ עכשיו 14"}, module=module)
 
 def GetSeriesList(iconimage):
 	#text = common.OpenURL(baseUrl)
@@ -41,6 +41,13 @@ def GetQuoteUrl(url):
 def GetEpisodesList(url, image):
 	bitrate = common.GetAddonSetting('{0}_res'.format(module))
 	text = common.OpenURL(url)
+	#lastEpisode = re.compile('<div class=\'kaltura-zone\'>.*?src=".*?data-guid=(.*?)"></iframe>.*?<h1.*?>(.*?)</h1>.*?<div class="date-zone">.*?\((.*?)\).*?</div>', re.S).findall(text)
+	#videoid = lastEpisode[0][0].strip()
+	#date = lastEpisode[0][2].replace('/', '.')
+	#name = common.GetLabelColor('{0} - {1}'.format(common.UnEscapeXML(lastEpisode[0][1].strip()), date), keyColor="chColor")
+	#iconimage = 'https://frankly-vod.akamaized.net/channel14/transcoded/{0}/poster.jpg'.format(videoid)
+	#link = 'https://frankly-vod.akamaized.net/channel14/transcoded/{0}/hls/master.m3u8'.format(videoid)
+	#common.addDir(name, link, 2, iconimage, infos={"Title": name, "Aired": date}, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=choose&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module)), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=set_14tv_res&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module))], module=module, moreData=bitrate, isFolder=False, isPlayable=True)
 	episodes = re.compile('<div class="katan-unit(.*?)</div>\s*</div>\s*</div>', re.S).findall(text)
 	for episode in episodes:
 		match = re.compile('data-videoid="(.*?)".*?src=["\'](.*?)["\'].*?<div class="the-title">(.*?)</div>.*?<div class="episode_air_date"\s*?>(.*?)</div>', re.S).findall(episode)
@@ -49,32 +56,18 @@ def GetEpisodesList(url, image):
 			iconimage = GetQuoteUrl(iconimage)
 			if iconimage.startswith('/'):
 				iconimage = '{0}{1}'.format(baseUrl, iconimage)
-			link = 'https://cdn.ch20-cdnwiz.com/ch20/player.php?clipid={0}&autoplay=true&automute=false'.format(videoid.strip())
+			link = 'https://frankly-vod.akamaized.net/channel14/transcoded/{0}/hls/master.m3u8'.format(videoid.strip())
 			common.addDir(name, link, 2, iconimage, infos={"Title": name, "Aired": date}, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=choose&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module)), (common.GetLocaleString(30023), 'RunPlugin({0}?url={1}&name={2}&mode=2&iconimage={3}&moredata=set_14tv_res&module={4})'.format(sys.argv[0], common.quote_plus(link), name, common.quote_plus(iconimage), module))], module=module, moreData=bitrate, isFolder=False, isPlayable=True)
 
-def Play(name, url, iconimage, quality='best', live=''):
+def Play(name, url, iconimage, quality='best'):
 	userAgent = common.GetUserAgent()
-	if live != '':
-		common.PlayStream('{0}|User-Agent={1}'.format(live, userAgent), quality, name, iconimage)
-		return
-	headers = {"User-Agent": userAgent}
-	text = common.OpenURL(url, headers=headers)
-	match = re.compile('src:\s*"(.*?)"').findall(text)
-	if len(match) < 1:
-		match = re.compile('source\s*src="(.*?)"').findall(text)
-	if len(match) < 1:
-		match = re.compile("hls.loadSource\('(.*?)'\)").findall(text)
-	link = common.GetRedirect(match[0], headers=headers)
-	if link is None:
-		link = match[0]
-	if not link.endswith('.mp4'):
-		link = common.GetStreams(link, headers=headers, quality=quality)
+	link = common.GetStreams(url, headers={"User-Agent": userAgent}, quality=quality)
 	final = '{0}|User-Agent={1}'.format(link, userAgent)
 	common.PlayStream(final, quality, name, iconimage)
 
 def Watch(name, iconimage, quality='best'):
 	url = 'https://ch14-channel14.akamaized.net/hls/live/2097589/CH14_CHANNEL14/master.m3u8'
-	Play(name, url, iconimage, quality, live=url)
+	Play(name, url, iconimage, quality)
 
 def Run(name, url, mode, iconimage='', moreData=''):
 	global sortBy

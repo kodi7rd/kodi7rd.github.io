@@ -289,8 +289,6 @@ def Search():
 		name = common.getDisplayName(serieName, moduleName, programNameFormat, bold=True)
 		infos = {"Title": name, "Plot": serie['desc']}
 		isFolder = False if serieMoreData == 'youtube' else True
-		xbmc.log(serie['url'], 5)
-		xbmc.log(serie['icon'], 5)
 		common.addDir(name, serie['url'], serie['mode'], common.encode(serie['icon'], 'utf-8'), infos, module=serie['module'], moreData=common.encode(serieMoreData, 'utf-8'), totalItems=len(filteredSeries), isFolder=isFolder, urlParamsData={'name': common.GetLabelColor(serieName, keyColor="prColor", bold=True)})
 
 def PlayLive(id):

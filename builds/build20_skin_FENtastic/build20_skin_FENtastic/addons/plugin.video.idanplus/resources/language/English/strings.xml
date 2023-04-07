@@ -59,7 +59,7 @@
 	<string id="30603">קשת 12</string>
 	<string id="30626">קשת 12 - לקויי שמיעה</string>
 	<string id="30604">רשת 13</string>
-	<string id="30606">14 עכשיו</string>
+	<string id="30606">עכשיו 14</string>
 	<string id="30607">כאן חינוכית 23</string>
 	<string id="30608">ערוץ 24 החדש</string>
 	<string id="30609">מכאן 33</string>
@@ -135,6 +135,7 @@
 	<string id="30800">טלויזיה חיה</string>
 	<string id="30801">שימוש בטלויזיה חיה</string>
 	<string id="30802">יצירת קבצים לטלויזיה חיה</string>
+	<string id="30803">Timeshift</string>
 	<string id="30804">פתיחת הגדרות טלויזיה חיה</string>
 	<string id="30805">פתיחת הגדרות IPTV Simple Client</string>
 	<string id="30806">איזור זמן (ריק למציאה אוטומטית)</string>

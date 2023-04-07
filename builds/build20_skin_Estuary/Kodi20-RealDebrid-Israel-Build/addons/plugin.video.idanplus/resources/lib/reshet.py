@@ -17,10 +17,8 @@ moduleIcon = common.GetIconFullPath("13.jpg")
 def GetCategoriesList(iconimage):
 	name = "{0}: {1}".format(common.GetLocaleString(30001), common.GetLocaleString(30002) if sortBy == 0 else common.GetLocaleString(30003))
 	common.addDir(name, "toggleSortingMethod", 5, iconimage, {"Title": name, "Plot": "{0}[CR]{1}[CR]{2} / {3}".format(name, common.GetLocaleString(30004), common.GetLocaleString(30002), common.GetLocaleString(30003))}, module=module, isFolder=False)
-	result = GetUrlJson('{0}/vod/'.format(baseUrl))
-	if len(result) > 0:
-		name = common.GetLabelColor("כל התכניות", bold=True, color="none")
-		common.addDir(name, '{0}/all-shows/all-shows-list/'.format(baseUrl), 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות רשת 13"}, module=module)
+	name = common.GetLabelColor("כל התכניות", bold=True, color="none")
+	common.addDir(name, '{0}/all-shows/all-shows-list/'.format(baseUrl), 0, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות רשת 13"}, module=module)
 	name = common.GetLabelColor("חדשות 13", bold=True, color="none")
 	common.addDir(name, '', 10, iconimage, infos={"Title": name, "Plot": "צפיה בתכניות חדשות 13"}, module=module)
 	name = common.GetLabelColor("ארכיון רשת 13", bold=True, color="none")
@@ -413,8 +411,12 @@ def GetSeasonList(url, iconimage, buildId):
 	if len(url) > 0 and url[-1] != '/':
 		url += '/'
 	serie = url[url.rfind('/', 0, len(url)-1)+1:-1]
+	if len(buildId) < 1:
+		result = GetUrlJson('{0}/all-shows/all-shows-list/'.format(baseUrl), root=True)
+		if len(result) < 1:
+			return
+		buildId = result['buildId']
 	url = "{0}/_next/data/{1}/he/all-shows/{2}.json?all=all-shows&all={2}".format(baseUrl, buildId, serie)
-	xbmc.log(url, 5)
 	result = common.OpenURL(url, headers={"User-Agent": userAgent}, responseMethod='json')
 	grids = result['pageProps']['page']['Content']['PageGrid']
 	grids_arr = []

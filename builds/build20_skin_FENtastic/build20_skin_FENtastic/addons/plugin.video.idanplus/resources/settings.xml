@@ -103,6 +103,7 @@
 		<setting id="useIPTV" type="bool" label="30801" default="true" />
 		<setting id="tvShortcut" type="bool" label="30808" default="false" />
 		<setting id="radioShortcut" type="bool" label="30809" default="false" />
+		<setting id="useIPTVtimeshift" type="bool" label="30803" default="false" />
 		<setting id="timeZone" type="text" label="30806" default="" />
 		<setting id="actUpdateIPTV" type="action" label="30802" action="RunPlugin(plugin://plugin.video.idanplus/?mode=7)" option="close" />
 		<setting id="actPVRsettings" type="action" label="30804" action="RunPlugin(plugin://plugin.video.idanplus/?mode=6&amp;url=ActivateWindow&amp;moredata=pvrsettings)" option="close" />
