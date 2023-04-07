@@ -42,6 +42,7 @@ def show_contact(msg=""):
             self.fen_connect_rd_button = 104
             self.fen_connect_trakt_button = 105
             self.fen_connect_ad_button = 106
+            self.close_button = 120
             self.show_dialog()
 
         def show_dialog(self):
@@ -52,7 +53,9 @@ def show_contact(msg=""):
             self.setFocusId(self.fen_connect_rd_button)
 
         def onClick(self, controlid):
-            if controlid == self.fen_connect_rd_button:
+            if controlid == self.close_button:
+                self.close()
+            elif controlid == self.fen_connect_rd_button:
                 self.close()
                 # Open Fen Real Debrid Authentication Window
                 xbmc.executebuiltin('RunPlugin(plugin://plugin.video.fen/?mode=real_debrid.authenticate)')

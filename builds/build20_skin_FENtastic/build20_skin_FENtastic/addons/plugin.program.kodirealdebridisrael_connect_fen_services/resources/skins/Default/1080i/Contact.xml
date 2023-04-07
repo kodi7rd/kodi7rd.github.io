@@ -47,6 +47,8 @@
                 <aligny>center</aligny>
                 <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
                 <texturenofocus>Button/testbuttonnf.png</texturenofocus>
+                <onleft>105</onleft>
+                <ondown>106</ondown>
             </control>
 			<control type="button" id="105">
                 <left>500</left>
@@ -60,10 +62,12 @@
                 <aligny>center</aligny>
                 <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
                 <texturenofocus>Button/testbuttonnf.png</texturenofocus>
+                <onright>104</onright>
+                <ondown>106</ondown>
             </control>
 			<control type="button" id="106">
                 <left>830</left>
-                <top>370</top>
+                <top>340</top>
                 <width>260</width>
                 <height>100</height>
                 <font>font13</font>
@@ -73,6 +77,23 @@
                 <aligny>center</aligny>
                 <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
                 <texturenofocus>Button/testbuttonnf.png</texturenofocus>
+                <onup>104</onup>
+                <ondown>120</ondown>
+			</control>
+            <control type="button" id="120">
+                <left>830</left>
+                <top>500</top>
+                <width>260</width>
+                <height>60</height>
+                <font>font13</font>
+                <textcolor>FFF0F0F0</textcolor>
+                <textoffsetx>20</textoffsetx>
+                <label>סגור</label>
+                <align>center</align>
+                <aligny>center</aligny>
+                <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
+                <texturenofocus>Button/testbuttonnf.png</texturenofocus>
+                <onup>106</onup>
             </control>
         </control>
     </controls>
