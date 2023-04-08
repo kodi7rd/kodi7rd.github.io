@@ -25,5 +25,11 @@
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="22013"/>
         </include>
+        <include content="WidgetListPoster">
+            <param name="content_path" value="plugin://plugin.video.idanplus"/>
+            <param name="widget_header" value="[B]עידן+ פלוס[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22014"/>
+        </include>
     </include>
 </includes>
