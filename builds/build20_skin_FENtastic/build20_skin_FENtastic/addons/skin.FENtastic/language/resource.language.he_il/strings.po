@@ -313,9 +313,37 @@ msgctxt "#31079"
 msgid "Cast not available"
 msgstr "שידור אינו זמין"
 
+msgctxt "#72724"
+msgid "Released"
+msgstr "שנת יציאה"
+
+msgctxt "#72727"
+msgid "Genre"
+msgstr "ז'אנר"
+
+msgctxt "#24242"
+msgid "Director"
+msgstr "במאי"
+
 msgctxt "#31080"
 msgid "Ends at"
 msgstr "שעת סיום"
+
+msgctxt "#75755"
+msgid "Episodes"
+msgstr "פרקים"
+
+msgctxt "#75756"
+msgid "watched-tvshows"
+msgstr "נצפו"
+
+msgctxt "#75757"
+msgid "watched-movies"
+msgstr "נצפה"
+
+msgctxt "#76462"
+msgid "Status"
+msgstr "סטטוס"
 
 msgctxt "#31082"
 msgid "Lyrics add-on"

@@ -1,8 +1,0 @@
-<favourites>
-    <favourite name="[B]Fen[/B]" thumb="special://home/addons/plugin.video.fen/resources/media/fen_icon.png">RunAddon(plugin.video.fen)</favourite>
-    <favourite name="[B][COLOR orange]חיבור שירותים להרחבת Fen[/COLOR][/B]" thumb="https://i.imgur.com/mLoowHt.png">RunAddon(&quot;plugin.program.kodirealdebridisrael_connect_fen_services&quot;)</favourite>
-    <favourite name="[B]עידן+ פלוס[/B]" thumb="special://home/addons/plugin.video.idanplus/icon.png">RunAddon(plugin.video.idanplus)</favourite>
-    <favourite name="[B][COLOR limegreen]מידע נוסף וטיפים[/COLOR][/B]" thumb="special://home/addons/plugin.program.kodirealdebridisraelguides/icon.png">RunAddon(plugin.program.kodirealdebridisraelguides)</favourite>
-    <favourite name="[B][COLOR yellow]עדכון מהיר[/COLOR][/B]" thumb="https://i.imgur.com/aK8DRyP.png">PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=gui&amp;name=%D7%91%D7%99%D7%9C%D7%93+%D7%A1%D7%A7%D7%99%D7%9F+FENtastic+-+%D7%9C%D7%9E%D7%9B%D7%A9%D7%99%D7%A8%D7%99%D7%9D+%D7%97%D7%96%D7%A7%D7%99%D7%9D%21&quot;)</favourite>
-    <favourite name="[B][COLOR limegreen]Kodi + Real Debrid Israel Wizard[/COLOR][/B]" thumb="https://i.imgur.com/qaLKGdB.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
-</favourites>
