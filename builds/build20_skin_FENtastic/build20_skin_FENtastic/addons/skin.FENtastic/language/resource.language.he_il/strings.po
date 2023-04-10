@@ -315,35 +315,35 @@ msgstr "שידור אינו זמין"
 
 msgctxt "#72724"
 msgid "Released"
-msgstr "שנת יציאה"
+msgstr "[B]שנת יציאה[/B]"
 
 msgctxt "#72727"
 msgid "Genre"
-msgstr "ז'אנר"
+msgstr "[B]ז'אנר[/B]"
 
 msgctxt "#24242"
 msgid "Director"
-msgstr "במאי"
+msgstr "[B]במאי[/B]"
 
 msgctxt "#31080"
 msgid "Ends at"
-msgstr "שעת סיום"
+msgstr "[B]שעת סיום[/B]"
 
 msgctxt "#75755"
 msgid "Episodes"
-msgstr "פרקים"
+msgstr "[B]פרקים[/B]"
 
 msgctxt "#75756"
 msgid "watched-tvshows"
-msgstr "נצפו"
+msgstr "[B]נצפו[/B]"
 
 msgctxt "#75757"
 msgid "watched-movies"
-msgstr "נצפה"
+msgstr "[B]נצפה[/B]"
 
 msgctxt "#76462"
 msgid "Status"
-msgstr "סטטוס"
+msgstr "[B]סטטוס[/B]"
 
 msgctxt "#31082"
 msgid "Lyrics add-on"
