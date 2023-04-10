@@ -13,6 +13,7 @@ from cocoscrapers.modules import dom_parser
 from cocoscrapers.modules import log_utils
 import sqlite3 as db
 
+
 base_url = 'https://plex.tv'
 kodiVersion = control.getKodiVersion(full=True)
 
@@ -101,12 +102,15 @@ class Plex():
 			for connection in connections:
 				share_url = dom_parser.parseDOM(connection, 'connection', ret='uri')[0]
 				local = dom_parser.parseDOM(connection, 'connection', ret='local')[0]
-				if '.plex.direct:' not in share_url or local == '1': continue
+				#if '.plex.direct:' not in share_url or local == '1': continue
+				#if '.plex.direct:' not in share_url: continue
+				if local == '1': continue
 				if share_url:
+					#log_utils.log('plexshare sourceTitle = %s' % sourceTitle,1)
+					#log_utils.log('plexshare direct url = %s' % share_url, 1)
 					if not control.yesnoDialog('plexshare resource found: %s[CR]Add?' % sourceTitle): continue
-					#log_utils.log('plexshare sourceTitle = %s' % sourceTitle, __name__, level=log_utils.LOGDEBUG)
-					#log_utils.log('plexshare direct url = %s' % share_url, __name__, level=log_utils.LOGDEBUG)
 					self.plex_insert(sourceTitle, accessToken, share_url)
+					break
 					#control.setSetting('plexshare.sourceTitle', sourceTitle)
 					#control.setSetting('plexshare.accessToken', accessToken)
 					#control.setSetting('plexshare.url', share_url)

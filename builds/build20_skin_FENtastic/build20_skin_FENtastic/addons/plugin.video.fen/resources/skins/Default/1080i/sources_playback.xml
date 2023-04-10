@@ -536,7 +536,6 @@
                     <align>center</align>
                     <aligny>bottom</aligny>
                     <font>font12</font> <!-- FEN_26 -->
-                    <!-- <textcolor>FFB7B4BB</textcolor> -->
                     <textcolor>$INFO[Window.Property(result_highlight)]</textcolor>
                 </control>
             </control>
@@ -547,27 +546,17 @@
                     <left>560</left>
                     <top>570</top>
                     <width>820</width>
-                    <height>368</height>
+                    <height>310</height>
                     <font>font12</font> <!-- FEN_26 -->
                     <align>center</align>
                     <textcolor>FFB7B4BB</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                 </control>
-                <control type="textbox" id="2001">
-                    <top>260</top>
-                    <left>340</left>
-                    <width>450</width>
-                    <height>210</height>
-                    <align>center</align>
-                    <aligny>bottom</aligny>
-                    <font>font12</font> <!-- FEN_26 -->
-                    <textcolor>FFB7B4BB</textcolor>
-                </control>
                 <control type="textbox" id="2002">
-                    <top>970</top>
+                    <top>950</top>
                     <left>20</left>
                     <width>1880</width>
-                    <height>75</height>
+                    <height>100</height>
                     <font>font12</font> <!-- FEN_26 -->
                     <align>center</align>
                     <textcolor>FFB7B4BB</textcolor>

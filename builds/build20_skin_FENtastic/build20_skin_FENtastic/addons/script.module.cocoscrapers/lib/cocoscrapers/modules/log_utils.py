@@ -59,7 +59,7 @@ def log(msg, caller=None, level=LOGINFO):
 					f.write(line.rstrip('\r\n') + '\n' + log_file)
 		else:
 			import xbmc
-			xbmc.log('%s: %s' % (DEBUGPREFIX % debug_list[level], msg, level))
+			xbmc.log('%s: %s' % (DEBUGPREFIX % debug_list[level], msg), level)
 	except Exception as e:
 		import traceback
 		traceback.print_exc()

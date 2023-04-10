@@ -681,7 +681,7 @@ def results_format_choice(params={}):
 					('MediaList',            img_url % 'xXWixYv'),
 					('Rows',                 img_url % '44OzIVW')
 					]
-	choice = open_window(('windows.sources_results', 'SourceResultsChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
+	choice = open_window(('windows.sources', 'SourcesChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
 	if choice: set_setting('results.list_format', choice)
 
 def set_subtitle_choice():

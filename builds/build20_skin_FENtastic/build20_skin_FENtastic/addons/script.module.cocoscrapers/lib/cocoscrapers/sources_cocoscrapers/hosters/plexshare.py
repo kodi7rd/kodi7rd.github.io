@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-# created by Venom for Fenomscrapers (updated 8-07-2022)
-# modified for multiple shares -ud (01/10/23)
+# created by Venom
+# modified for multiple shares -ud (01/10/23) modified to remove plex.direct and accept first result (3/31/23)
 """
 	CocoScrapers Project
 """
 import re
 import time
 import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from urllib.parse import quote
 from cocoscrapers.modules import cleantitle, source_utils
 from cocoscrapers.modules.client import parseDOM, replaceHTMLCodes
@@ -72,11 +74,12 @@ class source:
 				hdlr = year
 				url = '%s%s' % (base_link, moviesearch % (quote(title), year))
 				years = [str(int(year)-1), str(year), str(int(year)+1)]
-			#from cocoscrapers.modules import log_utils
+			#rom cocoscrapers.modules import log_utils
 			#log_utils.log('url = %s' % url)
 
-			try: results = requests.get(url,timeout=10)
-			except requests.exceptions.SSLError: results = requests.get(url, verify=False)
+			try: results = requests.get(url,timeout=6)
+			except requests.exceptions.SSLError: 
+				results = requests.get(url, verify=False)
 
 			if episode_title: results = re.findall(r'(<Video.+?type="episode".+?</Video>)', results.text, flags=re.M | re.S)
 			else: results = re.findall(r'(<Video.+?type="movie".+?</Video>)', results.text, flags=re.M | re.S)
@@ -88,59 +91,63 @@ class source:
 			return self.sources
 
 		for result in results:
-			try:
-				name = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Part', ret='file')[0].replace(' ', '.')))
-				if '/' in name: name = name.rsplit('/', 1)[1]
-				elif '\\' in name: name = name.rsplit('\\', 1)[1]
-				if not episode_title:
-					source_year = re.search(r'(?:19|20)[0-9]{2}', name)
-					if not source_year:
-						source_year = parseDOM(result, 'Video', ret='year')[0]
-						name = name.rsplit('.', 1)
-						name = '%s.%s.%s' % (name[0], source_year, name[1])
-				file_name = name
-
-				if cleantitle.get(title.replace('&', 'and')) not in cleantitle.get(name.replace('&', 'and')): # use meta title in case file naming is whacked
-					if not episode_title:
-						meta_title = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Video', ret='title')[0].replace(' ', '.')))
-						meta_year = parseDOM(result, 'Video', ret='year')[0]
-						name = '%s.%s' % (meta_title, meta_year)
-					else:
-						meta_title = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Video', ret='grandparentTitle')[0].replace('&amp;', '&').replace(' ', '.')))
-						meta_season, meta_episode = parseDOM(result, 'Video', ret='parentIndex')[0], parseDOM(result, 'Video', ret='index')[0]
-						name = '%s.%s' % (meta_title, 'S%02dE%02d' % (int(meta_season), int(meta_episode)))
-
-				if not source_utils.check_title(title, aliases, name, hdlr, year, years): continue
-				name_info = source_utils.info_from_name(file_name, title, year, hdlr)
-				# if source_utils.remove_lang(name_info, check_foreign_audio): continue
-				# if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
-
-				if not name_info or len(name_info) <= 5: # use meta info because file name lacks info, or has video extension only
-					quality = parseDOM(result, 'Media', ret='videoResolution')[0]
-					video_codec = parseDOM(result, 'Media', ret='videoCodec')[0]
-					audio_codec = parseDOM(result, 'Media', ret='audioCodec')[0]
-					try:
-						if audio_codec.startswith('dca'): audio_codec = PLEX_AUDIO.get(audio_codec)
-					except: pass
-					audio_channels = parseDOM(result, 'Media', ret='audioChannels')[0]
-					container = parseDOM(result, 'Media', ret='container')[0]
-					name_info = '.' + quality + '.' + video_codec + '.' + audio_codec + '.' + audio_channels + 'ch.' + container
-
-				if self.composite_installed:
-					key = parseDOM(result, 'Video', ret='key')[0]
-					url = '%s%s?X-Plex-Client-Identifier=%s&X-Plex-Token=%s&mode=5' % (play_link, key, self.client_id, accessToken)
-				else:
-					key = parseDOM(result, 'Part', ret='key')[0].rsplit('/', 1)[0] # remove "/file.mkv" to replace with true file name for dnld
-					url = '%s%s/%s?X-Plex-Client-Identifier=%s&X-Plex-Token=%s' % (play_link, key, file_name, self.client_id, accessToken)
-
-				size = parseDOM(result, 'Part', ret='size')[0]
-				quality, info = source_utils.get_release_quality(name_info, url)
+			#from cocoscrapers.modules import log_utils
+			#log_utils.log('result = %s' % result)
+			media = re.findall(r'(<Media.+?</Media>)', result, flags=re.M | re.S)
+			for count, m in enumerate(media):
 				try:
-					dsize, isize = source_utils.convert_size(float(size), to='GB')
-					if isize: info.insert(0, isize)
-				except: dsize = 0
-				info = ' | '.join(info)
-				self.sources_append({'provider': 'plexshare', 'plexsource': sourceTitle, 'source': 'direct', 'name': file_name, 'name_info': name_info,
-								'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': True, 'debridonly': False, 'size': dsize})
-			except:
-				source_utils.scraper_error('PLEXSHARE')
+					name = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Part', ret='file')[count].replace(' ', '.')))
+					if '/' in name: name = name.rsplit('/', 1)[1]
+					elif '\\' in name: name = name.rsplit('\\', 1)[1]
+					if not episode_title:
+						source_year = re.search(r'(?:19|20)[0-9]{2}', name)
+						if not source_year:
+							source_year = parseDOM(result, 'Video', ret='year')[0]
+							name = name.rsplit('.', 1)
+							name = '%s.%s.%s' % (name[0], source_year, name[1])
+					file_name = name
+
+					if cleantitle.get(title.replace('&', 'and')) not in cleantitle.get(name.replace('&', 'and')): # use meta title in case file naming is whacked
+						if not episode_title:
+							meta_title = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Video', ret='title')[0].replace(' ', '.')))
+							meta_year = parseDOM(result, 'Video', ret='year')[0]
+							name = '%s.%s' % (meta_title, meta_year)
+						else:
+							meta_title = cleantitle.normalize(replaceHTMLCodes(parseDOM(result, 'Video', ret='grandparentTitle')[0].replace('&amp;', '&').replace(' ', '.')))
+							meta_season, meta_episode = parseDOM(result, 'Video', ret='parentIndex')[0], parseDOM(result, 'Video', ret='index')[0]
+							name = '%s.%s' % (meta_title, 'S%02dE%02d' % (int(meta_season), int(meta_episode)))
+
+					if not source_utils.check_title(title, aliases, name, hdlr, year, years): continue
+					name_info = source_utils.info_from_name(file_name, title, year, hdlr)
+					# if source_utils.remove_lang(name_info, check_foreign_audio): continue
+					# if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
+
+					if not name_info or len(name_info) <= 5: # use meta info because file name lacks info, or has video extension only
+						quality = parseDOM(result, 'Media', ret='videoResolution')[count]
+						video_codec = parseDOM(result, 'Media', ret='videoCodec')[count]
+						audio_codec = parseDOM(result, 'Media', ret='audioCodec')[count]
+						try:
+							if audio_codec.startswith('dca'): audio_codec = PLEX_AUDIO.get(audio_codec)
+						except: pass
+						audio_channels = parseDOM(result, 'Media', ret='audioChannels')[count]
+						container = parseDOM(result, 'Media', ret='container')[count]
+						name_info = '.' + quality + '.' + video_codec + '.' + audio_codec + '.' + audio_channels + 'ch.' + container
+
+					if self.composite_installed:
+						key = parseDOM(result, 'Video', ret='key')[0]
+						url = '%s%s?X-Plex-Client-Identifier=%s&X-Plex-Token=%s&mode=5' % (play_link, key, self.client_id, accessToken)
+					else:
+						key = parseDOM(result, 'Part', ret='key')[count].rsplit('/', 1)[0] # remove "/file.mkv" to replace with true file name for dnld
+						url = '%s%s/%s?X-Plex-Client-Identifier=%s&X-Plex-Token=%s' % (play_link, key, file_name, self.client_id, accessToken)
+
+					size = parseDOM(result, 'Part', ret='size')[count]
+					quality, info = source_utils.get_release_quality(name_info, url)
+					try:
+						dsize, isize = source_utils.convert_size(float(size), to='GB')
+						if isize: info.insert(0, isize)
+					except: dsize = 0
+					info = ' | '.join(info)
+					self.sources_append({'provider': 'plexshare', 'plexsource': sourceTitle, 'source': 'direct', 'name': file_name, 'name_info': name_info,
+									'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': True, 'debridonly': False, 'size': dsize})
+				except:
+					source_utils.scraper_error('PLEXSHARE')

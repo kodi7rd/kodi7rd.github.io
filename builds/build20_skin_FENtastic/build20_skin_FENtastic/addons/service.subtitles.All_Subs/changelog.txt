@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.1.2[/B][/COLOR]
+﻿[COLOR yellow][B]v3.1.3[/B][/COLOR]
+* Disable autosub on PVR (IPTV Client)
+[COLOR yellow][B]v3.1.2[/B][/COLOR]
 * Fix Subtitles auto link matching results sorting for FEN
 * Fix BSPlayer subtitles download errors.
 [COLOR yellow][B]v3.0.9[/B][/COLOR]

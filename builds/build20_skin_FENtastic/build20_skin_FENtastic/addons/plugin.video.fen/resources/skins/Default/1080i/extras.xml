@@ -522,7 +522,7 @@
                         <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2050).NumItems,1) | Integer.IsEqual(Container(2050).NumItems,2)">Conditional</animation>
                         <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2050).NumItems,3) | Integer.IsEqual(Container(2050).NumItems,4)">Conditional</animation>
                         <pagecontrol>4050</pagecontrol>
-                        <top>60</top><!--45-->
+                        <top>60</top>
                         <width>1180</width>
                         <height>360</height>
                         <onup>50</onup>
@@ -577,7 +577,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2050) + [Control.HasFocus(2050) | Control.HasFocus(4050)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2050) | Control.HasFocus(4050)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -677,7 +677,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2051) + [Control.HasFocus(2051) | Control.HasFocus(4051)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2051) | Control.HasFocus(4051)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -775,7 +775,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2052) + [Control.HasFocus(2052) | Control.HasFocus(4052)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2052) | Control.HasFocus(4052)]</visible>
                     </control>
                     <control type="image">
                         <top>225</top>
@@ -873,7 +873,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2053) + [Control.HasFocus(2053) | Control.HasFocus(4053)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2053) | Control.HasFocus(4053)]</visible>
                     </control>
                     <control type="image">
                         <top>225</top>
@@ -971,7 +971,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2054) + [Control.HasFocus(2054) | Control.HasFocus(4054)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2054) | Control.HasFocus(4054)]</visible>
                     </control>
                     <control type="image">
                         <top>225</top>
@@ -1177,7 +1177,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2056) + [Control.HasFocus(2056) | Control.HasFocus(4056)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2056) | Control.HasFocus(4056)]</visible>
                     </control>
                     <control type="image">
                         <top>230</top>
@@ -1270,7 +1270,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2057) + [Control.HasFocus(2057) | Control.HasFocus(4057)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2057) | Control.HasFocus(4057)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -1361,7 +1361,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2058) + [Control.HasFocus(2058) | Control.HasFocus(4058)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2058) | Control.HasFocus(4058)]</visible>
                     </control>
                     <control type="image">
                         <top>230</top>
@@ -1461,7 +1461,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2059) + [Control.HasFocus(2059) | Control.HasFocus(4059)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2059) | Control.HasFocus(4059)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -1561,7 +1561,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2060) + [Control.HasFocus(2060) | Control.HasFocus(4060)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2060) | Control.HasFocus(4060)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -1661,7 +1661,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2061) + [Control.HasFocus(2061) | Control.HasFocus(4061)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2061) | Control.HasFocus(4061)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
@@ -1795,7 +1795,7 @@
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + Control.IsVisible(2062) + [Control.HasFocus(2062) | Control.HasFocus(4062)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2062) | Control.HasFocus(4062)]</visible>
                     </control>
                     <control type="image">
                         <top>215</top>
