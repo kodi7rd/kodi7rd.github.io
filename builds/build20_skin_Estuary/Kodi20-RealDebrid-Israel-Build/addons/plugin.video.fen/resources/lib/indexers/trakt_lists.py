@@ -155,7 +155,7 @@ def get_trakt_trending_popular_lists(params):
 	if not external_browse(): set_view_mode('view.main')
 
 def build_trakt_list(params):
-	handle, is_widget, content, build = int(sys.argv[1]), external_browse(), 'movies', False
+	handle, is_widget, content, build, list_name = int(sys.argv[1]), external_browse(), 'movies', False, params.get('list_name')
 	if build_content():
 		def _process(function, _list): item_list_extend(function(_list).worker())
 		def _paginate_list(data, page_no, paginate_start):
@@ -168,7 +168,7 @@ def build_trakt_list(params):
 		build = True
 		threads, item_list = [], []
 		item_list_extend = item_list.extend
-		user, slug, list_type, list_name = params.get('user'), params.get('slug'), params.get('list_type'), params.get('list_name')
+		user, slug, list_type = params.get('user'), params.get('slug'), params.get('list_type')
 		page_no, paginate_start = int(params.get('new_page', '1')), int(params.get('paginate_start', '0'))
 		result = get_trakt_list_contents(list_type, user, slug)
 		trakt_list = [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(result)]

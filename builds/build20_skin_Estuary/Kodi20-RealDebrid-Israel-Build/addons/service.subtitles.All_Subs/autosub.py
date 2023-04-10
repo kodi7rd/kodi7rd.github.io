@@ -35,7 +35,10 @@ trigger=False
     
 def isExcluded(movieFullPath,current_list_item):
     excluded_addons=['idanplus','sdarot.tv','youtube','kids_new']
-    if (movieFullPath.find("pvr://") > -1) :
+
+    current_list_item=current_list_item+movieFullPath
+ 
+    if (current_list_item.find("pvr://") > -1) :
         log.warning("isExcluded(): Video is playing via Live TV, which is currently set as excluded location.")
         return False
     if (xbmc.getInfoLabel("VideoPlayer.mpaa")=='heb'):
@@ -174,15 +177,15 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
                           "sync": "",
                           "hearing_imp":""})
     
-    sub_final_data.append({'label':"ניקוי מטמון",
-                          'label2':'[COLOR khaki][I]'+"ניקוי מטמון DarkSubs"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"ניקוי",
+                          'label2':'[COLOR khaki][I]'+"אפס את נתוני המטמון של התוסף"+'[/I][/COLOR]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=clean" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
-    sub_final_data.append({'label':"ניקוי קבצי מטמון",
-                          'label2':'[COLOR khaki][I]'+"ניקוי קבצי מטמון DarkSubs"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"ניקוי קאש כתוביות",
+                          'label2':'[COLOR khaki][I]'+"אפס את נתוני המטמון של התוסף"+'[/I][/COLOR]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=clean_folders" % (MyScriptID),
@@ -602,7 +605,8 @@ class KodiMonitor(xbmc.Monitor):
                         video_data['Tagline']=tag_original
                         
                         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-                        sub_name=place_sub(f_result)
+                        if len(f_result)>0:
+                            sub_name=place_sub(f_result)
                         
                     except Exception as e:
                         import linecache
@@ -623,8 +627,10 @@ class KodiMonitor(xbmc.Monitor):
                     if  Addon.getSetting("pause")=='true':
                         xbmc.Player().pause()
                     
-                    
-                    general.show_msg="[COLOR lightblue]כתובית מוכנה[/COLOR]"
+                    if sub_name:
+                        general.show_msg="[COLOR lightblue]כתובית מוכנה[/COLOR]"
+                    else:
+                        general.show_msg="[COLOR red]אין כתוביות[/COLOR]"
                     
                     
                     
@@ -669,14 +675,16 @@ monitor=KodiMonitor()
 while not ab_req:
     
     current_list_item_temp=(xbmc.getInfoLabel("ListItem.FileNameAndPath"))
-    if len(current_list_item_temp)>0 and (('plugin://') in current_list_item_temp or ('smb://') in current_list_item_temp):
-                      
-            regex='//(.+?)/'
-            match=re.compile(regex).findall(current_list_item_temp)
-            if len (match)>0:
-               current_list_item=match[0]
+    if len(current_list_item_temp)>0 and (('plugin://') in current_list_item_temp or ('smb://') in current_list_item_temp or ('pvr://') in current_list_item_temp):
+            if 'pvr://' in current_list_item_temp:
+                current_list_item='pvr://video' 
             else:
-                current_list_item=current_list_item_temp
+                regex='//(.+?)/'
+                match=re.compile(regex).findall(current_list_item_temp)
+                if len (match)>0:
+                   current_list_item=match[0]
+                else:
+                    current_list_item=current_list_item_temp
     if monitor.waitForAbort(1):
        break
 del monitor

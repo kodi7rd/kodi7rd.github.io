@@ -282,7 +282,7 @@ class Sources():
 
 	def display_results(self, results):
 		window_format = results_format()
-		action, chosen_item = open_window(('windows.sources_results', 'SourceResults'), 'sources_results.xml',
+		action, chosen_item = open_window(('windows.sources', 'SourcesResults'), 'sources_results.xml',
 				window_format=window_format, window_style=results_style(), window_id=results_xml_window_number(window_format), results=results, meta=self.meta,
 				scraper_settings=self.scraper_settings, prescrape=self.prescrape, filters_ignored=self.filters_ignored, uncached_torrents=self.uncached_torrents)
 		if not action: self._kill_progress_dialog()
@@ -477,7 +477,7 @@ class Sources():
 			for item in self.folder_info: clear_property(int_window_prop % item[0])
 
 	def _make_progress_dialog(self):
-		self.progress_dialog = create_window(('windows.sources_playback', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
+		self.progress_dialog = create_window(('windows.sources', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
 		Thread(target=self.progress_dialog.run).start()
 
 	def _make_resolve_dialog(self):
@@ -563,13 +563,14 @@ class Sources():
 				if provider == 'external': provider = item['debrid'].replace('.me', '')
 				elif provider == 'folders': provider = item['source']
 				provider_text = provider.upper()
-				display_name = '%s | %s | %s' % (item['quality'], item['size_label'], item['display_name'].upper())
-				resolve_item['resolve_display'] = ('%02d. [B]%s[/B]' % (count, provider_text), display_name)
+				extra_info = '[B]%s[/B] | [B]%s[/B] | %s' %  (item['quality'], item['size_label'], item['extraInfo'])
+				display_name = item['display_name'].upper()
+				resolve_item['resolve_display'] = '%s[CR]%s[CR]%s' % ('%02d. [B]%s[/B]' % (count, provider_text), extra_info, display_name)
 				processed_items_append(resolve_item)
 				if provider == 'easynews' and self.monitor_playback and self.easynews_max_retries:
 					for retry in range(1, self.easynews_max_retries + 1):
 						resolve_item = dict(item)
-						resolve_item['resolve_display'] = ('%02d. [B]%s (RETRYx%s)[/B]' % (count, provider_text, retry), display_name)
+						resolve_item['resolve_display'] = '%s[CR]%s[CR]%s' % ('%02d. [B]%s (RETRYx%s)[/B]' % (count, provider_text, retry), extra_info, display_name)
 						processed_items_append(resolve_item)
 			items = list(processed_items)
 			if not self.continue_resolve_check(): return self._kill_progress_dialog()

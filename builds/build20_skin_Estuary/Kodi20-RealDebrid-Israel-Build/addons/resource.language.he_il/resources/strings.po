@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: translations@kodi.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/xbmc/xbmc/issues/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2023-01-30 23:09+0000\n"
 "Last-Translator: Christian Gade <gade@kodi.tv>\n"
@@ -14957,6 +14957,11 @@ msgctxt "#35254"
 msgid "Save the game automatically during game play, if supported. Resume playing where you left off."
 msgstr ""
 
+#. Label for showing which emulator the game was saved with
+msgctxt "#35255"
+msgid "Saved with:"
+msgstr ""
+
 #. Error message when a game client fails to install when a game is being launched
 msgctxt "#35256"
 msgid "Failed to install add-on."
@@ -18579,11 +18584,6 @@ msgstr "מקורות פרטי ספרייה"
 msgctxt "#39123"
 msgid "Artwork"
 msgstr "גרפיקה"
-
-#. Label for component level debug logging setting
-msgctxt "#39124"
-msgid "Verbose logging for the [B]Add-ons[/B] component"
-msgstr ""
 
 # empty string with id 39124
 msgctxt "#39125"
