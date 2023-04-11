@@ -57,7 +57,7 @@
     <setting id="nextep.include_unwatched" default="true">0</setting>
     <setting id="widget_hide_watched" default="true">false</setting>
     <setting id="widget_hide_next_page" default="true">false</setting>
-    <setting id="get_fanart_data">true</setting>
+    <setting id="get_fanart_data" default="true">false</setting>
     <setting id="fanarttv.default" default="true">false</setting>
     <setting id="image_resolutions_name" default="true">$ADDON[plugin.video.fen 32164]</setting>
     <setting id="meta_language_display">Hebrew</setting>
