@@ -192,7 +192,7 @@
     <setting id="subtitles.storagemode" default="true">0</setting>
     <setting id="subtitles.custompath" default="true" />
     <setting id="subtitles.pauseonsearch" default="true">true</setting>
-    <setting id="subtitles.downloadfirst">true</setting>
+    <setting id="subtitles.downloadfirst" default="true">false</setting>
     <setting id="subtitles.tv">service.subtitles.All_Subs</setting>
     <setting id="subtitles.movie">service.subtitles.All_Subs</setting>
     <setting id="pvrmanager.syncchannelgroups" default="true">true</setting>
