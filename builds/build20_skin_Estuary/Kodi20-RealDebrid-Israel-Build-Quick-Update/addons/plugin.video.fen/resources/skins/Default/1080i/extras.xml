@@ -32,7 +32,7 @@
                     <left>1590</left>
                     <width max="300">auto</width>
                     <height>20</height>
-                    <font>font16</font> <!-- FEN_38 -->
+                    <font>font37</font> <!-- FEN_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -151,7 +151,7 @@
             <control type="label">
                 <width max="1150">auto</width>
                 <height>25</height>
-                <font>font16</font> <!-- FEN_38 -->
+                <font>font37</font> <!-- FEN_38 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <align>center</align>
                 <label>[I]$INFO[Window.Property(genre)][/I]</label>
@@ -161,7 +161,7 @@
                 <top>55</top>
                 <width max="1150">auto</width>
                 <height>25</height>
-                <font>font16</font> <!-- FEN_38 -->
+                <font>font37</font> <!-- FEN_38 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <align>center</align>
             </control>
@@ -170,7 +170,7 @@
                 <top>105</top>
                 <width max="1150">auto</width>
                 <height>25</height>
-                <font>font16</font> <!-- FEN_38 -->
+                <font>font37</font> <!-- FEN_38 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <align>center</align>
             </control>

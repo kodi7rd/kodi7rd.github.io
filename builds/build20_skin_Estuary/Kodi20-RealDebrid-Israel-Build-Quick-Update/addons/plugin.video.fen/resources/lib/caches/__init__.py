@@ -76,11 +76,18 @@ def check_databases():
                     expires integer, unique (provider, db_type, tmdb_id, title, year, season, episode))""")
     dbcon.close()
     
-    # KODI-RD-IL ADDITION - Check Subs Cache
+    # KODI-RD-IL ADDITION - Check Subs Cache (subs.db)
     try:
         dbcon = database.connect(subs)
         dbcon.execute("""CREATE TABLE IF NOT EXISTS (name TEXT ,free TEXT)""")
         dbcon.close()
+    except:pass
+    #########################################
+    
+    # KODI-RD-IL ADDITION - Clear sources.db cache
+    try:
+        from caches import sub_cache
+        sub_cache.clear(table=['posters'])
     except:pass
     #########################################
     

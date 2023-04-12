@@ -31,7 +31,7 @@
                     <left>1590</left>
                     <width max="300">auto</width>
                     <height>20</height>
-                    <font>font16</font> <!-- FEN_38 -->
+                    <font>font37</font> <!-- FEN_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>

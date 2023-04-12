@@ -33,7 +33,7 @@
             <control type="label">
                 <left>70</left>
                 <top>22</top>
-                <width max="800">auto</width>
+                <width max="1000">auto</width>
                 <height>20</height>
                 <font>font10</font> <!-- FEN_21 -->
                 <textcolor>FFFFFFFF</textcolor>

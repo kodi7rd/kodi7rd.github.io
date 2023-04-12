@@ -121,7 +121,6 @@ class SourcesResults(BaseDialog):
         
             # KODI-RD-IL ADDITION - NEW CUSTOM LINES:
             global subcount
-            subcount = 0
             #########################################
             
             for count, item in enumerate(results, 1):
@@ -224,12 +223,12 @@ class SourcesResults(BaseDialog):
                     
         # KODI-RD-IL ADDITION - NEW CUSTOM LINES:
         if int(subcount)>0:
-            sub=str(subcount)+' כתוביות עם 100% התאמה | '
+            sub='[COLOR deepskyblue]' + str(subcount) + ' מקורות עם 100% התאמה לכתוביות | ' + '[/COLOR]'
         else:
-            sub='לא נמצאו כתוביות עם 100% התאמה | '
+            sub='[COLOR deepskyblue] לא נמצאו מקורות עם 100% התאמה לכתוביות | [/COLOR]'
         if int(totalsub)>0:
-            total=' סך הכל ' + str(totalsub) + ' כתוביות | '
-            # 11.04.23 - Until subs.db bug fix - don't show total subs (random numbers)
+            total=' נמצאו סך הכל ' + str(totalsub) + ' כתוביות | '
+            # Don't show total subs - not accurate - only Ktuvit site is working.
             total=''
         else:
             total=''
@@ -247,7 +246,7 @@ class SourcesResults(BaseDialog):
         # KODI-RD-IL ADDITION - ORIGINAL FEN LINE:
         #self.setProperty('total_results', self.total_results)
         # KODI-RD-IL ADDITION - NEW CUSTOM LINE:
-        self.setProperty('total_results', sub+total+self.total_results)
+        self.setProperty('total_results', sub + total + self.total_results)
         #########################################
         
         self.setProperty('filters_ignored', self.filters_ignored)
