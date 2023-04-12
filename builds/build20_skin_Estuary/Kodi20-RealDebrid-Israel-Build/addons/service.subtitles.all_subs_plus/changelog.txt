@@ -1,3 +1,22 @@
+2.0.1
+** All Subs Plus by Burekas **
+- Hotfix (Subscene)
+
+2.0.0
+** All Subs Plus by Burekas **
+- Fix: Subscene provider
+- Fix: Local directory as provider
+- Removing the providers: yify and aa_sub
+- Removing the "Disable" option in results screen
+- Fix: Sync percentage calculation accuracy
+- Fix: Sync rating calculation
+- Fix: Sync indication in results
+- Added: New setting for Sync threshold level
+- Added: New setting for providers results colors
+- Added: New setting for results line structure style
+- Bugs fixes
+- Significant code refactoring, a lot of code fixes and improvements
+
 1.0.4
 ** All Subs Plus by Burekas **
 - Fix for subtitles built-in google translate

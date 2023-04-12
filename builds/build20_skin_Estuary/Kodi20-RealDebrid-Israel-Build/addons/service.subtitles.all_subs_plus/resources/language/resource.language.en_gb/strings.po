@@ -32,11 +32,11 @@ msgstr "Addon`s local cache was cleared successfully"
 
 msgctxt "#32005"
 msgid "Email"
-msgstr "Email (Subscenter)"
+msgstr "Email"
 
 msgctxt "#32006"
-msgid "Password"
-msgstr "Password (Subscenter)"
+msgid "Encrypted password"
+msgstr "Encrypted password"
 
 msgctxt "#32007"
 msgid "Login Details"
@@ -56,14 +56,12 @@ msgid "Logged in successfully"
 msgstr "Logged in successfully"
 
 msgctxt "#32011"
-msgid "Login User Opensubtitles"
-msgstr "Login User Opensubtitles"
-
-
+msgid "User"
+msgstr "User"
 
 msgctxt "#32012"
-msgid "Password Opensubtitles"
-msgstr "Password Opensubtitles"
+msgid "Password"
+msgstr "Password"
 
 msgctxt "#32013"
 msgid "Opensubtitle"
@@ -117,8 +115,6 @@ msgctxt "#32025"
 msgid "color"
 msgstr "Font color"
 
-
-
 msgctxt "#32026"
 msgid "background intensity"
 msgstr "Background intensity"
@@ -136,15 +132,15 @@ msgid "Open setting"
 msgstr "Open Addon setting"
 
 msgctxt "#32030"
-msgid "setting"
+msgid "Setting"
 msgstr "Setting"
 
 msgctxt "#32031"
-msgid "Clean"
-msgstr "Clean"
+msgid "Clear"
+msgstr "Clear"
 
 msgctxt "#32032"
-msgid "subskeys1"
+msgid "Keys"
 msgstr "Keys"
 
 msgctxt "#32033"
@@ -160,27 +156,35 @@ msgid "Disable"
 msgstr "Disable Subtitles"
 
 msgctxt "#32036"
+msgid "Disable"
+msgstr "Disable"
+
+msgctxt "#32037"
 msgid "popup"
 msgstr "Enable popups"
 
 # New by burekas
 
-msgctxt "#32037"
-msgid "חשבונות"
-msgstr "חשבונות"
-
 msgctxt "#32038"
-msgid "מקורות"
-msgstr "מקורות"
+msgid "Accounts"
+msgstr "Accounts"
 
 msgctxt "#32039"
-msgid "שפות"
-msgstr "שפות"
+msgid "Provider"
+msgstr "Provider"
 
 msgctxt "#32040"
-msgid "הגדרות כלליות"
-msgstr "הגדרות כלליות"
+msgid "Languages"
+msgstr "Languages"
 
 msgctxt "#32041"
-msgid "הגדרות מראה"
-msgstr "הגדרות מראה"
+msgid "General Settings"
+msgstr "General Settings"
+
+msgctxt "#32042"
+msgid "View Settings"
+msgstr "View Settings"
+
+msgctxt "#32043"
+msgid "View Style"
+msgstr "View Style"

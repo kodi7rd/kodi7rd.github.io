@@ -1,5 +1,5 @@
-All Subs Plus
-==================
+All Subs Plus *by Burekas*
+============================
 
 Additional info for Ktuvit.me provider
 
@@ -16,7 +16,7 @@ copy(x.value); // this will copy your encrtyped password to your clipboard
 console.log(`Now past it in the addon's settings at the Encrypted password field`)
 4. The encrypt code is now ready to paste it in kodi.
 
-==================
+============================
 
 Additional info for AutoSubs feature:
 
@@ -25,6 +25,7 @@ Additional info for AutoSubs feature:
 (Otherwise if subtitles are already exist it won't load a new while using 'autosubs')
 * If you want to be sure the 'autosubs' feature is running on each play, activate also the "popup" option.
 * After updating the settings, restart kodi, because this addon is a service that reloading when kodi starts.
-* It seems that there is relevant of the kodi default subtitles service settings for this feature, 
+* It seems that there is no effect of the kodi default subtitles service settings on this feature, 
 you can set another addon which is not AllSubs_Plus.
-* Also it seems that there is relevant of the kodi "Auto download first subtitle" setting for this feature.
+* But, it is recommanded to disable the kodi "Auto download first subtitle" setting for this feature,
+it seems that there is an effect on this feature.

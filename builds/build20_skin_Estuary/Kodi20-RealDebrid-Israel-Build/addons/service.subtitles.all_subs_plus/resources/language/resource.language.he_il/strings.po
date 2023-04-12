@@ -32,11 +32,11 @@ msgstr "נתוני המטמוןשל התוסף אופסו בהצלחה"
 
 msgctxt "#32005"
 msgid "Email"
-msgstr "אי-מייל של סאבסנטר"
+msgstr "אימייל"
 
 msgctxt "#32006"
-msgid "Password"
-msgstr "סיסמה של סאבסנטר"
+msgid "Encrypted password"
+msgstr "סיסמה מוצפנת"
 
 msgctxt "#32007"
 msgid "Login Details"
@@ -55,12 +55,12 @@ msgid "Logged in successfully"
 msgstr "התחברת בהצלחה"
 
 msgctxt "#32011"
-msgid "Login User Opensubtitles"
-msgstr "שם משתמש ב-Opensubtitles"
+msgid "User"
+msgstr "שם משתמש"
 
 msgctxt "#32012"
-msgid "Password Opensubtitles"
-msgstr "סיסמה ב-Opensubtitle"
+msgid "Password"
+msgstr "סיסמה"
 
 msgctxt "#32013"
 msgid "Opensubtitle"
@@ -131,15 +131,15 @@ msgid "Open setting"
 msgstr "פתח הגדרות הרחבה"
 
 msgctxt "#32030"
-msgid "setting"
+msgid "Setting"
 msgstr "הגדרות"
 
 msgctxt "#32031"
-msgid "Clean"
+msgid "Clear"
 msgstr "ניקוי"
 
 msgctxt "#32032"
-msgid "subskeys1"
+msgid "Keys"
 msgstr "מקשים"
 
 msgctxt "#32033"
@@ -155,27 +155,35 @@ msgid "Disable"
 msgstr "בטל כתוביות"
 
 msgctxt "#32036"
+msgid "Disable"
+msgstr "בטל"
+
+msgctxt "#32037"
 msgid "popup"
 msgstr "אפשר הודעות קופצות"
 
 # New by burekas
 
-msgctxt "#32037"
+msgctxt "#32038"
 msgid "חשבונות"
 msgstr "חשבונות"
 
-msgctxt "#32038"
+msgctxt "#32039"
 msgid "מקורות"
 msgstr "מקורות"
 
-msgctxt "#32039"
+msgctxt "#32040"
 msgid "שפות"
 msgstr "שפות"
 
-msgctxt "#32040"
+msgctxt "#32041"
 msgid "הגדרות כלליות"
 msgstr "הגדרות כלליות"
 
-msgctxt "#32041"
+msgctxt "#32042"
 msgid "הגדרות מראה"
 msgstr "הגדרות מראה"
+
+msgctxt "#32043"
+msgid "סגנון תצוגה"
+msgstr "סגנון תצוגה"
