@@ -136,7 +136,7 @@
     <setting id="search.enable.yearcheck" default="true">false</setting>
     <setting id="search.finish.early" default="true">false</setting>
     <setting id="torrent.display.uncached" default="true">false</setting>
-    <setting id="results.ignore_filter">1</setting>
+    <setting id="results.ignore_filter" default="true">0</setting>
     <setting id="results.sort_order_display">Quality, Size, Provider</setting>
     <setting id="results.size_sort_direction" default="true">0</setting>
     <setting id="results.filter_size_method" default="true">0</setting>
