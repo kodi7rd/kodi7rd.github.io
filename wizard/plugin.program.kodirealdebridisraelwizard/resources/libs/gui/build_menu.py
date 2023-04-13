@@ -193,7 +193,7 @@ class BuildMenu:
             
             directory.add_separator('התקנה מלאה')
             
-            directory.add_file('התקנה ראשונה של הבילד? לחץ כאן', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
+            directory.add_file('התקנה מלאה של הבילד? לחץ כאן', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
                                icon=icon, themeit=CONFIG.THEME1)
                                
             if guicheck:
