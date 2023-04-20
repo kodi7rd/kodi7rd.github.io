@@ -1,0 +1,66 @@
+# Kodi Media Center language file
+# Addon Name: Fen
+# Addon id: plugin.video.fen
+# Addon Provider: Tiki
+# Translator English: Tiki
+msgid ""
+msgstr ""
+
+# KODI-RD-IL Custom Hebrew Strings
+# Hebrew setting menu label
+msgctxt "#40000"
+msgid "התאמת כתוביות"
+msgstr "התאמת כתוביות"
+
+# Hebrew Subtitles Matching Settings
+msgctxt "#40001"
+msgid "התאמת כתוביות למקורות"
+msgstr "התאמת כתוביות למקורות"
+
+msgctxt "#40002"
+msgid "הפעל התאמת כתוביות בעת חיפוש מקורות"
+msgstr "הפעל התאמת כתוביות בעת חיפוש מקורות"
+
+msgctxt "#40003"
+msgid "סנן כתוביות בעייתיות (חסרי פורמט מלא בשם)"
+msgstr "סנן כתוביות בעייתיות (חסרי פורמט מלא בשם)"
+
+msgctxt "#40004"
+msgid "חפש כתוביות עם אחוז התאמה מעל:"
+msgstr "חפש כתוביות עם אחוז התאמה מעל:"
+
+msgctxt "#40005"
+msgid "אחוז (%)"
+msgstr "אחוז (%)"
+
+# Subtitles Websites
+msgctxt "#40006"
+msgid "היכן לחפש כתוביות"
+msgstr "היכן לחפש כתוביות"
+
+msgctxt "#40007"
+msgid "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
+msgstr "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
+
+msgctxt "#40008"
+msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
+msgstr "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
+
+msgctxt "#40009"
+msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
+msgstr "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
+
+msgctxt "#400010"
+msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
+msgstr "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
+
+msgctxt "#400011"
+msgid "BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]"
+msgstr "BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]"
+
+#########################################
+
+# Fen Translation
+msgctxt "#32139"
+msgid "Results"
+msgstr "[B]מקורות[/B]"
