@@ -38,27 +38,33 @@ def similar(w1, w2):
 
 def sort_subtitles(save_all_data,video_data):
     highest_rating=0
-
-    release_names=['bluray','hdtv','dvdrip','bdrip','web-dl','hdcam','hdrip','webrip']
-    all_data=[]
-    all_eng=[]
-    Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
+    
+    ############KODI-RD-IL###################
+    # Original DarkSubs Line:
+    #release_names=['bluray','hdtv','dvdrip','bdrip','web-dl','hdcam','hdrip','webrip']
+    
+    release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
+                     'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
+                     'web','web-dl','web dl','web-dlrip','webrip','web-rip',
+                     'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
+                     'telecine','hdts','telesync']
+    #########################################
+    
+    all_data = []
+    all_eng = []
+    Quality = (xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
     for save_data_value in save_all_data:
-          json_value=json.loads(json.dumps(save_data_value))
-          
-         
+          json_value = json.loads(json.dumps(save_data_value))
           
           if 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value and 'sync' in json_value and 'hearing_imp' in json_value:
-           array_original=video_data['file_original_path'].strip().replace("_",".").replace(" ",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
-           array_original=[line.strip().lower() for line in array_original]
-           array_subs=json_value['label2'].replace(json_value['site_id'],'').strip().replace("_",".").replace(" ",".").split(".")
-          
-           #array_subs.pop(0)
-           array_subs=[line.strip().lower() for line in array_subs]
-           array_subs=[str(x).lower() for x in array_subs if x != '']
-           array_subs_original=array_subs
-
-           array_original=[str(x).lower() for x in array_original if x != '']
+           # Video file array
+           array_original = video_data['file_original_path'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
+           array_original = [element.strip().lower() for element in array_original if element != '']
+           
+           # Subtitle name array
+           array_subs = json_value['label2'].replace(json_value['site_id'],'').strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").split(".")
+           array_subs = [element.strip().lower() for element in array_subs if element != '']
+           
            if Quality not in array_original and Quality in array_subs:
              array_original.append(Quality)
 
@@ -71,19 +77,18 @@ def sort_subtitles(save_all_data,video_data):
               array_subs.append(item_2)
               array_subs.append(item_2)
            
-           precent=similar(array_original,array_subs)
-
-           #if precent==0:
+           precent = similar(array_original,array_subs)
            
-           array_original=video_data['Tagline'].strip().replace("_",".").replace(" ",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
+           # Video file array
+           array_original = video_data['Tagline'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
+           array_original = [element.strip().lower() for element in array_original if element != '']
            
-
-           #array_subs.pop(0)
+           # Subtitle name array
+           array_subs = json_value['label2'].replace(json_value['site_id'],'').strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").split(".")
+           array_subs = [element.strip().lower() for element in array_subs if element != '']
            
            if Quality not in array_original and Quality in array_subs:
                array_original.append(Quality)
-           array_subs=[str(x).lower() for x in array_subs if x != '']
-           array_original=[str(x).lower() for x in array_original if x != '']
 
            for item_2 in release_names:
             if item_2 in array_original and item_2 in array_subs:
@@ -95,10 +100,10 @@ def sort_subtitles(save_all_data,video_data):
               array_subs.append(item_2)
            
            
-           precent2=similar(array_original,array_subs)
-
-           if precent2>precent:
-              precent=precent2
+           precent2 = similar(array_original,array_subs)
+           
+           # if use_video_tagline_only_for_sort_subtitles is true - use precent2 (Video TagLine percent). else - set percent to the highest of percent/percent2.
+           precent = precent2 if Addon.getSetting('use_video_tagline_only_for_sort_subtitles') == 'true' or precent2 > precent else precent
     
            #if 'language=English' in json_value['url'] or 'language=Arabic' in json_value['url'] or 'language=Spanish' in json_value['url']:
            

@@ -1,20 +1,14 @@
 <settings version="2">
-    <setting id="Email" default="true" />
-    <setting id="Password" default="true" />
     <setting id="OSuser2" default="true" />
     <setting id="OSpass2" default="true" />
     <setting id="KT_email" default="true" />
     <setting id="KT_enc_pass" default="true" />
     <setting id="dummy_setting" default="true" />
     <setting id="ktcode" default="true" />
-    <setting id="local_files" default="true">false</setting>
-    <setting id="subscenter">false</setting>
     <setting id="wizset">true</setting>
     <setting id="ktuvitset">true</setting>
-    <setting id="yify">false</setting>
     <setting id="opensubtitle">true</setting>
-    <setting id="subscene">false</setting>
-    <setting id="aa_subs">false</setting>
+    <setting id="subscene">true</setting>
     <setting id="storage_en" default="true">false</setting>
     <setting id="storage" default="true" />
     <setting id="English">true</setting>
@@ -28,11 +22,14 @@
     <setting id="json_cache" default="true">false</setting>
     <setting id="history_log" default="true">false</setting>
     <setting id="sort_subs">true</setting>
+    <setting id="sync_percent">85</setting>
+    <setting id="Debug" default="true">false</setting>
+    <setting id="dummy_setting2" default="true" />
     <setting id="autosub" default="true">false</setting>
     <setting id="force">false</setting>
-    <setting id="pause" default="true">false</setting>
+    <setting id="pause" default="true">0</setting>
+    <setting id="local_files" default="true">false</setting>
     <setting id="ExcludeTime">1</setting>
-    <setting id="dummy_setting2" default="true" />
     <setting id="ExcludeAddosOption" default="true">false</setting>
     <setting id="ExcludeAddos" default="true" />
     <setting id="ExcludeAddosOption2" default="true">false</setting>
@@ -45,7 +42,17 @@
     <setting id="ExcludeAddos5" default="true" />
     <setting id="ExcludeAddosOption6" default="true">false</setting>
     <setting id="ExcludeAddos6" default="true" />
-    <setting id="Debug" default="true">false</setting>
+    <setting id="result_style">4</setting>
+    <setting id="enable_custom_colors" default="true">false</setting>
+    <setting id="color_result_wizdom" default="true">white</setting>
+    <setting id="color_result_wizdom_custom" default="true" />
+    <setting id="color_result_ktuvit" default="true">limegreen</setting>
+    <setting id="color_result_ktuvit_custom" default="true" />
+    <setting id="color_result_opensubs" default="true">yellow</setting>
+    <setting id="color_result_opensubs_custom" default="true" />
+    <setting id="color_result_subscene" default="true">lightskyblue</setting>
+    <setting id="color_result_local" default="true">bisque</setting>
+    <setting id="color_result_local_custom" default="true" />
     <setting id="enable_font" default="true">false</setting>
     <setting id="background" default="true">false</setting>
     <setting id="bold">true</setting>

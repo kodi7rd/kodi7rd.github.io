@@ -45,6 +45,7 @@
 		
 		<setting label="הורדת כתוביות אוטומטית" type="lsep"/>
 		<setting id="autosub" label="אפשר הורדת כתוביות אוטומטית" type="bool" default="true" />
+		<setting id="use_video_tagline_only_for_sort_subtitles" label="התאמה לפי אחוזים מTagLine בלבד" type="bool" default="true" />
 		<setting id="pause" label="השהה ווידאו בזמן חיפוש כתוביות" type="bool" default="false" />
 		<setting id="ExcludeTime" type="number" label="אל תוריד לסרטון קצר מ-" default="1"/> 
 		

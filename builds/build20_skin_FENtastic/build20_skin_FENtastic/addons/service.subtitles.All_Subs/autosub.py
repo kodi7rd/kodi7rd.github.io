@@ -177,15 +177,15 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
                           "sync": "",
                           "hearing_imp":""})
     
-    sub_final_data.append({'label':"ניקוי",
-                          'label2':'[COLOR khaki][I]'+"אפס את נתוני המטמון של התוסף"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"ניקוי מטמון",
+                          'label2':'[COLOR khaki][I]'+"ניקוי מטמון DarkSubs"+'[/I][/COLOR]',
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=clean" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
-    sub_final_data.append({'label':"ניקוי קאש כתוביות",
-                          'label2':'[COLOR khaki][I]'+"אפס את נתוני המטמון של התוסף"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"ניקוי קבצי מטמון",
+                          'label2':'[COLOR khaki][I]'+"ניקוי קבצי מטמון DarkSubs"+'[/I][/COLOR]',  
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=clean_folders" % (MyScriptID),
