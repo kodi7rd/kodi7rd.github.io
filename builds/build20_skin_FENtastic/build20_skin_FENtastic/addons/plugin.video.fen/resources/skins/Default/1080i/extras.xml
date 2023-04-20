@@ -547,6 +547,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4050)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -647,6 +648,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4051)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -740,27 +742,21 @@
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <control type="group">
-                                    <control type="image">
-                                        <height>360</height>
-                                        <width>570</width>
-                                        <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
-                                    </control>
-                                    <control type="textbox">
-                                        <top>15</top>
-                                        <left>15</left>
-                                        <width>540</width>
-                                        <height>308</height>
-                                        <font>font12</font> <!-- FEN_26 -->
-                                        <align>center</align>
-                                        <aligny>top</aligny>
-                                        <textcolor>FF302F2F</textcolor>
-                                        <label>$INFO[ListItem.Property(text)]</label>
-                                    </control>
-                                </control>
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
                             </control>
                         </focusedlayout>
                     </control>
@@ -838,27 +834,21 @@
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <control type="group">
-                                    <control type="image">
-                                        <height>360</height>
-                                        <width>570</width>
-                                        <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
-                                    </control>
-                                    <control type="textbox">
-                                        <top>15</top>
-                                        <left>15</left>
-                                        <width>540</width>
-                                        <height>308</height>
-                                        <font>font12</font> <!-- FEN_26 -->
-                                        <align>center</align>
-                                        <aligny>top</aligny>
-                                        <textcolor>FF302F2F</textcolor>
-                                        <label>$INFO[ListItem.Property(text)]</label>
-                                    </control>
-                                </control>
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
                             </control>
                         </focusedlayout>
                     </control>
@@ -936,27 +926,21 @@
                             </control>
                         </itemlayout>
                         <focusedlayout height="380" width="590">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <control type="group">
-                                    <control type="image">
-                                        <height>360</height>
-                                        <width>570</width>
-                                        <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
-                                    </control>
-                                    <control type="textbox">
-                                        <top>15</top>
-                                        <left>15</left>
-                                        <width>540</width>
-                                        <height>308</height>
-                                        <font>font12</font> <!-- FEN_26 -->
-                                        <align>center</align>
-                                        <aligny>top</aligny>
-                                        <textcolor>FF302F2F</textcolor>
-                                        <label>$INFO[ListItem.Property(text)]</label>
-                                    </control>
-                                </control>
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
                             </control>
                         </focusedlayout>
                     </control>
@@ -1053,46 +1037,42 @@
                             </control>
                         </itemlayout>
                         <focusedlayout height="360" width="236">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <control type="image">
-                                    <width>230</width>
-                                    <height>360</height>
-                                    <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
-                                </control>
-                                <control type="image">
-                                    <left>6</left>
-                                    <top>40</top>
-                                    <width>224</width>
-                                    <height>320</height>
-                                    <aspectratio>scale</aspectratio>
-                                    <texture colordiffuse="FF302F2F">$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                                <control type="textbox">
-                                    <left>6</left>
-                                    <top>6</top>
-                                    <width>224</width>
-                                    <height>75</height>
-                                    <font>font12</font> <!-- FEN_26 -->
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(name)]</label>
-                                    <autoscroll>false</autoscroll>
-                                </control>
-                                <control type="textbox">
-                                    <left>6</left>
-                                    <top>280</top>
-                                    <width>224</width>
-                                    <height>75</height>
-                                    <font>font12</font> <!-- FEN_26 -->
-                                    <align>center</align>
-                                    <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
-                                    <label>$INFO[ListItem.Property(ranking)]</label>
-                                    <autoscroll>false</autoscroll>
-                                </control>
+                            <control type="image">
+                                <width>230</width>
+                                <height>360</height>
+                                <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="image">
+                                <left>6</left>
+                                <top>40</top>
+                                <width>224</width>
+                                <height>320</height>
+                                <aspectratio>scale</aspectratio>
+                                <texture colordiffuse="FF302F2F">$INFO[ListItem.Property(thumbnail)]</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>6</left>
+                                <top>6</top>
+                                <width>224</width>
+                                <height>75</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(name)]</label>
+                                <autoscroll>false</autoscroll>
+                            </control>
+                            <control type="textbox">
+                                <left>6</left>
+                                <top>280</top>
+                                <width>224</width>
+                                <height>75</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>center</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(ranking)]</label>
+                                <autoscroll>false</autoscroll>
                             </control>
                         </focusedlayout>
                     </control>
@@ -1147,6 +1127,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4056)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1240,6 +1221,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4057)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1331,6 +1313,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4058)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1431,6 +1414,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4059)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1531,6 +1515,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4060)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1631,6 +1616,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4061)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
@@ -1766,6 +1752,7 @@
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                 <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4062)">Conditional</animation>
                                 <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>

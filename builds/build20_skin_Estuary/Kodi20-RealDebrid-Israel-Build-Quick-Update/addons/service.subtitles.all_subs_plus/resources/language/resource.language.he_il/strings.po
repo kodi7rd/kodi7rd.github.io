@@ -76,7 +76,7 @@ msgstr "מקורות חיפוש"
 
 msgctxt "#32016"
 msgid "Autosub"
-msgstr "הורדת כתוביות אוטומטית"
+msgstr "הורדת כתוביות אוטומטית (נדרשת הפעלה מחדש של קודי)"
 
 msgctxt "#32017"
 msgid "Enable auto sub"
@@ -87,11 +87,11 @@ msgid "dont download if shorter"
 msgstr "אל תוריד לסרטון קצר מ-"
 
 msgctxt "#32019"
-msgid "ignore shorts"
-msgstr "אל תכלול הרחבה"
+msgid "Ignore custom addons"
+msgstr "אל תכלול הרחבות"
 
 msgctxt "#32020"
-msgid "addon ignore name"
+msgid "Addon ignore name"
 msgstr "שם ההרחבה"
 
 msgctxt "#32021"
@@ -99,11 +99,11 @@ msgid "Pause"
 msgstr "השהה ווידאו בזמן חיפוש כתוביות"
 
 msgctxt "#32022"
-msgid "custom look"
-msgstr "אפשרויות מראה מתקדמות"
+msgid "Custom Subltitle look"
+msgstr "אפשרויות מראה כתוביות מתקדמות"
 
 msgctxt "#32023"
-msgid "background"
+msgid "Add background"
 msgstr "הפעל רקע לכתוביות"
 
 msgctxt "#32024"
@@ -187,3 +187,19 @@ msgstr "הגדרות מראה"
 msgctxt "#32043"
 msgid "סגנון תצוגה"
 msgstr "סגנון תצוגה"
+
+msgctxt "#32044"
+msgid "לא מאופשר"
+msgstr "לא מאופשר"
+
+msgctxt "#32045"
+msgid "השהה רק בזמן חיפוש"
+msgstr "השהה רק בזמן חיפוש"
+
+msgctxt "#32046"
+msgid "השהה"
+msgstr "השהה"
+
+msgctxt "#32047"
+msgid "נדרשת הפעלה מחדש של קודי"
+msgstr "נדרשת הפעלה מחדש של קודי"

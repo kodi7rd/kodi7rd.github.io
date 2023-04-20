@@ -23,6 +23,7 @@ get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watch
 erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
 playback_attempt_pause = settings.playback_attempt_pause
+sd_check = ('SD', 'CAM', 'TELE', 'SYNC')
 rd_info, pm_info, ad_info = ('apis.real_debrid_api', 'RealDebridAPI'), ('apis.premiumize_api', 'PremiumizeAPI'), ('apis.alldebrid_api', 'AllDebridAPI')
 debrids = {'Real-Debrid': rd_info, 'rd_cloud': rd_info, 'rd_browse': rd_info, 'Premiumize.me': pm_info, 'pm_cloud': pm_info, 'pm_browse': pm_info,
 			'AllDebrid': ad_info, 'ad_cloud': ad_info, 'ad_browse': ad_info}
@@ -46,6 +47,8 @@ class Sources():
 		self.monitor_playback = monitor_playback()
 		self.easynews_max_retries = easynews_max_retries()
 		self.playback_attempt_pause = playback_attempt_pause()
+		self.count_tuple = (('sources_4k', '4K', self._quality_length), ('sources_1080p', '1080p', self._quality_length), ('sources_720p', '720p', self._quality_length),
+							('sources_sd', '', self._quality_length_sd), ('sources_total', '', self.quality_length_final))
 
 	def playback_prep(self, params=None):
 		hide_busy_dialog()
@@ -271,7 +274,7 @@ class Sources():
 					sleep(self.sleep_time)
 					if len(remaining_providers) == 0: break
 					if percent >= 100: break
-				except: self._kill_progress_dialog()
+				except: return self._kill_progress_dialog()
 		if self.prescrape: scraper_list, _threads = self.prescrape_scrapers, self.prescrape_threads
 		else: scraper_list, _threads = self.providers, self.threads
 		self.internal_scrapers = self._get_active_scraper_names(scraper_list)
@@ -395,13 +398,7 @@ class Sources():
 			self._sources_quality_count(sources)
 	
 	def _sources_quality_count(self, sources):
-		for i in sources:
-			quality = i['quality']
-			if quality == '4K': self.sources_4k += 1
-			elif quality in ('1440p', '1080p'): self.sources_1080p += 1
-			elif quality in ('720p', 'HD'): self.sources_720p += 1
-			else: self.sources_sd += 1
-			self.sources_total += 1
+		for item in self.count_tuple: setattr(self, item[0], getattr(self, item[0]) + item[2](sources, item[1]))
 
 	def _quality_filter(self):
 		setting = 'results_quality_%s' % self.media_type if not self.autoplay else 'autoplay_quality_%s' % self.media_type
@@ -542,7 +539,7 @@ class Sources():
 
 	def play_file(self, results, source={}):
 		hide_busy_dialog()
-		url, playback_successful = None, None
+		url, playback_successful, cancel_all_playback = None, None, False
 		try:
 			results = [i for i in results if not 'Uncached' in i.get('cache_provider', '')]
 			if not source: source = results[0]
@@ -592,7 +589,7 @@ class Sources():
 						try: del player
 						except: pass
 					player = FenPlayer()
-					url, playback_successful = None, None
+					url, playback_successful, cancel_all_playback = None, None, False
 					self.playing_filename = item['name']
 					try:
 						if self.progress_dialog.iscanceled() or monitor.abortRequested(): break
@@ -648,7 +645,7 @@ class Sources():
 		try:
 			if not self.background or self.autoscrape_nextep: return True
 			if self.autoplay_nextep: return self.autoplay_nextep_handler()
-			else: return self.random_continual_handler()
+			return self.random_continual_handler()
 		except: return False
 
 	def random_continual_handler(self):
@@ -663,9 +660,7 @@ class Sources():
 		player = xbmc_player()
 		if player.isPlayingVideo():
 			total_time = player.getTotalTime()
-			use_window = self.nextep_settings['use_window']
-			window_time = self.nextep_settings['window_time']
-			default_action = self.nextep_settings['default_action']
+			use_window, window_time, default_action = self.nextep_settings['use_window'], self.nextep_settings['window_time'], self.nextep_settings['default_action']
 			action = None if use_window else 'close'
 			while player.isPlayingVideo():
 				try:
@@ -764,3 +759,12 @@ class Sources():
 					url = debrid_function().add_headers_to_url(item_id)
 		except: pass
 		return url
+
+	def _quality_length(self, items, quality):
+		return len([i for i in items if i['quality'] == quality])
+
+	def _quality_length_sd(self, items, dummy):
+		return len([i for i in items if i['quality'] in sd_check])
+
+	def quality_length_final(self, items, dummy):
+		return len(items)

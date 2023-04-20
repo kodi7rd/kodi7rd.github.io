@@ -17,7 +17,6 @@
 		<setting id="dummy_setting" label="" type="action" action="" visible="false"/>
 		<setting label="מאפשר משיכת כתוביות בעיצוב מוגדר מראש" type="lsep"/>
 		<setting id="ktcode" label="קוד צימוד (באיזור האישי)" type="text" default="" />
-		<setting id="local_files" label="חפש כתוביות לתוכן מקומי" type="bool" default="false"/>
 	</category>
 	<category label="32039">
 		<setting label="32015" type="lsep"/>
@@ -29,8 +28,8 @@
 		<setting type="action" label="אפס AA קאש" action="RunScript(service.subtitles.all_subs_plus, 1,action=clear_aa)" option="close" visible="true"/> -->
         <!-- <setting id="subscenter" label="Subscenter [COLOR blue](http://www.subscenter.org)[/COLOR]" type="bool" default="true" visible="false"/> -->
 		<!-- <setting id="yify" label="Yify subtitles [COLOR blue](http://www.yifysubtitles.com/)[/COLOR]" type="bool" default="true" /> -->
-		<setting id="storage_en" label="תקייה מקומית" type="bool" default="false" />
-		<setting id="storage"  type="folder"   label="בחר תקיית כתוביות מקומית" default="" visible= "eq(-1,true)"/>
+		<setting id="storage_en" label="תיקייה מקומית" type="bool" default="false" />
+		<setting id="storage"  type="folder"   label="בחר תיקיית כתוביות מקומית" default="" visible= "eq(-1,true)"/>
 	</category>
 	<category label="32040">
 		<setting id="English" label="אנגלית" type="bool" default="false" />
@@ -53,15 +52,18 @@
 		<setting id="history_log" label="שמירת לוג כתוביות" type="bool" default="false" />
 		<setting id="sort_subs" label="סדר כתוביות לפי אחוזים" type="bool" default="true" />
 		<setting id="sync_percent" type="number" label="הגדר סנכרון מעל" default="85"/>
+		<setting id="Debug" label="Debug" type="bool" default="false" />
 
+		<setting label=" " type="lsep"/>
+		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/>
 		<setting label="32016" type="lsep"/>
 		<setting id="autosub" label="32017" type="bool" default="false" />
 		<setting id="force" label="32034" type="bool" default="true" />
-		<setting id="pause" label="32021" type="bool" default="false" />
+		<!-- <setting id="pause" label="32021" type="bool" default="false" /> -->
+		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="0" />
+		<setting id="local_files" label="חפש כתוביות לתוכן מקומי" type="bool" default="false"/>
 		<setting id="ExcludeTime" type="number" label="32018" default="15"/>
-		<setting label="('tenil','reshet','kidsil','movix','mako','rss' Excluded)" type="lsep"/>
-        <setting id="dummy_setting2" label="" type="action" action="" visible="false"/>
-		<setting label="('sertil','jksp','multidown','sdarot','Ebs4_Kids_Tv' Excluded)" type="lsep"/>
+
 		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" />
 		<setting id="ExcludeAddos" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
 		<setting id="ExcludeAddosOption2" type="bool" label="32019" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
@@ -75,8 +77,6 @@
 		<setting id="ExcludeAddosOption6" type="bool" label="לא הספיק לך? כאן תכניס כמה שאתה רוצה רק עם פסיק בניהם" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
 		<setting id="ExcludeAddos6" type="text" source="video" label="אל תכלול הרחבות" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
 
-
-		<setting id="Debug" label="Debug" type="bool" default="false" />
 
     </category>
 	<category label="32042">

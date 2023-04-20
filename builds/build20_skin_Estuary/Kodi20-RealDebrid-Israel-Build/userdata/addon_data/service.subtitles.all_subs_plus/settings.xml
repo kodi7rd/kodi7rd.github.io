@@ -43,7 +43,7 @@
     <setting id="ExcludeAddosOption6" default="true">false</setting>
     <setting id="ExcludeAddos6" default="true" />
     <setting id="result_style">4</setting>
-    <setting id="enable_custom_colors" default="true">false</setting>
+    <setting id="enable_custom_colors" default="true">true</setting>
     <setting id="color_result_wizdom" default="true">white</setting>
     <setting id="color_result_wizdom_custom" default="true" />
     <setting id="color_result_ktuvit" default="true">limegreen</setting>

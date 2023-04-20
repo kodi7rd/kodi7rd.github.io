@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import sys, gzip, os, io, random, re, json, urllib, requests, time, collections, xml.parsers.expat as expat
+import resources.lib.cloudscraper as cloudscraper
 #import zipfile
 
 try:
@@ -250,6 +251,7 @@ def OpenURL(url, headers={}, user_data=None, session=None, cookies=None, retries
 			if responseMethod == 'text':
 				if int(response.status_code) > 400:
 					xbmc.log('{0}  -  response {1}.'.format(url, response.status_code), 3)
+					xbmc.log(response.text, 3)
 					continue
 				link = response.text
 			elif responseMethod == 'content':
@@ -586,7 +588,9 @@ def GetKaltura(entryId, partnerId, baseUrl, userAgent, quality='best'):
 			if s["format"] == "applehttp":
 				link = s["url"]
 				break
+		xbmc.log(link, 5)
 		link = GetStreams(link, quality=quality)
+		xbmc.log(link, 5)
 	except Exception as ex:
 		xbmc.log(str(ex), 3)
 	return link
@@ -638,3 +642,40 @@ def GetYouTube(url):
 	if '?' in video_id:
 		video_id = video_id[:video_id.find('?')]
 	return '{0}/play/?video_id={1}'.format(youtubePlugin, video_id)
+
+class TLSAdapter(requests.adapters.HTTPAdapter):
+	def init_poolmanager(self, connections, maxsize, block=False):
+		import ssl, urllib3
+		ctx = ssl.create_default_context()
+		ctx.set_ciphers('DEFAULT@SECLEVEL=1')
+		ctx.check_hostname = False
+		self.poolmanager = urllib3.poolmanager.PoolManager(num_pools=connections, maxsize=maxsize, block=block, ssl_version=ssl.PROTOCOL_TLSv1_2, ssl_context=ctx)	
+														   
+def GetCF(url, ua=None, retries=10, responseMethod='text'):
+	if ua is None:
+		ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36'
+	scraper = cloudscraper.create_scraper(delay=10)
+	scraper.mount('https://', TLSAdapter())
+	scraper.headers.update({'User-Agent': ua})
+	
+	
+	for i in range(retries):
+		try:
+			response = scraper.get(url)
+			if response.status_code in [503, 429, 403]:
+				if response.status_code == 503:
+					xbmc.sleep(6000)
+				if response.status_code == 429:
+					xbmc.sleep(4000)
+				else:
+					xbmc.sleep(100)
+				xbmc.log('{0}  -  response {1}.'.format(url, response.status_code), 3)
+				continue
+			if responseMethod == 'json':
+				return response.json()
+			else:
+				return response.text
+		except Exception as ex:
+			xbmc.log(str(ex), 3)
+			return None
+	return ''

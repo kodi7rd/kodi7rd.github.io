@@ -112,7 +112,7 @@ networks = (
 		{'id':14,'name':'PBS','logo': 'network_pbs'},                                 {'id':16,'name':'CBS','logo': 'network_cbs'},
 		{'id':19,'name':'FOX','logo': 'network_fox'},                                 {'id':21,'name':'The WB','logo': 'network_thewb'},
 		{'id':24,'name':'BET','logo': 'network_bet'},                                 {'id':30,'name':'USA Network','logo': 'network_usanetwork'},
-		{'id':32,'name':'CBC','logo': 'network_cbc'},                                 {'id':173,'name':'AT-X','logo': 'network_atx'},
+		{'id':23,'name':'CBC','logo': 'network_cbc'},                                 {'id': 88, 'name': 'FX', 'logo': 'network_fx'},
 		{'id':33,'name':'MTV','logo': 'network_mtv'},                                 {'id':34,'name':'Lifetime','logo': 'network_lifetime'},
 		{'id':35,'name':'Nick Junior','logo': 'network_nickjr'},                      {'id':41,'name':'TNT','logo': 'network_tnt'},
 		{'id':43,'name':'National Geographic','logo': 'network_natgeo'},              {'id':47,'name':'Comedy Central','logo': 'network_comedycentral'},
@@ -142,7 +142,7 @@ networks = (
 		{'id':1709,'name':'CBS All Access','logo': 'network_cbsallaccess'},           {'id':3186,'name':'HBO Max','logo': 'network_hbomax'},
 		{'id':2243,'name':'DC Universe','logo': 'network_dcuniverse'},                {'id':2076,'name':'Paramount Network','logo': 'network_paramount'},
 		{'id':4330,'name':'Paramount+','logo': 'network_paramountplus'},              {'id': 3353, 'name': 'Peacock', 'logo': 'network_peacock'},
-		{'id':4353,'name':'Discovery+','logo': 'network_discoveryplus'},              {'id': 88, 'name': 'FX', 'logo': 'network_fx'}
+		{'id':4353,'name':'Discovery+','logo': 'network_discoveryplus'}
 	)
 
 language_choices =  {

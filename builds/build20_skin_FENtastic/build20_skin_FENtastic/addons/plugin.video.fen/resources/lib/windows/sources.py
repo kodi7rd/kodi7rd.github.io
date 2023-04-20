@@ -260,13 +260,13 @@ class SourcesResults(BaseDialog):
 				choice_sorter = sorted(sort_ranks.keys(), key=sort_ranks.get)
 				choice_sorter = [upper(i) for i in choice_sorter]
 			duplicates = set()
-			provider_choices = [i.getProperty(main_choice) for i in self.item_list \
+			choices = [i.getProperty(main_choice) for i in self.item_list \
 						if not (i.getProperty(main_choice) in duplicates or duplicates.add(i.getProperty(main_choice))) \
 						and not i.getProperty(main_choice) == '']
-			provider_choices.sort(key=choice_sorter.index)
-			list_items = [{'line1': item, 'icon': self.poster} for item in provider_choices]
+			choices.sort(key=choice_sorter.index)
+			list_items = [{'line1': item, 'icon': self.poster} for item in choices]
 			kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'multi_choice': 'true'}
-			choice = select_dialog(provider_choices, **kwargs)
+			choice = select_dialog(choices, **kwargs)
 			if choice == None: return
 			filtered_list = [i for i in self.item_list if any(x in i.getProperty(main_choice) for x in choice)]
 		elif main_choice == 'keyword_title':

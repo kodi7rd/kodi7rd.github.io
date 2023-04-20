@@ -15,6 +15,7 @@ close_all_dialog, int_window_prop, get_setting = kodi_utils.close_all_dialog, ko
 season_display, show_display, remain_str, pack_display = ls(32537), ls(32089), ls(32676), '%s (%s)'
 pack_check = (season_display, show_display)
 debrid_runners = {'Real-Debrid': ('Real-Debrid', RD_check), 'Premiumize.me': ('Premiumize.me', PM_check), 'AllDebrid': ('AllDebrid', AD_check)}
+sd_check = ('SD', 'CAM', 'TELE', 'SYNC')
 
 class source:
 	def __init__(self, meta, source_dict, debrid_torrents, debrid_hosters, internal_scrapers, prescrape_sources, progress_dialog, disabled_ext_ignored=False):
@@ -34,6 +35,10 @@ class source:
 		self.timeout = 60 if disabled_ext_ignored else int(get_setting('results.timeout', '20'))
 		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.final_total = self.final_4k = self.final_1080p = self.final_720p = self.final_sd = 0
+		self.count_tuple = (('sources_4k', '4K', self._quality_length), ('sources_1080p', '1080p', self._quality_length), ('sources_720p', '720p', self._quality_length),
+							('sources_sd', '', self._quality_length_sd), ('sources_total', '', self.quality_length_final))
+		self.count_tuple_final = (('final_4k', '4K', self._quality_length), ('final_1080p', '1080p', self._quality_length), ('final_720p', '720p', self._quality_length),
+									('final_sd', '', self._quality_length_sd), ('final_total', '', self.quality_length_final))
 
 	def results(self, info):
 		if not self.source_dict: return
@@ -217,24 +222,12 @@ class source:
 				except: pass
 		except: pass
 		return sources
-	
+
 	def process_quality_count(self, sources):
-		for i in sources:
-			quality = i['quality']
-			if quality == '4K': self.sources_4k += 1
-			elif quality == '1080p': self.sources_1080p += 1
-			elif quality == '720p': self.sources_720p += 1
-			else: self.sources_sd += 1
-			self.sources_total += 1
+		for item in self.count_tuple: setattr(self, item[0], getattr(self, item[0]) + item[2](sources, item[1]))
 	
 	def process_quality_count_final(self, sources):
-		for i in sources:
-			quality = i['quality']
-			if quality == '4K': self.final_4k += 1
-			elif quality == '1080p': self.final_1080p += 1
-			elif quality == '720p': self.final_720p += 1
-			else: self.final_sd += 1
-			self.final_total += 1
+		for item in self.count_tuple_final: setattr(self, item[0], getattr(self, item[0]) + item[2](sources, item[1]))
 
 	def process_hosters(self, hoster_sources):
 		if not hoster_sources or not self.debrid_hosters: return []
@@ -304,3 +297,13 @@ class source:
 		try: del self.progress_dialog
 		except: pass
 		self.progress_dialog = None
+
+
+	def _quality_length(self, items, quality):
+		return len([i for i in items if i['quality'] == quality])
+
+	def _quality_length_sd(self, items, dummy):
+		return len([i for i in items if i['quality'] in sd_check])
+
+	def quality_length_final(self, items, dummy):
+		return len(items)

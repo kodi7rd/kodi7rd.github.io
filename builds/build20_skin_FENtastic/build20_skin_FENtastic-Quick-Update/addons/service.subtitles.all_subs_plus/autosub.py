@@ -108,7 +108,7 @@ def getSettingAsBool(setting):
 def isExcluded(movieFullPath):
     global current_list_item
     if not movieFullPath:
-        return False
+        return True
 
     Debug("isExcluded(): Checking exclusion settings for '%s'." % movieFullPath)
     check_local=all_setting["local_files"]=='true'
@@ -116,11 +116,11 @@ def isExcluded(movieFullPath):
     if not check_local and 'smb:' in movieFullPath:
         Debug("isExcluded(): Video is Local. Do not exclude.")
         # Debug("isExcluded(): Video is Local.")
-        return True #was False
+        return False #was True
 
     if (movieFullPath.find("pvr://") > -1) :
         Debug("isExcluded(): Video is playing via Live TV, which is currently set as excluded location.")
-        return False
+        return True
 
     Debug('Excluded Check:')
     Debug('current_list_item: ' + repr(current_list_item.lower()))
@@ -128,41 +128,41 @@ def isExcluded(movieFullPath):
 
     if (xbmc.getInfoLabel("VideoPlayer.mpaa")=='heb'):
         Debug("isExcluded(): Excluded from list defined!!." )
-        return False
+        return True
 
     if any(x in current_list_item.lower() for x in excluded_addons):
         Debug("isExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!." )
-        return False
+        return True
 
     ExcludeAddos = getSetting('ExcludeAddos')
     if ExcludeAddos and getSettingAsBool('ExcludeAddosOption'):
         if ((ExcludeAddos.lower()) in current_list_item.lower() ):
             Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 1." % ExcludeAddos)
-            return False
+            return True
 
     ExcludeAddos2 = getSetting('ExcludeAddos2')
     if ExcludeAddos2 and getSettingAsBool('ExcludeAddosOption2'):
         if ( (ExcludeAddos2.lower()) in current_list_item.lower() ):
             Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 2." % ExcludeAddos2)
-            return False
+            return True
 
     ExcludeAddos3 = getSetting('ExcludeAddos3')
     if ExcludeAddos3 and getSettingAsBool('ExcludeAddosOption3'):
         if ((ExcludeAddos3.lower()) in current_list_item.lower()   ):
             Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 3." % ExcludeAddos3)
-            return False
+            return True
 
     ExcludeAddos4 = getSetting('ExcludeAddos4')
     if ExcludeAddos4 and getSettingAsBool('ExcludeAddosOption4'):
         if ((ExcludeAddos4.lower()) in current_list_item.lower()  ):
             Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 4." % ExcludeAddos4)
-            return False
+            return True
 
     ExcludeAddos5 = getSetting('ExcludeAddos5')
     if ExcludeAddos5 and getSettingAsBool('ExcludeAddosOption5'):
         if ((ExcludeAddos5.lower()) in current_list_item.lower()  ):
             Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 5." % ExcludeAddos5)
-            return False
+            return True
 
     if getSettingAsBool('ExcludeAddosOption6'):
         ExcludeAddos6_pre = getSetting('ExcludeAddos6')
@@ -170,9 +170,9 @@ def isExcluded(movieFullPath):
         for items in ExcludeAddos6:
             if ((items.lower()) in current_list_item.lower()  ) and len(items)>0:
                 Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 6." % items)
-                return False
+                return True
 
-    return True
+    return False
 
 class MainMonitor(xbmc.Monitor):
 
@@ -180,9 +180,9 @@ class MainMonitor(xbmc.Monitor):
         super(MainMonitor, self).__init__()
 
     def onSettingsChanged(self):
-        from service import refresh_setting
+        from service import refresh_setting,all_setting
         global location,subtitle_cache_next
-        all_setting=(refresh_setting())
+        refresh_setting()
         Debug("Setting Changed")
 
         next_sub=(MyAddon.getSetting("nextsub"))
@@ -261,19 +261,15 @@ class MainMonitor(xbmc.Monitor):
 
                 else:
                     try:
-                        if all_setting["pause"]=='true':
-                            xbmc.Player().pause()
-
-                        search_all(2,all_setting)
-                        #subtitle_cache_next.set('last_sub','ZERO')
-                        if all_setting["pause"]=='true':
-                            xbmc.Player().pause()
+                        begin_search_process()
                     except:
                         PrintException()
                         try:
                             xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, 'Failed')))
                         except:
                             xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, 'Failed')).encode('utf-8'))
+
+        #xbmc.executebuiltin('XBMC.Container.Update(%s)' % __cwd__)
 
 
 class AutoSubsPlayer(xbmc.Player):
@@ -297,85 +293,95 @@ class AutoSubsPlayer(xbmc.Player):
         self.run = True
 
     def onPlayBackStarted(self):
-        try:
-            global running,subtitle_cache_next
-            Debug('start player')
+        global running,subtitle_cache_next
+        Debug('start player')
 
-            if self.run:
-                movieFullPath = xbmc.Player().getPlayingFile()
-                Debug("movieFullPath '%s'" % movieFullPath)
-                xbmc.sleep(1000)
-                availableLangs = xbmc.Player().getAvailableSubtitleStreams()
+        if all_setting["autosub"]=='true':
+            try:
+                if self.run:
+                    movieFullPath = xbmc.Player().getPlayingFile()
+                    Debug("movieFullPath '%s'" % movieFullPath)
+                    xbmc.sleep(1000)
+                    availableLangs = xbmc.Player().getAvailableSubtitleStreams()
 
-                Debug("availableLangs '%s'" % availableLangs)
-                totalTime = xbmc.Player().getTotalTime()
-                #totalTime ==0.0
-                if xbmc.Player().isPlaying():
-                    Debug('Start Playing')
-                    #vidtime = xbmc.Player().getTime()
-                    #Debug('vidtime:'+str(vidtime))
-                    while 1:
-                        vidtime = xbmc.Player().getTime()
-                        Debug('vidtime:'+str(vidtime))
-                        if vidtime>0:
-                            totalTime = xbmc.Player().getTotalTime()
-                            #Debug('totalTimeIn:'+str(totalTime))
-                            break
-                        if not xbmc.Player().isPlaying():
-                            totalTime = 0.0
-                            #totalTime ==0.0
-                            break
-                        xbmc.sleep(100)
-                Debug("totalTime '%s'" % totalTime)
-                Debug("ExcludeTime '%s'" % ExcludeTime)
+                    Debug("availableLangs '%s'" % availableLangs)
+                    totalTime = xbmc.Player().getTotalTime()
+                    #totalTime ==0.0
+                    if xbmc.Player().isPlaying():
+                        Debug('Start Playing')
+                        #vidtime = xbmc.Player().getTime()
+                        #Debug('vidtime:'+str(vidtime))
+                        while 1:
+                            vidtime = xbmc.Player().getTime()
+                            Debug('vidtime:'+str(vidtime))
+                            if vidtime>0:
+                                totalTime = xbmc.Player().getTotalTime()
+                                #Debug('totalTimeIn:'+str(totalTime))
+                                break
+                            if not xbmc.Player().isPlaying():
+                                totalTime = 0.0
+                                #totalTime ==0.0
+                                break
+                            xbmc.sleep(100)
+                    Debug("totalTime '%s'" % totalTime)
+                    Debug("ExcludeTime '%s'" % ExcludeTime)
 
-                force_download=True
-                if all_setting["force"]=='true':
                     force_download=True
-                if all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
-                    force_download=False
+                    if all_setting["force"]=='true':
+                        force_download=True
+                    if all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
+                        force_download=False
 
-                try:
-                    res=(isExcluded(movieFullPath))
-                except:
-                    Debug('AutoSubs isExcluded ERROR')
+                    try:
+                        is_excluded=(isExcluded(movieFullPath))
+                    except:
+                        Debug('AutoSubs isExcluded ERROR')
 
-                Debug('Is autosub Playing:'+str(xbmc.Player().isPlaying()))
-                Debug('totalTime:'+str(totalTime))
-                Debug('movieFullPath:'+str(movieFullPath))
-                Debug('(isExcluded(movieFullPath)) ): '+repr(res))
-                Debug('force_download:'+str(force_download) )
+                    Debug('Is autosub Playing:'+str(xbmc.Player().isPlaying()))
+                    Debug('totalTime:'+str(totalTime))
+                    Debug('movieFullPath:'+str(movieFullPath))
+                    Debug('(isExcluded(movieFullPath)) ): '+repr(is_excluded))
+                    Debug('force_download:'+str(force_download) )
 
-                if (xbmc.Player().isPlaying() and totalTime > ExcludeTime and force_download==True and (res) ):
-                    self.run = False
-                    #xbmc.sleep(1000)
-                    Debug('Started: AutoSearching for Subs')
-                    Debug('running')
-                    Debug(repr(running))
-                    running=0
-                    if running==0:
-                        running=1
-                      #try:
-                        if all_setting["pause"]=='true':
-                            xbmc.Player().pause()
-                        if all_setting["autosub"]=='true':
-                            search_all(2,all_setting)
-
-                        #subtitle_cache_next.set('last_sub','ZERO')
-
-                      #except Exception as e:
-                      # xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, str(e))).encode('utf-8'))
-                      # try:
-                      #   PrintException()
-                      # except:
-                      #  pass
+                    if (xbmc.Player().isPlaying() and totalTime > ExcludeTime and force_download==True and not is_excluded ):
+                        self.run = False
+                        #xbmc.sleep(1000)
+                        Debug('Started: AutoSearching for Subs')
+                        Debug('running')
+                        Debug(repr(running))
                         running=0
-                    #xbmc.executebuiltin('XBMC.ActivateWindow(SubtitleSearch)')
-                else:
-                    Debug('Started: Subs found or Excluded')
-                    self.run = False
-        except:
-            pass
+                        if running==0:
+                            running=1
+                          #try:
+                            begin_search_process()
+
+                            #subtitle_cache_next.set('last_sub','ZERO')
+
+                          #except Exception as e:
+                          # xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, str(e))).encode('utf-8'))
+                          # try:
+                          #   PrintException()
+                          # except:
+                          #  pass
+                            running=0
+                        #xbmc.executebuiltin('XBMC.ActivateWindow(SubtitleSearch)')
+                    else:
+                        Debug('Started: Subs found or Excluded')
+                        self.run = False
+            except:
+                pass
+
+def begin_search_process():
+    #0 = Without pause
+    #1 = Pause and Resume
+    #2 = Pause
+    if all_setting["pause"]=='1' or all_setting["pause"]=='2':
+        xbmc.Player().pause()
+
+    search_all(2,all_setting)
+
+    # if all_setting["pause"]=='1':
+    #     xbmc.Player().pause()
 
 '''
 def get_aa_server_ch():
@@ -408,7 +414,7 @@ elif action == 'manualsearch':
     search_all(3,(all_setting),manual_search=True,manual_title=searchstring)
 
 if action is None:
-    from service import refresh_setting
+    from service import refresh_setting,all_setting
 
     update_time=1
     reset_running=0
@@ -416,7 +422,7 @@ if action is None:
     last_run=0
     time_Show=100
 
-    all_setting=refresh_setting()
+    refresh_setting()
 
     player_monitor = AutoSubsPlayer()
     monitor = MainMonitor()

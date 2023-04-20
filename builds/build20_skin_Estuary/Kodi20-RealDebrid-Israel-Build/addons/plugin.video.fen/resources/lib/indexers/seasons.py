@@ -81,6 +81,7 @@ def build_season_list(params):
 					info_tag.setMediaType('season')
 					info_tag.setTitle(title)
 					info_tag.setOriginalTitle(orig_title)
+					info_tag.setTvShowTitle(show_title)
 					info_tag.setTvShowStatus(status)
 					info_tag.setSeason(season_number)
 					info_tag.setPlot(plot)

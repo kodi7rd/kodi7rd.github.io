@@ -3766,6 +3766,14 @@ msgctxt "#33143"
 msgid "Widgets Item Limit"
 msgstr ""
 
+msgctxt "#33144"
+msgid "Make Fen Work Properly"
+msgstr ""
+
+msgctxt "#33145"
+msgid ""
+msgstr ""
+
 #############################################
 
 msgctxt "#32209"

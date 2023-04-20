@@ -1,5 +1,4 @@
-﻿tenil
-reshet
+﻿reshet
 kidsil
 movix
 mako
@@ -8,30 +7,10 @@ sertil
 jksp
 multidown
 sdarot
-ebs4_kids_tv
-plugin.video.wwe-on-demand
-sparo
 רשת
-פומלה TV
-ebs_movix
-ebs_kan
-olam
-bali_perek
-firstonetv
-gozlan
-תענוג
-walla
 zira
 ערוץ
-ahoradot
-עולם
-funloty
 movix_reborn
-seretall
-serethd
 idanplus
 playlistLoader
-HebDub.movies
-TheFirstAvenger
-ghostshows
 plugin.video.kids

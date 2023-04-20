@@ -4,7 +4,7 @@ from windows import open_window
 from caches import refresh_cached_data
 from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 ok_dialog, container_content, close_all_dialog, external_browse = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external_browse
 get_property, open_settings, set_property, get_icon, dialog = kodi_utils.get_property, kodi_utils.open_settings, kodi_utils.set_property, kodi_utils.get_icon, kodi_utils.dialog
@@ -66,77 +66,6 @@ def tmdb_image_resolutions_choice(params):
 	make_settings_dict()
 	clear_cache('meta', silent=True)
 	kodi_refresh()
-
-def extras_buttons_choice(params):
-	media_type, button_dict, orig_button_dict = params.get('media_type', None), params.get('button_dict', {}), params.get('orig_button_dict', {})
-	if not orig_button_dict:
-		for _type in ('movie', 'tvshow'):
-			setting_id_base = 'extras.%s.button' % _type
-			for item in range(10, 18):
-				setting_id = setting_id_base + str(item)
-				button_action = get_setting(setting_id)
-				button_label = extras_button_label_values[_type][button_action]
-				button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
-				orig_button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
-	if media_type == None:
-		choices = [(32028, 'movie'), (32029, 'tvshow')]
-		list_items = [{'line1': ls(i[0])} for i in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': ls(33120), 'narrow_window': 'true'}
-		choice = select_dialog(choices, **kwargs)
-		if choice == None:
-			if button_dict != orig_button_dict:
-				pause_settings_change()
-				for k, v in button_dict.items(): set_setting(k, v['button_action'])
-				unpause_settings_change()
-				make_settings_dict()
-				return ok_dialog(text=32576)
-			return
-		media_type = choice[1]
-	choices = [('[B]%s[/B]   |   %s' % (v['button_name'], ls(v['button_label'])), v['button_name'], v['button_label'], k) for k, v in button_dict.items() if media_type in k]
-	list_items = [{'line1': i[0]} for i in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(33121), 'narrow_window': 'true'}
-	choice = select_dialog(choices, **kwargs)
-	if choice == None: return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict})
-	button_name, button_label, button_setting = choice[1:]
-	choices = [(v, k) for k, v in extras_button_label_values[media_type].items() if not v == button_label]
-	choices = [i for i in choices if not i[0] == button_label]
-	list_items = [{'line1': ls(i[0])} for i in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(33122) % button_name, 'narrow_window': 'true'}
-	choice = select_dialog(choices, **kwargs)
-	if choice == None: return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict, 'media_type': media_type})
-	button_label, button_action = choice
-	button_dict[button_setting] = {'button_action': button_action, 'button_label': button_label, 'button_name': button_name}
-	return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict, 'media_type': media_type})
-
-def default_extras_buttons_choice(params):
-	choices = [(32028, 'movie'), (32029, 'tvshow'), (32030, 'both')]
-	list_items = [{'line1': ls(i[0])} for i in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(33123), 'narrow_window': 'true'}
-	choice = select_dialog(choices, **kwargs)
-	if choice == None: return
-	media_type = choice[1]
-	pause_settings_change()
-	if media_type in ('movie', 'both'):
-		for item in movie_extras_buttons_defaults: set_setting(item[0], item[1])
-	if media_type in ('tvshow', 'both'):
-		for item in tvshow_extras_buttons_defaults: set_setting(item[0], item[1])
-	unpause_settings_change()
-	make_settings_dict()
-	ok_dialog(text=32576)
-
-def extras_ratings_choice(params={}):
-	choices = [('Metacritic', 'Meta'), ('Tomato Rating Critic', 'Tom/Critic'), ('Tomato Rating User', 'Tom/User'), ('IMDb', 'IMDb'), ('TMDb', 'TMDb')]
-	list_items = [{'line1': i[0]} for i in choices]
-	current_settings = extras_enabled_ratings()
-	try: preselect = [choices.index(i) for i in choices if i[1] in current_settings]
-	except: preselect = []
-	kwargs = {'items': json.dumps(list_items), 'heading': ls(33135), 'multi_choice': 'true', 'preselect': preselect}
-	selection = select_dialog(choices, **kwargs)
-	if selection == None: return
-	if selection == []:
-		ok_dialog(text=33136)
-		return extras_ratings_choice()
-	set_setting('extras.enabled_ratings', ', '.join([i[1] for i in selection]))
 
 def default_highlight_colors_choice(params):
 	silent = params.get('silent', 'false') != 'false'
@@ -222,10 +151,9 @@ def link_folders_choice(params):
 		dbcon.commit()
 		dbcon.close()
 		clear_property(string)
-		kodi_refresh()
-		return ok_dialog(text=32576)
-	if current_link:
-		if not confirm_dialog(text=ls(33076) % (current_link['media_type'].upper(), current_link['rootname'])): return
+		ok_dialog(text=32576)
+		return kodi_refresh()
+	if current_link and not confirm_dialog(text=ls(33076) % (current_link['media_type'].upper(), current_link['rootname'])): return
 	media_type = _get_media_type()
 	if media_type == None: return
 	query = dialog.input(ls(32228)).lower()
@@ -537,31 +465,103 @@ def set_quality_choice(params):
 		return set_quality_choice(params)
 	set_setting(quality_setting, ', '.join(choice))
 
+def extras_buttons_choice(params):
+	media_type, button_dict, orig_button_dict = params.get('media_type', None), params.get('button_dict', {}), params.get('orig_button_dict', {})
+	if not orig_button_dict:
+		for _type in ('movie', 'tvshow'):
+			setting_id_base = 'extras.%s.button' % _type
+			for item in range(10, 18):
+				setting_id = setting_id_base + str(item)
+				button_action = get_setting(setting_id)
+				button_label = extras_button_label_values[_type][button_action]
+				button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
+				orig_button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
+	if media_type == None:
+		choices = [(32028, 'movie'), (32029, 'tvshow')]
+		list_items = [{'line1': ls(i[0])} for i in choices]
+		kwargs = {'items': json.dumps(list_items), 'heading': ls(33120), 'narrow_window': 'true'}
+		choice = select_dialog(choices, **kwargs)
+		if choice == None:
+			if button_dict != orig_button_dict:
+				pause_settings_change()
+				for k, v in button_dict.items(): set_setting(k, v['button_action'])
+				unpause_settings_change()
+				make_settings_dict()
+				return ok_dialog(text=32576)
+			return
+		media_type = choice[1]
+	choices = [('[B]%s[/B]   |   %s' % (v['button_name'], ls(v['button_label'])), v['button_name'], v['button_label'], k) for k, v in button_dict.items() if media_type in k]
+	list_items = [{'line1': i[0]} for i in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(33121), 'narrow_window': 'true'}
+	choice = select_dialog(choices, **kwargs)
+	if choice == None: return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict})
+	button_name, button_label, button_setting = choice[1:]
+	choices = [(v, k) for k, v in extras_button_label_values[media_type].items() if not v == button_label]
+	choices = [i for i in choices if not i[0] == button_label]
+	list_items = [{'line1': ls(i[0])} for i in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(33122) % button_name, 'narrow_window': 'true'}
+	choice = select_dialog(choices, **kwargs)
+	if choice == None: return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict, 'media_type': media_type})
+	button_label, button_action = choice
+	button_dict[button_setting] = {'button_action': button_action, 'button_label': button_label, 'button_name': button_name}
+	return extras_buttons_choice({'button_dict': button_dict, 'orig_button_dict': orig_button_dict, 'media_type': media_type})
+
+def default_extras_buttons_choice(params):
+	choices = [(32028, 'movie'), (32029, 'tvshow'), (32030, 'both')]
+	list_items = [{'line1': ls(i[0])} for i in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(33123), 'narrow_window': 'true'}
+	choice = select_dialog(choices, **kwargs)
+	if choice == None: return
+	media_type = choice[1]
+	pause_settings_change()
+	if media_type in ('movie', 'both'):
+		for item in movie_extras_buttons_defaults: set_setting(item[0], item[1])
+	if media_type in ('tvshow', 'both'):
+		for item in tvshow_extras_buttons_defaults: set_setting(item[0], item[1])
+	unpause_settings_change()
+	make_settings_dict()
+	ok_dialog(text=32576)
+
+def extras_ratings_choice(params={}):
+	choices = [('Metacritic', 'Meta'), ('Tomato Rating Critic', 'Tom/Critic'), ('Tomato Rating User', 'Tom/User'), ('IMDb', 'IMDb'), ('TMDb', 'TMDb')]
+	list_items = [{'line1': i[0]} for i in choices]
+	current_settings = extras_enabled_ratings()
+	try: preselect = [choices.index(i) for i in choices if i[1] in current_settings]
+	except: preselect = []
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(33135), 'multi_choice': 'true', 'preselect': preselect}
+	selection = select_dialog(choices, **kwargs)
+	if selection == None: return
+	if selection == []:
+		ok_dialog(text=33136)
+		return extras_ratings_choice()
+	set_setting('extras.enabled_ratings', ', '.join([i[1] for i in selection]))
+
 def extras_lists_choice(params={}):
-	fl = [2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062]
+	fl = [2000, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062]
 	dl = [
-			{'name': ls(32664),                            'image': img_url % 'DrqssE5'},
-			{'name': ls(32503),                            'image': img_url % 'FZ6xrxr'},
-			{'name': ls(32607),                            'image': img_url % 'CAvVerM'},
-			{'name': ls(32984),                            'image': img_url % 'nz8PVph'},
-			{'name': ls(32986),                            'image': img_url % 'jmFttcs'},
-			{'name': ls(32989),                            'image': img_url % 'H5JLFoD'},
-			{'name': ls(33032),                            'image': img_url % 'cdpBetd'},
-			{'name': ls(32616),                            'image': img_url % 'mbPvLrG'},
-			{'name': ls(32617),                            'image': img_url % '6TVW6r8'},
-			{'name': '%s %s' % (ls(32612), ls(32543)),     'image': img_url % '6cVE5WT'},
-			{'name': '%s %s' % (ls(32612), ls(32470)),     'image': img_url % 'ahJK4ZX'},
-			{'name': '%s %s' % (ls(32612), ls(32480)),     'image': img_url % 'adtLIuW'},
-			{'name': '%s %s' % (ls(32612), ls(32499)),     'image': img_url % 'wn2MpHK'}
-			]
+			{'name': ls(32842),                            'image': img_url % 'DozdPCs'},
+			{'name': ls(32664),                            'image': img_url % 'fuksnW8'},
+			{'name': ls(32503),                            'image': img_url % 'dBiyfar'},
+			{'name': ls(32607),                            'image': img_url % 'vTJ3Sen'},
+			{'name': ls(32984),                            'image': img_url % '3TUiDnJ'},
+			{'name': ls(32986),                            'image': img_url % 'amYnTsq'},
+			{'name': ls(32989),                            'image': img_url % '97PxNyo'},
+			{'name': ls(33032),                            'image': img_url % 'biGxjHV'},
+			{'name': ls(32616),                            'image': img_url % 'GUU4in9'},
+			{'name': ls(32617),                            'image': img_url % '8w5Mqh6'},
+			{'name': '%s %s' % (ls(32612), ls(32543)),     'image': img_url % 'DYO6Nyx'},
+			{'name': '%s %s' % (ls(32612), ls(32470)),     'image': img_url % 'V46E8Ed'},
+			{'name': '%s %s' % (ls(32612), ls(32480)),     'image': img_url % '9ZUQZjF'},
+			{'name': '%s %s' % (ls(32612), ls(32499)),     'image': img_url % 'YMoV6mn'}
+		]
 	try: preselect = [fl.index(i) for i in extras_enabled_menus()]
 	except: preselect = []
 	kwargs = {'items': json.dumps(dl), 'preselect': preselect}
 	selection = open_window(('windows.extras', 'ExtrasChooser'), 'extras_chooser.xml', **kwargs)
-	if selection  == []: return set_setting('extras.enabled_menus', 'noop')
+	if selection  == []: return set_setting('extras.enable_menus', 'noop')
 	elif selection == None: return
 	selection = [str(fl[i]) for i in selection]
-	set_setting('extras.enabled_menus', ','.join(selection))
+	set_setting('extras.enable_menus', ','.join(selection))
 
 def set_language_filter_choice(params):
 	from modules.meta_lists import language_choices
@@ -679,7 +679,8 @@ def results_format_choice(params={}):
 					('List',                 img_url % '5qdaSAr'),
 					('InfoList',             img_url % 'wePo8Vv'),
 					('MediaList',            img_url % 'xXWixYv'),
-					('Rows',                 img_url % '44OzIVW')
+					('Rows',                 img_url % '44OzIVW'),
+					('WideList',                 img_url % '9oIDKtL')
 					]
 	choice = open_window(('windows.sources', 'SourcesChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
 	if choice: set_setting('results.list_format', choice)

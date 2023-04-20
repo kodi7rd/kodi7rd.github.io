@@ -39,7 +39,7 @@ tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
 setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'fen_flags/ratings/%s'
 separator = '  •  '
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
-cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2050, 2051, 2052, 2053, 2054, 2055
+plot_id, cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055
 videos_id, posters_id, fanarts_id, year_id, genres_id, networks_id, collection_id = 2056, 2057, 2058, 2059, 2060, 2061, 2062
 tmdb_list_ids = (recommended_id, year_id, genres_id, networks_id, collection_id)
 imdb_list_ids = (reviews_id, trivia_id, blunders_id, parentsguide_id)
@@ -59,9 +59,9 @@ class Extras(BaseDialog):
 		self.control_id = None
 		self.set_starting_constants(kwargs)
 		self.set_properties()
-		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_ratings, self.set_poster, self.make_cast, self.make_recommended, self.make_reviews,
-					self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres, self.make_network,
-					self.make_posters, self.make_fanart, self.make_collection)
+		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_ratings, self.set_poster, self.make_plot, self.make_cast, self.make_recommended,
+					self.make_reviews, self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres,
+					self.make_network, self.make_posters, self.make_fanart, self.make_collection)
 
 	def onInit(self):
 		for i in self.tasks: Thread(target=i).start()
@@ -142,6 +142,10 @@ class Extras(BaseDialog):
 		if win_prop == 4000 and active_extra_ratings:
 			self.setProperty('extra_ratings', 'true')
 			self.set_infoline1(remove_rating=True)
+
+	def make_plot(self):
+		if not plot_id in self.enabled_lists: return
+		self.setProperty('plot', self.plot)
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -628,7 +632,7 @@ class Extras(BaseDialog):
 	def set_properties(self):
 		self.assign_buttons()
 		self.setProperty('media_type', self.media_type), self.setProperty('fanart', self.fanart), self.setProperty('clearlogo', self.clearlogo)
-		self.setProperty('title', self.title), self.setProperty('plot', self.plot), self.setProperty('year', self.year)
+		self.setProperty('title', self.title), self.setProperty('year', self.year)
 		self.setProperty('genre', self.genre), self.setProperty('network', self.network), self.setProperty('enable_scrollbars', self.enable_scrollbars)
 
 	def set_infoline1(self, remove_rating=False):

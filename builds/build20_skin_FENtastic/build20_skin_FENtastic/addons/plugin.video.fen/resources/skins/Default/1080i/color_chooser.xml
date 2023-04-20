@@ -99,19 +99,12 @@
                     <label>[B][COLOR=$INFO[Container(2000).ListItem.Property(label)]]$INFO[Container(2000).ListItem.Property(label)][/COLOR][/B]</label>
                 </control>
                 <control type="image">
-                    <left>0</left>
-                    <top>45</top>
-                    <width>210</width>
-                    <height>210</height>
-                    <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
-                </control>
-                <control type="image">
                     <left>5</left>
                     <top>50</top>
                     <width>200</width>
                     <height>200</height>
                     <aspectratio>stretch</aspectratio>
-                    <texture>$INFO[Container(2000).ListItem.Property(image)]</texture>
+                    <texture diffuse="fen_diffuse/landscape_w284_h160.png">$INFO[Container(2000).ListItem.Property(image)]</texture>
                 </control>
             </control>
             <!-- Buttons -->

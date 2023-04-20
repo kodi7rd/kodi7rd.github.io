@@ -23,8 +23,8 @@ Additional info for AutoSubs feature:
 * Make sure that "autosubs" is enabled in the AllSubs_Plus settings.
 * It is recommanded also to enable the "Force down" option.
 (Otherwise if subtitles are already exist it won't load a new while using 'autosubs')
-* If you want to be sure the 'autosubs' feature is running on each play, activate also the "popup" option.
-* After updating the settings, restart kodi, because this addon is a service that reloading when kodi starts.
+* If you want to be sure that the 'autosubs' feature is running on each play, activate also the "popup" option.
+* On each settings updating restart Kodi, because the AutoSub feature is a service that has been reloaded when kodi starts.
 * It seems that there is no effect of the kodi default subtitles service settings on this feature, 
 you can set another addon which is not AllSubs_Plus.
 * But, it is recommanded to disable the kodi "Auto download first subtitle" setting for this feature,

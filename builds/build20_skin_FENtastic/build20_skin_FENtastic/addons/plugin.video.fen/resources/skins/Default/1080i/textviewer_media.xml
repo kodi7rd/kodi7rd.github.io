@@ -15,7 +15,7 @@
             <left>100</left>
             <top>135</top>
             <animation type="WindowOpen" reversible="false">
-                <effect type="zoom" start="50" end="100" time="200" center="770,560" tween="quadratic" easing="out" />
+                <effect type="zoom" start="50" end="100" time="200" center="auto" tween="quadratic" easing="out" />
             </animation>
             <control type="image">
                 <height>810</height>

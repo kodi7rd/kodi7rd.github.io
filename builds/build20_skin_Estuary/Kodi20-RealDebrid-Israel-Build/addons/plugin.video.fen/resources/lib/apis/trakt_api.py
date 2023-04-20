@@ -261,7 +261,6 @@ def trakt_progress(action, media, media_id, percent, season=None, episode=None, 
 	if refresh_trakt: trakt_sync_activities()
 
 def trakt_collection_lists(media_type, list_type):
-	logger('list_type', list_type)
 	limit = 20
 	data = trakt_fetch_collection_watchlist('collection', media_type)
 	if list_type == 'recent': data.sort(key=lambda k: k['collected_at'], reverse=True)
@@ -375,9 +374,8 @@ def remove_from_collection(data):
 def hide_unhide_trakt_items(params):
 	action, media_type, media_id, list_type = params['action'], params['media_type'], params['media_id'], params['section']
 	media_type = 'movies' if media_type in ('movie', 'movies') else 'shows'
-	key = 'tmdb'# if media_type == 'movies' else 'imdb'
 	url = 'users/hidden/%s' % list_type if action == 'hide' else 'users/hidden/%s/remove' % list_type
-	data = {media_type: [{'ids': {key: media_id}}]}
+	data = {media_type: [{'ids': {'tmdb': media_id}}]}
 	call_trakt(url, data=data)
 	trakt_sync_activities()
 	kodi_refresh()

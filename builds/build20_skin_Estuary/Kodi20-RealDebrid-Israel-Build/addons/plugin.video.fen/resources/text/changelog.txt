@@ -1,6 +1,14 @@
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
-[COLOR red][B]Fen users looking for a lightweight, fast skin with a customizable home page for widgets are encouraged to try out ivarbrandt's mod of Estuary: "FENtastic". Use "https://ivarbrandt.github.io/repository.ivarbrandt/" in Kodi's File Manager to download his repo. He has done a great job making many modifications to Estuary, and the skin is geared towards Fen users.[/B][/COLOR]
+[B]Fen users looking for a lightweight, fast skin with a customizable home page for widgets are encouraged to try out ivarbrandt's mod of Estuary: "FENtastic". Use "https://ivarbrandt.github.io/repository.ivarbrandt/" in Kodi's File Manager to download his repo. He has done a great job making many modifications to Estuary, and the skin is geared towards Fen users.[/B]
+
+[COLOR dodgerblue][B]Version 3.1.08[/B][/COLOR]
+- Added "Plot" to list of Content removable for Extras Window. Unfortunately the Extras content will be re-set to default with this update.
+- Added autohide screen elements after 2 seconds for windowed playback via Fen Extras.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.07[/B][/COLOR]
+- Added "WideList" to Results Display Formats. This is a wide list covering the majority of the width of the display.
 
 [COLOR dodgerblue][B]Version 3.1.06[/B][/COLOR]
 - Added FX Network to TV Show Networks.

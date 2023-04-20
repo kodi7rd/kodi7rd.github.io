@@ -432,8 +432,8 @@ class Navigator:
 		mode, action = ('build_movie_list', 'tmdb_movies_recommendations') if media_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_recommendations')
 		recently_watched = get_recently_watched(media_type, short_list=0)
 		for item in recently_watched:
-			if media_type == 'movie': name, tmdb_id = because_str % item['title'], item['media_id']
-			else: name, tmdb_id = because_str % '%s - %sx%s' % (item['title'], str(item['season']), str(item['episode'])), item['media_ids']['tmdb']
+			if media_type == 'movie': name, tmdb_id = item['title'], item['media_id']
+			else: name, tmdb_id = '%s - %sx%s' % (item['title'], str(item['season']), str(item['episode'])), item['media_ids']['tmdb']
 			self.add({'mode': mode, 'action': action, 'tmdb_id': tmdb_id}, name, 'because_you_watched', False)
 		self.end_directory()
 

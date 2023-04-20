@@ -2,7 +2,7 @@
 from windows import BaseDialog
 from modules.kodi_utils import Thread, empty_poster
 from modules.settings import get_art_provider
-from modules.kodi_utils import logger
+# from modules.kodi_utils import logger
 
 button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'autoscrape_nextep': {10: 'play', 11: 'close', 12: 'cancel'}}
 

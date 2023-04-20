@@ -45,10 +45,11 @@ def GetLocalJson(item,prefix_local,color_local,all_setting):
                 nicon = '[COLOR '+color_local+']'+prefix_local+'[/COLOR]'
                 nthumb = lang
 
-                url = "plugin://%s/?action=download&filename=%s&id=%s&source=%s&language=%s" % (MyScriptID,
+                url = "plugin://%s/?action=download&filename=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
                                                                                     xbmc_translate_path(os.path.join(mypath,file1)),
                                                                                     'LOCAL FILE',
                                                                                     'LOCAL FILE',
+                                                                                    nthumb,
                                                                                     nthumb)
 
                 json_data={'url':url,

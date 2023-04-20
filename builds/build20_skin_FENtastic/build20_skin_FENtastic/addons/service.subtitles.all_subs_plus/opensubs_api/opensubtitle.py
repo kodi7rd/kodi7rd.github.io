@@ -84,13 +84,14 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
                ):
 
 
-                url = "plugin://%s/?action=download&link=%s&id=%s&filename=%s&format=%s&source=%s&language=%s" % (__scriptid__,
+                url = "plugin://%s/?action=download&link=%s&id=%s&filename=%s&subformat=%s&source=%s&language=%s&thumbLang=%s" % (__scriptid__,
                                                                                   item_data["ZipDownloadLink"],
                                                                                   'opensubs$$$' + item_data["IDSubtitleFile"],
                                                                                   item_data["SubFileName"],
                                                                                   item_data["SubFormat"],
                                                                                   'opensubtitle',
-                                                                                  item_data["LanguageName"]
+                                                                                  item_data["LanguageName"],
+                                                                                  nthumb
                                                                                   )
 
                 json_data={'url':url,
@@ -116,7 +117,7 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
                     break
         return subtitle_list,search_data
 
-def Download_opensubtitle(id,url,filename,format,mode_subtitle,stack=False):
+def Download_opensubtitle(id,url,filename,subformat,mode_subtitle,stack=False):
     from service import MyZipFolder2,MySubFolder2
     MyZipFolder = MyZipFolder2
     MySubFolder = MySubFolder2
@@ -128,10 +129,10 @@ def Download_opensubtitle(id,url,filename,format,mode_subtitle,stack=False):
                       ## you can only retreive multiple subs in zip
         isSucceeded = False
     else:
-        #subtitle = os.path.join(MySubFolder, "%s.%s" %(str(uuid.uuid4()), format))
+        #subtitle = os.path.join(MySubFolder, "%s.%s" %(str(uuid.uuid4()), subformat))
         ## filename = unquote(filename)
         ## filename = path.basename(filename)[:-4]
-        ## subtitle = os.path.join(MySubFolder, "%s.%s" %(filename, format))
+        ## subtitle = os.path.join(MySubFolder, "%s.%s" %(filename, subformat))
         subtitle = os.path.join(MySubFolder, filename)
         try:
             isSucceeded = OSDBServer().download(id, subtitle)

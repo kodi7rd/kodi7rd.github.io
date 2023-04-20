@@ -113,6 +113,7 @@
                     <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
                     <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                     <control type="image">
+                        <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                         <left>0</left>
                         <top>0</top>
                         <width>300</width>

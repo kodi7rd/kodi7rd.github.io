@@ -424,11 +424,12 @@ class SubtitleAPI:
             link = 'https://subscene.com'+itt['link']
             _id = "subscene$$$" + link.split("/")[-1]
 
-            url = "plugin://%s/?action=download&link=%s&id=%s&source=%s&language=%s" % (MyScriptID,
+            url = "plugin://%s/?action=download&link=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
                                                                                 link,
                                                                                 _id,
                                                                                 'subscene',
-                                                                                lang)
+                                                                                lang,
+                                                                                nthumb)
 
             json_data={'url':url,
                             'label':nlabel,

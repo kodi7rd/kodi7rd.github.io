@@ -1,3 +1,8 @@
+2.0.3
+** All Subs Plus by Burekas **
+- Fixes and improvements for AutoSub
+- Some general bug fixes and improvements
+
 2.0.1
 ** All Subs Plus by Burekas **
 - Hotfix (Subscene)

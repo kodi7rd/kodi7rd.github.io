@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from windows import BaseDialog
+from modules.kodi_utils import colorpalette_path
 from modules.meta_lists import colors
 # from modules.kodi_utils import logger
 
@@ -13,7 +14,7 @@ class SelectColor(BaseDialog):
 		self.window_id = 2000
 		self.selected = None
 		self.start_index = 0
-		self.palette_location = self.translate_path('special://profile/addon_data/plugin.video.fen/color_palette/')
+		self.palette_location = colorpalette_path
 		self.texture_location = self.palette_location + '%s.png'
 		self.palette_status = self.palette_check()
 		self.make_menu()

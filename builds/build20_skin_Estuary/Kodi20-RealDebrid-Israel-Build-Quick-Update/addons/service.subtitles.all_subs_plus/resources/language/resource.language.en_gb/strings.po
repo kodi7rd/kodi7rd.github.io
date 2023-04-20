@@ -76,7 +76,7 @@ msgid "Search Providers"
 msgstr "Search Providers"
 
 msgctxt "#32016"
-msgid "Autosub"
+msgid "Autosub (Kodi restart is required)"
 msgstr "Automatic subtitle download"
 
 msgctxt "#32017"
@@ -88,23 +88,23 @@ msgid "dont download if shorter"
 msgstr "Dont download if shorter"
 
 msgctxt "#32019"
-msgid "ignore shorts"
-msgstr "Dont include addon"
+msgid "Ignore custom addons"
+msgstr "Ignore custom addons"
 
 msgctxt "#32020"
-msgid "addon ignore name"
+msgid "Addon ignore name"
 msgstr "Addon ignore name"
 
 msgctxt "#32021"
 msgid "Pause"
-msgstr "Pause will subtitle search"
+msgstr "Pause"
 
 msgctxt "#32022"
-msgid "custom look"
-msgstr "custom Subltitle look"
+msgid "Custom Subltitle look"
+msgstr "Custom Subltitle look"
 
 msgctxt "#32023"
-msgid "background"
+msgid "Add background"
 msgstr "Add background"
 
 msgctxt "#32024"
@@ -188,3 +188,20 @@ msgstr "View Settings"
 msgctxt "#32043"
 msgid "View Style"
 msgstr "View Style"
+
+msgctxt "#32044"
+msgid "Disabled"
+msgstr "Disabled"
+
+msgctxt "#32045"
+msgid "Pause and Resume"
+msgstr "Pause and Resume"
+
+msgctxt "#32046"
+msgid "Pause"
+msgstr "Pause"
+
+msgctxt "#32047"
+msgid "Kodi restart is required"
+msgstr "Kodi restart is required"
+

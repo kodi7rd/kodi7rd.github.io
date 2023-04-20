@@ -7,23 +7,22 @@ download_directories_dict = {'movie': 'movie_download_directory', 'episode': 'tv
 							'image_url': 'image_download_directory','image': 'image_download_directory', 'premium': 'premium_download_directory',
 							None: 'premium_download_directory', 'None': False}
 results_style_dict = {'true': 'contrast', 'false': 'non_contrast'}
-results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002, 'rows': 2003}
+results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002, 'rows': 2003, 'widelist': 2004}
 year_in_title_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
-default_action_dict = {0: 'play', 1: 'cancel'}
+default_action_dict = {'0': 'play', '1': 'cancel'}
 extras_open_action_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
 paginate_dict = {True: 'paginate.limit_widgets', False: 'paginate.limit_addon'}
 prescrape_scrapers_tuple = ('furk', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud')
 sort_to_top_dict = {'folders': 'results.sort_folders_first', 'rd_cloud': 'results.sort_rdcloud_first',
 					'pm_cloud': 'results.sort_pmcloud_first', 'ad_cloud': 'results.sort_adcloud_first'}
 internal_scrapers_clouds_list = [('rd', 'provider.rd_cloud'), ('pm', 'provider.pm_cloud'), ('ad', 'provider.ad_cloud')]
-single_ep_format_dict = {0: '%d-%m-%Y', 1: '%Y-%m-%d', 2: '%m-%d-%Y'}
+single_ep_format_dict = {'0': '%d-%m-%Y', '1': '%Y-%m-%d', '2': '%m-%d-%Y'}
 default_art_provider_tuple = ('poster', 'poster2', 'fanart', 'fanart2', 'clearlogo', 'clearlogo2')
 art_provider_dict = {True: ('poster2', 'poster', 'fanart2', 'fanart', 'clearlogo2', 'clearlogo'), False: ('poster', 'poster2', 'fanart', 'fanart2', 'clearlogo2', 'clearlogo')}
-resolution_tuple = (
-	{'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185', 'clearlogo': 'original'},
-	{'poster': 'w342', 'fanart': 'w780', 'still': 'w300', 'profile': 'w342', 'clearlogo': 'original'},
-	{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632', 'clearlogo': 'original'},
-	{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original', 'clearlogo': 'original'})
+resolution_tuple = ({'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185', 'clearlogo': 'original'},
+					{'poster': 'w342', 'fanart': 'w780', 'still': 'w300', 'profile': 'w342', 'clearlogo': 'original'},
+					{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632', 'clearlogo': 'original'},
+					{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original', 'clearlogo': 'original'})
 
 def skin_location(skin_xml):
 	user_skin = current_skin()
@@ -152,7 +151,7 @@ def auto_nextep_settings():
 	scraper_time = int(get_setting('results.timeout', '60')) + 20
 	window_percentage = 100 - int(get_setting('autoplay_next_window_percentage', '95'))
 	alert_method = int(get_setting('autoplay_alert_method', '0'))
-	default_action = default_action_dict[int(get_setting('autoplay_default_action', '1'))] if alert_method == 0 else 'cancel'
+	default_action = default_action_dict[get_setting('autoplay_default_action', '1')] if alert_method == 0 else 'cancel'
 	return {'scraper_time': scraper_time, 'window_percentage': window_percentage, 'alert_method': alert_method, 'default_action': default_action}
 
 def filter_status(filter_type):
@@ -225,7 +224,7 @@ def extras_exclude_non_acting():
 	return get_setting('extras.exclude_non_acting_roles', 'true') == 'true'
 
 def extras_enabled_menus():
-	setting = get_setting('extras.enabled_menus')
+	setting = get_setting('extras.enable_menus')
 	if setting in ('', None, 'noop', []): return []
 	return [int(i) for i in setting.split(',')]
 
@@ -288,7 +287,7 @@ def show_unaired():
 	return get_setting('show_unaired', 'true') == 'true'
 
 def single_ep_format():
-	return single_ep_format_dict[int(get_setting('single_ep_format', '1'))]
+	return single_ep_format_dict[get_setting('single_ep_format', '1')]
 
 def single_ep_display_title():
 	return int(get_setting('single_ep_display', '0'))

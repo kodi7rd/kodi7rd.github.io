@@ -123,6 +123,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4020)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <left>0</left>
                                             <top>0</top>
                                             <height>330</height>
@@ -230,6 +231,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4021)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <width>560</width>
                                             <height>330</height>
                                             <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
@@ -334,6 +336,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4022)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <width>560</width>
                                             <height>330</height>
                                             <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
@@ -445,6 +448,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4023)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <top>80</top>
                                             <width>840</width>
                                             <height>155</height>
@@ -551,6 +555,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4024)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <width>560</width>
                                             <height>330</height>
                                             <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
@@ -664,6 +669,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4025)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <width>560</width>
                                             <height>330</height>
                                             <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
@@ -771,6 +777,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4026)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <left>0</left>
                                             <top>40</top>
                                             <height>250</height>
@@ -880,6 +887,7 @@
                                         <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
                                         <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4027)">Conditional</animation>
                                         <control type="image">
+                                            <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                             <left>0</left>
                                             <top>0</top>
                                             <height>330</height>

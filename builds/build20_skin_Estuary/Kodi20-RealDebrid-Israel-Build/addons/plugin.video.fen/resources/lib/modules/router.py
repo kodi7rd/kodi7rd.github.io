@@ -10,7 +10,6 @@ def services_finished():
 
 def routing(sys):
 	if not services_finished():
-		from modules.kodi_utils import make_fake_widget
 		if make_fake_widget(): return
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	_get = params.get

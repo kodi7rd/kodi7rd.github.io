@@ -462,7 +462,7 @@ def tvshow_expiry(current_date, meta):
 	try:
 		if meta['status'] in finished_show_check: return EXPIRES_182_DAYS
 		next_episode_to_air = meta['extra_info'].get('next_episode_to_air', None)
-		if not next_episode_to_air: return EXPIRES_7_DAYS
+		if not next_episode_to_air: return EXPIRES_4_DAYS
 		expiration = subtract_dates_function(jsondate_to_datetime_function(next_episode_to_air['air_date'], date_format, remove_time=True), current_date)
 	except: return EXPIRES_4_DAYS
 	return max(expiration, EXPIRES_4_DAYS)

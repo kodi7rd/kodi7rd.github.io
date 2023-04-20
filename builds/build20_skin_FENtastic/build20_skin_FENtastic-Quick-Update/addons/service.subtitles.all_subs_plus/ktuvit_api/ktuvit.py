@@ -182,11 +182,12 @@ def parse_ktuvit_response(response,f_id,prefix_ktuvit,color_ktuvit):
         #nlabel2 = '[COLOR '+color_ktuvit+']'+str(z)+'. '+prefix_ktuvit+' '+nm+'[/COLOR]'
         nicon = '[COLOR '+color_ktuvit+']'+prefix_ktuvit+'[/COLOR]'
         nthumb = "he"
-        url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s" % (MyScriptID,
+        url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
                                                                               nm,
                                                                               "ktuvit$$$"+data+'$$$'+f_id,
                                                                               'ktuvit',
-                                                                              nlabel)
+                                                                              nlabel,
+                                                                              nthumb)
 
         json_data={'url':url,
                             'label':nlabel,

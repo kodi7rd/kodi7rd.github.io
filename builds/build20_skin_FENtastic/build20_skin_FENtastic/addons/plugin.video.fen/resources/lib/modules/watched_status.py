@@ -4,7 +4,7 @@ from apis.trakt_api import trakt_watched_status_mark, trakt_official_status, tra
 from caches.trakt_cache import clear_trakt_collection_watchlist_data
 from modules import kodi_utils, settings, metadata
 from modules.utils import get_datetime, adjust_premiered_date, sort_for_article, make_thread_list
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 ls, database, notification, kodi_refresh = kodi_utils.local_string, kodi_utils.database, kodi_utils.notification, kodi_utils.kodi_refresh
 sleep, progressDialogBG, Thread, get_video_database_path = kodi_utils.sleep, kodi_utils.progressDialogBG, kodi_utils.Thread, kodi_utils.get_video_database_path
@@ -35,19 +35,18 @@ def get_next_episodes(watched_info):
 def get_recently_watched(media_type, short_list=1, dummy1=None):
 	watched_indicators = watched_indicators_function()
 	if media_type == 'movie':
-		_watched = get_watched_info_movie(watched_indicators)
-		data = [{'media_id': i[0], 'title': i[1], 'last_played': i[2]} for i in _watched]
+		data = sorted([{'media_id': i[0], 'title': i[1], 'last_played': i[2]} for i in get_watched_info_movie(watched_indicators)], key=lambda x: x['last_played'], reverse=True)
 	else:
-		seen = set()
-		_watched = get_watched_info_tv(watched_indicators)
-		_watched.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
-		if short_list: data = [{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'last_played': i[4], 'title': i[3]}
-				for i in _watched]
-		else: data = [{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'last_played': i[4], 'title': i[3]}
-				for i in _watched if not (i[0] in seen or seen.add(i[0]))]
-	watched_info = sorted(data, key=lambda k: (k['last_played']), reverse=True)
-	if short_list: return watched_info[0:20]
-	else: return watched_info
+		if short_list:
+			data = sorted([{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'last_played': i[4], 'title': i[3]}
+						for i in get_watched_info_tv(watched_indicators)], key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)
+		else:
+			seen = set()
+			data = sorted([{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'last_played': i[4], 'title': i[3]}
+						for i in sorted(get_watched_info_tv(watched_indicators), key=lambda x: (x[4], x[0], x[1], x[2]), reverse=True) if not (i[0] in seen or seen.add(i[0]))],
+						key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)
+	if short_list: return data[0:20]
+	else: return data
 
 def get_progress_percent(bookmarks, tmdb_id, season='', episode=''):
 	try: percent = str(round(float(detect_bookmark(bookmarks, tmdb_id, season, episode)[0])))
@@ -285,7 +284,6 @@ def mark_tvshow(params):
 			display = 'S%.2dE%.2d' % (int(season_number), int(ep_number))
 			progressDialogBG.update(int(float(count)/float(total)*100), ls(32577), '%s' % display)
 			episode_date, premiered = adjust_premiered_date(ep['premiered'], date_offset())
-			if int(season_number) == 2: logger('episode_date', episode_date)
 			if episode_date and current_date < episode_date: continue
 			insert_append(make_batch_insert(action, 'episode', tmdb_id, season_number, ep_number, last_played, title))
 	batch_watched_status_mark(watched_indicators, insert_list, action)

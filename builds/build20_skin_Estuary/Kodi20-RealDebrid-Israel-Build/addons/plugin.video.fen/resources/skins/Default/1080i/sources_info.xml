@@ -114,7 +114,7 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[Window.Property(extra_info)][/UPPERCASE]</label>
+                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32106]: [/B][/COLOR]$INFO[Window.Property(hash)][/UPPERCASE]</label>
                 </control>
                 <control type="label">
                     <top>300</top>
@@ -124,17 +124,18 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[Window.Property(name)][/UPPERCASE]</label>
+                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32605]: [/B][/COLOR]$INFO[Window.Property(extra_info)][/UPPERCASE]</label>
                 </control>
-                <control type="label">
-                    <top>350</top>
+                <control type="textbox">
+                    <top>340</top>
                     <width max="1275">auto</width>
-                    <height>20</height>
+                    <!-- <height>97</height> -->
+                    <height>140</height>
                     <font>font14</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
-                    <aligny>center</aligny>
-                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32106]: [/B][/COLOR]$INFO[Window.Property(hash)][/UPPERCASE]</label>
+                    <aligny>top</aligny>
+                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.fen 32228]: [/B][/COLOR]$INFO[Window.Property(name)][/UPPERCASE]</label>
                 </control>
             </control>
         </control>

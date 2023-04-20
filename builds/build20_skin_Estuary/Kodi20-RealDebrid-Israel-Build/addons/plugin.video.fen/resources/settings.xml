@@ -2562,7 +2562,7 @@
 		<category id="hidden" label="32456" help="">
 			<!-- Tools -->
 			<group id="1" label="32456">
-				<setting id="open_fen_tools" type="action" label="33141" help="">
+				<setting id="tools.open" type="action" label="33141" help="">
 					<level>0</level>
 					<data>ReplaceWindow(Videos,plugin://plugin.video.fen/?mode=navigator.tools)</data>
 					<constraints>
@@ -2571,6 +2571,31 @@
 					<control type="button" format="action">
 						<close>true</close>
 					</control>
+				</setting>
+				<setting id="tools.maintenance" type="action" label="32003" help="">
+					<level>0</level>
+					<data>ReplaceWindow(Videos,plugin://plugin.video.fen/?mode=navigator.maintenance)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting id="tools.toggle_language_invoker" type="action" label="33017" help="">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.fen/?mode=toggle_language_invoker)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting id="tools.make_fen_work" type="boolean" label="33144" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
 				</setting>
 			<!-- Hidden -->
 				<setting id="trakt.expires" type="string" help="">
@@ -2942,9 +2967,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="extras.enabled_menus" type="string" help="">
+				<setting id="extras.enable_menus" type="string" help="">
 					<level>0</level>
-					<default>2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</default>
+					<default>2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>

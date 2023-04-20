@@ -10,6 +10,8 @@ from threading import Thread, activeCount
 from urllib.parse import unquote, unquote_plus, urlencode, quote, parse_qsl, urlparse
 from modules import icons
 
+try: xbmc_actor = xbmc.Actor
+except: xbmc_actor = None
 getLocalizedString = Addon().getLocalizedString
 player, xbmc_player, numeric_input, xbmc_monitor, translatePath = xbmc.Player(), xbmc.Player, 1, xbmc.Monitor, xbmcvfs.translatePath
 ListItem, getSkinDir, log, getCurrentWindowId, Window = xbmcgui.ListItem, xbmc.getSkinDir, xbmc.log, xbmcgui.getCurrentWindowId, xbmcgui.Window
@@ -22,8 +24,6 @@ addDirectoryItem, addDirectoryItems, setContent, setCategory = xbmcplugin.addDir
 window_xml_left_action, window_xml_right_action, window_xml_up_action, window_xml_down_action, window_xml_info_action = 1, 2, 3, 4, 11
 window_xml_selection_actions, window_xml_closing_actions, window_xml_context_actions = (7, 100), (9, 10, 13, 92), (101, 108, 117)
 kodi_version = int(get_infolabel('System.BuildVersion')[0:2])
-try: xbmc_actor = xbmc.Actor
-except: xbmc_actor = None
 img_url = 'https://i.imgur.com/%s.png'
 empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.item_next
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
@@ -46,6 +46,7 @@ addon_icon = translatePath('special://home/addons/plugin.video.fen/resources/med
 addon_fanart = translatePath('special://home/addons/plugin.video.fen/resources/media/fen_fanart.png')
 addon_clearlogo = translatePath('special://home/addons/plugin.video.fen/resources/media/fen_clearlogo.png')
 databases_path = translatePath('special://profile/addon_data/plugin.video.fen/databases/')
+colorpalette_path = translatePath('special://profile/addon_data/plugin.video.fen/color_palette/')
 navigator_db = translatePath(database_path_raw % current_dbs[0])
 watched_db = translatePath(database_path_raw % current_dbs[1])
 favorites_db = translatePath(database_path_raw % current_dbs[2])
