@@ -196,6 +196,7 @@
     <setting id="subtitles.language_primary" default="true">eng</setting>
     <setting id="subtitles.language_secondary" default="true">None</setting>
     <setting id="subtitles.auto_enable" default="true">true</setting>
+    <setting id="tools.make_fen_work" default="true">false</setting>
     <setting id="trakt.expires" default="true">0</setting>
     <setting id="trakt.refresh" default="true">0</setting>
     <setting id="trakt.token" default="true">0</setting>
@@ -205,7 +206,7 @@
     <setting id="meta_language">he</setting>
     <setting id="meta_mpaa_region" default="true">US</setting>
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1679838515</setting>
+    <setting id="database.maintenance.due">1682262023</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -224,9 +225,9 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.1.05</setting>
+    <setting id="version_number">3.1.08</setting>
     <setting id="dummy_setting" default="true">foo</setting>
-    <setting id="extras.enabled_menus" default="true">2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
+    <setting id="extras.enable_menus" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="fen.highlight">FF0166FF</setting>
     <setting id="provider.furk_colour" default="true">FFE6002E</setting>
     <setting id="provider.easynews_colour" default="true">FF00B3B2</setting>
@@ -261,6 +262,7 @@
     <setting id="extras.movie.button16" default="true">show_director</setting>
     <setting id="extras.movie.button17" default="true">show_options</setting>
     <setting id="custom_skins.version" default="true">0.0.0</setting>
+    <setting id="extras.enabled_menus" default="true">2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="paginate.limit" default="true">40</setting>
     <setting id="paginate.reference" default="true">0</setting>
     <setting id="paginate.widget_only" default="true">false</setting>
