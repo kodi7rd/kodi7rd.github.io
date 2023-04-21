@@ -123,7 +123,7 @@ def filter_problematic_subtitle_names_list(unique_subtitles_list, media_type, ti
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
     # Filter the unique subtitles list to only include subtitles whose name length is greater than stripped_media_name_length
-    return [subtitle_name for subtitle_name in unique_subtitles_list if len(string_utils.clean_string(subtitle_name)) > stripped_media_name_length]
+    return [subtitle_name.replace("'", "") for subtitle_name in unique_subtitles_list if len(string_utils.clean_string(subtitle_name)) > stripped_media_name_length]
     
     
 def get_imdb_id(media_type, tmdb_id):
@@ -174,12 +174,12 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] |'
     """
     
-    total_subtitles_found_text = f"[COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR] | " if total_subtitles_found_count > 0 else ""
+    total_subtitles_found_text = f"[B][COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR][/B] | " if total_subtitles_found_count > 0 else "[B][COLOR deepskyblue]לא נמצאו כתוביות[/COLOR][/B] | "
         
     if subtitles_matched_count > 0:
-        subtitles_matched_count_text = f"[COLOR yellow]{subtitles_matched_count} מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
+        subtitles_matched_count_text = f"[B][COLOR yellow]{subtitles_matched_count} מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR][/B] | "
     else:
-        subtitles_matched_count_text = f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
+        subtitles_matched_count_text = f"[B][COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR][/B] | "
         
     kodi_utils.logger("KODI-RD-IL", f"FEN sources with matched subtitles: {subtitles_matched_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
@@ -214,9 +214,10 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
     highest_sync_percent, matched_subtitle_name, matched_subtitle_website_name  = calculate_highest_sync_percent_between_subtitles_and_fen_source(total_subtitles_found_list, original_fen_source_file_name, quality)
     
     if highest_sync_percent >= minimum_sync_percent:
+    
         subtitles_matched_count = 1
-        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]"
-        
+        percent_color = "yellow" if highest_sync_percent == 100 else "cyan"
+        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR {percent_color}]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]"
         
         kodi_utils.logger("KODI-RD-IL", f"Match found! SYNC PERCENT: {highest_sync_percent} | Between FEN Original Source File Name: {original_fen_source_file_name} To Subtitle Name: {matched_subtitle_name}")
         kodi_utils.logger("KODI-RD-IL", f"To Subtitle Name: {matched_subtitle_name}")
@@ -297,7 +298,7 @@ def calculate_sync_percent_between_subtitles_and_fen_source(subtitle_name, array
     array_fen_source_file_name = [element.strip().lower() for element in array_fen_source_file_name if element != '']
     
     array_subtitle_name = subtitle_name.strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").split(".")
-    array_subtitle_name=[element.strip().lower() for element in array_subtitle_name if element != '']
+    array_subtitle_name = [element.strip().lower() for element in array_subtitle_name if element != '']
 
     if quality not in array_fen_source_file_name and quality in array_subtitle_name:
         array_fen_source_file_name.append(quality)
