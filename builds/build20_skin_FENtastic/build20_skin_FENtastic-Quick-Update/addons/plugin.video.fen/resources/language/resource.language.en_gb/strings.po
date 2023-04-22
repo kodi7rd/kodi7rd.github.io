@@ -58,6 +58,11 @@ msgctxt "#400011"
 msgid "BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]"
 msgstr "BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]"
 
+# Fen sources_results.xml
+msgctxt "#400012"
+msgid "[B]Results[/B]"
+msgstr "[B]מקורות[/B]"
+
 #########################################
 
 msgctxt "#32001"
