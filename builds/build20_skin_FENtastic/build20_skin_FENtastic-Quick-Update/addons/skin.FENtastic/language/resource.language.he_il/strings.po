@@ -363,6 +363,14 @@ msgctxt "#70011"
 msgid "Status"
 msgstr "[B]סטטוס[/B]"
 
+msgctxt "#70012"
+msgid "Season"
+msgstr "[B]עונה[/B]"
+
+msgctxt "#70013"
+msgid "Episode"
+msgstr "[B]פרק[/B]"
+
 #######################################
 
 msgctxt "#31080"
