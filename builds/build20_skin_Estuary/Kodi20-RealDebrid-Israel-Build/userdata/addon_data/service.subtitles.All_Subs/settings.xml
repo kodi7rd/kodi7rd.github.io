@@ -25,7 +25,7 @@
     <setting id="ExcludeAddos" default="true" />
     <setting id="Debug" default="true">false</setting>
     <setting id="show_debug" default="true">false</setting>
-    <setting id="subs_width">1080</setting>
+    <setting id="subs_width">1130</setting>
     <setting id="subs_hight">360</setting>
     <setting id="subs_px">1</setting>
     <setting id="subs_py">7</setting>

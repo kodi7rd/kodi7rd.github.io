@@ -60,7 +60,7 @@
     </category>
 	<category label="חלון כתוביות">
 
-		<setting id="subs_width" label="רוחב חלון" type="number" default="1080"/>
+		<setting id="subs_width" label="רוחב חלון" type="number" default="1130"/>
 		<setting id="subs_hight" label="גובה חלון" type="number" default="360" />
 		<setting id="subs_px" label="מיקום X" type="number" default="1" />
 		<setting id="subs_py" label="מיקום Y" type="number" default="7" />
