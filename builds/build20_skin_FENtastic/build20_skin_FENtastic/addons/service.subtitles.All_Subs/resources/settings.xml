@@ -45,7 +45,7 @@
 		
 		<setting label="הורדת כתוביות אוטומטית" type="lsep"/>
 		<setting id="autosub" label="אפשר הורדת כתוביות אוטומטית" type="bool" default="true" />
-		<setting id="use_video_tagline_only_for_sort_subtitles" label="התאמה לפי אחוזים מTagLine בלבד" type="bool" default="true" />
+		<setting id="use_video_tagline_only_for_sort_subtitles" label="התאמה לפי אחוזים מTagLine בלבד" type="bool" default="false" />
 		<setting id="pause" label="השהה ווידאו בזמן חיפוש כתוביות" type="bool" default="false" />
 		<setting id="ExcludeTime" type="number" label="אל תוריד לסרטון קצר מ-" default="1"/> 
 		
@@ -60,7 +60,7 @@
     </category>
 	<category label="חלון כתוביות">
 
-		<setting id="subs_width" label="רוחב חלון" type="number" default="1130"/>
+		<setting id="subs_width" label="רוחב חלון" type="number" default="1140"/>
 		<setting id="subs_hight" label="גובה חלון" type="number" default="360" />
 		<setting id="subs_px" label="מיקום X" type="number" default="1" />
 		<setting id="subs_py" label="מיקום Y" type="number" default="7" />

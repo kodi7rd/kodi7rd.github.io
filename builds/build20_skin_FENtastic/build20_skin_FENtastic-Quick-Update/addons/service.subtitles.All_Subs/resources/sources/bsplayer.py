@@ -116,18 +116,19 @@ def __set_size_and_hash():
     
 
     f = xbmcvfs.File( xbmc.Player().getPlayingFile())
-
+    filehash=0
+    filesize=0
     try:
         filesize = f.size()
 
         # used for mocking
         try:
             filehash = f.hash()
-            return
+            return 0,0
         except: pass
 
         if filesize < __64k * 2:
-            return
+            return 0,0
 
         # ref: https://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes
         # filehash = filesize + 64bit sum of the first and last 64k of the file
@@ -141,6 +142,7 @@ def __set_size_and_hash():
         filehash = "%016x" % result.filehash
     finally:
         f.close()
+
     return filehash,filesize
 def __get_url():
     from datetime import datetime
@@ -207,6 +209,8 @@ def get_subs(item,file_name=""):
     x=requests.post('http://r4.api.subs.bplayer.org/subs-rest/searchSubtitles',headers=headers,data=data).json()
     results_list=[]
     for items in x['data']:
+        if 'subName' not in items:
+            continue
         name = items['subName']
         lang_id = items['subLang']
  

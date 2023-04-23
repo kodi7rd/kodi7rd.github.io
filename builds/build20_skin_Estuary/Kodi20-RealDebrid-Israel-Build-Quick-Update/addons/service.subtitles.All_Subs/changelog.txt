@@ -1,5 +1,6 @@
 ﻿[COLOR yellow][B]v3.1.4[/B][/COLOR]
 * Improve subtitles matching by sync percentage
+* Improve Subtitles Window Look (Add playing file name + total subtitles found count)
 [COLOR yellow][B]v3.1.3[/B][/COLOR]
 * Disable autosub on PVR (IPTV Client)
 [COLOR yellow][B]v3.1.2[/B][/COLOR]

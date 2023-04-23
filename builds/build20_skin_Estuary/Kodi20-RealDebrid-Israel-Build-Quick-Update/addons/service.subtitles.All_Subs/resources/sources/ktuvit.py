@@ -255,7 +255,7 @@ def download(download_data,MySubFolder):
     with open(archive_file, 'wb') as handle:
         for block in response.iter_content(1024):
             handle.write(block)
-   
+    log.warning(archive_file)
     sub_file=extract(archive_file,MySubFolder)
     return sub_file
              

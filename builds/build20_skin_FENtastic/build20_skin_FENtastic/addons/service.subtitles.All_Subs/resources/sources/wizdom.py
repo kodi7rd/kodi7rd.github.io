@@ -48,6 +48,8 @@ def get_subs(item):
     if json_object!=0:
         for item_data in json_object:
             download_data={}
+            if "id" not in item_data:
+                continue
             download_data['id']=item_data["id"]
             url = "plugin://%s/?action=download&filename=%s&id=%s&download_data=%s&source=wizdom&language=Hebrew" % (
                     MyScriptID, que(item_data["versioname"]), item_data["id"],que(json.dumps(download_data)))

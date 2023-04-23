@@ -30,7 +30,11 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             log.warning(video_data)
             self.video_data=video_data
             self.setGeometry(wd, hd, 9, 1,pos_x=px, pos_y=py)
-            self.time_c=0
+            
+            ############KODI-RD-IL###################
+            self.total_subs_count=len(f_list)
+            #########################################
+            
             self.all_subs=all_subs
             self.last_sub_index=last_sub_index
             self.set_info_controls()
@@ -47,20 +51,23 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
                     self.label_info.setLabel(general.show_msg+' - '+str(general.progress_msg))
                 xbmc.sleep(500)
         def set_info_controls(self):
-          
-          
-             # Label
-            self.label = pyxbmct.Label(str(int(self.time_c)))
-            self.placeControl(self.label,  4, 0, 3, 1)
-            
-            self.label_info = pyxbmct.Label('מחכה לבחירתך')
+        
+            ############KODI-RD-IL###################
+            # File Name Label
+            self.video_file_name_label = f"[B][COLOR yellow]{self.video_data['Tagline']}[/COLOR][/B]"
+            self.label_info = pyxbmct.Label(self.video_file_name_label)
             self.placeControl(self.label_info,  0, 0, 1, 1)
+
+            # Total Subtitles Count Label
+            self.label = pyxbmct.Label(f"[B]{str(self.total_subs_count)} כתוביות נמצאו[/B]")
+            self.placeControl(self.label,  7, 0, 3, 1)
+            #########################################
             
             self.list = pyxbmct.List()
             self.placeControl(self.list, 1, 0, 7, 1)
             self.connect(self.list, self.click_list)
             
-            self.button = pyxbmct.Button('Close')
+            self.button = pyxbmct.Button('[B]סגור[/B]')
             self.placeControl(self.button, 8, 0)
             # Connect control to close the window.
             self.connect(self.button, self.click_c)
@@ -106,6 +113,10 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
                 self.set_active_controls()
                 from resources.modules import general
                 general.show_msg="END"
+                
+                ############KODI-RD-IL###################
+                self.label_info.setLabel(self.video_file_name_label)
+                #########################################
         def click_c(self):
             global list_index
             
@@ -132,7 +143,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
                     pass
                 
                 if (self.last_sub_index==items[8]):
-                    added_string='[COLOR deepskyblue][B][I]>> '
+                    added_string='[COLOR yellow][B][I]SELECTED >> '
                 elif val:
                     added_string='[COLOR deepskyblue][B][I]'
                 else:
