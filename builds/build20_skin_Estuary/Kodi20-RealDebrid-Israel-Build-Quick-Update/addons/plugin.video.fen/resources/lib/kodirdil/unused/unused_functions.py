@@ -1,4 +1,31 @@
-        
+def filter_problematic_subtitle_names_list(unique_subtitles_list, media_type, title, season, episode, year):
+
+    """
+    Filter a list of subtitles to remove problematic ones with short names.
+
+    Args:
+        unique_subtitles_list (list): A list of unique subtitle names.
+        media_type (str): The type of media (e.g., movie, tvshow).
+        title (str): The title of the media.
+        season (str): The season of the media (if applicable).
+        episode (str): The episode of the media (if applicable).
+        year (str): The year of the media (if applicable).
+
+    Returns:
+        list: A filtered list of subtitles that have a name length greater than the length of the stripped media name.
+
+    Example: top.gun.maverick.2022.srt
+    """
+    
+    stripped_media_name = string_utils.strip_media_name(media_type, title, season, episode, year)
+    stripped_media_name_length = len(stripped_media_name)
+    kodi_utils.logger("KODI-RD-IL", f"stripped_media_name_length: {stripped_media_name_length}")
+    kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+    
+    # Filter the unique subtitles list to only include subtitles whose name length is greater than stripped_media_name_length
+    return [subtitle_name.replace("'", "") for subtitle_name in unique_subtitles_list if len(string_utils.clean_string(subtitle_name)) > stripped_media_name_length]
+    
+    
 def generate_subtitles_match_top_panel_text_for_100_match(total_subtitles_found_count, subtitles_matched_count):
     """Generates a text string for a Fen results top panel notification displaying the number of subtitles found and sources with 100% subtitle match.
 

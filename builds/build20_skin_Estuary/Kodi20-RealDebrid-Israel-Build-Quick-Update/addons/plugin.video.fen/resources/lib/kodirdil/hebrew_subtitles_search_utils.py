@@ -15,8 +15,7 @@ from kodirdil.websites import subscene
 #########################################
 
 ########### Settings ####################
-filter_problematic_subtitle_names = kodi_utils.get_setting('filter_problematic_subtitle_names', 'true') == 'true'
-minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '85'))
+minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '80'))
 #########################################
 
 ########### Constants ###################
@@ -84,46 +83,29 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     
     # Convert the set back to a list
     unique_subtitles_list = list(unique_subtitles_dict.keys())
-    kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list BEFORE problematic subtitles filter: {str(unique_subtitles_list)}")
-    kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
-    # Problematic Subtitles Filtering (if filter_problematic_subtitle_names setting enabled)
-    log_message = "Filtering problematic subtitles..." if filter_problematic_subtitle_names else "Skipping filtering problematic subtitles..."
-    kodi_utils.logger("KODI-RD-IL", f"SETTING filter_problematic_subtitle_names is: {filter_problematic_subtitle_names}. {log_message}")
-    if filter_problematic_subtitle_names:
-        unique_subtitles_list = filter_problematic_subtitle_names_list(unique_subtitles_list, media_type, title, season, episode, year)
-        kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list AFTER problematic subtitles filter: : {str(unique_subtitles_list)}")
+    unique_subtitles_list = strip_problematic_chars_from_subtitle_names_list(unique_subtitles_list)
+    
+    kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list: {str(unique_subtitles_list)}")
+    kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
     # Write the unique subtitles list to the hebrew_subtitles_db cache table if it is not empty
     db_utils.write_unique_subtitles_to_hebrew_subtitles_db(unique_subtitles_list, website_subtitles_dict)
   
- 
-def filter_problematic_subtitle_names_list(unique_subtitles_list, media_type, title, season, episode, year):
+  
+def strip_problematic_chars_from_subtitle_names_list(unique_subtitles_list):
 
     """
-    Filter a list of subtitles to remove problematic ones with short names.
+    Removes problematic characters (e.g. apostrophes) from each string in a list of subtitle names.
 
     Args:
-        unique_subtitles_list (list): A list of unique subtitle names.
-        media_type (str): The type of media (e.g., movie, tvshow).
-        title (str): The title of the media.
-        season (str): The season of the media (if applicable).
-        episode (str): The episode of the media (if applicable).
-        year (str): The year of the media (if applicable).
+        unique_subtitles_list (list): A list of subtitle names.
 
     Returns:
-        list: A filtered list of subtitles that have a name length greater than the length of the stripped media name.
-
-    Example: top.gun.maverick.2022.srt
+        list: A new list where each string in unique_subtitles_list has been stripped of problematic characters.
     """
-    
-    stripped_media_name = string_utils.strip_media_name(media_type, title, season, episode, year)
-    stripped_media_name_length = len(stripped_media_name)
-    kodi_utils.logger("KODI-RD-IL", f"stripped_media_name_length: {stripped_media_name_length}")
-    kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-    
-    # Filter the unique subtitles list to only include subtitles whose name length is greater than stripped_media_name_length
-    return [subtitle_name.replace("'", "") for subtitle_name in unique_subtitles_list if len(string_utils.clean_string(subtitle_name)) > stripped_media_name_length]
+
+    return [subtitle_name.replace("'", "") for subtitle_name in unique_subtitles_list]
     
     
 def get_imdb_id(media_type, tmdb_id):
@@ -153,33 +135,52 @@ def get_imdb_id(media_type, tmdb_id):
         return ''
         
 
-def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count):
+def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count, total_quality_counts):
 
-    """Generates a formatted string to display a notification on a Fen results top panel.
-    
-    The string shows the total number of subtitles found and the number of sources with a subtitle match percentage
+    """
+    Generate a formatted string to display a notification on a Fen results top panel.
+
+    The function displays the number of subtitles found and the number of sources with a subtitle match percentage
     greater than or equal to the given minimum_sync_percent argument. The function also logs the number of sources 
     with matched subtitles.
 
     Args:
         total_subtitles_found_count (int): The total number of subtitles found.
         subtitles_matched_count (int): The number of sources with a subtitle match percentage greater than or equal to the minimum_sync_percent.
+        total_quality_counts (Dict[str, int]): A dictionary containing the count of each subtitle quality.
+        minimum_sync_percent (int): The minimum percentage of subtitle match to display in the formatted string.
 
     Returns:
-        str: The formatted string displaying the total number of subtitles found and sources with a subtitle match percentage
+        str: A formatted string displaying the total number of subtitles found and sources with a subtitle match percentage
         greater than or equal to the given minimum_sync_percent.
 
     Example:
-        >>> generate_subtitles_match_top_panel_text_for_sync_percent_match(10, 5, 90)
-        '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] |'
+        >>> generate_subtitles_match_top_panel_text_for_sync_percent_match(10, 5, {"4K": 2, "1080p": 3, "720p": 0, "SD": 0}, 90)
+        '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] | [COLOR yellow]מחפש התאמה מעל 90%[/COLOR] | [COLOR FF0166FF]SD: 0[/COLOR] | [COLOR FF3C9900]720P: 0[/COLOR] | [COLOR FF3CFA38]1080P: 3[/COLOR] | [COLOR FFFF00FE]4K: 2[/COLOR] | סך הכל '
     """
     
-    total_subtitles_found_text = f"[COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR] | " if total_subtitles_found_count > 0 else "[B][COLOR deepskyblue]לא נמצאו כתוביות[/COLOR] | "
-        
+    total_subtitles_found_text = (f"[COLOR deepskyblue]{total_subtitles_found_count} כתוביות נמצאו[/COLOR] | " 
+                                  if total_subtitles_found_count > 0 
+                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות לתוכן זה[/COLOR] | ")
+
+    subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
+                                   if total_subtitles_found_count > 0 and subtitles_matched_count == 0
+                                   else "")
     if subtitles_matched_count > 0:
-        subtitles_matched_count_text = f"[COLOR yellow]{subtitles_matched_count} מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
-    else:
-        subtitles_matched_count_text = f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
+    
+        # Get the counts for each quality from the total quality counts dictionary
+        count_4k = total_quality_counts.get("4K", 0)
+        count_1080p = total_quality_counts.get("1080p", 0)
+        count_720p = total_quality_counts.get("720p", 0)
+        count_sd = total_quality_counts.get("SD", 0)
+        
+        text_minimum_sync_percent = f"[COLOR yellow]מחפש התאמה מעל {minimum_sync_percent}%[/COLOR]"
+        text_sd = f"[COLOR FF0166FF]SD: {count_sd}[/COLOR]"
+        text_720p = f"[COLOR FF3C9900]720P: {count_720p}[/COLOR]"
+        text_1080p = f"[COLOR FF3CFA38]1080P: {count_1080p}[/COLOR]"
+        text_4k = f"[COLOR FFFF00FE]4K: {count_4k}[/COLOR]"
+        
+        subtitles_matched_count_text = (f"{text_minimum_sync_percent} | {text_sd} | {text_720p} | {text_1080p} | {text_4k} | סך הכל ")
         
     kodi_utils.logger("KODI-RD-IL", f"FEN sources with matched subtitles: {subtitles_matched_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
@@ -200,13 +201,26 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
         quality (str): The quality of the video file.
 
     Returns:
-        Tuple[int, str]: A tuple containing subtitles_matched_count (an integer indicating the number of sources with a subtitle match percentage
-        greater than or equal to minimum_sync_percent) and subtitle_matches_text (a formatted string indicating the name of the subtitle website and the sync percentage).
-
+        Dict: A dictionary containing subtitles_matched_count (an integer indicating the number of sources with a subtitle match percentage greater than or equal to minimum_sync_percent), subtitle_matches_text (a formatted string indicating the name of the subtitle website and the sync percentage), and the count for each quality.
+        
     Example:
         >>> calculate_highest_sync_percent_and_set_match_text(["sub1", "sub2"], "FEN source", "1080p", 90)
-        (1, '[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]')
+        {
+            "subtitles_matched_count": 1,
+            "subtitle_matches_text": '[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]',
+            "4k_count": 5,
+            "1080p_count": 1,
+            "720p_count": 3,
+            "sd_count": 0
+        }
     """
+    
+    quality_counts_for_source = {
+        "4K": 0,
+        "1080p": 0,
+        "720p": 0,
+        "SD": 0
+    }
     
     subtitles_matched_count = 0
     subtitle_matches_text = ""
@@ -216,14 +230,17 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
     if highest_sync_percent >= minimum_sync_percent:
     
         subtitles_matched_count = 1
-        percent_color = "cyan" if highest_sync_percent == 100 else "yellow"
-        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR {percent_color}]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]"
+        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]"
+        
+        # Increment the quality count if a match is found
+        if quality in quality_counts_for_source:
+            quality_counts_for_source[quality] = 1
         
         kodi_utils.logger("KODI-RD-IL", f"Match found! SYNC PERCENT: {highest_sync_percent} | Between FEN Original Source File Name: {original_fen_source_file_name} To Subtitle Name: {matched_subtitle_name}")
         kodi_utils.logger("KODI-RD-IL", f"To Subtitle Name: {matched_subtitle_name}")
         kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
         
-    return subtitles_matched_count, subtitle_matches_text
+    return subtitles_matched_count, subtitle_matches_text, quality_counts_for_source
 
 
 def calculate_highest_sync_percent_between_subtitles_and_fen_source(total_subtitles_found_list, original_fen_source_file_name, quality):
@@ -246,9 +263,11 @@ def calculate_highest_sync_percent_between_subtitles_and_fen_source(total_subtit
     # Reformat quality from Fen to correct format.
     quality_mapping = {
         "4K": "2160p",
+        "1080p": "1080p",
+        "720p": "720p",
         "SD": "480p"
     }
-     # If no map found - get default quality value. (1080p / 720p)
+    
     quality = quality_mapping.get(quality, quality)
     
     array_fen_source_file_name = original_fen_source_file_name.strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")

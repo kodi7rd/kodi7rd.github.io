@@ -33,13 +33,13 @@
             <control type="label">
                 <left>70</left>
                 <top>22</top>
-                <width max="1100">auto</width>
+                <width max="1600">auto</width>
                 <height>20</height>
                 <font>font10</font> <!-- FEN_21 -->
                 <textcolor>FFFFFFFF</textcolor>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>[UPPERCASE][B]$INFO[Window.Property(total_results)][/B] $ADDON[plugin.video.fen 400012] [COLOR=$INFO[Window(10000).Property(fen.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
+                <label>[UPPERCASE][B]$INFO[Window.Property(total_results)][/B] $ADDON[plugin.video.fen 400010] [COLOR=$INFO[Window(10000).Property(fen.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
                 <animation effect="slide" start="0,0" end="0,-15" time="0" center="auto" condition="String.StartsWith(Window.Property(window_format),media) + !String.IsEmpty(Window.Property(clearlogo))">Conditional</animation>
             </control>
         </control>

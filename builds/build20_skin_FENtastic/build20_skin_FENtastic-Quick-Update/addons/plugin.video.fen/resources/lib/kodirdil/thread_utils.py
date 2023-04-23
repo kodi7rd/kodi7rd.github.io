@@ -72,7 +72,7 @@ def manage_search_hebrew_subtitles_thread(search_hebrew_subtitles_thread, search
         while search_hebrew_subtitles_thread is not None and search_hebrew_subtitles_thread.is_alive():
             #kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
             kodi_utils.logger("KODI-RD-IL", "SLEEP search_hebrew_subtitles_thread - Still alive. sleeping 200ms...")
-            kodi_utils.sleep(200)
+            kodi_utils.sleep(100)
             count += 1
             if count > 100:
                 kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")

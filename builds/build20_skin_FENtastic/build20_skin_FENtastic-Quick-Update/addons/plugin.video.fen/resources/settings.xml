@@ -8,21 +8,11 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="filter_problematic_subtitle_names" type="boolean" label="40003" help="">
-					<level>0</level>
-					<default>true</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
 			</group>
-			<group id="2" label="40004">
-				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40005" help="">
+			<group id="2" label="40003">
+				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40004" help="">
 					<level>0</level>
-					<default>85</default>
+					<default>80</default>
 					<constraints>
 						<minimum>10</minimum>
 						<step>1</step>
@@ -38,8 +28,8 @@
 					</control>
 				</setting>
 			</group>
-			<group id="3" label="40006">
-				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
+			<group id="3" label="40005">
+				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40006" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -49,7 +39,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40008" help="">
+				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40007" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -59,7 +49,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40009" help="">
+				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40008" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -69,7 +59,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="400010" help="">
+				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="40009" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>

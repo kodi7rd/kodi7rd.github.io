@@ -113,6 +113,7 @@ class SourcesResults(BaseDialog):
                 # Initialize the subtitles found count and matched count
                 global total_subtitles_found_count
                 global subtitles_matched_count
+                global total_quality_counts
 
                 total_subtitles_found_count = len(total_subtitles_found_list)
                 subtitles_matched_count = 0
@@ -123,6 +124,14 @@ class SourcesResults(BaseDialog):
                 
                 kodi_utils.logger("KODI-RD-IL", f"Searching for subtitle matches above {minimum_sync_percent}%...")
                 kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+                
+                # # Initialize the total quality count
+                total_quality_counts = {
+                    "4K": 0,
+                    "1080p": 0,
+                    "720p": 0,
+                    "SD": 0
+                }
             #########################################
             
             for count, item in enumerate(results, 1):
@@ -147,8 +156,13 @@ class SourcesResults(BaseDialog):
                             original_fen_source_file_name = get('original_fen_source_file_name') or name
                             
                             # Sync Percentage Matching
-                            matches_count, subtitle_matches_text = hebrew_subtitles_search_utils.calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_fen_source_file_name, quality)
+                            matches_count, subtitle_matches_text, quality_counts_for_source = hebrew_subtitles_search_utils.calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_fen_source_file_name, quality)
                             subtitles_matched_count += matches_count
+                            
+                            # Add the quality counts for the current source to the total quality counts
+                            for quality_name, quality_count in quality_counts_for_source.items():
+                                if quality_name in total_quality_counts and quality_count > 0:
+                                    total_quality_counts[quality_name] += 1
                         #########################################
                         
                         source_site = upper(get('provider'))
@@ -219,8 +233,10 @@ class SourcesResults(BaseDialog):
                     
         ############KODI-RD-IL###################
         if enable_hebrew_subtitles_to_fen_sources_matching:
+            kodi_utils.logger("KODI-RD-IL", f"total_quality_counts: {str(total_quality_counts)}")
+            
             # Sync Percentage Matching
-            subtitles_match_top_panel_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count)
+            subtitles_match_top_panel_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count, total_quality_counts)
         #########################################
         
         self.setProperty('window_format', self.window_format)
