@@ -16,6 +16,7 @@ from kodirdil.websites import subscene
 
 ########### Settings ####################
 minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '80'))
+show_only_qualities_with_matches_found = kodi_utils.get_setting('show_only_qualities_with_matches_found', 'false') == 'true'
 #########################################
 
 ########### Constants ###################
@@ -159,11 +160,11 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] | [COLOR yellow]מחפש התאמה מעל 90%[/COLOR] | [COLOR FF0166FF]SD: 0[/COLOR] | [COLOR FF3C9900]720P: 0[/COLOR] | [COLOR FF3CFA38]1080P: 3[/COLOR] | [COLOR FFFF00FE]4K: 2[/COLOR] | סך הכל '
     """
     
-    total_subtitles_found_text = (f"[COLOR deepskyblue]{total_subtitles_found_count} כתוביות נמצאו[/COLOR] | " 
+    total_subtitles_found_text = (f"[COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR] | " 
                                   if total_subtitles_found_count > 0 
-                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות לתוכן זה[/COLOR] | ")
+                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות לתוכן זה[/COLOR] | סך הכל ")
 
-    subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | "
+    subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | סך הכל "
                                    if total_subtitles_found_count > 0 and subtitles_matched_count == 0
                                    else "")
     if subtitles_matched_count > 0:
@@ -174,13 +175,13 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         count_720p = total_quality_counts.get("720p", 0)
         count_sd = total_quality_counts.get("SD", 0)
         
-        text_minimum_sync_percent = f"[COLOR yellow]מחפש התאמה מעל {minimum_sync_percent}%[/COLOR]"
-        text_sd = f"[COLOR FF0166FF]SD: {count_sd}[/COLOR]"
-        text_720p = f"[COLOR FF3C9900]720P: {count_720p}[/COLOR]"
-        text_1080p = f"[COLOR FF3CFA38]1080P: {count_1080p}[/COLOR]"
-        text_4k = f"[COLOR FFFF00FE]4K: {count_4k}[/COLOR]"
+        text_minimum_sync_percent = f"[COLOR yellow]כמות מקורות עם התאמה מעל {minimum_sync_percent}% (לפי איכות):[/COLOR] |"
+        text_sd = f"[COLOR FF0166FF] SD: {count_sd}[/COLOR] |" if not show_only_qualities_with_matches_found or count_sd > 0 else ""
+        text_720p = f"[COLOR FF3C9900] 720P: {count_720p}[/COLOR] |" if not show_only_qualities_with_matches_found or count_720p > 0 else ""
+        text_1080p = f"[COLOR FF3CFA38] 1080P: {count_1080p}[/COLOR] |" if not show_only_qualities_with_matches_found or count_1080p > 0 else ""
+        text_4k = f"[COLOR FFFF00FE] 4K: {count_4k}[/COLOR] |" if not show_only_qualities_with_matches_found or count_4k > 0 else ""
         
-        subtitles_matched_count_text = (f"{text_minimum_sync_percent} | {text_sd} | {text_720p} | {text_1080p} | {text_4k} | סך הכל ")
+        subtitles_matched_count_text = (f"{text_minimum_sync_percent}{text_sd}{text_720p}{text_1080p}{text_4k} סך הכל ")
         
     kodi_utils.logger("KODI-RD-IL", f"FEN sources with matched subtitles: {subtitles_matched_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")

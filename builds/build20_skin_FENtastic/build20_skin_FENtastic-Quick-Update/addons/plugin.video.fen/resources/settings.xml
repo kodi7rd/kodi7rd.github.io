@@ -27,9 +27,19 @@
 						<popup>false</popup>
 					</control>
 				</setting>
+				<setting id="show_only_qualities_with_matches_found" type="boolean" label="40005" help="">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 			</group>
-			<group id="3" label="40005">
-				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40006" help="">
+			<group id="3" label="40006">
+				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -39,7 +49,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40007" help="">
+				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40008" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -49,7 +59,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40008" help="">
+				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40009" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -59,7 +69,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="40009" help="">
+				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="400010" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -1858,7 +1868,7 @@
 				</setting>
 				<setting id="results.list_format" type="string" label="32102" help="">
 					<level>0</level>
-					<default>List</default>
+					<default>MediaList</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=results_format_choice)</data>
 					</control>
