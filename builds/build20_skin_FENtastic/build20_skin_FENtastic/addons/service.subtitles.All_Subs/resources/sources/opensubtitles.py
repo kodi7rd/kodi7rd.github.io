@@ -61,7 +61,7 @@ class TimeoutTransport(xmlrpclib.Transport):
 class OSDBServer:
   def __init__( self, *args, **kwargs ):
     Addon=xbmcaddon.Addon()
-    socket.setdefaulttimeout(10)
+    socket.setdefaulttimeout(5)
     self.server = xmlrpclib.Server( BASE_URL_XMLRPC, verbose=0 ,transport=TimeoutTransport())
      
     login = self.server.LogIn(Addon.getSetting( "OSuser2" ), Addon.getSetting( "OSpass2" ), "en", "%s_v%s" %(__scriptname__.replace(" ","_"),__version__))
