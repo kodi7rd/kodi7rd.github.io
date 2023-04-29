@@ -572,9 +572,11 @@ class KodiMonitor(xbmc.Monitor):
                 
                 log.warning('current_list_item::'+str(current_list_item))
                 if Addon.getSetting("autosub")=='true':
-                  movieFullPath = xbmc.Player().getPlayingFile()
-                  
-                  excluded=isExcluded(movieFullPath,current_list_item)
+                  try:
+                      movieFullPath = xbmc.Player().getPlayingFile()
+                      
+                      excluded=isExcluded(movieFullPath,current_list_item)
+                  except: pass
                   if not excluded:
                     trigger=False
                   
