@@ -74,9 +74,9 @@ def manage_search_hebrew_subtitles_thread(search_hebrew_subtitles_thread, search
             kodi_utils.logger("KODI-RD-IL", "SLEEP search_hebrew_subtitles_thread - Still alive. sleeping 100ms...")
             kodi_utils.sleep(100)
             count += 1
-            if count > 100:
+            if count > 150:
                 kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-                kodi_utils.logger("KODI-RD-IL", "FORCE STOP search_hebrew_subtitles_thread -  runs longer than 10 seconds. stopping the thread...")
+                kodi_utils.logger("KODI-RD-IL", "FORCE STOP search_hebrew_subtitles_thread -  runs longer than 15 seconds. stopping the thread...")
                 break
                 
         # calculate the total run time
