@@ -73,7 +73,8 @@ def get_subs(item):
                 x=x+1
                 global_var=subtitle_list
 def download(download_data,MySubFolder):
-    
+
+    from requests import get
     try:
         shutil.rmtree(MyTmp)
     except: pass
@@ -81,9 +82,15 @@ def download(download_data,MySubFolder):
     id=str(download_data['id'])
     archive_file = os.path.join(MyTmp, 'wizdom.sub.'+id+'.zip')
     
-  
-    urlretrieve("http://wizdom.xyz/api/files/sub/"+id, archive_file)
+    ################KODI-RD-IL###############
+    url=f"http://wizdom.xyz/api/files/sub/{id}"
+    data = get(url)
+    open(archive_file, 'wb').write(data.content)
+    #########################################
     
+    # Original DarkSubs Line:
+    #urlretrieve("http://wizdom.xyz/api/files/sub/"+id, archive_file)
     
     sub_file=extract(archive_file,MySubFolder)
+    
     return sub_file
