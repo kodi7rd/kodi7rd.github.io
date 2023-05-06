@@ -332,20 +332,35 @@ tools.ensure_folders()
 # Ensure that the wizard's name matches its folder
 check.check_paths()
 
-
+######################################
+# KODI-RD-IL - COMMENTED - NOT NEEDED:
 # FIRST RUN SETTINGS
-if CONFIG.get_setting('first_install') == 'true':
-    logging.log("[First Run] Showing Save Data Settings", level=xbmc.LOGINFO)
-    window.show_save_data_settings()
-else:
-    logging.log("[First Run] Skipping Save Data Settings", level=xbmc.LOGINFO)
+# if CONFIG.get_setting('first_install') == 'true':
+    # logging.log("[First Run] Showing Save Data Settings", level=xbmc.LOGINFO)
+    # window.show_save_data_settings()
+# else:
+    # logging.log("[First Run] Skipping Save Data Settings", level=xbmc.LOGINFO)
+######################################
 
+# KODI-RD-IL - COMMENTED - NOT NEEDED:
 # BUILD INSTALL PROMPT
+# if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
+    # logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
+    # window.show_build_prompt()
+# else:
+    # logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
+######################################
+
+# KODI-RD-IL - BUILD INSTALL WINDOW ON STARTUP
 if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
     logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
-    window.show_build_prompt()
+    CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
+    CONFIG.set_setting('installed', 'ignored')
+    url = 'plugin://{0}/?mode=builds'.format(CONFIG.ADDON_ID)
+    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
 else:
     logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
+
 
 # ENABLE ALL ADDONS AFTER INSTALL
 if CONFIG.get_setting('enable_all') == 'true':
