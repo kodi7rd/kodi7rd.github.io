@@ -1,5 +1,5 @@
 ﻿[COLOR yellow][B]v3.1.5[/B][/COLOR]
-* Fix Wizdom error when downloading subtitle
+* Fix download subtitle from Wizdom error
 [COLOR yellow][B]v3.1.4[/B][/COLOR]
 * Improve subtitles matching by sync percentage
 * Improve Subtitles Window Look (Add playing file name + total subtitles found count)

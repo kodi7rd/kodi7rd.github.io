@@ -7,11 +7,11 @@ from resources.modules import cache
 import xbmcvfs
 import zipfile
 import shutil,os
-from urllib.request import urlretrieve
+
 from resources.modules.extract_sub import extract
 import urllib
 import urllib.parse
-
+import urllib.request
 que=urllib.parse.quote_plus
 Addon=xbmcaddon.Addon()
 MyScriptID=Addon.getAddonInfo('id')
@@ -73,8 +73,7 @@ def get_subs(item):
                 x=x+1
                 global_var=subtitle_list
 def download(download_data,MySubFolder):
-
-    from requests import get
+    
     try:
         shutil.rmtree(MyTmp)
     except: pass
@@ -82,15 +81,16 @@ def download(download_data,MySubFolder):
     id=str(download_data['id'])
     archive_file = os.path.join(MyTmp, 'wizdom.sub.'+id+'.zip')
     
-    ################KODI-RD-IL###############
-    url=f"http://wizdom.xyz/api/files/sub/{id}"
-    data = get(url)
-    open(archive_file, 'wb').write(data.content)
-    #########################################
+
+    opener = urllib.request.build_opener()
+    opener.addheaders = [('User-agent',  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')]
+    opener.addheaders = [('authority',  'wizdom.xyz')]
+    opener.addheaders = [('accept',  'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7')]
+    urllib.request.install_opener(opener)
+    urllib.request.urlretrieve("http://wizdom.xyz/api/files/sub/"+id, archive_file)
+
     
-    # Original DarkSubs Line:
-    #urlretrieve("http://wizdom.xyz/api/files/sub/"+id, archive_file)
+    
     
     sub_file=extract(archive_file,MySubFolder)
-    
     return sub_file
