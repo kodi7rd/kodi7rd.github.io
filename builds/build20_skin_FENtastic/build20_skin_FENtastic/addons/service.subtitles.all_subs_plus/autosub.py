@@ -2,14 +2,14 @@
 
 import xbmc,xbmcaddon,xbmcvfs
 from xbmcvfs import  mkdirs
-import time,json,logging,hashlib
+import time,json,hashlib
 import os,re,linecache
 import sys,base64
 import cache,threading
 
-from service import search_all,change_background,set_providers_colors
-from service import running,action,searchstring
-from service import MyAddon,__settings__,MyScriptID,all_setting,settings_list,download_next,location,last_sub_download,getParams,subtitle_cache_next
+from service import search_all,change_background
+from service import running,action,searchstring,notify3
+from service import MyAddon,__settings__,MyScriptID,all_setting,download_next,location,last_sub_download,getParams,subtitle_cache_next
 #from service import links_wizdom,links_ktuvit,links_open,links_subscene,links_subcenter,links_local,imdbid,base_aa
 
 from shutil import rmtree
@@ -38,12 +38,15 @@ __resource__ = xbmc_translate_path(os.path.join(__cwd__, 'resources'))
 cache_list_folder=(xbmc_translate_path(os.path.join(__profile__, 'cache_list_folder')))
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 current_list_item=''
-ExcludeTime = int((__settings__.getSetting('ExcludeTime')))*60
+excludeTime = int((__settings__.getSetting('ExcludeTime')))*60
 
 from myLogger import myLogger
 
 def Debug(msg):
     myLogger("[AutoSubs] " + msg)
+
+def DebugExclude(msg):
+    Debug("isExclude() :: " + msg)
 
 sys.path.append(__resource__)
 
@@ -52,10 +55,11 @@ sys.path.append(__resource__)
 Debug(os.path.join(__cwd__,'ignore.txt'))
 
 
+# Create the ignore addons list to be excluded from using the AutoSub feature
 if KODI_VERSION<=18:
     f=open(os.path.join(__cwd__,'ignore.txt'), 'r')
 else:
-    f=open(os.path.join(__cwd__,'ignore.txt'), 'r', encoding="utf-8")
+    f=open(os.path.join(__cwd__,'ignore.txt'), 'r', encoding="utf-8-sig")
 excluded_addons_temp=f.readlines()
 excluded_addons=[]
 f.close()
@@ -64,8 +68,6 @@ for ext in excluded_addons_temp:
     x=(ext).replace('\n','').replace('\r','').lower()
     excluded_addons.append(x)
 
-#except:
-#  excluded_addons=['tenil','reshet','kidsil','movix','mako','rss','sertil','jksp','multidown','sdarot','ebs4_kids_tv']
 if KODI_VERSION>18:
     class Thread (threading.Thread):
        def __init__(self, target, *args):
@@ -94,7 +96,12 @@ def PrintException():
     filename = f.f_code.co_filename
     linecache.checkcache(filename)
     line = linecache.getline(filename, lineno, f.f_globals)
-    Debug( 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
+    try:
+        # myLogger('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj), logLevel=xbmc.LOGERROR)
+        Debug( 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
+        return "Error"
+    except:
+        return "Error"
 
 def getSetting(setting):
     global all_setting
@@ -105,63 +112,68 @@ def getSettingAsBool(setting):
     return getSetting(setting).lower() == "true"
 
 # check exclusion settings for filename passed as argument
-def isExcluded(movieFullPath):
+def isExcluded(videoFullPath):
     global current_list_item
-    if not movieFullPath:
+
+    DebugExclude('Excluded Check')
+    DebugExclude('excluded_addons: ' + repr(excluded_addons))
+    DebugExclude('current_list_item: ' + repr(current_list_item.lower()))
+    DebugExclude("videoFullPath '%s'" % videoFullPath)
+
+    DebugExclude("Checking exclusion settings for '%s'." % videoFullPath)
+    exlude_local_files_smb=all_setting["exlude_local_files_smb"]=='true'
+
+    if not videoFullPath:
         return True
 
-    Debug("isExcluded(): Checking exclusion settings for '%s'." % movieFullPath)
-    check_local=all_setting["local_files"]=='true'
+    if 'smb:' in videoFullPath or 'smb:' in current_list_item:
+        if exlude_local_files_smb:
+            DebugExclude("Video is Local from SMB. Exclude.")
+            return True
+        else:
+            DebugExclude("Video is Local from SMB. Do not exclude.")
+            return False
 
-    if not check_local and 'smb:' in movieFullPath:
-        Debug("isExcluded(): Video is Local. Do not exclude.")
-        # Debug("isExcluded(): Video is Local.")
-        return False #was True
-
-    if (movieFullPath.find("pvr://") > -1) :
-        Debug("isExcluded(): Video is playing via Live TV, which is currently set as excluded location.")
+    if (videoFullPath.find("pvr://") > -1 or "pvr://" in current_list_item.lower()) :
+        DebugExclude("Video is playing via Live TV, which is currently set as excluded location.")
         return True
-
-    Debug('Excluded Check:')
-    Debug('current_list_item: ' + repr(current_list_item.lower()))
-    Debug('excluded_addons: ' + repr(excluded_addons))
 
     if (xbmc.getInfoLabel("VideoPlayer.mpaa")=='heb'):
-        Debug("isExcluded(): Excluded from list defined!!." )
+        DebugExclude("mpaa is 'heb'. Excluded from list defined!!." )
         return True
 
     if any(x in current_list_item.lower() for x in excluded_addons):
-        Debug("isExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!." )
+        DebugExclude("Video is playing from '%s', which is currently set as !!excluded_addons!!." %current_list_item)
         return True
 
     ExcludeAddos = getSetting('ExcludeAddos')
     if ExcludeAddos and getSettingAsBool('ExcludeAddosOption'):
         if ((ExcludeAddos.lower()) in current_list_item.lower() ):
-            Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 1." % ExcludeAddos)
+            DebugExclude("Video is playing from '%s', which is currently set as excluded path 1." % ExcludeAddos)
             return True
 
     ExcludeAddos2 = getSetting('ExcludeAddos2')
     if ExcludeAddos2 and getSettingAsBool('ExcludeAddosOption2'):
         if ( (ExcludeAddos2.lower()) in current_list_item.lower() ):
-            Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 2." % ExcludeAddos2)
+            DebugExclude("Video is playing from '%s', which is currently set as excluded path 2." % ExcludeAddos2)
             return True
 
     ExcludeAddos3 = getSetting('ExcludeAddos3')
     if ExcludeAddos3 and getSettingAsBool('ExcludeAddosOption3'):
         if ((ExcludeAddos3.lower()) in current_list_item.lower()   ):
-            Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 3." % ExcludeAddos3)
+            DebugExclude("Video is playing from '%s', which is currently set as excluded path 3." % ExcludeAddos3)
             return True
 
     ExcludeAddos4 = getSetting('ExcludeAddos4')
     if ExcludeAddos4 and getSettingAsBool('ExcludeAddosOption4'):
         if ((ExcludeAddos4.lower()) in current_list_item.lower()  ):
-            Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 4." % ExcludeAddos4)
+            DebugExclude("Video is playing from '%s', which is currently set as excluded path 4." % ExcludeAddos4)
             return True
 
     ExcludeAddos5 = getSetting('ExcludeAddos5')
     if ExcludeAddos5 and getSettingAsBool('ExcludeAddosOption5'):
         if ((ExcludeAddos5.lower()) in current_list_item.lower()  ):
-            Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 5." % ExcludeAddos5)
+            DebugExclude("Video is playing from '%s', which is currently set as excluded path 5." % ExcludeAddos5)
             return True
 
     if getSettingAsBool('ExcludeAddosOption6'):
@@ -169,7 +181,7 @@ def isExcluded(movieFullPath):
         ExcludeAddos6=ExcludeAddos6_pre.split(',')
         for items in ExcludeAddos6:
             if ((items.lower()) in current_list_item.lower()  ) and len(items)>0:
-                Debug("isExcluded(): Video is playing from '%s', which is currently set as excluded path 6." % items)
+                DebugExclude("Video is playing from '%s', which is currently set as excluded path 6." % items)
                 return True
 
     return False
@@ -274,6 +286,7 @@ class MainMonitor(xbmc.Monitor):
 
 class AutoSubsPlayer(xbmc.Player):
     global __settings__,MyAddon,MyScriptID
+
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
         Debug("Initalized")
@@ -293,18 +306,14 @@ class AutoSubsPlayer(xbmc.Player):
         self.run = True
 
     def onPlayBackStarted(self):
-        global running,subtitle_cache_next
+        global running,subtitle_cache_next,current_list_item
         Debug('start player')
 
         if all_setting["autosub"]=='true':
             try:
                 if self.run:
-                    movieFullPath = xbmc.Player().getPlayingFile()
-                    Debug("movieFullPath '%s'" % movieFullPath)
                     xbmc.sleep(1000)
-                    availableLangs = xbmc.Player().getAvailableSubtitleStreams()
-
-                    Debug("availableLangs '%s'" % availableLangs)
+                    Debug('Is autosub Playing: '+str(xbmc.Player().isPlaying()))
                     totalTime = xbmc.Player().getTotalTime()
                     #totalTime ==0.0
                     if xbmc.Player().isPlaying():
@@ -323,36 +332,41 @@ class AutoSubsPlayer(xbmc.Player):
                                 #totalTime ==0.0
                                 break
                             xbmc.sleep(100)
-                    Debug("totalTime '%s'" % totalTime)
-                    Debug("ExcludeTime '%s'" % ExcludeTime)
+                    Debug("totalTime: '%s'" % totalTime)
+                    Debug("excludeTime: '%s'" % excludeTime)
 
+                    # Force override subtitles even if the video file already contains subtitles
                     force_download=True
                     if all_setting["force"]=='true':
                         force_download=True
                     if all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
                         force_download=False
 
+                    videoFullPath = xbmc.Player().getPlayingFile()
+
+                    # Check if the video source is excluded from using the AutoSub feature
                     try:
-                        is_excluded=(isExcluded(movieFullPath))
+                        is_excluded = isExcluded(videoFullPath)
                     except:
+                        is_excluded = False
                         Debug('AutoSubs isExcluded ERROR')
 
-                    Debug('Is autosub Playing:'+str(xbmc.Player().isPlaying()))
-                    Debug('totalTime:'+str(totalTime))
-                    Debug('movieFullPath:'+str(movieFullPath))
-                    Debug('(isExcluded(movieFullPath)) ): '+repr(is_excluded))
-                    Debug('force_download:'+str(force_download) )
+                    Debug('isExcluded: '+repr(is_excluded))
 
-                    if (xbmc.Player().isPlaying() and totalTime > ExcludeTime and force_download==True and not is_excluded ):
+                    availableLangs = xbmc.Player().getAvailableSubtitleStreams()
+                    Debug("availableLangs '%s'" % availableLangs)
+                    Debug('force_download: '+str(force_download) )
+
+                    if (xbmc.Player().isPlaying() and totalTime > excludeTime
+                        and force_download==True and not is_excluded ):
                         self.run = False
                         #xbmc.sleep(1000)
                         Debug('Started: AutoSearching for Subs')
-                        Debug('running')
-                        Debug(repr(running))
                         running=0
                         if running==0:
                             running=1
                           #try:
+                            Debug('running: ' + repr(running))
                             begin_search_process()
 
                             #subtitle_cache_next.set('last_sub','ZERO')
@@ -364,18 +378,23 @@ class AutoSubsPlayer(xbmc.Player):
                           # except:
                           #  pass
                             running=0
+                            Debug('running: ' + repr(running))
                         #xbmc.executebuiltin('XBMC.ActivateWindow(SubtitleSearch)')
                     else:
                         Debug('Started: Subs found or Excluded')
                         self.run = False
-            except:
+            except Exception as e:
+                Debug("AutoSub failed: %s" %e)
+                notify3('[COLOR aqua]AutoSub נכשל[/COLOR]',2)
+                # if all_setting["pause"]=='1': #resume
+                #     xbmc.Player().pause()
                 pass
 
 def begin_search_process():
     #0 = Without pause
     #1 = Pause and Resume
     #2 = Pause
-    if all_setting["pause"]=='1' or all_setting["pause"]=='2':
+    if all_setting["pause"]!='0': #pause
         xbmc.Player().pause()
 
     search_all(2,all_setting)
@@ -428,7 +447,7 @@ if action is None:
     monitor = MainMonitor()
 
     Debug('AutoSubs service_started')
-
+    #        if all_setting["autosub"]=='true':
     try:
         rmtree(cache_list_folder)
     except: pass
@@ -443,24 +462,27 @@ if action is None:
         ab_req=monit.abortRequested()
     while not ab_req:
         if(time.time() > last_run + update_time) and running==0 and not xbmc.Player().isPlaying():
-             now = time.time()
-             last_run = now - (now % update_time)
-             '''
-             if KODI_VERSION >= 17:
-               current_list_item_temp=(xbmc.getInfoLabel("ListItem.AddonName"))
-               if len(current_list_item_temp)>0 :
-                   current_list_item=current_list_item_temp
-             else:
-             '''
-             current_list_item_temp=(xbmc.getInfoLabel("ListItem.FileNameAndPath"))
+            now = time.time()
+            last_run = now - (now % update_time)
+            '''
+            if KODI_VERSION >= 17:
+              current_list_item_temp=(xbmc.getInfoLabel("ListItem.AddonName"))
+              if len(current_list_item_temp)>0 :
+                  current_list_item=current_list_item_temp
+            else:
+            '''
+            current_list_item_temp=(xbmc.getInfoLabel("ListItem.FileNameAndPath"))
+            if len(current_list_item_temp) > 0:
+                if ('plugin://') in current_list_item_temp: #or ('smb://') in current_list_item_temp):
+                    regex='//(.+?)/'
+                    match=re.compile(regex).findall(current_list_item_temp)
+                    if len (match)>0:
+                        current_list_item = match[0]
+                    else:
+                        current_list_item = current_list_item_temp
+                else:
+                    current_list_item = current_list_item_temp
 
-             if len(current_list_item_temp)>0 and (('plugin://') in current_list_item_temp or ('smb://') in current_list_item_temp):
-                 regex='//(.+?)/'
-                 match=re.compile(regex).findall(current_list_item_temp)
-                 if len (match)>0:
-                     current_list_item=match[0]
-                 else:
-                     current_list_item=current_list_item_temp
 
         if running==1:
             reset_running=reset_running+1

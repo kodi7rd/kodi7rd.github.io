@@ -1,6 +1,23 @@
+2.0.4
+** All Subs Plus by Burekas **
+- Bug fix: Wizdom subtitles download
+- Bug fix: Subtitles checking for Movie with SMB as video source
+- Bug fix: Error notification when selecting the menu items in the results list
+- Updated: AutoSubs Popup setting (Multiple options)
+- Updated: AutoSubs settings structure
+- Improvement in the searching algorithm
+- Improvement in the sync percentage calculation algorithm
+- Improvement of the machine translation process
+- Improvement in the Autosub for subtitles language recognition
+- Improvement in the Autosub excludes
+- Reorganization of the addon settings (Focusing on the AutoSubs section)
+- Updated: Translation files
+- A lot of code fixes, code cleanup, refactoring and imporvements
+
 2.0.3
 ** All Subs Plus by Burekas **
 - Fixes and improvements for AutoSub
+- Updated: AutoSubs 'Pause' setting
 - Some general bug fixes and improvements
 
 2.0.1

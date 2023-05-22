@@ -3,8 +3,8 @@ import xbmcvfs,xbmcgui,xbmcaddon,xbmc
 from xbmcplugin import endOfDirectory, addDirectoryItem
 from xbmcgui import ListItem, Dialog
 from xbmcvfs import listdir, exists
-from xbmc import executebuiltin, getInfoLabel, executeJSONRPC, Player, sleep, log, getCondVisibility
-import sys,logging,unicodedata,urllib,zlib,os,zipfile,contextlib,hashlib,shutil,threading
+from xbmc import executebuiltin, getInfoLabel, executeJSONRPC, Player, getCondVisibility
+import sys,unicodedata,urllib,zlib,os,zipfile,contextlib,hashlib,shutil,threading
 from os import path
 
 import json
@@ -21,13 +21,21 @@ import time
 import linecache
 import PTN,base64
 
+from myLogger import myLogger
+
 try:
-    import HTMLParser
-    html_parser = HTMLParser.HTMLParser()
+    from HTMLParser import HTMLParser
+    html_parser_unescape = HTMLParser.HTMLParser().unescape
+except ImportError:
+    if sys.version_info >= (3, 4):
+        import html
+        html_parser_unescape = html.unescape
+
+try:
     from urllib import urlretrieve
     from urllib import  unquote_plus, unquote, urlopen, quote
 except:
-    import html
+    # import html
     from urllib.request import urlretrieve
     from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 
@@ -41,9 +49,6 @@ from ktuvit_api.ktuvit import GetKtuvitJson,ktuvit_download_sub
 from subscene_api import SubtitleAPI
 from opensubs_api.opensubtitle import GetOpenSubtitlesJson,Download_opensubtitle
 from local_api.local import GetLocalJson
-#from aa_subs_api.aa_subs import aa_subs, Download_aa
-
-from myLogger import myLogger
 
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 if KODI_VERSION<=18:
@@ -68,12 +73,42 @@ else:
         def run(self):
             self._target(*self._args)
 
+# For future change
+# from enum import Enum
+# class submode(Enum):
+#     NEXT_SUB = 1
+#     AUTO_SUBS = 2
+#     SUBS_DIALOG = 3
+# a = submode.AUTO_SUBS.value
 
+class dialogprogress:
+    def __init__(self):
+        self.dp = xbmcgui.DialogProgress()
+
+    def create(self, *args):
+        if KODI_VERSION>18:
+            msg = "\n".join(args)
+            self.dp.create(msg)
+        else:
+            self.dp.create(args)
+
+    def update(self, precent, *args):
+        if KODI_VERSION>18:
+            msg = "\n".join(args)
+            self.dp.update(precent, msg);
+        else:
+            self.dp.update(precent, args)
+
+    def iscanceled(self):
+        return self.dp.iscanceled()
+
+    def close(self):
+        self.dp.close()
 
 
 #reload(sys)
 #sys.setdefaultencoding('utf8')
-#from yify_api.yify import search_yify
+
 socket.setdefaulttimeout(10)
 action=None
 searchstring=None
@@ -86,25 +121,24 @@ last_sub_download=''
 running=0
 
 
-global links_wizdom,links_subcenter,links_local,links_ktuvit,links_open,imdbid,links_subscene
+global links_wizdom,links_local,links_ktuvit,links_open,imdbid,links_subscene
 imdbid=''
 links_wizdom=[]
 links_ktuvit=[]
 links_open=[]
 links_subscene=[]
-links_subcenter=[]
 links_local=[]
 
 prefix_wizdom='Wiz'
-prefix_ktuvit='Kt'
-prefix_open='OpS'
-prefix_subscene='SSc'
+prefix_ktuvit='Ktu'
+prefix_open='Ops'
+prefix_subscene='Ssc'
 prefix_acat='AC' #AA_CAT
 prefix_local='Loc'
 # prefix_wizdom='[Wiz]'
-# prefix_ktuvit='[Kt]'
-# prefix_open='[OpS]'
-# prefix_subscene='[SSc]'
+# prefix_ktuvit='[Ktu]'
+# prefix_open='[Ops]'
+# prefix_subscene='[Ssc]'
 # prefix_acat='[AC]' #AA_CAT
 # prefix_local='[Loc]'
 
@@ -272,16 +306,18 @@ def PrintException():
 
 def notify(msg_id):
     xbmc.executebuiltin(u'Notification(%s,%s)' % (__scriptname__, __language__(msg_id)))
+
 def notify2(msg_id,all_setting,timeout=-1):
-    if all_setting["popup"]=="true":
-        if not timeout==-1:
-            timeout*=1000
+    if all_setting["popup"]=="1":
+        if timeout != -1:
+            timeout *= 1000
             xbmc.executebuiltin((u'Notification(%s,%s,%s)' % (__scriptname__, msg_id, timeout)))
         else:
             xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, msg_id)))
+
 def notify3(msg,timeout=-1):
-    if not timeout==-1:
-        timeout*=1000
+    if timeout != -1:
+        timeout *= 1000
         xbmc.executebuiltin((u'Notification(%s,%s,%s)' % (__scriptname__, msg, timeout)))
     else:
         xbmc.executebuiltin((u'Notification(%s,%s)' % (__scriptname__, msg)))
@@ -316,7 +352,9 @@ def take_title_from_focused_item():
     return title
 '''
 
-def getOriginalTitle(): ###### burekas
+def getTVShowOriginalTitle(): ###### burekas
+    myLogger("getTVShowOriginalTitle")
+
     if xbmc.getInfoLabel("VideoPlayer.TVshowtitle").isascii():
         return normalizeString(xbmc.getInfoLabel("VideoPlayer.TVshowtitle"))  # Show
 
@@ -345,7 +383,7 @@ def takeTitleFromFocusedItem(type="movie"): ###### burekas
         labelTVShowTitle = getTVshowOriginalTitleByJSONandDBid()  ##using kodi database json
         #If not, try get the original title by using tmdb api
         if (labelTVShowTitle == "" or not labelTVShowTitle.isascii()):
-            labelTVShowTitle = getTVshowOriginalTitleByTMDBapi()  ##New way using tmdb api
+            labelTVShowTitle = getTVshowOriginalTitleByTMDBapi('notPlaying')  ##New way using tmdb api
 
     title = 'SearchFor...'
     if isItMovie and labelMovieTitle and labelYear:
@@ -419,7 +457,7 @@ def getTVshowOriginalTitleByTMDBapi(source="notPlaying"): ###### burekas
         popularityMax = 0
         itemIndexMax = 0
         for item in json['results']:
-            itemIndex = itemIndex+1
+            itemIndex += 1
             if (item['vote_count'] > voteCountMax and item['popularity'] > popularityMax):
                 voteCountMax = item['vote_count']
                 popularityMax = item['popularity']
@@ -428,11 +466,11 @@ def getTVshowOriginalTitleByTMDBapi(source="notPlaying"): ###### burekas
         if resultsLen > 0 :
             #originalTitle = json["results"][itemIndexMax]["original_name"]
             originalTitle = json["results"][itemIndexMax]["name"]
-		'''
+        '''
 
         try:    originalTitle = json_results[0]["name"]
         except Exception as e:
-            myLogger( "[%s]" % (e,))
+            myLogger( "getTVshowOriginalTitleByTMDBapi originalTitle Error [%s]" % (e,))
             return ''
 
         return originalTitle
@@ -494,9 +532,7 @@ def download_manager(mode_subtitle,id):
         #subs,temp = subscene.subscene_download_process(params,mode_subtitle)
     elif source=='local':
         subs,temp = download(id,language,thumbLang,sub_link,filename,mode_subtitle)
-    # elif source=='aa_subs':
-    #     myLogger('AA SUBS DOWNLOAD')
-    #     subs = Download_aa(params["link"],mode_subtitle)
+
     else:
         subs,temp = download(id,language,thumbLang,sub_link,filename,mode_subtitle)
         # try:
@@ -505,6 +541,10 @@ def download_manager(mode_subtitle,id):
         # except:
         #     pass
         myLogger("download_manager - temp: %s" %(temp))
+
+
+    #if mode_subtitle == 2:
+        # subs = rename_sub_filename_with_language_prefix(subs,MySubFolder2,thumbLang)
 
     myLogger("download_manager - subs: %s" %(subs))
     return subs,temp
@@ -547,17 +587,18 @@ def remove_and_generate_directory(dir_path):
     delete_junction(dir_path)
     xbmcvfs.mkdirs(dir_path)
 
-def remove_and_generate_temp_subs_directories(fromZip):
+def remove_and_generate_temp_subs_directories():
     delete_junction(MyTmp)
 
     try:
         xbmcvfs.mkdirs(MyTmp)
-        if (fromZip):
-            xbmcvfs.mkdirs(MyZipFolder)
-            xbmcvfs.mkdirs(MySubFolder)
-        else:
-            xbmcvfs.mkdirs(MyZipFolder2)
-            xbmcvfs.mkdirs(MySubFolder2)
+
+        xbmcvfs.mkdirs(MyZipFolder)
+        xbmcvfs.mkdirs(MySubFolder)
+
+        xbmcvfs.mkdirs(MyZipFolder2)
+        xbmcvfs.mkdirs(MySubFolder2)
+
     except Exception as e:
         myLogger("remove_and_generate_temp_subs_directories Error: " + repr(e))
 
@@ -593,25 +634,25 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
             exts = [".srt", ".sub", ".str"]
 
             if 'wizdom$$$' in id:
-                remove_and_generate_temp_subs_directories(True)
+                remove_and_generate_temp_subs_directories()
                 id = id.replace('wizdom$$$','')
                 archive_file = path.join(MyZipFolder, 'wizdom.sub.'+id+'.zip')
                 wizdom_download_sub(id,archive_file)
 
             elif 'ktuvit$$$' in id:
-                remove_and_generate_temp_subs_directories(False)
+                remove_and_generate_temp_subs_directories()
                 #ktuvit doesn't download zip, it builds the subtitle file directly from data as plain text file
                 return ktuvit_download_sub(id,MySubFolder2,mode_subtitle)
 
             elif 'opensubs$$$' in id:
-                remove_and_generate_temp_subs_directories(False)
+                remove_and_generate_temp_subs_directories()
                 id = id.replace('opensubs$$$','')
                 #opensubtitles doesn't download zip when usin XMLRPC, it builds the subtitle file directly from data as plain text file
                 #Only when there is an error it tries to download with HTTP and then it will us zip (handled inside)
                 return Download_opensubtitle(id, sub_link,filename,subformat,mode_subtitle)
 
             elif 'subscene$$$' in id:
-                remove_and_generate_temp_subs_directories(True)
+                remove_and_generate_temp_subs_directories()
                 id = id.replace('subscene$$$','')
                 archive_file = path.join(MyZipFolder, 'subscene.sub.'+id+'.zip')
 
@@ -626,13 +667,6 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
                 else:
                     return 'NO',False
 
-            '''
-            elif 'yify$$$' in id:
-                archive_file = path.join(MyZipFolder, 'yify.sub.'+id.replace('yify$$$','').replace('/subtitles/','')+'.zip')
-
-                if not path.exists(archive_file):
-                    urlretrieve("https://www.yifysubtitles.org/subtitle/"+id.replace('yify$$$','').replace('/subtitles/','')+".zip", archive_file)
-            '''
 
             #executebuiltin(('XBMC.Extract("%s","%s")' % (archive_file, MySubFolder)).encode('utf-8'), True)
             try:
@@ -647,7 +681,6 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
             for file_ in listdir(MySubFolder)[1]:
                 ufile = file_
                 file_ = path.join(MySubFolder, ufile)
-                #file_ = rename_sub_filename_with_language_prefix(ufile,MySubFolder,thumbLang)
                 if path.splitext(ufile)[1] in exts:
                     convert_to_utf(file_)
                     subtitle_list.append(file_)
@@ -662,7 +695,6 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
                 #xbmc.Player().setSubtitles(subtitle_list[0])
                 return sub_result,True
     except Exception as e:
-        import linecache
         exc_type, exc_obj, tb = sys.exc_info()
         f = tb.tb_frame
         lineno = tb.tb_lineno
@@ -671,39 +703,58 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
         line = linecache.getline(filename, lineno, f.f_globals)
 
         myLogger('ERROR IN Download:'+str(lineno)+',Error:'+str(e), logLevel=xbmc.LOGERROR)
-        notify2('[COLOR red] Error: [/COLOR]'+str(lineno)+' E:'+str(e),all_setting)
+        notify2(colorize_text(" Error: ","red")+str(lineno)+' E:'+str(e),all_setting)
 
     if mode_subtitle>1:
         return '',False
     else:
         return 'NO',False
 
-def rename_sub_filename_with_language_prefix(old_filename, dir, lang):
+def rename_sub_filename_with_language_prefix(sub, dir, lang):
+    log_prefix = "Renaming :: "
+    updated_subs = ''
+    # updated_subs = []
+    myLogger(log_prefix + repr(sub))
+
     if (lang==''):
         lang = "he"
-    try:
-        old_full_path_filename = path.join(dir, old_filename)
-        myLogger("Rename filename: " + repr(old_full_path_filename))
 
-        parts = old_filename.split('.')
+    #for sub in subs:
+    try:
+        old_full_path_filename = sub
+        myLogger(log_prefix + "Sub old filename path: " + repr(old_full_path_filename))
+        old_filename = os.path.basename(old_full_path_filename)
+        sub_temp = (old_filename.replace(" - No ","").replace("-No ","").replace(".no.","")
+                                .replace("HI.",".").replace("- HI.",".").replace("-HI.","."))
+        myLogger(log_prefix + "Rename filename: " + repr(old_filename))
+
+        parts = sub_temp.split('.')
         parts.insert(-1, lang)
         new_filename = '.'.join(parts)
 
-        new_full_path_filename = path.join(dir, new_filename)
-        myLogger("To this filename: " + repr(new_full_path_filename))
+        myLogger(log_prefix + "To this filename: " + repr(new_filename))
+        new_full_path_filename_before = path.join(dir, old_filename)
+        new_full_path_filename_after = path.join(dir, new_filename)
 
-        _filename = ''
+        _filename_path = ''
         if os.path.isfile(old_full_path_filename):
-            os.replace(old_full_path_filename, new_full_path_filename)
-            _filename = new_full_path_filename
+            if not os.path.exists(new_full_path_filename_before):
+                shutil.copy(old_full_path_filename, dir)
+            os.replace(new_full_path_filename_before, new_full_path_filename_after)
+            _filename_path = new_full_path_filename_after
         else:
-            _filename = old_full_path_filename
+            _filename_path = old_full_path_filename
 
-        myLogger("Filename is: " + repr(_filename))
-        return _filename;
+        myLogger(log_prefix + "Sub new filename path is: " + repr(_filename_path))
+        # updated_subs.append(_filename_path)
+        updated_subs = _filename_path
+
     except Exception as e:
-        myLogger("Renaming Error: " + repr(e), logLevel=xbmc.LOGERROR)
-        return old_full_path_filename
+        # updated_subs.append(old_full_path_filename)
+        updated_subs = old_full_path_filename
+        myLogger(log_prefix + "Renaming Error: " + repr(e), logLevel=xbmc.LOGERROR)
+
+    return updated_subs
 
 
 def getParams(arg):
@@ -792,19 +843,7 @@ def Local_Search(item,all_setting):
 
     return len(subtitle_list),links_local
 
-#///////////////////////////////////////Subcenter archive////////////////////////////////////////////////
-'''
-def aa_subs_Search(item,mode_subtitle):
-    global links_subcenter
-
-    myLogger("ACat_Search item:" + repr(item))
-
-    subtitle_list,result = aa_subs(item,mode_subtitle,prefix_acat,color_acat)
-
-    links_subcenter = subtitle_list
-
-    return len(result),links_subcenter
-'''
+#/////////////////////////////////////////////////////////////////////////////////////////////
 
 
 def clean_title(item):
@@ -1004,16 +1043,16 @@ def download_next(location,all_setting,last_sub_download,save_all_data,max_sub):
                 xbmcvfs.copy(sub, dst)
                 if all_setting["enable_font"]=='true':
                     sub = srt2ass(sub,all_setting)
-                notify2('Setting sub [COLOR skyblue]'+str(total_count) +'/'+str(max_sub-1)+'[/COLOR]: ' +lab2,all_setting)
+                notify2('Setting sub '+colorize_text(str(total_count) +'/'+str(max_sub-1),"skyblue")+': ' +lab2,all_setting)
 
                 xbmc.Player().setSubtitles(sub)
                 break_now=1
                 break
             else:
-                notify2('[COLOR red]Cannot download [/COLOR][COLOR skyblue]'+str(total_count) +'/'+str(max_sub-1)+'[/COLOR]: ' +lab2,all_setting)
+                notify2(colorize_text("Cannot download ","red")+colorize_text(str(total_count) +'/'+str(max_sub-1),"skyblue")+': ' +lab2,all_setting)
 
-        x=x+1
-        total_count=total_count+1
+        x += 1
+        total_count += 1
     return location
 
 color_wizdom=''
@@ -1044,21 +1083,18 @@ def set_providers_colors():
     cCustomOpen = all_setting["color_result_opensubs_custom"]
     cCustomSubscene = all_setting["color_result_subscene_custom"]
     cCustomlocal = all_setting["color_result_local_custom"]
-    # cCustomAcat = all_setting["color_result_aa_subs_custom"]
 
     cWizdom = all_setting["color_result_wizdom"]
     cKtuvit = all_setting["color_result_ktuvit"]
     cOpen = all_setting["color_result_opensubs"]
     cSubscene = all_setting["color_result_subscene"]
     clocal = all_setting["color_result_local"]
-    # cAcat = all_setting["color_result_aa_subs"]
 
     color_wizdom = cCustomWizdom if cWizdom == custom else cWizdom
     color_ktuvit = cCustomKtuvit if cKtuvit == custom else cKtuvit
     color_open = cCustomOpen if cOpen == custom else cOpen
     color_subscene = cCustomSubscene if cSubscene == custom else cSubscene
     color_local = cCustomlocal if clocal == custom else clocal
-    # color_acat = cCustomAcat if cAcat == custom else cAcat
 
     '''
     cCustomPercent = all_setting["color_result_percent_custom"]
@@ -1071,77 +1107,71 @@ def set_providers_colors():
 
     myLogger("Colors: color_wizdom=%s | color_ktuvit=%s | color_open=%s | color_subscene=%s | color_local=%s" %(color_wizdom,color_ktuvit,color_open,color_subscene,color_local))
 
-settings_list = {"Email":MyAddon.getSetting("Email"),
-                 "Password":MyAddon.getSetting("Password"),
-                 "action":MyAddon.getSetting("action"),
-                 "OSuser":MyAddon.getSetting("OSuser"),
-                 "OSpass":MyAddon.getSetting("OSpass"),
-                 "wizset":MyAddon.getSetting("wizset"),
-                 "subscene":MyAddon.getSetting("subscene"),
-                 "opensubtitle":MyAddon.getSetting("opensubtitle"),
-                 "English":MyAddon.getSetting("English"),
-                 "autosub":MyAddon.getSetting("autosub"),
-                 "pause":MyAddon.getSetting("pause"),
-                 "sync_percent":MyAddon.getSetting("sync_percent"),
-                 "ExcludeTime":MyAddon.getSetting("ExcludeTime"),
-                 "ExcludeAddosOption":MyAddon.getSetting("ExcludeAddosOption"),
-                 "ExcludeAddos":MyAddon.getSetting("ExcludeAddos"),
-                 "ExcludeAddosOption2":MyAddon.getSetting("ExcludeAddosOption2"),
-                 "ExcludeAddos2":MyAddon.getSetting("ExcludeAddos2"),
-                 "ExcludeAddosOption3":MyAddon.getSetting("ExcludeAddosOption3"),
-                 "ExcludeAddos3":MyAddon.getSetting("ExcludeAddos3"),
-                 "ExcludeAddosOption4":MyAddon.getSetting("ExcludeAddosOption4"),
-                 "ExcludeAddos4":MyAddon.getSetting("ExcludeAddos4"),
-                 "ExcludeAddosOption5":MyAddon.getSetting("ExcludeAddosOption5"),
-                 "ExcludeAddos5":MyAddon.getSetting("ExcludeAddos5"),
-                 "ExcludeAddosOption6":MyAddon.getSetting("ExcludeAddosOption6"),
-                 "ExcludeAddos6":MyAddon.getSetting("ExcludeAddos6"),
-                 "enable_font":MyAddon.getSetting("enable_font"),
-                 "background":MyAddon.getSetting("background"),
-                 "bold":MyAddon.getSetting("bold"),
-                 "size":MyAddon.getSetting("size"),
-                 "color":MyAddon.getSetting("color"),
-                 "background_level":MyAddon.getSetting("background_level"),
-                 "force":MyAddon.getSetting("force"),
-                 "popup":MyAddon.getSetting("popup"),
-                 "storage":MyAddon.getSetting("storage"),
-                 "ktuvitset":MyAddon.getSetting("ktuvitset"),
-                 "ktcode":MyAddon.getSetting("ktcode"),
-                 "sort_subs":MyAddon.getSetting("sort_subs"),
-                 "auto_translate":MyAddon.getSetting("auto_translate"),
-                 "arab":MyAddon.getSetting("arab"),
-                 "spanish":MyAddon.getSetting("spanish"),
-                 "history_log":MyAddon.getSetting("history_log"),
-                 "other_lang":MyAddon.getSetting("other_lang"),
-                 "storage_en":MyAddon.getSetting("storage_en"),
-                 "all_lang":MyAddon.getSetting("all_lang"),
-                 "local_files":MyAddon.getSetting("local_files"),
-                 "Debug":MyAddon.getSetting("Debug"),
-                 "color_result_wizdom":MyAddon.getSetting("color_result_wizdom"),
-                 "color_result_wizdom_custom":MyAddon.getSetting("color_result_wizdom_custom"),
-                 "color_result_ktuvit":MyAddon.getSetting("color_result_ktuvit"),
-                 "color_result_ktuvit_custom":MyAddon.getSetting("color_result_ktuvit_custom"),
-                 "color_result_opensubs":MyAddon.getSetting("color_result_opensubs"),
-                 "color_result_opensubs_custom":MyAddon.getSetting("color_result_opensubs_custom"),
-                 "color_result_subscene":MyAddon.getSetting("color_result_subscene"),
-                 "color_result_subscene_custom":MyAddon.getSetting("color_result_subscene_custom"),
-                 "color_result_aa_subs":MyAddon.getSetting("color_result_aa_subs"),
-                 "color_result_aa_subs_custom":MyAddon.getSetting("color_result_aa_subs_custom"),
-                 "color_result_local":MyAddon.getSetting("color_result_local"),
-                 "color_result_local_custom":MyAddon.getSetting("color_result_local_custom"),
-                 "result_style":MyAddon.getSetting("result_style")
-                 }
+settings_list = {
+                    "action":MyAddon.getSetting("action"),
+                    "OSuser":MyAddon.getSetting("OSuser"),
+                    "OSpass":MyAddon.getSetting("OSpass"),
+                    "wizset":MyAddon.getSetting("wizset"),
+                    "subscene":MyAddon.getSetting("subscene"),
+                    "opensubtitle":MyAddon.getSetting("opensubtitle"),
+                    "English":MyAddon.getSetting("English"),
+                    "autosub":MyAddon.getSetting("autosub"),
+                    "pause":MyAddon.getSetting("pause"),
+                    "sync_percent":MyAddon.getSetting("sync_percent"),
+                    "ExcludeTime":MyAddon.getSetting("ExcludeTime"),
+                    "ExcludeAddosOption":MyAddon.getSetting("ExcludeAddosOption"),
+                    "ExcludeAddos":MyAddon.getSetting("ExcludeAddos"),
+                    "ExcludeAddosOption2":MyAddon.getSetting("ExcludeAddosOption2"),
+                    "ExcludeAddos2":MyAddon.getSetting("ExcludeAddos2"),
+                    "ExcludeAddosOption3":MyAddon.getSetting("ExcludeAddosOption3"),
+                    "ExcludeAddos3":MyAddon.getSetting("ExcludeAddos3"),
+                    "ExcludeAddosOption4":MyAddon.getSetting("ExcludeAddosOption4"),
+                    "ExcludeAddos4":MyAddon.getSetting("ExcludeAddos4"),
+                    "ExcludeAddosOption5":MyAddon.getSetting("ExcludeAddosOption5"),
+                    "ExcludeAddos5":MyAddon.getSetting("ExcludeAddos5"),
+                    "ExcludeAddosOption6":MyAddon.getSetting("ExcludeAddosOption6"),
+                    "ExcludeAddos6":MyAddon.getSetting("ExcludeAddos6"),
+                    "enable_font":MyAddon.getSetting("enable_font"),
+                    "background":MyAddon.getSetting("background"),
+                    "bold":MyAddon.getSetting("bold"),
+                    "size":MyAddon.getSetting("size"),
+                    "color":MyAddon.getSetting("color"),
+                    "background_level":MyAddon.getSetting("background_level"),
+                    "force":MyAddon.getSetting("force"),
+                    "popup":MyAddon.getSetting("popup"),
+                    "storage":MyAddon.getSetting("storage"),
+                    "ktuvitset":MyAddon.getSetting("ktuvitset"),
+                    "ktcode":MyAddon.getSetting("ktcode"),
+                    "sort_subs":MyAddon.getSetting("sort_subs"),
+                    "auto_translate":MyAddon.getSetting("auto_translate"),
+                    "arab":MyAddon.getSetting("arab"),
+                    "spanish":MyAddon.getSetting("spanish"),
+                    "history_log":MyAddon.getSetting("history_log"),
+                    "other_lang":MyAddon.getSetting("other_lang"),
+                    "storage_en":MyAddon.getSetting("storage_en"),
+                    "all_lang":MyAddon.getSetting("all_lang"),
+                    "exlude_local_files_smb":MyAddon.getSetting("exlude_local_files_smb"),
+                    "Debug":MyAddon.getSetting("Debug"),
+                    "color_result_wizdom":MyAddon.getSetting("color_result_wizdom"),
+                    "color_result_wizdom_custom":MyAddon.getSetting("color_result_wizdom_custom"),
+                    "color_result_ktuvit":MyAddon.getSetting("color_result_ktuvit"),
+                    "color_result_ktuvit_custom":MyAddon.getSetting("color_result_ktuvit_custom"),
+                    "color_result_opensubs":MyAddon.getSetting("color_result_opensubs"),
+                    "color_result_opensubs_custom":MyAddon.getSetting("color_result_opensubs_custom"),
+                    "color_result_subscene":MyAddon.getSetting("color_result_subscene"),
+                    "color_result_subscene_custom":MyAddon.getSetting("color_result_subscene_custom"),
+                    "color_result_local":MyAddon.getSetting("color_result_local"),
+                    "color_result_local_custom":MyAddon.getSetting("color_result_local_custom"),
+                    "result_style":MyAddon.getSetting("result_style")
+                }
 
 def refresh_setting():
     global all_setting,settings_list
 
     all_setting={}
     all_setting=settings_list
-    all_setting["aa_subs"]='false'
-    all_setting["yify"]='false'
+
     '''
-    "aa_subs":MyAddon.getSetting("aa_subs"),
-    "yify":MyAddon.getSetting("yify"),
     "color_result_percent":MyAddon.getSetting("color_result_percent"),
     "color_result_percent_custom":MyAddon.getSetting("color_result_percent_custom"),
     "color_result_counter":MyAddon.getSetting("color_result_counter"),
@@ -1255,7 +1285,7 @@ def download_subs(link):
         source=''
     myLogger('source=='+source)
 
-    subs,temp = download_manager(3,id)
+    subs,temp = download_manager(2,id)
 
     try:
         shutil.rmtree(__last__)
@@ -1274,10 +1304,10 @@ def download_subs(link):
 
 def rtl(text):
     try:
-        text=html_parser.unescape(text)
-    except:
+        text=html_parser_unescape(text.decode('utf-8'))
+    except Exception as e:
         import xml.sax.saxutils as saxutils
-        text=saxutils.unescape(text.decode())
+        text=saxutils.unescape(text.decode('utf-8'))
 
     test_t=text[-1:]
 
@@ -1288,87 +1318,94 @@ def rtl(text):
 
 
 def translate_subs(input_file,output_file,mode_subtitle):
-    import requests,chardet
+    try:
+        import chardet
 
-    sourcelang='eng'
-    if mode_subtitle==3:
-        dp = xbmcgui . DialogProgress ( )
-        if KODI_VERSION>18:
-            dp.create('אנא המתן'+'\n'+'מתרגם',)
-            dp.update(0, 'אנא המתן'+'\n'+'מתרגם' )
+        myLogger('translate_subs - starting')
+        sourcelang='eng'
+        if mode_subtitle == 3:
+            dp = dialogprogress()
+            dp.create('אנא המתן','מתרגם')
+            dp.update(0, 'אנא המתן','מתרגם')
+        elif mode_subtitle == 2 and all_setting["popup"]!="0":
+            notify3(colorize_text('מתרגם - אנא המתן...','aqua'),2)
+
+        url = 'https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}'
+        targetlang='he'
+        api_key='AIzaSyCk5TfD_K1tU1AB2salwn2Lb_yZbesSmY8'
+
+        # Open the file as binary data
+        with open(input_file, 'rb') as f:
+            # Join binary lines for specified number of lines
+            rawdata = f.read()
+
+        encoding=chardet.detect(rawdata)['encoding']
+        myLogger('translate_subs - sub encoding: ' + encoding)
+
+        text=rawdata
+
+        if encoding=='ISO-8859-7':
+            text=text.decode('cp1253','ignore')
+        elif encoding=='MacCyrillic':
+            text=text.decode('cp1256','ignore')
         else:
-            dp.create('אנא המתן','מתרגם',)
-            dp.update(0, 'אנא המתן','מתרגם' )
+            text=text.decode(encoding,'ignore')
 
-    url = 'https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}'
-    targetlang='he'
-    api_key='AIzaSyCk5TfD_K1tU1AB2salwn2Lb_yZbesSmY8'
-    import chardet
+        from gtn.google_trans_new import google_translator
 
-    # Open the file as binary data
-    with open(input_file, 'rb') as f:
-        # Join binary lines for specified number of lines
-        rawdata = f.read()
+        translator = google_translator()
 
-    encoding=chardet.detect(rawdata)['encoding']
-    myLogger('encoding:'+encoding)
+        all_text_p1=[]
+        all_data=''
 
-    text=rawdata
+        counter=0
 
-    if encoding=='ISO-8859-7':
-        text=text.decode('cp1253','ignore')
-    elif encoding=='MacCyrillic':
-        text=text.decode('cp1256','ignore')
-    else:
-        text=text.decode(encoding,'ignore')
+        split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+        ax2=split_string(text,4000)
+        f_sub_pre = ''
 
-    from gtn.google_trans_new import google_translator
+        xx = 0
+        for items in ax2:
+            percent_translate_progress = int(((xx * 100.0) / (len(ax2)-1)) )
+            if mode_subtitle == 3:
+                dp.update(percent_translate_progress, 'מתרגם...', str(percent_translate_progress)+'%')
+                # dp.update(percent_translate_progress, ' מתרגם ' + encoding, str(percent_translate_progress)+'%')
+            elif mode_subtitle == 2 and all_setting["popup"]!="0":
+                notify3(colorize_text(' מתרגם - אנא המתן... ' + str(percent_translate_progress)+'%','aqua'),5)
 
-    translator = google_translator()
+            if (items != None):
+                translation = translator.translate(items, lang_tgt='he')
+            # time.sleep(1)
+                f_sub_pre += translation
+            xx += 1
 
-    all_text_p1=[]
-    all_data=''
+        all_text = f_sub_pre.replace(': ',':').replace('"# ','"#').split('\r\n')
 
-    counter=0
-
-    split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
-
-    ax2=split_string(text,3000)
-    f_sub_pre=''
-    xx=0
-
-    for items in ax2:
-        if mode_subtitle==3:
-            if KODI_VERSION>18:
-                dp.update(int(((xx* 100.0)/(len(ax2))) ), ' מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%')
+        f_all = ''
+        for line in all_text:
+            if '[' and ']' not in line:
+                f_all=f_all+rtl(line.encode('utf-8'))+'\n'
             else:
-                dp.update(int(((xx* 100.0)/(len(ax2))) ), ' מתרגם ' + encoding,str(int(((xx* 100.0)/(len(ax2))) ))+'%')
-        translation=translator.translate(items, lang_tgt='he')
-        f_sub_pre=f_sub_pre+translation
-        xx+=1
+                f_all=f_all+line.replace('] [','][')+'\n'
 
-    all_text=f_sub_pre.replace(': ',':').replace('"# ','"#').split('\r\n')
-
-    f_all=''
-    for line in all_text:
-        if '[' and ']' not in line:
-            f_all=f_all+rtl(line.encode('utf-8'))+'\n'
+        if KODI_VERSION>18:
+            with open(output_file, mode="w", encoding="utf8") as f:
+                f.write(f_all)
         else:
-            f_all=f_all+line.replace('] [','][')+'\n'
+            with open(output_file, mode="w") as f:
+                f.write(f_all)
 
-    if KODI_VERSION>18:
-        with open(output_file, mode="w", encoding="utf8") as f:
-            f.write(f_all)
-    else:
-        with open(output_file, mode="w") as f:
-            f.write(f_all)
+        if mode_subtitle==3:
+            dp.close()
 
-    if mode_subtitle==3:
-        dp.close()
+        myLogger('translate_subs - Done')
+        # return f_all
+        return True
+    except Exception as e:
+        myLogger('translate_subs - Error: [%s]' %(e))
+        return False
 
-    return f_all
-
-
+#not in use
 def searchTMDB(type, query, year):
     import requests
 
@@ -1389,6 +1426,7 @@ def searchTMDB(type, query, year):
     try:
         tmdb_id = int(json_results[0]["id"])
     except Exception as err:
+        myLogger("searchTMDB Error: " + repr(err))
         return '0000'
 
 
@@ -1434,161 +1472,160 @@ def get_TMDB_data_popularity_and_votes_sorted(url,filename):    ##### burekas
     myLogger("searchTMDB: %s" % url)
     json = caching_json(filename,url)
     json_results = json["results"]
-    myLogger("searchTMDB: json_results - " + repr(json_results))
-    json_results.sort(key = lambda x:x["popularity"], reverse=True)
-    json_results.sort(key = lambda x:x["vote_count"], reverse=True)
-    myLogger("searchTMDB: json_results sorted - " + repr(json_results))
+    myLogger("get_TMDB_data_popularity_and_votes_sorted: json_results - " + repr(json_results))
+    # 1st priority: popularity
+    # 2nd priority: vote_count
+    json_results.sort(key = lambda x:(x["popularity"],x["vote_count"]), reverse=True)
+    # json_results = sorted(json_results, key = lambda x:(x["popularity"],x["vote_count"]), reverse=True)
+    # json_results.sort(key = lambda x:x["popularity"], reverse=True)
+    # json_results.sort(key = lambda x:x["vote_count"], reverse=True)
+    myLogger("get_TMDB_data_popularity_and_votes_sorted: json_results sorted - " + repr(json_results))
 
     return json_results
 
-def get_TMDB_data_filtered(url,filename,query,type):    ##### burekas
+def get_TMDB_data_filtered(url,filename,query,type,year=0):    ##### burekas
     myLogger("searchTMDB: %s" % url)
     myLogger("query filtered: %s" % query)
     json = caching_json(filename,url)
     json_results = json["results"]
-    myLogger("searchTMDB: json_results - " + repr(json_results))
+    myLogger("get_TMDB_data_filtered: json_results - " + repr(json_results))
     if type=='tv':
         json_results.sort(key = lambda x:x["name"]==query, reverse=True)
     else:
-        json_results.sort(key = lambda x:x["title"]==query, reverse=True)
-    myLogger("searchTMDB: json_results sorted - " + repr(json_results))
+        if int(year) > 0:
+            json_results.sort(key = lambda x:(x["title"]==query,year in x["release_date"]), reverse=True)
+            #json_results.sort(key = lambda x:(x["title"]==query), reverse=True)
+        else:
+            json_results.sort(key = lambda x:x["title"]==query, reverse=True)
+    myLogger("get_TMDB_data_filtered: json_results sorted - " + repr(json_results))
 
     return json_results
 
-def getIMDB(title):    ##### burekas
-	myLogger("ManualSearch for title: %s" % title)
+def getIMDB(title,imdb_id):    ##### burekas
+    myLogger("getIMDB: SelfSearch for title: %s" % title)
 
-	item = {}
-	item['tvshow'], item['season'], item['episode'], item['dbtype'] = checkAndParseIfTitleIsTVshowEpisode(title)
-	myLogger("Parse item tvshow result: " + item['tvshow'])
-	myLogger("ManualSearch for item: %s" % repr(item))
+    item = {}
+    item['imdb_id'] = imdb_id #previous imdb_id
+    item['tvshow'], item['season'], item['episode'], item['dbtype'] = checkAndParseIfTitleIsTVshowEpisode(title)
+    myLogger("Parse item tvshow result: " + item['tvshow'])
+    myLogger("getIMDB: SelfSearch for item: %s" % repr(item))
 
-	if item['tvshow'] == 'NotTVShowEpisode':
-		item['title'] = title
-		item['tvshow'] = ''
-		_query = item['title'].rsplit(' ', 1)[0]
+    if item['tvshow'] == 'NotTVShowEpisode':
+        item['title'] = title
+        item['tvshow'] = ''
+        _query = item['title'].rsplit(' ', 1)[0]
 
-		try:
-			item['year'] = item['title'].rsplit(' ', 1)[1]
-			item['title'] = _query
-			if item['year'].isdigit():
-				if int(item['year']) > 1900:
-					item['imdb_id'] = searchForIMDBID(_query, item)
-					myLogger("item imdb_id %s" % (item['imdb_id']))
-				else:
-					#item['year'] is not present a year
-					item['imdb_id'] = ''
-			else:
-				item['imdb_id'] = ''
-		except:
-			item['imdb_id'] = ''
+        try:
+            item['year'] = item['title'].rsplit(' ', 1)[1]
+            item['title'] = _query
+            if item['year'].isdigit():
+                if int(item['year']) > 1900:
+                    item['imdb_id'] = searchForIMDBID(_query, item)
+                    myLogger("item imdb_id %s" % (item['imdb_id']))
+                else:
+                    #item['year'] is not present a year
+                    item['imdb_id'] = ''
+            else:
+                item['imdb_id'] = ''
+        except:
+            item['imdb_id'] = ''
 
-	else:  # TVShowEpisode
-		item['year'] = '0000'
-		_query = item['tvshow']
+    else:  # TVShowEpisode
+        item['year'] = '0000'
+        _query = item['tvshow']
 
-		_season = item['season'].split("0")
-		_episode = item['episode'].split("0")
-		if _season[0] == '':
-			item['season'] = _season[1]
-		if _episode[0] == '':
-			item['episode'] = _episode[1]
+        _season = item['season'].split("0")
+        _episode = item['episode'].split("0")
+        if _season[0] == '':
+            item['season'] = _season[1]
+        if _episode[0] == '':
+            item['episode'] = _episode[1]
 
-		item['imdb_id'] = searchForIMDBID(_query, item)
+        item['imdb_id'] = searchForIMDBID(_query, item)
 
-	try:
-		if item['imdb_id']:
-			return item['imdb_id']
-		else:
-			return 0
+    try:
+        if item['imdb_id'] != '' or item['imdb_id'] == '0':
+            return item['imdb_id']
+        else:
+            return '0'
 
-	except Exception as err:
-		myLogger('Caught Exception: error in manual search: %s' % format(err))
-		pass
+    except Exception as err:
+        myLogger('getIMDB: Caught Exception: error in self search: %s' % format(err))
+        pass
 
 def searchForIMDBID(query,item):  ##### burekas
-    import requests
-    year=item["year"]
+    myLogger("searchForIMDBID - item: " + repr(item))
+
     info=(PTN.parse(query))
     tmdbKey = '653bb8af90162bd98fc7ee32bcbbfb3d'
 
     if item["tvshow"] and item['dbtype'] == 'episode':
         type_search='tv'
-        filename = 'subs.search.tmdb.%s.%s.%s.json'%(type_search,lowercase_with_underscores(item['tvshow']),year)
-        url="https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en&append_to_response=external_ids"%(type_search,tmdbKey,quote_plus(item['tvshow']))
-          #url="https://api.tmdb.org/3/search/tv?api_key=%s&query=%s&year=%s&language=he&append_to_response=external_ids"%(tmdbKey,quote_plus(item['tvshow']),year)
-
-          #url='https://www.omdbapi.com/?apikey=8e4dcdac&t=%s&year=%s'%(item["tvshow"],item["year"])
-
-        #json_results = get_TMDB_data_popularity_and_votes_sorted(url,filename)
-        json_results = get_TMDB_data_filtered(url,filename,item['tvshow'],type_search)
-
-        try:
-            tmdb_id = int(json_results[0]["id"])
-        except Exception as e:
-            myLogger( "[%s]" % (e,))
-            return 0
-
-        filename = 'subs.search.tmdb.fulldata.%s.%s.json'%(type_search,tmdb_id)
-        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
-        myLogger("searchTMDB fulldata id: %s" % url)
-        json = caching_json(filename,url)
-
-        try:    imdb_id = json['external_ids']["imdb_id"]
-        except Exception as e:
-            myLogger( "[%s]" % (e,))
-            return 0
-
-        return imdb_id
+        temp_query = item["tvshow"]
+        year = 0 #year = item["year"]
+        url="https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en&append_to_response=external_ids"%(type_search,tmdbKey,quote_plus(temp_query))
+        #url="https://api.tmdb.org/3/search/tv?api_key=%s&query=%s&year=%s&language=he&append_to_response=external_ids"%(tmdbKey,quote_plus(temp_query),year)
+        #url='https://www.omdbapi.com/?apikey=8e4dcdac&t=%s&year=%s'%(temp_query,item["year"])
 
     elif info['title']: # and item['dbtype'] == 'movie':
         type_search='movie'
-        filename = 'subs.search.tmdb.%s.%s.%s.json'%(type_search,lowercase_with_underscores(query),year)
+        temp_query = info['title'] # was item['title'] for get_TMDB_data_filtered, and 'query' for filename
+        year = item["year"]
         if int(year) > 0:
-            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&year=%s&language=en"%(type_search,tmdbKey,quote(info['title']),year)
+            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&year=%s&language=en"%(type_search,tmdbKey,quote(temp_query),year)
         else:
-            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en"%(type_search,tmdbKey,quote(info['title']))
+            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en"%(type_search,tmdbKey,quote(temp_query))
 
-        #json_results = get_TMDB_data_popularity_and_votes_sorted(url,filename)
-        json_results = get_TMDB_data_filtered(url,filename,item['title'],type_search)
+    filename = 'subs.search.tmdb.%s.%s.%s.json'%(type_search,lowercase_with_underscores(temp_query),year)
+    #json_results = get_TMDB_data_popularity_and_votes_sorted(url,filename)
 
-        try:
-            tmdb_id = int(json_results[0]["id"])
-        except Exception as e:
-            myLogger( "[%s]" % (e,))
-            return 0
+    json_results = get_TMDB_data_filtered(url,filename,temp_query,type_search,year)
 
-        filename = 'subs.search.tmdb.fulldata.%s.%s.json'%(type_search,tmdb_id)
-        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
-        myLogger("searchTMDB fulldata id: %s" % url)
-        json = caching_json(filename,url)
+    try:
+        tmdb_id = int(json_results[0]["id"])
+    except Exception as e:
+        myLogger("searchForIMDBID (%s_1) Error: [%s]" % (type_search,e))
+        tmdb_id = ''
+        pass
+        # return "0"
 
-        try:    imdb_id = json['external_ids']["imdb_id"]
-        except Exception as e:
-            myLogger( "[%s]" % (e,))
-            return 0
+    if tmdb_id == '':
+        if item['imdb_id'] != '':
+            tmdb_id = item['imdb_id']
+        else:
+            return "0"
 
-        return imdb_id
+    filename = 'subs.search.tmdb.fulldata.%s.%s.json'%(type_search,tmdb_id)
+    url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
+    #url = "https://api.themoviedb.org/3/%s/%s?api_key=%s&language=en-US&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
+    myLogger("searchTMDB fulldata id: %s" % url)
+
+    json = caching_json(filename,url)
+
+    try:
+        imdb_id = json['external_ids']["imdb_id"]
+    except Exception as e:
+        myLogger("searchForIMDBID (%s_2) Error: [%s]" % (type_search,e))
+        return "0"
+
+    return imdb_id
+
 
 def is_local_file_tvshow(item):
-    return item["title"] and (int(item["year"])==0 or "smb:" in item['full_path'])
+    return item["title"] and (int(item["year"])==0) # or "smb:" in item['full_path'])
 
 def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
     myLogger('getting subs')
-    global links_wizdom,links_ktuvit,links_open,links_subscene,links_subcenter,links_local
+    global links_wizdom,links_ktuvit,links_open,links_subscene,links_local
     import requests
     ########################################## Get IMDB ID ###############################################
     myLogger("get_subtitles imdb_id: " + imdb_id)
     myLogger('get_subtitles item: ' + repr(item))
 
     if mode_subtitle==3:
-        dp = xbmcgui . DialogProgress ( )
-        if KODI_VERSION>18:
-            dp.create('אנא המתן'+'\n'+ 'מחפש כתוביות'+'\n'+ '','')
-            dp.update(0, 'אנא המתן'+'\n'+ 'מחפש כתוביות'+'\n'+  imdb_id )
-        else:
-            dp.create('אנא המתן', 'מחפש כתוביות', '','')
-            dp.update(0, 'אנא המתן','מחפש כתוביות',  imdb_id )
+        dp = dialogprogress()
+        dp.create('אנא המתן', 'מחפש כתוביות', '','')
+        dp.update(0, 'אנא המתן','מחפש כתוביות',  imdb_id)
 
     #imdb_id=''
     try:
@@ -1604,18 +1641,16 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
 
     if imdb_id==None:
         imdb_id='0'
+
     if mode_subtitle==3:
-        if KODI_VERSION>18:
-            dp.update(0, 'אנא המתן'+'\n'+ 'עדיין מחפש IMDB'+'\n'+  imdb_id )
-        else:
-            dp.update(0, 'אנא המתן', 'עדיין מחפש IMDB',  imdb_id )
+        dp.update(0, 'אנא המתן', 'עדיין מחפש IMDB',  imdb_id)
     else:
         notify2(' מחפש מספר IMDB '+imdb_id,all_setting)
 
     myLogger('get_subtitles: initial imdb_id is ' + imdb_id)
 
     try:
-        myLogger('get_subtitles item: ' + repr(params))
+        myLogger('get_subtitles main item: ' + repr(params))
 
         if not imdb_id[:2]=="tt":
             if item["tvshow"] or is_local_file_tvshow(item):
@@ -1637,33 +1672,27 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
                 s_string = ("%s %s" %(item["title"], str(item['year'])))
 
             myLogger('get_subtitles: search for a proper imdb_id - ' + s_string)
-            imdb_id = getIMDB(s_string)
+            imdb_id = getIMDB(s_string,imdb_id)
             myLogger('get_subtitles: imdb_id that has been founded is ' + imdb_id)
 
     except Exception as e:
-        imdb_id = 0
+        imdb_id = '0'
         myLogger('get_subtitles: exception searching imdb_id: ' + imdb_id)
         if mode_subtitle==3:
-            if KODI_VERSION>18:
-                dp.update(0, 'אנא המתן'+'\n'+ 'imdb_id כשל '+'\n'+  str(e) )
-            else:
-                dp.update(0, 'אנא המתן','imdb_id כשל ',  str(e) )
+            dp.update(0, 'אנא המתן','imdb_id כשל ',  str(e))
         else:
            notify2(' imdb_id כשל  '+e,all_setting)
         pass
 
     #if 'tt' not in str(imdb_id)
     if not imdb_id[:2]=="tt":
-        imdb_id = 0
+        imdb_id = '0'
         myLogger('get_subtitles: imdb_id has not been founded - ' + imdb_id)
     else:
         if mode_subtitle==3:
-            if KODI_VERSION>18:
-                dp.update(0, 'אנא המתן'+'\n'+ 'נמצא '+'\n'+  imdb_id )
-            else:
-                dp.update(0, 'אנא המתן', 'נמצא ',  imdb_id )
+            dp.update(0, 'אנא המתן', 'נמצא', imdb_id)
         else:
-            notify2(' נמצא'+imdb_id,all_setting)
+            notify2(' נמצא '+imdb_id, all_setting)
 
 
     save_all_data=[]
@@ -1682,14 +1711,6 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         threads.append(Thread(Subscene_Search,item,imdb_id))
         #threads.append(Thread(Subscene_Search,item,mode_subtitle))
         #num_of_subs,subtitle,saved_data=search_subscene(item,mode_subtitle)
-    '''
-    if all_setting["aa_subs"]== 'true':# Subcenter Search
-        threads.append(Thread(aa_subs_Search,item,mode_subtitle))
-        #num_of_subs,subtitle,saved_data=subcenter_search(item,mode_subtitle)
-
-    #if all_setting["yify"]== 'true':# YIFY Search
-        #num_of_subs,subtitle,saved_data=search_yify(item,imdb_id,mode_subtitle)
-    '''
 
     if all_setting["storage_en"]=='true' and len(all_setting["storage"])>0:# Local
         threads.append(Thread(Local_Search,item,all_setting))
@@ -1715,7 +1736,7 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         still_alive=0
         for yy in range(0,len(threads)):
             if not threads[yy].is_alive():
-                num_live=num_live+1
+                num_live += 1
                 tt[yy]="lightgreen"
             else:
                 still_alive=1
@@ -1725,30 +1746,26 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         zz=0
 
         if all_setting["wizset"]== 'true':
-            string_dp=string_dp+(prefix_wizdom.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_wizdom)))
-            zz=zz+1
+            string_dp += prefix_wizdom.upper() + ':' + colorize_text(len(links_wizdom),tt[zz]) + " "
+            zz += 1
         if all_setting["ktuvitset"]== 'true':
             #myLogger('links_ktuvit out:'+str(len(links_ktuvit)))
-            string_dp=string_dp+(prefix_ktuvit.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_ktuvit)))
-            zz=zz+1
+            string_dp += prefix_ktuvit.upper() + ':' + colorize_text(len(links_ktuvit),tt[zz]) + " "
+            zz += 1
         if all_setting["opensubtitle"]== 'true':
-            string_dp=string_dp+(prefix_open.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_open)))
-            zz=zz+1
+            string_dp += prefix_open.upper() + ':' + colorize_text(len(links_open),tt[zz]) + " "
+            zz += 1
         if all_setting["subscene"]== 'true':
-            string_dp=string_dp+(prefix_subscene.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_subscene)))
-            zz=zz+1
+            string_dp += prefix_subscene.upper() + ':' + colorize_text(len(links_subscene),tt[zz]) + " "
+            zz += 1
         if all_setting["storage_en"]=='true' and len(all_setting["storage"])>0:
-            string_dp=string_dp+(prefix_local.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_local)))
-            zz=zz+1
-        #   if all_setting["aa_subs"]== 'true':
-        #     string_dp=string_dp+(prefix_acat.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_subcenter)))
-        #     zz=zz+1
+            string_dp += prefix_local.upper() + ':' + colorize_text(len(links_local),tt[zz]) + " "
+            zz += 1
 
         if mode_subtitle==3:
-            if KODI_VERSION>18:
-                dp.update(int(((num_live* 100.0)/(len(threads))) ), ' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+'\n'+ string_dp+'\n'+  string_dp)
-            else:
-                dp.update(int(((num_live* 100.0)/(len(threads))) ), ' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)),string_dp,  string_dp)
+            percent_search_progress = int(((num_live* 100.0)/(len(threads))))
+            dp.update(percent_search_progress, ' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)), string_dp, string_dp)
+
         #old end for
 
         if still_alive==0:
@@ -1773,13 +1790,13 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
     save_all_data.append(links_open)
     save_all_data.append(links_subscene)
     save_all_data.append(links_local)
-    # save_all_data.append(links_subcenter)
 
     if mode_subtitle==3:
         dp.close()
+
     dont_save=0
 
-    if len(links_wizdom)==0 and len(links_ktuvit)==0 and len(links_open)==0 and len(links_subscene)==0 and len (links_local)==0: #and len(links_subcenter)==0
+    if len(links_wizdom)==0 and len(links_ktuvit)==0 and len(links_open)==0 and len(links_subscene)==0 and len (links_local)==0:
         dont_save=1
     return save_all_data,imdb_id,dont_save
 
@@ -1804,37 +1821,95 @@ def get_now_played():
     return item
 
 def calc_sub_percent_sync(json_value,array_original):
+    #json_value is the subtitle filename
+    #array_original is the video/source filename
+
     release_names=['bluray','blu-ray','bdrip','brrip','brip',
                    'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip','hc',
                    'web','web-dl','web dl','web-dlrip','webrip','web-rip',
-                   'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','screener','dvdscr','dvd-full',
+                   'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip',
+                   'screener','dvdscr','dvd-full',
                    'tc','telecine','ts','hdts','telesync']
 
-    Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
+    resolutions = ['720p','1080p','1440p','2160p','4k','4320p','4k']
 
-    array_subs=json_value['label2'].replace(prefix_wizdom,'').replace(prefix_ktuvit,'').replace(prefix_open,'').replace(prefix_subscene,'').replace(prefix_acat,'').replace(prefix_local,'').replace("[SCe]",'').replace("[SC]",'').replace("[SZ]",'').replace("[sz]",'').replace("[COLOR "+color_wizdom+"]",'').replace("[COLOR "+color_ktuvit+"]",'').replace("[COLOR "+color_open+"]",'').replace("[COLOR "+color_subscene+"]",'').replace("[COLOR "+color_local+"]",'').replace("[COLOR skyblue]",'').replace("[COLOR lightcoral]",'').replace("[COLOR gray]",'').replace("[COLOR burlywood]",'').replace(".srt",'').replace("[/COLOR]",'').strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").split(".")
-    #array_subs.pop(0)
+    quality=xbmc.getInfoLabel("VideoPlayer.VideoResolution")+'p'
+
+    # remove '[...]' from text
+    text = json_value['label2']
+    text = remove_brackets_content_from_text(text)
+
+    array_subs=(text.replace(prefix_wizdom,'').replace(prefix_ktuvit,'')
+                .replace(prefix_open,'').replace(prefix_subscene,'').replace(prefix_acat,'')
+                .replace(prefix_local,'').replace("[SCe]",'').replace("[SC]",'').replace("[SZ]",'')
+                .replace("[sz]",'').replace("[COLOR "+color_wizdom+"]",'')
+                .replace("[COLOR "+color_ktuvit+"]",'').replace("[COLOR "+color_open+"]",'')
+                .replace("[COLOR "+color_subscene+"]",'').replace("[COLOR "+color_local+"]",'')
+                .replace("[COLOR skyblue]",'').replace("[COLOR lightcoral]",'')
+                .replace("[COLOR gray]",'').replace("[COLOR burlywood]",'').replace(".srt",'')
+                .replace("[/COLOR]",'')
+                .strip()
+                .replace("-",".").replace("_",".").replace(" ",".").replace("+",".").replace("/",".")
+                .replace("[",".").replace("]",".")
+                .split("."))
+    ##array_subs.pop(0)
+
+    #remove empty items from sub array
     array_subs=[element.strip().lower() for element in array_subs if element != '']
-    array_subs=[element for element in array_subs if element not in ('-','no', 'hi')]
     #array_subs=[str(x).lower() for x in array_subs if x != '']
+
+    #fix for 'Opensubtitles" subs - remo
+    if array_subs[-1].lower()=='hi' and array_subs[-2].lower()=='no':
+        array_subs.pop(-1)
+        array_subs.pop(-1)
+    #array_subs=[element for element in array_subs if element not in ('hi')] # was ('-','no','hi')
+
+    #myLogger("Video source array before compare: %s" %array_original)
+    #myLogger("Subtitle array before compare: %s" %array_subs)
 
     array_original=[element.strip().lower() for element in array_original if element != '']
     #array_original=[element.strip().lower() for element in array_original]
     #array_original=[str(x).lower() for x in array_original if x != '']
 
-    if Quality not in array_original and Quality in array_subs:
-        array_original.append(Quality)
+    #----------------------------------------------------------------------------------#
+    # 1st priority "release name" (+3 if "release name" are equal)
+    # 2nd priority "release type" (+2 if "release name" and "release type" are equal)
+    # 3th priority "resolution"   (+1 if "release name" and "release type" and "resolution" are equal)
+    #----------------------------------------------------------------------------------#
 
-    #If we want to give more weight to the ratio score to the "release type" when comparing.
-    for item_2 in release_names:
-        if item_2 in array_original and item_2 in array_subs:
-            array_original.append(item_2)
-            # array_original.append(item_2)
-            # array_original.append(item_2)
-            array_subs.append(item_2)
-            # array_subs.append(item_2)
-            # array_subs.append(item_2)
+    # Give "release name" more weight (x3) to the ratio score of the compare
+    # 1st priority "release name"
+    #myLogger("Video source release: %s" %array_original[-1])
+    #myLogger("Subtitle release: %s" %array_subs[-1])
+    release_name_position = -2 if array_subs[-1].lower()=='hi' else -1
+    sub_release_name = array_subs[release_name_position]
+    video_release_name = array_original[-1]
+    if sub_release_name.lower() == video_release_name.lower():
+        for i in range(3):
+            array_subs.append(sub_release_name)
+            array_original.append(video_release_name)
 
+        # Give "release type" more weight (x2) to the ratio score of the compare
+        # 2nd priority "release type"
+        sub_release_type = list(set(array_subs).intersection(release_names))
+        video_release_type = list(set(array_original).intersection(release_names))
+        if len(sub_release_type) > 0 and len(video_release_type) > 0 and sub_release_type[-1] == video_release_type[-1]:
+            for i in range(2):
+                array_original.append(video_release_type[-1])
+                array_subs.append(sub_release_type[-1])
+
+            # 3th priority "resolution"
+            video_quality = list(set(array_original).intersection(resolutions))
+            sub_quality = list(set(array_subs).intersection(resolutions))
+            if len(video_quality) > 0 and len(sub_quality) > 0 and sub_quality[-1] == video_quality[-1]:
+                for i in range(1):
+                    array_original.append(video_quality[-1])
+                    array_subs.append(sub_quality[-1])
+                    #myLogger("Video source quality: %s" %repr(video_quality[0]))
+                    #myLogger("Subtitle quality: %s" %repr(sub_quality[0]))
+
+    #myLogger("Video source array for compare: %s" %array_original)
+    #myLogger("Subtitle array for compare: %s" %array_subs)
     precent=similar(array_original,array_subs)
     return precent
 
@@ -1849,11 +1924,12 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
         best_sub=items[4]
         highest_rating=items[5]
         hearing_imp=items[6]
-        # notify2('[COLOR yellow]'+str(highest_rating)+'%[/COLOR]' + ' - ' +label2+','+label ,all_setting)
-        notify2('%s | %s | %s | %s' %('[COLOR yellow]'+str(highest_rating)+'%[/COLOR]',source_prefix,label2,label) ,all_setting,3)
+
+        # notify2(colorize_text(str(highest_rating)+'%',"yellow") + ' - ' +label2+','+label ,all_setting)
+        notify2('%s | %s | %s | %s' %(colorize_text(str(highest_rating)+'%',"yellow"),source_prefix,label2,label) ,all_setting,3)
 
         if len(best_sub)>0:
-            subs=download_subs(best_sub)
+            sub=download_subs(best_sub)
 
             try:
                 shutil.rmtree(__last__)
@@ -1867,13 +1943,13 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
 
             #if ('language=English' in best_sub or  'language=Arabic' in best_sub or 'language=Spanish' in best_sub) and all_setting["auto_translate"]=='true':
 
-            subs = check_and_translate_subs(subs,best_sub,label,mode_subtitle,'',all_setting)
+            (sub, isSuccess) = translate_subs_and_renaming(sub,best_sub,label,mode_subtitle,'',all_setting)
 
             dst=last_sub_path
-            xbmcvfs.copy(subs, dst)
+            xbmcvfs.copy(sub, dst)
 
             if all_setting["enable_font"]=='true':
-                subs = srt2ass(subs,all_setting)
+                sub = srt2ass(sub,all_setting)
 
             json_value2=json.loads(json.dumps(save_all_data))
 
@@ -1882,9 +1958,10 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
             last_sub_download=hashlib.sha256(str(json.dumps(params)).encode('utf-8','ignore')).hexdigest()
 
             subtitle_cache_next().set('last_sub', last_sub_download)
-            notify3('[COLOR aqua]כתובית מוכנה[/COLOR]',2)
+            if all_setting["popup"]!="0" and isSuccess:
+                notify3(colorize_text('הכתוביות מוכנות','aqua'),2)
 
-            myLogger("AutoSub sub ready: " + repr(subs))
+            myLogger("AutoSub sub ready: " + repr(sub))
 
             # listitem = xbmcgui.ListItem(label          = label,
             #                             label2         = label2
@@ -1892,112 +1969,141 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
             # listitem.setArt({'thumb' : lang_prefix, 'icon': source_prefix})
             # xbmc.Player().updateInfoTag(listitem)
 
-            xbmc.Player().setSubtitles(subs)
-            if all_setting["pause"]=='1':
+            xbmc.Player().setSubtitles(sub)
+            if all_setting["pause"]=='1' and isSuccess: #resume
                 xbmc.Player().pause()
             break
 
-def check_and_translate_subs(subs_to_translate_path,best_sub_url,label,mode_subtitle,language,all_setting):
-    subs = subs_to_translate_path
+def translate_subs_and_renaming(subs_to_translate_path,best_sub_url,label,mode_subtitle,language,all_setting):
+    try:
+        isSuccess = True
+        sub = subs_to_translate_path
 
-    if mode_subtitle == 2:
-        if all_setting["auto_translate"]=='true' and (best_sub_url!='' and label!=''
-                                                      and not any(s in best_sub_url for s in ['language=Hebrew','language=hebrew',
-                                                                                      'language=He','language=he'])
-                                                      and not any(s in label for s in ['Hebrew','hebrew','He','he'])
-                                                     ):
-            notify2('[COLOR red]מתרגם... המתן קטנה :-)[/COLOR]',all_setting)
-            subs = start_tranlate_sub(subs_to_translate_path,mode_subtitle)
+        myLogger("translate_subs_and_renaming - sub path before: " + repr(sub))
 
-    elif mode_subtitle == 3:
-        #if (language=='English' or language=='Arabic' or language=='Spanish')  and all_setting["auto_translate"]=='true':
-        if all_setting["auto_translate"]=='true' and (language!=''
-                                                      and not any(s in language for s in ['Hebrew','hebrew','He','he'])):
-                                #  and (source=='opensubtitle' or source=='subscene')):
-            subs = start_tranlate_sub(subs_to_translate_path,mode_subtitle)
+        if all_setting["auto_translate"]=='true':
+            # translation_in_progress = false
+            if (mode_subtitle == 2 and (best_sub_url!='' and label!=''
+                                    and not any(s in best_sub_url for s in ['language=Hebrew','language=hebrew',
+                                                                            'language=He','language=he'])
+                                    and not any(s in label for s in ['Hebrew','hebrew','He','he']))
+                or mode_subtitle == 3 and (language!=''
+                                            and not any(s in language for s in ['Hebrew','hebrew','He','he']))):
 
-    return subs;
+                    (sub,isSuccess) = start_tranlate_sub(subs_to_translate_path,mode_subtitle)
+                    if isSuccess:
+                        target_lang = 'he'
+                    else:
+                        target_lang = thumbLang
+                        notify3(colorize_text('התרגום נכשל - נסה שנית מאוחר יותר','red'),3)
+            else:
+                target_lang = thumbLang
+
+        elif mode_subtitle == 2:
+            target_lang = thumbLang
+
+        sub = rename_sub_filename_with_language_prefix(sub,MySubFolder2,target_lang)
+        myLogger("translate_subs_and_renaming - sub path after: " + repr(sub))
+        return (sub,isSuccess);
+
+    except Exception as e:
+        myLogger("translate_subs_and_renaming - Error [%s]" %(e))
+        return (subs_to_translate_path,False)
+
+
+class historylog:
+    def __init__(self, line):
+        self.name = ""
+        self.link = ""
+        self.season = ""
+        self.episode = ""
+        self.original = ""
+
+    def parse_line(self, line):
+        arr = line.split(' ::: ')
+        self.name = arr[0].strip()
+        self.link = arr[1].strip()
+        self.season = arr[2].strip()
+        self.episode = arr[3].strip()
+        self.original = arr[4].strip()
+
+    def same_season_episode(self, other):
+        return self.season == other.season and self.episode == other.episode
+
+    def __str__(self):
+        data = ""
+        data += self.name
+        data += ' ::: ' + self.link
+        data += ' ::: ' + self.season
+        data += ' ::: ' + self.episode
+        data += ' ::: ' + self.original
+        data += '\n'
 
 def check_and_save_history_logs(sub,all_setting):
-    if all_setting["history_log"]=='true':
-            xbmcvfs.mkdirs(__history__)
-            h_file=os.path.join(__history__, "hist_report.txt")
-            if os.path.exists(h_file):
-                file = open(h_file, 'r')
-                all_subs_hist= file.readlines()
-                file.close()
-            else:
-                all_subs_hist=[]
+    if all_setting["history_log"] != 'true':
+        return
 
-            f_link=[]
-            f_name=[]
-            f_season=[]
-            f_episode=[]
-            all_data=[]
-            f_original=[]
+    xbmcvfs.mkdirs(__history__)
+    h_file=os.path.join(__history__, "hist_report.txt")
 
-            for items in all_subs_hist:
-                f_name.append(items.split(':::')[0].strip())
-                f_link.append(items.split(':::')[1].strip())
+    all_subs_hist = []
+    if os.path.exists(h_file):
+        with open(h_file, 'r') as file:
+            all_subs_hist = file.readlines()
 
-                f_season.append(items.split(':::')[2].strip())
-                f_episode.append(items.split(':::')[3].strip())
-                f_original.append(items.split(':::')[4].strip())
-                all_data.append((items.split(':::')[0].strip(),items.split(':::')[1].strip(),items.split(':::')[2].strip(),items.split(':::')[3].strip(),items.split(':::')[4].strip()))
+    all_data={}
+    for items in all_subs_hist:
+        data = historylog()
+        data.parseline(items)
+        all_data[data.link] = data
 
-            new_f_link=getInfoLabel("VideoPlayer.DBID")
-            new_f_season=(getInfoLabel("VideoPlayer.Season"))
-            new_f_episode=(getInfoLabel("VideoPlayer.Episode"))
-            new_f_original=(getInfoLabel("VideoPlayer.OriginalTitle"))
+    newdata = historylog()
+    newdata.name = params.get('versioname')
+    if "" == newdata.name:
+        newdata.name = params.get('filename')
+    if "" == newdata.name:
+        newdata.name = os.path.basename(sub)
+    newdata.name = newdata.name.replace('.srt', '').replace('.sub','')
 
-            if 'versioname' in params:
-                new_f_name=params['versioname']
-            elif 'filename' in params:
-                new_f_name=params['filename']
-            else:
-                new_f_name=(os.path.basename(sub))
-            new_f_name=new_f_name.replace('.srt','').replace('.sub','')
-            if new_f_link in f_link :
-                index_o=f_link.index(new_f_link)
-                if new_f_season.strip()==f_season[index_o].strip() and new_f_episode.strip()==f_episode[index_o].strip():
-                    all_data.pop(index_o)
-                    all_data.append((new_f_name,new_f_link,new_f_season,new_f_episode,new_f_original))
-            else:
-                all_data.append((new_f_name,new_f_link,new_f_season,new_f_episode,new_f_original))
-            file = open(h_file, 'w')
+    newdata.link = xbmc.getInfoLabel("VideoPlayer.DBID")
+    newdata.season = xbmc.getInfoLabel("VideoPlayer.Season").strip()
+    newdata.episode = xbmc.getInfoLabel("VideoPlayer.Episode").strip()
+    newdata.original = xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
 
-            for name_in,link_in,season_in,episode_in,f_original_in in all_data:
-                if season_in=='':
-                    season_in=' '
-                if episode_in=='':
-                    episode_in=' '
-                file.write(name_in+':::'+link_in+':::'+season_in+':::'+episode_in+':::'+f_original_in+'\n')
+    data = all_data.get(newdata.link, historylog())
+    if newdata.link == data.link:
+        if data.same_season_episode(newdata):
+            all_data[newdata.link] = newdata
+        #else: dont update ?
+    else:
+        all_data[newdata.link] = newdata
 
-            file.close()
+    with open(h_file, 'w') as file:
+        for data in all_data:
+            file.write(str(data))
 
 def start_tranlate_sub(subs_to_translate,mode_subtitle):
     try:
         translated_sub_path = os.path.join(__last__, "trans.srt")
-        translate_subs(subs_to_translate,translated_sub_path,mode_subtitle)
+        isSuccess = translate_subs(subs_to_translate,translated_sub_path,mode_subtitle)
     except Exception as e:
-        myLogger('e'+str(mode_subtitle))
-        myLogger(e, logLevel=xbmc.LOGERROR)
+        myLogger("start_tranlate_sub - Error: " + repr(e), logLevel=xbmc.LOGERROR)
+        isSuccess = False
         pass
 
-    return translated_sub_path
+    dst=subs_to_translate
+    xbmcvfs.copy(translated_sub_path, dst)
+    return (dst,isSuccess)
 
 def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
-    global links_wizdom,links_subcenter,links_local,links_ktuvit,links_open,imdbid
+    global links_wizdom,links_local,links_ktuvit,links_open,links_subscene,imdbid
     running=1
 
     myLogger("search_all: mode_subtitle - " + repr(mode_subtitle))
 
     if mode_subtitle==3:
-        dp = xbmcgui.DialogProgress()
-        if KODI_VERSION>18:
-            dp.create('מקבל מידע...','Getting item info...'+'\n'+''+'\n'+'')
-        else:
-            dp.create('מקבל מידע...','Getting item info...','','')
+        dp = dialogprogress()
+        dp.create('מקבל מידע...','Getting item info...','','')
     else:
         notify2('Getting item info',all_setting)
 
@@ -2034,22 +2140,16 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
     #item['full_path']=getInfoLabel("Player.Filenameandpath")
 
     if mode_subtitle==3:
-        if KODI_VERSION>18:
-            dp.update(0, 'אנא המתן'+'\n'+'מחפש מספר IMDB'+'\n'+ imdb_id )
-        else:
-            dp.update(0, 'אנא המתן','מחפש מספר IMDB', imdb_id )
+        dp.update(0, 'אנא המתן','מחפש מספר IMDB', imdb_id)
     else:
-        notify2('Serching IMDB '+imdb_id,all_setting)
+        notify2(' מחפש מספר IMDB '+imdb_id,all_setting)
 
 
     clean_title(item)
     #parse_rls_title(item)
 
     if mode_subtitle==3:
-        if KODI_VERSION>18:
-            dp.update(0, 'מנקה תיקיות'+'\n'+ item['title'] )
-        else:
-            dp.update(0, 'מנקה תיקיות', item['title'] )
+        dp.update(0, 'מנקה תיקיות', item['title'])
     else:
         notify2('מנקה תיקיות',all_setting)
 
@@ -2067,12 +2167,9 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
 
     if mode_subtitle==3:
-        if KODI_VERSION>18:
-            dp.update(0, 'מתחיל לחפש כתוביות'+'\n'+ imdb_id )
-        else:
-            dp.update(0, 'מתחיל לחפש כתוביות', imdb_id )
-    else:
-        notify2('מתחיל לחפש כתוביות',all_setting)
+        dp.update(0, 'מתחיל לחפש כתוביות', imdb_id)
+    elif all_setting["popup"]!="0":
+        notify3(colorize_text('מתחיל לחפש כתוביות','aqua'),2)
 
 
     dd=[]
@@ -2094,15 +2191,14 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
     links_ktuvit=[]
     links_wizdom=[]
-    links_subcenter=[]
+    links_subscene=[]
     links_local=[]
     links_open=[]
 
     if mode_subtitle>1:
         try:
-            f = open(last_sub, 'w')
-            f.write(json.dumps(save_all_data))
-            f.close()
+            with open(last_sub, 'w') as f:
+                f.write(json.dumps(save_all_data))
 
             subtitle_cache.set('save','save')
         except:
@@ -2115,7 +2211,8 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
         if mode_subtitle==2:
             if len(all_data)==0:
-                notify3('[COLOR aqua]לא נמצאו כתוביות[/COLOR]',2)
+                if all_setting["popup"]!="0":
+                    notify3(colorize_text('לא נמצאו כתוביות','aqua'),2)
             else:
                 autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data)
         else:
@@ -2188,6 +2285,7 @@ def get_manual_search_item_data(item,manual_title):
     return item,d_value_s,d_value_e
 
 def get_player_item_data(item):
+    myLogger("get_player_item_data")
     try:
         item['season']=int(item['season'])
     except:
@@ -2214,9 +2312,11 @@ def get_player_item_data(item):
 
     if item['episode']==0:
         item['title'] = normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).replace("%20"," ")  # no original title, get just Title
+        # if (item['title'].isascii() == False):
+        #     item['title'] = getTVShowOriginalTitle().replace("%20"," ")
     else:
         #item['title'] = normalizeString(xbmc.getInfoLabel("VideoPlayer.TVshowtitle")).replace("%20"," ")  # Show
-        item['title'] = getOriginalTitle().replace("%20"," ")  # Show
+        item['title'] = getTVShowOriginalTitle().replace("%20"," ")  # Show
         item['tvshow'] = item['title']
         if (item['tvshow']):
             item['tvshow'] = ("%s S%.2dE%.2d" % (item['tvshow'], int(item["season"]), int(item["episode"])))
@@ -2247,6 +2347,8 @@ def get_player_item_data(item):
     return item, imdb_id
 
 def get_non_player_item_data(item):
+    myLogger("get_non_player_item_data")
+
     imdb_id = getInfoLabel("ListItem.IMDBNumber")
     item['year'] = getInfoLabel("ListItem.Year")
     item['season'] = getInfoLabel("ListItem.Season")
@@ -2298,6 +2400,30 @@ def is_to_check_percent(item):
     # Without 'strm' which is video addon file or 'plugin://' which is video addon menu
     return Player().isPlaying() or not Player().isPlaying() and not any(s in item['full_path'] for s in ['strm','plugin://'])
 
+def remove_brackets_content_from_text(text):
+    new_text = text
+    # remove '[...]' from text
+    start_index = text.find("[")
+    end_index = text.find("]")
+    if start_index != -1 and end_index != -1:
+        # '[' and ']' are both present in the string
+        new_text = text[:start_index] + text[end_index + 1:]
+
+    start_index = new_text.find("(")
+    end_index = new_text.find(")")
+    if start_index != -1 and end_index != -1:
+        # '[' and ']' are both present in the string
+        new_text = new_text[:start_index] + new_text[end_index + 1:]
+
+    return new_text
+
+def orginaize_string_for_compare(text):
+    text = remove_brackets_content_from_text(text)
+
+    return (text.strip().replace("-",".").replace("_",".").replace(" ",".")
+                .replace("+",".").replace("/",".").replace("[",".").replace("]",".")
+                .replace(".avi","").replace(".mp4","").replace(".mkv","").split("."))
+
 def results_subs_processing(save_all_data,item,last_sub):
     ########## Calc Percent and Langauge Sort ##########
     all_data=[]
@@ -2313,17 +2439,23 @@ def results_subs_processing(save_all_data,item,last_sub):
             if 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value and 'sync' in json_value and 'hearing_imp' in json_value:
                 ############## Calc Sync Percentage ###############
                 if is_to_check_percent(item):
-                    array_original=item['file_original_path'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
-                    percent = calc_sub_percent_sync(json_value, array_original)
+                    if len(item['file_original_path']) > 0:
+                        array_original = orginaize_string_for_compare(item['file_original_path'])
+                        percent = calc_sub_percent_sync(json_value, array_original)
+                    else:
+                        percent = 0
                     #if precent==0:
 
-                    array_original=xbmc.getInfoLabel("VideoPlayer.title").strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
-                    percent2 = calc_sub_percent_sync(json_value, array_original)
+                    if len(xbmc.getInfoLabel("VideoPlayer.title")) > 0:
+                        array_original = orginaize_string_for_compare(xbmc.getInfoLabel("VideoPlayer.title"))
+                        percent2 = calc_sub_percent_sync(json_value, array_original)
+                    else:
+                        percent2 = 0
 
-                    if percent2>percent:
-                        percent=percent2
+                    if percent2 > percent:
+                        percent = percent2
                 else:
-                    percent=0
+                    percent = 0
 
                 ############## Build subs data ###############
                 ############## Language Filtering & attach percent value foe each ###############
@@ -2360,10 +2492,8 @@ def results_subs_processing(save_all_data,item,last_sub):
 
     all_data=all_data+all_eng+all_arb+all_spn
 
-    f = open(last_sub+'_sort', 'w')
-
-    f.write(json.dumps(all_data))
-    f.close()
+    with open(last_sub+'_sort', 'w') as f:
+        f.write(json.dumps(all_data))
 
     return all_data
 
@@ -2372,7 +2502,7 @@ def results_styling_subs(counter,items,item,manual_title):
     #items[0] = 'label', items[1] = 'label2 : sub',items[2] = 'iconImage', items[3] = 'thumbnailImage : flag',
     #items[4] = 'url : download', items[5] = 'percent', items[6] = 'hearing_imp'
 
-    #sub_name='[COLOR cyan]'+str(items[5])+ "% "+'[/COLOR]'+items[1]
+    #sub_name=colorize_text(str(items[5])+ "% ","cyan")+items[1]
     language=items[0] #or second string for menu item
     sub_name=items[1]
     source_prefix=items[2]
@@ -2385,13 +2515,13 @@ def results_styling_subs(counter,items,item,manual_title):
     str_source_prefix = str(str(source_prefix))
 
     ##### Set 'Sync' #####
-    #json_value['label2']='[COLOR gold]'+str(precent)+ "% "+'[/COLOR]'+json_value['label2']
+    #json_value['label2']=colorize_text(str(precent)+ "% ",'gold')+json_value['label2']
     #if sync_percent>int(all_setting["sync_percent"]) or item['file_original_path'].replace("."," ") in sub_name.replace("."," ") and len(item['file_original_path'].replace("."," "))>5:
     if sync_percent>int(all_setting["sync_percent"]):
         isSynced = 'true'
         #isSynced = 'true' if items[5]>int(all_setting["sync_percent"]) else 'false'
-        #sub_name='[COLOR gold]GOLD [B]'+sub_name+'[/B][/COLOR]'
-        ##json_value['label2']='[COLOR gold] GOLD [B]'+json_value['label2']+'[/B][/COLOR]'
+        #sub_name=colorize_text('GOLD [B]'+sub_name+'[/B]','gold')
+        #sub_name=colorize_text(' GOLD [B]'+json_value['label2']+'[/B]','gold')
     else:
         isSynced = 'false'
 
@@ -2412,10 +2542,10 @@ def results_styling_subs(counter,items,item,manual_title):
         prefix1 = str_counter + " " + str_percent + " [" + str_source_prefix + "] "
         prefix2 = str_counter + " [" + str_source_prefix + "] "
 
-        if Player().isPlaying():
-            sub_name=wrap_text_with_color(prefix1,color_result)+sub_name
+        if is_to_check_percent(item):
+            sub_name=colorize_text(prefix1,color_result)+sub_name
         else:
-            sub_name=wrap_text_with_color(prefix2,color_result)+sub_name
+            sub_name=colorize_text(prefix2,color_result)+sub_name
             iconData=''
     else:
         if all_setting["result_style"]=='0':
@@ -2446,16 +2576,16 @@ def results_styling_subs(counter,items,item,manual_title):
         #Show % or rating only when percent can be calculate
         #Do not show when running manual search
         if is_to_check_percent(item) and manual_title=='' or not "%" in prefix2:
-            sub_name=wrap_text_with_color(prefix2,color_result)+sub_name
+            sub_name=colorize_text(prefix2,color_result)+sub_name
         if is_to_check_percent(item) and manual_title=='' or not "%" in prefix1:
-            sub_name=wrap_text_with_color(prefix1,color_result)+sub_name
+            sub_name=colorize_text(prefix1,color_result)+sub_name
         if not is_to_check_percent(item) and "%" in iconData or manual_title!='':
             iconData=''
 
-    #sub_name="[COLOR %s]%s.[/COLOR] %s" %(color_result_counter, counter, sub_name)
+    #sub_name=colorize_text(counter,color_result_counter) + ' ' + sub_name
 
     if iconData!='':
-        iconData = wrap_text_with_color(iconData,color_result)
+        iconData = colorize_text(iconData,color_result)
 
     try:
         listitem = xbmcgui.ListItem(label          = language,
@@ -2476,65 +2606,67 @@ def results_styling_subs(counter,items,item,manual_title):
     return listitem
 
 
-def wrap_text_with_color(text,color):
-    return '[COLOR '+color+']'+str(text)+'[/COLOR]'
+def colorize_text(text,color):
+    return "[COLOR %s]%s[/COLOR]" %(color, str(text))
 
 def results_generate_menu_items():
     listitem = ListItem(label=__language__(32030),
-                        label2='[COLOR plum][I]'+ __language__(32029)+'[/I][/COLOR]')
+                        label2=colorize_text('[I]'+ __language__(32029)+'[/I]','plum'))
     url = "plugin://%s/?action=download&versioname=%s&id=%s" % (MyScriptID, "1", "open_setting")
     addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=True)
 
     listitem = ListItem(label=__language__(32031),
-                        label2='[COLOR khaki][I]'+ __language__(32003)+'[/I][/COLOR]')
+                        label2=colorize_text('[I]'+ __language__(32003)+'[/I]','khaki'))
     url = "plugin://%s/?action=download&versioname=%s&id=%s" % (MyScriptID, "1", "clean")
     addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=True)
 
     if os.path.exists(pathToAddonSubskeys) or os.path.exists(pathToAddonKeymap):
         listitem = ListItem(label=__language__(32032),
-                            label2='[COLOR olive][I]'+ __language__(32033)+'[/I][/COLOR]')
+                            label2=colorize_text('[I]'+ __language__(32033)+'[/I]','olive'))
         url = "plugin://%s/?action=download&versioname=%s&id=%s" % (MyScriptID, "1", "keys")
         addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=True)
 
     '''
     listitem = ListItem(label=__language__(32036),
-                        label2='[COLOR seagreen][I]'+ __language__(32035)+'[/I][/COLOR]')
+                        label2=colorize_text('[I]'+ __language__(32035)+'[/I]','seagreen'))
     url = "plugin://%s/?action=download&versioname=%s&id=%s" % (MyScriptID, "1", "disable_subs")
     #url = "plugin://%s/?action=disable_subs" % (MyScriptID)
     addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=True)
     '''
 
     '''
-    listitem = ListItem(label=__language__(32032),label2='[COLOR aqua][I]'+ 'יצא קובץ היסטוריה'+'[/I][/COLOR]')
+    listitem = ListItem(label=__language__(32032),
+                        label2=colorize_text('[I]'+ 'יצא קובץ היסטוריה' +'[/I]','aqua'))
     url = "plugin://%s/?action=export"% (MyScriptID)
     addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=True)
     '''
 
 def change_background(all_setting):
-        #sublist=os.listdir(__last__)
-        sub=last_sub_path
+    #sublist=os.listdir(__last__)
+    sub = last_sub_path
 
-        if all_setting["enable_font"]=='true':
-          if all_setting["background"]=='false':
-           all_setting["background"]='true'
-          else:
-           all_setting["background"]='false'
-
-          sub = srt2ass(sub,all_setting)
+    if all_setting["enable_font"]=='true':
+        if all_setting["background"]=='false':
+            all_setting["background"]='true'
         else:
-          if all_setting["background"]=='false':
-           all_setting["background"]='true'
-           sub = srt2ass(sub,all_setting)
-          else:
-           all_setting["background"]='false'
+            all_setting["background"]='false'
 
-        xbmc.Player().setSubtitles(sub)
-        return all_setting
+        sub = srt2ass(sub, all_setting)
+    else:
+        if all_setting["background"]=='false':
+            all_setting["background"]='true'
+            sub = srt2ass(sub, all_setting)
+        else:
+            all_setting["background"]='false'
+
+    xbmc.Player().setSubtitles(sub)
+    return all_setting
 
 def clear_data():
     try:
-        delete_junction(MyTmp)
+        remove_and_generate_temp_subs_directories()
         delete_junction(cache_list_folder)
+        #delete_junction(MyTmp)
         #remove_and_generate_directory(MyTmp)
         #remove_and_generate_directory(cache_list_folder)
 
@@ -2606,6 +2738,10 @@ elif action == 'download':
 
         try:
             #sublist=os.listdir(__last__)
+            if not os.path.exists(last_sub_path):
+                with open(last_sub_path, 'w') as file:
+                    file.write("dummy")
+
             sub=last_sub_path
             end_sub_progress(sub,all_setting)
         except:
@@ -2630,7 +2766,7 @@ elif action == 'download':
         subtitle_cache_next().set('last_sub', last_sub_download)
 
         for sub in subs:
-            sub = check_and_translate_subs(sub,'','',3,language,all_setting)
+            (sub, isSuccess) = translate_subs_and_renaming(sub,'','',3,language,all_setting)
 
             check_and_save_history_logs(sub,all_setting)
 
@@ -2639,6 +2775,7 @@ elif action == 'download':
 
             end_sub_progress(sub,all_setting)
 
+    #xbmc.Player().setSubtitles(sub)
     endOfDirectory(int(sys.argv[1]))
 
 elif action=='clean':
@@ -2653,11 +2790,6 @@ elif action=='disable_subs':
     addDirectoryItem(handle=int(sys.argv[1]), url="ww", listitem=listitem,isFolder=False)
 
     endOfDirectory(int(sys.argv[1]))
-'''
-'''
-elif action=='clear_aa':
-     cache.clear(['subs_aa','subs'])
-     executebuiltin((u'Notification(%s,%s)' % (__scriptname__, __language__(32004))))
 
 elif action=='export':
     myLogger("export")

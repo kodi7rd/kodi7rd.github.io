@@ -79,7 +79,7 @@ def get_ktuvit_data(item,imdb_id):
 
     data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":false}}'%(s_title,s_type)
 
-    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data).json()
+    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8')).json()
 
     j_data=json.loads(response['d'])['Films']
     f_id=''
@@ -129,6 +129,7 @@ def get_ktuvit_data(item,imdb_id):
         )
 
         response = requests.get('https://www.ktuvit.me/Services/GetModuleAjax.ashx', headers=headers, params=params, cookies=login_cook).content
+
     else:
         headers = {
             'authority': 'www.ktuvit.me',
@@ -153,6 +154,7 @@ def get_ktuvit_data(item,imdb_id):
     return response,f_id
 
 def parse_ktuvit_response(response,f_id,prefix_ktuvit,color_ktuvit):
+    from service import colorize_text
     MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
 
     regex='<tr>(.+?)</tr>'
@@ -177,10 +179,10 @@ def parse_ktuvit_response(response,f_id,prefix_ktuvit,color_ktuvit):
         data='{"request":{"FilmID":"%s","SubtitleID":"%s","FontSize":0,"FontColor":"","PredefinedLayout":-1}}'%(f_id,m[0][1])
 
         nlabel = "Hebrew"
-        nlabel2 = '[COLOR '+color_ktuvit+']'+nm+'[/COLOR]'
-        #nlabel2 = '[COLOR '+color_ktuvit+']'+prefix_ktuvit+' '+nm+'[/COLOR]'
-        #nlabel2 = '[COLOR '+color_ktuvit+']'+str(z)+'. '+prefix_ktuvit+' '+nm+'[/COLOR]'
-        nicon = '[COLOR '+color_ktuvit+']'+prefix_ktuvit+'[/COLOR]'
+        nlabel2 = colorize_text(nm,color_ktuvit)
+        # nlabel2 = colorize_text(prefix_ktuvit,color_ktuvit)
+        # nlabel2 = colorize_text(str(z)+'. '+prefix_ktuvit+' '+nm,color_ktuvit)
+        nicon = colorize_text(prefix_ktuvit,color_ktuvit)
         nthumb = "he"
         url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
                                                                               nm,

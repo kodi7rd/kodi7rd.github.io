@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
 import xbmc,socket
 import struct
-import urllib
 import xbmcvfs
 try:
     import xmlrpclib
 except:
     import xmlrpc.client as xmlrpclib
 import xbmcaddon
-import unicodedata,logging
+import unicodedata
 from xbmcaddon import Addon
 
 from myLogger import myLogger
@@ -65,7 +62,7 @@ class OSDBServer:
             else:
                 if str(year) == "" and xbmc.Player().isPlaying():
                     title, year = xbmc.getCleanMovieTitle( title )
-                if not imdb_id:
+                if 'tt' not in imdb_id:
                     OS_search_string = title.replace(" ","+")
                 else:
                     OS_search_string = imdb_id
@@ -80,8 +77,8 @@ class OSDBServer:
 
             if 'tt' in imdb_id:
                 imdb_id=imdb_id.replace('tt','')
-            if imdb_id=='':
-               imdb_id=str((str(imdb_id)).replace('tt',''))
+            # if imdb_id=='':
+            #    imdb_id=str((str(imdb_id)).replace('tt',''))
 
             if (len(tvshow)==0 and imdb_id != ""):
                 searchlist.append({'sublanguageid' :",".join(lang),

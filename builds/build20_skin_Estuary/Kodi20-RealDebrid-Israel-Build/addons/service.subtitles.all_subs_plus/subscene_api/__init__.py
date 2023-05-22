@@ -1,13 +1,4 @@
 import os
-import shutil
-import zipfile
-import asyncio
-import requests
-
-import re
-import unicodedata
-import json
-import zlib
 
 import xbmc
 import xbmcvfs
@@ -24,6 +15,7 @@ from myLogger import myLogger
 
 import urllib3
 import ssl
+import requests
 from requests import adapters
 from .third_party.cloudscraper import cloudscraper
 
@@ -388,13 +380,15 @@ class SubtitleAPI:
         return f'<subsceneScraper Class {str_}>'
 
     def GetSubsceneJson(self,imdb_id,item,prefix_subscene,color_subscene):
+        from service import colorize_text
+
         MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
 
-        #def movie(self, title=None, year=None, imdb_id=None, release_type=None):
+        # def movie(self, title=None, year=None, imdb_id=None, release_type=None):
         #subscene.movie(title='Tenet',year=2020,release_type='bluray')
         #result = subscene.movie(title='Finch',year=2021)
 
-        #def tvshow(self, title=None, imdb_id=None, release_type=None, season=None, episode=None):
+        # def tvshow(self, title=None, imdb_id=None, release_type=None, season=None, episode=None):
 
         if item["tvshow"]:
             result = self.tvshow(imdb_id=imdb_id,title=item["tvshow"],season=item["season"], episode=item["episode"])
@@ -415,11 +409,11 @@ class SubtitleAPI:
             else:
                 nthumb = ''
 
-            nlabel = lang
-            nlabel2 = '[COLOR '+color_subscene+']'+nm+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_subscene+']'+prefix_subscene+' '+nm+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_subscene+']'+str(z)+'. '+prefix_subscene+' '+nm+'[/COLOR]'
-            nicon = '[COLOR '+color_subscene+']'+prefix_subscene+'[/COLOR]'
+            nlabel = lang.capitalize()
+            nlabel2 = colorize_text(nm,color_subscene)
+            #nlabel2 = colorize_text(prefix_subscene+' '+nm,color_subscene)
+            #nlabel2 = colorize_text(str(z)+'. '+prefix_subscene+' '+nm,color_subscene)
+            nicon = colorize_text(prefix_subscene,color_subscene)
 
             link = 'https://subscene.com'+itt['link']
             _id = "subscene$$$" + link.split("/")[-1]

@@ -1,11 +1,10 @@
 import os
-import shutil
 import sys
 import urllib
 import xbmc
 import xbmcaddon
 import xbmcgui,xbmcplugin
-import xbmcvfs,logging
+import xbmcvfs
 import uuid
 
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
@@ -33,16 +32,17 @@ from myLogger import myLogger
 from .OSUtilities import OSDBServer, log, hashFile, normalizeString
 
 try:
-    import HTMLParser
-    html_parser = HTMLParser.HTMLParser()
+    # import HTMLParser
+    # html_parser = HTMLParser.HTMLParser()
     from urllib import urlretrieve
     from urllib import  unquote_plus, unquote, quote
 except:
-    import html
+    # import html
     from urllib.request import urlretrieve
     from urllib.parse import  unquote_plus, unquote,  quote
 
 def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, color_open):
+    from service import colorize_text
     myLogger("Search_opensubtitle imdb: " + imdb_id)
     search_data = []
     search_data = OSDBServer().searchsubtitles(item,imdb_id,all_setting)
@@ -50,7 +50,7 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
     subtitle_list=[]
 
     if search_data != None:
-        myLogger("Search_opensubtitle search_data: " + repr(search_data))
+        #myLogger("Search_opensubtitle search_data: " + repr(search_data))
         search_data.sort(key=lambda x: [not x['MatchedBy'] == 'moviehash',
                          not os.path.splitext(x['SubFileName'])[0] == os.path.splitext(os.path.basename(unquote(item['file_original_path'])))[0],
                          not normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).lower() in x['SubFileName'].replace('.',' ').lower(),
@@ -61,10 +61,10 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
         url_list=[]
         for item_data in search_data:
             nlabel = item_data["LanguageName"]
-            nlabel2 = '[COLOR '+color_open+']'+item_data["SubFileName"]+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_open+']'+prefix_open+' '+item_data["SubFileName"]+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_open+']'+str(x)+ '. '+prefix_open+' '+item_data["SubFileName"]+'[/COLOR]'
-            nicon = '[COLOR '+color_open+']'+prefix_open+'[/COLOR]'
+            nlabel2 = colorize_text(item_data["SubFileName"],color_open)
+            #nlabel2 = colorize_text(prefix_open+' '+item_data["SubFileName"],color_open)
+            #nlabel2 = colorize_text(str(x)+ '. '+prefix_open+' '+item_data["SubFileName"],color_open)
+            nicon = colorize_text(prefix_open,color_open)
             #nicon = str(int(round(float(item_data["SubRating"])/2)))
             nthumb = item_data["ISO639"]
 
@@ -149,7 +149,6 @@ def Download_opensubtitle(id,url,filename,subformat,mode_subtitle,stack=False):
         myLogger(url)
         with open(zip, "wb") as subFile:
             subFile.write(f.read())
-        subFile.close()
 
         xbmc.sleep(500)
         xbmc.executebuiltin('Extract("%s","%s")' % (zip,MySubFolder,))

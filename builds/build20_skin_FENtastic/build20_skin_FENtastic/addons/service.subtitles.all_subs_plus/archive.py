@@ -1,3 +1,81 @@
+#///////////////////////////////////////yifi archive////////////////////////////////////////////////
+#from yify_api.yify import search_yify
+
+    #if all_setting["yify"]== 'true':# YIFY Search
+        #num_of_subs,subtitle,saved_data=search_yify(item,imdb_id,mode_subtitle)
+
+        '''
+            elif 'yify$$$' in id:
+                archive_file = path.join(MyZipFolder, 'yify.sub.'+id.replace('yify$$$','').replace('/subtitles/','')+'.zip')
+
+                if not path.exists(archive_file):
+                    urlretrieve("https://www.yifysubtitles.org/subtitle/"+id.replace('yify$$$','').replace('/subtitles/','')+".zip", archive_file)
+        '''
+
+#///////////////////////////////////////Subcenter archive////////////////////////////////////////////////
+        '''
+		<!-- <setting id="aa_subs" label="aa_subs [COLOR blue](http://aa_subs.com/)[/COLOR]" type="bool" default="false" />
+		<setting type="action" label="אפס AA קאש" action="RunScript(service.subtitles.all_subs_plus, 1,action=clear_aa)" option="close" visible="true"/>
+        <setting id="subscenter" label="Subscenter [COLOR blue](http://www.subscenter.org)[/COLOR]" type="bool" default="true" visible="false"/> -->
+
+        <setting id="color_result_aa_subs" label="aa_subs" type="labelenum" values="custom|bisque|lightskyblue|yellow|limegreen|white|thistle|cyan|" default="thistle" visible= "eq(-11,true)" enable="eq(-11,true)"/>
+        <setting id="color_result_aa_subs_custom" type="text" default="" visible= "eq(-12,true) + eq(-1,0)" enable="eq(-12,true) + eq(-1,0)" />
+        '''
+
+#from aa_subs_api.aa_subs import aa_subs, Download_aa
+
+                    #  "color_result_aa_subs":MyAddon.getSetting("color_result_aa_subs"),
+                    #  "color_result_aa_subs_custom":MyAddon.getSetting("color_result_aa_subs_custom"),
+                    #  "Email":MyAddon.getSetting("Email"),
+                    #  "Password":MyAddon.getSetting("Password"),
+
+    # all_setting["aa_subs"]='false'
+    # all_setting["yify"]='false'
+    # "aa_subs":MyAddon.getSetting("aa_subs"),
+    # "yify":MyAddon.getSetting("yify"),
+
+    # cCustomAcat = all_setting["color_result_aa_subs_custom"]
+    # cAcat = all_setting["color_result_aa_subs"]
+    # color_acat = cCustomAcat if cAcat == custom else cAcat
+
+'''
+def aa_subs_Search(item,mode_subtitle):
+    global links_subcenter
+
+    myLogger("ACat_Search item:" + repr(item))
+
+    subtitle_list,result = aa_subs(item,mode_subtitle,prefix_acat,color_acat)
+
+    links_subcenter = subtitle_list
+
+    return len(result),links_subcenter
+'''
+
+'''
+if all_setting["aa_subs"]== 'true':# Subcenter Search
+    threads.append(Thread(aa_subs_Search,item,mode_subtitle))
+    #num_of_subs,subtitle,saved_data=subcenter_search(item,mode_subtitle)
+
+'''
+
+        #   if all_setting["aa_subs"]== 'true':
+        #       string_dp += (prefix_acat.upper()+':[COLOR %s]%s[/COLOR] '%(tt[zz],len( links_subcenter)))
+        #       zz += 1
+
+    # save_all_data.append(links_subcenter)
+
+     #and len(links_subcenter)==0
+
+    # elif source=='aa_subs':
+    #     myLogger('AA SUBS DOWNLOAD')
+    #     subs = Download_aa(params["link"],mode_subtitle)
+
+'''
+elif action=='clear_aa':
+     cache.clear(['subs_aa','subs'])
+     executebuiltin((u'Notification(%s,%s)' % (__scriptname__, __language__(32004))))
+'''
+
 def ManualSearch(title,option,mode_subtitle,imdb_id,item):  #burekas - not in use, need to be tested
     title=title.replace("&"," and ")
     filename = 'subs.search.wizdom.%s.json'%(quote(title))
@@ -43,6 +121,7 @@ def ManualSearch(title,option,mode_subtitle,imdb_id,item):  #burekas - not in us
     except:    pass
 
 #cinemast / Subcenter - not in use
+'''
 BASE_URL = "http://www.cinemast.org/he/cinemast/api/"
 def login( notify_success=True):
     email = all_setting["Email"]
@@ -63,6 +142,7 @@ def login( notify_success=True):
     else:
         notify(32009)
         return None
+'''
 
 elif action=='login':
     login(True)

@@ -3,17 +3,18 @@ msgstr ""
 "Project-Id-Version: All Subs\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2017-09-27 10:42+0300\n"
-"Last-Translator: A. Dambledore\n"
-"Language-Team: Eng2Heb\n"
+"PO-Revision-Date: 2023-05-04 10:42+0300\n"
+"Last-Translator: burekas\n"
+"Language-Team: burekas\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar_IL\n"
+"Language: he\n"
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Generator: Poedit 2.0.4\n"
 
 # Hebrew
+
 msgctxt "#32001"
 msgid "Error while searching subtitles"
 msgstr "שגיאה בעת חיפוש הכתוביות"
@@ -43,7 +44,7 @@ msgid "Login Details"
 msgstr "פרטי התחברות"
 
 msgctxt "#32008"
-msgid "Check login details"
+msgid "Check Subcenter login details"
 msgstr "בדוק את פרטי ההתחברות לסאבסנטר"
 
 msgctxt "#32009"
@@ -63,11 +64,11 @@ msgid "Password"
 msgstr "סיסמה"
 
 msgctxt "#32013"
-msgid "Opensubtitle"
-msgstr "פרטי התחברות ל-Opensubtitle (לא באמת נחוץ)."
+msgid "Opensubtitle login (Optional)"
+msgstr "פרטי התחברות ל-Opensubtitle (רשות)."
 
 msgctxt "#32014"
-msgid "Subscenter"
+msgid "Subscenter Login"
 msgstr "פרטי התחברות לסאבסנטר"
 
 msgctxt "#32015"
@@ -75,16 +76,16 @@ msgid "Search Providers"
 msgstr "מקורות חיפוש"
 
 msgctxt "#32016"
-msgid "Autosub"
+msgid "Auto Subs (Kodi restart is required)"
 msgstr "הורדת כתוביות אוטומטית (נדרשת הפעלה מחדש של קודי)"
 
 msgctxt "#32017"
-msgid "Enable auto sub"
+msgid "Enable automatic subtitle download"
 msgstr "אפשר הורדת כתוביות אוטומטית"
 
 msgctxt "#32018"
-msgid "dont download if shorter"
-msgstr "אל תוריד לסרטון קצר מ-"
+msgid "Do not search if video duration is less than (sec)"
+msgstr "אל תחפש עבור וידאו שקצר מ- (שניות)"
 
 msgctxt "#32019"
 msgid "Ignore custom addons"
@@ -95,8 +96,8 @@ msgid "Addon ignore name"
 msgstr "שם ההרחבה"
 
 msgctxt "#32021"
-msgid "Pause"
-msgstr "השהה ווידאו בזמן חיפוש כתוביות"
+msgid "Pause video while searching"
+msgstr "השהה וידאו בזמן חיפוש כתוביות"
 
 msgctxt "#32022"
 msgid "Custom Subltitle look"
@@ -107,31 +108,31 @@ msgid "Add background"
 msgstr "הפעל רקע לכתוביות"
 
 msgctxt "#32024"
-msgid "bold"
-msgstr "Bold"
+msgid "Bold"
+msgstr "הדגשה"
 
 msgctxt "#32025"
-msgid "color"
+msgid "Font color"
 msgstr "צבע הכתוביות"
 
 msgctxt "#32026"
-msgid "background intensity"
+msgid "Background intensity"
 msgstr "עוצמת הרקע"
 
 msgctxt "#32027"
-msgid "size"
+msgid "Size"
 msgstr "גודל הגופן"
 
 msgctxt "#32028"
-msgid "enabel custom look"
+msgid "Enabel custom look"
 msgstr "אפשר הגדרות מראה מתקדמות"
 
 msgctxt "#32029"
-msgid "Open setting"
+msgid "Open addon`s settings"
 msgstr "פתח הגדרות הרחבה"
 
 msgctxt "#32030"
-msgid "Setting"
+msgid "Settings"
 msgstr "הגדרות"
 
 msgctxt "#32031"
@@ -143,15 +144,15 @@ msgid "Keys"
 msgstr "מקשים"
 
 msgctxt "#32033"
-msgid "keyboard shortcuts"
-msgstr "קיצורי מקלדת לכתוביות..."
+msgid "Set keyboard shortcuts"
+msgstr "קיצורי מקלדת לכתוביות"
 
 msgctxt "#32034"
-msgid "Force down"
+msgid "Download Subs even if exists"
 msgstr "הורד למרות שיש כתוביות"
 
 msgctxt "#32035"
-msgid "Disable"
+msgid "Disable Subtitles"
 msgstr "בטל כתוביות"
 
 msgctxt "#32036"
@@ -159,47 +160,55 @@ msgid "Disable"
 msgstr "בטל"
 
 msgctxt "#32037"
-msgid "popup"
+msgid "Enable popups"
 msgstr "אפשר הודעות קופצות"
 
 # New by burekas
 
 msgctxt "#32038"
-msgid "חשבונות"
+msgid "Accounts"
 msgstr "חשבונות"
 
 msgctxt "#32039"
-msgid "מקורות"
+msgid "Providers"
 msgstr "מקורות"
 
 msgctxt "#32040"
-msgid "שפות"
+msgid "Languages"
 msgstr "שפות"
 
 msgctxt "#32041"
-msgid "הגדרות כלליות"
+msgid "General Settings"
 msgstr "הגדרות כלליות"
 
 msgctxt "#32042"
-msgid "הגדרות מראה"
+msgid "View Settings"
 msgstr "הגדרות מראה"
 
 msgctxt "#32043"
-msgid "סגנון תצוגה"
+msgid "View Style"
 msgstr "סגנון תצוגה"
 
 msgctxt "#32044"
-msgid "לא מאופשר"
+msgid "Disabled"
 msgstr "לא מאופשר"
 
 msgctxt "#32045"
-msgid "השהה רק בזמן חיפוש"
+msgid "Pause and Resume"
 msgstr "השהה רק בזמן חיפוש"
 
 msgctxt "#32046"
-msgid "השהה"
+msgid "Pause"
 msgstr "השהה"
 
 msgctxt "#32047"
-msgid "נדרשת הפעלה מחדש של קודי"
+msgid "Kodi restart is required"
 msgstr "נדרשת הפעלה מחדש של קודי"
+
+msgctxt "#32048"
+msgid "Show all"
+msgstr "הצג הכול"
+
+msgctxt "#32049"
+msgid "Minimal"
+msgstr "מינימלי"

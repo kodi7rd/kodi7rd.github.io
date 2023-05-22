@@ -24,9 +24,6 @@
 		<setting id="ktuvitset" label="Ktuvit [COLOR blue](https://www.ktuvit.me/)[/COLOR]" type="bool" default="true" />
 		<setting id="opensubtitle" label="Opensubtitle [COLOR blue](http://www.opensubtitles.org/he)[/COLOR]" type="bool" default="true" />
 		<setting id="subscene" label="subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="true" />
-		<!-- <setting id="aa_subs" label="aa_subs [COLOR blue](http://aa_subs.com/)[/COLOR]" type="bool" default="false" />
-		<setting type="action" label="אפס AA קאש" action="RunScript(service.subtitles.all_subs_plus, 1,action=clear_aa)" option="close" visible="true"/> -->
-        <!-- <setting id="subscenter" label="Subscenter [COLOR blue](http://www.subscenter.org)[/COLOR]" type="bool" default="true" visible="false"/> -->
 		<!-- <setting id="yify" label="Yify subtitles [COLOR blue](http://www.yifysubtitles.com/)[/COLOR]" type="bool" default="true" /> -->
 		<setting id="storage_en" label="תיקייה מקומית" type="bool" default="false" />
 		<setting id="storage"  type="folder"   label="בחר תיקיית כתוביות מקומית" default="" visible= "eq(-1,true)"/>
@@ -42,11 +39,9 @@
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
 		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
 
-		<setting label="32015" type="lsep"/>
-		<setting id="auto_translate" label="תירגום מכונה אוטומטי ?" type="bool" default="false" />
+		<setting id="auto_translate" label="תירגום מכונה אוטומטי" type="bool" default="false" />
 	</category>
     <category label="32041">
-		<setting id="popup" label="32037" type="bool" default="true" />
 		<setting id="nextsub" type="text" option = "hidden" visible= 'false' label="32012" default="no"/>
 		<setting id="json_cache" label="שמירת json cache" type="bool" default="false" />
 		<setting id="history_log" label="שמירת לוג כתוביות" type="bool" default="false" />
@@ -54,28 +49,30 @@
 		<setting id="sync_percent" type="number" label="הגדר סנכרון מעל" default="85"/>
 		<setting id="Debug" label="Debug" type="bool" default="false" />
 
-		<setting label=" " type="lsep"/>
-		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/>
+		<!-- <setting label=" " type="lsep"/>
+		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/> -->
 		<setting label="32016" type="lsep"/>
 		<setting id="autosub" label="32017" type="bool" default="false" />
-		<setting id="force" label="32034" type="bool" default="true" />
-		<!-- <setting id="pause" label="32021" type="bool" default="false" /> -->
-		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="0" />
-		<setting id="local_files" label="חפש כתוביות לתוכן מקומי" type="bool" default="false"/>
-		<setting id="ExcludeTime" type="number" label="32018" default="15"/>
+		<setting id="force" label="32034" type="bool" default="true" visible="eq(-1,true)" enable="eq(-1,true)" />
+		<setting id="popup" label="32037" type="enum" lvalues="32044|32048|32049" default="2" visible="eq(-2,true)" enable="eq(-2,true)"/>
+		<!-- <setting id="popup" label="32037" type="bool" default="true" visible="eq(-2,true)" enable="eq(-2,true)" /> -->
+		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="1" visible="eq(-3,true)" enable="eq(-3,true)"/>
+		<!-- <setting id="pause" label="32021" type="bool" default="false" visible="eq(-3,true)" enable="eq(-3,true)"/> -->
+		<setting id="exlude_local_files_smb" label="אל תחפש כתוביות לתוכן מקומי SMB" type="bool" default="false" visible="eq(-4,true)" enable="eq(-4,true)"/>
+		<setting id="ExcludeTime" type="number" label="32018" default="15" visible= "eq(-5,true)" enable="eq(-5,true)"/>
 
-		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" />
-		<setting id="ExcludeAddos" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="ExcludeAddosOption2" type="bool" label="32019" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
-		<setting id="ExcludeAddos2" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="ExcludeAddosOption3" type="bool" label="32019" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
-		<setting id="ExcludeAddos3" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="ExcludeAddosOption4" type="bool" label="32019" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
-		<setting id="ExcludeAddos4" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="ExcludeAddosOption5" type="bool" label="32019" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
-		<setting id="ExcludeAddos5" type="text" source="video" label="32020" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="ExcludeAddosOption6" type="bool" label="לא הספיק לך? כאן תכניס כמה שאתה רוצה רק עם פסיק בניהם" default="false" visible= "eq(-2,true)" enable="eq(-2,true)" />
-		<setting id="ExcludeAddos6" type="text" source="video" label="אל תכלול הרחבות" default="" visible= "eq(-1,true)" enable="eq(-1,true)" />
+		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" visible= "eq(-6,true)" enable="eq(-6,true)" />
+		<setting id="ExcludeAddos" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-7,true)" enable="eq(-1,true) + eq(-7,true)" />
+		<setting id="ExcludeAddosOption2" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-8,true)" enable="eq(-2,true) + eq(-8,true)" />
+		<setting id="ExcludeAddos2" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-9,true)" enable="eq(-1,true) + eq(-3,true) + eq(-9,true)" />
+		<setting id="ExcludeAddosOption3" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-10,true)" enable="eq(-2,true) + eq(-4,true) + eq(-10,true)" />
+		<setting id="ExcludeAddos3" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-11,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-11,true)" />
+		<setting id="ExcludeAddosOption4" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-12,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-12,true)" />
+		<setting id="ExcludeAddos4" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-13,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-13,true)" />
+		<setting id="ExcludeAddosOption5" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-14,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-14,true)" />
+		<setting id="ExcludeAddos5" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-15,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-15,true)" />
+		<setting id="ExcludeAddosOption6" type="bool" label="כאן תכניס כמה שאתה רוצה רק עם פסיק ביניהם" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-16,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-16,true)" />
+		<setting id="ExcludeAddos6" type="text" source="video" label="אל תכלול הרחבות" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-17,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-17,true)" />
 
 
     </category>
@@ -101,9 +98,6 @@
         <setting id="color_result_local_custom" type="text" default="" visible= "eq(-10,true) + eq(-1,0)" enable="eq(-10,true) + eq(-1,0)" />
 
         <!--
-        <setting id="color_result_aa_subs" label="aa_subs" type="labelenum" values="custom|bisque|lightskyblue|yellow|limegreen|white|thistle|cyan|" default="thistle" visible= "eq(-11,true)" enable="eq(-11,true)"/>
-        <setting id="color_result_aa_subs_custom" type="text" default="" visible= "eq(-12,true) + eq(-1,0)" enable="eq(-12,true) + eq(-1,0)" />
-
         <setting id="color_result_percent" label="אחוזים" type="labelenum" values="custom|cyan|bisque|lightskyblue|yellow|limegreen|white|thistle" default="cyan" visible= "eq(-13,true)" enable="eq(-13,true)"/>
         <setting id="color_result_percent_custom" type="text" default="" visible= "eq(-14,true) + eq(-1,0)" enable="eq(-14,true) + eq(-1,0)" />
 

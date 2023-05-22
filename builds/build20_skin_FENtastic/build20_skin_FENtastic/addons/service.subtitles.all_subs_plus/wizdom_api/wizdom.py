@@ -4,20 +4,22 @@ from os import path
 from myLogger import myLogger
 
 def getDomainWizdom():
-	from requests import get
-	try:
-		myDomain = str(get('https://pastebin.com/raw/1vbRPSGh').text)
-		return myDomain
-	except Exception as err:
-		myLogger('Caught Exception: error in finding getDomain: %s' % format(err))
-		return "wizdom.xyz" # "lolfw.com"
+    from requests import get
+    try:
+        url = 'https://pastebin.com/raw/0rv7wtrm'
+        # url = 'https://pastebin.com/raw/1vbRPSGh'
+        myDomain = str(get(url).text)
+        return myDomain
+    except Exception as err:
+        myLogger('Caught Exception: error in finding getDomain: %s' % format(err))
+        return "wizdom.xyz" # "lolfw.com"
 
 def get_wizdom_url():
     return getDomainWizdom() + "/api"
 
 def GetWizJson(imdb,prefix_wizdom,color_wizdom,season=0,episode=0,version=0):
 
-    from service import caching_json
+    from service import caching_json, colorize_text
 
     MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
 
@@ -41,10 +43,10 @@ def GetWizJson(imdb,prefix_wizdom,color_wizdom,season=0,episode=0,version=0):
     if json_object!=0:
         for item_data in json_object:
             nlabel = "Hebrew"
-            nlabel2 = '[COLOR '+color_wizdom+']'+item_data["versioname"]+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_wizdom+']'+prefix_wizdom+' '+item_data["versioname"]+'[/COLOR]'
-            #nlabel2 = '[COLOR '+color_wizdom+']'+str(x)+'. '+prefix_wizdom+' '+item_data["versioname"]+'[/COLOR]'
-            nicon = '[COLOR '+color_wizdom+']'+prefix_wizdom+'[/COLOR]'
+            nlabel2 = colorize_text(item_data["versioname"],color_wizdom)
+            #nlabel2 = colorize_text(prefix_wizdom+' '+item_data["versioname"],color_wizdom)
+            #nlabel2 = colorize_text(str(x)+'. '+prefix_wizdom+' '+item_data["versioname"],color_wizdom)
+            nicon = colorize_text(prefix_wizdom,color_wizdom)
             #nicon = path.join('resources', 'images', "logoWizdom.png")
             #nicon = path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images', "logoWizdom.png")
             #nicon = "%s"%("{:.0f}".format(item_data["score"]/2))
@@ -78,11 +80,50 @@ def GetWizJson(imdb,prefix_wizdom,color_wizdom,season=0,episode=0,version=0):
     else:
         return subtitle_list,json_object
 
-def wizdom_download_sub(id,archive_file):
-    try:
-        from urllib import urlretrieve
-    except:
-        from urllib.request import urlretrieve
+def wizdom_download_sub(id,archive_file,delay = 2):
+    import time
+    from service import notify3
+    from subscene_api.third_party.cloudscraper import cloudscraper
+    global error_page_text
+    # from requests import get
 
-    if not path.exists(archive_file):
-        urlretrieve("http://%s/"%format(get_wizdom_url())+"/files/sub/"+id, archive_file)
+    myLogger("Wizdom wizdom_download_sub")
+    method = 'GET'
+    url = "http://%s/"%format(get_wizdom_url())+"/files/sub/"+id
+
+    try:
+        for i in range(5):
+            myLogger("Wizdom wizdom_download_sub url: " + repr(url))
+            s = cloudscraper.create_scraper(interpreter='native')
+            r = s.request(method, url)
+            # r = get(url)
+            if r.status_code == 403:
+                myLogger(f"Attempt {i+1}: Response code is {r.status_code}. Retrying...")
+                time.sleep(delay)
+            else:
+                myLogger(f"Attempt {i+1}: Response code is {r.status_code}. Request successful.")
+                break
+        else:
+            myLogger("All attempts failed.")
+            notify3("%s %s" %(error_page_text, str(r.status_code)))
+
+    except:
+        s = cloudscraper.create_scraper(interpreter='native')
+        r = s.request(method, url, verify=False)
+        # r = get(url)
+        return r.text
+
+    if r.status_code == 200:
+        with open(archive_file, 'wb') as f:
+            f.write(r.content)
+            myLogger(f'Download completed: {archive_file}')
+    else:
+        notify3(f'Download failed with status code: {r.status_code}')
+
+    # try:
+    #     from urllib import urlretrieve
+    # except:
+    #     from urllib.request import urlretrieve
+
+    # if not path.exists(archive_file):
+    #     urlretrieve("http://%s/"%format(get_wizdom_url())+"/files/sub/"+id, archive_file)
