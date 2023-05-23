@@ -313,6 +313,32 @@ msgctxt "#31079"
 msgid "Cast not available"
 msgstr "שידור אינו זמין"
 
+# KODI-RD-IL CUSTOM ADDITION:
+
+# Search Button
+
+msgctxt "#70001"
+msgid "Search movies"
+msgstr "[B]חיפוש סרט[/B]"
+
+msgctxt "#70002"
+msgid "Search shows"
+msgstr "[B]חיפוש סדרה[/B]"
+
+msgctxt "#70003"
+msgid "Search actors/actresses"
+msgstr "[B]חיפוש שחקן[/B]"
+
+msgctxt "#70004"
+msgid "Search movie collections"
+msgstr "[B]חיפוש קולקציית סרטים[/B]"
+
+msgctxt "#700041"
+msgid "Search Trakt list"
+msgstr "[B]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/B]"
+
+#######################################
+
 msgctxt "#31080"
 msgid "Ends at"
 msgstr "שעת סיום"
