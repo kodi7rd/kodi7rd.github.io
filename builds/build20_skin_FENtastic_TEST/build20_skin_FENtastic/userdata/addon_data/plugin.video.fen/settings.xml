@@ -28,8 +28,8 @@
     <setting id="custom_context_main_menu" default="true">false</setting>
     <setting id="custom_context_menu" default="true">false</setting>
     <setting id="custom_info_dialog" default="true">false</setting>
-    <setting id="sort.progress" default="true">0</setting>
-    <setting id="sort.watched" default="true">0</setting>
+    <setting id="sort.progress">1</setting>
+    <setting id="sort.watched">1</setting>
     <setting id="sort.collection" default="true">0</setting>
     <setting id="sort.watchlist" default="true">0</setting>
     <setting id="paginate.lists">3</setting>
