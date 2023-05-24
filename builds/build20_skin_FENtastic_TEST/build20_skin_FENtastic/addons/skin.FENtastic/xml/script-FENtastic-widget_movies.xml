@@ -9,7 +9,7 @@
         </include>
         <include content="WidgetListEpisodes">
             <param name="content_path" value="plugin://plugin.video.fen/?name=32476&amp;iconImage=player&amp;mode=build_movie_list&amp;action=in_progress_movies"/>
-            <param name="widget_header" value="[B]סרטים בתהליך צפייה[/B]"/>
+            <param name="widget_header" value="[B]סרטים להמשך צפייה[/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="19011"/>
         </include>
