@@ -39,13 +39,10 @@
 					</item>
 					<item>
 						<label>$LOCALIZE[13012]</label>
-						<onclick>Quit()</onclick>
+						<!-- Original - <onclick>Quit()</onclick> -->
+						<!-- Force Close Kodi Script:  -->
+						<onclick>RunScript(&quot;plugin.close.kodi&quot;)</onclick>
 						<visible>System.ShowExitButton</visible>
-					</item>
-					<item>
-						<label>$LOCALIZE[13016]</label>
-						<onclick>Powerdown()</onclick>
-						<visible>System.CanPowerDown</visible>
 					</item>
 					<item>
 						<label>$LOCALIZE[20150]</label>

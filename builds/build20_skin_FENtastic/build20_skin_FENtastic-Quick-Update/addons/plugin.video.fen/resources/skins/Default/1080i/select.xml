@@ -76,10 +76,10 @@
                         <visible>String.IsEqual(Window().Property(multi_choice),false)</visible>
                     </control>
                     <control type="image">
-                        <left>770</left>
-                        <top>285</top>
-                        <height>500</height>
-                        <width>500</width>
+                        <left>820</left>
+                        <top>370</top>
+                        <height>400</height>
+                        <width>400</width>
                         <aspectratio aligny="bottom">keep</aspectratio>
                         <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[Container(2025).ListItem.Property(icon)]</texture>
                         <fadetime>100</fadetime>
@@ -216,7 +216,7 @@
                     <description>True</description>
                     <width>340</width>
                     <height>85</height>
-                    <onup>11</onup>
+                    <onup>13</onup>
                     <ondown>11</ondown>
                     <onleft>2025</onleft>
                     <onright>2025</onright>
@@ -230,11 +230,11 @@
                 </control>
                 <control type="button" id="11">
                     <description>False</description>
-                    <top>105</top>
+                    <top>95</top>
                     <width>340</width>
                     <height>85</height>
                     <onup>10</onup>
-                    <ondown>10</ondown>
+                    <ondown>12</ondown>
                     <onleft>2025</onleft>
                     <onright>2025</onright>
                     <label>[B]$ADDON[plugin.video.fen 32840][/B]</label>
@@ -244,6 +244,42 @@
                     <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
                     <align>center</align>
+                </control>
+                <control type="button" id="12">
+                    <description>Select All</description>
+                    <top>190</top>
+                    <width>340</width>
+                    <height>85</height>
+                    <onup>11</onup>
+                    <ondown>13</ondown>
+                    <onleft>2025</onleft>
+                    <onright>2025</onright>
+                    <label>[B]$ADDON[plugin.video.fen 33149][/B]</label>
+                    <font>font14</font> <!-- FEN_33 -->
+                    <textcolor>FFB7B4BB</textcolor>
+                    <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
+                    <align>center</align>
+                    <visible>String.IsEqual(Window().Property(select_button),select_all)</visible>
+                </control>
+                <control type="button" id="13">
+                    <description>Deselect All</description>
+                    <top>190</top>
+                    <width>340</width>
+                    <height>85</height>
+                    <onup>12</onup>
+                    <ondown>10</ondown>
+                    <onleft>2025</onleft>
+                    <onright>2025</onright>
+                    <label>[B]$ADDON[plugin.video.fen 33150][/B]</label>
+                    <font>font14</font> <!-- FEN_33 -->
+                    <textcolor>FFB7B4BB</textcolor>
+                    <focusedcolor>$INFO[Window(10000).Property(fen.highlight)]</focusedcolor>
+                    <texturefocus colordiffuse="FFCCCCCC" border="30">fen_common/circle.png</texturefocus>
+                    <texturenofocus colordiffuse="FF4a4347" border="30">fen_common/circle.png</texturenofocus>
+                    <align>center</align>
+                    <visible>String.IsEqual(Window().Property(select_button),deselect_all)</visible>
                 </control>
             </control>
             <control type="scrollbar" id="2065">

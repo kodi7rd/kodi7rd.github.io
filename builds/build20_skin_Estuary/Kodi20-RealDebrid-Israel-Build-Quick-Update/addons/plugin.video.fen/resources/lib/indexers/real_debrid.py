@@ -6,7 +6,7 @@ from modules.utils import clean_file_name, normalize, jsondate_to_datetime
 # logger = kodi_utils.logger
 
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
-add_items, set_content, end_directory, external_browse = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.external_browse
+add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 default_rd_icon, fanart, fen_clearlogo = kodi_utils.get_icon('realdebrid'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
 ls, sys, make_listitem, build_url, kodi_version = kodi_utils.local_string, kodi_utils.sys, kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.kodi_version
 folder_str, file_str, down_str = ls(32742).upper(), ls(32743).upper(), '[B]%s[/B]' % ls(32747)
@@ -52,7 +52,7 @@ def rd_torrent_cloud():
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def rd_downloads():
 	def _builder():
@@ -89,7 +89,7 @@ def rd_downloads():
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def browse_rd_cloud(folder_id):
 	def _builder():
@@ -127,7 +127,7 @@ def browse_rd_cloud(folder_id):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def resolve_rd(params):
 	url = params['url']

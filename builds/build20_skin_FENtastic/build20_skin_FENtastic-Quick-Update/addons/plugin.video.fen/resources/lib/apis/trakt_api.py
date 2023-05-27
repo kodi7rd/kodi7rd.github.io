@@ -394,10 +394,9 @@ def get_trakt_list_contents(list_type, user, slug):
 		params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': True, 'method': 'sort_by_headers'}
 	return cache_trakt_object(get_trakt, string, params)
 
-def trakt_trending_popular_lists(list_type):
-	string = 'trakt_%s_user_lists' % list_type
-	path = 'lists/%s/%s' % (list_type, '%s')
-	params = {'path': path, 'params': {'limit': 100}}
+def trakt_trending_popular_lists(list_type, page_no):
+	string = 'trakt_%s_user_lists_%s' % (list_type, page_no)
+	params = {'path': 'lists/%s', 'path_insert': list_type, 'params': {'limit': 50}, 'page_no': page_no}
 	return cache_object(get_trakt, string, params, False)
 
 def trakt_get_lists(list_type):
@@ -559,10 +558,9 @@ def trakt_indicators_tv():
 		for s in seasons:
 			season_no, episodes = s['number'], s['episodes']
 			for e in episodes:
-				add_episode = True
 				last_watched_at = e['last_watched_at']
-				if reset_at and reset_at > js2date(last_watched_at, res_format): add_episode = False
-				if add_episode: insert_append(('episode', tmdb_id, season_no, e['number'], last_watched_at, title))
+				if reset_at and reset_at > js2date(last_watched_at, res_format): continue
+				insert_append(('episode', tmdb_id, season_no, e['number'], last_watched_at, title))
 	insert_list = []
 	insert_append = insert_list.append
 	params = {'path': 'users/me/watched/shows?extended=full%s', 'with_auth': True, 'pagination': False}

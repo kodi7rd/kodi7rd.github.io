@@ -7,7 +7,7 @@ from modules.utils import clean_file_name, normalize
 # logger = kodi_utils.logger
 
 json, make_listitem, build_url, ls, sys = kodi_utils.json, kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.local_string, kodi_utils.sys
-add_items, set_content, end_directory, external_browse = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.external_browse
+add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
 confirm_dialog, ok_dialog, kodi_refresh, dialog = kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.kodi_refresh, kodi_utils.dialog
 default_pm_icon, fanart, fen_clearlogo, kodi_version = kodi_utils.get_icon('premiumize'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
@@ -61,7 +61,7 @@ def pm_torrent_cloud(folder_id=None, folder_name=None):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def pm_transfers():
 	def _builder():
@@ -107,7 +107,7 @@ def pm_transfers():
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def pm_account_info():
 	import math

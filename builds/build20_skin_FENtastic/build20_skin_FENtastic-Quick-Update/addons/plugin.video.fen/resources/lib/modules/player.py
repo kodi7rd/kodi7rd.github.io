@@ -36,7 +36,9 @@ class FenPlayer(xbmc_player):
 		self.play(self.url, self.make_listing())
 		if not self.is_generic:
 			self.check_playback_start()
-			if self.playback_successful == True: self.start_monitor()
+			if self.playback_successful == True:
+				if self.monitor_playback: return self.start_monitor()
+				else: self.monitor()
 			else:
 				self.set_build_content('true')
 				if self.cancel_all_playback: self.kill_dialog()

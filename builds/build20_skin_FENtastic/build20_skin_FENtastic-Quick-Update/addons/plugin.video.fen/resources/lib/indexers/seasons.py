@@ -145,4 +145,4 @@ def build_season_list(params):
 	set_content(handle, content_type)
 	set_category(handle, category_name)
 	end_directory(handle, False if is_widget else None)
-	if not is_widget: set_view_mode(view_mode, content_type)
+	set_view_mode(view_mode, content_type, is_widget)

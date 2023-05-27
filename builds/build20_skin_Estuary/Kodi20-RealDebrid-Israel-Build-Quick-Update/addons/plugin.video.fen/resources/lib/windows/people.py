@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from windows import BaseDialog
+from windows import BaseDialog, window_manager, window_player
 from apis.tmdb_api import tmdb_people_info, tmdb_people_full_info
 from apis.imdb_api import imdb_videos, imdb_people_trivia
 from indexers import dialogs
 from indexers.images import Images
 from modules.utils import calculate_age, get_datetime
-from modules.kodi_utils import json, notification, show_busy_dialog, hide_busy_dialog, get_icon, addon_fanart, Thread, empty_poster, execute_builtin, local_string as ls
-from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution, metadata_user_info
+from modules.kodi_utils import notification, show_busy_dialog, hide_busy_dialog, get_icon, addon_fanart, Thread, empty_poster, execute_builtin, local_string as ls
+from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution, metadata_user_info, extras_windowed_playback
 # from modules.kodi_utils import logger
 
 tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
@@ -17,6 +17,7 @@ genres_exclude = (10763, 10764, 10767)
 gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: 'N/A'}
 more_from_movies_id, more_from_tvshows_id, trivia_id, videos_id, more_from_director_id = 2050, 2051, 2052, 2053, 2054
 tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
+empty_check = (None, 'None', '')
 
 class People(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -30,9 +31,69 @@ class People(BaseDialog):
 		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
 
 	def onInit(self):
+		self.set_home_property('window_loaded', 'true')
 		for i in self.tasks: Thread(target=i).start()
 		try:self.setFocusId(10)
 		except: self.close()
+		if self.starting_position:
+			try:
+				window_id, focus = self.starting_position
+				self.sleep(300)
+				self.setFocusId(window_id)
+				self.select_item(window_id, focus)
+			except: pass
+
+	def run(self):
+		self.doModal()
+		self.clearProperties()
+
+	def onClick(self, controlID):
+		self.control_id = None
+		if controlID in button_ids:
+			if controlID == 10:
+				Images().run({'mode': 'people_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id, 'actor_imdb_id': self.person_imdb_id,
+							'actor_image': self.person_image, 'page_no': 1, 'rolling_count_list': [0]})
+			elif controlID == 11:
+				Images().run({'mode': 'people_tagged_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id})
+			elif controlID == 50:
+				self.show_text_media(self.person_biography)
+		else: self.control_id = controlID
+
+	def onAction(self, action):
+		if action in self.closing_actions: return window_manager(self)
+		if action == self.info_action:
+			focus_id = self.getFocusId()
+			tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
+			if not focus_id in tmdb_list_ids: return
+			show_busy_dialog()
+			from modules.metadata import movie_meta, tvshow_meta
+			chosen_listitem = self.get_listitem(focus_id)
+			media_type = 'movie' if focus_id in (more_from_movies_id, more_from_director_id) else 'tvshow'
+			function = movie_meta if media_type == 'movie' else tvshow_meta
+			meta = function('tmdb_id', chosen_listitem.getProperty('tmdb_id'), metadata_user_info(), get_datetime())
+			hide_busy_dialog()
+			self.show_extrainfo(media_type, meta, meta.get('poster', empty_poster))
+		if not self.control_id: return
+		if action in self.selection_actions:
+			chosen_listitem = self.get_listitem(self.control_id)
+			chosen_var = chosen_listitem.getProperty(self.item_action_dict[self.control_id])
+			if self.control_id in (more_from_movies_id, more_from_tvshows_id, more_from_director_id):
+				if self.control_id in (more_from_movies_id, more_from_director_id): media_type = 'movie'
+				else: media_type = 'tvshow'
+				self.set_current_params()
+				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': media_type, 'is_widget': self.is_widget, 'stacked': 'true'}
+				return window_manager(self)
+			elif self.control_id == trivia_id:
+				end_index = self.show_text_media_list(chosen_var)
+				self.select_item(self.control_id, end_index)
+			elif self.control_id == videos_id:
+				thumb = chosen_listitem.getProperty('thumbnail')
+				chosen = dialogs.imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], thumb)
+				if not chosen: return
+				if extras_windowed_playback(): return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
+				self.set_current_params()
+				self.window_player_url = chosen
+				return window_player(self)
 
 	def set_infoline1(self):
 		label = '[B]%s: [/B] %s ' % (ls(32845), self.person_gender) if self.person_gender else ''
@@ -53,66 +114,15 @@ class People(BaseDialog):
 	def make_director(self):
 		self.make_more_from('director')
 
-	def run(self):
-		self.doModal()
-		self.clearProperties()
-
-	def onClick(self, controlID):
-		self.control_id = None
-		if controlID in button_ids:
-			if controlID == 10:
-				Images().run({'mode': 'people_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id, 'actor_imdb_id': self.person_imdb_id,
-							'actor_image': self.person_image, 'page_no': 1, 'rolling_count_list': [0]})
-			elif controlID == 11:
-				Images().run({'mode': 'people_tagged_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id})
-			elif controlID == 50:
-				self.show_text_media(self.person_biography)
-		else: self.control_id = controlID
-
-	def onAction(self, action):
-		if action in self.closing_actions: self.close()
-		if action == self.info_action:
-			focus_id = self.getFocusId()
-			tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
-			if not focus_id in tmdb_list_ids: return
-			show_busy_dialog()
-			from modules.metadata import movie_meta, tvshow_meta
-			chosen_listitem = self.get_listitem(focus_id)
-			media_type = 'movie' if focus_id in (more_from_movies_id, more_from_director_id) else 'tvshow'
-			function = movie_meta if media_type == 'movie' else tvshow_meta
-			meta = function('tmdb_id', chosen_listitem.getProperty('tmdb_id'), metadata_user_info(), get_datetime())
-			hide_busy_dialog()
-			self.show_extrainfo(media_type, meta, meta.get('poster', empty_poster))
-		if not self.control_id: return
-		if action in self.selection_actions:
-			chosen_listitem = self.get_listitem(self.control_id)
-			chosen_var = chosen_listitem.getProperty(self.item_action_dict[self.control_id])
-			if self.control_id in (more_from_movies_id, more_from_tvshows_id, more_from_director_id):
-				if self.control_id in (more_from_movies_id, more_from_director_id): media_type = 'movie'
-				else: media_type = 'tvshow'
-				params = {'tmdb_id': chosen_var, 'media_type': media_type, 'is_widget': self.kwargs.get('is_widget', 'false')}
-				return dialogs.extras_menu_choice(params)
-			elif self.control_id == trivia_id:
-				end_index = self.show_text_media_list(chosen_var)
-				self.select_item(self.control_id, end_index)
-			elif self.control_id == videos_id:
-				thumb = chosen_listitem.getProperty('thumbnail')
-				chosen = dialogs.imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], thumb)
-				if not chosen: return
-				return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
-
 	def show_extrainfo(self, media_type, meta, poster):
 		text = dialogs.media_extra_info_choice({'media_type': media_type, 'meta': meta})
 		return self.show_text_media(text, poster)
 
 	def make_person_data(self):
-		show_busy_dialog()
-		if self.kwargs['query']:
-			self.reference_tmdb_id = self.kwargs.get('reference_tmdb_id', None)
-			self.person_id = None
+		if self.query not in empty_check:
 			try:
-				data = tmdb_people_info(self.kwargs['query'])
-				if len(data) > 1 and self.reference_tmdb_id:
+				data = tmdb_people_info(self.query)
+				if len(data) > 1 and self.reference_tmdb_id not in empty_check:
 					for item in data:
 						known_for = item.get('known_for', [])
 						if known_for:
@@ -124,8 +134,7 @@ class People(BaseDialog):
 					try: self.person_id = data[0]['id']
 					except: pass
 			except: pass
-		else: self.person_id = self.kwargs['actor_id']
-		hide_busy_dialog()
+		else: self.person_id = self.actor_id
 		if not self.person_id:
 			notification(32760)
 			return self.close()
@@ -260,8 +269,20 @@ class People(BaseDialog):
 		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media_list.xml',
 								items=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id), poster=self.person_image)
 
+	def set_current_params(self, set_starting_position=True):
+		self.current_params = {'mode': 'person_data_dialog', 'query': self.query, 'actor_name': self.person_name, 'actor_image': self.person_image, 'stacked': 'true',
+								'actor_id': self.person_id, 'reference_tmdb_id': self.reference_tmdb_id, 'is_widget': self.is_widget}
+		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
+
 	def set_starting_constants(self):
 		self.item_action_dict = {}
+		self.current_params, self.new_params = {}, {}
+		self.person_id = None
+		self.is_widget = self.kwargs.get('is_widget', 'false')
+		self.query = self.kwargs.get('query', '')
+		self.actor_id = self.kwargs.get('actor_id', '')
+		self.reference_tmdb_id = self.kwargs.get('reference_tmdb_id', '')
+		self.starting_position = self.kwargs.get('starting_position', None)
 		self.enable_scrollbars = extras_enable_scrollbars()
 		self.exclude_non_acting = extras_exclude_non_acting()
 		self.poster_resolution = get_resolution()['poster']

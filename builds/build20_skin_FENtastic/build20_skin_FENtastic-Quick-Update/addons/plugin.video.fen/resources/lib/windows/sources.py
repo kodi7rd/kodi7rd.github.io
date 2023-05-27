@@ -39,14 +39,14 @@ class SourcesResults(BaseDialog):
         BaseDialog.__init__(self, args)
         self.window_format = kwargs.get('window_format', 'list')
         self.window_style = kwargs.get('window_style', 'contrast')
-        self.make_poster = self.window_format in poster_lists
         self.window_id = kwargs.get('window_id', 2000)
         self.results = kwargs.get('results')
         self.uncached_torrents = kwargs.get('uncached_torrents', [])
-        self.meta = kwargs.get('meta')
-        self.meta_get = self.meta.get
         self.info_highlights_dict = kwargs.get('scraper_settings')
         self.prescrape = kwargs.get('prescrape')
+        self.meta = kwargs.get('meta')
+        self.meta_get = self.meta.get
+        self.make_poster = self.window_format in poster_lists
         self.filters_ignored = '[B](%s)[/B]' % filters_ignored if kwargs.get('filters_ignored', False) else ''
         self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
         self.poster = self.original_poster()
@@ -161,7 +161,7 @@ class SourcesResults(BaseDialog):
                             
                             # Add the quality counts for the current source to the total quality counts
                             for quality_name, quality_count in quality_counts_for_source.items():
-                                if quality_name in total_quality_counts and quality_count > 0:
+                                if quality_count > 0:
                                     total_quality_counts[quality_name] += 1
                         #########################################
                         

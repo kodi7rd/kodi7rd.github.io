@@ -4,7 +4,7 @@ from modules import kodi_utils
 # from modules.kodi_utils import logger
 
 ls, sys, build_url, make_listitem, set_view_mode = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_view_mode
-add_items, set_content, external_browse, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.external_browse, kodi_utils.end_directory
+add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 default_imdb_icon, fanart, fen_clearlogo, kodi_version = kodi_utils.get_icon('imdb'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
 
 def imdb_build_user_lists(media_type):
@@ -36,7 +36,7 @@ def imdb_build_user_lists(media_type):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main')
+	set_view_mode('view.main')
 
 def imdb_build_keyword_results(media_type, query):
 	def _builder():
@@ -68,7 +68,7 @@ def imdb_build_keyword_results(media_type, query):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main')
+	set_view_mode('view.main')
 
 
 

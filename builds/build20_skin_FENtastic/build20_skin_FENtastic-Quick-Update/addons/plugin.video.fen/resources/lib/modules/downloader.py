@@ -14,7 +14,7 @@ video_extensions, image_extensions, get_icon, dialog, unquote = kodi_utils.video
 add_items, set_sort_method, set_content, end_directory, sys = kodi_utils.add_items, kodi_utils.set_sort_method, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.sys
 player, confirm_dialog, ok_dialog, addon_fanart, build_url = kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.addon_fanart, kodi_utils.build_url
 show_busy_dialog, hide_busy_dialog, make_directory, open_file = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.make_directory, kodi_utils.open_file
-external_browse, set_view_mode, make_listitem, list_dirs = kodi_utils.external_browse, kodi_utils.set_view_mode, kodi_utils.make_listitem, kodi_utils.list_dirs
+set_view_mode, make_listitem, list_dirs = kodi_utils.set_view_mode, kodi_utils.make_listitem, kodi_utils.list_dirs
 fen_clearlogo, sleep, kodi_version, set_category = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.set_category
 poster_empty, get_setting, select_dialog = kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 sources = Sources()
@@ -77,7 +77,7 @@ def select_pack_item(pack_choices, icon):
 	list_items = [{'line1': '%.2f GB | %s' % (float(item['pack_files']['size'])/1073741824, clean_file_name(item['pack_files']['filename']).upper()), 'icon': icon} \
 				for item in pack_choices]
 	heading = '%s - %s' % (ls(32031), clean_file_name(json.loads(pack_choices[0].get('source')).get('name')))
-	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'true', 'multi_choice': 'true', 'multi_line': 'false'}
+	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'true', 'multi_choice': 'true'}
 	return select_dialog(pack_choices, **kwargs)
 
 def get_title(meta):
@@ -390,4 +390,4 @@ def download_manager(params):
 	set_content(handle, '')
 	set_category(handle, params.get('name'))
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main', '')
+	set_view_mode('view.main', '')

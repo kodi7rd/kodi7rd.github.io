@@ -11,7 +11,7 @@ sys, json, translate_path, database, get_icon = kodi_utils.sys, kodi_utils.json,
 get_property, dialog, notification, select_dialog, run_plugin = kodi_utils.get_property, kodi_utils.dialog, kodi_utils.notification, kodi_utils.select_dialog, kodi_utils.run_plugin
 add_items, show_text, container_refresh, focus_index, add_item = kodi_utils.add_items, kodi_utils.show_text, kodi_utils.container_refresh, kodi_utils.focus_index, kodi_utils.add_item
 ls, build_url, make_listitem, set_property, set_content = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_property, kodi_utils.set_content
-end_directory, external_browse, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.external_browse, kodi_utils.set_view_mode, kodi_utils.maincache_db
+end_directory, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.maincache_db
 clear_property, confirm_dialog, numeric_input, kodi_version = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input, kodi_utils.kodi_version
 default_icon, fanart, default_poster, default_cast, fen_clearlogo = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family', kodi_utils.addon_clearlogo
 set_category = kodi_utils.set_category
@@ -43,43 +43,43 @@ class Discover:
 
 	def movie(self):
 		self._set_default_params()
-		self._add_dir({'mode': 'discover._clear_property', 'media_type': 'movie', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
-		self._add_dir({'mode': 'discover.recommended', 'media_type': 'movie', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), self.gv('recommended'))})
+		self.add({'mode': 'discover._clear_property', 'media_type': 'movie', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
+		self.add({'mode': 'discover.recommended', 'media_type': 'movie', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), self.gv('recommended'))})
 		if not 'recommended'in self.value_names:
-			self._add_dir({'mode': 'discover.year', 'media_type': 'movie', 'key': 'year_start', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), self.gv('year_start'))})
-			self._add_dir({'mode': 'discover.year', 'media_type': 'movie', 'key': 'year_end', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), self.gv('year_end'))})
-			self._add_dir({'mode': 'discover.genres', 'media_type': 'movie', 'key': 'with_genres', 'list_name': base_str % (inc_str % ls(32470), self.gv('with_genres'))})
-			self._add_dir({'mode': 'discover.genres', 'media_type': 'movie', 'key': 'without_genres', 'list_name': base_str % (ex_str % ls(32470), self.gv('without_genres'))})
-			self._add_dir({'mode': 'discover.keywords', 'media_type': 'movie', 'key': 'with_keywords', 'list_name': base_str % (inc_str % ls(32657), self.gv('with_keywords'))})
-			self._add_dir({'mode': 'discover.keywords', 'media_type': 'movie', 'key': 'without_keywords', 'list_name': base_str % (ex_str % ls(32657), self.gv('without_keywords'))})
-			self._add_dir({'mode': 'discover.language', 'media_type': 'movie', 'list_name': base_str % (ls(32658), self.gv('language'))})
-			self._add_dir({'mode': 'discover.region', 'media_type': 'movie', 'list_name': base_str % (ls(32659), self.gv('region'))})
-			self._add_dir({'mode': 'discover.companies', 'media_type': 'movie', 'list_name': base_str % (ls(32660), self.gv('companies'))})
-			self._add_dir({'mode': 'discover.certification', 'media_type': 'movie', 'list_name': base_str % (ls(32473), self.gv('certification'))})
-			self._add_dir({'mode': 'discover.rating', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), self.gv('rating'))})
-			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), self.gv('rating_votes'))})
-			self._add_dir({'mode': 'discover.cast', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32664), self.gv('cast'))})
-			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'movie', 'list_name': base_str % (ls(32067), self.gv('sort_by'))})
-			self._add_dir({'mode': 'discover.adult', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32665), self.gv('adult'))})
+			self.add({'mode': 'discover.year', 'media_type': 'movie', 'key': 'year_start', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), self.gv('year_start'))})
+			self.add({'mode': 'discover.year', 'media_type': 'movie', 'key': 'year_end', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), self.gv('year_end'))})
+			self.add({'mode': 'discover.genres', 'media_type': 'movie', 'key': 'with_genres', 'list_name': base_str % (inc_str % ls(32470), self.gv('with_genres'))})
+			self.add({'mode': 'discover.genres', 'media_type': 'movie', 'key': 'without_genres', 'list_name': base_str % (ex_str % ls(32470), self.gv('without_genres'))})
+			self.add({'mode': 'discover.keywords', 'media_type': 'movie', 'key': 'with_keywords', 'list_name': base_str % (inc_str % ls(32657), self.gv('with_keywords'))})
+			self.add({'mode': 'discover.keywords', 'media_type': 'movie', 'key': 'without_keywords', 'list_name': base_str % (ex_str % ls(32657), self.gv('without_keywords'))})
+			self.add({'mode': 'discover.language', 'media_type': 'movie', 'list_name': base_str % (ls(32658), self.gv('language'))})
+			self.add({'mode': 'discover.region', 'media_type': 'movie', 'list_name': base_str % (ls(32659), self.gv('region'))})
+			self.add({'mode': 'discover.companies', 'media_type': 'movie', 'list_name': base_str % (ls(32660), self.gv('companies'))})
+			self.add({'mode': 'discover.certification', 'media_type': 'movie', 'list_name': base_str % (ls(32473), self.gv('certification'))})
+			self.add({'mode': 'discover.rating', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), self.gv('rating'))})
+			self.add({'mode': 'discover.rating_votes', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), self.gv('rating_votes'))})
+			self.add({'mode': 'discover.cast', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32664), self.gv('cast'))})
+			self.add({'mode': 'discover.sort_by', 'media_type': 'movie', 'list_name': base_str % (ls(32067), self.gv('sort_by'))})
+			self.add({'mode': 'discover.adult', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32665), self.gv('adult'))})
 		self._add_defaults()
 		self._end_directory()
 
 	def tvshow(self):
 		self._set_default_params()
-		self._add_dir({'mode': 'discover._clear_property', 'media_type': 'tvshow', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
-		self._add_dir({'mode': 'discover.recommended', 'media_type': 'tvshow', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), self.gv('recommended'))})
+		self.add({'mode': 'discover._clear_property', 'media_type': 'tvshow', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
+		self.add({'mode': 'discover.recommended', 'media_type': 'tvshow', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), self.gv('recommended'))})
 		if not 'recommended'in self.value_names:
-			self._add_dir({'mode': 'discover.year', 'media_type': 'tvshow', 'key': 'year_start', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), self.gv('year_start'))})
-			self._add_dir({'mode': 'discover.year', 'media_type': 'tvshow', 'key': 'year_end', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), self.gv('year_end'))})
-			self._add_dir({'mode': 'discover.genres', 'media_type': 'tvshow', 'key': 'with_genres', 'list_name': base_str % (inc_str % ls(32470), self.gv('with_genres'))})
-			self._add_dir({'mode': 'discover.genres', 'media_type': 'tvshow', 'key': 'without_genres', 'list_name': base_str % (ex_str % ls(32470), self.gv('without_genres'))})
-			self._add_dir({'mode': 'discover.keywords', 'media_type': 'tvshow', 'key': 'with_keywords', 'list_name': base_str % (inc_str % ls(32657), self.gv('with_keywords'))})
-			self._add_dir({'mode': 'discover.keywords', 'media_type': 'tvshow', 'key': 'without_keywords', 'list_name': base_str % (ex_str % ls(32657), self.gv('without_keywords'))})
-			self._add_dir({'mode': 'discover.language', 'media_type': 'tvshow', 'list_name': base_str % (ls(32658), self.gv('language'))})
-			self._add_dir({'mode': 'discover.network', 'media_type': 'tvshow', 'list_name': base_str % (ls(32480), self.gv('network'))})
-			self._add_dir({'mode': 'discover.rating', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), self.gv('rating'))})
-			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), self.gv('rating_votes'))})
-			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'tvshow', 'list_name': base_str % (ls(32067), self.gv('sort_by'))})
+			self.add({'mode': 'discover.year', 'media_type': 'tvshow', 'key': 'year_start', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), self.gv('year_start'))})
+			self.add({'mode': 'discover.year', 'media_type': 'tvshow', 'key': 'year_end', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), self.gv('year_end'))})
+			self.add({'mode': 'discover.genres', 'media_type': 'tvshow', 'key': 'with_genres', 'list_name': base_str % (inc_str % ls(32470), self.gv('with_genres'))})
+			self.add({'mode': 'discover.genres', 'media_type': 'tvshow', 'key': 'without_genres', 'list_name': base_str % (ex_str % ls(32470), self.gv('without_genres'))})
+			self.add({'mode': 'discover.keywords', 'media_type': 'tvshow', 'key': 'with_keywords', 'list_name': base_str % (inc_str % ls(32657), self.gv('with_keywords'))})
+			self.add({'mode': 'discover.keywords', 'media_type': 'tvshow', 'key': 'without_keywords', 'list_name': base_str % (ex_str % ls(32657), self.gv('without_keywords'))})
+			self.add({'mode': 'discover.language', 'media_type': 'tvshow', 'list_name': base_str % (ls(32658), self.gv('language'))})
+			self.add({'mode': 'discover.network', 'media_type': 'tvshow', 'list_name': base_str % (ls(32480), self.gv('network'))})
+			self.add({'mode': 'discover.rating', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), self.gv('rating'))})
+			self.add({'mode': 'discover.rating_votes', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), self.gv('rating_votes'))})
+			self.add({'mode': 'discover.sort_by', 'media_type': 'tvshow', 'list_name': base_str % (ls(32067), self.gv('sort_by'))})
 		self._add_defaults()
 		self._end_directory()
 
@@ -397,9 +397,9 @@ class Discover:
 		name, query, export_icon = self.discover_params.get('name', '...'), self.discover_params.get('final_string', ''), get_icon('nextpage')
 		menu_export_str = ls(32730).upper().replace('[/B]', ':[/B] [I]%s[/I]' % name)
 		folder_export_str = ls(32731).upper().replace('[/B]', ':[/B] [I]%s[/I]' % name)
-		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'export_type': 'menu', 'list_name': menu_export_str}, icon=export_icon)
-		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'export_type': 'folder', 'list_name': folder_export_str}, icon=export_icon)
-		self._add_dir({'mode': mode, 'action': action, 'query': query, 'name': name, 'list_name': ls(32666) % name}, isFolder=True, icon=get_icon('search'))
+		self.add({'mode': 'discover.export', 'media_type': self.media_type, 'export_type': 'menu', 'list_name': menu_export_str}, icon=export_icon)
+		self.add({'mode': 'discover.export', 'media_type': self.media_type, 'export_type': 'folder', 'list_name': folder_export_str}, icon=export_icon)
+		self.add({'mode': mode, 'action': action, 'query': query, 'name': name, 'list_name': ls(32666) % name}, isFolder=True, icon=get_icon('search'))
 
 	def _action(self, key):
 		dict_item = self.discover_params
@@ -433,7 +433,7 @@ class Discover:
 	def _set_property(self):
 		return set_property(self.window_prop, json.dumps(self.discover_params))
 
-	def _add_dir(self, params, isFolder=False, icon=None):
+	def add(self, params, isFolder=False, icon=None):
 		handle = int(sys.argv[1])
 		icon = icon or default_icon
 		list_name = params.get('list_name', '')
@@ -453,7 +453,7 @@ class Discover:
 		set_content(handle, '')
 		set_category(handle, self.category_name)
 		end_directory(handle, cacheToDisc=False)
-		if not external_browse(): set_view_mode(self.view, '')
+		set_view_mode(self.view, '')
 
 	def _selection_dialog(self, dialog_list, function_list, string):
 		list_items = [{'line1': item} for item in dialog_list]

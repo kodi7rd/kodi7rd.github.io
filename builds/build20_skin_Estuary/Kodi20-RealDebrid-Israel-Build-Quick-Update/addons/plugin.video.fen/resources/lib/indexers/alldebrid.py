@@ -7,7 +7,7 @@ from modules.utils import clean_file_name, normalize
 
 json, build_url, make_listitem, sys, ls = kodi_utils.json, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.sys, kodi_utils.local_string
 default_ad_icon, fanart, fen_clearlogo, set_view_mode = kodi_utils.get_icon('alldebrid'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.set_view_mode
-add_items, set_content, end_directory, external_browse = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.external_browse
+add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 show_busy_dialog, hide_busy_dialog, show_text, kodi_version = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.kodi_version
 folder_str, file_str, archive_str, down_str = ls(32742).upper(), ls(32743).upper(), ls(32982), '[B]%s[/B]' % ls(32747)
 linked_str, addlink_str, clearlink_str = ls(33074).upper(), ls(33078), ls(33079)
@@ -52,7 +52,7 @@ def ad_torrent_cloud(folder_id=None):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def browse_ad_cloud(folder):
 	def _builder():
@@ -88,7 +88,7 @@ def browse_ad_cloud(folder):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def resolve_ad(params):
 	url = params['url']

@@ -47,7 +47,7 @@ class TVShows:
 			try:
 				mode = self.params_get('mode')
 				try: page_no = int(self.params_get('new_page', '1'))
-				except ValueError: page_no = self.params_get('new_page')
+				except: page_no = self.params_get('new_page')
 				if self.action in personal: var_module, import_function = personal[self.action]
 				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
 				try: function = manual_function_import(var_module, import_function)
@@ -121,7 +121,7 @@ class TVShows:
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
-			set_view_mode(view_mode, content_type)
+			set_view_mode(view_mode, content_type, self.is_widget)
 
 	def build_tvshow_content(self, item_position, _id):
 		try:

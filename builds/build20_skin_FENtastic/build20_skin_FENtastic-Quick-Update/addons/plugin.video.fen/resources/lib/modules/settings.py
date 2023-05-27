@@ -223,6 +223,9 @@ def extras_enable_scrollbars():
 def extras_exclude_non_acting():
 	return get_setting('extras.exclude_non_acting_roles', 'true') == 'true'
 
+def extras_windowed_playback():
+	return get_setting('extras.windowed_playback', 'false') == 'true'
+
 def extras_enabled_menus():
 	setting = get_setting('extras.enable_menus')
 	if setting in ('', None, 'noop', []): return []

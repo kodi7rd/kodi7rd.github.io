@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog" id="1107">
+	<defaultcontrol always="true">9000</defaultcontrol>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="group">
+			<centerleft>50%</centerleft>
+			<width>600</width>
+			<centertop>60%</centertop>
+			<height>700</height>
+			<include content="DialogBackgroundCommons">
+				<param name="width" value="600" />
+				<param name="height" value="80" />
+				<param name="header_label" value="$LOCALIZE[137]" />
+				<param name="header_id" value="" />
+			</include>
+			<control type="panel" id="9000">
+				<include>ButtonMenuList</include>
+				<content>
+					<item>
+						<label>$LOCALIZE[70001]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=movie&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fu8jgyN3.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[70002]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=tvshow&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxYTdX3O.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[70003]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=people&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FF1EZyWz.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[70004]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=tmdb_movie_sets&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fr0ITv0C.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[700041]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia("plugin://plugin.video.fen/?mode=get_search_term&amp;search_type=trakt_lists&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxihFNwP.png",return)</onclick>
+					</item>
+				</content>
+			</control>
+		</control>
+	</controls>
+</window>

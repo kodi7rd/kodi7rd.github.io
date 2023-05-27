@@ -175,7 +175,9 @@ def end_directory(handle, cacheToDisc=None):
     if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
     endOfDirectory(handle, cacheToDisc=cacheToDisc)
 
-def set_view_mode(view_type, content='files'):
+def set_view_mode(view_type, content='files', is_widget=None):
+    if is_widget == None: is_widget = external_browse()
+    if is_widget: return
     view_id = get_property(view_type_prop % view_type)
     if not view_id:
         try:
@@ -416,7 +418,7 @@ def choose_view(view_type, content):
     add_item(handle, params_url, listitem, False)
     set_content(handle, content)
     end_directory(handle)
-    set_view_mode(view_type, content)
+    set_view_mode(view_type, content, False)
 
 def set_temp_highlight(temp_highlight):
     current_highlight = get_property(highlight_prop)
@@ -514,12 +516,17 @@ def toggle_language_invoker():
     update_local_addons()
     disable_enable_addon()
 
-def upload_logfile():
-    # Thanks 123Venom
-    if not confirm_dialog(text=32580): return
+def upload_logfile(params):
+    log_files = [(33145, 'kodi.log'), (33146, 'kodi.old.log')]
+    list_items = [{'line1': local_string(i[0])} for i in log_files]
+    kwargs = {'items': json.dumps(list_items), 'heading': local_string(33147), 'narrow_window': 'true'}
+    log_file = select_dialog(log_files, **kwargs)
+    if log_file == None: return
+    log_name, log_file = log_file
+    if not confirm_dialog(heading=log_name, text=32580): return
     show_busy_dialog()
     url = 'https://paste.kodi.tv/'
-    log_file = translate_path('special://logpath/kodi.log')
+    log_file = translate_path('special://logpath/%s' % log_file)
     if not path_exists(log_file): return ok_dialog(text=33039)
     try:
         with open_file(log_file) as f: text = f.read()

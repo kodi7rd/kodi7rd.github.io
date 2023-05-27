@@ -233,7 +233,7 @@ def routing(sys):
 		return manual_add_magnet_to_cloud(params)
 	elif mode == 'upload_logfile':
 		from modules.kodi_utils import upload_logfile
-		return upload_logfile()
+		return upload_logfile(params)
 	elif mode == 'toggle_language_invoker':
 		from modules.kodi_utils import toggle_language_invoker
 		return toggle_language_invoker()

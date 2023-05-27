@@ -3826,7 +3826,27 @@ msgid "Make Fen Work Properly"
 msgstr ""
 
 msgctxt "#33145"
-msgid ""
+msgid "Current Kodi Log"
+msgstr ""
+
+msgctxt "#33146"
+msgid "Previous Kodi Log"
+msgstr ""
+
+msgctxt "#33147"
+msgid "Choose Which Log File to Upload"
+msgstr ""
+
+msgctxt "#33148"
+msgid "Play Extras Videos in Windowed Mode"
+msgstr ""
+
+msgctxt "#33149"
+msgid "Select All"
+msgstr ""
+
+msgctxt "#33150"
+msgid "Deselect All"
 msgstr ""
 
 #############################################

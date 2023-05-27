@@ -21,7 +21,7 @@ hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
-tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
+tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'network_id', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
 				'tmdb_movies_certifications': 'certification', 'tmdb_movies_recommendations': 'tmdb_id', 'tmdb_movies_genres': 'genre_id', 'tmdb_movies_search': 'query',
 				'tmdb_movies_search_sets': 'query'}
 personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_progress_movies': ('modules.watched_status', 'get_in_progress_movies'), 
@@ -50,7 +50,7 @@ class Movies:
 			try:
 				builder, mode = self.worker, self.params_get('mode')
 				try: page_no = int(self.params_get('new_page', '1'))
-				except ValueError: page_no = self.params_get('new_page')
+				except: page_no = self.params_get('new_page')
 				if self.action in personal: var_module, import_function = personal[self.action]
 				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
 				try: function = manual_function_import(var_module, import_function)
@@ -129,7 +129,7 @@ class Movies:
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
-			set_view_mode(view_mode, content_type)
+			set_view_mode(view_mode, content_type, self.is_widget)
 		
 	def build_movie_content(self, item_position, _id):
 		try:

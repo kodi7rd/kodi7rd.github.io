@@ -4,9 +4,10 @@ from caches.main_cache import cache_object
 from modules.dom_parser import parseDOM
 from modules.kodi_utils import requests, json, get_setting, local_string as ls
 from modules.utils import imdb_sort_list, remove_accents, replace_html_codes, string_alphanum_to_num
-# from modules.kodi_utils import logger
+from modules.kodi_utils import logger
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+# headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.123 Safari/537.36'}
 base_url = 'https://www.imdb.com/%s'
 watchlist_url = 'user/ur%s/watchlist'
 user_list_movies_url = 'list/%s/?view=detail&sort=%s&title_type=movie,short,video,tvShort,tvMovie,tvSpecial&start=1&page=%s'
@@ -83,19 +84,25 @@ def imdb_trivia(imdb_id):
 	url = base_url % trivia_url % imdb_id
 	string = 'imdb_trivia_%s' % imdb_id
 	params = {'url': url, 'action': 'imdb_trivia'}
-	return cache_object(get_imdb, string, params, False, 168)[0]
+	# return cache_object(get_imdb, string, params, False, 168)[0]
+	result = get_imdb(params)
+	return result[0]
 
 def imdb_blunders(imdb_id):
 	url = base_url % blunders_url % imdb_id
 	string = 'imdb_blunders_%s' % imdb_id
 	params = {'url': url, 'action': 'imdb_blunders'}
-	return cache_object(get_imdb, string, params, False, 168)[0]
+	# return cache_object(get_imdb, string, params, False, 168)[0]
+	result = get_imdb(params)
+	return result[0]
 
 def imdb_people_trivia(imdb_id):
 	url = base_url % people_trivia_url % imdb_id
 	string = 'imdb_people_trivia_%s' % imdb_id
 	params = {'url': url, 'action': 'imdb_people_trivia'}
-	return cache_object(get_imdb, string, params, False, 168)[0]
+	# return cache_object(get_imdb, string, params, False, 168)[0]
+	result = get_imdb(params)
+	return result[0]
 
 def imdb_images(imdb_id, page_no):
 	url = base_url % images_url % (imdb_id, page_no)
@@ -119,7 +126,9 @@ def imdb_keywords(imdb_id):
 	url = base_url % keywords_url % imdb_id
 	string = 'imdb_keywords_%s' % imdb_id
 	params = {'url': url, 'action': 'imdb_keywords'}
-	return cache_object(get_imdb, string, params, False, 168)[0]
+	# return cache_object(get_imdb, string, params, False, 168)[0]
+	result = get_imdb(params)
+	return result[0]
 
 def imdb_year_check(imdb_id):
 	url = year_check_url % imdb_id
@@ -203,10 +212,12 @@ def get_imdb(params):
 				except: pass
 		if action == 'imdb_trivia': _str = ls(32984).upper()
 		else: _str =  ls(32986).upper()
-		result = requests.get(url, timeout=timeout)
+		result = requests.get(url, timeout=timeout, headers=headers)
+		logger('result', result)
 		result = remove_accents(result.text)
 		result = result.replace('\n', ' ')
 		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})
+		logger('items', items[0:5])
 		imdb_list = list(_process())
 	elif action == 'imdb_people_trivia':
 		def _process():
@@ -218,7 +229,7 @@ def get_imdb(params):
 					yield content
 				except: pass
 		trivia_str = ls(32984).upper()
-		result = requests.get(url, timeout=timeout)
+		result = requests.get(url, timeout=timeout, headers=headers)
 		result = remove_accents(result.text)
 		result = result.replace('\n', ' ')
 		result = re.search(r'<a name="trivia"></a>(.*?)Personal Quotes', result).group(1)
@@ -419,7 +430,7 @@ def get_imdb(params):
 					keyword = re.search(r'" >(.+?)</a>', item, re.DOTALL).group(1)
 					yield keyword
 				except: pass
-		result = requests.get(url, timeout=timeout)
+		result = requests.get(url, timeout=timeout, headers=headers)
 		result = remove_accents(result.text)
 		result = result.replace('\n', ' ')
 		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})

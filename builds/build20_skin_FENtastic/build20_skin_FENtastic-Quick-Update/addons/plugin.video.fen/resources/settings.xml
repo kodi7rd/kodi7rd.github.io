@@ -85,12 +85,12 @@
 		<category id="general" label="32001" help="">
 			<!-- General -->
 			<group id="1" label="32001">
-				<setting id="wait_for_services" type="boolean" label="33140" help="">
+				<setting id="auto_start_fen" type="boolean" label="32017" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="auto_start_fen" type="boolean" label="32017" help="">
+				<setting id="wait_for_services" type="boolean" label="33140" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -352,6 +352,11 @@
 				<setting id="extras.exclude_non_acting_roles" type="boolean" label="33040" help="">
 					<level>0</level>
 					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="extras.windowed_playback" type="boolean" label="33148" help="">
+					<level>0</level>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 			</group>

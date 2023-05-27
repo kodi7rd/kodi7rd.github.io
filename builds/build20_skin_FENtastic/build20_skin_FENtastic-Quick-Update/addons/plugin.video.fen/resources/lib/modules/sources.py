@@ -112,7 +112,7 @@ class Sources():
 			self.orig_results = self.collect_results()
 			if not self.orig_results and not self.active_external: self._kill_progress_dialog()
 			results = self.process_results(self.orig_results)
-			if not results: return self._process_post_results()
+		if not results: return self._process_post_results()
 		if self.autoscrape: return results
 		else: return self.play_source(results)
 

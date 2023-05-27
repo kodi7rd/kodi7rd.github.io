@@ -4,7 +4,7 @@ from modules import kodi_utils
 from modules.utils import clean_file_name
 # logger = kodi_utils.logger
 
-add_items, set_content, show_text, external_browse, unquote = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.show_text, kodi_utils.external_browse, kodi_utils.unquote
+add_items, set_content, show_text, unquote = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.show_text, kodi_utils.unquote
 show_busy_dialog, hide_busy_dialog, set_view_mode, end_directory = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.set_view_mode, kodi_utils.end_directory
 confirm_dialog, notification, kodi_refresh, kodi_version = kodi_utils.confirm_dialog, kodi_utils.notification, kodi_utils.kodi_refresh, kodi_utils.kodi_version
 ls, sys, build_url, make_listitem = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem
@@ -24,7 +24,7 @@ def search_furk(params):
 	except: pass
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def my_furk_files(params):
 	handle = int(sys.argv[1])
@@ -34,7 +34,7 @@ def my_furk_files(params):
 	except: pass
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def furk_folder_browser(files, display_mode, handle):
 	def _builder():
@@ -111,7 +111,7 @@ def furk_t_file_browser(params):
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def add_to_files(item_id):
 	if not confirm_dialog(text=32580): return

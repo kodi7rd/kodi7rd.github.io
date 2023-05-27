@@ -5,7 +5,7 @@ logger = kodi_utils.logger
 
 add_dir, add_items, set_content, end_directory, kodi_version = kodi_utils.add_dir, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.kodi_version
 ls, sys, build_url, make_listitem, get_icon = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.get_icon
-external_browse, set_view_mode, unquote, set_category = kodi_utils.external_browse, kodi_utils.set_view_mode, kodi_utils.unquote, kodi_utils.set_category
+set_view_mode, unquote, set_category = kodi_utils.set_view_mode, kodi_utils.unquote, kodi_utils.set_category
 icon, fanart, fen_clearlogo = get_icon('search_history'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
 history_str, remove_str, remove_all_str = '[B]%s:[/B] [I]%s[/I]' % (ls(32486).upper(), '%s'), ls(32786), '[B]%s[/B]' % ls(32699)
 new_search_str = '[B]%s %s...[/B]' % (ls(32857).upper(), ls(32450).upper())
@@ -52,5 +52,5 @@ def search_history(params):
 	set_content(handle, '')
 	set_category(handle, params.get('name') or ls(32486))
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.main', '')
+	set_view_mode('view.main', '')
 	

@@ -64,7 +64,7 @@ def search_trakt_lists(params):
 	else: add_items(handle, make_placeholder())
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main')
+	set_view_mode('view.main')
 
 def get_trakt_lists(params):
 	def _process():
@@ -108,7 +108,7 @@ def get_trakt_lists(params):
 	set_content(handle, 'files')
 	set_sort_method(handle, 'label')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main')
+	set_view_mode('view.main')
 
 def get_trakt_trending_popular_lists(params):
 	def _process():
@@ -146,13 +146,16 @@ def get_trakt_trending_popular_lists(params):
 			except: pass
 	handle = int(sys.argv[1])
 	if build_content():
+		page = params.get('new_page', '1')
+		new_page = str(int(page) + 1)
 		list_type = params['list_type']
-		lists = trakt_trending_popular_lists(list_type)
+		lists = trakt_trending_popular_lists(list_type, page)
 		add_items(handle, list(_process()))
+		add_dir({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'new_page': new_page}, nextpage_str % new_page, handle, 'item_next')
 	else: add_items(handle, make_placeholder())
 	set_content(handle, 'files')
 	end_directory(handle)
-	if not external_browse(): set_view_mode('view.main')
+	set_view_mode('view.main')
 
 def build_trakt_list(params):
 	handle, is_widget, content, build, list_name = int(sys.argv[1]), external_browse(), 'movies', False, params.get('list_name')
@@ -199,7 +202,7 @@ def build_trakt_list(params):
 	end_directory(handle, False if is_widget else None)
 	if not is_widget and build:
 		if params.get('refreshed') == 'true': sleep(1000)
-		set_view_mode('view.%s' % content, content)
+		set_view_mode('view.%s' % content, content, is_widget)
 
 def build_trakt_movie_sets(params):
 	handle, content, is_widget = int(sys.argv[1]), 'movies', external_browse()
@@ -209,4 +212,4 @@ def build_trakt_movie_sets(params):
 	else: add_items(handle, make_placeholder())
 	set_content(handle, content)
 	end_directory(handle, False if is_widget else None)
-	if not is_widget: set_view_mode('view.%s' % content, content)
+	set_view_mode('view.%s' % content, content, is_widget)

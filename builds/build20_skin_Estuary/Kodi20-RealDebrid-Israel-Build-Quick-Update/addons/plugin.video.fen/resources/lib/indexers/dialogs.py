@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
-from windows import open_window
+from windows import open_window, create_window
 from caches import refresh_cached_data
+from indexers.people import person_data_dialog
 from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
 # logger = kodi_utils.logger
@@ -241,8 +242,7 @@ def media_artwork_choice(meta, changed_artwork=False):
 	custom_images = open_window(('windows.artwork_chooser', 'SelectArtwork'), 'artwork_chooser.xml', **kwargs)
 	if custom_images:
 		from caches.meta_cache import metacache
-		for image_type, image in custom_images.items():
-			meta[image_type] = image
+		for image_type, image in custom_images.items(): meta[image_type] = image
 		metacache.set(meta['mediatype'], 'tmdb_id', meta)
 		return kodi_refresh()
 
@@ -994,16 +994,18 @@ def options_menu_choice(params, meta=None):
 	options_menu_choice(params, meta=meta)
 
 def person_search_choice(params):
-	from indexers.people import person_data_dialog
-	person_data_dialog({'query': params['query'], 'is_widget': params.get('is_widget', 'true' if external_browse() else 'false')})
+	person_data_dialog({'query': params['query'], 'is_widget': params.get('is_widget', 'true' if external_browse() else 'false'),
+						'starting_position': params.get('starting_position', None)})
 
 def extras_menu_choice(params):
-	show_busy_dialog()
+	stacked = params.get('stacked', 'false') == 'true'
+	if not stacked: show_busy_dialog()
 	media_type = params['media_type']
 	function = metadata.movie_meta if media_type == 'movie' else metadata.tvshow_meta
 	meta = function('tmdb_id', params['tmdb_id'], metadata_user_info(), get_datetime())
-	hide_busy_dialog()
-	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'true' if external_browse() else 'false'), options_media_type=media_type)
+	if not stacked: hide_busy_dialog()
+	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'true' if external_browse() else 'false'),
+															options_media_type=media_type, starting_position=params.get('starting_position', None))
 
 def media_extra_info_choice(params):
 	media_type, meta = params.get('media_type'), params.get('meta')

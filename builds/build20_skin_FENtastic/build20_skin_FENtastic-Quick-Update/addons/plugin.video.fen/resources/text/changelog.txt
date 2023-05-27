@@ -1,6 +1,22 @@
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
-[B]Fen users looking for a lightweight, fast skin with a customizable home page for widgets are encouraged to try out ivarbrandt's mod of Estuary: "FENtastic". Use "https://ivarbrandt.github.io/repository.ivarbrandt/" in Kodi's File Manager to download his repo. He has done a great job making many modifications to Estuary, and the skin is geared towards Fen users.[/B]
+
+[COLOR dodgerblue][B]Version 3.1.11[/B][/COLOR]
+- RESTART KODI AFTER THIS UPDATE.
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.1.10[/B][/COLOR]
+- Added setting Features->Extras->"Play Extras Videos in Windowed Mode". Videos from Extras will now, by default, play in normal Kodi fullscreen.
+- Some changes to window stack manager.
+- Changes to Multi Select Dialog. Now has a "Select All/Deselect All" Button.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.09[/B][/COLOR]
+- Added "Networks" to Movies menu. You will need to navigate into the Movies menu, then context menu: Edit Menu->Check if Movies Menu has new Menu item. Then add "Networks" where you want it in the list. If that fails, select Restore Movies menu to Default.
+- Added simple window stack manager for opening subsequent Extras/People custom windows. The previous window will now close and re-open when the new window is closed. Much better for lower specced hardware.
+- Added ability to upload OLD Kodi log to Tools.
+- Added multiple pages to Trending/Popular Trakt lists. Lists lowered to 50 per page.
+- Other changes/fixes.
 
 [COLOR dodgerblue][B]Version 3.1.08[/B][/COLOR]
 - Added "Plot" to list of Content removable for Extras Window. Unfortunately the Extras content will be re-set to default with this update.
