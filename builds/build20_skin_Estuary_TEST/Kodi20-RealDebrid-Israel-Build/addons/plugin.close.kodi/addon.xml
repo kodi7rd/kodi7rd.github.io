@@ -6,6 +6,10 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Force Close Kodi</summary>
     <description lang="en"></description>
+    <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+    </assets>
     <platform>all</platform>
   </extension>
 </addon>
