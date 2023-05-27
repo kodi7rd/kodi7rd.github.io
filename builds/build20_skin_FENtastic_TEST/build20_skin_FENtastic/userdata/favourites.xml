@@ -1,7 +1,7 @@
 <favourites>
     <favourite name="[B]Fen[/B]" thumb="special://home/addons/plugin.video.fen/resources/media/fen_icon.png">RunAddon(plugin.video.fen)</favourite>
     <favourite name="[B][COLOR orange]חיבור שירותים להרחבת Fen[/COLOR][/B]" thumb="https://i.imgur.com/mLoowHt.png">RunAddon(&quot;plugin.program.kodirealdebridisrael_connect_fen_services&quot;)</favourite>
-    <favourite name="[B][COLOR yellow]הצטרפו לקבוצת התמיכה של הבילד שלנו[/COLOR][/B]" thumb="https://i.imgur.com/hHCHhjV.png">placeholder</favourite>
+    <favourite name="[B][COLOR yellow]הצטרפו לקבוצת התמיכה של הבילד שלנו[/COLOR][/B]" thumb="https://i.imgur.com/hHCHhjV.png">do_nothing</favourite>
     <favourite name="[B]עידן+ פלוס[/B]" thumb="special://home/addons/plugin.video.idanplus/icon.png">RunAddon(plugin.video.idanplus)</favourite>
     <favourite name="[B](Fen) שליחת לוג[/B]" thumb="https://i.imgur.com/XbEEv9X.png">PlayMedia(&quot;plugin://plugin.video.fen/?mode=upload_logfile&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FXbEEv9X.png&quot;)</favourite>
     <favourite name="[B]סטטוס מנוי Real Debrid[/B]" thumb="https://i.imgur.com/DotYAc3.png">PlayMedia(&quot;plugin://plugin.video.fen/?mode=real_debrid.rd_account_info&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FDotYAc3.png&quot;)</favourite>
