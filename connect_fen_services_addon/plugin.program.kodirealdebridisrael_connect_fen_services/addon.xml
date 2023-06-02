@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.program.kodirealdebridisrael_connect_fen_services" name="[COLOR orange]חיבור שירותים להרחבת Fen[/COLOR]" version="1.0.1" provider-name="KodiRealDebridIsrael">
+    <extension point="xbmc.python.script" library="main.py"/>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <assets>
+            <icon>icon.jpg</icon>
+            <fanart>fanart.png</fanart>
+        </assets>
+        <news>
+        </news>
+    </extension>
+</addon>
