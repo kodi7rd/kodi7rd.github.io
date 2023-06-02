@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.program.kodirealdebridisraelguides" name="[COLOR limegreen]Kodi + Real Debrid Israel Guides[/COLOR]" version="1.0.1" provider-name="KodiRealDebridIsrael">
+    <extension point="xbmc.python.script" library="main.py"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">[COLOR yellow]Kodi + Real Debrid Israel Guides[/COLOR]</summary>
+        <description lang="en">[COLOR yellow]Kodi + Real Debrid Israel Guides[/COLOR]</description>
+        <platform>all</platform>
+        <assets>
+            <icon>icon.jpg</icon>
+            <fanart>fanart.png</fanart>
+        </assets>
+        <news>
+        </news>
+    </extension>
+</addon>
