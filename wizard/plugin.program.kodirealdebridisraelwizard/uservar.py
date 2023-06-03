@@ -42,18 +42,18 @@ ADVANCEDFILE = 'http://'
 # Example:  ICONMAINT     = os.path.join(ART, 'mainticon.png')
 #           ICONSETTINGS  = 'https://www.yourhost.com/repo/wizard/settings.png'
 # Leave as http:// for default icon
-ICONBUILDS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONMAINT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONSPEED = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONAPK = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONADDONS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONYOUTUBE = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONSAVE = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONTRAKT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONREAL = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONLOGIN = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONCONTACT = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
-ICONSETTINGS = os.path.join(CUSTOM_ART, 'kodi-rd-il-wizard-512x512.png')
+ICONBUILDS = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONMAINT = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONSPEED = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONAPK = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONADDONS = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONYOUTUBE = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONSAVE = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONTRAKT = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONREAL = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONLOGIN = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONCONTACT = os.path.join(CUSTOM_ART, 'wizard.jpg')
+ICONSETTINGS = os.path.join(CUSTOM_ART, 'wizard.jpg')
 # Hide the section separators 'Yes' or 'No'
 HIDESPACERS = 'No'
 # Character used in separator
