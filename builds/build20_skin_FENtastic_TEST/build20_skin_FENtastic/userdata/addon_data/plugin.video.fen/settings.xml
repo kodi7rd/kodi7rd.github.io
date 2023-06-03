@@ -1,6 +1,6 @@
 <settings version="2">
-    <setting id="wait_for_services" default="true">false</setting>
     <setting id="auto_start_fen" default="true">false</setting>
+    <setting id="wait_for_services" default="true">false</setting>
     <setting id="kodi_menu_cache" default="true">false</setting>
     <setting id="limit_concurrent_threads" default="true">true</setting>
     <setting id="max_threads" default="true">60</setting>
@@ -23,8 +23,10 @@
     <setting id="extras.restore_default" default="true">$ADDON[plugin.video.fen 32652]</setting>
     <setting id="extras.enable_extra_ratings" default="true">true</setting>
     <setting id="extras.enabled_ratings" default="true">Meta, Tom/Critic, Tom/User, IMDb, TMDb</setting>
+    <setting id="extras.ratings_amble" default="true" />
     <setting id="extras.enable_scrollbars" default="true">false</setting>
     <setting id="extras.exclude_non_acting_roles" default="true">true</setting>
+    <setting id="extras.windowed_playback" default="true">false</setting>
     <setting id="custom_context_main_menu" default="true">false</setting>
     <setting id="custom_context_menu" default="true">false</setting>
     <setting id="custom_info_dialog" default="true">false</setting>
@@ -73,6 +75,7 @@
     <setting id="imdb_user" default="true" />
     <setting id="imdb_lists.sort_type" default="true">0</setting>
     <setting id="imdb_lists.sort_direction" default="true">0</setting>
+    <setting id="check_premium_account_status">true</setting>
     <setting id="provider.external" default="true">true</setting>
     <setting id="rd.token" default="true" />
     <setting id="rd.enabled" default="true">true</setting>
@@ -131,7 +134,7 @@
     <setting id="results.sort_folders_first" default="true">true</setting>
     <setting id="results.folders_ignore_filters" default="true">false</setting>
     <setting id="results.timeout" default="true">20</setting>
-    <setting id="results.list_format">MediaList</setting>
+    <setting id="results.list_format" default="true">MediaList</setting>
     <setting id="results.use_contrast">false</setting>
     <setting id="search.enable.yearcheck" default="true">false</setting>
     <setting id="search.finish.early" default="true">false</setting>
@@ -180,6 +183,7 @@
     <setting id="autoplay_alert_method" default="true">0</setting>
     <setting id="autoplay_default_action" default="true">0</setting>
     <setting id="autoplay_next_window_percentage" default="true">95</setting>
+    <setting id="autoplay_use_chapters" default="true">true</setting>
     <setting id="autoscrape_next_episode">true</setting>
     <setting id="auto_resume_episode">1</setting>
     <setting id="playback.watched_percent" default="true">90</setting>
@@ -206,7 +210,7 @@
     <setting id="meta_language">he</setting>
     <setting id="meta_mpaa_region" default="true">US</setting>
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1682262023</setting>
+    <setting id="database.maintenance.due">1686044291</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -225,7 +229,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.1.08</setting>
+    <setting id="version_number">3.1.12</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enable_menus" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="fen.highlight">FF0166FF</setting>
