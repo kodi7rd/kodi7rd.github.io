@@ -893,6 +893,10 @@ msgctxt "#32208"
 msgid "All Debrid Color"
 msgstr ""
 
+msgctxt "#32209"
+msgid "Check Accounts Status on Startup"
+msgstr ""
+
 msgctxt "#32210"
 msgid "Premium Files Directory"
 msgstr ""
@@ -3697,6 +3701,10 @@ msgctxt "#33112"
 msgid "Features"
 msgstr ""
 
+msgctxt "#33113"
+msgid "[I]Enter OMDb key in Metadata Accounts settings for Ratings Options[/I]"
+msgstr ""
+
 msgctxt "#33114"
 msgid "Monitor For Successful Playback"
 msgstr ""
@@ -3849,14 +3857,10 @@ msgctxt "#33150"
 msgid "Deselect All"
 msgstr ""
 
-#############################################
-
-msgctxt "#32209"
-msgid ""
+msgctxt "#33151"
+msgid "Use Chapter Info For Alert When Available"
 msgstr ""
 
-msgctxt "#33113"
-msgid ""
+msgctxt "#33152"
+msgid "Restart Fen Services"
 msgstr ""
-
-#############################################

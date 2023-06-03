@@ -67,15 +67,18 @@ class Extras(BaseDialog):
 	def onInit(self):
 		self.set_home_property('window_loaded', 'true')
 		for i in self.tasks: Thread(target=i).start()
-		try: self.setFocusId(10)
-		except: self.close()
 		if self.starting_position:
 			try:
 				window_id, focus = self.starting_position
 				self.sleep(300)
 				self.setFocusId(window_id)
 				self.select_item(window_id, focus)
-			except: pass
+			except: self.set_default_focus()
+		else: self.set_default_focus()
+
+	def set_default_focus(self):
+		try: self.setFocusId(10)
+		except: self.close()
 
 	def run(self):
 		self.doModal()
@@ -156,7 +159,7 @@ class Extras(BaseDialog):
 				active_extra_ratings = True
 		if win_prop == 4000 and active_extra_ratings:
 			self.setProperty('extra_ratings', 'true')
-			self.set_infoline1(remove_rating=True)
+			if 'TMDb' in current_settings and self.getProperty('TMDb_rating') == 'true': self.set_infoline1(remove_rating=True)
 
 	def make_plot(self):
 		if not plot_id in self.enabled_lists: return
@@ -194,6 +197,7 @@ class Extras(BaseDialog):
 
 	def make_reviews(self):
 		if not reviews_id in self.enabled_lists: return
+		from modules.utils import jsondate_to_datetime
 		def builder():
 			for item in self.all_reviews:
 				try:
@@ -211,6 +215,7 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_trivia(self):
+		return
 		if not trivia_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_trivia:
@@ -229,6 +234,7 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_blunders(self):
+		return
 		if not blunders_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_blunders:

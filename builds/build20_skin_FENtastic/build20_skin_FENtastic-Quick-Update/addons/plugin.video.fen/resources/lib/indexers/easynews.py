@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from modules.utils import jsondate_to_datetime
 from apis.easynews_api import import_easynews
 from modules import kodi_utils
 from modules.utils import clean_file_name
@@ -71,8 +73,6 @@ def resolve_easynews(params):
 	FenPlayer().run(resolved_link, 'video')
 
 def account_info(params):
-	from datetime import datetime
-	from modules.utils import jsondate_to_datetime
 	try:
 		show_busy_dialog()
 		account_info, usage_info = EasyNews.account()
@@ -92,3 +92,11 @@ def account_info(params):
 		hide_busy_dialog()
 		return show_text(ls(32070).upper(), '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+def active_days():
+	try:
+		account_info = EasyNews.account_info()
+		expires = jsondate_to_datetime(account_info[2], '%Y-%m-%d')
+		days_remaining = (expires - datetime.today()).days
+	except: days_remaining = 0
+	return days_remaining

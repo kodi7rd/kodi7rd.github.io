@@ -308,10 +308,10 @@ class Downloader:
 					pass
 				if errno == 10054: #'An existing connection was forcibly closed by the remote host'
 					errors = 10 #force resume
-					sleep_time  = 30
+					sleep_time = 30
 				if errno == 11001: # 'getaddrinfo failed'
 					errors = 10 #force resume
-					sleep_time  = 30
+					sleep_time = 30
 			if chunk:
 				errors = 0
 				chunks.append(chunk)

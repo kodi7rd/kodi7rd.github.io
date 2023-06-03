@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from apis.alldebrid_api import AllDebridAPI
 from modules import kodi_utils
 from modules.source_utils import supported_video_extensions, gather_assigned_content, test_assigned_content
@@ -98,7 +99,6 @@ def resolve_ad(params):
 	FenPlayer().run(resolved_link, 'video')
 
 def ad_account_info():
-	from datetime import datetime
 	try:
 		show_busy_dialog()
 		account_info = AllDebrid.account_info()['user']
@@ -117,4 +117,12 @@ def ad_account_info():
 		hide_busy_dialog()
 		return show_text(ls(32063).upper(), '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+def active_days():
+	try:
+		account_info = AllDebrid.account_info()['user']
+		expires = datetime.fromtimestamp(account_info['premiumUntil'])
+		days_remaining = (expires - datetime.today()).days
+	except: days_remaining = 0
+	return days_remaining
 

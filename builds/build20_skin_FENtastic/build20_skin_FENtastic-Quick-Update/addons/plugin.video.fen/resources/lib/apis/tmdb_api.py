@@ -139,6 +139,11 @@ def tmdb_movies_companies(company_id, page_no):
 							% (base_url, tmdb_api_key(), company_id, page_no)
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
+def tmdb_movies_reviews(tmdb_id):
+	string = 'tmdb_movies_reviews_%s' % tmdb_id
+	url = '%s/movie/%s/reviews?api_key=%s' % (base_url, tmdb_id, tmdb_api_key())
+	return cache_object(get_tmdb, string, url, json=False, expiration=EXPIRY_1_WEEK)
+
 def tmdb_tv_discover(query, page_no):
 	string = url = query % page_no
 	return cache_object(get_tmdb, string, url)

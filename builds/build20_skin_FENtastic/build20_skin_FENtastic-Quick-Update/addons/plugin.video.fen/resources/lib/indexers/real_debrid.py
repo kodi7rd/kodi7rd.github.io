@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from modules.utils import datetime_workaround
 from apis.real_debrid_api import RealDebridAPI
 from modules import kodi_utils
 from modules.source_utils import supported_video_extensions, gather_assigned_content, test_assigned_content
@@ -137,8 +139,6 @@ def resolve_rd(params):
 	FenPlayer().run(resolved_link, 'video')
 
 def rd_account_info():
-	from datetime import datetime
-	from modules.utils import datetime_workaround
 	try:
 		show_busy_dialog()
 		account_info = RealDebrid.account_info()
@@ -155,3 +155,11 @@ def rd_account_info():
 		hide_busy_dialog()
 		return show_text(ls(32054).upper(), '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+def active_days():
+	try:
+		account_info = RealDebrid.account_info()
+		expires = datetime_workaround(account_info['expiration'], '%Y-%m-%dT%H:%M:%S.%fZ')
+		days_remaining = (expires - datetime.today()).days
+	except: days_remaining = 0
+	return days_remaining
