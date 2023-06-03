@@ -4,7 +4,7 @@ zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-
 
 name="Kodi 20 Real Debrid Israel Build"
 version="3.0.8"
-url="https://kodi7rd.github.io/builds/build20_skin_Estuary/Kodi20-RealDebrid-Israel-Build-3.0.8.zip"
+url="https://kodi7rd.github.io/builds/build20_skin_Estuary_TEST/Kodi20-RealDebrid-Israel-Build-3.1.0.zip"
 minor="https://"
 gui="https://kodi7rd.github.io/builds/build20_skin_Estuary/Kodi20-RealDebrid-Israel-Build-3.0.8-Quick-Update.zip"
 kodi="20.0"
