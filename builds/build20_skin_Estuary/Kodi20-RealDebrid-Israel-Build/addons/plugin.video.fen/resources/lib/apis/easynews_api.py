@@ -2,6 +2,7 @@
 import re
 import base64
 from caches.main_cache import cache_object
+from modules.dom_parser import parseDOM
 from modules.kodi_utils import make_session, json, urlencode, quote, get_setting
 # from modules.kodi_utils import logger
 
@@ -47,20 +48,27 @@ class EasyNewsAPI:
 		return cache_object(self._process_search, string, url, json=False, expiration=expiration)
 
 	def account(self):
-		from modules.dom_parser import parseDOM
-		account_info, usage_info = None, None
+		account_info, usage_info = self.account_info(), self.usage_info()
+		return account_info, usage_info
+
+	def account_info(self):
+		account_info = None
 		try:
 			account_html = self._get(self.account_link)
 			account_info = parseDOM(account_html, 'form', attrs={'id': 'accountForm'})
 			account_info = parseDOM(account_info, 'td')[0:11][1::3]
 		except: pass
+		return account_info
+
+	def usage_info(self):
+		usage_info = None
 		try:
 			usage_html = self._get(self.usage_link)
 			usage_info = parseDOM(usage_html, 'div', attrs={'class': 'table-responsive'})
 			usage_info = parseDOM(usage_info, 'td')[0:11][1::3]
 			usage_info[1] = re.sub(r'[</].+?>', '', usage_info[1])
 		except: pass
-		return account_info, usage_info
+		return usage_info
 
 	def _process_files(self, files):
 		def _process():

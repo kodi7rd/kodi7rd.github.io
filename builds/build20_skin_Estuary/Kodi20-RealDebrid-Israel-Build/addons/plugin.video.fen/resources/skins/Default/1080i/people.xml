@@ -10,12 +10,12 @@
             </control>
             <control type="image">
                 <texture>$INFO[Window.Property(fanart)]</texture>
-                <animation effect="fade" start="80" end="20" time="1000" tween="sine">WindowOpen</animation>
+                <animation effect="fade" start="80" end="20" time="800" tween="sine">WindowOpen</animation>
             </control>
         </control>
         <!-- Fen Logo and Tips/Clock & Date -->
         <control type="group">
-            <animation effect="fade" start="0" end="100" delay="800" time="450">WindowOpen</animation>
+            <animation effect="fade" start="0" end="100" delay="600" time="450">WindowOpen</animation>
             <control type="image">
                 <top>5</top>
                 <left>5</left>
@@ -77,8 +77,8 @@
         <control type="group">
             <control type="label">
                 <animation type="WindowOpen" reversible="false">
-                    <effect type="fade" start="0" end="100" time="450" tween="sine" delay="350" easing="in" />
-                    <effect type="slide" start="0,-135" end="0" time="450" center="auto" delay="350" tween="quadratic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="450" tween="sine" delay="200" easing="in" />
+                    <effect type="slide" start="0,-135" end="0" time="450" center="auto" delay="200" tween="quadratic" easing="out" />
                 </animation>
                 <top>120</top>
                 <left>55</left>
@@ -92,8 +92,8 @@
             </control>
             <control type="image">
                 <animation type="WindowOpen" reversible="false">
-                    <effect type="fade" start="0" end="100" time="450" tween="sine" delay="350" easing="in" />
-                    <effect type="slide" start="650" end="0" time="450" center="auto" delay="350" tween="quadratic" easing="out" />
+                    <effect type="fade" start="0" end="100" time="450" tween="sine" delay="200" easing="in" />
+                    <effect type="slide" start="650" end="0" time="450" center="auto" delay="200" tween="quadratic" easing="out" />
                 </animation>
                 <top>80</top>
                 <left>1255</left>
@@ -106,8 +106,8 @@
         <!-- Top 3 Lines Info -->
         <control type="group">
             <animation type="WindowOpen" reversible="false">
-                <effect type="fade" start="0" end="100" time="600" tween="sine" delay="200" easing="in" />
-                <effect type="slide" start="-1200" end="0" time="600" center="auto" tween="quadratic" delay="200" easing="out" />
+                <effect type="fade" start="0" end="100" time="450" tween="sine" delay="200" easing="in" />
+                <effect type="slide" start="-1200" end="0" time="450" center="auto" tween="quadratic" delay="200" easing="out" />
             </animation>
             <animation effect="fade" start="100" end="0" time="200" tween="sine" condition="!Control.HasFocus(10) + !Control.HasFocus(11)">conditional</animation>
             <top>260</top>
@@ -143,8 +143,8 @@
         <!-- Body -->
         <control type="grouplist" id="1000">
             <animation type="WindowOpen" reversible="false">
-                <effect type="fade" start="0" end="100" time="600" tween="sine" delay="200" easing="in" />
-                <effect type="slide" start="-1200" end="0" time="600" center="auto" tween="quadratic" delay="200" easing="out" />
+                <effect type="fade" start="0" end="100" time="450" tween="sine" delay="200" easing="in" />
+                <effect type="slide" start="-1200" end="0" time="450" center="auto" tween="quadratic" delay="200" easing="out" />
             </animation>
             <animation effect="slide" end="0,220" time="300" reversible="true" condition="Control.HasFocus(10) | Control.HasFocus(11)">Conditional</animation>
             <top>300</top>

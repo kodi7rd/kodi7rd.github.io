@@ -73,13 +73,14 @@
                     <visible>String.IsEmpty(Window.Property(clearlogo))</visible>
                 </control>
                 <control type="label">
-                    <top>335</top>
+                    <top>280</top>
                     <width max="1920">auto</width>
                     <height>25</height>
                     <font>font14</font> <!-- FEN_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <label>[I]$INFO[Window.Property(genre)][/I]</label>
+                    <visible>String.IsEmpty(Window.Property(clearlogo))</visible>
                 </control>
             </control>
             <!-- Busy Spinner -->

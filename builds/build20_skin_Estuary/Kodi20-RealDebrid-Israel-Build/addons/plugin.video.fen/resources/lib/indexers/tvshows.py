@@ -7,7 +7,7 @@ from modules.watched_status import get_watched_info_tv, get_watched_status_tvsho
 
 sleep, meta_function, get_datetime_function, add_item, xbmc_actor = kodi_utils.sleep, tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor
 kodi_version, get_watched_function, get_watched_info_function, set_category = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category
-set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
+set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.tvshow_dict_removals
 metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.paginate
@@ -36,7 +36,7 @@ class TVShows:
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
 		self.items, self.new_page, self.total_pages, self.is_widget, self.max_threads = [], {}, None, external_browse(), max_threads()
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
-		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
+		self.exit_list_params = self.params_get('exit_list_params', None) or folder_path()
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.append = self.items.append
@@ -47,7 +47,7 @@ class TVShows:
 			try:
 				mode = self.params_get('mode')
 				try: page_no = int(self.params_get('new_page', '1'))
-				except ValueError: page_no = self.params_get('new_page')
+				except: page_no = self.params_get('new_page')
 				if self.action in personal: var_module, import_function = personal[self.action]
 				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
 				try: function = manual_function_import(var_module, import_function)
@@ -121,7 +121,7 @@ class TVShows:
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
-			set_view_mode(view_mode, content_type)
+			set_view_mode(view_mode, content_type, self.is_widget)
 
 	def build_tvshow_content(self, item_position, _id):
 		try:

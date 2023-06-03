@@ -51,8 +51,7 @@ class SelectArtwork(BaseDialog):
 			for count, item in enumerate(image_list):
 				try:
 					listitem = self.make_listitem()
-					if self.tmdb_image_check(item): res_prop, provider = 'w300', 'TMDb'
-					else: res_prop, provider = '/preview/', 'Fanart.tv'
+					res_prop, provider = self.image_check(item)
 					listitem.setProperty('provider', provider)
 					listitem.setProperty('thumbnail', change_image_resolution(item, res_prop))
 					listitem.setProperty('image', item)
@@ -89,5 +88,6 @@ class SelectArtwork(BaseDialog):
 	def add_active(self, _id):
 		self.active_items.append(_id)
 
-	def tmdb_image_check(self, image):
-		return 'image.tmdb' in image
+	def image_check(self, image):
+		if 'image.tmdb' in image: return 'w300', 'TMDb'
+		else: return '/preview/', 'Fanart.tv'

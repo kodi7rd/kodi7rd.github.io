@@ -216,6 +216,9 @@ def routing(sys):
 		elif mode == 'set_view':
 			return kodi_utils.set_view(_get('view_type'))
 	##EXTRA modes##
+	elif mode == 'restart_services':
+		from modules.kodi_utils import restart_services
+		return restart_services()
 	elif mode == 'kodi_refresh':
 		from modules.kodi_utils import kodi_refresh
 		return kodi_refresh()
@@ -233,7 +236,7 @@ def routing(sys):
 		return manual_add_magnet_to_cloud(params)
 	elif mode == 'upload_logfile':
 		from modules.kodi_utils import upload_logfile
-		return upload_logfile()
+		return upload_logfile(params)
 	elif mode == 'toggle_language_invoker':
 		from modules.kodi_utils import toggle_language_invoker
 		return toggle_language_invoker()

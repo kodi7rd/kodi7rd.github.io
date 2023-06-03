@@ -6,23 +6,31 @@ from xml.dom.minidom import parse as mdParse
 from windows import FontUtils, get_custom_xmls_version, download_custom_xmls
 from caches import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
+from indexers import real_debrid, premiumize, alldebrid, furk, easynews
+from modules.debrid import debrid_enabled
+from modules.utils import jsondate_to_datetime, datetime_workaround
 from modules import kodi_utils, settings
 
 disable_enable_addon, update_local_addons, get_infolabel, run_plugin = kodi_utils.disable_enable_addon, kodi_utils.update_local_addons, kodi_utils.get_infolabel, kodi_utils.run_plugin
 ls, path_exists, translate_path, custom_context_main_menu_prop = kodi_utils.local_string, kodi_utils.path_exists, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop
 custom_context_prop, custom_info_prop, pause_settings_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.pause_settings_prop, kodi_utils.addon
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
-get_window_id, Thread, make_window_properties = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.make_window_properties
+get_window_id, Thread, make_window_properties, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.make_window_properties, settings.check_premium_account_status
 get_setting, set_setting, make_settings_dict, external_browse = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.external_browse
-logger, json, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.json, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
+logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_fen = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_fen
 make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
 current_skin_prop, use_skin_fonts_prop, custom_skin_path = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.custom_skin_path
-notification = kodi_utils.notification
+notification, ok_dialog = kodi_utils.notification, kodi_utils.ok_dialog
+pause_settings_change, unpause_settings_change = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change
 fen_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025)
+premium_check_function_dict = {'Real-Debrid': real_debrid.active_days, 'Premiumize.me': premiumize.active_days, 'AllDebrid': alldebrid.active_days,
+								'Furk': furk.active_days, 'Easynews': easynews.active_days}
+premium_check_setting_dict = {'Real-Debrid': 'rd.enabled', 'Premiumize.me': 'pm.enabled', 'AllDebrid': 'ad.enabled',
+								'Furk': 'provider.furk', 'Easynews': 'provider.easynews'}
 
 class SetKodiVersion:
 	def run(self):
@@ -189,13 +197,13 @@ class CustomActions:
 		return logger(fen_str, 'CustomActions Service Finished')
 
 	def run_custom_action(self, action, window):
-		close_dialog(window)
+		close_dialog(window, True)
 		run_plugin(action)
-		count = 0
-		while get_visibility(window_top_str % window):
-			if count == 5: break
-			self.wait_for_abort(0.25)
-			count += 0.25
+		# count = 0
+		# while get_visibility(window_top_str % window):
+		# 	if count == 5: break
+		# 	self.wait_for_abort(0.25)
+		# 	count += 0.25
 
 class CustomFonts:
 	def run(self):
@@ -245,6 +253,45 @@ class AutoRun:
 		logger(fen_str, 'AutoRun Service Starting')
 		if auto_start_fen(): run_addon()
 		return logger(fen_str, 'AutoRun Service Finished')
+
+class PremiumExpiryCheck:
+	def run(self):
+		if not check_premium(): return
+		logger(fen_str, 'Premium Expiry Check Service Starting')
+		self.message, self.days_remaining = [], []
+		try:
+			self.run_check()
+			if self.make_message(): ok_dialog('Fen - Premium Accounts Expiring...', '\n'.join(self.message))
+			self.expired_premium = [i for i in self.days_remaining if i[1] == 0]
+			if self.expired_premium and confirm_dialog(heading='Fen - Premium Accounts Expired', text='Disable Expired Accounts?', ok_label=32839, cancel_label=32840): self.revoke()
+		except: pass
+		logger(fen_str, 'Premium Expiry Check Service Finished')
+
+	def run_check(self):
+		active_functions = [Thread(target=self.process, args=(premium_check_function_dict[i], i)) for i in self.active_accounts()]
+		[i.start() for i in active_functions]
+		[i.join() for i in active_functions]
+
+	def active_accounts(self):
+		active_accounts = debrid_enabled()
+		if settings.furk_active(): active_accounts.append('Furk')
+		if settings.easynews_active(): active_accounts.append('Easynews')
+		return active_accounts
+
+	def make_message(self):
+		if any(i in [i[1] for i in self.days_remaining] for i in (7, 5, 3, 1, 0)):
+			self.message = ['[B]%s: EXPIRED[/B]' % i[0] if i[1] == 0 else '[B]%s:[/B] %s Days Remaining' % i for i in self.days_remaining]
+		return self.message
+
+	def process(self, function, name):
+		expiry = function()
+		if expiry <= 7: self.days_remaining.append((name, expiry))
+
+	def revoke(self):
+		pause_settings_change()
+		for item in self.expired_premium: set_setting(premium_check_setting_dict[item[0]], 'false')
+		unpause_settings_change()
+		make_settings_dict()
 
 class OnSettingsChangedActions:
 	def run(self):

@@ -4,7 +4,7 @@ from modules.utils import remove_accents
 from modules.kodi_utils import make_session, clear_property, maincache_db, database, get_setting, set_setting
 # from modules.kodi_utils import logger
 
-base_url = 'https://www.furk.net/api/'
+base_url = 'http://www.furk.net/api/'
 login_url = 'login/login?login=%s&pwd=%s'
 file_get_video_url = 'file/get?api_key=%s&type=video'
 file_link_url = 'file/link?api_key=%s&id=%s'
@@ -106,9 +106,10 @@ class FurkAPI:
 		return result['files'][0]['t_files']
 
 	def _get(self, url):
-		try: result = session.get(url, timeout=timeout)
-		except: result = session.get(url, verify=False, timeout=timeout)
-		return result.json()
+		try:
+			result = session.get(url, timeout=timeout)
+			return result.json()
+		except: return None
 
 def clear_media_results_database():
 	results = []

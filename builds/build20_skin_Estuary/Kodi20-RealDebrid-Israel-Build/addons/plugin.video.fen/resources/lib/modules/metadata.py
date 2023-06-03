@@ -16,7 +16,7 @@ default_custom_artwork = {'custom_poster': '', 'custom_fanart': '', 'custom_clea
 writer_credits = ('Author', 'Writer', 'Screenplay', 'Characters')
 alt_titles_check, trailers_check, finished_show_check, empty_value_check = ('US', 'GB', 'UK', ''), ('Trailer', 'Teaser'), ('Ended', 'Canceled'), ('', 'None', None)
 tmdb_image_url, youtube_url, date_format = 'https://image.tmdb.org/t/p/%s%s', 'plugin://plugin.video.youtube/play/?video_id=%s', '%Y-%m-%d'
-EXPIRES_6_HOURS, EXPIRES_4_DAYS, EXPIRES_7_DAYS, EXPIRES_14_DAYS, EXPIRES_30_DAYS, EXPIRES_182_DAYS = 0.25, 4, 7, 14, 30, 182
+EXPIRES_6_HOURS, EXPIRES_1_DAYS, EXPIRES_4_DAYS, EXPIRES_7_DAYS, EXPIRES_14_DAYS, EXPIRES_30_DAYS, EXPIRES_182_DAYS = 0.25, 1, 4, 7, 14, 30, 182
 invalid_error_codes = (6, 34, 37)
 
 def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
@@ -198,8 +198,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		return meta
 	try:
 		tmdb_api = user_info['tmdb_api']
-		if id_type == 'tmdb_id':
-			data = tvshow_data(media_id, language, tmdb_api)
+		if id_type == 'tmdb_id': data = tvshow_data(media_id, language, tmdb_api)
 		else:
 			external_result = tvshow_external(id_type, media_id, tmdb_api)
 			if not external_result: data = None
@@ -238,7 +237,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		tmdb_id, imdb_id, tvdb_id = data_get('id', ''), external_ids.get('imdb_id', ''), external_ids.get('tvdb_id', 'None')
 		rating, votes = data_get('vote_average', ''), data_get('vote_count', '')
 		plot, tagline, premiered = data_get('overview', ''), data_get('tagline', ''), data_get('first_air_date', '')
-		season_data, total_seasons, total_aired_eps = data_get('seasons'), data_get('number_of_seasons'), data_get('number_of_episodes')
+		season_data, total_seasons = data_get('seasons'), data_get('number_of_seasons')
 		extra_images = data_get('images', {})
 		if extra_images:
 			images['poster'] = [tmdb_image_url % (image_resolution['poster'], (i['file_path'] if i['file_path'].endswith('jpg') \
@@ -324,8 +323,9 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		else: ei_created_by = 'N/A'
 		ei_next_ep, ei_last_ep = data_get('next_episode_to_air', None), data_get('last_episode_to_air', None)
 		if ei_last_ep and not status in finished_show_check:
-				total_aired_eps = sum([i['episode_count'] for i in season_data if i['season_number'] < ei_last_ep['season_number'] \
-																			and i['season_number'] != 0]) + ei_last_ep['episode_number']
+			total_aired_eps = sum([i['episode_count'] for i in season_data if i['season_number'] < ei_last_ep['season_number'] \
+																		and i['season_number'] != 0]) + ei_last_ep['episode_number']
+		else: total_aired_eps = data_get('number_of_episodes')
 		if fanart_data: images.update({'poster': images['poster'] + all_fanart_images['poster'], 'fanart': images['fanart'] + all_fanart_images['fanart'],
 									'clearlogo': images['clearlogo'] + all_fanart_images['clearlogo'], 'banner': all_fanart_images['banner'],
 									'clearart': all_fanart_images['clearart'], 'landscape': all_fanart_images['landscape']})
@@ -453,16 +453,16 @@ def movie_expiry(current_date, meta):
 		if difference < 0: expiration = abs(difference) + 1
 		elif difference <= 14: expiration = EXPIRES_7_DAYS
 		elif difference <= 30: expiration = EXPIRES_14_DAYS
-		else: expiration = EXPIRES_182_DAYS
+		else: expiration = EXPIRES_30_DAYS
 	except: return EXPIRES_7_DAYS
-	final = max(expiration, EXPIRES_7_DAYS)
-	return final
+	return max(expiration, EXPIRES_7_DAYS)
 
 def tvshow_expiry(current_date, meta):
 	try:
-		if meta['status'] in finished_show_check: return EXPIRES_182_DAYS
+		if meta['status'] in finished_show_check: return EXPIRES_30_DAYS
 		next_episode_to_air = meta['extra_info'].get('next_episode_to_air', None)
-		if not next_episode_to_air: return EXPIRES_4_DAYS
+		if not next_episode_to_air: return EXPIRES_1_DAYS
 		expiration = subtract_dates_function(jsondate_to_datetime_function(next_episode_to_air['air_date'], date_format, remove_time=True), current_date)
+		if expiration <= 0: return EXPIRES_1_DAYS
 	except: return EXPIRES_4_DAYS
-	return max(expiration, EXPIRES_4_DAYS)
+	return max(expiration - EXPIRES_1_DAYS, EXPIRES_1_DAYS)

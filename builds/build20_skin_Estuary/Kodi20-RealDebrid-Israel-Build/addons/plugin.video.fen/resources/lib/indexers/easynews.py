@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from modules.utils import jsondate_to_datetime
 from apis.easynews_api import import_easynews
 from modules import kodi_utils
 from modules.utils import clean_file_name
@@ -7,7 +9,7 @@ from modules.utils import clean_file_name
 ls, sys, build_url, unquote, urlencode, quote = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.unquote, kodi_utils.urlencode, kodi_utils.quote
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
 default_easynews_icon, fanart, fen_clearlogo, sleep = kodi_utils.get_icon('easynews'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.sleep
-add_items, set_content, end_directory, external_browse = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.external_browse
+add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 make_listitem, ok_dialog, kodi_version = kodi_utils.make_listitem, kodi_utils.ok_dialog, kodi_utils.kodi_version
 down_str = '[B]%s[/B]' % ls(32747)
 EasyNews = import_easynews()
@@ -21,7 +23,7 @@ def search_easynews(params):
 	except: pass
 	set_content(handle, 'files')
 	end_directory(handle, False)
-	if not external_browse(): set_view_mode('view.premium')
+	set_view_mode('view.premium')
 
 def easynews_file_browser(files, handle):
 	def _builder():
@@ -71,8 +73,6 @@ def resolve_easynews(params):
 	FenPlayer().run(resolved_link, 'video')
 
 def account_info(params):
-	from datetime import datetime
-	from modules.utils import jsondate_to_datetime
 	try:
 		show_busy_dialog()
 		account_info, usage_info = EasyNews.account()
@@ -92,3 +92,11 @@ def account_info(params):
 		hide_busy_dialog()
 		return show_text(ls(32070).upper(), '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+def active_days():
+	try:
+		account_info = EasyNews.account_info()
+		expires = jsondate_to_datetime(account_info[2], '%Y-%m-%d')
+		days_remaining = (expires - datetime.today()).days
+	except: days_remaining = 0
+	return days_remaining

@@ -8,7 +8,7 @@ from modules.watched_status import get_watched_info_movie, get_watched_status_mo
 
 meta_function, get_datetime_function, add_item, fen_clearlogo = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.addon_clearlogo
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
-set_content, end_directory, set_view_mode, get_infolabel = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.get_infolabel
+set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
 sleep, kodi_version, xbmc_actor, set_category = kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.movie_dict_removals
@@ -21,7 +21,7 @@ hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
-tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
+tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'network_id', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
 				'tmdb_movies_certifications': 'certification', 'tmdb_movies_recommendations': 'tmdb_id', 'tmdb_movies_genres': 'genre_id', 'tmdb_movies_search': 'query',
 				'tmdb_movies_search_sets': 'query'}
 personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_progress_movies': ('modules.watched_status', 'get_in_progress_movies'), 
@@ -39,7 +39,7 @@ class Movies:
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
 		self.items, self.new_page, self.total_pages, self.is_widget, self.max_threads = [], {}, None, external_browse(), max_threads()
 		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
-		self.exit_list_params = self.params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
+		self.exit_list_params = self.params_get('exit_list_params', None) or folder_path()
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.append = self.items.append
@@ -50,7 +50,7 @@ class Movies:
 			try:
 				builder, mode = self.worker, self.params_get('mode')
 				try: page_no = int(self.params_get('new_page', '1'))
-				except ValueError: page_no = self.params_get('new_page')
+				except: page_no = self.params_get('new_page')
 				if self.action in personal: var_module, import_function = personal[self.action]
 				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
 				try: function = manual_function_import(var_module, import_function)
@@ -129,7 +129,7 @@ class Movies:
 		end_directory(handle, False if self.is_widget else None)
 		if not self.is_widget:
 			if self.params_get('refreshed') == 'true': sleep(1000)
-			set_view_mode(view_mode, content_type)
+			set_view_mode(view_mode, content_type, self.is_widget)
 		
 	def build_movie_content(self, item_position, _id):
 		try:

@@ -18,23 +18,29 @@
 				<include>ButtonMenuList</include>
 				<content>
 					<item>
-						<label>$LOCALIZE[31113]</label>
+						<label>$LOCALIZE[70001]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick condition="System.AddonIsEnabled(script.globalsearch)">RunScript(script.globalsearch)</onclick>
-						<onclick condition="System.HasAddon(script.globalsearch) + !System.AddonIsEnabled(script.globalsearch)">EnableAddon(script.globalsearch)</onclick>
-						<onclick condition="!System.HasAddon(script.globalsearch)">InstallAddon(script.globalsearch)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=movie&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fu8jgyN3.png",return)</onclick>
 					</item>
 					<item>
-						<label>$LOCALIZE[31145]</label>
+						<label>$LOCALIZE[70002]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(addonbrowser,addons://search/,return)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=tvshow&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxYTdX3O.png",return)</onclick>
 					</item>
 					<item>
-						<label>$LOCALIZE[31114]</label>
+						<label>$LOCALIZE[70003]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick condition="System.AddonIsEnabled(plugin.video.youtube)">ActivateWindow(videos,"plugin://plugin.video.youtube/kodion/search/list/",return)</onclick>
-						<onclick condition="System.HasAddon(plugin.video.youtube) + !System.AddonIsEnabled(plugin.video.youtube)">EnableAddon(plugin.video.youtube)</onclick>
-						<onclick condition="!System.HasAddon(plugin.video.youtube)">InstallAddon(plugin.video.youtube)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=people&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FF1EZyWz.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[70004]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=tmdb_movie_sets&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fr0ITv0C.png",return)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[700041]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia("plugin://plugin.video.fen/?mode=get_search_term&amp;search_type=trakt_lists&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxihFNwP.png",return)</onclick>
 					</item>
 				</content>
 			</control>
