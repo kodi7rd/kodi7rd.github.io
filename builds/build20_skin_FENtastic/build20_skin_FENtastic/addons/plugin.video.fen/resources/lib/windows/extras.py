@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from datetime import datetime, timedelta
-from windows import BaseDialog
+from windows import BaseDialog, window_manager, window_player
 from apis import tmdb_api, imdb_api, omdb_api
 from indexers import dialogs, people
 from indexers.images import Images
@@ -21,7 +21,7 @@ extras_button_label_values, show_busy_dialog, hide_busy_dialog = kodi_utils.extr
 container_update, activate_window = kodi_utils.container_update, kodi_utils.activate_window
 extras_enable_scrollbars, get_resolution, omdb_api_key, date_offset = settings.extras_enable_scrollbars, settings.get_resolution, settings.omdb_api_key, settings.date_offset
 default_all_episodes, metadata_user_info, extras_enabled_menus = settings.default_all_episodes, settings.metadata_user_info, settings.extras_enabled_menus
-enable_extra_ratings, extras_enabled_ratings = settings.extras_enable_extra_ratings, settings.extras_enabled_ratings
+enable_extra_ratings, extras_enabled_ratings, windowed_playback = settings.extras_enable_extra_ratings, settings.extras_enabled_ratings, settings.extras_windowed_playback
 watched_indicators, get_art_provider = settings.watched_indicators, settings.get_art_provider
 options_menu_choice, extras_menu_choice, imdb_videos_choice = dialogs.options_menu_choice, dialogs.extras_menu_choice, dialogs.imdb_videos_choice
 get_progress_percent, get_bookmarks, get_watched_info_movie = watched_status.get_progress_percent, watched_status.get_bookmarks, watched_status.get_watched_info_movie
@@ -31,11 +31,12 @@ trailer_choice, imdb_keywords_choice, media_extra_info, genres_choice = dialogs.
 person_search, person_data_dialog = people.person_search, people.person_data_dialog
 tmdb_movies_year, tmdb_tv_year, tmdb_movies_genres, tmdb_tv_genres = tmdb_api.tmdb_movies_year, tmdb_api.tmdb_tv_year, tmdb_api.tmdb_movies_genres, tmdb_api.tmdb_tv_genres
 tmdb_movies_recommendations, tmdb_tv_recommendations, tmdb_company_id = tmdb_api.tmdb_movies_recommendations, tmdb_api.tmdb_tv_recommendations, tmdb_api.tmdb_company_id
-tmdb_movies_networks, tmdb_tv_networks = tmdb_api.tmdb_movies_networks, tmdb_api.tmdb_tv_networks
+tmdb_movies_companies, tmdb_tv_networks = tmdb_api.tmdb_movies_companies, tmdb_api.tmdb_tv_networks
 imdb_reviews, imdb_trivia, imdb_blunders = imdb_api.imdb_reviews, imdb_api.imdb_trivia, imdb_api.imdb_blunders
 imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_videos
 fetch_ratings_info = omdb_api.fetch_ratings_info
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
+youtube_check = 'plugin.video.youtube'
 setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'fen_flags/ratings/%s'
 separator = '  •  '
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
@@ -64,7 +65,18 @@ class Extras(BaseDialog):
 					self.make_network, self.make_posters, self.make_fanart, self.make_collection)
 
 	def onInit(self):
+		self.set_home_property('window_loaded', 'true')
 		for i in self.tasks: Thread(target=i).start()
+		if self.starting_position:
+			try:
+				window_id, focus = self.starting_position
+				self.sleep(300)
+				self.setFocusId(window_id)
+				self.select_item(window_id, focus)
+			except: self.set_default_focus()
+		else: self.set_default_focus()
+
+	def set_default_focus(self):
 		try: self.setFocusId(10)
 		except: self.close()
 
@@ -79,7 +91,7 @@ class Extras(BaseDialog):
 		else: self.control_id = controlID
 
 	def onAction(self, action):
-		if action in self.closing_actions: return self.close()
+		if action in self.closing_actions: return window_manager(self)
 		if action == self.info_action:
 			focus_id = self.getFocusId()
 			if not focus_id in tmdb_list_ids: return
@@ -107,14 +119,20 @@ class Extras(BaseDialog):
 			try: chosen_var = self.get_listitem(self.control_id).getProperty(self.item_action_dict[self.control_id])
 			except: return
 			if self.control_id in tmdb_list_ids:
-				params = {'tmdb_id': chosen_var, 'media_type': self.media_type, 'is_widget': self.is_widget}
-				return extras_menu_choice(params)
+				self.set_current_params()
+				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': self.media_type, 'is_widget': self.is_widget, 'stacked': 'true'}
+				return window_manager(self)
 			elif self.control_id == cast_id:
-				return person_data_dialog({'query': chosen_var, 'reference_tmdb_id': self.tmdb_id, 'is_widget': self.is_widget})
+				self.set_current_params()
+				self.new_params = {'mode': 'person_data_dialog', 'query': chosen_var, 'reference_tmdb_id': self.tmdb_id, 'is_widget': self.is_widget, 'stacked': 'true'}
+				return window_manager(self)
 			elif self.control_id == videos_id:
 				chosen = imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], self.poster)
 				if not chosen: return
-				self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', meta=self.meta, video=chosen)
+				if windowed_playback(): return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', meta=self.meta, video=chosen)
+				self.set_current_params()
+				self.window_player_url = chosen
+				return window_player(self)
 			elif self.control_id in imdb_list_ids:
 				if self.control_id == parentsguide_id:
 					if not chosen_var: return
@@ -141,7 +159,7 @@ class Extras(BaseDialog):
 				active_extra_ratings = True
 		if win_prop == 4000 and active_extra_ratings:
 			self.setProperty('extra_ratings', 'true')
-			self.set_infoline1(remove_rating=True)
+			if 'TMDb' in current_settings and self.getProperty('TMDb_rating') == 'true': self.set_infoline1(remove_rating=True)
 
 	def make_plot(self):
 		if not plot_id in self.enabled_lists: return
@@ -179,6 +197,7 @@ class Extras(BaseDialog):
 
 	def make_reviews(self):
 		if not reviews_id in self.enabled_lists: return
+		from modules.utils import jsondate_to_datetime
 		def builder():
 			for item in self.all_reviews:
 				try:
@@ -196,6 +215,7 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_trivia(self):
+		return
 		if not trivia_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_trivia:
@@ -214,6 +234,7 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_blunders(self):
+		return
 		if not blunders_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_blunders:
@@ -336,7 +357,7 @@ class Extras(BaseDialog):
 			network = self.meta_get('studio')
 			network_id = [i['id'] for i in tmdb_company_id(network)['results'] if i['name'] == network][0] \
 						if self.media_type == 'movie' else [item['id'] for item in networks if 'name' in item and item['name'] == network][0]
-			function = tmdb_movies_networks if self.media_type == 'movie' else tmdb_tv_networks
+			function = tmdb_movies_companies if self.media_type == 'movie' else tmdb_tv_networks
 			data = self.remove_current_tmdb_mediaitem(function(network_id, 1)['results'])
 			item_list = list(self.make_tmdb_listitems(data))
 			self.setProperty('more_from_networks.number', count_insert % len(item_list))
@@ -469,7 +490,7 @@ class Extras(BaseDialog):
 		if 'image.tmdb' in self.current_poster:
 			try: poster = change_image_resolution(self.current_poster, 'original')
 			except: pass
-		elif not self.check_poster_cached(self.current_poster): self.current_poster = self.meta_get(self.poster_backup) or ''
+		elif not self.check_image_cached(self.current_poster): self.current_poster = self.meta_get(self.poster_backup) or ''
 		return poster
 
 	def original_fanart(self):
@@ -502,16 +523,16 @@ class Extras(BaseDialog):
 			self.set_image(200, self.current_poster)
 			self.set_image(201, self.poster)
 			total_time = 0
-			while not self.check_poster_cached(self.poster) and not total_time > 200:
+			while not self.check_image_cached(self.poster) and not total_time > 200:
 				total_time += 1
 				self.sleep(50)
 			self.set_image(200, self.poster)
 		else: self.setProperty('active_poster', 'false')
 
-	def check_poster_cached(self, poster):
+	def check_image_cached(self, image):
 		try:
-			if poster == empty_poster: return True
-			if fetch_kodi_imagecache(poster): return True
+			if image in (empty_poster, ''): return True
+			if fetch_kodi_imagecache(image): return True
 			return False
 		except: return True
 
@@ -533,10 +554,14 @@ class Extras(BaseDialog):
 		Sources().playback_prep(url_params)
 
 	def show_trailers(self):
+		if not self.youtube_installed_check(): return self.notification('Youtube Plugin needed for playback')
 		chosen = trailer_choice(self.media_type, self.poster, self.tmdb_id, self.meta_get('trailer'), self.meta_get('all_trailers'))
 		if not chosen: return ok_dialog()
 		elif chosen == 'canceled': return
-		self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
+		if windowed_playback(): return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
+		self.set_current_params(set_starting_position=False)
+		self.window_player_url = chosen
+		return window_player(self)
 
 	def show_keywords(self):
 		base_media = 'movies' if self.media_type == 'movie' else 'tv'
@@ -570,7 +595,9 @@ class Extras(BaseDialog):
 	def show_director(self):
 		director = self.meta_get('director', None)
 		if not director: return
-		return person_data_dialog({'query': director, 'is_widget': self.is_widget})
+		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_widget': self.is_widget}
+		self.new_params = {'mode': 'person_data_dialog', 'query': director, 'is_widget': self.is_widget}
+		window_manager(self)
 
 	def show_options(self):
 		params = {'content': self.options_media_type, 'tmdb_id': str(self.tmdb_id), 'poster': self.poster, 'is_widget': self.is_widget, 'from_extras': 'true'}
@@ -606,16 +633,22 @@ class Extras(BaseDialog):
 			self.button_action_dict[item] = button_action
 		self.button_action_dict[50] = 'show_text_media'
 
+	def set_current_params(self, set_starting_position=True):
+		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_widget': self.is_widget}
+		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
+
 	def set_starting_constants(self, kwargs):
-		self.item_action_dict, self.button_action_dict = {}, {}
-		self.selected = None
 		self.meta = kwargs['meta']
 		self.meta_get = self.meta.get
+		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
+		self.starting_position = kwargs.get('starting_position', None)
+		self.is_widget = kwargs['is_widget'].lower()
+		self.item_action_dict, self.button_action_dict = {}, {}
+		self.selected = None
+		self.current_params, self.new_params = {}, {}
 		self.extra_info = self.meta_get('extra_info')
 		self.extra_info_get = self.extra_info.get
-		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
 		self.tmdb_id, self.imdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id')
-		self.is_widget = kwargs['is_widget'].lower()
 		self.folder_runner = activate_window if self.is_widget == 'true' else container_update
 		self.meta_user_info, self.enabled_lists, self.enable_scrollbars = metadata_user_info(), extras_enabled_menus(), extras_enable_scrollbars()
 		self.poster_resolution, self.watched_indicators, self.omdb_api = get_resolution()['poster'], watched_indicators(), omdb_api_key()
@@ -642,6 +675,11 @@ class Extras(BaseDialog):
 		if self.media_type == 'movie': line2 = separator.join([self.get_progress(), self.get_finish()])
 		else: line2 = separator.join([i for i in (self.get_next_episode(), self.get_last_aired(), self.get_next_aired()) if i])
 		self.set_label(3001, line2)
+
+	def youtube_installed_check(self):
+		if not self.addon_installed(youtube_check): return False
+		if not self.addon_enabled(youtube_check): return False
+		return True
 
 class ShowTextMedia(BaseDialog):
 	def __init__(self, *args, **kwargs):

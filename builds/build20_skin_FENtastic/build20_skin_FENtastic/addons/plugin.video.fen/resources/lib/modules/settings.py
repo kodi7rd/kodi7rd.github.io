@@ -55,6 +55,9 @@ def enabled_debrids_check(debrid_service):
 	if get_setting('%s.token' % debrid_service) in (None, ''): return False
 	return True
 
+def check_premium_account_status():
+	return get_setting('check_premium_account_status', 'false') == 'true'
+
 def playback_settings():
 	return (int(get_setting('playback.watched_percent', '90')), int(get_setting('playback.resume_percent', '5')))
 
@@ -147,6 +150,9 @@ def autoscrape_next_episode():
 	if not auto_play('episode') and get_setting('autoscrape_next_episode', 'false') == 'true': return True
 	else: return False
 
+def autoplay_use_chapters():
+	return get_setting('autoplay_use_chapters', 'true') == 'true'
+
 def auto_nextep_settings():
 	scraper_time = int(get_setting('results.timeout', '60')) + 20
 	window_percentage = 100 - int(get_setting('autoplay_next_window_percentage', '95'))
@@ -222,6 +228,9 @@ def extras_enable_scrollbars():
 
 def extras_exclude_non_acting():
 	return get_setting('extras.exclude_non_acting_roles', 'true') == 'true'
+
+def extras_windowed_playback():
+	return get_setting('extras.windowed_playback', 'false') == 'true'
 
 def extras_enabled_menus():
 	setting = get_setting('extras.enable_menus')

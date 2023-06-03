@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from apis.tmdb_api import tmdb_popular_people
-from windows import BaseDialog
+from windows import BaseDialog, window_manager
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
 from modules.kodi_utils import json, select_dialog, addon_fanart, item_next, local_string as ls
@@ -19,6 +19,7 @@ class ThumbImageViewer(BaseDialog):
 		self.ImagesInstance = kwargs.get('ImagesInstance')
 
 	def onInit(self):
+		self.set_home_property('window_loaded', 'true')
 		self.make_page()
 
 	def run(self):
@@ -48,7 +49,7 @@ class ThumbImageViewer(BaseDialog):
 			choice = self.make_context_menu(enable_delete=chosen_listitem.getProperty('delete') == 'true')
 			if choice:
 				if choice == 'delete_image': return self.reset_after_delete(chosen_listitem, position)
-				#donwload
+				#download
 				name, thumb, path = chosen_listitem.getProperty('name'), chosen_listitem.getProperty('thumb'), chosen_listitem.getProperty('path')
 				params = {'mode': 'downloader', 'action': 'image', 'name': name, 'thumb_url': thumb, 'image_url': path, 'media_type': 'image', 'image': thumb}
 				self.execute_code('RunPlugin(%s)' % self.build_url(params))

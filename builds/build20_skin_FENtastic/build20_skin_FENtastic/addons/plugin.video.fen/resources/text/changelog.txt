@@ -1,6 +1,28 @@
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
-[B]Fen users looking for a lightweight, fast skin with a customizable home page for widgets are encouraged to try out ivarbrandt's mod of Estuary: "FENtastic". Use "https://ivarbrandt.github.io/repository.ivarbrandt/" in Kodi's File Manager to download his repo. He has done a great job making many modifications to Estuary, and the skin is geared towards Fen users.[/B]
+
+[COLOR dodgerblue][B]Version 3.1.12[/B][/COLOR]
+- Added "Check Accounts Status on Startup" in Provider Accounts settings tab. Enable this to get a dialog on startup when your premium accounts are close to or have run out of days remaining. Default is OFF.
+- Added "Use Chapter Info For Alert When Available" to Settings->Playback->Episodes. Used for Autoplay Next Episode. If a chapter is found for the video file that is >= 90% total play time, then Fen will assume that is the start of credits and move the notification for next episode to that time. Be aware, most episode video files dont have chapter info, but it will work if that info is present.
+- Changed some behaviors with In Progress TV Shows and Watched TV Shows. New behavior: For TV Shows where all episodes have been watched, but the TV Show is still airing, that TV Show will now appear in In Progress TV Shows instead of Watched TV Shows. Watched TV Shows will now exclusively be for TV Shows that have all episodes watched and has finished airing (there will be no new episodes in the future).
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.11[/B][/COLOR]
+- RESTART KODI AFTER THIS UPDATE.
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.1.10[/B][/COLOR]
+- Added setting Features->Extras->"Play Extras Videos in Windowed Mode". Videos from Extras will now, by default, play in normal Kodi fullscreen.
+- Some changes to window stack manager.
+- Changes to Multi Select Dialog. Now has a "Select All/Deselect All" Button.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.09[/B][/COLOR]
+- Added "Networks" to Movies menu. You will need to navigate into the Movies menu, then context menu: Edit Menu->Check if Movies Menu has new Menu item. Then add "Networks" where you want it in the list. If that fails, select Restore Movies menu to Default.
+- Added simple window stack manager for opening subsequent Extras/People custom windows. The previous window will now close and re-open when the new window is closed. Much better for lower specced hardware.
+- Added ability to upload OLD Kodi log to Tools.
+- Added multiple pages to Trending/Popular Trakt lists. Lists lowered to 50 per page.
+- Other changes/fixes.
 
 [COLOR dodgerblue][B]Version 3.1.08[/B][/COLOR]
 - Added "Plot" to list of Content removable for Extras Window. Unfortunately the Extras content will be re-set to default with this update.

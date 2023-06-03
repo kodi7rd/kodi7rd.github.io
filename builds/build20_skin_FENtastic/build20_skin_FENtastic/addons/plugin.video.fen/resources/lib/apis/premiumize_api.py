@@ -287,11 +287,6 @@ class PremiumizeAPI:
 		try: return json.loads(response)
 		except: return response
 
-	def revoke_auth(self):
-		set_setting('pm.account_id', '')
-		set_setting('pm.token', '')
-		ok_dialog(heading=32061, text='%s %s' % (ls(32059), ls(32576)))
-
 	def clear_cache(self, clear_hashes=True):
 		try:
 			from modules.kodi_utils import clear_property, path_exists, database, maincache_db

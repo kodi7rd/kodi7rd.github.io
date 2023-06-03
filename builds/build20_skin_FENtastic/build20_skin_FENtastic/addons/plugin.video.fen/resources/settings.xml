@@ -1,16 +1,97 @@
 <?xml version="1.0" ?>
 <settings version="1">
 	<section id="plugin.video.fen">
+		<!-- Hebrew Subtitle Matching -->
+		<category id="hebrew_subtitle_matching" label="40000" help="">
+			<group id="1" label="40001">
+				<setting id="enable_hebrew_subtitles_to_fen_sources_matching" type="boolean" label="40002" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="2" label="40003">
+				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40004" help="">
+					<level>0</level>
+					<default>80</default>
+					<constraints>
+						<minimum>10</minimum>
+						<step>1</step>
+						<maximum>100</maximum>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
+				<setting id="show_only_qualities_with_matches_found" type="boolean" label="40005" help="">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="3" label="40006">
+				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40008" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40009" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="400010" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_fen_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
 		<!-- General -->
 		<category id="general" label="32001" help="">
 			<!-- General -->
 			<group id="1" label="32001">
-				<setting id="wait_for_services" type="boolean" label="33140" help="">
+				<setting id="auto_start_fen" type="boolean" label="32017" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="auto_start_fen" type="boolean" label="32017" help="">
+				<setting id="wait_for_services" type="boolean" label="33140" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -243,11 +324,6 @@
 				<setting id="extras.enable_extra_ratings" type="boolean" label="33061" help="">
 					<level>0</level>
 					<default>true</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="!is" setting="omdb_api"/>
-						</dependency>
-					</dependencies>
 					<control type="toggle"/>
 				</setting>
 				<setting id="extras.enabled_ratings" type="string" label="33135" help="" parent="extras.enable_extra_ratings">
@@ -257,11 +333,33 @@
 						<dependency type="visible">
 							<and>
 								<condition operator="is" setting="extras.enable_extra_ratings">true</condition>
+								<condition operator="!is" setting="omdb_api"/>
 							</and>
 						</dependency>
 					</dependencies>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=extras_ratings_choice)</data>
+					</control>
+				</setting>
+				<setting id="extras.ratings_amble" type="string" label="33113" help="" parent="extras.enable_extra_ratings">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="extras.enable_extra_ratings">true</condition>
+								<condition operator="is" setting="omdb_api"/>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>33113</heading>
 					</control>
 				</setting>
 				<setting id="extras.enable_scrollbars" type="boolean" label="32846" help="">
@@ -272,6 +370,11 @@
 				<setting id="extras.exclude_non_acting_roles" type="boolean" label="33040" help="">
 					<level>0</level>
 					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="extras.windowed_playback" type="boolean" label="33148" help="">
+					<level>0</level>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 			</group>
@@ -824,8 +927,16 @@
 		</category>
 		<!-- Provider Accounts -->
 		<category id="provider accounts" label="32685" help="">
+			<!-- General -->
+			<group id="1" label="32001">
+				<setting id="check_premium_account_status" type="boolean" label="32209" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
 			<!-- External Scrapers -->
-			<group id="1" label="32079">
+			<group id="2" label="32079">
 				<setting id="provider.external" type="boolean" label="32055" help="">
 					<level>0</level>
 					<default>true</default>
@@ -848,7 +959,7 @@
 				</setting>
 			</group>
 			<!-- Real Debrid -->
-			<group id="2" label="32054">
+			<group id="3" label="32054">
 				<setting id="rd.token" type="string" label="rd token" help="">
 					<level>0</level>
 					<default/>
@@ -1051,7 +1162,7 @@
 				</setting>
 			</group>
 			<!-- Premiumize -->
-			<group id="3" label="32061">
+			<group id="4" label="32061">
 				<setting id="pm.token" type="string" label="pm token" help="">
 					<level>0</level>
 					<default/>
@@ -1254,7 +1365,7 @@
 				</setting>
 			</group>
 			<!-- All Debrid -->
-			<group id="4" label="32063">
+			<group id="5" label="32063">
 				<setting id="ad.token" type="string" label="ad token" help="">
 					<level>0</level>
 					<default/>
@@ -1470,7 +1581,7 @@
 				</setting>
 			</group>
 			<!-- Furk -->
-			<group id="5" label="32069">
+			<group id="6" label="32069">
 				<setting id="provider.furk" type="boolean" label="32055" help="">
 					<level>0</level>
 					<default>false</default>
@@ -1572,7 +1683,7 @@
 				</setting>
 			</group>
 			<!-- Easynews -->
-			<group id="6" label="32070">
+			<group id="7" label="32070">
 				<setting id="provider.easynews" type="boolean" label="32055" help="">
 					<level>0</level>
 					<default>false</default>
@@ -1716,7 +1827,7 @@
 				</setting>
 			</group>
 			<!-- Folders 1-5 -->
-			<group id="7" label="32108">
+			<group id="8" label="32108">
 				<setting id="provider.folders" type="boolean" label="32055" help="">
 					<level>0</level>
 					<default>false</default>
@@ -1788,7 +1899,7 @@
 				</setting>
 				<setting id="results.list_format" type="string" label="32102" help="">
 					<level>0</level>
-					<default>List</default>
+					<default>MediaList</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=results_format_choice)</data>
 					</control>
@@ -2377,6 +2488,19 @@
 					<control type="slider" format="integer">
 						<popup>false</popup>
 					</control>
+				</setting>
+				<setting id="autoplay_use_chapters" type="boolean" label="33151" help="" parent="autoplay_next_episode">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="auto_play_episode">true</condition>
+								<condition operator="is" setting="autoplay_next_episode">true</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
 				</setting>
 				<setting id="autoscrape_next_episode" type="boolean" label="33086" help="">
 					<level>0</level>

@@ -268,11 +268,6 @@ class AllDebridAPI:
 		except: pass
 		return result
 
-	def revoke_auth(self):
-		set_setting('ad.account_id', '')
-		set_setting('ad.token', '')
-		ok_dialog(heading=32063, text='%s %s' % (ls(32059), ls(32576)))
-
 	def clear_cache(self, clear_hashes=True):
 		try:
 			if not path_exists(maincache_db): return True

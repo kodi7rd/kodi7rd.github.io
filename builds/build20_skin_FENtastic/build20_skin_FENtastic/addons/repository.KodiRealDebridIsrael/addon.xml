@@ -17,7 +17,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<assets>
-			<icon>icon.png</icon>
+			<icon>icon.jpg</icon>
 		</assets>
 		<summary>Kodi + Real Debrid Israel Repository</summary>
 		<description>Kodi + Real Debrid Israel Repository</description>

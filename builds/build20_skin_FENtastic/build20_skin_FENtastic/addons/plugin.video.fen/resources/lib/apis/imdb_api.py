@@ -2,11 +2,11 @@
 import re
 from caches.main_cache import cache_object
 from modules.dom_parser import parseDOM
-from modules.kodi_utils import requests, json, get_setting, local_string as ls
+from modules.kodi_utils import requests, json, get_setting, local_string as ls, sleep
 from modules.utils import imdb_sort_list, remove_accents, replace_html_codes, string_alphanum_to_num
 # from modules.kodi_utils import logger
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'}
 base_url = 'https://www.imdb.com/%s'
 watchlist_url = 'user/ur%s/watchlist'
 user_list_movies_url = 'list/%s/?view=detail&sort=%s&title_type=movie,short,video,tvShort,tvMovie,tvSpecial&start=1&page=%s'
@@ -23,7 +23,7 @@ videos_url = '_json/video/%s'
 keywords_url = 'title/%s/keywords?'
 keywords_search_url = 'find?s=kw&q=%s'
 people_images_url = 'name/%s/mediaindex?page=%s'
-people_trivia_url = 'name/%s/bio'
+people_trivia_url = 'name/%s/trivia'
 people_search_url_backup = 'search/name/?name=%s'
 people_search_url = 'https://sg.media-imdb.com/suggests/%s/%s.json'
 year_check_url = 'https://v2.sg.media-imdb.com/suggestion/t/%s.json'
@@ -203,9 +203,7 @@ def get_imdb(params):
 				except: pass
 		if action == 'imdb_trivia': _str = ls(32984).upper()
 		else: _str =  ls(32986).upper()
-		result = requests.get(url, timeout=timeout)
-		result = remove_accents(result.text)
-		result = result.replace('\n', ' ')
+		result = get_correct_imdb_data(url)
 		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})
 		imdb_list = list(_process())
 	elif action == 'imdb_people_trivia':
@@ -213,16 +211,16 @@ def get_imdb(params):
 			for count, item in enumerate(items, 1):
 				try:
 					content = re.sub(r'<a href=".+?">', '', item).replace('</a>', '').replace('<p> ', '').replace('<br />', '').replace('  ', '')
+					content = re.sub(r'<a class=".+?">', '', item).replace('</a>', '').replace('<p> ', '').replace('<br />', '').replace('  ', '')
 					content = replace_html_codes(content)
 					content = '[B]%s %02d.[/B][CR][CR]%s' % (trivia_str, count, content)
 					yield content
 				except: pass
 		trivia_str = ls(32984).upper()
-		result = requests.get(url, timeout=timeout)
+		result = requests.get(url, timeout=timeout, headers=headers)
 		result = remove_accents(result.text)
 		result = result.replace('\n', ' ')
-		result = re.search(r'<a name="trivia"></a>(.*?)Personal Quotes', result).group(1)
-		items = parseDOM(result, 'div', attrs={'class': 'soda .+?'})
+		items = parseDOM(result, 'div', attrs={'class': 'ipc-html-content-inner-div'})
 		imdb_list = list(_process())
 	elif action == 'imdb_reviews':
 		def _process():
@@ -249,7 +247,6 @@ def get_imdb(params):
 					if spoiler: review = '[B][COLOR red][%s][/COLOR][CR][/B]' % spoiler_str + review
 					yield review
 				except: pass
-		
 		spoiler_str = ls(32985).upper()
 		imdb_id = params['imdb_id']
 		paginationKey = ''
@@ -419,9 +416,7 @@ def get_imdb(params):
 					keyword = re.search(r'" >(.+?)</a>', item, re.DOTALL).group(1)
 					yield keyword
 				except: pass
-		result = requests.get(url, timeout=timeout)
-		result = remove_accents(result.text)
-		result = result.replace('\n', ' ')
+		result = get_correct_imdb_data(url)
 		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})
 		imdb_list = list(_process())
 		imdb_list = sorted(imdb_list)
@@ -438,6 +433,20 @@ def get_imdb(params):
 		items = parseDOM(result, 'div', attrs={'class': 'ipc-metadata-list-summary-item__tc'})
 		imdb_list = list(_process())
 	return (imdb_list, next_page)
+
+def get_correct_imdb_data(url):
+	result, retries = '', 0
+	while not retries > 0:
+		result = requests.get(url, timeout=timeout, headers=headers)
+		if result.status_code == 200:
+			result = result.text
+			if 'http://ogp.me/ns#' in result:
+				result = remove_accents(result)
+				result = result.replace('\n', ' ')
+				break
+		sleep(2000)
+		retries += 1
+	return result
 
 def clear_imdb_cache(silent=False):
 	from modules.kodi_utils import path_exists, clear_property, database, maincache_db
@@ -473,9 +482,3 @@ def refresh_imdb_meta_data(imdb_id):
 		dbcur.execute("DELETE FROM maincache WHERE id LIKE ?", (insert2,))
 		for i in imdb_results: clear_property(i)
 	except: pass
-
-
-
-
-
-

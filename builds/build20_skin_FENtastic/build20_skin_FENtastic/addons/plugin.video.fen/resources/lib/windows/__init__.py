@@ -5,12 +5,14 @@ from modules import kodi_utils
 from modules.settings import skin_location, use_skin_fonts
 from modules.utils import manual_function_import
 
+up_action, down_action = kodi_utils.window_xml_up_action, kodi_utils.window_xml_down_action
 closing_actions, selection_actions, context_actions = kodi_utils.window_xml_closing_actions, kodi_utils.window_xml_selection_actions, kodi_utils.window_xml_context_actions
 build_url, execute_builtin, set_property, get_property = kodi_utils.build_url, kodi_utils.execute_builtin, kodi_utils.set_property, kodi_utils.get_property
 translate_path, get_infolabel, list_dirs, current_skin = kodi_utils.translate_path, kodi_utils.get_infolabel, kodi_utils.list_dirs, kodi_utils.current_skin
 current_skin_prop, use_skin_fonts_prop, addon_installed = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.addon_installed
 left_action, right_action, info_action = kodi_utils.window_xml_left_action, kodi_utils.window_xml_right_action, kodi_utils.window_xml_info_action
-up_action, down_action = kodi_utils.window_xml_up_action, kodi_utils.window_xml_down_action
+show_busy_dialog, hide_busy_dialog, addon_enabled = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.addon_enabled
+json, clear_property, run_plugin, Thread = kodi_utils.json, kodi_utils.clear_property, kodi_utils.run_plugin, kodi_utils.Thread
 window_xml_dialog, logger, player, notification, delete_folder = kodi_utils.window_xml_dialog, kodi_utils.logger, kodi_utils.player, kodi_utils.notification, kodi_utils.delete_folder
 make_listitem, sleep, open_file, path_exists, confirm_dialog = kodi_utils.make_listitem, kodi_utils.sleep, kodi_utils.open_file, kodi_utils.path_exists, kodi_utils.confirm_dialog
 requests, get_setting, custom_skins_version_path, custom_skin_path = kodi_utils.requests, kodi_utils.get_setting, kodi_utils.custom_skins_version_path, kodi_utils.custom_skin_path
@@ -34,14 +36,14 @@ def create_window(import_info, skin_xml, **kwargs):
 	'''
 	import_info: ('module', 'function')
 	'''
-	# try:
-	function = manual_function_import(*import_info)
-	args = (skin_xml, skin_location(skin_xml))
-	xml_window = function(*args, **kwargs)
-	return xml_window
-	# except Exception as e:
-		# logger('error in create_window', str(e))
-		# return notification(32574)
+	try:
+		function = manual_function_import(*import_info)
+		args = (skin_xml, skin_location(skin_xml))
+		xml_window = function(*args, **kwargs)
+		return xml_window
+	except Exception as e:
+		logger('error in create_window', str(e))
+		return notification(32574)
 
 def get_custom_xmls_version():
 	try:
@@ -60,6 +62,97 @@ def download_custom_xmls():
 def remove_custom_xmls():
 	try: delete_folder(translate_path(custom_skin_path), force=True)
 	except: pass
+
+def window_manager(obj):
+	def close():
+		obj.close()
+		clear_property('fen.window_loaded')
+		clear_property('fen.param_stack')
+	def monitor():
+		timer = 0
+		while not get_property('fen.window_loaded') == 'true' and timer <= 5:
+			sleep(50)
+			timer += 0.05
+		hide_busy_dialog()
+		obj.close()
+		clear_property('fen.window_loaded')
+	def runner(params):
+		try:
+			mode = params['mode']
+			if mode == 'extras_menu_choice':
+				from indexers.dialogs import extras_menu_choice
+				extras_menu_choice(params)
+			elif mode == 'person_data_dialog':
+				from indexers.people import person_data_dialog
+				person_data_dialog(params)
+			else: close()
+		except: close()
+	def get_stack():
+		try: param_stack = json.loads(get_property('fen.param_stack'))
+		except: param_stack = []
+		return param_stack
+	def add_to_stack(params):
+		param_stack.append(params)
+		set_property('fen.param_stack', json.dumps(param_stack))
+	def remove_from_stack():
+		previous_params = param_stack.pop()
+		set_property('fen.param_stack', json.dumps(param_stack))
+		return previous_params
+	show_busy_dialog()
+	try:
+		clear_property('fen.window_loaded')
+		current_params = obj.current_params
+		new_params = obj.new_params
+		param_stack = get_stack()
+		if current_params: add_to_stack(current_params)
+		if new_params:
+			Thread(target=monitor).start()
+			runner(new_params)
+		elif param_stack:
+			previous_params = remove_from_stack()
+			if previous_params:
+				Thread(target=monitor).start()
+				runner(previous_params)
+		else: close()
+	except: close()
+	hide_busy_dialog()
+
+def window_player(obj):
+	def monitor():
+		timer = 0
+		while not get_property('fen.window_loaded') == 'true' and timer <= 5:
+			sleep(50)
+			timer += 0.05
+		hide_busy_dialog()
+		obj.close()
+		clear_property('fen.window_loaded')
+	def runner(params):
+		try:
+			mode = params['mode']
+			if mode == 'extras_menu_choice':
+				from indexers.dialogs import extras_menu_choice
+				extras_menu_choice(params)
+			else:
+				from indexers.people import person_data_dialog
+				person_data_dialog(params)
+		except: close()
+	try:
+		window_player_url = obj.window_player_url
+		if 'plugin.video.youtube' in window_player_url:
+			if not addon_installed('plugin.video.youtube') or not addon_enabled('plugin.video.youtube'): return
+		clear_property('fen.window_loaded')
+		current_params = obj.current_params
+		player.play(window_player_url)
+		sleep(2000)
+		while not player.isPlayingVideo(): sleep(100)
+		obj.close()
+		while player.isPlayingVideo(): sleep(100)
+		show_busy_dialog()
+		sleep(1000)
+		Thread(target=monitor).start()
+		runner(current_params)
+	except: obj.close()
+	hide_busy_dialog()
 
 class BaseDialog(window_xml_dialog):
 	def __init__(self, *args):
@@ -162,6 +255,9 @@ class BaseDialog(window_xml_dialog):
 	def addon_installed(self, addon_id):
 		return addon_installed(addon_id)
 
+	def addon_enabled(self, addon_id):
+		return addon_enabled(addon_id)
+
 class FontUtils:
 	def execute_custom_fonts(self):
 		if not self.skin_change_check(): return
@@ -180,7 +276,7 @@ class FontUtils:
 		try:
 			skin_folder = mdParse(translate_path('special://skin/addon.xml')).getElementsByTagName('extension')[0].getElementsByTagName('res')[0].getAttribute('folder')
 			if not skin_folder: skin_folder = [i for i in list_dirs(translate_path('special://skin'))[0] if i in folder_options][0]
-		except Exception as e: logger('error', str(e))
+		except Exception as e: logger('error in get_skin_folder', str(e))
 		return skin_folder
 
 	def skin_change_check(self):
@@ -209,11 +305,11 @@ class FontUtils:
 			for item in mdParse(skin_font_xml).getElementsByTagName('fontset')[0].getElementsByTagName('font'):
 				try: name = item.getElementsByTagName('name')[0].firstChild.data
 				except: continue
-				name_compare = name.lower()
 				try: size = int(item.getElementsByTagName('size')[0].firstChild.data)
 				except: continue
 				try: style = item.getElementsByTagName('style')[0].firstChild.data.lower()
 				except: style = ''
+				name_compare = name.lower()
 				bold = any('bold' in item for item in (name_compare, style))
 				extra_styles = any(item in style for item in extras_keys)
 				if not extra_styles: extra_styles = any(item in name_compare for item in extras_keys)
@@ -227,7 +323,7 @@ class FontUtils:
 		for item in replacement_values:
 			try: content = re.sub(r'<font>(.*?)</font> <\!-- %s -->' % item[0], '<font>%s</font> <!-- %s -->' % (item[1], item[0]), content)
 			except: pass
-		with open_file(translate_path(file), 'w') as f: f.write(content)
+		with open_file(file, 'w') as f: f.write(content)
 
 	def default_font_info(self):
 		return [{'name': 'font10', 'size': 21, 'bold': False, 'extra_styles': False},

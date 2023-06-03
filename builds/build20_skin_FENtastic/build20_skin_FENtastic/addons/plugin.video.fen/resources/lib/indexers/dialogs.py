@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
-from windows import open_window
+from windows import open_window, create_window
 from caches import refresh_cached_data
+from indexers.people import person_data_dialog
 from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
 # logger = kodi_utils.logger
@@ -13,7 +14,7 @@ pause_settings_change, unpause_settings_change, img_url, sleep = kodi_utils.paus
 get_setting, set_setting, make_settings_dict, kodi_refresh = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.kodi_refresh
 json, ls, build_url, translate_path, select_dialog = kodi_utils.json, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.translate_path, kodi_utils.select_dialog
 run_plugin, metadata_user_info, autoplay_next_episode, quality_filter = kodi_utils.run_plugin, settings.metadata_user_info, settings.autoplay_next_episode, settings.quality_filter
-make_window_properties, get_infolabel, container_refresh_input = kodi_utils.make_window_properties, kodi_utils.get_infolabel, kodi_utils.container_refresh_input
+make_window_properties, container_refresh_input = kodi_utils.make_window_properties, kodi_utils.container_refresh_input
 numeric_input, container_update, activate_window = kodi_utils.numeric_input, kodi_utils.container_update, kodi_utils.activate_window
 poster_empty, fanart_empty, clear_property, highlight_prop = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.clear_property, kodi_utils.highlight_prop
 fen_str, addon_icon, database, maincache_db, custom_context_prop = ls(32036), kodi_utils.addon_icon, kodi_utils.database, kodi_utils.maincache_db, kodi_utils.custom_context_prop
@@ -241,8 +242,7 @@ def media_artwork_choice(meta, changed_artwork=False):
 	custom_images = open_window(('windows.artwork_chooser', 'SelectArtwork'), 'artwork_chooser.xml', **kwargs)
 	if custom_images:
 		from caches.meta_cache import metacache
-		for image_type, image in custom_images.items():
-			meta[image_type] = image
+		for image_type, image in custom_images.items(): meta[image_type] = image
 		metacache.set(meta['mediatype'], 'tmdb_id', meta)
 		return kodi_refresh()
 
@@ -994,16 +994,18 @@ def options_menu_choice(params, meta=None):
 	options_menu_choice(params, meta=meta)
 
 def person_search_choice(params):
-	from indexers.people import person_data_dialog
-	person_data_dialog({'query': params['query'], 'is_widget': params.get('is_widget', 'true' if external_browse() else 'false')})
+	person_data_dialog({'query': params['query'], 'is_widget': params.get('is_widget', 'true' if external_browse() else 'false'),
+						'starting_position': params.get('starting_position', None)})
 
 def extras_menu_choice(params):
-	show_busy_dialog()
+	stacked = params.get('stacked', 'false') == 'true'
+	if not stacked: show_busy_dialog()
 	media_type = params['media_type']
 	function = metadata.movie_meta if media_type == 'movie' else metadata.tvshow_meta
 	meta = function('tmdb_id', params['tmdb_id'], metadata_user_info(), get_datetime())
-	hide_busy_dialog()
-	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'true' if external_browse() else 'false'), options_media_type=media_type)
+	if not stacked: hide_busy_dialog()
+	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'true' if external_browse() else 'false'),
+															options_media_type=media_type, starting_position=params.get('starting_position', None))
 
 def media_extra_info_choice(params):
 	media_type, meta = params.get('media_type'), params.get('meta')

@@ -333,6 +333,10 @@ msgctxt "#70004"
 msgid "Search movie collections"
 msgstr "[B]חיפוש קולקציית סרטים[/B]"
 
+msgctxt "#700041"
+msgid "Search Trakt list"
+msgstr "[B]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/B]"
+
 # InfoPanel
 
 msgctxt "#70005"

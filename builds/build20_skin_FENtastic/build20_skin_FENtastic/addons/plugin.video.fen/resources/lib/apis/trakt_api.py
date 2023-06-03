@@ -14,7 +14,7 @@ requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, ko
 set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
 pause_settings_change, unpause_settings_change, progress_dialog = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.progress_dialog
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
-get_infolabel, get_icon, remove_keys, trakt_dict_removals = kodi_utils.get_infolabel, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
+folder_path, get_icon, remove_keys, trakt_dict_removals = kodi_utils.folder_path, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
 ignore_articles, lists_sort_order = settings.ignore_articles, settings.lists_sort_order
 show_unaired_watchlist, metadata_user_info = settings.show_unaired_watchlist, settings.metadata_user_info
 clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cache.clear_all_trakt_cache_data, trakt_cache.cache_trakt_object, trakt_cache.clear_trakt_calendar
@@ -335,7 +335,7 @@ def remove_from_list(user, slug, data):
 	if result['deleted']['movies'] + result['deleted']['shows'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'my_lists' in get_infolabel('Container.FolderPath'): kodi_refresh()
+	if 'my_lists' in folder_path(): kodi_refresh()
 	return result
 
 def add_to_watchlist(data):
@@ -351,7 +351,7 @@ def remove_from_watchlist(data):
 	if result['deleted']['movies'] + result['deleted']['shows'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'trakt_watchlist' in get_infolabel('Container.FolderPath'): kodi_refresh()
+	if 'trakt_watchlist' in folder_path(): kodi_refresh()
 	return result
 
 def add_to_collection(data, multi=False):
@@ -368,7 +368,7 @@ def remove_from_collection(data):
 	if result['deleted']['movies'] + result['deleted']['episodes'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'trakt_collection' in get_infolabel('Container.FolderPath'): kodi_refresh()
+	if 'trakt_collection' in folder_path(): kodi_refresh()
 	return result
 
 def hide_unhide_trakt_items(params):
@@ -394,10 +394,9 @@ def get_trakt_list_contents(list_type, user, slug):
 		params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': True, 'method': 'sort_by_headers'}
 	return cache_trakt_object(get_trakt, string, params)
 
-def trakt_trending_popular_lists(list_type):
-	string = 'trakt_%s_user_lists' % list_type
-	path = 'lists/%s/%s' % (list_type, '%s')
-	params = {'path': path, 'params': {'limit': 100}}
+def trakt_trending_popular_lists(list_type, page_no):
+	string = 'trakt_%s_user_lists_%s' % (list_type, page_no)
+	params = {'path': 'lists/%s', 'path_insert': list_type, 'params': {'limit': 50}, 'page_no': page_no}
 	return cache_object(get_trakt, string, params, False)
 
 def trakt_get_lists(list_type):
@@ -559,10 +558,9 @@ def trakt_indicators_tv():
 		for s in seasons:
 			season_no, episodes = s['number'], s['episodes']
 			for e in episodes:
-				add_episode = True
 				last_watched_at = e['last_watched_at']
-				if reset_at and reset_at > js2date(last_watched_at, res_format): add_episode = False
-				if add_episode: insert_append(('episode', tmdb_id, season_no, e['number'], last_watched_at, title))
+				if reset_at and reset_at > js2date(last_watched_at, res_format): continue
+				insert_append(('episode', tmdb_id, season_no, e['number'], last_watched_at, title))
 	insert_list = []
 	insert_append = insert_list.append
 	params = {'path': 'users/me/watched/shows?extended=full%s', 'with_auth': True, 'pagination': False}

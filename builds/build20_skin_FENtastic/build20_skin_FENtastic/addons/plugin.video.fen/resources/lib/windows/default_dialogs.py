@@ -3,6 +3,10 @@ from windows import BaseDialog
 from modules.kodi_utils import json, select_dialog, local_string as ls
 # from modules.kodi_utils import logger
 
+ok_id, cancel_id, selectall_id, deselectall_id = 10, 11, 12, 13
+button_ids = (ok_id, cancel_id, selectall_id, deselectall_id)
+select_deselect_ids = (selectall_id, deselectall_id)
+
 class Select(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
@@ -19,7 +23,6 @@ class Select(BaseDialog):
 		self.enable_context_menu = self.kwargs.get('enable_context_menu', 'false') == 'true'
 		self.item_list = []
 		self.chosen_indexes = []
-		self.append = self.chosen_indexes.append
 		self.selected = None
 		self.set_properties()
 		self.make_menu()
@@ -27,9 +30,10 @@ class Select(BaseDialog):
 	def onInit(self):
 		self.add_items(self.window_id, self.item_list)
 		if self.preselect:
+			if len(self.preselect) == len(self.item_list): self.setProperty('select_button', 'deselect_all')
 			for index in self.preselect:
 				self.item_list[index].setProperty('check_status', 'checked')
-				self.append(index)
+				self.chosen_indexes.append(index)
 		self.setFocusId(self.window_id)
 
 	def run(self):
@@ -38,15 +42,27 @@ class Select(BaseDialog):
 		return self.selected
 
 	def onClick(self, controlID):
-		if controlID == 10:
-			self.selected = sorted(self.chosen_indexes)
-			self.close()
-		elif controlID == 11:
-			self.close()
+		self.control_id = None
+		if controlID in button_ids:
+			if controlID == ok_id:
+				self.selected = sorted(self.chosen_indexes)
+				self.close()
+			elif controlID == cancel_id:
+				self.close()
+			elif controlID in select_deselect_ids:
+				item_list_indexes = list(range(0, len(self.item_list)))
+				if controlID == selectall_id: status, select_property, self.chosen_indexes = 'checked', 'deselect_all', item_list_indexes
+				else: status, select_property, self.chosen_indexes = '', 'select_all', []
+				for index in item_list_indexes: self.item_list[index].setProperty('check_status', status)
+				self.setProperty('select_button', select_property)
+				try: self.setFocusId(ok_id)
+				except: pass
+		else: self.control_id = controlID
 
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
 		if action in self.selection_actions:
+			if not self.control_id: return
 			position = self.get_position(self.window_id)
 			if self.multi_choice == 'true':
 				if chosen_listitem.getProperty('check_status') == 'checked':
@@ -54,7 +70,7 @@ class Select(BaseDialog):
 					self.chosen_indexes.remove(position)
 				else:
 					chosen_listitem.setProperty('check_status', 'checked')
-					self.append(position)
+					self.chosen_indexes.append(position)
 			else:
 				self.selected = position
 				return self.close()
@@ -101,6 +117,7 @@ class Select(BaseDialog):
 	def set_properties(self):
 		self.setProperty('multi_choice', self.multi_choice)
 		self.setProperty('multi_line', self.multi_line)
+		self.setProperty('select_button', 'select_all')
 		self.setProperty('heading', self.heading)
 		self.setProperty('narrow_window', self.narrow_window)
 

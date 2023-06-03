@@ -170,7 +170,7 @@ def build_episode_list(params):
 	set_content(handle, content_type)
 	set_category(handle, category_name)
 	end_directory(handle, False if is_widget else None)
-	if not is_widget: set_view_mode(view_mode, content_type)
+	set_view_mode(view_mode, content_type, is_widget)
 
 def build_single_episode(list_type, params={}):
 	def _get_category_name():
@@ -421,4 +421,4 @@ def build_single_episode(list_type, params={}):
 	set_content(handle, content_type)
 	set_category(handle, category_name)
 	end_directory(handle, cacheToDisc=False)
-	if not is_widget: set_view_mode(view_mode, content_type)
+	set_view_mode(view_mode, content_type, is_widget)

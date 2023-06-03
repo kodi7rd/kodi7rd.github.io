@@ -4357,9 +4357,14 @@ msgctxt "#10132"
 msgid "Content settings"
 msgstr "הגדרות תוכן"
 
+# KODI-RD-IL CUSTOM ADDITION:
+
 msgctxt "#10134"
 msgid "Favourites"
-msgstr "מועדפים"
+#msgstr "מועדפים"
+msgstr "מסך הבית"
+
+#######################################
 
 msgctxt "#10135"
 msgid "Song info"
@@ -6473,13 +6478,19 @@ msgctxt "#14075"
 msgid "Use daylight saving time"
 msgstr "שימוש בשעון קיץ"
 
+# KODI-RD-IL CUSTOM ADDITION:
+
 msgctxt "#14076"
 msgid "Add to favourites"
-msgstr "הוספה למועדפים"
+#msgstr "הוספה למועדפים"
+msgstr "הוספה למסך הבית"
 
 msgctxt "#14077"
 msgid "Remove from favourites"
-msgstr "הסרה ממועדפים"
+#msgstr "הסרה ממועדפים"
+msgstr "הסרה ממסך הבית"
+
+#######################################
 
 msgctxt "#14078"
 msgid "Colours"

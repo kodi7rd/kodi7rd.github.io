@@ -32,7 +32,14 @@ custom_xml_path = 'special://profile/addon_data/plugin.video.fen/custom_skins/%s
 custom_skin_path = 'special://profile/addon_data/plugin.video.fen/custom_skins/'
 default_skin_path = 'special://home/addons/plugin.video.fen'
 database_path_raw = 'special://profile/addon_data/plugin.video.fen/databases/%s'
-current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
+
+############KODI-RD-IL###################
+# ORIGINAL FEN LINE:
+#current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
+# NEW CUSTOM LINE:
+current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'hebrew_subtitles.db')
+#########################################
+
 fen_settings_str, menu_cache_prop, highlight_prop, meta_filter_prop = 'fen_settings', 'fen.kodi_menu_cache', 'fen.highlight', 'fen.meta_filter'
 view_type_prop, props_made_prop, pause_settings_prop, build_content_prop = 'fen.view_type_%s', 'fen.window_properties_made', 'fen.pause_settings', 'fen.build_content'
 custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'fen.custom_main_menu_context', 'fen.custom_context_menu', 'fen.custom_info_dialog'
@@ -56,6 +63,11 @@ maincache_db = translatePath(database_path_raw % current_dbs[5])
 metacache_db = translatePath(database_path_raw % current_dbs[6])
 debridcache_db = translatePath(database_path_raw % current_dbs[7])
 external_db = translatePath(database_path_raw % current_dbs[8])
+
+############KODI-RD-IL###################
+hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[9])
+#########################################
+
 myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
@@ -163,7 +175,9 @@ def end_directory(handle, cacheToDisc=None):
 	if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
 	endOfDirectory(handle, cacheToDisc=cacheToDisc)
 
-def set_view_mode(view_type, content='files'):
+def set_view_mode(view_type, content='files', is_widget=None):
+	if is_widget == None: is_widget = external_browse()
+	if is_widget: return
 	view_id = get_property(view_type_prop % view_type)
 	if not view_id:
 		try:
@@ -262,8 +276,8 @@ def translate_path(path):
 def sleep(time):
 	return xbmc_sleep(time)
 
-def execute_builtin(command):
-	return executebuiltin(command)
+def execute_builtin(command, block=False):
+	return executebuiltin(command, block)
 
 def current_skin():
 	return getSkinDir()
@@ -284,17 +298,20 @@ def hide_busy_dialog():
 	execute_builtin('Dialog.Close(busydialognocancel)')
 	execute_builtin('Dialog.Close(busydialog)')
 
-def close_dialog(dialog):
-	execute_builtin('Dialog.Close(%s,true)' % dialog)
+def close_dialog(dialog, block=False):
+	execute_builtin('Dialog.Close(%s,true)' % dialog, block)
 
 def close_all_dialog():
 	execute_builtin('Dialog.Close(all,true)')
 
-def run_addon(addon='plugin.video.fen'):
-	return execute_builtin('RunAddon(%s)' % addon)
+def run_addon(addon='plugin.video.fen', block=False):
+	return execute_builtin('RunAddon(%s)' % addon, block)
 
 def external_browse():
 	return 'fen' not in get_infolabel('Container.PluginName')
+
+def folder_path():
+	return get_infolabel('Container.FolderPath')
 
 def reload_skin():
 	execute_builtin('ReloadSkin()')
@@ -302,28 +319,28 @@ def reload_skin():
 def kodi_refresh():
 	execute_builtin('UpdateLibrary(video,special://skin/foo)')
 
-def run_plugin(params):
+def run_plugin(params, block=False):
 	if isinstance(params, dict): params = build_url(params)
-	return execute_builtin('RunPlugin(%s)' % params)
+	return execute_builtin('RunPlugin(%s)' % params, block)
 
-def container_update(params):
+def container_update(params, block=False):
 	if isinstance(params, dict): params = build_url(params)
-	return execute_builtin('Container.Update(%s)' % params)
+	return execute_builtin('Container.Update(%s)' % params, block)
 
-def activate_window(params):
+def activate_window(params, block=False):
 	if isinstance(params, dict): params = build_url(params)
-	return execute_builtin('ActivateWindow(Videos,%s,return)' % params)
+	return execute_builtin('ActivateWindow(Videos,%s,return)' % params, block)
 
 def container_refresh():
 	return execute_builtin('Container.Refresh')
 
-def container_refresh_input(params):
+def container_refresh_input(params, block=False):
 	if isinstance(params, dict): params = build_url(params)
-	return execute_builtin('Container.Refresh(%s)' % params)
+	return execute_builtin('Container.Refresh(%s)' % params, block)
 
-def replace_window(params):
+def replace_window(params, block=False):
 	if isinstance(params, dict): params = build_url(params)
-	return execute_builtin('ReplaceWindow(Videos,%s)' % params)
+	return execute_builtin('ReplaceWindow(Videos,%s)' % params, block)
 
 def disable_enable_addon(addon_name='plugin.video.fen'):
 	try:
@@ -331,8 +348,13 @@ def disable_enable_addon(addon_name='plugin.video.fen'):
 		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': True}}))
 	except: pass
 
+def restart_services():
+	execute_builtin('ActivateWindow(Home)', True)
+	sleep(1000)
+	Thread(target=disable_enable_addon).start()
+
 def update_local_addons():
-	execute_builtin('UpdateLocalAddons')
+	execute_builtin('UpdateLocalAddons', True)
 	sleep(2500)
 
 def make_global_list():
@@ -404,7 +426,7 @@ def choose_view(view_type, content):
 	add_item(handle, params_url, listitem, False)
 	set_content(handle, content)
 	end_directory(handle)
-	set_view_mode(view_type, content)
+	set_view_mode(view_type, content, False)
 
 def set_temp_highlight(temp_highlight):
 	current_highlight = get_property(highlight_prop)
@@ -498,16 +520,21 @@ def toggle_language_invoker():
 	with open(addon_xml, 'w') as f: f.write(new_xml)
 	set_setting('reuse_language_invoker', new_value)
 	ok_dialog(text=32576)
-	execute_builtin('ActivateWindow(Home)')
+	execute_builtin('ActivateWindow(Home)', True)
 	update_local_addons()
 	disable_enable_addon()
 
-def upload_logfile():
-	# Thanks 123Venom
-	if not confirm_dialog(text=32580): return
+def upload_logfile(params):
+	log_files = [(33145, 'kodi.log'), (33146, 'kodi.old.log')]
+	list_items = [{'line1': local_string(i[0])} for i in log_files]
+	kwargs = {'items': json.dumps(list_items), 'heading': local_string(33147), 'narrow_window': 'true'}
+	log_file = select_dialog(log_files, **kwargs)
+	if log_file == None: return
+	log_name, log_file = log_file
+	if not confirm_dialog(heading=log_name, text=32580): return
 	show_busy_dialog()
 	url = 'https://paste.kodi.tv/'
-	log_file = translate_path('special://logpath/kodi.log')
+	log_file = translate_path('special://logpath/%s' % log_file)
 	if not path_exists(log_file): return ok_dialog(text=33039)
 	try:
 		with open_file(log_file) as f: text = f.read()
