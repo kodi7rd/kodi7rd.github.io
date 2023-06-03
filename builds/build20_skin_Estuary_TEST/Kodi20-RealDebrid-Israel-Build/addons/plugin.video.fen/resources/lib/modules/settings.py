@@ -55,6 +55,9 @@ def enabled_debrids_check(debrid_service):
 	if get_setting('%s.token' % debrid_service) in (None, ''): return False
 	return True
 
+def check_premium_account_status():
+	return get_setting('check_premium_account_status', 'false') == 'true'
+
 def playback_settings():
 	return (int(get_setting('playback.watched_percent', '90')), int(get_setting('playback.resume_percent', '5')))
 
@@ -146,6 +149,9 @@ def autoplay_next_episode():
 def autoscrape_next_episode():
 	if not auto_play('episode') and get_setting('autoscrape_next_episode', 'false') == 'true': return True
 	else: return False
+
+def autoplay_use_chapters():
+	return get_setting('autoplay_use_chapters', 'true') == 'true'
 
 def auto_nextep_settings():
 	scraper_time = int(get_setting('results.timeout', '60')) + 20

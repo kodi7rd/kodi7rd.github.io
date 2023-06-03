@@ -305,11 +305,11 @@ class FontUtils:
 			for item in mdParse(skin_font_xml).getElementsByTagName('fontset')[0].getElementsByTagName('font'):
 				try: name = item.getElementsByTagName('name')[0].firstChild.data
 				except: continue
-				name_compare = name.lower()
 				try: size = int(item.getElementsByTagName('size')[0].firstChild.data)
 				except: continue
 				try: style = item.getElementsByTagName('style')[0].firstChild.data.lower()
 				except: style = ''
+				name_compare = name.lower()
 				bold = any('bold' in item for item in (name_compare, style))
 				extra_styles = any(item in style for item in extras_keys)
 				if not extra_styles: extra_styles = any(item in name_compare for item in extras_keys)
@@ -323,7 +323,7 @@ class FontUtils:
 		for item in replacement_values:
 			try: content = re.sub(r'<font>(.*?)</font> <\!-- %s -->' % item[0], '<font>%s</font> <!-- %s -->' % (item[1], item[0]), content)
 			except: pass
-		with open_file(translate_path(file), 'w') as f: f.write(content)
+		with open_file(file, 'w') as f: f.write(content)
 
 	def default_font_info(self):
 		return [{'name': 'font10', 'size': 21, 'bold': False, 'extra_styles': False},

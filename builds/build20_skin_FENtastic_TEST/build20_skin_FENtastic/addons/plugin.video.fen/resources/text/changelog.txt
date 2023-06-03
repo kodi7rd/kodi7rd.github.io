@@ -1,6 +1,12 @@
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
 
+[COLOR dodgerblue][B]Version 3.1.12[/B][/COLOR]
+- Added "Check Accounts Status on Startup" in Provider Accounts settings tab. Enable this to get a dialog on startup when your premium accounts are close to or have run out of days remaining. Default is OFF.
+- Added "Use Chapter Info For Alert When Available" to Settings->Playback->Episodes. Used for Autoplay Next Episode. If a chapter is found for the video file that is >= 90% total play time, then Fen will assume that is the start of credits and move the notification for next episode to that time. Be aware, most episode video files dont have chapter info, but it will work if that info is present.
+- Changed some behaviors with In Progress TV Shows and Watched TV Shows. New behavior: For TV Shows where all episodes have been watched, but the TV Show is still airing, that TV Show will now appear in In Progress TV Shows instead of Watched TV Shows. Watched TV Shows will now exclusively be for TV Shows that have all episodes watched and has finished airing (there will be no new episodes in the future).
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.1.11[/B][/COLOR]
 - RESTART KODI AFTER THIS UPDATE.
 - Couple of quick fixes.

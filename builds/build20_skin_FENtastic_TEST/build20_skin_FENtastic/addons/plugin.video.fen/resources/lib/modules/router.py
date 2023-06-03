@@ -216,6 +216,9 @@ def routing(sys):
 		elif mode == 'set_view':
 			return kodi_utils.set_view(_get('view_type'))
 	##EXTRA modes##
+	elif mode == 'restart_services':
+		from modules.kodi_utils import restart_services
+		return restart_services()
 	elif mode == 'kodi_refresh':
 		from modules.kodi_utils import kodi_refresh
 		return kodi_refresh()

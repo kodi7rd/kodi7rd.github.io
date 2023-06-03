@@ -12,6 +12,7 @@ watched_indicators_function, lists_sort_order, ignore_articles = settings.watche
 date_offset, metadata_user_info = settings.date_offset, settings.metadata_user_info
 WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
+finished_show_check = ('Ended', 'Canceled')
 
 def get_database(watched_indicators=None):
 	return indicators_dict[watched_indicators or watched_indicators_function()]
@@ -158,7 +159,9 @@ def get_in_progress_tvshows(dummy_arg, page_no):
 		tmdb_id = item['media_id']
 		meta = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
 		watched_status = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))
+		status = meta.get('status', '')
 		if watched_status[0] == 0: data_append(item)
+		elif status not in finished_show_check: data_append(item)
 	data, duplicates = [], set()
 	data_append, duplicates_add = data.append, duplicates.add
 	watched_indicators = watched_indicators_function()
@@ -193,7 +196,8 @@ def get_watched_items(media_type, page_no):
 			tmdb_id = item['media_id']
 			meta = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
 			watched_status = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))
-			if watched_status[0] == 1: data_append(item)
+			status = meta.get('status', '')
+			if watched_status[0] == 1 and status in finished_show_check: data_append(item)
 		watched_info = get_watched_info_tv(watched_indicators)
 		meta_user_info = metadata_user_info()
 		duplicates = set()

@@ -59,17 +59,7 @@ class NextEpisode(BaseDialog):
 		return self.meta.get('custom_clearlogo') or self.meta.get(self.clearlogo_main) or self.meta.get(self.clearlogo_backup) or ''
 
 	def monitor(self):
-		try: progress_bar = self.get_control(5000)
-		except: progress_bar = None
-		total_time = self.player.getTotalTime()
-		total_remaining = total_time - self.player.getTime()
 		while self.player.isPlaying():
-			try:
-				if self.closed: break
-				current_time = self.player.getTime()
-				remaining = round(total_time - current_time)
-				current_point = (remaining / float(total_remaining)) * 100
-				if progress_bar: progress_bar.setPercent(current_point)
-				self.sleep(1000)
-			except: pass
+			if self.closed: break
+			self.sleep(1000)
 		self.close()

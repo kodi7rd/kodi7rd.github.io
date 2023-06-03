@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
+import math
+from datetime import datetime
 from apis.premiumize_api import PremiumizeAPI
 from modules import kodi_utils
 from modules.source_utils import supported_video_extensions
@@ -110,8 +112,6 @@ def pm_transfers():
 	set_view_mode('view.premium')
 
 def pm_account_info():
-	import math
-	from datetime import datetime
 	try:
 		show_busy_dialog()
 		account_info = Premiumize.account_info()
@@ -132,3 +132,12 @@ def pm_account_info():
 		hide_busy_dialog()
 		return show_text(ls(32061).upper(), '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+
+def active_days():
+	try:
+		account_info = Premiumize.account_info()
+		expires = datetime.fromtimestamp(account_info['premium_until'])
+		days_remaining = (expires - datetime.today()).days
+	except: days_remaining = 0
+	return days_remaining

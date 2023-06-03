@@ -18,7 +18,7 @@ recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, mu
 log_utils_str, tips_use_str, views_str, updates_str, fen_str, all_str, cache_str, clean_str = ls(32777), ls(32518), ls(32510), ls(32196), ls(32036), ls(32129), ls(32524), ls(32526)
 discover_str, history_str, help_str, furk_str, easy_str, rd_str, pm_str, ad_str = ls(32451), ls(32486), ls(32487), ls(32069), ls(32070), ls(32054), ls(32061), ls(32063)
 cloud_str, clca_str, trakt_str, imdb_str, coll_str, wlist_str, ls_str, fav_str = ls(32496), ls(32497), ls(32037), ls(32064), ls(32499), ls(32500), ls(32501), ls(32453)
-root_str, season_str, images_str, make_short_str, delete_str, mcol_str, res_hc = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(33107)
+root_str, season_str, images_str, make_short_str, delete_str, mcol_str, res_hc, res_serv_str = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(33107), ls(33152)
 _in_str, mov_str, tv_str, edit_str, add_menu_str, s_folder_str, mset_str, local_str = ls(32484), ls(32028), ls(32029), ls(32705), ls(32730), ls(32731), ls(33080), ls(33104)
 new_str, spot_str, tips_str = ls(32857).upper(), ls(32858).upper(), ls(32546).upper()
 change_log_utils_str = '%s & %s' % (changelog_str, log_utils_str)
@@ -196,6 +196,7 @@ class Navigator:
 		self.add({'mode': 'navigator.set_view_modes'}, tools_ins % views_str, 'settings2')
 		self.add({'mode': 'default_highlight_colors_choice', 'isFolder': 'false'}, tools_ins % res_hc, 'settings2')
 		self.add({'mode': 'navigator.shortcut_folders'}, tools_ins % shortcut_manager_str, 'settings2')
+		self.add({'mode': 'restart_services', 'isFolder': 'false'}, tools_ins % res_serv_str, 'settings')
 		self.add({'mode': 'toggle_language_invoker', 'isFolder': 'false'}, tools_ins % langinv_str, 'settings2')
 		self.end_directory()
 

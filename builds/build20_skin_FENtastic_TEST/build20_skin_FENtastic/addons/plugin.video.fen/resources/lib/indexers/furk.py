@@ -187,3 +187,10 @@ def account_info(params):
 		hide_busy_dialog()
 		return show_text(heading, '\n\n'.join(body), font_size='large')
 	except: hide_busy_dialog()
+
+def active_days():
+	try:
+		accinfo = Furk.account_info()
+		days_remaining = int(accinfo['premium']['time_left'])/60/60/24
+	except: days_remaining = 0
+	return days_remaining

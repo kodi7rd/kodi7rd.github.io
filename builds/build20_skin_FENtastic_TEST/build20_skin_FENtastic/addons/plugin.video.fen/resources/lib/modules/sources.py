@@ -274,7 +274,7 @@ class Sources():
 					sleep(self.sleep_time)
 					if len(remaining_providers) == 0: break
 					if percent >= 100: break
-				except: return self._kill_progress_dialog()
+				except:	return self._kill_progress_dialog()
 		if self.prescrape: scraper_list, _threads = self.prescrape_scrapers, self.prescrape_threads
 		else: scraper_list, _threads = self.providers, self.threads
 		self.internal_scrapers = self._get_active_scraper_names(scraper_list)
@@ -538,9 +538,9 @@ class Sources():
 		return FenPlayer().run(link, 'video')
 
 	def play_file(self, results, source={}):
-		hide_busy_dialog()
-		url, playback_successful, cancel_all_playback = None, None, False
 		try:
+			hide_busy_dialog()
+			url = None
 			results = [i for i in results if not 'Uncached' in i.get('cache_provider', '')]
 			if not source: source = results[0]
 			items = [source]
@@ -577,6 +577,7 @@ class Sources():
 			if self.background: sleep(1000)
 			monitor = kodi_utils.monitor
 			url = None
+			self.playback_successful, self.cancel_all_playback = None, False
 			for count, item in enumerate(items, 1):
 				try:
 					hide_busy_dialog()
@@ -589,7 +590,7 @@ class Sources():
 						try: del player
 						except: pass
 					player = FenPlayer()
-					url, playback_successful, cancel_all_playback = None, None, False
+					url, self.playback_successful, self.cancel_all_playback = None, None, False
 					self.playing_filename = item['name']
 					try:
 						if self.progress_dialog.iscanceled() or monitor.abortRequested(): break
@@ -605,19 +606,17 @@ class Sources():
 							self.progress_dialog.update_resolver(percent=resolve_percent)
 							sleep(200)
 							player.run(url, self)
-							playback_successful = player.playback_successful
-							cancel_all_playback = player.cancel_all_playback
-						if playback_successful: break
-						if cancel_all_playback: break
+						if self.cancel_all_playback: break
+						if self.playback_successful: break
 						if count == len(items):
+							self.cancel_all_playback = True
 							player.stop()
 							break
 					except: pass
 				except: pass
 		except: self._kill_progress_dialog()
-		
-		if cancel_all_playback: return self._kill_progress_dialog()
-		if not playback_successful or not url: self.playback_failed_action()
+		if self.cancel_all_playback: return self._kill_progress_dialog()
+		if not self.playback_successful or not url: self.playback_failed_action()
 		try: del monitor
 		except: pass
 
@@ -662,23 +661,29 @@ class Sources():
 			total_time = player.getTotalTime()
 			use_window, window_time, default_action = self.nextep_settings['use_window'], self.nextep_settings['window_time'], self.nextep_settings['default_action']
 			action = None if use_window else 'close'
+			continue_nextep = False
 			while player.isPlayingVideo():
 				try:
-					if round(total_time - player.getTime()) <= window_time: break
+					remaining_time = round(total_time - player.getTime())
+					if remaining_time <= window_time:
+						continue_nextep = True
+						break
 					sleep(100)
 				except: pass
-			if use_window: action = self._make_nextep_dialog(default_action=default_action)
-			else: notification('%s %s S%02dE%02d' % (ls(32801), self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')), 6500, self.meta.get('poster'))
-			if not action: action = default_action
-			if action == 'cancel': return False
-			else:
-				if action == 'play':
-					self._make_resolve_dialog()
-					player.stop()
+			if continue_nextep:
+				if use_window: action = self._make_nextep_dialog(default_action=default_action)
+				else: notification('%s %s S%02dE%02d' % (ls(32801), self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')), 6500, self.meta.get('poster'))
+				if not action: action = default_action
+				if action == 'cancel': return False
 				else:
-					while player.isPlayingVideo(): sleep(100)
-					self._make_resolve_dialog()
-				return True
+					if action == 'play':
+						self._make_resolve_dialog()
+						player.stop()
+					else:
+						while player.isPlayingVideo(): sleep(100)
+						self._make_resolve_dialog()
+					return True
+			else: return False
 		else: return False
 
 	def autoscrape_nextep_handler(self):

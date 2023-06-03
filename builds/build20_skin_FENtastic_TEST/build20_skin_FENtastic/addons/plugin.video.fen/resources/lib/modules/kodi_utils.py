@@ -72,543 +72,551 @@ myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
 extras_button_label_values = {'movie': {'movies_play': 32174, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798,  'show_extrainfo': 32605,
-                        'show_genres': 32470, 'show_director': 32627, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
-                        'playback_choice': 32187, 'show_favorites_manager': 32197},
-                        'tvshow': {'tvshow_browse': 32838, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798, 'show_extrainfo': 32605,
-                        'show_genres': 32470, 'play_nextep': 33115, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
-                        'play_random_episode': 32613, 'show_favorites_manager': 32197}}
+						'show_genres': 32470, 'show_director': 32627, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
+						'playback_choice': 32187, 'show_favorites_manager': 32197},
+						'tvshow': {'tvshow_browse': 32838, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798, 'show_extrainfo': 32605,
+						'show_genres': 32470, 'play_nextep': 33115, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
+						'play_random_episode': 32613, 'show_favorites_manager': 32197}}
 movie_extras_buttons_defaults = [('extras.movie.button10', 'movies_play'), ('extras.movie.button11', 'show_trailers'), ('extras.movie.button12', 'show_keywords'),
-                    ('extras.movie.button13', 'show_images'), ('extras.movie.button14', 'show_extrainfo'), ('extras.movie.button15', 'show_genres'),
-                    ('extras.movie.button16', 'show_director'), ('extras.movie.button17', 'show_options')]
+					('extras.movie.button13', 'show_images'), ('extras.movie.button14', 'show_extrainfo'), ('extras.movie.button15', 'show_genres'),
+					('extras.movie.button16', 'show_director'), ('extras.movie.button17', 'show_options')]
 tvshow_extras_buttons_defaults = [('extras.tvshow.button10', 'tvshow_browse'), ('extras.tvshow.button11', 'show_trailers'), ('extras.tvshow.button12', 'show_keywords'),
-                    ('extras.tvshow.button13', 'show_images'), ('extras.tvshow.button14', 'show_extrainfo'), ('extras.tvshow.button15', 'show_genres'),
-                    ('extras.tvshow.button16', 'play_nextep'), ('extras.tvshow.button17', 'show_options')]
+					('extras.tvshow.button13', 'show_images'), ('extras.tvshow.button14', 'show_extrainfo'), ('extras.tvshow.button15', 'show_genres'),
+					('extras.tvshow.button16', 'play_nextep'), ('extras.tvshow.button17', 'show_options')]
 movie_dict_removals = ('fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers', 'fanart', 'banner', 'clearlogo', 'clearlogo2', 'clearart',
-                        'landscape', 'discart', 'original_title', 'english_title', 'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster',
-                        'fanart2', 'poster2', 'keyart', 'images', 'custom_poster', 'custom_fanart', 'custom_clearlogo', 'custom_banner', 'custom_clearart', 'custom_landscape',
-                        'custom_discart', 'custom_keyart')
+						'landscape', 'discart', 'original_title', 'english_title', 'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster',
+						'fanart2', 'poster2', 'keyart', 'images', 'custom_poster', 'custom_fanart', 'custom_clearlogo', 'custom_banner', 'custom_clearart', 'custom_landscape',
+						'custom_discart', 'custom_keyart')
 tvshow_dict_removals = ('fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers', 'discart', 'total_episodes', 'total_seasons', 'fanart',
-                        'banner', 'clearlogo', 'clearlogo2', 'clearart', 'landscape', 'season_data', 'original_title', 'extra_info', 'alternative_titles', 'english_title',
-                        'season_summary', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'total_aired_eps', 'fanart2', 'poster2', 'keyart', 'images', 'custom_poster',
-                        'custom_fanart', 'custom_clearlogo', 'custom_banner', 'custom_clearart', 'custom_landscape', 'custom_discart', 'custom_keyart', 'season_art')
+						'banner', 'clearlogo', 'clearlogo2', 'clearart', 'landscape', 'season_data', 'original_title', 'extra_info', 'alternative_titles', 'english_title',
+						'season_summary', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'total_aired_eps', 'fanart2', 'poster2', 'keyart', 'images', 'custom_poster',
+						'custom_fanart', 'custom_clearlogo', 'custom_banner', 'custom_clearart', 'custom_landscape', 'custom_discart', 'custom_keyart', 'season_art')
 episode_dict_removals = ('thumb', 'guest_stars')
 tmdb_dict_removals = ('adult', 'backdrop_path', 'genre_ids', 'original_language', 'original_title', 'overview', 'popularity', 'vote_count', 'video', 'origin_country', 'original_name')
 trakt_dict_removals = ('collected_at', 'released')
 video_extensions = ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', 'rmvb', 'mpd', 'ifo', 'mov', 'qt', 'divx', 'xvid', 'bivx', 'vob', 'nrg', 'img', 'iso', 'udf', 'pva',
-                    'wmv', 'asf', 'asx', 'ogm', 'm2v', 'avi', 'bin', 'dat', 'mpg', 'mpeg', 'mp4', 'mkv', 'mk3d', 'avc', 'vp3', 'svq3', 'nuv', 'viv', 'dv', 'fli', 'flv', 'wpl',
-                    'xspf', 'vdr', 'dvr-ms', 'xsp', 'mts', 'm2t', 'm2ts', 'evo', 'ogv', 'sdp', 'avs', 'rec', 'url', 'pxml', 'vc1', 'h264', 'rcv', 'rss', 'mpls', 'mpl', 'webm',
-                    'bdmv', 'bdm', 'wtv', 'trp', 'f4v', 'pvr', 'disc')
+					'wmv', 'asf', 'asx', 'ogm', 'm2v', 'avi', 'bin', 'dat', 'mpg', 'mpeg', 'mp4', 'mkv', 'mk3d', 'avc', 'vp3', 'svq3', 'nuv', 'viv', 'dv', 'fli', 'flv', 'wpl',
+					'xspf', 'vdr', 'dvr-ms', 'xsp', 'mts', 'm2t', 'm2ts', 'evo', 'ogv', 'sdp', 'avs', 'rec', 'url', 'pxml', 'vc1', 'h264', 'rcv', 'rss', 'mpls', 'mpl', 'webm',
+					'bdmv', 'bdm', 'wtv', 'trp', 'f4v', 'pvr', 'disc')
 image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'png', 'gif', 'webp', 'tiff', 'tif',
-                    'psd', 'raw', 'arw', 'cr2', 'nrw', 'k25', 'jp2', 'j2k', 'jpf', 'jpx', 'jpm', 'mj2')
+					'psd', 'raw', 'arw', 'cr2', 'nrw', 'k25', 'jp2', 'j2k', 'jpf', 'jpx', 'jpm', 'mj2')
 default_highlights = (('hoster.identify', 'FF0166FF'), ('torrent.identify', 'FFFF00FE'), ('provider.rd_colour', 'FF3C9900'), ('provider.pm_colour', 'FFFF3300'),
-                    ('provider.ad_colour', 'FFE6B800'), ('provider.furk_colour', 'FFE6002E'), ('provider.easynews_colour', 'FF00B3B2'),
-                    ('provider.debrid_cloud_colour', 'FF7A01CC'), ('provider.folders_colour', 'FFB36B00'), ('scraper_4k_highlight', 'FFFF00FE'),
-                    ('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('fen.highlight', 'FF008EB2'),
-                    ('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
+					('provider.ad_colour', 'FFE6B800'), ('provider.furk_colour', 'FFE6002E'), ('provider.easynews_colour', 'FF00B3B2'),
+					('provider.debrid_cloud_colour', 'FF7A01CC'), ('provider.folders_colour', 'FFB36B00'), ('scraper_4k_highlight', 'FFFF00FE'),
+					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('fen.highlight', 'FF008EB2'),
+					('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
 
 def get_icon(image_name):
-    return img_url % getattr(icons, image_name, 'I1JJhji')
+	return img_url % getattr(icons, image_name, 'I1JJhji')
 
 def local_string(string):
-    if isinstance(string, str):
-        try: string = int(string)
-        except: return string
-    return getLocalizedString(string)
+	if isinstance(string, str):
+		try: string = int(string)
+		except: return string
+	return getLocalizedString(string)
 
 def build_url(url_params):
-    return 'plugin://plugin.video.fen/?%s' % urlencode(url_params)
+	return 'plugin://plugin.video.fen/?%s' % urlencode(url_params)
 
 def remove_keys(dict_item, dict_removals):
-    for k in dict_removals: dict_item.pop(k, None)
-    return dict_item
+	for k in dict_removals: dict_item.pop(k, None)
+	return dict_item
 
 def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None, isFolder=True):
-    fanart = fanartImage or addon_fanart
-    icon = get_icon(iconImage)
-    url = build_url(url_params)
-    listitem = make_listitem()
-    listitem.setLabel(list_name)
-    listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': addon_clearlogo})
-    if kodi_version >= 20:
-        info_tag = listitem.getVideoInfoTag()
-        info_tag.setPlot(' ')
-    else: listitem.setInfo('video', {'plot': ' '})
-    add_item(handle, url, listitem, isFolder)
+	fanart = fanartImage or addon_fanart
+	icon = get_icon(iconImage)
+	url = build_url(url_params)
+	listitem = make_listitem()
+	listitem.setLabel(list_name)
+	listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': addon_clearlogo})
+	if kodi_version >= 20:
+		info_tag = listitem.getVideoInfoTag()
+		info_tag.setPlot(' ')
+	else: listitem.setInfo('video', {'plot': ' '})
+	add_item(handle, url, listitem, isFolder)
 
 def make_placeholder_listitem():
-    listitem = make_listitem()
-    listitem.setLabel('Empty')
-    listitem.setArt({'icon': empty_poster, 'poster': empty_poster, 'thumb': empty_poster, 'fanart': addon_fanart, 'banner': empty_poster, 'clearlogo': addon_clearlogo})
-    if kodi_version >= 20:
-        info_tag = listitem.getVideoInfoTag()
-        info_tag.setPlot(' ')
-    else: listitem.setInfo('video', {'plot': ' '})
-    return [('', listitem, False)]
+	listitem = make_listitem()
+	listitem.setLabel('Empty')
+	listitem.setArt({'icon': empty_poster, 'poster': empty_poster, 'thumb': empty_poster, 'fanart': addon_fanart, 'banner': empty_poster, 'clearlogo': addon_clearlogo})
+	if kodi_version >= 20:
+		info_tag = listitem.getVideoInfoTag()
+		info_tag.setPlot(' ')
+	else: listitem.setInfo('video', {'plot': ' '})
+	return [('', listitem, False)]
 
 def make_fake_widget():
-    fake_widget_made = False
-    if addon().getSetting('wait_for_services') == 'true':
-        fake_widget_made = True
-        handle = int(sys.argv[1])
-        set_property(services_refresh_after_run_prop, 'true')
-        add_items(handle, make_placeholder_listitem())
-        end_directory(handle, False)
-    else: set_property(services_finished_prop, 'true')
-    return fake_widget_made
+	fake_widget_made = False
+	if addon().getSetting('wait_for_services') == 'true':
+		fake_widget_made = True
+		handle = int(sys.argv[1])
+		set_property(services_refresh_after_run_prop, 'true')
+		add_items(handle, make_placeholder_listitem())
+		end_directory(handle, False)
+	else: set_property(services_finished_prop, 'true')
+	return fake_widget_made
 
 def make_listitem():
-    return ListItem(offscreen=True)
+	return ListItem(offscreen=True)
 
 def add_item(handle, url, listitem, isFolder):
-    addDirectoryItem(handle, url, listitem, isFolder)
+	addDirectoryItem(handle, url, listitem, isFolder)
 
 def add_items(handle, item_list):
-    addDirectoryItems(handle, item_list)
+	addDirectoryItems(handle, item_list)
 
 def set_content(handle, content):
-    setContent(handle, content)
+	setContent(handle, content)
 
 def set_category(handle, label):
-    setCategory(handle, label)
+	setCategory(handle, label)
 
 def end_directory(handle, cacheToDisc=None):
-    if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
-    endOfDirectory(handle, cacheToDisc=cacheToDisc)
+	if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
+	endOfDirectory(handle, cacheToDisc=cacheToDisc)
 
 def set_view_mode(view_type, content='files', is_widget=None):
-    if is_widget == None: is_widget = external_browse()
-    if is_widget: return
-    view_id = get_property(view_type_prop % view_type)
-    if not view_id:
-        try:
-            dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-            dbcur = dbcon.cursor()
-            dbcur.execute("SELECT view_id FROM views WHERE view_type = ?", (str(view_type),))
-            view_id = dbcur.fetchone()[0]
-        except: return
-    try:
-        hold = 0
-        sleep(100)
-        while not container_content() == content:
-            hold += 1
-            if hold < 5000: sleep(1)
-            else: return
-        if view_id: execute_builtin('Container.SetViewMode(%s)' % view_id)
-    except: return
+	if is_widget == None: is_widget = external_browse()
+	if is_widget: return
+	view_id = get_property(view_type_prop % view_type)
+	if not view_id:
+		try:
+			dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
+			dbcur = dbcon.cursor()
+			dbcur.execute("SELECT view_id FROM views WHERE view_type = ?", (str(view_type),))
+			view_id = dbcur.fetchone()[0]
+		except: return
+	try:
+		hold = 0
+		sleep(100)
+		while not container_content() == content:
+			hold += 1
+			if hold < 5000: sleep(1)
+			else: return
+		if view_id: execute_builtin('Container.SetViewMode(%s)' % view_id)
+	except: return
 
 def build_content():
-    return get_property(build_content_prop) != 'false'
+	return get_property(build_content_prop) != 'false'
 
 def append_path(_path):
-    sys.path.append(translatePath(_path))
+	sys.path.append(translatePath(_path))
 
 def logger(heading, function):
-    log('###%s###: %s' % (heading, function), 1)
+	log('###%s###: %s' % (heading, function), 1)
 
 def get_property(prop):
-    return window.getProperty(prop)
+	return window.getProperty(prop)
 
 def set_property(prop, value):
-    return window.setProperty(prop, value)
+	return window.setProperty(prop, value)
 
 def clear_property(prop):
-    return window.clearProperty(prop)
+	return window.clearProperty(prop)
 
 def addon(addon_id='plugin.video.fen'):
-    return Addon(id=addon_id)
+	return Addon(id=addon_id)
 
 def addon_installed(addon_id):
-    return get_visibility('System.HasAddon(%s)' % addon_id)
+	return get_visibility('System.HasAddon(%s)' % addon_id)
 
 def addon_enabled(addon_id):
-    return get_visibility('System.AddonIsEnabled(%s)' % addon_id)
+	return get_visibility('System.AddonIsEnabled(%s)' % addon_id)
 
 def container_content():
-    return get_infolabel('Container.Content')
+	return get_infolabel('Container.Content')
 
 def set_sort_method(handle, method):
-    addSortMethod(handle, sort_method_dict[method])
+	addSortMethod(handle, sort_method_dict[method])
 
 def make_session(url='https://'):
-    session = requests.Session()
-    session.mount(url, requests.adapters.HTTPAdapter(pool_maxsize=100))
-    return session  
+	session = requests.Session()
+	session.mount(url, requests.adapters.HTTPAdapter(pool_maxsize=100))
+	return session	
 
 def make_playlist(playlist_type='video'):
-    return PlayList(playlist_type_dict[playlist_type])
+	return PlayList(playlist_type_dict[playlist_type])
 
 def convert_language(lang):
-    return convertLanguage(lang, 1)
+	return convertLanguage(lang, 1)
 
 def supported_media():
-    return getSupportedMedia('video')
+	return getSupportedMedia('video')
 
 def path_exists(path):
-    return exists(path)
+	return exists(path)
 
 def open_file(_file, mode='r'):
-    return File(_file, mode)
+	return File(_file, mode)
 
 def copy_file(source, destination):
-    return copy(source, destination)
+	return copy(source, destination)
 
 def delete_file(_file):
-    delete(_file)
+	delete(_file)
 
 def delete_folder(_folder, force=False):
-    rmdir(_folder, force)
+	rmdir(_folder, force)
 
 def rename_file(old, new):
-    rename(old, new)
+	rename(old, new)
 
 def list_dirs(location):
-    return listdir(location)
+	return listdir(location)
 
 def make_directory(path):
-    mkdir(path)
+	mkdir(path)
 
 def make_directories(path):
-    mkdirs(path)
+	mkdirs(path)
 
 def translate_path(path):
-    return translatePath(path)
+	return translatePath(path)
 
 def sleep(time):
-    return xbmc_sleep(time)
+	return xbmc_sleep(time)
 
-def execute_builtin(command):
-    return executebuiltin(command)
+def execute_builtin(command, block=False):
+	return executebuiltin(command, block)
 
 def current_skin():
-    return getSkinDir()
+	return getSkinDir()
 
 def get_window_id():
-    return getCurrentWindowId()
+	return getCurrentWindowId()
 
 def current_window_id():
-    return Window(get_window_id())
+	return Window(get_window_id())
 
 def get_video_database_path():
-    return translate_path('special://profile/Database/MyVideos%s.db' % myvideos_db_paths[kodi_version])
+	return translate_path('special://profile/Database/MyVideos%s.db' % myvideos_db_paths[kodi_version])
 
 def show_busy_dialog():
-    return execute_builtin('ActivateWindow(busydialognocancel)')
+	return execute_builtin('ActivateWindow(busydialognocancel)')
 
 def hide_busy_dialog():
-    execute_builtin('Dialog.Close(busydialognocancel)')
-    execute_builtin('Dialog.Close(busydialog)')
+	execute_builtin('Dialog.Close(busydialognocancel)')
+	execute_builtin('Dialog.Close(busydialog)')
 
-def close_dialog(dialog):
-    execute_builtin('Dialog.Close(%s,true)' % dialog)
+def close_dialog(dialog, block=False):
+	execute_builtin('Dialog.Close(%s,true)' % dialog, block)
 
 def close_all_dialog():
-    execute_builtin('Dialog.Close(all,true)')
+	execute_builtin('Dialog.Close(all,true)')
 
-def run_addon(addon='plugin.video.fen'):
-    return execute_builtin('RunAddon(%s)' % addon)
+def run_addon(addon='plugin.video.fen', block=False):
+	return execute_builtin('RunAddon(%s)' % addon, block)
 
 def external_browse():
-    return 'fen' not in get_infolabel('Container.PluginName')
+	return 'fen' not in get_infolabel('Container.PluginName')
+
+def folder_path():
+	return get_infolabel('Container.FolderPath')
 
 def reload_skin():
-    execute_builtin('ReloadSkin()')
+	execute_builtin('ReloadSkin()')
 
 def kodi_refresh():
-    execute_builtin('UpdateLibrary(video,special://skin/foo)')
+	execute_builtin('UpdateLibrary(video,special://skin/foo)')
 
-def run_plugin(params):
-    if isinstance(params, dict): params = build_url(params)
-    return execute_builtin('RunPlugin(%s)' % params)
+def run_plugin(params, block=False):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('RunPlugin(%s)' % params, block)
 
-def container_update(params):
-    if isinstance(params, dict): params = build_url(params)
-    return execute_builtin('Container.Update(%s)' % params)
+def container_update(params, block=False):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('Container.Update(%s)' % params, block)
 
-def activate_window(params):
-    if isinstance(params, dict): params = build_url(params)
-    return execute_builtin('ActivateWindow(Videos,%s,return)' % params)
+def activate_window(params, block=False):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('ActivateWindow(Videos,%s,return)' % params, block)
 
 def container_refresh():
-    return execute_builtin('Container.Refresh')
+	return execute_builtin('Container.Refresh')
 
-def container_refresh_input(params):
-    if isinstance(params, dict): params = build_url(params)
-    return execute_builtin('Container.Refresh(%s)' % params)
+def container_refresh_input(params, block=False):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('Container.Refresh(%s)' % params, block)
 
-def replace_window(params):
-    if isinstance(params, dict): params = build_url(params)
-    return execute_builtin('ReplaceWindow(Videos,%s)' % params)
+def replace_window(params, block=False):
+	if isinstance(params, dict): params = build_url(params)
+	return execute_builtin('ReplaceWindow(Videos,%s)' % params, block)
 
 def disable_enable_addon(addon_name='plugin.video.fen'):
-    try:
-        execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': False}}))
-        execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': True}}))
-    except: pass
+	try:
+		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': False}}))
+		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': True}}))
+	except: pass
+
+def restart_services():
+	execute_builtin('ActivateWindow(Home)', True)
+	sleep(1000)
+	Thread(target=disable_enable_addon).start()
 
 def update_local_addons():
-    execute_builtin('UpdateLocalAddons')
-    sleep(2500)
+	execute_builtin('UpdateLocalAddons', True)
+	sleep(2500)
 
 def make_global_list():
-    global global_list
-    global_list = []
+	global global_list
+	global_list = []
 
 def progress_dialog(heading='', icon=addon_icon):
-    from windows import create_window
-    if isinstance(heading, int): heading = local_string(heading)
-    progress_dialog = create_window(('windows.progress', 'Progress'), 'progress.xml', heading=heading, icon=icon)
-    Thread(target=progress_dialog.run).start()
-    return progress_dialog
+	from windows import create_window
+	if isinstance(heading, int): heading = local_string(heading)
+	progress_dialog = create_window(('windows.progress', 'Progress'), 'progress.xml', heading=heading, icon=icon)
+	Thread(target=progress_dialog.run).start()
+	return progress_dialog
 
 def select_dialog(function_list, **kwargs):
-    from windows import open_window
-    selection = open_window(('windows.default_dialogs', 'Select'), 'select.xml', **kwargs)
-    if selection in (None, []): return selection
-    if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
-    return function_list[selection]
+	from windows import open_window
+	selection = open_window(('windows.default_dialogs', 'Select'), 'select.xml', **kwargs)
+	if selection in (None, []): return selection
+	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
+	return function_list[selection]
 
 def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, default_control=11):
-    from windows import open_window
-    if isinstance(heading, int): heading = local_string(heading)
-    if isinstance(text, int): text = local_string(text)
-    if isinstance(ok_label, int): ok_label = local_string(ok_label)
-    if isinstance(cancel_label, int): cancel_label = local_string(cancel_label)
-    kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control}
-    return open_window(('windows.default_dialogs', 'Confirm'), 'confirm.xml', **kwargs)
+	from windows import open_window
+	if isinstance(heading, int): heading = local_string(heading)
+	if isinstance(text, int): text = local_string(text)
+	if isinstance(ok_label, int): ok_label = local_string(ok_label)
+	if isinstance(cancel_label, int): cancel_label = local_string(cancel_label)
+	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control}
+	return open_window(('windows.default_dialogs', 'Confirm'), 'confirm.xml', **kwargs)
 
 def ok_dialog(heading='', text=32760, ok_label=32839):
-    from windows import open_window
-    if isinstance(heading, int): heading = local_string(heading)
-    if isinstance(text, int): text = local_string(text)
-    if isinstance(ok_label, int): ok_label = local_string(ok_label)
-    kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
-    return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
+	from windows import open_window
+	if isinstance(heading, int): heading = local_string(heading)
+	if isinstance(text, int): text = local_string(text)
+	if isinstance(ok_label, int): ok_label = local_string(ok_label)
+	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
+	return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
-    from windows import open_window
-    if isinstance(heading, int): heading = local_string(heading)
-    if isinstance(text, int): text = local_string(text)
-    heading = heading.replace('[B]', '').replace('[/B]', '')
-    if file:
-        with open(file, encoding='utf-8') as r: text = r.readlines()
-    if kodi_log:
-        confirm = confirm_dialog(text=32855, ok_label=32824, cancel_label=32828)
-        if confirm == None: return
-        if confirm: text = [i for i in text if any(x in i.lower() for x in ('exception', 'error', '[test]'))]
-    text = ''.join(text)
-    return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
+	from windows import open_window
+	if isinstance(heading, int): heading = local_string(heading)
+	if isinstance(text, int): text = local_string(text)
+	heading = heading.replace('[B]', '').replace('[/B]', '')
+	if file:
+		with open(file, encoding='utf-8') as r: text = r.readlines()
+	if kodi_log:
+		confirm = confirm_dialog(text=32855, ok_label=32824, cancel_label=32828)
+		if confirm == None: return
+		if confirm: text = [i for i in text if any(x in i.lower() for x in ('exception', 'error', '[test]'))]
+	text = ''.join(text)
+	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
 
 def notification(line1, time=5000, icon=None, sound=False):
-    if isinstance(line1, int): line1 = local_string(line1)
-    icon = icon or addon_icon
-    dialog.notification(local_string(32036), line1, icon, time, sound)
+	if isinstance(line1, int): line1 = local_string(line1)
+	icon = icon or addon_icon
+	dialog.notification(local_string(32036), line1, icon, time, sound)
 
 def choose_view(view_type, content):
-    handle = int(sys.argv[1])
-    set_view_str = local_string(32547)
-    settings_icon = get_icon('settings')
-    listitem = make_listitem()
-    listitem.setLabel(set_view_str)
-    params_url = build_url({'mode': 'set_view', 'view_type': view_type})
-    listitem.setArt({'icon': settings_icon, 'poster': settings_icon, 'thumb': settings_icon, 'fanart': addon_fanart, 'banner': settings_icon, 'clearlogo': addon_clearlogo})
-    if kodi_version >= 20:
-        info_tag = listitem.getVideoInfoTag()
-        info_tag.setPlot(' ')
-    else: listitem.setInfo('video', {'plot': ' '})
-    add_item(handle, params_url, listitem, False)
-    set_content(handle, content)
-    end_directory(handle)
-    set_view_mode(view_type, content, False)
+	handle = int(sys.argv[1])
+	set_view_str = local_string(32547)
+	settings_icon = get_icon('settings')
+	listitem = make_listitem()
+	listitem.setLabel(set_view_str)
+	params_url = build_url({'mode': 'set_view', 'view_type': view_type})
+	listitem.setArt({'icon': settings_icon, 'poster': settings_icon, 'thumb': settings_icon, 'fanart': addon_fanart, 'banner': settings_icon, 'clearlogo': addon_clearlogo})
+	if kodi_version >= 20:
+		info_tag = listitem.getVideoInfoTag()
+		info_tag.setPlot(' ')
+	else: listitem.setInfo('video', {'plot': ' '})
+	add_item(handle, params_url, listitem, False)
+	set_content(handle, content)
+	end_directory(handle)
+	set_view_mode(view_type, content, False)
 
 def set_temp_highlight(temp_highlight):
-    current_highlight = get_property(highlight_prop)
-    set_property(highlight_prop, temp_highlight)
-    return current_highlight
+	current_highlight = get_property(highlight_prop)
+	set_property(highlight_prop, temp_highlight)
+	return current_highlight
 
 def restore_highlight(current_highlight):
-    set_property(highlight_prop, current_highlight)
+	set_property(highlight_prop, current_highlight)
 
 def set_view(view_type):
-    view_id = str(current_window_id().getFocusId())
-    dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-    dbcur = dbcon.cursor()
-    dbcur.execute('''PRAGMA synchronous = OFF''')
-    dbcur.execute('''PRAGMA journal_mode = OFF''')
-    dbcur.execute("INSERT OR REPLACE INTO views VALUES (?, ?)", (view_type, view_id))
-    set_view_property(view_type, view_id)
-    notification(get_infolabel('Container.Viewmode').upper(), time=500)
+	view_id = str(current_window_id().getFocusId())
+	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
+	dbcur = dbcon.cursor()
+	dbcur.execute('''PRAGMA synchronous = OFF''')
+	dbcur.execute('''PRAGMA journal_mode = OFF''')
+	dbcur.execute("INSERT OR REPLACE INTO views VALUES (?, ?)", (view_type, view_id))
+	set_view_property(view_type, view_id)
+	notification(get_infolabel('Container.Viewmode').upper(), time=500)
 
 def set_view_property(view_type, view_id):
-    set_property(view_type_prop % view_type, view_id)
+	set_property(view_type_prop % view_type, view_id)
 
 def set_view_properties():
-    dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-    dbcur = dbcon.cursor()
-    dbcur.execute('''PRAGMA synchronous = OFF''')
-    dbcur.execute('''PRAGMA journal_mode = OFF''')
-    dbcur.execute("SELECT * FROM views")
-    view_ids = dbcur.fetchall()
-    for item in view_ids: set_view_property(item[0], item[1])
+	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
+	dbcur = dbcon.cursor()
+	dbcur.execute('''PRAGMA synchronous = OFF''')
+	dbcur.execute('''PRAGMA journal_mode = OFF''')
+	dbcur.execute("SELECT * FROM views")
+	view_ids = dbcur.fetchall()
+	for item in view_ids: set_view_property(item[0], item[1])
 
 def timeIt(func):
-    # Thanks to 123Venom
-    import time
-    fnc_name = func.__name__
-    def wrap(*args, **kwargs):
-        started_at = time.time()
-        result = func(*args, **kwargs)
-        logger('%s.%s' % (__name__ , fnc_name), (time.time() - started_at))
-        return result
-    return wrap
+	# Thanks to 123Venom
+	import time
+	fnc_name = func.__name__
+	def wrap(*args, **kwargs):
+		started_at = time.time()
+		result = func(*args, **kwargs)
+		logger('%s.%s' % (__name__ , fnc_name), (time.time() - started_at))
+		return result
+	return wrap
 
 def volume_checker():
-    # 0% == -60db, 100% == 0db
-    try:
-        if get_setting('playback.volumecheck_enabled', 'false') == 'false' or get_visibility('Player.Muted'): return
-        from modules.utils import string_alphanum_to_num
-        max_volume = min(int(get_setting('playback.volumecheck_percent', '50')), 100)
-        if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
-    except: pass
+	# 0% == -60db, 100% == 0db
+	try:
+		if get_setting('playback.volumecheck_enabled', 'false') == 'false' or get_visibility('Player.Muted'): return
+		from modules.utils import string_alphanum_to_num
+		max_volume = min(int(get_setting('playback.volumecheck_percent', '50')), 100)
+		if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
+	except: pass
 
 def focus_index(index, sleep_time=1000):
-    show_busy_dialog()
-    sleep(sleep_time)
-    current_window = current_window_id()
-    focus_id = current_window.getFocusId()
-    try: current_window.getControl(focus_id).selectItem(index)
-    except: pass
-    hide_busy_dialog()
+	show_busy_dialog()
+	sleep(sleep_time)
+	current_window = current_window_id()
+	focus_id = current_window.getFocusId()
+	try: current_window.getControl(focus_id).selectItem(index)
+	except: pass
+	hide_busy_dialog()
 
 def clear_settings_window_properties():
-    clear_property('fen_settings')
-    notification(32576, 2500)
+	clear_property('fen_settings')
+	notification(32576, 2500)
 
 def fetch_kodi_imagecache(image):
-    result = None
-    try:
-        dbcon = database.connect(translate_path('special://database/Textures13.db'), timeout=40.0)
-        dbcur = dbcon.cursor()
-        dbcur.execute("SELECT cachedurl FROM texture WHERE url = ?", (image,))
-        result = dbcur.fetchone()[0]
-    except: pass
-    return result
+	result = None
+	try:
+		dbcon = database.connect(translate_path('special://database/Textures13.db'), timeout=40.0)
+		dbcur = dbcon.cursor()
+		dbcur.execute("SELECT cachedurl FROM texture WHERE url = ?", (image,))
+		result = dbcur.fetchone()[0]
+	except: pass
+	return result
 
 def get_all_icon_vars(include_values=False):
-    if include_values: return [(k, v) for k, v in vars(icons).items() if not k.startswith('__')]
-    else: return [k for k, v in vars(icons).items() if not k.startswith('__')]
+	if include_values: return [(k, v) for k, v in vars(icons).items() if not k.startswith('__')]
+	else: return [k for k, v in vars(icons).items() if not k.startswith('__')]
 
 def toggle_language_invoker():
-    from xml.dom.minidom import parse as mdParse
-    close_all_dialog()
-    sleep(100)
-    addon_xml = translate_path('special://home/addons/plugin.video.fen/addon.xml')
-    current_addon_setting = get_setting('reuse_language_invoker', 'true')
-    new_value = 'false' if current_addon_setting == 'true' else 'true'
-    if not confirm_dialog(text=local_string(33018) % (current_addon_setting.upper(), new_value.upper())): return
-    if new_value == 'true' and not confirm_dialog(text=33019): return
-    root = mdParse(addon_xml)
-    root.getElementsByTagName("reuselanguageinvoker")[0].firstChild.data = new_value
-    new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
-    with open(addon_xml, 'w') as f: f.write(new_xml)
-    set_setting('reuse_language_invoker', new_value)
-    ok_dialog(text=32576)
-    execute_builtin('ActivateWindow(Home)')
-    update_local_addons()
-    disable_enable_addon()
+	from xml.dom.minidom import parse as mdParse
+	close_all_dialog()
+	sleep(100)
+	addon_xml = translate_path('special://home/addons/plugin.video.fen/addon.xml')
+	current_addon_setting = get_setting('reuse_language_invoker', 'true')
+	new_value = 'false' if current_addon_setting == 'true' else 'true'
+	if not confirm_dialog(text=local_string(33018) % (current_addon_setting.upper(), new_value.upper())): return
+	if new_value == 'true' and not confirm_dialog(text=33019): return
+	root = mdParse(addon_xml)
+	root.getElementsByTagName("reuselanguageinvoker")[0].firstChild.data = new_value
+	new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
+	with open(addon_xml, 'w') as f: f.write(new_xml)
+	set_setting('reuse_language_invoker', new_value)
+	ok_dialog(text=32576)
+	execute_builtin('ActivateWindow(Home)', True)
+	update_local_addons()
+	disable_enable_addon()
 
 def upload_logfile(params):
-    log_files = [(33145, 'kodi.log'), (33146, 'kodi.old.log')]
-    list_items = [{'line1': local_string(i[0])} for i in log_files]
-    kwargs = {'items': json.dumps(list_items), 'heading': local_string(33147), 'narrow_window': 'true'}
-    log_file = select_dialog(log_files, **kwargs)
-    if log_file == None: return
-    log_name, log_file = log_file
-    if not confirm_dialog(heading=log_name, text=32580): return
-    show_busy_dialog()
-    url = 'https://paste.kodi.tv/'
-    log_file = translate_path('special://logpath/%s' % log_file)
-    if not path_exists(log_file): return ok_dialog(text=33039)
-    try:
-        with open_file(log_file) as f: text = f.read()
-        UserAgent = 'Fen %s' % addon().getAddonInfo('version')
-        response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
-        if 'key' in response: ok_dialog(text='%s%s' % (url, response['key']))
-        else: ok_dialog(text=33039)
-    except: ok_dialog(text=33039)
-    hide_busy_dialog()
+	log_files = [(33145, 'kodi.log'), (33146, 'kodi.old.log')]
+	list_items = [{'line1': local_string(i[0])} for i in log_files]
+	kwargs = {'items': json.dumps(list_items), 'heading': local_string(33147), 'narrow_window': 'true'}
+	log_file = select_dialog(log_files, **kwargs)
+	if log_file == None: return
+	log_name, log_file = log_file
+	if not confirm_dialog(heading=log_name, text=32580): return
+	show_busy_dialog()
+	url = 'https://paste.kodi.tv/'
+	log_file = translate_path('special://logpath/%s' % log_file)
+	if not path_exists(log_file): return ok_dialog(text=33039)
+	try:
+		with open_file(log_file) as f: text = f.read()
+		UserAgent = 'Fen %s' % addon().getAddonInfo('version')
+		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
+		if 'key' in response: ok_dialog(text='%s%s' % (url, response['key']))
+		else: ok_dialog(text=33039)
+	except: ok_dialog(text=33039)
+	hide_busy_dialog()
 
 def open_settings(query, addon='plugin.video.fen'):
-    hide_busy_dialog()
-    if query:
-        try:
-            button, control = 100, 80
-            menu, function = query.split('.')
-            execute_builtin('Addon.OpenSettings(%s)' % addon)
-            execute_builtin('SetFocus(%i)' % (int(menu) - button))
-            execute_builtin('SetFocus(%i)' % (int(function) - control))
-        except: execute_builtin('Addon.OpenSettings(%s)' % addon)
-    else: execute_builtin('Addon.OpenSettings(%s)' % addon)
+	hide_busy_dialog()
+	if query:
+		try:
+			button, control = 100, 80
+			menu, function = query.split('.')
+			execute_builtin('Addon.OpenSettings(%s)' % addon)
+			execute_builtin('SetFocus(%i)' % (int(menu) - button))
+			execute_builtin('SetFocus(%i)' % (int(function) - control))
+		except: execute_builtin('Addon.OpenSettings(%s)' % addon)
+	else: execute_builtin('Addon.OpenSettings(%s)' % addon)
 
 def set_setting(setting_id, value):
-    addon().setSetting(setting_id, value)
+	addon().setSetting(setting_id, value)
 
 def get_setting(setting_id, fallback=None):
-    if get_property(suppress_sett_dict_prop): return addon().getSetting(setting_id)
-    try: settings_dict = json.loads(get_property(fen_settings_str))
-    except: settings_dict = make_settings_dict()
-    if settings_dict is None or setting_id not in settings_dict:
-        settings_dict = get_setting_fallback(setting_id)
-        if not get_property(suppress_sett_dict_prop) == 'true':
-            make_settings_dict()
-            make_window_properties()
-    value = settings_dict.get(setting_id, '')
-    if value == '':
-        if fallback is None: return value
-        return fallback
-    return value
+	if get_property(suppress_sett_dict_prop): return addon().getSetting(setting_id)
+	try: settings_dict = json.loads(get_property(fen_settings_str))
+	except: settings_dict = make_settings_dict()
+	if settings_dict is None or setting_id not in settings_dict:
+		settings_dict = get_setting_fallback(setting_id)
+		if not get_property(suppress_sett_dict_prop) == 'true':
+			make_settings_dict()
+			make_window_properties()
+	value = settings_dict.get(setting_id, '')
+	if value == '':
+		if fallback is None: return value
+		return fallback
+	return value
 
 def get_setting_fallback(setting_id):
-    return {setting_id: addon().getSetting(setting_id)}
+	return {setting_id: addon().getSetting(setting_id)}
 
 def make_settings_dict():
-    settings_dict = None
-    clear_property(fen_settings_str)
-    if not get_property(suppress_sett_dict_prop) == 'true':
-        from xml.dom.minidom import parse as mdParse
-        try:
-            if not path_exists(userdata_path): make_directories(userdata_path)
-            settings_dict = {}
-            dict_update = settings_dict.update
-            for item in mdParse(user_settings).getElementsByTagName('setting'):
-                setting_id = item.getAttribute('id')
-                try: setting_value = item.firstChild.data
-                except: setting_value = None
-                if setting_value is None: setting_value = ''
-                dict_item = {setting_id: setting_value}
-                dict_update(dict_item)
-            set_property(fen_settings_str, json.dumps(settings_dict))
-        except Exception as e:
-            settings_dict = None
-            set_property(suppress_sett_dict_prop, 'true')
-            logger('error in make_settings_dict', str(e))
-    return settings_dict
+	settings_dict = None
+	clear_property(fen_settings_str)
+	if not get_property(suppress_sett_dict_prop) == 'true':
+		from xml.dom.minidom import parse as mdParse
+		try:
+			if not path_exists(userdata_path): make_directories(userdata_path)
+			settings_dict = {}
+			dict_update = settings_dict.update
+			for item in mdParse(user_settings).getElementsByTagName('setting'):
+				setting_id = item.getAttribute('id')
+				try: setting_value = item.firstChild.data
+				except: setting_value = None
+				if setting_value is None: setting_value = ''
+				dict_item = {setting_id: setting_value}
+				dict_update(dict_item)
+			set_property(fen_settings_str, json.dumps(settings_dict))
+		except Exception as e:
+			settings_dict = None
+			set_property(suppress_sett_dict_prop, 'true')
+			logger('error in make_settings_dict', str(e))
+	return settings_dict
 
 def make_window_properties(override=False):
-    if override: make_properties = True
-    else: make_properties = get_property(props_made_prop) != 'true'
-    if make_properties:
-        __addon__ = addon()
-        set_view_properties()
-        set_property(menu_cache_prop, __addon__.getSetting('kodi_menu_cache'))
-        set_property(highlight_prop, __addon__.getSetting('fen.highlight'))
-        set_property(meta_filter_prop, __addon__.getSetting('meta_filter'))
-        set_property(custom_context_main_menu_prop, __addon__.getSetting('custom_context_main_menu'))
-        set_property(custom_context_prop, __addon__.getSetting('custom_context_menu'))
-        set_property(custom_info_prop, __addon__.getSetting('custom_info_dialog'))
-        set_property(props_made_prop, 'true')
+	if override: make_properties = True
+	else: make_properties = get_property(props_made_prop) != 'true'
+	if make_properties:
+		__addon__ = addon()
+		set_view_properties()
+		set_property(menu_cache_prop, __addon__.getSetting('kodi_menu_cache'))
+		set_property(highlight_prop, __addon__.getSetting('fen.highlight'))
+		set_property(meta_filter_prop, __addon__.getSetting('meta_filter'))
+		set_property(custom_context_main_menu_prop, __addon__.getSetting('custom_context_main_menu'))
+		set_property(custom_context_prop, __addon__.getSetting('custom_context_menu'))
+		set_property(custom_info_prop, __addon__.getSetting('custom_info_dialog'))
+		set_property(props_made_prop, 'true')
 
 def pause_settings_change():
-    set_property(pause_settings_prop, 'true')
+	set_property(pause_settings_prop, 'true')
 
 def unpause_settings_change():
-    clear_property(pause_settings_prop)
+	clear_property(pause_settings_prop)
