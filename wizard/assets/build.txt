@@ -32,7 +32,7 @@ description="בילד סקין FENtastic - לבעלי מכשירים חזקים.
 
 name="Ignore"
 version="3.1.0"
-url="https://kodi7rd.github.io/builds/build20_skin_Estuary_TEST/Kodi20-RealDebrid-Israel-Build-3.1.0.zip"
+url="https://ignore_url.zip"
 minor="https://"
 gui="https://"
 kodi="20.0"
