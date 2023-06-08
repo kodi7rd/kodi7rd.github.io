@@ -1,0 +1,8 @@
+<advancedsettings>
+	<cache>
+		<memorysize>104857600</memorysize> <!-- 100MB Cache (Uses 300MB RAM) -->
+	</cache>
+	<network>
+		<disableipv6>true</disableipv6>
+	</network>
+</advancedsettings>
