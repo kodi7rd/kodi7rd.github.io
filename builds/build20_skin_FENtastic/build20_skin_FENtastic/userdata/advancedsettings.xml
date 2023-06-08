@@ -1,6 +1,7 @@
 <advancedsettings>
 	<cache>
-		<memorysize>104857600</memorysize> <!-- 100MB Cache (Uses 300MB RAM) -->
+		<memorysize>139460608</memorysize> <!-- 133MB Cache (Uses 400MB RAM) -->
+		<readfactor>10</readfactor>
 	</cache>
 	<network>
 		<disableipv6>true</disableipv6>
