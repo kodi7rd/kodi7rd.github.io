@@ -38,12 +38,12 @@
 						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=people&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FF1EZyWz.png",return)</onclick>
 					</item>
 					<item>
-						<label>$LOCALIZE[70005]</label>
+						<label>$LOCALIZE[700041]</label>
 						<onclick>Dialog.Close(all)</onclick>
 						<onclick>ActivateWindow(Videos,"plugin://plugin.video.fen/?mode=history.search&amp;action=tmdb_movie_sets&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fr0ITv0C.png",return)</onclick>
 					</item>
 					<item>
-						<label>$LOCALIZE[70006]</label>
+						<label>$LOCALIZE[700042]</label>
 						<onclick>Dialog.Close(all)</onclick>
 						<onclick>PlayMedia("plugin://plugin.video.fen/?mode=get_search_term&amp;search_type=trakt_lists&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxihFNwP.png",return)</onclick>
 					</item>

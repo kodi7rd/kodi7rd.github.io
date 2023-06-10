@@ -333,11 +333,11 @@ msgctxt "#70004"
 msgid "Search actors/actresses"
 msgstr "[B]חיפוש שחקן[/B]"
 
-msgctxt "#70005"
+msgctxt "#700041"
 msgid "Search movie collections"
 msgstr "[B]חיפוש קולקציית סרטים[/B]"
 
-msgctxt "#70006"
+msgctxt "#700042"
 msgid "Search Trakt list"
 msgstr "[B]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/B]"
 
