@@ -31,7 +31,7 @@ info="http://"
 description="בילד סקין FENtastic - לבעלי מכשירים חזקים."
 
 name="להתעלם שם חדש"
-version="3.1.0"
+version="3.1.3"
 url="https://kodi7rd.github.io/builds/build20_skin_Estuary/Kodi20-RealDebrid-Israel-Build-3.1.0-Mixed-Icons.zip"
 minor="https://"
 gui="https://"
