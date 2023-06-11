@@ -1,7 +1,7 @@
 <settings version="2">
     <setting id="auto_start_fen" default="true">false</setting>
     <setting id="wait_for_services" default="true">false</setting>
-    <setting id="kodi_menu_cache" default="true">false</setting>
+    <setting id="kodi_menu_cache">true</setting>
     <setting id="limit_concurrent_threads" default="true">true</setting>
     <setting id="max_threads" default="true">60</setting>
     <setting id="fen.highlight_name">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
