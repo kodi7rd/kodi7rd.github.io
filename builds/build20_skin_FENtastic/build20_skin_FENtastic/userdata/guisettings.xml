@@ -241,7 +241,7 @@
     <setting id="services.devicename">KodiRD-IL</setting>
     <setting id="services.zeroconf" default="true">false</setting>
     <setting id="services.deviceuuid">5a34510b-a951-474b-a859-3d82f27c97aa</setting>
-    <setting id="services.webserver">true</setting>
+    <setting id="services.webserver" default="true">false</setting>
     <setting id="services.webserverport" default="true">8080</setting>
     <setting id="services.webserverauthentication">false</setting>
     <setting id="services.webserverusername" default="true">kodi</setting>
