@@ -319,27 +319,27 @@ msgstr "שידור אינו זמין"
 
 msgctxt "#70001"
 msgid "Search movies"
-msgstr "[B]חיפוש סרט[/B]"
+msgstr "[B][COLOR blue]חיפוש סרט[/COLOR][/B]"
 
 msgctxt "#70002"
 msgid "Search shows"
-msgstr "[B]חיפוש סדרה[/B]"
+msgstr "[B][COLOR blue]חיפוש סדרה[/COLOR][/B]"
 
 msgctxt "#70003"
 msgid "Search by year"
-msgstr "[B]חיפוש לפי שנה[/B]"
+msgstr "[B][COLOR blue]חיפוש לפי שנה[/COLOR][/B]"
 
 msgctxt "#70004"
 msgid "Search actors/actresses"
-msgstr "[B]חיפוש שחקן[/B]"
+msgstr "[B][COLOR blue]חיפוש שחקן[/COLOR][/B]"
 
 msgctxt "#700041"
 msgid "Search movie collections"
-msgstr "[B]חיפוש קולקציית סרטים[/B]"
+msgstr "[B][COLOR blue]חיפוש קולקציית סרטים[/COLOR][/B]"
 
 msgctxt "#700042"
 msgid "Search Trakt list"
-msgstr "[B]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/B]"
+msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
 
 # InfoPanel
 
