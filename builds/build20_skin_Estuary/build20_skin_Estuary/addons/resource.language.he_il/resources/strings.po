@@ -1314,9 +1314,14 @@ msgctxt "#341"
 msgid "Play disc"
 msgstr "נגן דיסק"
 
+# KODI-RD-IL CUSTOM ADDITION:
+
 msgctxt "#342"
 msgid "Movies"
-msgstr "סרטים"
+#msgstr "סרטים"
+msgstr "[B]סרטים[/B]"
+
+#######################################
 
 msgctxt "#343"
 msgid "Adjust framerate"
@@ -10766,9 +10771,14 @@ msgctxt "#20342"
 msgid "Movies"
 msgstr "סרטים"
 
+# KODI-RD-IL CUSTOM ADDITION:
+
 msgctxt "#20343"
 msgid "TV shows"
-msgstr "סדרות"
+#msgstr "סדרות"
+msgstr "[B]סדרות[/B]"
+
+#######################################
 
 #. xbmc/settings/dialogs/GUIDialogContentSettings.cpp
 msgctxt "#20344"
