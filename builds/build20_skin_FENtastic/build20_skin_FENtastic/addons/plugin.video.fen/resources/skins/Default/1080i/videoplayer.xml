@@ -28,7 +28,8 @@
                     <width max="1160">auto</width>
                     <height>20</height>
                     <font>font10</font> <!-- FEN_21 -->
-                    <label>[COLOR B3CCCCCC][B]$ADDON[plugin.video.fen 33138][/B][/COLOR]</label>
+                    <textcolor>B3CCCCCC</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.fen 33138][/UPPERCASE]</label>
                 </control>
             </control>
             <control type="group">

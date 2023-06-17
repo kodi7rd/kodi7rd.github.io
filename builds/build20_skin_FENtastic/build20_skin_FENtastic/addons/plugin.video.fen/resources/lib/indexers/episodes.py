@@ -367,7 +367,7 @@ def build_single_episode(list_type, params={}):
 			if include_unwatched != 0:
 				if include_unwatched in (1, 3):
 					try:
-						original_list = trakt_watchlist('watchlist', 'tcshow')
+						original_list = trakt_watchlist('watchlist', 'tvshow')
 						unwatched.extend([{'media_ids': i['media_ids'], 'season': 1, 'episode': 0, 'unwatched': True, 'title': i['title']} \
 									for i in original_list])
 					except: pass

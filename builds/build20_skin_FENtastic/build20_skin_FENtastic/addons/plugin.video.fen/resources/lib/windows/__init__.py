@@ -55,7 +55,7 @@ def download_custom_xmls():
 	try:
 		from modules.utils import download_github_zip
 		remove_custom_xmls()
-		success = download_github_zip('custom_skins', translate_path(custom_skin_path))
+		success = download_github_zip('custom_skins', 'custom_skins', translate_path(custom_skin_path))
 		return success
 	except: return False
 

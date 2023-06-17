@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from caches.main_cache import main_cache
 from modules import kodi_utils
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 add_dir, add_items, set_content, end_directory, kodi_version = kodi_utils.add_dir, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.kodi_version
 ls, sys, build_url, make_listitem, get_icon = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.get_icon

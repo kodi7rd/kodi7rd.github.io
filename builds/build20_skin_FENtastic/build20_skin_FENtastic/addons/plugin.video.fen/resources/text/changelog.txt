@@ -1,5 +1,16 @@
 [B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.1.16[/B][/COLOR]
+- Added 'basic', 'material_design', 'webcolors', 'rainbow' color palettes to the color chooser in Fen. Can be changed using the Choose Palette button.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.14/15[/B][/COLOR]
+- Quick addition of a direct search path that skins (if supported) can use to access "People" search results in Fen: "plugin://plugin.video.fen/?mode=person_direct.search&amp;query="
+
+[COLOR dodgerblue][B]Version 3.1.13[/B][/COLOR]
+- Added Navigation->Content->"Watched (Still Airing) TV Shows Location" setting. Choose between "Watched", "In Progress" or "Both". Decides where watched tv shows that will have future episodes airing will be placed.
+- Changes to resolving code, as well as autoplay next episode and autoscrape next episode code. As a byproduct of the changes, once the window notification appears for either, Fen will mark that episode as fully watched. Independent of the current progress of the episode.
+- Other changes/fixes.
 
 [COLOR dodgerblue][B]Version 3.1.12[/B][/COLOR]
 - Added "Check Accounts Status on Startup" in Provider Accounts settings tab. Enable this to get a dialog on startup when your premium accounts are close to or have run out of days remaining. Default is OFF.

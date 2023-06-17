@@ -51,12 +51,6 @@ class EpisodeTools:
 		except: url_params = 'error'
 		return url_params
 
-	def auto_nextep(self):
-		url_params = self.get_next_episode_info()
-		if url_params == 'error': return notification('%s %s' % (ls(33041), ls(32574)), 3000)
-		elif url_params == 'no_next_episode': return
-		return Sources().playback_prep(url_params)
-
 	def get_random_episode(self, continual=False, first_run=True):
 		try:
 			meta_user_info, adjust_hours, current_date = settings.metadata_user_info(), settings.date_offset(), get_datetime()
@@ -97,6 +91,12 @@ class EpisodeTools:
 				url_params['play_type'] = 'random_continual'
 		except: url_params = 'error'
 		return url_params
+
+	def auto_nextep(self):
+		url_params = self.get_next_episode_info()
+		if url_params == 'error': return notification('%s %s' % (ls(33041), ls(32574)), 3000)
+		elif url_params == 'no_next_episode': return
+		return Sources().playback_prep(url_params)
 
 	def play_random(self):
 		url_params = self.get_random_episode()

@@ -109,7 +109,7 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 		try: year = str(data_get('release_date').split('-')[0])
 		except: year = ''
 		try: duration = int(data_get('runtime', '90') * 60)
-		except: duration = 90 * 60
+		except: duration = 0
 		try: genre = ', '.join([i['name'] for i in data_get('genres')])
 		except: genre == []
 		rootname = '%s (%s)' % (title, year)
@@ -269,7 +269,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		try: year = str(data_get('first_air_date').split('-')[0]) or ''
 		except: year = ''
 		try: duration = min(data_get('episode_run_time'))*60
-		except: duration = 30*60
+		except: duration = 0
 		try: genre = ', '.join([i['name'] for i in data_get('genres')])
 		except: genre = []
 		rootname = '%s (%s)' % (title, year)

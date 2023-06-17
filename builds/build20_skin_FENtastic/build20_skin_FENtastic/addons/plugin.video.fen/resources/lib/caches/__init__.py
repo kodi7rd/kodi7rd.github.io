@@ -71,7 +71,8 @@ def check_databases():
     dbcon.close()
     
     ############KODI-RD-IL###################
-    db_utils.clear_fen_providers_db()
+    # clear_fen_providers_db Commented - not neccesary
+    #db_utils.clear_fen_providers_db()
     db_utils.clear_hebrew_subtitles_db_cache()
     #########################################
 

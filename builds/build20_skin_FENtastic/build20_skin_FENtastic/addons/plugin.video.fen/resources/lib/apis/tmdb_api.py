@@ -13,10 +13,30 @@ tvshows_append = 'external_ids,videos,credits,content_ratings,alternative_titles
 timeout = 20.0
 session = make_session(base_url)
 
-def tmdb_keyword_id(query):
-	string = 'tmdb_keyword_id_%s' % query
+def tmdb_keywords_by_query(query):
+	string = 'tmdb_keywords_by_query_%s' % query
 	url = '%s/search/keyword?api_key=%s&query=%s' % (base_url, tmdb_api_key(), query)
 	return cache_object(get_tmdb, string, url, expiration=EXPIRY_1_WEEK)
+
+def tmdb_movie_keywords(tmdb_id):
+	string = 'tmdb_movie_keywords_%s' % tmdb_id
+	url = '%s/movie/%s/keywords?api_key=%s' % (base_url, tmdb_id, tmdb_api_key())
+	return cache_object(get_tmdb, string, url, expiration=EXPIRY_1_WEEK)
+
+def tmdb_tv_keywords(tmdb_id):
+	string = 'tmdb_tv_keywords_%s' % tmdb_id
+	url = '%s/tv/%s/keywords?api_key=%s' % (base_url, tmdb_id, tmdb_api_key())
+	return cache_object(get_tmdb, string, url, expiration=EXPIRY_1_WEEK)
+
+def tmdb_movie_keyword_results(tmdb_id, page_no):
+	string = 'tmdb_movie_keyword_results_%s' % page_no
+	url = '%s/discover/movie?api_key=%s&language=en-US&with_keywords=%s&page=%s' % (base_url, tmdb_api_key(), tmdb_id, page_no)
+	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
+
+def tmdb_tv_keyword_results(tmdb_id, page_no):
+	string = 'tmdb_tv_keyword_results_%s' % page_no
+	url = '%s/discover/tv?api_key=%s&language=en-US&with_keywords=%s&page=%s' % (base_url, tmdb_api_key(), tmdb_id, page_no)
+	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
 def tmdb_company_id(query):
 	string = 'tmdb_company_id_%s' % query
@@ -139,10 +159,9 @@ def tmdb_movies_companies(company_id, page_no):
 							% (base_url, tmdb_api_key(), company_id, page_no)
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
-def tmdb_movies_reviews(tmdb_id):
-	string = 'tmdb_movies_reviews_%s' % tmdb_id
-	url = '%s/movie/%s/reviews?api_key=%s' % (base_url, tmdb_id, tmdb_api_key())
-	return cache_object(get_tmdb, string, url, json=False, expiration=EXPIRY_1_WEEK)
+def tmdb_movies_reviews(tmdb_id, page_no):
+	url = '%s/movie/%s/reviews?api_key=%s&page=%s' % (base_url, tmdb_id, tmdb_api_key(), page_no)
+	return get_tmdb(url).json()
 
 def tmdb_tv_discover(query, page_no):
 	string = url = query % page_no
@@ -226,6 +245,10 @@ def tmdb_tv_search(query, page_no):
 		url = '%s/search/tv?api_key=%s&language=en-US&include_adult=%s&query=%s&page=%s' % (base_url, tmdb_api_key(), meta_filter, query, page_no)
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
+def tmdb_tv_reviews(tmdb_id, page_no):
+	url = '%s/tv/%s/reviews?api_key=%s&page=%s' % (base_url, tmdb_id, tmdb_api_key(), page_no)
+	return get_tmdb(url).json()
+
 def tmdb_popular_people(page_no):
 	string = 'tmdb_popular_people_%s' % page_no
 	url = '%s/person/popular?api_key=%s&language=en-US&page=%s' % (base_url, tmdb_api_key(), page_no)
@@ -307,6 +330,32 @@ def get_data(url):
 	data = get_tmdb(url).json()
 	data['results'] = [remove_keys(i, tmdb_dict_removals) for i in data['results']]
 	return data
+
+def get_reviews_data(media_type, tmdb_id):
+	def make_reviews(media_type, tmdb_id):
+		reviews_list, all_data = [], []
+		template = '[B]%02d. %s%s[/B][CR][CR]%s'
+		media_type = 'movie' if media_type in ('movie', 'movies') else 'tv'
+		function = tmdb_movies_reviews if media_type  == 'movie' else tmdb_tv_reviews
+		next_page, total_pages = 1, 1
+		while next_page <= total_pages:
+			data = function(tmdb_id, next_page)
+			all_data += data['results']
+			total_pages = data['total_pages']
+			next_page = data['page'] + 1
+		if all_data:
+			for count, item in enumerate(all_data, 1):
+				try:
+					user = item['author'].upper()
+					rating = item['author_details'].get('rating')
+					if rating: rating = ' - %s/10' % str(rating).split('.')[0]
+					else: rating = ''
+					content = template % (count, user, rating, item['content'])
+					reviews_list.append(content)
+				except: pass
+		return reviews_list
+	string, url = 'tmdb_%s_reviews_%s' % (media_type ,tmdb_id), [media_type, tmdb_id]
+	return cache_object(make_reviews, string, url, json=False, expiration=EXPIRY_1_WEEK)
 
 def get_tmdb_api(tmdb_api=None):
 	return tmdb_api or tmdb_api_key()

@@ -123,7 +123,7 @@ class Discover:
 		keyword = dialog.input(heading_base % (heading % ls(32657)))
 		if keyword:
 			try:
-				result = tmdb_api.tmdb_keyword_id(keyword)['results']
+				result = tmdb_api.tmdb_keywords_by_query(keyword)['results']
 				keywords_choice = self._multiselect_dialog(heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
 				if keywords_choice != None:
 					for i in keywords_choice:

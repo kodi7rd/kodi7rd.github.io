@@ -341,7 +341,6 @@ class source:
         except: pass
         self.progress_dialog = None
 
-
     def _quality_length(self, items, quality):
         return len([i for i in items if i['quality'] == quality])
 

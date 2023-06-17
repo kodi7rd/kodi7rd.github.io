@@ -239,7 +239,7 @@ def media_artwork_choice(meta, changed_artwork=False):
 		all_images = [{k: [i for i in v if 'image.tmdb' in i] for k, v in all_images.items()}][0]
 	if all(i == [] for i in all_images.values()): return notification(33069, 2000)
 	kwargs = {'images': all_images, 'meta': meta}
-	custom_images = open_window(('windows.artwork_chooser', 'SelectArtwork'), 'artwork_chooser.xml', **kwargs)
+	custom_images = open_window(('windows.artwork', 'SelectArtwork'), 'artwork.xml', **kwargs)
 	if custom_images:
 		from caches.meta_cache import metacache
 		for image_type, image in custom_images.items(): meta[image_type] = image
@@ -306,7 +306,7 @@ def imdb_keywords_choice(media_type, imdb_id, poster):
 	list_items = [{'line1': i, 'icon': poster} for i in keywords_info]
 	kwargs = {'items': json.dumps(list_items), 'enable_context_menu': 'true', 'media_type': media_type}
 	hide_busy_dialog()
-	return select_dialog([{'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': i, 'media_type': media_type} for i in keywords_info], **kwargs)
+	return select_dialog([{'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': i} for i in keywords_info], **kwargs)
 
 def imdb_videos_choice(videos, poster):
 	try: videos = json.loads(videos)
@@ -557,7 +557,7 @@ def extras_lists_choice(params={}):
 	try: preselect = [fl.index(i) for i in extras_enabled_menus()]
 	except: preselect = []
 	kwargs = {'items': json.dumps(dl), 'preselect': preselect}
-	selection = open_window(('windows.extras', 'ExtrasChooser'), 'extras_chooser.xml', **kwargs)
+	selection = open_window(('windows.extras', 'ExtrasChoice'), 'extras_choice.xml', **kwargs)
 	if selection  == []: return set_setting('extras.enable_menus', 'noop')
 	elif selection == None: return
 	selection = [str(fl[i]) for i in selection]
@@ -682,7 +682,7 @@ def results_format_choice(params={}):
 					('Rows',                 img_url % '44OzIVW'),
 					('WideList',                 img_url % '9oIDKtL')
 					]
-	choice = open_window(('windows.sources', 'SourcesChooser'), 'sources_chooser.xml', xml_choices=xml_choices)
+	choice = open_window(('windows.sources', 'SourcesChoice'), 'sources_choice.xml', xml_choices=xml_choices)
 	if choice: set_setting('results.list_format', choice)
 
 def set_subtitle_choice():
@@ -755,7 +755,7 @@ def highlight_color_choice(params={}):
 		set_property(highlight_prop, chosen_color)
 
 def color_choice(params):
-	return open_window(('windows.color_chooser', 'SelectColor'), 'color_chooser.xml', default_setting=params.get('default_setting', None))
+	return open_window(('windows.color', 'SelectColor'), 'color.xml', default_setting=params.get('default_setting', None))
 
 def meta_language_choice(params={}):
 	from modules.meta_lists import meta_languages
@@ -802,17 +802,18 @@ def external_scrapers_choice(params={}):
 	all_scrapers_base = '[COLOR %s]%s [/COLOR]' % (all_color, all_scrapers_string.upper())
 	debrid_scrapers_base = '[COLOR %s]%s [/COLOR]' % (hosters_color, hosters_scrapers_string.upper())
 	torrent_scrapers_base = '[COLOR %s]%s [/COLOR]' % (torrent_color, torrent_scrapers_string.upper())
-	tools_menu = \
-		[(all_scrapers_base, fs_default_string, {'mode': 'set_default_scrapers'}),
-		(all_scrapers_base, enable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'true'}),
-		(all_scrapers_base, disable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'false'}),
-		(all_scrapers_base, enable_disable_string_base % '', {'mode': 'enable_disable', 'folder': 'all'}),
-		(debrid_scrapers_base, enable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'true'}),
-		(debrid_scrapers_base, disable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'false'}),
-		(debrid_scrapers_base, enable_disable_string_base % hosters_string, {'mode': 'enable_disable', 'folder': 'hosters'}),
-		(torrent_scrapers_base, enable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'true'}),
-		(torrent_scrapers_base, disable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'false'}),
-		(torrent_scrapers_base, enable_disable_string_base % torrent_string, {'mode': 'enable_disable', 'folder': 'torrents'})]
+	tools_menu = [
+					(all_scrapers_base, fs_default_string, {'mode': 'set_default_scrapers'}),
+					(all_scrapers_base, enable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'true'}),
+					(all_scrapers_base, disable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'false'}),
+					(all_scrapers_base, enable_disable_string_base % '', {'mode': 'enable_disable', 'folder': 'all'}),
+					(debrid_scrapers_base, enable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'true'}),
+					(debrid_scrapers_base, disable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'false'}),
+					(debrid_scrapers_base, enable_disable_string_base % hosters_string, {'mode': 'enable_disable', 'folder': 'hosters'}),
+					(torrent_scrapers_base, enable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'true'}),
+					(torrent_scrapers_base, disable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'false'}),
+					(torrent_scrapers_base, enable_disable_string_base % torrent_string, {'mode': 'enable_disable', 'folder': 'torrents'})
+				]
 	list_items = [{'line1': item[0], 'line2': item[1]} for item in tools_menu]
 	kwargs = {'items': json.dumps(list_items), 'multi_line': 'true', 'narrow_window': 'true'}
 	chosen_tool = select_dialog(tools_menu, **kwargs)

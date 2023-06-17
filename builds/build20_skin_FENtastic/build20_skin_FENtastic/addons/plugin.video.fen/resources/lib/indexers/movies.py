@@ -267,8 +267,8 @@ class Movies:
 			else: listitem.setInfo('video', {'mediatype': 'movie', 'plot': plot})
 			listitem.setLabel(title)
 			listitem.addContextMenuItems(cm)
-			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart,
-							'clearlogo': clearlogo, 'landscape': landscape, 'thumb': landscape, 'discart': discart, 'keyart': keyart})
+			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'landscape': landscape,
+							'thumb': landscape, 'discart': discart, 'keyart': keyart})
 			listitem.setProperty('fen.sort_order', string(item_position))
 			listitem.setProperty('fen.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': poster}))
 			self.append((url, listitem, True))

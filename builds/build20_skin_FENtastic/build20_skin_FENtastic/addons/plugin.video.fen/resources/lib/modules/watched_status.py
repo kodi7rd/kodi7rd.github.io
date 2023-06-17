@@ -9,7 +9,7 @@ from modules.utils import get_datetime, adjust_premiered_date, sort_for_article,
 ls, database, notification, kodi_refresh = kodi_utils.local_string, kodi_utils.database, kodi_utils.notification, kodi_utils.kodi_refresh
 sleep, progressDialogBG, Thread, get_video_database_path = kodi_utils.sleep, kodi_utils.progressDialogBG, kodi_utils.Thread, kodi_utils.get_video_database_path
 watched_indicators_function, lists_sort_order, ignore_articles = settings.watched_indicators, settings.lists_sort_order, settings.ignore_articles
-date_offset, metadata_user_info = settings.date_offset, settings.metadata_user_info
+date_offset, metadata_user_info, tv_progress_location = settings.date_offset, settings.metadata_user_info, settings.tv_progress_location
 WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
 finished_show_check = ('Ended', 'Canceled')
@@ -161,11 +161,12 @@ def get_in_progress_tvshows(dummy_arg, page_no):
 		watched_status = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))
 		status = meta.get('status', '')
 		if watched_status[0] == 0: data_append(item)
-		elif status not in finished_show_check: data_append(item)
+		elif include_watched_airing and status not in finished_show_check: data_append(item)
 	data, duplicates = [], set()
 	data_append, duplicates_add = data.append, duplicates.add
 	watched_indicators = watched_indicators_function()
 	meta_user_info = metadata_user_info()
+	include_watched_airing = tv_progress_location() in (1,2)
 	watched_info = get_watched_info_tv(watched_indicators)
 	watched_info.sort(key=lambda x: (x[0], x[4]), reverse=True)
 	prelim_data = [{'media_id': i[0], 'title': i[3], 'last_played': i[4]} for i in watched_info if not (i[0] in duplicates or duplicates_add(i[0]))]
@@ -197,13 +198,14 @@ def get_watched_items(media_type, page_no):
 			meta = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
 			watched_status = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))
 			status = meta.get('status', '')
-			if watched_status[0] == 1 and status in finished_show_check: data_append(item)
+			if watched_status[0] == 1:
+				if exclude_still_airing and status not in finished_show_check: return
+				data_append(item)
 		watched_info = get_watched_info_tv(watched_indicators)
 		meta_user_info = metadata_user_info()
-		duplicates = set()
-		duplicates_add = duplicates.add
-		data = []
-		data_append = data.append
+		exclude_still_airing = tv_progress_location() == 1
+		duplicates, data = set(), []
+		duplicates_add, data_append = duplicates.add, data.append
 		prelim_data = [{'media_id': i[0], 'title': i[3], 'last_played': i[4]} for i in watched_info if not (i[0] in duplicates or duplicates_add(i[0]))]
 		threads = list(make_thread_list(_process, prelim_data))
 		[i.join() for i in threads]

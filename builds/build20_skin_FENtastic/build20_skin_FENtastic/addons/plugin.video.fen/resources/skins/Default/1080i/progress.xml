@@ -44,7 +44,8 @@
                     <font>font10</font> <!-- FEN_21 -->
                     <align>left</align>
                     <aligny>bottom</aligny>
-                    <label>[COLOR B3CCCCCC][B]$ADDON[plugin.video.fen 33138][/B][/COLOR]</label>
+                    <textcolor>B3CCCCCC</textcolor>
+                    <label>[UPPERCASE]$ADDON[plugin.video.fen 33138][/UPPERCASE]</label>
                 </control>
                 <control type="image" id="200">
                     <left>640</left>

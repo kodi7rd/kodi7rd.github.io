@@ -82,7 +82,7 @@
                     <width>530</width>
                     <height>70</height>
                     <orientation>horizontal</orientation>
-                    <itemgap>20</itemgap>
+                    <itemgap>10</itemgap>
                     <control type="button" id="10">
                         <description>Close</description>
                         <width>160</width>
@@ -133,7 +133,7 @@
                     <width>530</width>
                     <height>70</height>
                     <orientation>horizontal</orientation>
-                    <itemgap>20</itemgap>
+                    <itemgap>10</itemgap>
                     <control type="button" id="10">
                         <description>Now</description>
                         <width>160</width>

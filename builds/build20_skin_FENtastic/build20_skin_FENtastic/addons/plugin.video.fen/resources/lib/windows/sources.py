@@ -401,8 +401,7 @@ class SourcesPlayback(BaseDialog):
         self.resume_choice = controlID == 10
 
     def onAction(self, action):
-        if action in self.closing_actions:
-            self.is_canceled = True
+        if action in self.closing_actions: self.is_canceled = True
         elif action == self.right_action and self.window_mode == 'resolver': self.skip_resolve = True
 
     def iscanceled(self):
@@ -432,18 +431,18 @@ class SourcesPlayback(BaseDialog):
         self.setProperty('enable_busy_spinner', toggle)
 
     def set_scraper_properties(self):
-        self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-        self.title, self.year, self.genre = self.meta_get('title'), string(self.meta_get('year')), self.meta_get('genre', '')
-        self.poster = self.meta_get('custom_poster') or self.meta_get(self.poster_main) or self.meta_get(self.poster_backup) or empty_poster
-        self.fanart = self.meta_get('custom_fanart') or self.meta_get(self.fanart_main) or self.meta_get(self.fanart_backup) or addon_fanart
-        self.clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or ''
+        poster_main, poster_backup, fanart_main, fanart_backup, clearlogo_main, clearlogo_backup = get_art_provider()
+        title, year, genre = self.meta_get('title'), string(self.meta_get('year')), self.meta_get('genre', '')
+        poster = self.meta_get('custom_poster') or self.meta_get(poster_main) or self.meta_get(poster_backup) or empty_poster
+        fanart = self.meta_get('custom_fanart') or self.meta_get(fanart_main) or self.meta_get(fanart_backup) or addon_fanart
+        clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(clearlogo_main) or self.meta_get(clearlogo_backup) or ''
         self.setProperty('window_mode', self.window_mode)
-        self.setProperty('title', self.title)
-        self.setProperty('fanart', self.fanart)
-        self.setProperty('clearlogo', self.clearlogo)
-        self.setProperty('year', self.year)
-        self.setProperty('poster', self.poster)
-        self.setProperty('genre', self.genre)
+        self.setProperty('title', title)
+        self.setProperty('fanart', fanart)
+        self.setProperty('clearlogo', clearlogo)
+        self.setProperty('year', year)
+        self.setProperty('poster', poster)
+        self.setProperty('genre', genre)
         self.setProperty('flag_highlight', self.get_setting('scraper_flag_identify_colour', 'FF7C7C7C'))
         self.setProperty('result_highlight', self.get_setting('scraper_result_identify_colour', 'FFFFFFFF'))
 
@@ -525,7 +524,7 @@ class SourcesInfo(BaseDialog):
         self.setProperty('provider_icon', provider_path)
         self.setProperty('quality_icon', quality_path)
 
-class SourcesChooser(BaseDialog):
+class SourcesChoice(BaseDialog):
     def __init__(self, *args, **kwargs):
         BaseDialog.__init__(self, args)
         self.window_id = 5001

@@ -3806,11 +3806,11 @@ msgid "[B]Browse...[/B]"
 msgstr ""
 
 msgctxt "#33138"
-msgid "Press BACK to Exit"
+msgid "Press [B]BACK[/B] to Exit"
 msgstr ""
 
 msgctxt "#33139"
-msgid "Press RIGHT to Skip"
+msgid "Press [B]RIGHT[/B] to Skip"
 msgstr ""
 
 msgctxt "#33140"
@@ -3863,4 +3863,24 @@ msgstr ""
 
 msgctxt "#33152"
 msgid "Restart Fen Services"
+msgstr ""
+
+msgctxt "#33153"
+msgid "Watched (Still Airing) TV Shows Location"
+msgstr ""
+
+msgctxt "#33154"
+msgid "Watched"
+msgstr ""
+
+msgctxt "#33155"
+msgid "In Progress"
+msgstr ""
+
+msgctxt "#33156"
+msgid "Enter Value"
+msgstr ""
+
+msgctxt "#33157"
+msgid "Choose Palette"
 msgstr ""

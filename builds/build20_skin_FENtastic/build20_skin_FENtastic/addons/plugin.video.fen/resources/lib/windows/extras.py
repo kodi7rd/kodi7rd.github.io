@@ -52,7 +52,7 @@ parentsguide_inputs = {'Sex & Nudity': (ls(32990), get_icon('sex_nudity')), 'Vio
 						'Frightening & Intense Scenes': (ls(32994), get_icon('genre_horror'))}
 meta_ratings_values = (('Meta', 'metascore', 1), ('Tom/Critic', 'tomatometer', 2), ('Tom/User', 'tomatousermeter', 3), ('IMDb', 'imdb', 4), ('TMDb', 'tmdb', 5))
 ratings_null = ('', '%')
-_images = Images()
+_images = Images().run
 
 class Extras(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -136,12 +136,12 @@ class Extras(BaseDialog):
 			elif self.control_id in imdb_list_ids:
 				if self.control_id == parentsguide_id:
 					if not chosen_var: return
-					self.show_text_media(chosen_var)
+					self.show_text_media(text=chosen_var)
 				else:
-					end_index = self.show_text_media_list(chosen_var)
+					end_index = self.show_text_media(text=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id))
 					self.select_item(self.control_id, end_index)
 			elif self.control_id in art_ids:
-				end_index = _images.run({'mode': 'slideshow_image', 'all_images': self.get_attribute(self, chosen_var), 'current_index': self.get_position(self.control_id)})
+				end_index = _images({'mode': 'slideshow_image', 'all_images': self.get_attribute(self, chosen_var), 'current_index': self.get_position(self.control_id)})
 				self.select_item(self.control_id, end_index)
 			else: return
 
@@ -197,7 +197,6 @@ class Extras(BaseDialog):
 
 	def make_reviews(self):
 		if not reviews_id in self.enabled_lists: return
-		from modules.utils import jsondate_to_datetime
 		def builder():
 			for item in self.all_reviews:
 				try:
@@ -536,12 +535,8 @@ class Extras(BaseDialog):
 			return False
 		except: return True
 
-	def show_text_media(self, text='', poster=None):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text or self.plot, poster=poster or self.poster)
-
-	def show_text_media_list(self, chosen_var):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media_list.xml',
-								items=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id), poster=self.poster)
+	def show_text_media(self, text='', poster=None, current_index=None):
+		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text or self.plot, poster=poster or self.poster, current_index=current_index)
 
 	def tvshow_browse(self):
 		close_all_dialog()
@@ -572,11 +567,11 @@ class Extras(BaseDialog):
 		self.close()
 
 	def show_images(self):
-		return _images.run({'mode': 'imdb_image_results', 'imdb_id': self.imdb_id, 'media_title': self.rootname, 'page_no': 1, 'rolling_count_list': [0]})
+		return _images({'mode': 'imdb_image_results', 'imdb_id': self.imdb_id, 'media_title': self.rootname, 'page_no': 1, 'rolling_count_list': [0]})
 
 	def show_extrainfo(self, media_type=None, meta=None, poster=None):
 		text = media_extra_info({'media_type': media_type or self.media_type, 'meta': meta or self.meta})
-		return self.show_text_media(text, poster)
+		return self.show_text_media(text=text, poster=poster)
 
 	def show_genres(self):
 		if not self.genre: return
@@ -684,42 +679,39 @@ class Extras(BaseDialog):
 class ShowTextMedia(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
-		self.poster = kwargs.get('poster')
-		self.text = kwargs.get('text', None)
-		self.items = kwargs.get('items', None)
+		self.text = kwargs.get('text')
 		self.position = kwargs.get('current_index', None)
-		if self.items: self.make_menu()
-		self.window_id = 2060
-		self.set_properties()
-
-	def onInit(self):
-		if self.items:
-			self.add_items(self.window_id, self.item_list)
-			self.select_item(self.window_id, self.position)
-		self.setFocusId(self.window_id)
+		self.text_is_list = isinstance(self.text, list)
+		self.len_text = len(self.text) if self.text_is_list else None
+		self.window_id = 2061
+		self.setProperty('poster', kwargs.get('poster'))
 
 	def run(self):
 		self.doModal()
-		if self.items: return self.position
+		return self.position
+
+	def onInit(self):
+		self.update_text()
+		self.setFocusId(self.window_id)	
 
 	def onAction(self, action):
-		if action in self.closing_actions:
-			if self.items: self.position = self.get_position(self.window_id)
-			self.close()
+		if action in self.closing_actions: return self.close()
+		if self.text_is_list:
+			if action == self.left_action: return self.update_text('previous')
+			if action == self.right_action: return self.update_text('next')
 
-	def make_menu(self):
-		def builder():
-			for item in self.items:
-				listitem = self.make_listitem()
-				listitem.setProperty('text', item)
-				yield listitem
-		self.item_list = list(builder())
+	def update_text(self, direction=None):
+		if direction == 'previous': self.position = self.position - 1 if self.position > 0 else self.len_text - 1
+		elif direction == 'next': self.position = 0 if self.position == self.len_text - 1 else self.position + 1
+		self.set_text(2001, self.text[self.position] if self.text_is_list else self.text)
+		if self.text_is_list:
+			if self.position == 0: self.setProperty('previous_display', 'false')
+			else: self.setProperty('previous_display', 'true')
+			if self.position == self.len_text - 1: self.setProperty('next_display', 'false')
+			else: self.setProperty('next_display', 'true')
+		else: self.setProperty('previous_display', 'false'), self.setProperty('next_display', 'false')
 
-	def set_properties(self):
-		if not self.items: self.setProperty('text', self.text)
-		self.setProperty('poster', self.poster)
-
-class ExtrasChooser(BaseDialog):
+class ExtrasChoice(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
 		self.window_id = 5001

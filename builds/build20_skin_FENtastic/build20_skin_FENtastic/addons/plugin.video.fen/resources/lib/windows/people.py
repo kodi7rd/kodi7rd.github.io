@@ -18,6 +18,7 @@ gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: 'N/A'}
 more_from_movies_id, more_from_tvshows_id, trivia_id, videos_id, more_from_director_id = 2050, 2051, 2052, 2053, 2054
 tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
 empty_check = (None, 'None', '')
+_images = Images().run
 
 class People(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -54,12 +55,12 @@ class People(BaseDialog):
 		self.control_id = None
 		if controlID in button_ids:
 			if controlID == 10:
-				Images().run({'mode': 'people_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id, 'actor_imdb_id': self.person_imdb_id,
+				_images({'mode': 'people_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id, 'actor_imdb_id': self.person_imdb_id,
 							'actor_image': self.person_image, 'page_no': 1, 'rolling_count_list': [0]})
 			elif controlID == 11:
-				Images().run({'mode': 'people_tagged_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id})
+				_images({'mode': 'people_tagged_image_results', 'actor_name': self.person_name, 'actor_id': self.person_id})
 			elif controlID == 50:
-				self.show_text_media(self.person_biography)
+				self.show_text_media(text=self.person_biography)
 		else: self.control_id = controlID
 
 	def onAction(self, action):
@@ -87,7 +88,7 @@ class People(BaseDialog):
 				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': media_type, 'is_widget': self.is_widget, 'stacked': 'true'}
 				return window_manager(self)
 			elif self.control_id == trivia_id:
-				end_index = self.show_text_media_list(chosen_var)
+				end_index = self.show_text_media(text=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id))
 				self.select_item(self.control_id, end_index)
 			elif self.control_id == videos_id:
 				thumb = chosen_listitem.getProperty('thumbnail')
@@ -119,7 +120,7 @@ class People(BaseDialog):
 
 	def show_extrainfo(self, media_type, meta, poster):
 		text = dialogs.media_extra_info_choice({'media_type': media_type, 'meta': meta})
-		return self.show_text_media(text, poster)
+		return self.show_text_media(text=text, poster=poster)
 
 	def make_person_data(self):
 		if self.query not in empty_check:
@@ -265,12 +266,8 @@ class People(BaseDialog):
 		present = sorted([i for i in data if i[key] and i not in future], key=lambda x: x[key], reverse=True)
 		return present + future + blank
 
-	def show_text_media(self, text, poster=None):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=poster or self.person_image)
-
-	def show_text_media_list(self, chosen_var):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media_list.xml',
-								items=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id), poster=self.person_image)
+	def show_text_media(self, text='', poster=None, current_index=None):
+		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=poster or self.person_image, current_index=current_index)
 
 	def set_current_params(self, set_starting_position=True):
 		self.current_params = {'mode': 'person_data_dialog', 'query': self.query, 'actor_name': self.person_name, 'actor_image': self.person_image, 'stacked': 'true',

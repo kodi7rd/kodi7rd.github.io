@@ -199,11 +199,6 @@ class CustomActions:
 	def run_custom_action(self, action, window):
 		close_dialog(window, True)
 		run_plugin(action)
-		# count = 0
-		# while get_visibility(window_top_str % window):
-		# 	if count == 5: break
-		# 	self.wait_for_abort(0.25)
-		# 	count += 0.25
 
 class CustomFonts:
 	def run(self):

@@ -25,6 +25,7 @@ def get_search_term(params):
 	close_all_dialog()
 	media_type = params.get('media_type', '')
 	search_type = params.get('search_type', 'media_title')
+	string = None
 	if search_type == 'media_title':
 		mode, action, string = ('build_movie_list', 'tmdb_movies_search', 'movie_queries') if media_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_search', 'tvshow_queries')
 		url_params = {'mode': mode, 'action': action}
