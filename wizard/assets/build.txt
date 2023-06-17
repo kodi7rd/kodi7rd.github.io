@@ -14,7 +14,7 @@ fanart="https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/fanart.jp
 preview="http://"
 adult="no"
 info="http://"
-description="בילד סקין Estuary"
+description="בילד סקין Estuary - מראה פשוט ומהיר"
 
 name="בילד סקין FENtastic - למכשירים חזקים!"
 version="3.1.0"
