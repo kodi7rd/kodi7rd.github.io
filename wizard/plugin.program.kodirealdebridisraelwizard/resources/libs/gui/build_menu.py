@@ -127,19 +127,19 @@ class BuildMenu:
             else:
                 if count21 > 0:
                     state = '+' if CONFIG.SHOW21 == 'false' else '-'
-                    directory.add_file('[B]{0} בילדים לגרסת קודי 21:[/B]'.format(state), {'mode': 'togglesetting',
+                    directory.add_file('[B]{0} בילדים לגרסת קודי 21 ומעלה:[/B]'.format(state), {'mode': 'togglesetting',
                                        'name': 'show21'}, themeit=CONFIG.THEME_YELLOW)
                     if CONFIG.SHOW21 == 'true':
                         self._list_all(match, kodiv=21)
                 if count20 > 0:
                     state = '+' if CONFIG.SHOW20 == 'false' else '-'
-                    directory.add_file('[B]{0} בילדים לגרסת קודי 20:[/B]'.format(state), {'mode': 'togglesetting',
+                    directory.add_file('[B]{0} בילדים לגרסת קודי 20 ומעלה:[/B]'.format(state), {'mode': 'togglesetting',
                                        'name': 'show20'}, themeit=CONFIG.THEME_YELLOW)
                     if CONFIG.SHOW20 == 'true':
                         self._list_all(match, kodiv=20)
                 if count19 > 0:
                     state = '+' if CONFIG.SHOW19 == 'false' else '-'
-                    directory.add_file('[B]{0} בילדים לגרסת קודי 19:[/B]'.format(state), {'mode': 'togglesetting',
+                    directory.add_file('[B]{0} בילדים לגרסת קודי 19 ומעלה:[/B]'.format(state), {'mode': 'togglesetting',
                                        'name': 'show19'}, themeit=CONFIG.THEME_LIMEGREEN)
                     if CONFIG.SHOW19 == 'true':
                         self._list_all(match, kodiv=19)
