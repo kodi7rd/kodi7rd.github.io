@@ -18,9 +18,9 @@
     <setting id="kodion.search.size">0</setting>
     <setting id="kodion.safe.search" default="true">0</setting>
     <setting id="kodion.age.gate" default="true">true</setting>
-    <setting id="kodion.video.quality.mpd" default="true">false</setting>
+    <setting id="kodion.video.quality.mpd">true</setting>
     <setting id="kodion.mpd.videos" default="true">true</setting>
-    <setting id="kodion.mpd.quality.selection" default="true">8</setting>
+    <setting id="kodion.mpd.quality.selection">6</setting>
     <setting id="kodion.mpd.hdr" default="true">false</setting>
     <setting id="kodion.mpd.limit.30" default="true">false</setting>
     <setting id="kodion.mpd.live_streams" default="true">true</setting>
@@ -53,6 +53,7 @@
     <setting id="youtube.folder.switch.user.show" default="true">true</setting>
     <setting id="youtube.folder.sign.out.show" default="true">true</setting>
     <setting id="youtube.folder.settings.show" default="true">true</setting>
+    <setting id="youtube.client.selection" default="true">0</setting>
     <setting id="simple.requests.ssl.verify" default="true">true</setting>
     <setting id="kodion.support.alternative_player" default="true">false</setting>
     <setting id="kodion.alternative_player.web.urls" default="true">false</setting>
