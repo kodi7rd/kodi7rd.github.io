@@ -350,6 +350,36 @@
 			</control>
 		</definition>
 	</include>
+	
+	
+		<include name="MediaLabelFlag">
+		<param name="labelflag">$INFO[Player.Process(VideoFPS)]</param>
+		<param name="freelabel">fps</param>
+		<definition>
+			<control type="group">
+			<visible>!String.IsEmpty($PARAM[flagvisible])</visible>
+			<control type="image">
+				<top>4</top>
+				<left>0</left>
+				<width>120</width>
+				<height>53</height>
+				<texture border="1.1.1.1">flags/flag.png</texture>
+			</control>
+			<control type="label">
+				<top>20</top>
+				<left>0</left>
+				<width>120</width>
+				<height>24</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>font_flag</font>
+				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
+				</control>
+			</control>
+		</definition>
+		</include>
+	
+	
 	<include name="MediaFlags">
 		<param name="infolabel_prefix"></param>
 		<param name="resolution_var">$VAR[ResolutionFlagVar]</param>

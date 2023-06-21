@@ -179,8 +179,8 @@
 						<description>DarkSubs Subtitles Window Button</description>
 						<width>230</width>
 						<height>77</height>
-						<texturenofocus colordiffuse="grey_a">choose_subs.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">choose_subs.png</texturefocus>
+						<texturenofocus colordiffuse="grey_a">kodirdil/choose_subs.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/choose_subs.png</texturefocus>
 						<onup>70046</onup>
 						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
 					</control>
@@ -190,6 +190,24 @@
 						</include>
 						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+					</control>
+					<!-- IMAX: OFF -->
+					<control type="radiobutton" id="700452">
+						<description>script.black.bars.never Toggle OFF</description>
+						<include content="OSDButton">
+							<param name="texture" value="kodirdil/imax/imax_off_white.png"/>
+						</include>
+						<visible>String.IsEqual(Window(10000).Property(blackbarsnever_status), off)</visible>
+						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
+					</control>
+					<!-- IMAX: ON -->
+					<control type="radiobutton" id="700453">
+						<description>script.black.bars.never Toggle ON</description>
+						<include content="OSDButton">
+							<param name="texture" value="kodirdil/imax/imax_on_green.png"/>
+						</include>
+						<visible>String.IsEqual(Window(10000).Property(blackbarsnever_status), on)</visible>
+						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
 					</control>
 					<control type="radiobutton" id="70043">
 						<include content="OSDButton">
@@ -231,6 +249,45 @@
 					</control>
 				</control>
 			</control>
+			
+			
+				<control type="grouplist">
+					<left>0</left>
+					<centertop>115</centertop>
+					<width>850</width>
+					<height>250</height>
+					<align>left</align>
+					<include>Animation_BottomSlide</include>
+					<orientation>horizontal</orientation>
+					<itemgap>5</itemgap>
+					<visible>!Player.ShowInfo</visible>
+					<animation effect="fade" start="0" end="100" time="200" delay="1000">Visible</animation>
+					<include content="MediaFlag">
+					<param name="texture" value="$INFO[VideoPlayer.VideoCodec,flags/videocodec/,.png]" />
+					</include>
+					<include content="MediaFlag">
+					<param name="texture" value="$INFO[VideoPlayer.VideoResolution,flags/videoresolution/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.HdrType,flags/videohdr/,.png]" />
+						<param name="visible" value="!String.IsEmpty(VideoPlayer.HdrType)" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.VideoAspect,flags/aspectratio/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.AudioCodec,flags/audiocodec/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.AudioChannels,flags/audiochannel/,.png]" />
+					</include>
+					<include content="MediaLabelFlag">
+						<param name="labelflag">$VAR[SetLabelflag]</param>
+						<param name="flagvisible">Player.Process(VideoFPS)</param>
+						<param name="freelabel">.fps</param>
+					</include>
+				</control>
+			
 			<control type="group" id="6000">
 				<top>60</top>
 				<animation type="WindowOpen" condition="!Window.IsVisible(fullscreeninfo)" reversible="False">

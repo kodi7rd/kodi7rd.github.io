@@ -117,7 +117,7 @@
 					</control>
 					<control type="textbox">
 						<left>645</left>
-						<top>505</top>
+						<top>515</top>
 						<height>250</height>
 						<right>115</right>
 						<autoscroll time="3000" delay="7000" repeat="5000">true</autoscroll>	
