@@ -432,6 +432,10 @@ msgctxt "#70006"
 msgid "Genre"
 msgstr "[B]ז'אנר[/B]"
 
+msgctxt "#700061"
+msgid "Genre"
+msgstr "ז'אנר:"
+
 msgctxt "#70007"
 msgid "Director"
 msgstr "[B]במאי[/B]"
@@ -469,7 +473,6 @@ msgstr "רענן סקין"
 msgctxt "#70015"
 msgid "Skin settings"
 msgstr "הגדרות סקין"
-
 
 #######################################
 
