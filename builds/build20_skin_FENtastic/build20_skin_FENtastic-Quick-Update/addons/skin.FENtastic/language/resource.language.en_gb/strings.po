@@ -396,7 +396,13 @@ msgstr ""
 
 # KODI-RD-IL CUSTOM ADDITION:
 
-# Search Button
+# Voice Search - ButtonDialogKeyboard.xml
+
+msgctxt "#70000"
+msgid "Voice Search"
+msgstr "חיפוש קולי"
+
+# Search Button - Custom_1107_SearchDialog.xml
 
 msgctxt "#70001"
 msgid "[B][COLOR blue]Search movies[/COLOR][/B]"
@@ -422,7 +428,7 @@ msgctxt "#700042"
 msgid "[B][COLOR blue]Search Trakt list[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
 
-# InfoPanel
+# InfoPanel - Variables.xml
 
 msgctxt "#70005"
 msgid "Released"
@@ -432,9 +438,13 @@ msgctxt "#70006"
 msgid "Genre"
 msgstr "[B]ז'אנר[/B]"
 
+# Poster View Type - Variables.xml
+
 msgctxt "#700061"
-msgid "Genre"
+msgid "Genre:"
 msgstr "ז'אנר:"
+
+# Continue InfoPanel - Variables.xml
 
 msgctxt "#70007"
 msgid "Director"
@@ -456,6 +466,8 @@ msgctxt "#70011"
 msgid "Status"
 msgstr "[B]סטטוס[/B]"
 
+# Episode List View - View_50_List.xml
+
 msgctxt "#70012"
 msgid "Season"
 msgstr "[B]עונה[/B]"
@@ -464,7 +476,7 @@ msgctxt "#70013"
 msgid "Episode"
 msgstr "[B]פרק[/B]"
 
-# Power Button
+# Power Button - DialogButtonMenu.xml
 
 msgctxt "#70014"
 msgid "Reload skin"
@@ -474,7 +486,7 @@ msgctxt "#70015"
 msgid "Skin settings"
 msgstr "הגדרות סקין"
 
-#######################################
+# Continue InfoPanel - Variables.xml
 
 msgctxt "#31080"
 msgid "Ends at"
