@@ -176,7 +176,8 @@
 					<font>font20_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
-					<visible>String.IsEqual(ListItem.DBtype,movie) + !String.IsEmpty(Container($PARAM[id]).ListItem.Property(WatchedProgress)) + !Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)</visible>
+					<visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)</visible>
+					<visible>Container.Content(movies)</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
 				</control>
 			</control>
@@ -240,7 +241,7 @@
 		</control>
 	</include>
 	
-		<include name="ClearlogoArt">
+	<include name="ClearlogoArt">
 	<param name="top" default="-105"/>
 	<param name="left" default="50%"/>
 		<definition>

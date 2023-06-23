@@ -79,6 +79,16 @@
 		<value condition="ListItem.IsParentFolder">DefaultFolderBackPoster.png</value>
 		<value>$INFO[ListItem.Icon]</value>
 	</variable>
+	
+	  <!--set your label flag -->
+  	<variable name="NoLabelFlagFound">
+	<value>$INFO[Player.Process(VideoFPS)]</value>
+	</variable>
+	
+	<variable name="SetLabelflag">
+	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
+	</variable>
+	
 	<variable name="IconWallThumbVar">
 		<value condition="String.IsEqual(listitem.dbtype,genre) + System.AddonIsEnabled(resource.images.moviegenreicons.transparent)">$INFO[ListItem.Label,resource://resource.images.moviegenreicons.transparent/,.png]</value>
 		<value condition="String.IsEqual(listitem.dbtype,studio) + System.AddonIsEnabled(resource.images.studios.white)">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</value>
@@ -493,12 +503,6 @@
 		<value condition="ListItem.HasReminder">icons/pvr/timers/bell.png</value>
 		<value>icons/pvr/timers/recording.png</value>
   </variable>
-  
-  <!--set your label flag -->
-  	<variable name="NoLabelFlagFound">
-	<value>$INFO[Player.Process(VideoFPS)]</value>
-	</variable>
-  
 	<!-- Breadcrumbs -->
 	<variable name="BreadcrumbsVideoVar">
 		<value condition="Container.Content(movies) | String.StartsWith(container.folderpath,library://video/movies/) | String.StartsWith(container.folderpath,videodb://movies)">$LOCALIZE[20342]</value>
@@ -689,7 +693,7 @@
 		<value condition="!String.IsEmpty(ListItem.Art(clearlogo))">$INFO[ListItem.Art(clearlogo)]</value>
 		<value>$INFO[ListItem.Label]</value>
 	</variable>
-
+	
 	<variable name="HomeInfoPanel">
 		<!-- COLLECTIONS -->
 		<value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
@@ -751,11 +755,5 @@
 	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונה</value>
 	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונות</value>
 	</variable>
-	
-	<variable name="SetLabelflag">
-	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
-	</variable>
-
-	
 	
 </includes>
