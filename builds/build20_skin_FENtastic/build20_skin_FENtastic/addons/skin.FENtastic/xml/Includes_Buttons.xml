@@ -346,4 +346,33 @@
 			</control>
 		</focusedlayout>
 	</include>
+	
+	<include name="SetOfOnToggleRadio">
+	<param name="padWH" default="70"/>
+	<param name="alignPadXY" default="left"/>
+	<param name="label" default="ON"/>
+	<param name="altlabel" default="OFF"/>
+	<param name="textcolor" default="white"/>
+	<param name="focusedcolor" default="yellow"/>
+	<definition>
+		<top>0</top>
+		<left>0</left>
+		<width>$PARAM[padWH]</width>
+		<height>$PARAM[padWH]</height>
+		<align>$PARAM[alignPadXY]</align>
+		<aligny>$PARAM[alignPadXY]</aligny>
+		<textcolor>$PARAM[textcolor]</textcolor>
+		<label>$PARAM[label]</label>
+		<altlabel>$PARAM[altlabel]</altlabel>
+		<focusedcolor>yellow</focusedcolor>
+		<disabledcolor>cyan</disabledcolor>
+		<textoffsetx>15</textoffsetx>
+		<textoffsety>55</textoffsety>
+		<textwidth>150</textwidth>
+		<font>font_flag</font>
+		<font>font12</font>
+		</definition>
+	</include>
+
+	
 </includes>
