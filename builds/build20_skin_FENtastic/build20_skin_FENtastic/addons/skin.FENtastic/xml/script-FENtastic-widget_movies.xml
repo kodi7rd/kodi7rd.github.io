@@ -8,8 +8,8 @@
             <param name="list_id" value="19010"/>
         </include>
         <include content="WidgetListPoster">
-            <param name="content_path" value="plugin://plugin.video.fen/?name=32458&amp;iconImage=trending&amp;mode=build_movie_list&amp;action=trakt_movies_trending"/>
-            <param name="widget_header" value="[B]סרטים פופולריים[/B]"/>
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32461&amp;iconImage=dvd&amp;mode=build_movie_list&amp;action=tmdb_movies_latest_releases"/>
+            <param name="widget_header" value="[B]סרטים פופולרים[/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="19011"/>
         </include>
