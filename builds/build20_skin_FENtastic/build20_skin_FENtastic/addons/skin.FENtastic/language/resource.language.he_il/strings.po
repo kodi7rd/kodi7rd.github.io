@@ -341,6 +341,22 @@ msgctxt "#700042"
 msgid "[B][COLOR blue]Search Trakt list[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
 
+# Power Button
+
+msgctxt "#70014"
+msgid "Reload skin"
+msgstr "רענן סקין"
+
+msgctxt "#70015"
+msgid "Skin settings"
+msgstr "הגדרות סקין"
+
+# Poster View Type
+
+msgctxt "#700061"
+msgid "Genre:"
+msgstr "ז'אנר:"
+
 # InfoPanel
 
 msgctxt "#70005"
@@ -350,10 +366,6 @@ msgstr "[B]שנת יציאה[/B]"
 msgctxt "#70006"
 msgid "Genre"
 msgstr "[B]ז'אנר[/B]"
-
-msgctxt "#700061"
-msgid "Genre"
-msgstr "ז'אנר:"
 
 msgctxt "#70007"
 msgid "Director"
@@ -382,18 +394,6 @@ msgstr "[B]עונה[/B]"
 msgctxt "#70013"
 msgid "Episode"
 msgstr "[B]פרק[/B]"
-
-# Power Button
-
-msgctxt "#70014"
-msgid "Reload skin"
-msgstr "רענן סקין"
-
-msgctxt "#70015"
-msgid "Skin settings"
-msgstr "הגדרות סקין"
-
-#######################################
 
 msgctxt "#31080"
 msgid "Ends at"
