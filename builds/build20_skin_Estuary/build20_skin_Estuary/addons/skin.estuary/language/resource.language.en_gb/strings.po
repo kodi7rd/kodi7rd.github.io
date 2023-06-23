@@ -422,10 +422,10 @@ msgctxt "#70006"
 msgid "[B][COLOR blue]Search Trakt list[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
 
-# "Poster" View
+# Poster View Type
 
 msgctxt "#700061"
-msgid "Genre"
+msgid "Genre:"
 msgstr "ז'אנר:"
 
 #######################################
