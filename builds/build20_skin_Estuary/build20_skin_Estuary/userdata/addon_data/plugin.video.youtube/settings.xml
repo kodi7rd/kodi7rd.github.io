@@ -18,7 +18,7 @@
     <setting id="kodion.search.size">0</setting>
     <setting id="kodion.safe.search" default="true">0</setting>
     <setting id="kodion.age.gate" default="true">true</setting>
-    <setting id="kodion.video.quality.mpd">true</setting>
+    <setting id="kodion.video.quality.mpd" default="true">false</setting>
     <setting id="kodion.mpd.videos" default="true">true</setting>
     <setting id="kodion.mpd.quality.selection">6</setting>
     <setting id="kodion.mpd.hdr" default="true">false</setting>
