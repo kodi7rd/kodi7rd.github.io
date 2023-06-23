@@ -39,6 +39,7 @@
 	<constant name="list_item_height">75</constant>
 	<expression name="infodialog_active">Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo) | Window.IsVisible(script-embuary-video.xml) | Window.IsVisible(script-embuary-person.xml) | Window.IsVisible(script-embuary-image.xml)</expression>
 	<expression name="sidebar_visible">ControlGroup(9000).HasFocus | Control.HasFocus(6130) | Control.HasFocus(6131)</expression>
+	<expression name="HomeScreenOff">!Window.IsActive(home)</expression>
 	<include name="CommonScrollbars">
 		<param name="bottom_offset">list_bottom_offset</param>
 		<definition>
@@ -183,6 +184,34 @@
 			</control>
 		</definition>
 	</include>
+	
+		<include name="MediaLabelFlag">
+		<param name="labelflag">$INFO[Player.Process(VideoFPS)]</param>
+		<param name="freelabel">fps</param>
+		<definition>
+			<control type="group">
+			<visible>!String.IsEmpty($PARAM[flagvisible])</visible>
+			<control type="image">
+				<top>4</top>
+				<left>0</left>
+				<width>120</width>
+				<height>53</height>
+				<texture border="1.1.1.1">flags/flag.png</texture>
+			</control>
+			<control type="label">
+				<top>20</top>
+				<left>0</left>
+				<width>120</width>
+				<height>24</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<font>font_flag</font>
+				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
+				</control>
+			</control>
+		</definition>
+		</include>
+	
 	<include name="PicsInfoLine">
 		<control type="grouplist">
 			<visible>!String.IsEmpty($PARAM[value])</visible>
@@ -315,25 +344,31 @@
 		</definition>
 	</include>
 	<include name="InfoFlag">
+	<param name="imagesize" default="40"/>
+	<param name="imagetop" default="-3"/>
+	<param name="imageleft" default="0"/>
+	<param name="labelleft" default="40"/>
+	<definition>
 		<control type="group">
 			<width>180</width>
 			<visible>$PARAM[visible]</visible>
 			<control type="image">
-				<top>-3</top>
-				<left>0</left>
-				<width>40</width>
-				<height>40</height>
+				<top>$PARAM[imagetop]</top>
+				<left>$PARAM[imageleft]</left>
+				<width>$PARAM[imagesize]</width>
+				<height>$PARAM[imagesize]</height>
 				<texture colordiffuse="white">$PARAM[icon]</texture>
 			</control>
 			<control type="label">
-				<left>50</left>
-				<width>180</width>
+				<left>$PARAM[labelleft]</left>
+				<width>620</width>
 				<height>35</height>
 				<aligny>center</aligny>
 				<font>font12</font>
 				<label>$PARAM[label]</label>
 			</control>
 		</control>
+	</definition>
 	</include>
 	<include name="MediaFlag">
 		<param name="width">115</param>
@@ -386,12 +421,12 @@
 		<definition>
 			<control type="grouplist">
 				<orientation>horizontal</orientation>
-				<right>20</right>
+				<left>95</left>
 				<top>0</top>
 				<height>70</height>
-				<align>right</align>
-				<itemgap>10</itemgap>
-				<width>1900</width>
+				<align>left</align>
+				<itemgap>20</itemgap>
+				<width>1920</width>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="group">
 					<width>150</width>
@@ -402,26 +437,44 @@
 				</control>
 				<control type="group">
 					<top>10</top>
-					<width>200</width>
-					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Premiered)</visible>
+					<width>260</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.RatingAndVotes) + $EXP[HomeScreenOff]</visible>
 					<include content="InfoFlag">
+						<param name="imagesize">70</param>
+						<param name="imagetop">-20</param>
+						<param name="imageleft">-15</param>
+						<param name="icon" value="kodirdil/poster_view_icons/star.png" />
+						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.RatingAndVotes]" />
+					</include>
+				</control>
+				<control type="group">
+					<top>10</top>
+					<width>180</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Premiered) + $EXP[HomeScreenOff]</visible>
+					<include content="InfoFlag">
+						<param name="imagesize">30</param>
+						<param name="imagetop">0</param>
 						<param name="icon" value="lists/year.png" />
 						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Premiered]" />
 					</include>
 				</control>
 				<control type="group">
-					<width>115</width>
-					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Duration)</visible>
-					<control type="label">
-						<width>115</width>
-						<height>60</height>
-						<align>center</align>
-						<aligny>center</aligny>
-						<label>$INFO[$PARAM[infolabel_prefix]ListItem.Duration]</label>
-						<font>font_flag</font>
-					</control>
-					<include content="MediaFlag">
-						<param name="texture" value="flags/flag.png" />
+					<top>10</top>
+					<width>150</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Duration) + $EXP[HomeScreenOff]</visible>
+					<include content="InfoFlag">
+						<param name="labelleft">45</param>
+						<param name="icon" value="kodirdil/poster_view_icons/clock.png" />
+						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Duration(hh:mm:ss)]" />
+					</include>
+				</control>
+					<control type="group">
+					<top>10</top>
+					<width>180</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Studio) + $EXP[HomeScreenOff]</visible>
+					<include content="InfoFlag">
+						<param name="icon" value="kodirdil/poster_view_icons/network.png" />
+						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Studio]" />
 					</include>
 				</control>
 				<include content="MediaFlag">
@@ -1236,6 +1289,7 @@
 					<texture flipy="true">frame/InfoBar.png</texture>
 				</control>
 				<control type="group">
+					<left>1720</left>
 					<visible>$PARAM[info_visible]</visible>
 					<visible>!System.HasActiveModalDialog</visible>
 					<visible>!Skin.HasSetting(touchmode)</visible>
@@ -1613,4 +1667,21 @@
 			</control>
 		</focusedlayout>
 	</include>
+
+	<!-- MY INCLUDES -->
+	
+	<include name="ToggleButtonObj">
+	<param name="icon" default="imax_off_white.png"/>
+	<param name="focusdiffusecolor" default="cyan"/>
+	<param name="nofocusdiffusecolor" default="ff00e532"/>
+	<param name="altfocusdiffusecolor" default="cyan"/>
+	<param name="altnofocusdiffusecolor" default="white"/>
+	<definition>
+		<texturefocus colordiffuse="$PARAM[focusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</texturefocus>
+		<texturenofocus colordiffuse="$PARAM[nofocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</texturenofocus>
+		<alttexturefocus colordiffuse="$PARAM[altfocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</alttexturefocus>
+		<alttexturenofocus colordiffuse="$PARAM[altnofocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</alttexturenofocus>
+		</definition>
+	</include>
+	
 </includes>

@@ -72,6 +72,16 @@
 		<value condition="ListItem.IsParentFolder">DefaultFolderBackPoster.png</value>
 		<value>$INFO[ListItem.Icon]</value>
 	</variable>
+	
+	  <!--set your label flag -->
+  	<variable name="NoLabelFlagFound">
+	<value>$INFO[Player.Process(VideoFPS)]</value>
+	</variable>
+	
+	<variable name="SetLabelflag">
+	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
+	</variable>
+	
 	<variable name="IconWallThumbVar">
 		<value condition="String.IsEqual(listitem.dbtype,genre) + System.AddonIsEnabled(resource.images.moviegenreicons.transparent)">$INFO[ListItem.Label,resource://resource.images.moviegenreicons.transparent/,.png]</value>
 		<value condition="String.IsEqual(listitem.dbtype,studio) + System.AddonIsEnabled(resource.images.studios.white)">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</value>
@@ -679,10 +689,6 @@
 	<variable name="SeasonCorrectLabel">
 	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונה</value>
 	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונות</value>
-	</variable>
-	
-	<variable name="SetLabelflag">
-	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
 	<!-- ##################### -->
 </includes>

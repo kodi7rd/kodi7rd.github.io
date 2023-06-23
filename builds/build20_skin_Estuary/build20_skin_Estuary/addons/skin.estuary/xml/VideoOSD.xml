@@ -179,8 +179,8 @@
 						<description>DarkSubs Subtitles Window Button</description>
 						<width>230</width>
 						<height>77</height>
-						<texturenofocus colordiffuse="grey_a">kodirdil/choose_subs.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">kodirdil/choose_subs.png</texturefocus>
+						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/choose_subs.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/choose_subs.png</texturefocus>
 						<onup>70046</onup>
 						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
 					</control>
@@ -190,24 +190,6 @@
 						</include>
 						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
-					</control>
-					<!-- IMAX: OFF -->
-					<control type="radiobutton" id="700452">
-						<description>script.black.bars.never Toggle OFF</description>
-						<include content="OSDButton">
-							<param name="texture" value="kodirdil/imax/imax_off_white.png"/>
-						</include>
-						<visible>String.IsEqual(Window(10000).Property(blackbarsnever_status), off)</visible>
-						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
-					</control>
-					<!-- IMAX: ON -->
-					<control type="radiobutton" id="700453">
-						<description>script.black.bars.never Toggle ON</description>
-						<include content="OSDButton">
-							<param name="texture" value="kodirdil/imax/imax_on_green.png"/>
-						</include>
-						<visible>String.IsEqual(Window(10000).Property(blackbarsnever_status), on)</visible>
-						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
 					</control>
 					<control type="radiobutton" id="70043">
 						<include content="OSDButton">
@@ -247,15 +229,21 @@
 						<onclick>SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
 						<onclick>ActivateWindow(1101)</onclick>
 					</control>
+					<control type="togglebutton" id="70049">
+					<visible>System.AddonIsEnabled(script.black.bars.never)</visible>
+						<include>SetOfOnToggleRadio</include>
+						<include>ToggleButtonObj</include>
+						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
+					</control>
 				</control>
 			</control>
 			
 			
 				<control type="grouplist">
 					<left>0</left>
-					<centertop>115</centertop>
+					<centertop>20</centertop>
 					<width>850</width>
-					<height>250</height>
+					<height>50</height>
 					<align>left</align>
 					<include>Animation_BottomSlide</include>
 					<orientation>horizontal</orientation>
