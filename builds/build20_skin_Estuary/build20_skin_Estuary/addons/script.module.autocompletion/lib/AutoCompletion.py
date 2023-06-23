@@ -47,7 +47,20 @@ def get_autocomplete_items(search_str, limit=10, provider=None):
     provider.limit = limit
     return provider.get_predictions(search_str)
 
-
+def is_hebrew(input_str):    
+       try:
+        import unicodedata
+        input_str=input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+        nfkd_form = unicodedata.normalize('NFKD', input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ',''))
+        a=False
+        for cha in input_str:
+            
+            a='HEBREW' in unicodedata.name(cha.strip())
+            if a:
+                break
+        return a
+       except:
+            return True
 def prep_search_str(text):
     for char in text:
         if 1488 <= ord(char) <= 1514:
@@ -85,7 +98,12 @@ class BaseProvider(ABC):
             yield li
 
     def fetch_data(self, search_str):
-        url = self.build_url(quote_plus(search_str))
+        check_heb=is_hebrew(search_str)
+        if check_heb:
+            url = self.build_url(quote_plus(search_str[::-1]))
+        else:
+            url = self.build_url(quote_plus(search_str))
+        
         result = get_JSON_response(url=self.BASE_URL.format(endpoint=url), headers=self.HEADERS, folder=self.FOLDER)
         return self.process_result(result)
 
