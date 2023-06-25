@@ -2,7 +2,7 @@
     <setting id="show_musicvideoposter" type="bool">false</setting>
     <setting id="homemenunotvshowbutton" type="bool">true</setting>
     <setting id="touchmode" type="bool">false</setting>
-    <setting id="autoscroll" type="bool">false</setting>
+    <setting id="autoscroll" type="bool">true</setting>
     <setting id="homemenunovideosbutton" type="bool">true</setting>
     <setting id="circle_rating" type="bool">true</setting>
     <setting id="homemenunogamesbutton" type="bool">true</setting>
