@@ -7,7 +7,7 @@ from modules import kodi_utils, source_utils, settings, metadata
 from modules.utils import get_datetime, title_key
 # logger = kodi_utils.logger
 
-ok_dialog, container_content, close_all_dialog, external_browse = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external_browse
+ok_dialog, container_content, close_all_dialog, external = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external
 get_property, open_settings, set_property, get_icon, dialog = kodi_utils.get_property, kodi_utils.open_settings, kodi_utils.set_property, kodi_utils.get_icon, kodi_utils.dialog
 show_busy_dialog, hide_busy_dialog, notification, confirm_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification, kodi_utils.confirm_dialog
 pause_settings_change, unpause_settings_change, img_url, sleep = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.img_url, kodi_utils.sleep
@@ -537,31 +537,20 @@ def extras_ratings_choice(params={}):
 	set_setting('extras.enabled_ratings', ', '.join([i[1] for i in selection]))
 
 def extras_lists_choice(params={}):
-	fl = [2000, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062]
-	dl = [
-			{'name': ls(32842),                            'image': img_url % 'DozdPCs'},
-			{'name': ls(32664),                            'image': img_url % 'fuksnW8'},
-			{'name': ls(32503),                            'image': img_url % 'dBiyfar'},
-			{'name': ls(32607),                            'image': img_url % 'vTJ3Sen'},
-			{'name': ls(32984),                            'image': img_url % '3TUiDnJ'},
-			{'name': ls(32986),                            'image': img_url % 'amYnTsq'},
-			{'name': ls(32989),                            'image': img_url % '97PxNyo'},
-			{'name': ls(33032),                            'image': img_url % 'biGxjHV'},
-			{'name': ls(32616),                            'image': img_url % 'GUU4in9'},
-			{'name': ls(32617),                            'image': img_url % '8w5Mqh6'},
-			{'name': '%s %s' % (ls(32612), ls(32543)),     'image': img_url % 'DYO6Nyx'},
-			{'name': '%s %s' % (ls(32612), ls(32470)),     'image': img_url % 'V46E8Ed'},
-			{'name': '%s %s' % (ls(32612), ls(32480)),     'image': img_url % '9ZUQZjF'},
-			{'name': '%s %s' % (ls(32612), ls(32499)),     'image': img_url % 'YMoV6mn'}
-		]
-	try: preselect = [fl.index(i) for i in extras_enabled_menus()]
+	choices = [(ls(32842), 2000), (ls(32664), 2050), (ls(32503), 2051), (ls(32607), 2052), (ls(33158), 2053),
+				(ls(32984), 2054), (ls(32986), 2055), (ls(32989), 2056), (ls(33032), 2057), (ls(32616), 2058), (ls(32617), 2059),
+				('%s %s' % (ls(32612), ls(32543)), 2060), ('%s %s' % (ls(32612), ls(32470)), 2061),
+				('%s %s' % (ls(32612), ls(32480)), 2062), ('%s %s' % (ls(32612), ls(32499)), 2063)]
+	list_items = [{'line1': i[0]} for i in choices]
+	current_settings = extras_enabled_menus()
+	try: preselect = [choices.index(i) for i in choices if i[1] in current_settings]
 	except: preselect = []
-	kwargs = {'items': json.dumps(dl), 'preselect': preselect}
-	selection = open_window(('windows.extras', 'ExtrasChoice'), 'extras_choice.xml', **kwargs)
-	if selection  == []: return set_setting('extras.enable_menus', 'noop')
+	kwargs = {'items': json.dumps(list_items), 'heading': ls(32046), 'multi_choice': 'true', 'preselect': preselect}
+	selection = select_dialog(choices, **kwargs)
+	if selection  == []: return set_setting('extras.enabled', 'noop')
 	elif selection == None: return
-	selection = [str(fl[i]) for i in selection]
-	set_setting('extras.enable_menus', ','.join(selection))
+	selection = [str(i[1]) for i in selection]
+	set_setting('extras.enabled', ','.join(selection))
 
 def set_language_filter_choice(params):
 	from modules.meta_lists import language_choices
@@ -833,7 +822,7 @@ def options_menu_choice(params, meta=None):
 		for item in listing: yield {'line1': item[0], 'line2': item[1] or item[0], 'icon': poster}
 	params_get = params.get
 	tmdb_id, content, poster = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None)
-	is_widget, from_extras = params_get('is_widget') in (True, 'True', 'true'), params_get('from_extras', 'false') == 'true'
+	is_external, from_extras = params_get('is_external') in (True, 'True', 'true'), params_get('from_extras', 'false') == 'true'
 	season, episode = params_get('season', ''), params_get('episode', '')
 	if not content: content = container_content()[:-1]
 	single_ep_list = ('episode.progress', 'episode.recently_watched', 'episode.next_trakt', 'episode.next_fen', 'episode.trakt_recently_aired', 'episode.trakt_calendar')
@@ -844,7 +833,7 @@ def options_menu_choice(params, meta=None):
 		meta = function('tmdb_id', tmdb_id, metadata_user_info(), get_datetime())
 	meta_get = meta.get
 	rootname = meta_get('rootname', None)
-	window_function = activate_window if is_widget else container_update
+	window_function = activate_window if is_external else container_update
 	title, year, imdb_id, tvdb_id = meta_get('title'), meta_get('year'), meta_get('imdb_id', None), meta_get('tvdb_id', None)
 	listing = []
 	listing_append = listing.append
@@ -868,7 +857,7 @@ def options_menu_choice(params, meta=None):
 			else:
 				if not playcount: listing_append((strip_bold(ls(32642)).replace(' %s', ''), '', 'mark_watched_tvshow'))
 				if progress: listing_append((strip_bold(ls(32643)).replace(' %s', ''), '', 'mark_unwatched_tvshow'))
-			if not is_widget: listing_append((strip_bold(ls(32649) if menu_type == 'movie' else ls(32650)), '', 'exit_menu'))
+			if not is_external: listing_append((strip_bold(ls(32649) if menu_type == 'movie' else ls(32650)), '', 'exit_menu'))
 		else:
 			listing_append((strip_bold(ls(32645)).replace('...', ''), '', 'extras'))
 			if menu_type == 'season':
@@ -880,7 +869,7 @@ def options_menu_choice(params, meta=None):
 				else: watched_action, watchedstr = 'mark_as_watched', strip_bold(ls(32642)).replace(' %s', '')
 				listing_append((watchedstr, '', 'mark_episode'))
 				if progress: listing_append((strip_bold(ls(32651)), '', 'clear_progress'))
-		if is_widget: listing_append((ls(32611), '', 'refresh_widgets'))
+		if is_external: listing_append((ls(32611), '', 'refresh_widgets'))
 	if menu_type in ('movie', 'episode') or menu_type in single_ep_list:
 		if menu_type == 'movie' and from_extras: listing_append((ls(32187), '%s %s' % (ls(32533), ls(32841)), 'playback_choice'))
 		if menu_type in single_ep_list:
@@ -888,7 +877,7 @@ def options_menu_choice(params, meta=None):
 			listing_append((ls(32544).replace(' %s', ''), ls(32544) % (title, season), 'browse_season'))
 			if menu_type == 'episode.next_trakt' and watched_indicators() == 1: listing_append((ls(32599), '', 'nextep_manager'))
 	if menu_type in ('movie', 'tvshow'):
-		listing_append((ls(32198), '', 'trakt_manager'))
+		if get_setting('trakt.user', ''): listing_append((ls(32198), '', 'trakt_manager'))
 		listing_append((ls(32197), '', 'favorites_choice'))
 		listing_append((ls(32503), ls(32004) % rootname, 'recommended'))
 		if menu_type == 'tvshow': listing_append((ls(32613), ls(32004) % rootname, 'random'))
@@ -925,7 +914,7 @@ def options_menu_choice(params, meta=None):
 	if choice == 'playback':
 		return run_plugin({'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': tmdb_id})
 	elif choice == 'extras':
-		return extras_menu_choice({'tmdb_id': tmdb_id, 'media_type': content, 'is_widget': str(is_widget)})
+		return extras_menu_choice({'tmdb_id': tmdb_id, 'media_type': content, 'is_external': str(is_external)})
 	elif choice == 'mark_movie':
 		return run_plugin({'mode': 'watched_status.mark_movie', 'action': watched_action, 'title': title, 'year': year, 'tmdb_id': tmdb_id})
 	elif choice == 'mark_episode':
@@ -995,7 +984,7 @@ def options_menu_choice(params, meta=None):
 	options_menu_choice(params, meta=meta)
 
 def person_search_choice(params):
-	person_data_dialog({'query': params['query'], 'is_widget': params.get('is_widget', 'true' if external_browse() else 'false'),
+	person_data_dialog({'query': params['query'], 'is_external': params.get('is_external', 'true' if external() else 'false'),
 						'starting_position': params.get('starting_position', None)})
 
 def extras_menu_choice(params):
@@ -1005,7 +994,7 @@ def extras_menu_choice(params):
 	function = metadata.movie_meta if media_type == 'movie' else metadata.tvshow_meta
 	meta = function('tmdb_id', params['tmdb_id'], metadata_user_info(), get_datetime())
 	if not stacked: hide_busy_dialog()
-	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'true' if external_browse() else 'false'),
+	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_external=params.get('is_external', 'true' if external() else 'false'),
 															options_media_type=media_type, starting_position=params.get('starting_position', None))
 
 def media_extra_info_choice(params):

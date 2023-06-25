@@ -5,7 +5,7 @@ from caches import check_databases, trakt_cache
 from caches.main_cache import cache_object
 from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movie_meta_external_id, tvshow_meta_external_id
-from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, jsondate_to_datetime as js2date, title_key
+from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, replace_html_codes, jsondate_to_datetime as js2date, title_key
 
 CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af', '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
@@ -77,7 +77,7 @@ def call_trakt(path, params={}, data=None, is_delete=False, with_auth=True, meth
 	if method == 'sort_by_headers' and 'X-Sort-By' in headers and 'X-Sort-How' in headers:
 		try: result = sort_list(headers['X-Sort-By'], headers['X-Sort-How'], result, ignore_articles())
 		except: pass
-	if pagination: return (result, response.headers['X-Pagination-Page-Count'])
+	if pagination: return (result, headers['X-Pagination-Page-Count'])
 	else: return result
 			
 def trakt_get_device_code():
@@ -144,7 +144,7 @@ def trakt_authenticate(dummy):
 		make_settings_dict()
 		sleep(1000)
 		try:
-			user = call_trakt('/users/me', with_auth=True)
+			user = call_trakt('/users/me')
 			set_setting('trakt.user', str(user['username']))
 		except: pass
 		notification('Trakt Account Authorized', 3000)
@@ -229,7 +229,7 @@ def trakt_get_hidden_items(list_type):
 	results = []
 	results_append = results.append
 	string = 'trakt_hidden_items_%s' % list_type
-	params = {'path': 'users/hidden/%s', 'path_insert': list_type, 'params': {'limit': 1000, 'type': 'show'}, 'with_auth': True, 'pagination': False}
+	params = {'path': 'users/hidden/%s', 'path_insert': list_type, 'params': {'limit': 1500, 'type': 'show'}, 'with_auth': True, 'pagination': False}
 	return cache_trakt_object(_process, string, params)
 
 def trakt_watched_status_mark(action, media, media_id, tvdb_id=0, season=None, episode=None, key='tmdb'):
@@ -389,9 +389,10 @@ def trakt_search_lists(search_title, page_no):
 def get_trakt_list_contents(list_type, user, slug):
 	string = 'trakt_list_contents_%s_%s_%s' % (list_type, user, slug)
 	if user == 'Trakt Official':
-		params = {'path': 'lists/%s/items', 'path_insert': slug, 'params': {'extended':'full'}, 'with_auth': True, 'method': 'sort_by_headers'}
+		params = {'path': 'lists/%s/items', 'path_insert': slug, 'params': {'extended':'full'}, 'method': 'sort_by_headers'}
 	else:
-		params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': True, 'method': 'sort_by_headers'}
+		with_auth = make_trakt_slug(user) == make_trakt_slug(get_setting('trakt.user', ''))
+		params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': with_auth, 'method': 'sort_by_headers'}
 	return cache_trakt_object(get_trakt, string, params)
 
 def trakt_trending_popular_lists(list_type, page_no):
@@ -573,6 +574,26 @@ def trakt_playback_progress():
 	params = {'path': 'sync/playback%s', 'with_auth': True, 'pagination': False}
 	return get_trakt(params)
 
+def trakt_comments(media_type, imdb_id):
+	def _process(foo):
+		data = get_trakt(params)
+		for count, item in enumerate(data, 1):
+			try:
+				rating = '%s/10 - ' % item['user_rating'] if item['user_rating'] else ''
+				comment = template % \
+				(count, rating, item['user']['username'].upper(), js2date(item['created_at'], date_format, True).strftime('%d %B %Y'), replace_html_codes(item['comment']))
+				if item['spoiler']: comment = spoiler_template + comment
+				all_comments_append(comment)
+			except: pass
+		return all_comments
+	all_comments = []
+	all_comments_append = all_comments.append
+	template, spoiler_template, date_format = '[B]%02d. [I]%s%s - %s[/I][/B][CR][CR]%s', '[B][COLOR red][%s][/COLOR][CR][/B]' % ls(32985).upper(), '%Y-%m-%dT%H:%M:%S.000Z'
+	media_type = 'movies' if media_type in ('movie', 'movies') else 'shows'
+	string = 'trakt_comments_%s %s' % (media_type, imdb_id)
+	params = {'path': '%s/%s/comments', 'path_insert': (media_type, imdb_id), 'params': {'limit': 1000, 'sort': 'likes'}, 'pagination': False}
+	return cache_object(_process, string, 'foo', False, 168)
+
 def trakt_progress_movies(progress_info):
 	def _process(item):
 		tmdb_id = get_trakt_movie_id(item['movie']['ids'])
@@ -676,7 +697,6 @@ def trakt_sync_activities(force_update=False):
 		try: result = _get_timestamp(js2date(latest, res_format)) > _get_timestamp(js2date(cached, res_format))
 		except: result = True
 		return result
-	if not get_setting('trakt.user', '') and not force_update: return 'no account'
 	if force_update:
 		check_databases()
 		clear_all_trakt_cache_data(silent=True, refresh=False)
@@ -684,6 +704,7 @@ def trakt_sync_activities(force_update=False):
 	clear_trakt_list_contents_data('user_lists')
 	clear_trakt_list_contents_data('liked_lists')
 	clear_trakt_list_contents_data('my_lists')
+	if not get_setting('trakt.user', '') and not force_update: return 'no account'
 	try: latest = trakt_get_activity()
 	except: return 'failed'
 	cached = reset_activity(latest)

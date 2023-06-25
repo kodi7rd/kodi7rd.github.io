@@ -43,7 +43,7 @@ imdb_lists_ins, tools_ins, settings_ins = _in_str % (imdb_lists_str.upper(), '%s
 trakt_collections_ins, trakt_watchlists_ins = _in_str % ('%s %s' % (trakt_str.upper(), coll_str.upper()), '%s'), _in_str % (trakt_watchlist_str.upper(), '%s')
 discover_main_ins, premium_ins, furk_ins = _in_str % (discover_str.upper(), '%s'), _in_str % (ls(32488).upper(), '%s'), _in_str % (furk_str.upper(), '%s %s')
 easynews_ins, real_debrid_ins, premiumize_ins = _in_str % (easy_str.upper(), '%s'), _in_str % (rd_str.upper(), '%s'), _in_str % (pm_str.upper(), '%s')
-trakt_lists_ins, trakt_recommendations_ins, local_source_str = _in_str % (trakt_str.upper(), '%s'), _in_str % (rec_str.upper(), '%s'), _in_str % (local_str.upper(), source_str)
+trakt_lists_ins, tr_rec_ins, local_source_str = _in_str % (trakt_str.upper(), '%s'), _in_str % (rec_str.upper(), '%s'), _in_str % (local_str.upper(), source_str)
 favorites_ins, imdb_watchlists_ins = _in_str % (fav_str.upper(), '%s'), _in_str % (imdb_watchlist_str.upper(), '%s')
 run_plugin, container_update, log_path = 'RunPlugin(%s)', 'Container.Update(%s)', 'special://home/addons/%s/changelog.txt'
 folder_info = (('folder1', ls(32110)), ('folder2', ls(32111)), ('folder3', ls(32112)), ('folder4', ls(32113)), ('folder5', ls(32114)))
@@ -118,57 +118,59 @@ class Navigator:
 		self.favorites()
 
 	def my_content(self):
-		trakt_status, imdb_status = get_setting('trakt.user') not in ('', None), get_setting('imdb_user') not in ('', None)
-		if not trakt_status and not imdb_status: notification(33022)
-		else:
-			if trakt_status:
-				self.add({'mode': 'navigator.trakt_collections'}, my_content_trakt_ins % coll_str, 'trakt')
-				self.add({'mode': 'navigator.trakt_watchlists'}, my_content_trakt_ins % wlist_str, 'trakt')
-				self.add({'mode': 'navigator.trakt_lists'}, my_content_trakt_ins % ls_str, 'trakt')
-			if imdb_status:
-				self.add({'mode': 'navigator.imdb_watchlists'}, my_content_imdb_ins % wlist_str, 'imdb')
-				self.add({'mode': 'navigator.imdb_lists'}, my_content_imdb_ins % ls_str, 'imdb')
+		if get_setting('trakt.user', ''):
+			self.add({'mode': 'navigator.trakt_collections'}, my_content_trakt_ins % coll_str, 'trakt')
+			self.add({'mode': 'navigator.trakt_watchlists'}, my_content_trakt_ins % wlist_str, 'trakt')
+			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'build_list': 'true', 'category_name': ml_str}, trakt_lists_ins % ml_str, 'trakt')
+			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'build_list': 'true', 'category_name': ll_str}, trakt_lists_ins % ll_str, 'trakt')
+			self.add({'mode': 'navigator.trakt_recommendations', 'category_name': rec_str}, trakt_lists_ins % rec_str, 'trakt')
+			self.add({'mode': 'build_my_calendar'}, trakt_lists_ins % cal_str, 'trakt')
+		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'category_name': tu_str}, trakt_lists_ins % tu_str, 'trakt')
+		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'popular', 'category_name': pu_str}, trakt_lists_ins % pu_str, 'trakt')
+		self.add({'mode': 'get_search_term', 'search_type': 'trakt_lists', 'isFolder': 'false'}, trakt_lists_ins % sea_str, 'trakt')
+		if get_setting('imdb_user', ''):
+			self.add({'mode': 'navigator.imdb_watchlists'}, my_content_imdb_ins % wlist_str, 'imdb')
+			self.add({'mode': 'navigator.imdb_lists'}, my_content_imdb_ins % ls_str, 'imdb')
 		self.end_directory()
 
+	def trakt_lists(self):
+		# for FENtastic skin
+		self.my_content()
+
 	def trakt_collections(self):
-		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection'}, trakt_collections_ins % mov_str, 'trakt')
-		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection'}, trakt_collections_ins % tv_str, 'trakt')
-		self.add({'mode': 'trakt.list.build_trakt_movie_sets'}, trakt_collections_ins % mcol_str, 'trakt')
-		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection_lists', 'new_page': 'recent'}, trakt_collections_ins % mrec_str, 'trakt')
-		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection_lists', 'new_page': 'random'}, trakt_collections_ins % mran_str, 'trakt')
-		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection_lists', 'new_page': 'recent'}, trakt_collections_ins % tvrec_str, 'trakt')
-		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection_lists', 'new_page': 'random'}, trakt_collections_ins % tvran_str, 'trakt')
+		self.category_name = coll_str
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection', 'category_name': '%s %s' % (mov_str, coll_str)}, trakt_collections_ins % mov_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection', 'category_name': '%s %s' % (tv_str, coll_str)}, trakt_collections_ins % tv_str, 'trakt')
+		self.add({'mode': 'trakt.list.build_trakt_movie_sets', 'category_name': mcol_str}, trakt_collections_ins % mcol_str, 'trakt')
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection_lists', 'new_page': 'recent', 'category_name': mrec_str}, trakt_collections_ins % mrec_str, 'trakt')
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_collection_lists', 'new_page': 'random', 'category_name': mran_str}, trakt_collections_ins % mran_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection_lists', 'new_page': 'recent', 'category_name': tvrec_str}, trakt_collections_ins % tvrec_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_collection_lists', 'new_page': 'random', 'category_name': tvran_str}, trakt_collections_ins % tvran_str, 'trakt')
 		self.add({'mode': 'build_my_calendar', 'recently_aired': 'true'}, trakt_collections_ins % ra_str, 'trakt')
 		self.end_directory()
 
 	def trakt_watchlists(self):
-		self.add({'mode': 'build_movie_list', 'action': 'trakt_watchlist'}, trakt_watchlists_ins % mov_str, 'trakt')
-		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_watchlist'}, trakt_watchlists_ins % tv_str, 'trakt')
-		self.end_directory()
-
-	def trakt_lists(self):
-		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'build_list': 'true'}, trakt_lists_ins % ml_str, 'trakt')
-		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'build_list': 'true'}, trakt_lists_ins % ll_str, 'trakt')
-		self.add({'mode': 'navigator.trakt_recommendations'}, trakt_lists_ins % rec_str, 'trakt')
-		self.add({'mode': 'build_my_calendar'}, trakt_lists_ins % cal_str, 'trakt')
-		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending'}, trakt_lists_ins % tu_str, 'trakt')
-		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'popular'}, trakt_lists_ins % pu_str, 'trakt')
-		self.add({'mode': 'get_search_term', 'search_type': 'trakt_lists', 'isFolder': 'false'}, trakt_lists_ins % sea_str, 'trakt')
+		self.category_name = wlist_str
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_watchlist', 'category_name': '%s %s' % (mov_str, wlist_str)}, trakt_watchlists_ins % mov_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_watchlist', 'category_name': '%s %s' % (tv_str, wlist_str)}, trakt_watchlists_ins % tv_str, 'trakt')
 		self.end_directory()
 
 	def trakt_recommendations(self):
-		self.add({'mode': 'build_movie_list', 'action': 'trakt_recommendations', 'new_page': 'movies'}, trakt_recommendations_ins % mov_str, 'trakt')
-		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_recommendations', 'new_page': 'shows'}, trakt_recommendations_ins % tv_str, 'trakt')
+		self.category_name = rec_str
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_recommendations', 'new_page': 'movies', 'category_name': '%s %s' % (mov_str, rec_str)}, tr_rec_ins % mov_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_recommendations', 'new_page': 'shows', 'category_name': '%s %s' % (tv_str, rec_str)}, tr_rec_ins % tv_str, 'trakt')
 		self.end_directory()
 
 	def imdb_watchlists(self):
-		self.add({'mode': 'build_movie_list', 'action': 'imdb_watchlist'}, imdb_watchlists_ins % mov_str, 'imdb')
-		self.add({'mode': 'build_tvshow_list', 'action': 'imdb_watchlist'}, imdb_watchlists_ins % tv_str, 'imdb')
+		self.category_name = imdb_watchlist_str
+		self.add({'mode': 'build_movie_list', 'action': 'imdb_watchlist', 'category_name': '%s %s' % (imdb_watchlist_str, mov_str)}, imdb_watchlists_ins % mov_str, 'imdb')
+		self.add({'mode': 'build_tvshow_list', 'action': 'imdb_watchlist', 'category_name': '%s %s' % (imdb_watchlist_str, tv_str)}, imdb_watchlists_ins % tv_str, 'imdb')
 		self.end_directory()
 
 	def imdb_lists(self):
-		self.add({'mode': 'imdb_build_user_lists', 'media_type': 'movie'}, imdb_lists_ins % mov_str, 'imdb')
-		self.add({'mode': 'imdb_build_user_lists', 'media_type': 'tvshow'}, imdb_lists_ins % tv_str, 'imdb')
+		self.category_name = imdb_lists_str
+		self.add({'mode': 'imdb_build_user_lists', 'media_type': 'movie', 'category_name': '%s %s' % (imdb_lists_str, mov_str)}, imdb_lists_ins % mov_str, 'imdb')
+		self.add({'mode': 'imdb_build_user_lists', 'media_type': 'tvshow', 'category_name': '%s %s' % (imdb_lists_str, tv_str)}, imdb_lists_ins % tv_str, 'imdb')
 		self.end_directory()
 
 	def search(self):

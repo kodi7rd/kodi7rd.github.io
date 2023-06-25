@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import translate_path, get_property, tmdb_default_api, fanarttv_default_api, get_setting, external_browse, current_skin, path_exists, \
+from modules.kodi_utils import translate_path, get_property, tmdb_default_api, fanarttv_default_api, get_setting, current_skin, path_exists, \
 								custom_xml_path, custom_skin_path, default_skin_path
 # from modules.kodi_utils import logger
 
@@ -108,13 +108,13 @@ def source_folders_directory(media_type, source):
 def suppress_episode_plot():
 	return get_setting('suppress_episode_plot', 'false') == 'true'
 
-def paginate(is_widget):
+def paginate(is_home):
 	paginate_lists = int(get_setting('paginate.lists', '0'))
-	if is_widget: return paginate_lists in (2, 3)
+	if is_home: return paginate_lists in (2, 3)
 	else: return paginate_lists in (1, 3)
 
-def page_limit(is_widget):	
-	return int(get_setting(paginate_dict[is_widget], '20'))
+def page_limit(is_home):	
+	return int(get_setting(paginate_dict[is_home], '20'))
 
 def jump_to_enabled():
 	return int(get_setting('paginate.jump_to', '0'))
@@ -237,7 +237,7 @@ def extras_windowed_playback():
 	return get_setting('extras.windowed_playback', 'false') == 'true'
 
 def extras_enabled_menus():
-	setting = get_setting('extras.enable_menus')
+	setting = get_setting('extras.enabled', '2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063')
 	if setting in ('', None, 'noop', []): return []
 	return [int(i) for i in setting.split(',')]
 

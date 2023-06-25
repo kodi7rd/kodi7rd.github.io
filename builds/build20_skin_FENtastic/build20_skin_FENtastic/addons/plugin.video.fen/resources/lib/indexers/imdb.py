@@ -4,10 +4,10 @@ from modules import kodi_utils
 # from modules.kodi_utils import logger
 
 ls, sys, build_url, make_listitem, set_view_mode = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_view_mode
-add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
+add_items, set_content, set_category, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.end_directory
 default_imdb_icon, fanart, fen_clearlogo, kodi_version = kodi_utils.get_icon('imdb'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
 
-def imdb_build_user_lists(media_type):
+def imdb_build_user_lists(params):
 	def _builder():
 		for item in user_lists:
 			try:
@@ -31,21 +31,23 @@ def imdb_build_user_lists(media_type):
 				yield (url, listitem, True)
 			except: pass
 	handle = int(sys.argv[1])
+	media_type = params.get('media_type')
 	user_lists = imdb_user_lists(media_type)
 	mode = 'build_%s_list' % media_type
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
+	set_category(handle, params.get('category_name'))
 	end_directory(handle)
 	set_view_mode('view.main')
 
-def imdb_build_keyword_results(media_type, query):
+def imdb_build_keyword_results(params):
 	def _builder():
 		for count, keyword in enumerate(results, 1):
 			try:
 				cm = []
 				cm_append = cm.append
 				name = '%s (IMDb)' % keyword.upper()
-				url_params = {'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': keyword.lower(), 'iconImage': 'imdb'}
+				url_params = {'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': keyword.lower(), 'iconImage': 'imdb', 'category_name': keyword.capitalize()}
 				url = build_url(url_params)
 				listitem = make_listitem()
 				cm_append((ls(32730),'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'imdb'})))
@@ -63,10 +65,12 @@ def imdb_build_keyword_results(media_type, query):
 				yield (url, listitem, True)
 			except: pass
 	handle = int(sys.argv[1])
+	media_type, query = params.get('media_type'), params.get('query')
 	results = imdb_keyword_search(query)
 	mode = 'build_%s_list' % media_type
 	add_items(handle, list(_builder()))
 	set_content(handle, 'files')
+	set_category(handle, query.capitalize())
 	end_directory(handle)
 	set_view_mode('view.main')
 

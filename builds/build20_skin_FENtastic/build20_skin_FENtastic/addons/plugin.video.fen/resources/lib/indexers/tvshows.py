@@ -5,10 +5,10 @@ from modules.utils import manual_function_import, get_datetime, make_thread_list
 from modules.watched_status import get_watched_info_tv, get_watched_status_tvshow
 # logger = kodi_utils.logger
 
-sleep, meta_function, get_datetime_function, add_item, xbmc_actor = kodi_utils.sleep, tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor
+sleep, meta_function, get_datetime_function, add_item, xbmc_actor, home = kodi_utils.sleep, tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor, kodi_utils.home
 kodi_version, get_watched_function, get_watched_info_function, set_category = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category
 set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
-string, ls, sys, external_browse, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external_browse, kodi_utils.add_items, kodi_utils.add_dir
+string, ls, sys, external, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.tvshow_dict_removals
 metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.paginate
 extras_open_action, get_art_provider, default_all_episodes, page_limit = settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes, settings.page_limit
@@ -34,8 +34,8 @@ class TVShows:
 		self.params_get = self.params.get
 		self.category_name = self.params_get('category_name', None) or self.params_get('name', None) or 32029
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
-		self.items, self.new_page, self.total_pages, self.is_widget, self.max_threads = [], {}, None, external_browse(), max_threads()
-		self.widget_hide_next_page = False if not self.is_widget else widget_hide_next_page()
+		self.items, self.new_page, self.total_pages, self.is_external, self.is_home, self.max_threads = [], {}, None, external(), home(), max_threads()
+		self.widget_hide_next_page = False if not self.is_home else widget_hide_next_page()
 		self.exit_list_params = self.params_get('exit_list_params', None) or folder_path()
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
@@ -103,7 +103,7 @@ class TVShows:
 					data = function(self.params['certification'], page_no)
 					self.list = [i['show']['ids'] for i in data]
 					self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
-				if self.total_pages and not self.is_widget:
+				if self.total_pages and not self.is_external:
 					jump_to = jump_to_enabled()
 					if jump_to != 3:
 						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
@@ -118,10 +118,10 @@ class TVShows:
 		else: add_items(handle, make_placeholder())
 		set_content(handle, content_type)
 		set_category(handle, ls(self.category_name))
-		end_directory(handle, False if self.is_widget else None)
-		if not self.is_widget:
+		end_directory(handle, False if self.is_external else None)
+		if not self.is_external:
 			if self.params_get('refreshed') == 'true': sleep(1000)
-			set_view_mode(view_mode, content_type, self.is_widget)
+			set_view_mode(view_mode, content_type, self.is_external)
 
 	def build_tvshow_content(self, item_position, _id):
 		try:
@@ -146,8 +146,8 @@ class TVShows:
 				landscape = meta_get('custom_landscape') or meta_get('landscape') or ''
 			else: banner, clearart, landscape = '', '', ''
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'tvshow', 'tmdb_id': tmdb_id, 'poster': poster, 'playcount': playcount,
-										'progress': progress, 'exit_menu': self.exit_list_params, 'is_widget': self.is_widget})
-			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_widget': self.is_widget})
+										'progress': progress, 'exit_menu': self.exit_list_params, 'is_external': self.is_external})
+			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_external': self.is_external})
 			if self.all_episodes:
 				if self.all_episodes == 1 and total_seasons > 1: url_params = build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
 				else: url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': 'all'})
@@ -160,20 +160,20 @@ class TVShows:
 			if not playcount:
 				cm_append((watched_str % self.watched_title, run_plugin % build_url({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year,
 																					'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})))
-			elif self.widget_hide_watched: return
+			elif self.home_hide_watched: return
 			if progress:
 				cm_append((unwatched_str % self.watched_title, run_plugin % build_url({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_unwatched', 'title': title,
 																						'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})))
 				set_properties({'watchedepisodes': string(total_watched), 'unwatchedepisodes': string(total_unwatched)})
 			set_properties({'watchedprogress': string(progress), 'totalepisodes': string(total_aired_eps), 'totalseasons': string(total_seasons)})
-			if not self.is_widget: cm_append((exit_str, container_refresh % self.exit_list_params))
+			if not self.is_external: cm_append((exit_str, container_refresh % self.exit_list_params))
 			display = rootname if self.include_year else title
 			listitem.setLabel(display)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'thumb': landscape,
 							'landscape': landscape, 'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo})
 			if kodi_version >= 20:
-				if self.is_widget: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('tvshow')
 				info_tag.setTitle(display)
@@ -204,17 +204,16 @@ class TVShows:
 				listitem.setInfo('video', remove_keys(meta, dict_removals))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 			set_properties({'fen.sort_order': string(item_position), 'fen.playcount': string(playcount), 'fen.extras_params': extras_params, 'fen.options_params': options_params})
-			if self.is_widget: set_properties({'fen.widget': 'true'})
+			if self.is_external: set_properties({'fen.external': 'true'})
 			if self.custom_order: self.append(((url_params, listitem, self.is_folder), item_position))
 			else: self.append((url_params, listitem, self.is_folder))
 		except: pass
 
 	def worker(self):
-		self.is_widget_arg = 'true' if self.is_widget else 'false'
 		self.current_date, self.current_time = get_datetime_function(), get_current_timestamp()
 		self.meta_user_info, self.watched_indicators, self.include_year = metadata_user_info(), watched_indicators(), include_year_in_title('tvshow')
 		self.watched_info, self.all_episodes, self.open_extras = get_watched_info_function(self.watched_indicators), default_all_episodes(), extras_open_action('tvshow')
-		self.fanart_enabled, self.widget_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_widget and self.meta_user_info['widget_hide_watched']
+		self.fanart_enabled, self.home_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_home and self.meta_user_info['widget_hide_watched']
 		self.is_folder, self.watched_title = False if self.open_extras else True, trakt_str if self.watched_indicators == 1 else fen_str
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
 		if self.custom_order: threads = list(make_thread_list_multi_arg(self.build_tvshow_content, self.list, self.max_threads))
@@ -225,9 +224,9 @@ class TVShows:
 		return self.items
 
 	def paginate_list(self, data, page_no):
-		if paginate(self.is_widget):
-			limit = page_limit(self.is_widget)
+		if paginate(self.is_home):
+			limit = page_limit(self.is_home)
 			data, all_pages, total_pages = paginate_list(data, page_no, limit, self.paginate_start)
-			if self.is_widget: self.paginate_start = limit
+			if self.is_home: self.paginate_start = limit
 		else: all_pages, total_pages = '', 1
 		return data, all_pages, total_pages

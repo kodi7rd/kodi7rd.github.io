@@ -287,7 +287,7 @@ class source:
             torrent_results.extend([dict(i, **{'cache_provider': provider if i['hash'] in cached else 'Uncached %s' % provider, 'debrid':provider}) for i in torrent_sources])
         def _debrid_check_dialog():
             self.progress_dialog.reset_is_cancelled()
-            start_time, timeout = time.time(), 22
+            start_time, timeout = time.time(), 20
             while not self.progress_dialog.iscanceled() and not monitor.abortRequested():
                 try:
                     remaining_debrids = [x.getName() for x in torrent_check_threads if x.is_alive() is True]

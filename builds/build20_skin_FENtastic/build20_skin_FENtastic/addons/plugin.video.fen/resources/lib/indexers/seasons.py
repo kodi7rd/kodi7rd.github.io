@@ -5,7 +5,7 @@ from modules.utils import adjust_premiered_date, get_datetime
 from modules.watched_status import get_watched_info_tv, get_watched_status_season
 # logger = kodi_utils.logger
 
-make_listitem, build_url, external_browse, ls = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.external_browse, kodi_utils.local_string
+make_listitem, build_url, external, ls = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.external, kodi_utils.local_string
 sys, add_items, set_content, end_directory, set_view_mode = kodi_utils.sys, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode
 kodi_version, xbmc_actor, set_category = kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 adjust_premiered_date_function, get_datetime_function, get_watched_status, get_watched_info = adjust_premiered_date, get_datetime, get_watched_status_season, get_watched_info_tv
@@ -60,9 +60,9 @@ def build_season_list(params):
 				try: progress = int((float(watched)/episode_count)*100)
 				except: progress = 0
 				url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season_number})
-				extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_widget': is_widget})
+				extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_external': is_external})
 				options_params = build_url({'mode': 'options_menu_choice', 'content': 'season', 'tmdb_id': tmdb_id, 'poster': show_poster, 'playcount': playcount,
-											'progress': progress, 'season': season_number, 'is_widget': is_widget})
+											'progress': progress, 'season': season_number, 'is_external': is_external})
 				cm_append((extras_str, run_plugin % extras_params))
 				cm_append((options_str, run_plugin % options_params))
 				if not playcount:
@@ -76,7 +76,7 @@ def build_season_list(params):
 				set_properties({'totalepisodes': string(episode_count), 'watchedprogress': string(progress), 'fen.playcount': string(playcount),
 								'fen.extras_params': extras_params, 'fen.options_params': options_params})
 				if kodi_version >= 20:
-					if is_widget: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+					if is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('season')
 					info_tag.setTitle(title)
@@ -109,14 +109,14 @@ def build_season_list(params):
 				listitem.setArt({'poster': poster, 'season.poster': poster, 'icon': thumb, 'thumb': thumb, 'fanart': show_fanart, 'banner': banner, 'landscape': show_landscape,
 							'clearlogo': show_clearlogo, 'clearart': show_clearart, 'tvshow.poster': poster, 'tvshow.clearlogo': show_clearlogo, 'tvshow.clearart': show_clearart})
 				listitem.addContextMenuItems(cm)
-				if is_widget: set_properties({'fen.widget': 'true'})
+				if is_external: set_properties({'fen.external': 'true'})
 				yield (url_params, listitem, True)
 			except: pass
-	handle, is_widget, category_name = int(sys.argv[1]), external_browse(), season_str
+	handle, is_external, category_name = int(sys.argv[1]), external(), season_str
 	if build_content():
 		meta_user_info, watched_indicators, show_unaired = metadata_user_info(), watched_indicators_info(), show_unaired_info()
 		watched_info, current_date, use_season_title = get_watched_info(watched_indicators), get_datetime_function(), use_season_title_info()
-		image_resolution, hide_watched = meta_user_info['image_resolution']['poster'], is_widget and meta_user_info['widget_hide_watched']
+		image_resolution, hide_watched = meta_user_info['image_resolution']['poster'], is_external and meta_user_info['widget_hide_watched']
 		fanart_enabled = meta_user_info['extra_fanart_enabled']
 		meta = tvshow_meta('tmdb_id', params['tmdb_id'], meta_user_info, current_date)
 		meta_get = meta.get
@@ -144,5 +144,5 @@ def build_season_list(params):
 	else: add_items(handle, make_placeholder())
 	set_content(handle, content_type)
 	set_category(handle, category_name)
-	end_directory(handle, False if is_widget else None)
-	set_view_mode(view_mode, content_type, is_widget)
+	end_directory(handle, False if is_external else None)
+	set_view_mode(view_mode, content_type, is_external)

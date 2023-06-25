@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import external_browse, parse_qsl, get_property, services_finished_prop, make_fake_widget
+from modules.kodi_utils import external, parse_qsl, get_property, services_finished_prop, make_fake_widget
 # from modules.kodi_utils import logger
 
-def exit_system_check():
-	return external_browse()
-
-def services_finished():
-	return get_property(services_finished_prop) == 'true'
+def sys_exit_check():
+	return external()
 
 def routing(sys):
-	if not services_finished():
-		if make_fake_widget(): return
+	if not get_property(services_finished_prop) == 'true' and make_fake_widget(): return
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	_get = params.get
 	mode = _get('mode', 'navigator.main')
@@ -87,13 +83,13 @@ def routing(sys):
 			return build_next_episode_manager()
 		if mode == 'imdb_build_user_lists':
 			from indexers.imdb import imdb_build_user_lists
-			return imdb_build_user_lists(_get('media_type'))
+			return imdb_build_user_lists(params)
 		if mode == 'build_popular_people':
 			from indexers.people import popular_people
 			return popular_people()
 		if mode == 'imdb_build_keyword_results':
 			from indexers.imdb import imdb_build_keyword_results
-			return imdb_build_keyword_results(_get('media_type'), _get('query'))
+			return imdb_build_keyword_results(params)
 	if 'watched_status.' in mode:
 		if mode == 'watched_status.mark_episode':
 			from modules.watched_status import mark_episode

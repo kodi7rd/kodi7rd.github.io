@@ -1911,7 +1911,7 @@
 				</setting>
 				<setting id="results.list_format" type="string" label="32102" help="">
 					<level>0</level>
-					<default>MediaList</default>
+					<default>List</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.fen/?mode=results_format_choice)</data>
 					</control>
@@ -2773,6 +2773,16 @@
 						<close>true</close>
 					</control>
 				</setting>
+				<setting id="tools.restart_services" type="action" label="33152" help="">
+					<level>0</level>
+					<data>RunPlugin(plugin://plugin.video.fen/?mode=restart_services)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
 				<setting id="tools.make_fen_work" type="boolean" label="33144" help="">
 					<level>0</level>
 					<default>false</default>
@@ -3148,9 +3158,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="extras.enable_menus" type="string" help="">
+				<setting id="extras.enabled" type="string" help="">
 					<level>0</level>
-					<default>2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</default>
+					<default>2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>

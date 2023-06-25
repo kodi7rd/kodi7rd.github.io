@@ -34,10 +34,11 @@ class People(BaseDialog):
 	def onInit(self):
 		self.set_home_property('window_loaded', 'true')
 		for i in self.tasks: Thread(target=i).start()
+		self.set_default_focus()
 		if self.starting_position:
 			try:
 				window_id, focus = self.starting_position
-				self.sleep(300)
+				self.sleep(500)
 				self.setFocusId(window_id)
 				self.select_item(window_id, focus)
 			except: self.set_default_focus()
@@ -85,7 +86,7 @@ class People(BaseDialog):
 				if self.control_id in (more_from_movies_id, more_from_director_id): media_type = 'movie'
 				else: media_type = 'tvshow'
 				self.set_current_params()
-				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': media_type, 'is_widget': self.is_widget, 'stacked': 'true'}
+				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': media_type, 'is_external': self.is_external, 'stacked': 'true'}
 				return window_manager(self)
 			elif self.control_id == trivia_id:
 				end_index = self.show_text_media(text=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id))
@@ -137,7 +138,7 @@ class People(BaseDialog):
 				if not self.person_id:
 					try: self.person_id = data[0]['id']
 					except: pass
-			except: pass
+			except: self.person_id = self.actor_id
 		else: self.person_id = self.actor_id
 		if not self.person_id:
 			notification(32760)
@@ -271,14 +272,14 @@ class People(BaseDialog):
 
 	def set_current_params(self, set_starting_position=True):
 		self.current_params = {'mode': 'person_data_dialog', 'query': self.query, 'actor_name': self.person_name, 'actor_image': self.person_image, 'stacked': 'true',
-								'actor_id': self.person_id, 'reference_tmdb_id': self.reference_tmdb_id, 'is_widget': self.is_widget}
+								'actor_id': self.person_id, 'reference_tmdb_id': self.reference_tmdb_id, 'is_external': self.is_external}
 		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
 
 	def set_starting_constants(self):
 		self.item_action_dict = {}
 		self.current_params, self.new_params = {}, {}
 		self.person_id = None
-		self.is_widget = self.kwargs.get('is_widget', 'false')
+		self.is_external = self.kwargs.get('is_external', 'false').lower()
 		self.query = self.kwargs.get('query', '')
 		self.actor_id = self.kwargs.get('actor_id', '')
 		self.reference_tmdb_id = self.kwargs.get('reference_tmdb_id', '')

@@ -21,7 +21,7 @@ def person_data_dialog(params):
 	if params.get('query', ''): query = unquote(params['query'])
 	else: query = None
 	open_window(('windows.people', 'People'), 'people.xml', query=query, actor_name=params.get('actor_name'), actor_image=params.get('actor_image'),
-				actor_id=params.get('actor_id'), reference_tmdb_id=params.get('reference_tmdb_id'), is_widget=params.get('is_widget', 'false'),
+				actor_id=params.get('actor_id'), reference_tmdb_id=params.get('reference_tmdb_id'), is_external=params.get('is_external', 'false'),
 				starting_position=params.get('starting_position', None))
 
 def person_direct_search(query):

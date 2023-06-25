@@ -8,8 +8,7 @@
             <control type="image">
                 <texture colordiffuse="FF000000">fen_common/white.png</texture>
             </control>
-            <control type="image">
-                <texture>$INFO[Window.Property(fanart)]</texture>
+            <control type="image" id="202">
                 <animation effect="fade" start="100" end="20" time="800" tween="sine">WindowOpen</animation>
             </control>
         </control>
@@ -26,7 +25,7 @@
             </control>
             <control type="group">
                 <animation effect="fade" start="0" end="100" delay="600" time="450">WindowOpen</animation>
-                <visible>!Control.HasFocus(2050) + !Control.HasFocus(2051) + !Control.HasFocus(2057) + !Control.HasFocus(2058) + !Control.HasFocus(2059) + !Control.HasFocus(2060) + !Control.HasFocus(2061) + !Control.HasFocus(2062)</visible>
+                <visible>!Control.HasFocus(2050) + !Control.HasFocus(2051) + !Control.HasFocus(2058) + !Control.HasFocus(2059) + !Control.HasFocus(2060) + !Control.HasFocus(2061) + !Control.HasFocus(2062) + !Control.HasFocus(2063)</visible>
                 <control type="label">
                     <top>20</top>
                     <left>1590</left>
@@ -60,7 +59,7 @@
                     <height>35</height>
                     <aspectratio>keep</aspectratio>
                     <texture>fen_common/info.png</texture>
-                    <visible>Control.HasFocus(2050) | Control.HasFocus(2051) | Control.HasFocus(2057) | Control.HasFocus(2058) | Control.HasFocus(2059) | Control.HasFocus(2060) | Control.HasFocus(2061) | Control.HasFocus(2062)</visible>
+                    <visible>Control.HasFocus(2050) | Control.HasFocus(2051) | Control.HasFocus(2058) | Control.HasFocus(2059) | Control.HasFocus(2060) | Control.HasFocus(2061) | Control.HasFocus(2062) | Control.HasFocus(2063)</visible>
                 </control>
                 <control type="label">
                     <width max="500">auto</width>
@@ -80,7 +79,7 @@
                     <align>right</align>
                     <aligny>top</aligny>
                     <label>$ADDON[plugin.video.fen 32049]</label>
-                    <visible>Control.HasFocus(2057) | Control.HasFocus(2058)</visible>
+                    <visible>Control.HasFocus(2058) | Control.HasFocus(2059)</visible>
                 </control>
                 <control type="label">
                     <width max="500">auto</width>
@@ -90,7 +89,7 @@
                     <align>right</align>
                     <aligny>top</aligny>
                     <label>$ADDON[plugin.video.fen 33129]</label>
-                    <visible>Control.HasFocus(2051) | Control.HasFocus(2059) | Control.HasFocus(2060) | Control.HasFocus(2061) | Control.HasFocus(2062)</visible>
+                    <visible>Control.HasFocus(2051) | Control.HasFocus(2060) | Control.HasFocus(2061) | Control.HasFocus(2062) | Control.HasFocus(2063)</visible>
                 </control>
             </control>
         </control>
@@ -113,7 +112,7 @@
                     <effect type="fade" start="0" end="100" time="450" tween="sine" delay="200" easing="in" />
                     <effect type="slide" start="0,-275" end="0" time="450" center="auto" delay="200" tween="quadratic" easing="out" />
                 </animation>
-                <control type="image">
+                <control type="image" id="201">
                     <top>35</top>
                     <left>70</left>
                     <height max="250">auto</height>
@@ -121,8 +120,6 @@
                     <aspectratio>keep</aspectratio>
                     <align>center</align>
                     <aligny>bottom</aligny>
-                    <texture background="true">$INFO[Window.Property(clearlogo)]</texture>
-                    <visible>!String.IsEmpty(Window.Property(clearlogo))</visible>
                 </control>
                 <control type="label">
                     <top>150</top>
@@ -134,7 +131,7 @@
                     <align>center</align>
                     <aligny>bottom</aligny>
                     <label>[B]$INFO[Window.Property(title)][/B]</label>
-                    <visible>String.IsEmpty(Window.Property(clearlogo))</visible>
+                    <visible>String.IsEqual(Window.Property(clearlogo),false)</visible>
                 </control>
             </control>
         </control>
@@ -319,7 +316,7 @@
                         <height>70</height>
                         <onleft>13</onleft>
                         <onright>11</onright>
-                        <onup>2062</onup>
+                        <onup>2063</onup>
                         <ondown>14</ondown>
                         <label>$INFO[Window.Property(button10.label)]</label>
                         <font>font13</font> <!-- FEN_30 -->
@@ -335,7 +332,7 @@
                         <height>70</height>
                         <onleft>10</onleft>
                         <onright>12</onright>
-                        <onup>2062</onup>
+                        <onup>2063</onup>
                         <ondown>15</ondown>
                         <label>$INFO[Window.Property(button11.label)]</label>
                         <font>font13</font> <!-- FEN_30 -->
@@ -351,7 +348,7 @@
                         <height>70</height>
                         <onleft>11</onleft>
                         <onright>13</onright>
-                        <onup>2062</onup>
+                        <onup>2063</onup>
                         <ondown>16</ondown>
                         <label>$INFO[Window.Property(button12.label)]</label>
                         <font>font13</font> <!-- FEN_30 -->
@@ -367,7 +364,7 @@
                         <height>70</height>
                         <onleft>12</onleft>
                         <onright>10</onright>
-                        <onup>2062</onup>
+                        <onup>2063</onup>
                         <ondown>17</ondown>
                         <label>$INFO[Window.Property(button13.label)]</label>
                         <font>font13</font> <!-- FEN_30 -->
@@ -446,7 +443,7 @@
                     </control>
                 </control>
             </control>
-            <!-- Plot -->
+            <!-- Plot 2000 -->
             <control type="group">
                 <visible>!String.IsEqual(Window.Property(plot),)</visible>
                 <height>760</height>
@@ -497,7 +494,7 @@
                     </control>
                 </control>
             </control>
-            <!-- Cast -->
+            <!-- Cast 2050 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2050).NumItems,0)</visible>
                 <height>760</height>
@@ -598,7 +595,7 @@
                     </control>
                 </control>
             </control>
-            <!-- Recommended -->
+            <!-- Recommended 2051 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2051).NumItems,0)</visible>
                 <height>760</height>
@@ -699,7 +696,7 @@
                     </control>
                 </control>
             </control>
-            <!-- IMDb Reviews -->
+            <!-- IMDb Reviews 2052 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2052).NumItems,0)</visible>
                 <height>760</height>
@@ -791,7 +788,7 @@
                     </control>
                 </control>
             </control>
-            <!-- IMDb Trivia -->
+            <!-- Trakt Comments 2053 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2053).NumItems,0)</visible>
                 <height>760</height>
@@ -803,7 +800,7 @@
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
-                        <label>[B]$ADDON[plugin.video.fen 32984][/B] $INFO[Window.Property(imdb_trivia.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 33158][/B] $INFO[Window.Property(trakt_comments.number),(x,)]</label>
                     </control>
                     <control type="panel" id="2053">
                         <pagecontrol>4053</pagecontrol>
@@ -878,12 +875,12 @@
                         <left>1125</left>
                         <width>25</width>
                         <height>25</height>
-                        <visible>[Control.HasFocus(2053) | Control.HasFocus(4053)] + Container(2053).HasNext</visible>
+                        <visible>[Control.HasFocus(2053) | Control.HasFocus(4063)] + Container(2053).HasNext</visible>
                         <texture flipx="true">fen_common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
-            <!-- IMDb Blunders -->
+            <!-- IMDb Trivia 2054 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2054).NumItems,0)</visible>
                 <height>760</height>
@@ -895,7 +892,7 @@
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
-                        <label>[B]$ADDON[plugin.video.fen 32986][/B] $INFO[Window.Property(imdb_blunders.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32984][/B] $INFO[Window.Property(imdb_trivia.number),(x,)]</label>
                     </control>
                     <control type="panel" id="2054">
                         <pagecontrol>4054</pagecontrol>
@@ -975,7 +972,7 @@
                     </control>
                 </control>
             </control>
-            <!-- IMDb Parents Guide -->
+            <!-- IMDb Blunders 2055 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2055).NumItems,0)</visible>
                 <height>760</height>
@@ -987,14 +984,106 @@
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>bottom</aligny>
-                        <label>[B]$ADDON[plugin.video.fen 32989][/B] $INFO[Window.Property(imdb_parentsguide.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32986][/B] $INFO[Window.Property(imdb_blunders.number),(x,)]</label>
                     </control>
                     <control type="panel" id="2055">
+                        <pagecontrol>40055</pagecontrol>
                         <top>60</top>
                         <width>1180</width>
                         <height>360</height>
                         <onup>2054</onup>
+                        <ondown>40055</ondown>
+                        <orientation>horizontal</orientation>
+                        <scrolltime tween="sine">500</scrolltime>
+                        <itemlayout height="380" width="590">
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FF302F2F" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FFB7B4BB</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
+                                <autoscroll>false</autoscroll>
+                            </control>
+                        </itemlayout>
+                        <focusedlayout height="380" width="590">
+                            <control type="image">
+                                <height>360</height>
+                                <width>570</width>
+                                <texture colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <top>15</top>
+                                <left>15</left>
+                                <width>540</width>
+                                <height>308</height>
+                                <font>font12</font> <!-- FEN_26 -->
+                                <align>center</align>
+                                <aligny>top</aligny>
+                                <textcolor>FF302F2F</textcolor>
+                                <label>$INFO[ListItem.Property(text)]</label>
+                            </control>
+                        </focusedlayout>
+                    </control>
+                    <control type="scrollbar" id="40055">
+                        <top>432</top>
+                        <width>1160</width>
+                        <height>15</height>
+                        <onup>2055</onup>
                         <ondown>2056</ondown>
+                        <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                        <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                        <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
+                        <showonepage>false</showonepage>
+                        <orientation>Horizontal</orientation>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2055) | Control.HasFocus(40055)]</visible>
+                    </control>
+                    <control type="image">
+                        <top>225</top>
+                        <left>10</left>
+                        <width>25</width>
+                        <height>25</height>
+                        <visible>[Control.HasFocus(2055) | Control.HasFocus(40055)] + Container(2055).HasPrevious</visible>
+                        <texture>fen_common/arrow_left.png</texture>
+                    </control>
+                    <control type="image">
+                        <top>225</top>
+                        <left>1125</left>
+                        <width>25</width>
+                        <height>25</height>
+                        <visible>[Control.HasFocus(2055) | Control.HasFocus(40055)] + Container(2055).HasNext</visible>
+                        <texture flipx="true">fen_common/arrow_left.png</texture>
+                    </control>
+                </control>
+            </control>
+            <!-- IMDb Parents Guide 2056 -->
+            <control type="group">
+                <visible>Integer.IsGreater(Container(2056).NumItems,0)</visible>
+                <height>760</height>
+                <control type="group">
+                    <control type="label">
+                        <width max="1160">auto</width>
+                        <height>20</height>
+                        <font>font14</font> <!-- FEN_33 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <label>[B]$ADDON[plugin.video.fen 32989][/B] $INFO[Window.Property(imdb_parentsguide.number),(x,)]</label>
+                    </control>
+                    <control type="panel" id="2056">
+                        <top>60</top>
+                        <width>1180</width>
+                        <height>360</height>
+                        <onup>2055</onup>
+                        <ondown>2057</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">500</scrolltime>
                         <itemlayout height="360" width="236">
@@ -1078,9 +1167,9 @@
                     </control>
                 </control>
             </control>
-            <!-- IMDb Videos -->
+            <!-- IMDb Videos 2057 -->
             <control type="group">
-                <visible>Integer.IsGreater(Container(2056).NumItems,0)</visible>
+                <visible>Integer.IsGreater(Container(2057).NumItems,0)</visible>
                 <height>760</height>
                 <control type="group">
                     <control type="label">
@@ -1089,24 +1178,24 @@
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <label>[B]$ADDON[plugin.video.fen 33032][/B] $INFO[Window.Property(imdb_videos.number),(x,)]</label>
-                        <visible>!Control.HasFocus(2056)</visible>
+                        <visible>!Control.HasFocus(2057)</visible>
                     </control>
                     <control type="label">
                         <width min="30" max="1160">auto</width>
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 33032][/B]  |  $INFO[Container(2056).ListItem.Property(name)]</label>
-                        <visible>Control.HasFocus(2056)</visible>
+                        <label>[B]$ADDON[plugin.video.fen 33032][/B]  |  $INFO[Container(2057).ListItem.Property(name)]</label>
+                        <visible>Control.HasFocus(2057)</visible>
                     </control>
-                    <control type="fixedlist" id="2056">
-                        <animation effect="slide" end="-392,0" time="0" condition="Integer.IsEqual(Container(2056).NumItems,1) | Integer.IsEqual(Container(2056).NumItems,2)">Conditional</animation>
-                        <pagecontrol>4056</pagecontrol>
+                    <control type="fixedlist" id="2057">
+                        <animation effect="slide" end="-392,0" time="0" condition="Integer.IsEqual(Container(2057).NumItems,1) | Integer.IsEqual(Container(2057).NumItems,2)">Conditional</animation>
+                        <pagecontrol>4057</pagecontrol>
                         <top>60</top>
                         <width>1180</width>
                         <height>360</height>
-                        <onup>2055</onup>
-                        <ondown>4056</ondown>
+                        <onup>2056</onup>
+                        <ondown>4057</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">500</scrolltime>
                         <focusposition>1</focusposition>
@@ -1125,7 +1214,7 @@
                             <control type="group">
                                 <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4056)">Conditional</animation>
+                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4057)">Conditional</animation>
                                 <control type="image">
                                     <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
@@ -1133,7 +1222,7 @@
                                     <height>360</height>
                                     <width>390</width>
                                     <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
-                                    <visible>Control.HasFocus(2056) | Control.HasFocus(4056)</visible>
+                                    <visible>Control.HasFocus(2057) | Control.HasFocus(4057)</visible>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
@@ -1146,26 +1235,26 @@
                             </control>
                         </focusedlayout>
                     </control>
-                    <control type="scrollbar" id="4056">
+                    <control type="scrollbar" id="4057">
                         <left>5</left>
                         <top>432</top>
                         <width>1165</width>
                         <height>15</height>
-                        <onup>2056</onup>
-                        <ondown>2057</ondown>
+                        <onup>2057</onup>
+                        <ondown>2058</ondown>
                         <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
                         <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
                         <showonepage>false</showonepage>
                         <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2056) | Control.HasFocus(4056)]</visible>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2057) | Control.HasFocus(4057)]</visible>
                     </control>
                     <control type="image">
                         <top>230</top>
                         <left>10</left>
                         <width>25</width>
                         <height>25</height>
-                        <visible>[Control.HasFocus(2056) | Control.HasFocus(4056)] + Container(2056).HasPrevious</visible>
+                        <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasPrevious</visible>
                         <texture>fen_common/arrow_left.png</texture>
                     </control>
                     <control type="image">
@@ -1173,14 +1262,14 @@
                         <left>1140</left>
                         <width>25</width>
                         <height>25</height>
-                        <visible>[Control.HasFocus(2056) | Control.HasFocus(4056)] + Container(2056).HasNext</visible>
+                        <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasNext</visible>
                         <texture flipx="true">fen_common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
-            <!-- TMDb Artwork Posters -->
+            <!-- TMDb Artwork Posters 2058 -->
             <control type="group">
-                <visible>Integer.IsGreater(Container(2057).NumItems,0)</visible>
+                <visible>Integer.IsGreater(Container(2058).NumItems,0)</visible>
                 <height>760</height>
                 <control type="group">
                     <control type="label">
@@ -1192,15 +1281,15 @@
                         <aligny>bottom</aligny>
                         <label>[B]$ADDON[plugin.video.fen 32616][/B] $INFO[Window.Property(tmdb_artwork.poster.number),(x,)]</label>
                     </control>
-                    <control type="fixedlist" id="2057">
-                        <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2057).NumItems,1) | Integer.IsEqual(Container(2057).NumItems,2)">Conditional</animation>
-                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2057).NumItems,3) | Integer.IsEqual(Container(2057).NumItems,4)">Conditional</animation>
-                        <pagecontrol>4057</pagecontrol>
+                    <control type="fixedlist" id="2058">
+                        <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2058).NumItems,1) | Integer.IsEqual(Container(2058).NumItems,2)">Conditional</animation>
+                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2058).NumItems,3) | Integer.IsEqual(Container(2058).NumItems,4)">Conditional</animation>
+                        <pagecontrol>4058</pagecontrol>
                         <top>60</top>
                         <width>1180</width>
                         <height>360</height>
-                        <onup>2056</onup>
-                        <ondown>4057</ondown>
+                        <onup>2057</onup>
+                        <ondown>4058</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">500</scrolltime>
                         <focusposition>2</focusposition>
@@ -1219,7 +1308,7 @@
                             <control type="group">
                                 <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4057)">Conditional</animation>
+                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4058)">Conditional</animation>
                                 <control type="image">
                                     <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
                                     <left>0</left>
@@ -1227,105 +1316,13 @@
                                     <height>360</height>
                                     <width>236</width>
                                     <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
-                                    <visible>Control.HasFocus(2057) | Control.HasFocus(4057)</visible>
-                                </control>
-                                <control type="image">
-                                    <left>6</left>
-                                    <top>6</top>
-                                    <height max="348">auto</height>
-                                    <width max="224">auto</width>
-                                    <aspectratio>scale</aspectratio>
-                                    <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                            </control>
-                        </focusedlayout>
-                    </control>
-                    <control type="scrollbar" id="4057">
-                        <left>5</left>
-                        <top>432</top>
-                        <width>1170</width>
-                        <height>15</height>
-                        <onup>2057</onup>
-                        <ondown>2058</ondown>
-                        <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
-                        <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
-                        <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
-                        <showonepage>false</showonepage>
-                        <orientation>Horizontal</orientation>
-                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2057) | Control.HasFocus(4057)]</visible>
-                    </control>
-                    <control type="image">
-                        <top>215</top>
-                        <left>10</left>
-                        <width>25</width>
-                        <height>25</height>
-                        <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasPrevious</visible>
-                        <texture>fen_common/arrow_left.png</texture>
-                    </control>
-                    <control type="image">
-                        <top>215</top>
-                        <left>1145</left>
-                        <width>25</width>
-                        <height>25</height>
-                        <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasNext</visible>
-                        <texture flipx="true">fen_common/arrow_left.png</texture>
-                    </control>
-                </control>
-            </control>
-            <!-- TMDb Artwork Fanart -->
-            <control type="group">
-                <visible>Integer.IsGreater(Container(2058).NumItems,0)</visible>
-                <height>760</height>
-                <control type="group">
-                    <control type="label">
-                        <width max="1160">auto</width>
-                        <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
-                        <textcolor>FFCCCCCC</textcolor>
-                        <align>left</align>
-                        <aligny>bottom</aligny>
-                        <label>[B]$ADDON[plugin.video.fen 32617][/B] $INFO[Window.Property(tmdb_artwork.fanart.number),(x,)]</label>
-                    </control>
-                    <control type="fixedlist" id="2058">
-                        <pagecontrol>4058</pagecontrol>
-                        <top>60</top>
-                        <width>1180</width>
-                        <height>360</height>
-                        <onup>2057</onup>
-                        <ondown>4058</ondown>
-                        <orientation>horizontal</orientation>
-                        <scrolltime tween="sine">500</scrolltime>
-                        <focusposition>0</focusposition>
-                        <movement>1</movement>
-                        <itemlayout height="360" width="590">
-                            <control type="image">
-                                <left>6</left>
-                                <top>6</top>
-                                <height max="348">auto</height>
-                                <width max="578">auto</width>
-                                <aspectratio>scale</aspectratio>
-                                <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
-                            </control>
-                        </itemlayout>
-                        <focusedlayout height="360" width="590">
-                            <control type="group">
-                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
-                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
-                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4058)">Conditional</animation>
-                                <control type="image">
-                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
-                                    <left>0</left>
-                                    <top>0</top>
-                                    <height>360</height>
-                                    <width>590</width>
-                                    <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2058) | Control.HasFocus(4058)</visible>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
                                     <top>6</top>
                                     <height max="348">auto</height>
-                                    <width max="578">auto</width>
+                                    <width max="224">auto</width>
                                     <aspectratio>scale</aspectratio>
                                     <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
@@ -1347,7 +1344,7 @@
                         <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2058) | Control.HasFocus(4058)]</visible>
                     </control>
                     <control type="image">
-                        <top>230</top>
+                        <top>215</top>
                         <left>10</left>
                         <width>25</width>
                         <height>25</height>
@@ -1355,7 +1352,7 @@
                         <texture>fen_common/arrow_left.png</texture>
                     </control>
                     <control type="image">
-                        <top>230</top>
+                        <top>215</top>
                         <left>1145</left>
                         <width>25</width>
                         <height>25</height>
@@ -1364,30 +1361,21 @@
                     </control>
                 </control>
             </control>
-            <!-- More From Year -->
+            <!-- TMDb Artwork Fanart 2059 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2059).NumItems,0)</visible>
                 <height>760</height>
                 <control type="group">
                     <control type="label">
-                        <width min="30" max="1160">auto</width>
+                        <width max="1160">auto</width>
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B] $INFO[Window.Property(more_from_year.number),(x,)]</label>
-                        <visible>!Control.HasFocus(2059)</visible>
-                    </control>
-                    <control type="label">
-                        <width min="30" max="1160">auto</width>
-                        <height>20</height>
-                        <font>font14</font> <!-- FEN_33 -->
-                        <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B]  |  $INFO[Container(2059).ListItem.Property(name)] • $INFO[Container(2059).ListItem.Property(release_date)] • $INFO[Container(2059).ListItem.Property(vote_average)]</label>
-                        <visible>Control.HasFocus(2059)</visible>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <label>[B]$ADDON[plugin.video.fen 32617][/B] $INFO[Window.Property(tmdb_artwork.fanart.number),(x,)]</label>
                     </control>
                     <control type="fixedlist" id="2059">
-                        <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2059).NumItems,1) | Integer.IsEqual(Container(2059).NumItems,2)">Conditional</animation>
-                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2059).NumItems,3) | Integer.IsEqual(Container(2059).NumItems,4)">Conditional</animation>
                         <pagecontrol>4059</pagecontrol>
                         <top>60</top>
                         <width>1180</width>
@@ -1396,19 +1384,19 @@
                         <ondown>4059</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">500</scrolltime>
-                        <focusposition>2</focusposition>
-                        <movement>2</movement>
-                        <itemlayout height="360" width="236">
+                        <focusposition>0</focusposition>
+                        <movement>1</movement>
+                        <itemlayout height="360" width="590">
                             <control type="image">
                                 <left>6</left>
                                 <top>6</top>
                                 <height max="348">auto</height>
-                                <width max="224">auto</width>
+                                <width max="578">auto</width>
                                 <aspectratio>scale</aspectratio>
                                 <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
                             </control>
                         </itemlayout>
-                        <focusedlayout height="360" width="236">
+                        <focusedlayout height="360" width="590">
                             <control type="group">
                                 <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
                                 <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
@@ -1418,7 +1406,7 @@
                                     <left>0</left>
                                     <top>0</top>
                                     <height>360</height>
-                                    <width>236</width>
+                                    <width>590</width>
                                     <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
                                     <visible>Control.HasFocus(2059) | Control.HasFocus(4059)</visible>
                                 </control>
@@ -1426,7 +1414,7 @@
                                     <left>6</left>
                                     <top>6</top>
                                     <height max="348">auto</height>
-                                    <width max="224">auto</width>
+                                    <width max="578">auto</width>
                                     <aspectratio>scale</aspectratio>
                                     <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
@@ -1448,7 +1436,7 @@
                         <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2059) | Control.HasFocus(4059)]</visible>
                     </control>
                     <control type="image">
-                        <top>215</top>
+                        <top>230</top>
                         <left>10</left>
                         <width>25</width>
                         <height>25</height>
@@ -1456,7 +1444,7 @@
                         <texture>fen_common/arrow_left.png</texture>
                     </control>
                     <control type="image">
-                        <top>215</top>
+                        <top>230</top>
                         <left>1145</left>
                         <width>25</width>
                         <height>25</height>
@@ -1465,7 +1453,7 @@
                     </control>
                 </control>
             </control>
-            <!-- More From Genres -->
+            <!-- More From Year 2060 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2060).NumItems,0)</visible>
                 <height>760</height>
@@ -1475,7 +1463,7 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B] $INFO[Window.Property(more_from_genres.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B] $INFO[Window.Property(more_from_year.number),(x,)]</label>
                         <visible>!Control.HasFocus(2060)</visible>
                     </control>
                     <control type="label">
@@ -1483,7 +1471,7 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B]  |  $INFO[Container(2060).ListItem.Property(name)] • $INFO[Container(2060).ListItem.Property(release_date)] • $INFO[Container(2060).ListItem.Property(vote_average)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(year)][/B]  |  $INFO[Container(2060).ListItem.Property(name)] • $INFO[Container(2060).ListItem.Property(release_date)] • $INFO[Container(2060).ListItem.Property(vote_average)]</label>
                         <visible>Control.HasFocus(2060)</visible>
                     </control>
                     <control type="fixedlist" id="2060">
@@ -1561,12 +1549,12 @@
                         <left>1145</left>
                         <width>25</width>
                         <height>25</height>
-                        <visible>[Control.HasFocus(2060) | Control.HasFocus(4060)] + Container(2060).HasNext</visible>
+                        <visible>[Control.HasFocus(2059) | Control.HasFocus(4059)] + Container(2059).HasNext</visible>
                         <texture flipx="true">fen_common/arrow_left.png</texture>
                     </control>
                 </control>
             </control>
-            <!-- More From Networks -->
+            <!-- More From Genres 2061 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2061).NumItems,0)</visible>
                 <height>760</height>
@@ -1576,7 +1564,7 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B] $INFO[Window.Property(more_from_networks.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B] $INFO[Window.Property(more_from_genres.number),(x,)]</label>
                         <visible>!Control.HasFocus(2061)</visible>
                     </control>
                     <control type="label">
@@ -1584,7 +1572,7 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B]  |  $INFO[Container(2061).ListItem.Property(name)] • $INFO[Container(2061).ListItem.Property(release_date)] • $INFO[Container(2061).ListItem.Property(vote_average)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(genre)][/B]  |  $INFO[Container(2061).ListItem.Property(name)] • $INFO[Container(2061).ListItem.Property(release_date)] • $INFO[Container(2061).ListItem.Property(vote_average)]</label>
                         <visible>Control.HasFocus(2061)</visible>
                     </control>
                     <control type="fixedlist" id="2061">
@@ -1667,7 +1655,7 @@
                     </control>
                 </control>
             </control>
-            <!-- More From Collection -->
+            <!-- More From Networks 2062 -->
             <control type="group">
                 <visible>Integer.IsGreater(Container(2062).NumItems,0)</visible>
                 <height>760</height>
@@ -1677,7 +1665,7 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$INFO[Window.Property(more_from_collection.name)][/B] $INFO[Window.Property(more_from_collection.number),(x,)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B] $INFO[Window.Property(more_from_networks.number),(x,)]</label>
                         <visible>!Control.HasFocus(2062)</visible>
                     </control>
                     <control type="label">
@@ -1685,57 +1673,22 @@
                         <height>20</height>
                         <font>font14</font> <!-- FEN_33 -->
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$INFO[Window.Property(more_from_collection.name)][/B]  |  $INFO[Container(2062).ListItem.Property(name)] • $INFO[Container(2062).ListItem.Property(release_date)] • $INFO[Container(2062).ListItem.Property(vote_average)]</label>
+                        <label>[B]$ADDON[plugin.video.fen 32612] $INFO[Window.Property(network)][/B]  |  $INFO[Container(2062).ListItem.Property(name)] • $INFO[Container(2062).ListItem.Property(release_date)] • $INFO[Container(2062).ListItem.Property(vote_average)]</label>
                         <visible>Control.HasFocus(2062)</visible>
                     </control>
-                    <control type="group">
-                        <top>60</top>
-                        <control type="image">
-                            <height>360</height>
-                            <width>933</width>
-                            <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
-                            <visible>Integer.IsGreater(Container(2062).NumItems,1)</visible>
-                        </control>
-                        <control type="image">
-                            <height>360</height>
-                            <width>1169</width>
-                            <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
-                            <visible>Integer.IsGreater(Container(2062).NumItems,2)</visible>
-                        </control>
-                        <control type="image">
-                            <left>6</left>
-                            <top>6</top>
-                            <width>224</width>
-                            <height>348</height>
-                            <aspectratio>scale</aspectratio>
-                            <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[Window.Property(more_from_collection.poster)]</texture>
-                        </control>
-                        <control type="textbox">
-                            <left>235</left>
-                            <top>6</top>
-                            <width>218</width>
-                            <height>348</height>
-                            <font>font12</font> <!-- FEN_26 -->
-                            <align>center</align>
-                            <aligny>center</aligny>
-                            <textcolor>FFB7B4BB</textcolor>
-                            <label>$INFO[Window.Property(more_from_collection.overview)]</label>
-                            <autoscroll time="1500" delay="6000" repeat="3000">true</autoscroll>
-                        </control>
-                    </control>
                     <control type="fixedlist" id="2062">
-                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2062).NumItems,2)">Conditional</animation>
+                        <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2062).NumItems,1) | Integer.IsEqual(Container(2062).NumItems,2)">Conditional</animation>
+                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2062).NumItems,3) | Integer.IsEqual(Container(2062).NumItems,4)">Conditional</animation>
                         <pagecontrol>4062</pagecontrol>
                         <top>60</top>
-                        <left>460</left>
-                        <width>708</width>
+                        <width>1180</width>
                         <height>360</height>
                         <onup>2061</onup>
                         <ondown>4062</ondown>
                         <orientation>horizontal</orientation>
                         <scrolltime tween="sine">500</scrolltime>
-                        <focusposition>1</focusposition>
-                        <movement>1</movement>
+                        <focusposition>2</focusposition>
+                        <movement>2</movement>
                         <itemlayout height="360" width="236">
                             <control type="image">
                                 <left>6</left>
@@ -1772,11 +1725,12 @@
                         </focusedlayout>
                     </control>
                     <control type="scrollbar" id="4062">
+                        <left>5</left>
                         <top>432</top>
                         <width>1170</width>
                         <height>15</height>
                         <onup>2062</onup>
-                        <ondown>10</ondown>
+                        <ondown>2063</ondown>
                         <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
                         <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
                         <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
@@ -1786,7 +1740,7 @@
                     </control>
                     <control type="image">
                         <top>215</top>
-                        <left>470</left>
+                        <left>10</left>
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2062) | Control.HasFocus(4062)] + Container(2062).HasPrevious</visible>
@@ -1794,7 +1748,7 @@
                     </control>
                     <control type="image">
                         <top>215</top>
-                        <left>1135</left>
+                        <left>1145</left>
                         <width>25</width>
                         <height>25</height>
                         <visible>[Control.HasFocus(2062) | Control.HasFocus(4062)] + Container(2062).HasNext</visible>
@@ -1802,8 +1756,143 @@
                     </control>
                 </control>
             </control>
+            <!-- More From Collection 2063 -->
+            <control type="group">
+                <visible>Integer.IsGreater(Container(2063).NumItems,0)</visible>
+                <height>760</height>
+                <control type="group">
+                    <control type="label">
+                        <width min="30" max="1160">auto</width>
+                        <height>20</height>
+                        <font>font14</font> <!-- FEN_33 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <label>[B]$INFO[Window.Property(more_from_collection.name)][/B] $INFO[Window.Property(more_from_collection.number),(x,)]</label>
+                        <visible>!Control.HasFocus(2063)</visible>
+                    </control>
+                    <control type="label">
+                        <width min="30" max="1160">auto</width>
+                        <height>20</height>
+                        <font>font14</font> <!-- FEN_33 -->
+                        <textcolor>FFCCCCCC</textcolor>
+                        <label>[B]$INFO[Window.Property(more_from_collection.name)][/B]  |  $INFO[Container(2063).ListItem.Property(name)] • $INFO[Container(2063).ListItem.Property(release_date)] • $INFO[Container(2063).ListItem.Property(vote_average)]</label>
+                        <visible>Control.HasFocus(2063)</visible>
+                    </control>
+                    <control type="group">
+                        <top>60</top>
+                        <control type="image">
+                            <height>360</height>
+                            <width>933</width>
+                            <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
+                            <visible>Integer.IsGreater(Container(2063).NumItems,1)</visible>
+                        </control>
+                        <control type="image">
+                            <height>360</height>
+                            <width>1169</width>
+                            <texture colordiffuse="FF302F2F">fen_common/white.png</texture>
+                            <visible>Integer.IsGreater(Container(2063).NumItems,2)</visible>
+                        </control>
+                        <control type="image">
+                            <left>6</left>
+                            <top>6</top>
+                            <width>224</width>
+                            <height>348</height>
+                            <aspectratio>scale</aspectratio>
+                            <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[Window.Property(more_from_collection.poster)]</texture>
+                        </control>
+                        <control type="textbox">
+                            <left>235</left>
+                            <top>6</top>
+                            <width>218</width>
+                            <height>348</height>
+                            <font>font12</font> <!-- FEN_26 -->
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <textcolor>FFB7B4BB</textcolor>
+                            <label>$INFO[Window.Property(more_from_collection.overview)]</label>
+                            <autoscroll time="1500" delay="6000" repeat="3000">true</autoscroll>
+                        </control>
+                    </control>
+                    <control type="fixedlist" id="2063">
+                        <animation effect="slide" end="-236,0" time="0" condition="Integer.IsEqual(Container(2063).NumItems,2)">Conditional</animation>
+                        <pagecontrol>4063</pagecontrol>
+                        <top>60</top>
+                        <left>460</left>
+                        <width>708</width>
+                        <height>360</height>
+                        <onup>2062</onup>
+                        <ondown>4063</ondown>
+                        <orientation>horizontal</orientation>
+                        <scrolltime tween="sine">500</scrolltime>
+                        <focusposition>1</focusposition>
+                        <movement>1</movement>
+                        <itemlayout height="360" width="236">
+                            <control type="image">
+                                <left>6</left>
+                                <top>6</top>
+                                <height max="348">auto</height>
+                                <width max="224">auto</width>
+                                <aspectratio>scale</aspectratio>
+                                <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
+                            </control>
+                        </itemlayout>
+                        <focusedlayout height="360" width="236">
+                            <control type="group">
+                                <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="auto">Focus</animation>
+                                <animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="auto">UnFocus</animation>
+                                <animation effect="fade" start="100" end="60" condition="Control.HasFocus(4063)">Conditional</animation>
+                                <control type="image">
+                                    <animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
+                                    <left>0</left>
+                                    <top>0</top>
+                                    <height>360</height>
+                                    <width>236</width>
+                                    <texture colordiffuse="FFB7B4BB" border="12">fen_common/panel-256-box.png</texture>
+                                    <visible>Control.HasFocus(2063) | Control.HasFocus(4063)</visible>
+                                </control>
+                                <control type="image">
+                                    <left>6</left>
+                                    <top>6</top>
+                                    <height max="348">auto</height>
+                                    <width max="224">auto</width>
+                                    <aspectratio>scale</aspectratio>
+                                    <texture diffuse="fen_diffuse/poster_w217_h320.png">$INFO[ListItem.Property(thumbnail)]</texture>
+                                </control>
+                            </control>
+                        </focusedlayout>
+                    </control>
+                    <control type="scrollbar" id="4063">
+                        <top>432</top>
+                        <width>1170</width>
+                        <height>15</height>
+                        <onup>2063</onup>
+                        <ondown>10</ondown>
+                        <texturesliderbackground colordiffuse="FF302F2F">fen_common/white.png</texturesliderbackground>
+                        <texturesliderbar colordiffuse="FF555556">fen_common/white.png</texturesliderbar>
+                        <texturesliderbarfocus colordiffuse="FFB7B4BB">fen_common/white.png</texturesliderbarfocus>
+                        <showonepage>false</showonepage>
+                        <orientation>Horizontal</orientation>
+                        <visible>String.IsEqual(Window.Property(enable_scrollbars),true) + [Control.HasFocus(2063) | Control.HasFocus(4063)]</visible>
+                    </control>
+                    <control type="image">
+                        <top>215</top>
+                        <left>470</left>
+                        <width>25</width>
+                        <height>25</height>
+                        <visible>[Control.HasFocus(2063) | Control.HasFocus(4063)] + Container(2063).HasPrevious</visible>
+                        <texture>fen_common/arrow_left.png</texture>
+                    </control>
+                    <control type="image">
+                        <top>215</top>
+                        <left>1135</left>
+                        <width>25</width>
+                        <height>25</height>
+                        <visible>[Control.HasFocus(2063) | Control.HasFocus(4063)] + Container(2063).HasNext</visible>
+                        <texture flipx="true">fen_common/arrow_left.png</texture>
+                    </control>
+                </control>
+            </control>
         </control>
-        <control type="image" id="201">
+        <control type="image" id="250">
             <description>Dummy load of Original Quality Image</description>
             <left>-1000</left>
             <top>-1000</top>

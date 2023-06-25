@@ -175,7 +175,11 @@ class EasyNewsAPI:
 		return self.base_resolver(url_dl)
 
 	def resolver(self, url_dl):
-		return url_dl
+		try:
+			headers = {'Authorization': self.auth}
+			resolved_link = session.get(url_dl, headers=headers, stream=True, timeout=timeout).url
+		except: resolved_link = url_dl
+		return resolved_link
 
 	def resolver_v3(self, url_dl):
 		headers = {'Authorization': self.auth}

@@ -136,9 +136,10 @@ class AllDebridAPI:
 				if season:
 					correct_files = [i for i in valid_results if seas_ep_filter(season, episode, i['filename'])]
 					if correct_files:
+						extras = [i for i in EXTRAS if not i == title.lower()]
 						episode_title = re.sub(r'[^A-Za-z0-9-]+', '.', title.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
 						try: media_id = [i['link'] for i in correct_files if not any(x in re.sub(episode_title, '', seas_ep_filter(season, episode, i['filename'], split=True)) \
-											for x in EXTRAS)][0]
+											for x in extras)][0]
 						except: media_id = None
 				else: media_id = max(valid_results, key=lambda x: x.get('size')).get('link', None)
 			if not store_to_cloud: Thread(target=self.delete_transfer, args=(transfer_id,)).start()

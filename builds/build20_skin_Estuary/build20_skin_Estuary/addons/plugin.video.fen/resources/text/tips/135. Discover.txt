@@ -11,7 +11,7 @@ You want to search for Comedy/Action Movies made in the 1980's that are PG Rated
 - Assign a "[B]Certification[/B]" filter of "PG"
 - Select "[B]Browse Results[/B]" to immediately see the results or "[B]Export List[/B]" to export the list to Fen Root Menu or Fen Movies Menu etc"
 - Only want movies with Tom Hanks in your new list? Add a 'Tom Hanks' filter for 'Includes Cast Member'.
-- [B]Enjoy your 1980's Action/Comedy Family Movie Night!!![/B]
+- [B]Enjoy your 1980's Action/Comedy Family Movie Night.[/B]
 
 [B]You can also search for Similar or Recommended Titles.[/B]
 [B]EXAMPLE 2:[/B]
@@ -21,4 +21,4 @@ You want to search for Movies Similar to Avengers Endgame.
     - Choose from the titles presented for the correct Movie/TV Show
     - You will notice the other filters have disappeared. Once a "Discover Recommended" value has been set, the other filters are not available.
     - Select "[B]Browse Results[/B]" to immediately see the results or "[B]Export List[/B]" to export the list to Fen Root Menu or Fen Movies Menu etc"
-[B]You will see a list of Movies Recommended based on Avengers Endgame!!![/B]
+[B]You will see a list of Movies Recommended based on Avengers Endgame.[/B]

@@ -147,13 +147,15 @@ def make_placeholder_listitem():
 
 def make_fake_widget():
 	fake_widget_made = False
-	if addon().getSetting('wait_for_services') == 'true':
-		fake_widget_made = True
-		handle = int(sys.argv[1])
-		set_property(services_refresh_after_run_prop, 'true')
-		add_items(handle, make_placeholder_listitem())
-		end_directory(handle, False)
-	else: set_property(services_finished_prop, 'true')
+	try:
+		if addon().getSetting('wait_for_services') == 'true':
+			fake_widget_made = True
+			handle = int(sys.argv[1])
+			set_property(services_refresh_after_run_prop, 'true')
+			add_items(handle, make_placeholder_listitem())
+			end_directory(handle, False)
+		else: set_property(services_finished_prop, 'true')
+	except: set_property(services_finished_prop, 'true')
 	return fake_widget_made
 
 def make_listitem():
@@ -175,9 +177,9 @@ def end_directory(handle, cacheToDisc=None):
 	if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
 	endOfDirectory(handle, cacheToDisc=cacheToDisc)
 
-def set_view_mode(view_type, content='files', is_widget=None):
-	if is_widget == None: is_widget = external_browse()
-	if is_widget: return
+def set_view_mode(view_type, content='files', is_external=None):
+	if is_external == None: is_external = external()
+	if is_external: return
 	view_id = get_property(view_type_prop % view_type)
 	if not view_id:
 		try:
@@ -285,7 +287,7 @@ def current_skin():
 def get_window_id():
 	return getCurrentWindowId()
 
-def current_window_id():
+def current_window_object():
 	return Window(get_window_id())
 
 def get_video_database_path():
@@ -307,8 +309,11 @@ def close_all_dialog():
 def run_addon(addon='plugin.video.fen', block=False):
 	return execute_builtin('RunAddon(%s)' % addon, block)
 
-def external_browse():
-	return 'fen' not in get_infolabel('Container.PluginName')
+def external():
+	return get_infolabel('Container.PluginName') == ''
+
+def home():
+	return getCurrentWindowId() == 10000
 
 def folder_path():
 	return get_infolabel('Container.FolderPath')
@@ -437,7 +442,7 @@ def restore_highlight(current_highlight):
 	set_property(highlight_prop, current_highlight)
 
 def set_view(view_type):
-	view_id = str(current_window_id().getFocusId())
+	view_id = str(current_window_object().getFocusId())
 	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
 	dbcur = dbcon.cursor()
 	dbcur.execute('''PRAGMA synchronous = OFF''')
@@ -481,7 +486,7 @@ def volume_checker():
 def focus_index(index, sleep_time=1000):
 	show_busy_dialog()
 	sleep(sleep_time)
-	current_window = current_window_id()
+	current_window = current_window_object()
 	focus_id = current_window.getFocusId()
 	try: current_window.getControl(focus_id).selectItem(index)
 	except: pass

@@ -7,7 +7,7 @@ from modules import kodi_utils
 build_url, confirm_dialog, dialog, sleep, kodi_refresh = kodi_utils.build_url, kodi_utils.confirm_dialog, kodi_utils.dialog, kodi_utils.sleep, kodi_utils.kodi_refresh
 get_infolabel, select_dialog, notification, execute_builtin = kodi_utils.get_infolabel, kodi_utils.select_dialog, kodi_utils.notification, kodi_utils.execute_builtin
 json, tp, ls, parse_qsl, get_icon = kodi_utils.json, kodi_utils.translate_path, kodi_utils.local_string, kodi_utils.parse_qsl, kodi_utils.get_icon
-get_all_icon_vars = kodi_utils.get_all_icon_vars
+get_setting, get_all_icon_vars = kodi_utils.get_setting, kodi_utils.get_all_icon_vars
 main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029)}
 fen_str, pos_str, top_pos_str, top_str, exists_str, addq_str = ls(32036), ls(32707), ls(32708), ls(32709), ls(32727), ls(32728)
 move_str, remove_str, add_org_str, fol_add_str, orig_add_str, fol_menu_str, trak_add_str = ls(32716), ls(32717), ls(32718), ls(32719), ls(32721), ls(32725), ls(32720)
@@ -40,7 +40,7 @@ class MenuEditor:
 			listing.append((fol_add_str % menu_name_translated_display, self.shortcut_folder_add_item))
 		listing.append((orig_add_str % list_name, self.add_original))
 		listing.append((fol_menu_str % list_name, self.shortcut_folder_add_to_main_menu))
-		listing.append((trak_add_str % list_name, self.add_trakt))
+		if get_setting('trakt.user', ''): listing.append((trak_add_str % list_name, self.add_trakt))
 		listing.append((res_str % list_name, self.restore))
 		listing.append((upd_str % list_name, self.check_update_list))
 		if not external_list_item: listing.append((reload_str % menu_name_translated_display, self.reload_menu_item))
@@ -230,17 +230,17 @@ class MenuEditor:
 		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': multi_line}
 		return select_dialog(index_list, **kwargs)
 
-	def _icon_select(self, folder_first=True):
+	def _icon_select(self, default_icon=''):
 		all_icons = get_all_icon_vars()
-		if folder_first:
+		if default_icon:
 			try:
-				all_icons.remove('folder')
-				all_icons.insert(0, 'folder')
+				all_icons.remove(default_icon)
+				all_icons.insert(0, default_icon)
 			except: pass
-			list_items = [{'line1': i if i != 'folder' else 'folder (default)', 'icon': get_icon(i)} for i in all_icons]
+			list_items = [{'line1': i if i != default_icon else '%s (default)' % default_icon, 'icon': get_icon(i)} for i in all_icons]
 		else: list_items = [{'line1': i, 'icon': get_icon(i)} for i in all_icons]
 		kwargs = {'items': json.dumps(list_items), 'heading': choose_icon_str}
-		icon_choice = select_dialog(all_icons, **kwargs) or 'folder'
+		icon_choice = select_dialog(all_icons, **kwargs) or default_icon or 'folder'
 		return icon_choice
 
 	def _clean_name(self, name):
@@ -264,6 +264,8 @@ class MenuEditor:
 			menu_item.update(self.params)
 		if menu_name: menu_item['name'] = menu_name
 		menu_item['external_list_item'] = 'True'
+		icon_choice = self._icon_select(default_icon=menu_item.get('iconImage', 'folder'))
+		menu_item['iconImage'] = icon_choice
 		return menu_item
 
 	def _get_main_menu_items(self, active_list):
@@ -327,7 +329,8 @@ class MenuEditor:
 		list_items = eval(choice_list)
 		name = self._clean_name(self.params_get('name') or self.params_get('menu_name_translated'))
 		menu_name = self._get_external_name_input(name) or name
-		self.menu_item.update({'name': menu_name, 'iconImage': self.params_get('iconImage', None) or self.menu_item_get('iconImage')})
+		icon_choice = self._icon_select(default_icon=self.params_get('iconImage', None) or self.menu_item_get('iconImage') or 'folder')
+		self.menu_item.update({'name': menu_name, 'iconImage': icon_choice})
 		if list_items:
 			position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True)
 			if position == None: return notification(32736, 1500)
@@ -352,7 +355,7 @@ class MenuEditor:
 		list_items = navigator_cache.currently_used_list(active_list)
 		position = self._menu_select(list_items, self.params_get('menu_name_translated'), multi_line='true', position_list=True)
 		if position == None: return notification(32736, 1500)
-		icon_choice = self._icon_select()
+		icon_choice = self._icon_select(default_icon='folder')
 		chosen_folder = {'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': icon_choice, 'shortcut_folder': 'True', 'external_list_item': 'True'}
 		list_items.insert(position, chosen_folder)
 		self._db_execute('set', active_list, list_items)

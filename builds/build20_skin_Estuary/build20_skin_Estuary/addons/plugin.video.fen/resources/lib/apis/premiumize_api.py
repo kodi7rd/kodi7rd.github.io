@@ -109,13 +109,14 @@ class PremiumizeAPI:
 			if len(valid_results) == 0: return
 			if season:
 				episode_title = re.sub(r'[^A-Za-z0-9-]+', '.', title.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
+				extras = [i for i in EXTRAS if not i == title.lower()]
 				for item in valid_results:
 					if seas_ep_filter(season, episode, item['path'].split('/')[-1]): append(item)
 					if len(correct_files) == 0: continue
 					for i in correct_files:
 						compare_link = seas_ep_filter(season, episode, i['path'], split=True)
 						compare_link = re.sub(episode_title, '', compare_link)
-						if not any(x in compare_link for x in EXTRAS):
+						if not any(x in compare_link for x in extras):
 							file_url = i['link']
 							break
 			else:

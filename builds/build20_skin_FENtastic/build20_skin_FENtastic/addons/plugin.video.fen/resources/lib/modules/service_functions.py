@@ -16,7 +16,7 @@ ls, path_exists, translate_path, custom_context_main_menu_prop = kodi_utils.loca
 custom_context_prop, custom_info_prop, pause_settings_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.pause_settings_prop, kodi_utils.addon
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
 get_window_id, Thread, make_window_properties, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.make_window_properties, settings.check_premium_account_status
-get_setting, set_setting, make_settings_dict, external_browse = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.external_browse
+get_setting, set_setting, make_settings_dict, external = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.external
 logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_fen = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_fen
@@ -26,7 +26,7 @@ notification, ok_dialog = kodi_utils.notification, kodi_utils.ok_dialog
 pause_settings_change, unpause_settings_change = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change
 fen_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
-media_windows = (10000, 10025)
+media_windows = (10000, 10025, 11121)
 premium_check_function_dict = {'Real-Debrid': real_debrid.active_days, 'Premiumize.me': premiumize.active_days, 'AllDebrid': alldebrid.active_days,
 								'Furk': furk.active_days, 'Easynews': easynews.active_days}
 premium_check_setting_dict = {'Real-Debrid': 'rd.enabled', 'Premiumize.me': 'pm.enabled', 'AllDebrid': 'ad.enabled',
@@ -124,19 +124,19 @@ class TraktMonitor:
 		trakt_service_string = 'TraktMonitor Service Update %s - %s'
 		update_string = 'Next Update in %s minutes...'
 		wait_time = 30 * 60
+		success_line_dict = {'success': 'Trakt Update Performed', 'no account': '(Unauthorized) Trakt Update Performed'}
 		while not monitor.abortRequested():
 			try:
 				while is_playing() or get_property(pause_services_prop) == 'true': wait_for_abort(10)
 				sync_interval, wait_time = trakt_sync_interval()
 				next_update_string = update_string % sync_interval
 				status = trakt_sync_activities()
-				if status == 'success':
-					logger(fen_str, trakt_service_string % ('Success', 'Trakt Update Performed'))
+				if status in ('success', 'no account'):
+					logger(fen_str, trakt_service_string % ('Success', success_line_dict[status]))
 					if trakt_sync_refresh_widgets():
 						kodi_refresh()
 						logger(fen_str, trakt_service_string % ('Widgets Refresh', 'Setting Activated. Widget Refresh Performed'))
 					else: logger(fen_str, trakt_service_string % ('Widgets Refresh', 'Setting Disabled. Skipping Widget Refresh'))
-				elif status == 'no account': logger(fen_str, trakt_service_string % ('Aborted. No Trakt Account Active', next_update_string))
 				elif status == 'failed': logger(fen_str, trakt_service_string % ('Failed. Error from Trakt', next_update_string))
 				else: logger(fen_str, trakt_service_string % ('Success. No Changes Needed', next_update_string))# 'not needed'
 			except Exception as e: logger(fen_str, trakt_service_string % ('Failed', 'The following Error Occured: %s' % str(e)))
@@ -153,24 +153,15 @@ class CustomActions:
 		monitor, player = xbmc_monitor(), xbmc_player()
 		self.wait_for_abort, abort_requested, is_playing = monitor.waitForAbort, monitor.abortRequested, player.isPlayingVideo
 		while not abort_requested():
-			customs_active, any_custom_params = False, False
-			context_visible, info_visible = False, False
-			run_custom = False
+			context_visible, info_visible, run_custom = False, False, False
 			while not any([context_visible, info_visible]) and not abort_requested():
 				custom_context = get_property(custom_context_prop) == 'true'
 				custom_main_context = get_property(custom_context_main_menu_prop) == 'true'
 				custom_info = get_property(custom_info_prop) == 'true'
-				customs_active = any([custom_context, custom_main_context, custom_info])
-				if not customs_active:
-					self.wait_for_abort(2)
-					continue
-				if not get_window_id() in media_windows:
-					self.wait_for_abort(2)
-					continue
-				if get_property(pause_services_prop) == 'true' or is_playing():
-					self.wait_for_abort(2)
-					continue
-				if not external_browse() or get_infolabel(listitem_property_str % 'fen.widget') == 'true':
+				if not any([custom_context, custom_main_context, custom_info]): self.wait_for_abort(5); continue
+				if not get_window_id() in media_windows: self.wait_for_abort(2); continue
+				if get_property(pause_services_prop) == 'true' or is_playing(): self.wait_for_abort(2); continue
+				if not external() or get_infolabel(listitem_property_str % 'fen.external') == 'true':
 					run_custom = True
 					custom_context_params = get_infolabel(listitem_property_str % 'fen.options_params')
 					custom_main_context_params = get_infolabel(listitem_property_str % 'fen.context_main_menu_params')
@@ -178,8 +169,7 @@ class CustomActions:
 					self.wait_for_abort(0.25)
 				else:
 					run_custom = False
-					self.wait_for_abort(1)
-					continue
+					self.wait_for_abort(1); continue
 				context_visible, info_visible = get_visibility(window_top_str % contextmenu_str), get_visibility(window_top_str % movieinformation_str)
 			try:
 				if run_custom and any([custom_context_params, custom_main_context_params, custom_info_params]):

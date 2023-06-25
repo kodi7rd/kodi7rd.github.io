@@ -6,7 +6,7 @@ from modules import kodi_utils
 from modules.settings import use_year_in_search
 # logger = kodi_utils.logger
 
-json, ls, close_all_dialog, external_browse = kodi_utils.json, kodi_utils.local_string, kodi_utils.close_all_dialog, kodi_utils.external_browse
+json, ls, close_all_dialog, external = kodi_utils.json, kodi_utils.local_string, kodi_utils.close_all_dialog, kodi_utils.external
 build_url, dialog, unquote, execute_builtin, select_dialog = kodi_utils.build_url, kodi_utils.dialog, kodi_utils.unquote, kodi_utils.execute_builtin, kodi_utils.select_dialog
 notification, kodi_refresh, numeric_input = kodi_utils.notification, kodi_utils.kodi_refresh, kodi_utils.numeric_input
 insert_string_4, insert_string_5 = '%s %s %s %s', '%s %s %s %s %s'
@@ -52,7 +52,7 @@ def get_search_term(params):
 		kodi_refresh()
 		return person_search(query)
 	url_params['query'] = query
-	action = 'ActivateWindow(Videos,%s,return)' if external_browse() else 'Container.Update(%s)'
+	action = 'ActivateWindow(Videos,%s,return)' if external() else 'Container.Update(%s)'
 	return execute_builtin(action % build_url(url_params))
 
 def add_to_search_history(search_name, search_list):

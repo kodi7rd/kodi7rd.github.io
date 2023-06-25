@@ -2,7 +2,7 @@
 import re
 from datetime import datetime, timedelta
 from windows import BaseDialog, window_manager, window_player
-from apis import tmdb_api, imdb_api, omdb_api
+from apis import tmdb_api, imdb_api, omdb_api, trakt_api
 from indexers import dialogs, people
 from indexers.images import Images
 from modules import kodi_utils, watched_status, settings
@@ -34,16 +34,16 @@ tmdb_movies_recommendations, tmdb_tv_recommendations, tmdb_company_id = tmdb_api
 tmdb_movies_companies, tmdb_tv_networks = tmdb_api.tmdb_movies_companies, tmdb_api.tmdb_tv_networks
 imdb_reviews, imdb_trivia, imdb_blunders = imdb_api.imdb_reviews, imdb_api.imdb_trivia, imdb_api.imdb_blunders
 imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_videos
-fetch_ratings_info = omdb_api.fetch_ratings_info
+fetch_ratings_info, trakt_comments = omdb_api.fetch_ratings_info, trakt_api.trakt_comments
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
 youtube_check = 'plugin.video.youtube'
 setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'fen_flags/ratings/%s'
 separator = '  •  '
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
-plot_id, cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055
-videos_id, posters_id, fanarts_id, year_id, genres_id, networks_id, collection_id = 2056, 2057, 2058, 2059, 2060, 2061, 2062
-tmdb_list_ids = (recommended_id, year_id, genres_id, networks_id, collection_id)
-imdb_list_ids = (reviews_id, trivia_id, blunders_id, parentsguide_id)
+plot_id, cast_id, recommended_id, reviews_id, comments_id, trivia_id, blunders_id, parentsguide_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055, 2056
+videos_id, posters_id, fanarts_id, year_id, genres_id, networks_id, collection_id = 2057, 2058, 2059, 2060, 2061, 2062, 2063
+items_list_ids = (recommended_id, year_id, genres_id, networks_id, collection_id)
+text_list_ids = (reviews_id, trivia_id, blunders_id, parentsguide_id, comments_id)
 art_ids = (posters_id, fanarts_id)
 finished_tvshow = ('', 'Ended', 'Canceled')
 parentsguide_levels = {'mild': ls(32996), 'moderate': ls(32997), 'severe': ls(32998), 'none': ls(33070)}
@@ -60,17 +60,18 @@ class Extras(BaseDialog):
 		self.control_id = None
 		self.set_starting_constants(kwargs)
 		self.set_properties()
-		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_ratings, self.set_poster, self.make_plot, self.make_cast, self.make_recommended,
-					self.make_reviews, self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres,
+		self.tasks = (self.set_artwork, self.set_infoline1, self.set_infoline2, self.make_ratings, self.make_plot, self.make_cast, self.make_recommended,
+					self.make_reviews, self.make_comments, self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres,
 					self.make_network, self.make_posters, self.make_fanart, self.make_collection)
 
 	def onInit(self):
 		self.set_home_property('window_loaded', 'true')
 		for i in self.tasks: Thread(target=i).start()
+		self.set_default_focus()
 		if self.starting_position:
 			try:
 				window_id, focus = self.starting_position
-				self.sleep(300)
+				self.sleep(500)
 				self.setFocusId(window_id)
 				self.select_item(window_id, focus)
 			except: self.set_default_focus()
@@ -94,7 +95,7 @@ class Extras(BaseDialog):
 		if action in self.closing_actions: return window_manager(self)
 		if action == self.info_action:
 			focus_id = self.getFocusId()
-			if not focus_id in tmdb_list_ids: return
+			if not focus_id in items_list_ids: return
 			show_busy_dialog()
 			from modules.metadata import movie_meta, tvshow_meta
 			chosen_listitem = self.get_listitem(focus_id)
@@ -118,13 +119,13 @@ class Extras(BaseDialog):
 		if action in self.selection_actions:
 			try: chosen_var = self.get_listitem(self.control_id).getProperty(self.item_action_dict[self.control_id])
 			except: return
-			if self.control_id in tmdb_list_ids:
+			if self.control_id in items_list_ids:
 				self.set_current_params()
-				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': self.media_type, 'is_widget': self.is_widget, 'stacked': 'true'}
+				self.new_params = {'mode': 'extras_menu_choice', 'tmdb_id': chosen_var, 'media_type': self.media_type, 'is_external': self.is_external, 'stacked': 'true'}
 				return window_manager(self)
 			elif self.control_id == cast_id:
 				self.set_current_params()
-				self.new_params = {'mode': 'person_data_dialog', 'query': chosen_var, 'reference_tmdb_id': self.tmdb_id, 'is_widget': self.is_widget, 'stacked': 'true'}
+				self.new_params = {'mode': 'person_data_dialog', 'query': chosen_var, 'reference_tmdb_id': self.tmdb_id, 'is_external': self.is_external, 'stacked': 'true'}
 				return window_manager(self)
 			elif self.control_id == videos_id:
 				chosen = imdb_videos_choice(self.get_attribute(self, chosen_var)[self.get_position(self.control_id)]['videos'], self.poster)
@@ -133,7 +134,7 @@ class Extras(BaseDialog):
 				self.set_current_params()
 				self.window_player_url = chosen
 				return window_player(self)
-			elif self.control_id in imdb_list_ids:
+			elif self.control_id in text_list_ids:
 				if self.control_id == parentsguide_id:
 					if not chosen_var: return
 					self.show_text_media(text=chosen_var)
@@ -211,6 +212,24 @@ class Extras(BaseDialog):
 			self.setProperty('imdb_reviews.number', count_insert % len(item_list))
 			self.item_action_dict[reviews_id] = 'content_list'
 			self.add_items(reviews_id, item_list)
+		except: pass
+
+	def make_comments(self):
+		if not comments_id in self.enabled_lists: return
+		def builder():
+			for item in self.all_comments:
+				try:
+					listitem = self.make_listitem()
+					listitem.setProperty('text', item)
+					listitem.setProperty('content_list', 'all_comments')
+					yield listitem
+				except: pass
+		try:
+			self.all_comments = trakt_comments(self.media_type, self.imdb_id)
+			item_list = list(builder())
+			self.setProperty('trakt_comments.number', count_insert % len(item_list))
+			self.item_action_dict[comments_id] = 'content_list'
+			self.add_items(comments_id, item_list)
 		except: pass
 
 	def make_trivia(self):
@@ -517,20 +536,28 @@ class Extras(BaseDialog):
 				yield listitem
 			except: pass
 
-	def set_poster(self):
+	def wait_for_image(self, image):
+		total_time = 0
+		while not self.check_image_cached(image) and not total_time > 200:
+			total_time += 1
+			self.sleep(50)
+
+	def set_artwork(self):
+		self.setProperty('clearlogo', 'false')
+		self.set_image(202, self.fanart)
+		self.set_image(201, self.clearlogo)
+		if self.current_poster: self.set_image(200, self.current_poster)
+		if self.clearlogo:
+			self.wait_for_image(self.clearlogo)
+			self.setProperty('clearlogo', 'true')
 		if self.current_poster:
-			self.set_image(200, self.current_poster)
-			self.set_image(201, self.poster)
-			total_time = 0
-			while not self.check_image_cached(self.poster) and not total_time > 200:
-				total_time += 1
-				self.sleep(50)
+			self.set_image(250, self.poster)
+			self.wait_for_image(self.poster)
 			self.set_image(200, self.poster)
-		else: self.setProperty('active_poster', 'false')
 
 	def check_image_cached(self, image):
 		try:
-			if image in (empty_poster, ''): return True
+			if image == '': return True
 			if fetch_kodi_imagecache(image): return True
 			return False
 		except: return True
@@ -590,12 +617,12 @@ class Extras(BaseDialog):
 	def show_director(self):
 		director = self.meta_get('director', None)
 		if not director: return
-		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_widget': self.is_widget}
-		self.new_params = {'mode': 'person_data_dialog', 'query': director, 'is_widget': self.is_widget}
+		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_external': self.is_external}
+		self.new_params = {'mode': 'person_data_dialog', 'query': director, 'is_external': self.is_external}
 		window_manager(self)
 
 	def show_options(self):
-		params = {'content': self.options_media_type, 'tmdb_id': str(self.tmdb_id), 'poster': self.poster, 'is_widget': self.is_widget, 'from_extras': 'true'}
+		params = {'content': self.options_media_type, 'tmdb_id': str(self.tmdb_id), 'poster': self.poster, 'is_external': self.is_external, 'from_extras': 'true'}
 		return options_menu_choice(params, self.meta)
 
 	def show_recommended(self):
@@ -629,7 +656,7 @@ class Extras(BaseDialog):
 		self.button_action_dict[50] = 'show_text_media'
 
 	def set_current_params(self, set_starting_position=True):
-		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_widget': self.is_widget}
+		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_external': self.is_external}
 		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
 
 	def set_starting_constants(self, kwargs):
@@ -637,14 +664,14 @@ class Extras(BaseDialog):
 		self.meta_get = self.meta.get
 		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
 		self.starting_position = kwargs.get('starting_position', None)
-		self.is_widget = kwargs['is_widget'].lower()
+		self.is_external = kwargs['is_external'].lower()
 		self.item_action_dict, self.button_action_dict = {}, {}
 		self.selected = None
 		self.current_params, self.new_params = {}, {}
 		self.extra_info = self.meta_get('extra_info')
 		self.extra_info_get = self.extra_info.get
 		self.tmdb_id, self.imdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id')
-		self.folder_runner = activate_window if self.is_widget == 'true' else container_update
+		self.folder_runner = activate_window if self.is_external == 'true' else container_update
 		self.meta_user_info, self.enabled_lists, self.enable_scrollbars = metadata_user_info(), extras_enabled_menus(), extras_enable_scrollbars()
 		self.poster_resolution, self.watched_indicators, self.omdb_api = get_resolution()['poster'], watched_indicators(), omdb_api_key()
 		self.display_extra_ratings = self.imdb_id and self.omdb_api and enable_extra_ratings()
@@ -659,8 +686,7 @@ class Extras(BaseDialog):
 
 	def set_properties(self):
 		self.assign_buttons()
-		self.setProperty('media_type', self.media_type), self.setProperty('fanart', self.fanart), self.setProperty('clearlogo', self.clearlogo)
-		self.setProperty('title', self.title), self.setProperty('year', self.year)
+		self.setProperty('media_type', self.media_type), self.setProperty('title', self.title), self.setProperty('year', self.year)
 		self.setProperty('genre', self.genre), self.setProperty('network', self.network), self.setProperty('enable_scrollbars', self.enable_scrollbars)
 
 	def set_infoline1(self, remove_rating=False):
@@ -710,57 +736,3 @@ class ShowTextMedia(BaseDialog):
 			if self.position == self.len_text - 1: self.setProperty('next_display', 'false')
 			else: self.setProperty('next_display', 'true')
 		else: self.setProperty('previous_display', 'false'), self.setProperty('next_display', 'false')
-
-class ExtrasChoice(BaseDialog):
-	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
-		self.window_id = 5001
-		self.kwargs = kwargs
-		self.preselect = self.kwargs['preselect']
-		self.items = json.loads(self.kwargs['items'])
-		self.chosen_indexes = []
-		self.append = self.chosen_indexes.append
-		self.selected = None
-		self.make_menu()
-
-	def onInit(self):
-		self.add_items(self.window_id, self.item_list)
-		if self.preselect:
-			for index in self.preselect:
-				self.item_list[index].setProperty('check_status', 'checked')
-				self.append(index)
-		self.setFocusId(self.window_id)
-
-	def run(self):
-		self.doModal()
-		return self.selected
-
-	def onClick(self, controlID):
-		if controlID == 10:
-			self.selected = sorted(self.chosen_indexes)
-			self.close()
-		elif controlID == 11:
-			self.close()
-
-	def onAction(self, action):
-		if action in self.selection_actions:
-			position = self.get_position(self.window_id)
-			chosen_listitem = self.get_listitem(self.window_id)
-			if chosen_listitem.getProperty('check_status') == 'checked':
-				chosen_listitem.setProperty('check_status', '')
-				self.chosen_indexes.remove(position)
-			else:
-				chosen_listitem.setProperty('check_status', 'checked')
-				self.append(position)
-		elif action in self.closing_actions:
-			return self.close()
-
-	def make_menu(self):
-		def builder():
-			for item in self.items:
-				listitem = self.make_listitem()
-				listitem.setProperty('name', item['name'])
-				listitem.setProperty('image', item['image'])
-				listitem.setProperty('item', json.dumps(item))
-				yield listitem
-		self.item_list = list(builder())

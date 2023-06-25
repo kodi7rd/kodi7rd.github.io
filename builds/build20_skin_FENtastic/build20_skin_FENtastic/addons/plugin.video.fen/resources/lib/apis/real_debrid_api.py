@@ -224,6 +224,7 @@ class RealDebridAPI:
 				if m2ts_check: m2ts_key, torrent_files = self._m2ts_key_value(torrent_files)
 				else: torrent_files = self.sort_cache_list([(item, max([i['filesize'] for i in item.values()])) for item in torrent_files])
 			compare_title = re.sub(r'[^A-Za-z0-9]+', '.', title.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
+			extras = [i for i in EXTRAS if not i == title.lower()]
 			for item in torrent_files:
 				try:
 					if not season and not m2ts_check:
@@ -231,7 +232,7 @@ class RealDebridAPI:
 						for value in item_values:
 							filename = re.sub(r'[^A-Za-z0-9-]+', '.', value.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
 							filename_info = filename.replace(compare_title, '')
-							if any(x in filename_info for x in EXTRAS): continue
+							if any(x in filename_info for x in extras): continue
 					torrent_keys = item.keys()
 					if len(torrent_keys) == 0: continue
 					torrent_keys = ','.join(torrent_keys)
@@ -250,7 +251,7 @@ class RealDebridAPI:
 						for i in correct_files:
 							compare_link = seas_ep_filter(season, episode, i['path'], split=True)
 							compare_link = re.sub(compare_title, '', compare_link)
-							if any(x in compare_link for x in EXTRAS): continue
+							if any(x in compare_link for x in extras): continue
 							else: match = True; break
 						if match: index = [i[0] for i in selected_files if i[1]['path'] == correct_files[0]['path']][0]; break
 					elif m2ts_check: match, index = True, [i[0] for i in selected_files if i[1]['id'] == m2ts_key][0]; break
@@ -259,7 +260,7 @@ class RealDebridAPI:
 						for value in selected_files:
 							filename = re.sub(r'[^A-Za-z0-9-]+', '.', value[1]['path'].rsplit('/', 1)[1].replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
 							filename_info = filename.replace(compare_title, '')
-							if any(x in filename_info for x in EXTRAS): continue
+							if any(x in filename_info for x in extras): continue
 							match, index = True, value[0]; break
 						if match: break
 				except: pass

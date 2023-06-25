@@ -27,7 +27,7 @@ class SelectColor(BaseDialog):
 			self.close()
 		self.add_items(self.window_id, self.item_list)
 		self.setFocusId(self.window_id)
-		self.select_item(self.window_id, self.start_index)
+		self.select_item(self.window_id, 0)
 
 	def run(self):
 		self.doModal()
@@ -62,10 +62,8 @@ class SelectColor(BaseDialog):
 					listitem = self.make_listitem()
 					listitem.setProperty('label', item)
 					listitem.setProperty('image', self.texture_location % item)
-					if item == self.current_setting: self.start_index = count
 					yield listitem
 				except: pass
-		self.start_index = 0
 		current_palette = palettes[self.current_palette]
 		self.item_list = list(builder())
 
