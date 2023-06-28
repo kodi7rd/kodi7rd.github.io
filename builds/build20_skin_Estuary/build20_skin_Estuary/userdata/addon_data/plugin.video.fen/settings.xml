@@ -187,7 +187,7 @@
     <setting id="autoscrape_next_episode">true</setting>
     <setting id="auto_resume_episode">1</setting>
     <setting id="playback.watched_percent" default="true">90</setting>
-    <setting id="playback.resume_percent" default="true">5</setting>
+    <setting id="playback.resume_percent">3</setting>
     <setting id="playback.widget_load_empty" default="true">true</setting>
     <setting id="playback.limit_resolve" default="true">false</setting>
     <setting id="playback.disable_content_lookup" default="true">false</setting>
