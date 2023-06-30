@@ -259,6 +259,7 @@ def show_save_data_settings():
             #self.advanced = 306
             self.favourites = 307
             self.fendata = 316
+            self.twilightdata = 319
             #self.superfav = 308
             self.repo = 309
             self.whitelist = 310
@@ -271,12 +272,12 @@ def show_save_data_settings():
             # self.login, self.profiles, self.playercore, self.superfav, self.advanced
             self.controllist = [self.github_custom_save_data_config, self.trakt, self.debrid,
                                     self.sources, self.guisettings,
-                                    self.favourites, self.fendata, self.repo,
+                                    self.favourites, self.fendata, self.twilightdata, self.repo,
                                     self.whitelist, self.addons33db, self.cache, self.packages,
                                     self.thumbs]
             self.controlsettings = ['use_github_custom_save_data_config', 'keeptrakt', 'keepdebrid',
                                     'keepsources', 'keepguisettings',
-                                    'keepfavourites', 'keepfendata', 'keeprepos',
+                                    'keepfavourites', 'keepfendata', 'keeptwilightdata', 'keeprepos',
                                     'keepwhitelist', 'keepaddons33db', 'clearcache', 'clearpackages',
                                     'clearthumbs']
             for item in self.controllist:

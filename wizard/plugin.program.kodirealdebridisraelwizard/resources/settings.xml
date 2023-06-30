@@ -64,6 +64,7 @@
         <!-- Default settings for Save Data entries -->
         <setting id="exodusredux" type="text" default="" visible="false"/>
         <setting id="fen" type="text" default="" visible="false"/>
+        <setting id="twilight" type="text" default="" visible="false"/>
         <setting id="gaia" type="text" default="" visible="false"/>
         <setting id="numbers" type="text" default="" visible="false"/>
         <setting id="openmeta" type="text" default="" visible="false"/>
@@ -78,8 +79,10 @@
         <setting id="venom" type="text" default="" visible="false"/>
 
         <setting id="fenad" type="text" default="" visible="false"/>
+        <setting id="twilightad" type="text" default="" visible="false"/>
         <setting id="fenpm" type="text" default="" visible="false"/>
         <setting id="fenrd" type="text" default="" visible="false"/>
+        <setting id="twilightrd" type="text" default="" visible="false"/>
         <setting id="gaiaad" type="text" default="" visible="false"/>
         <setting id="gaiapm" type="text" default="" visible="false"/>
         <setting id="gaiard" type="text" default="" visible="false"/>
@@ -170,7 +173,7 @@
         <setting id="loginnextsave" type="text" label="נשמר לאחרונה - התחברות" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
         <setting type="lsep" label="שמירת הגדרות בזמן התקנת הבילד:"/>
         <setting id="keepfavourites" type="bool" label="Favourites.xml שמירת מועדפים קודי" default="false"/>
-        <setting id="keepfendata" type="bool" label="שמירת מועדפי Fen (הסרטים/הסדרות שלי)" default="true"/>
+        <setting id="keeptwilightdata" type="bool" label="שמירת מועדפי Twilight (הסרטים/הסדרות שלי)" default="true"/>
         <setting id="keepsources" type="bool" label="Sources.xml שמירת" default="false"/>
         <setting id="keepprofiles" type="bool" label="שמירת פרופילים" default="false"/>
         <setting id="keepplayercore" type="bool" label="שמירת My playercorefactory.xml" default="false"/>
@@ -179,6 +182,7 @@
         <setting id="keeprepos" type="bool" label="שמירת מאגרי הרחבות" default="false"/>
         <setting id="keepsuper" type="bool" label="שמירת Super Favourites" default="false"/>
         <setting id="keepwhitelist" type="bool" label="שמירת הרחבות מותקנות" default="false"/>
+        <setting id="keepfendata" type="bool" label="שמירת מועדפי Fen (הסרטים/הסדרות שלי)" default="false"/>
         <setting id="keepaddons33db" type="bool" label="שמירת Addons33.db" default="false"/>
     </category>
 

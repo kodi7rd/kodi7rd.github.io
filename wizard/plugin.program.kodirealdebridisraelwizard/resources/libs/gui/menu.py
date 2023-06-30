@@ -315,6 +315,7 @@ def save_menu():
     debrid = 'true' if CONFIG.KEEPDEBRID == 'true' else 'false'
     login = 'true' if CONFIG.KEEPLOGIN == 'true' else 'false'
     fendata = 'true' if CONFIG.KEEPFENDATA == 'true' else 'false'
+    twilightdata = 'true' if CONFIG.KEEPTWILIGHTDATA == 'true' else 'false'
     favourites = 'true' if CONFIG.KEEPFAVS == 'true' else 'false'
     sources = 'true' if CONFIG.KEEPSOURCES == 'true' else 'false'
     advanced = 'true' if CONFIG.KEEPADVANCED == 'true' else 'false'
@@ -334,7 +335,7 @@ def save_menu():
     directory.add_file('GitHub-קבל הגדרות שמירת נתונים מ: {0}'.format(github_custom_save_data_config.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'use_github_custom_save_data_config'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Trakt שמירת חשבון: {0}'.format(trakt.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptrakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_file('Debrid שמירת חשבון: {0}'.format(debrid.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)
-    directory.add_file('(הסרטים/הסדרות שלי) Fen שמירת מועדפי: {0}'.format(fendata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfendata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    directory.add_file('(הסרטים/הסדרות שלי) Twilight שמירת מועדפי: {0}'.format(twilightdata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptwilightdata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('שמירת הגדרות קודי פנימיות: {0}'.format(guisettings.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepguisettings'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Favourites.xml שמירת מועדפים קודי: {0}'.format(favourites.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfavourites'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Sources.xml שמירת: {0}'.format(sources.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepsources'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
@@ -346,6 +347,7 @@ def save_menu():
         directory.add_file('ניקוי רשימת הרחבות שמורות', {'mode': 'whitelist', 'name': 'clear'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
         directory.add_file('ייבוא רשימת הרחבות לשמירה', {'mode': 'whitelist', 'name': 'import'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
         directory.add_file('ייצוא רשימת הרחבות שמורות', {'mode': 'whitelist', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    directory.add_file('(הסרטים/הסדרות שלי) Fen שמירת מועדפי: {0}'.format(fendata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfendata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Addons33.db שמירת: {0}'.format(addons33db.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepaddons33db'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     #directory.add_dir('Keep Login Info', {'mode': 'login'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
     #directory.add_file('Save Login Info: {0}'.format(login.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeplogin'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)

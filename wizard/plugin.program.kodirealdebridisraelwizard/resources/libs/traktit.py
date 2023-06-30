@@ -29,7 +29,7 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import tools
 
-ORDER = ['exodusredux', 'fen', 'gaia', 'numbers', 'openmeta', 'premiumizer',
+ORDER = ['exodusredux', 'fen', 'twilight', 'gaia', 'numbers', 'openmeta', 'premiumizer',
          'realizer', 'scrubs', 'seren', 'shadow', 'thecrew', 'trakt', 'venom']
 
 TRAKTID = {
@@ -212,7 +212,19 @@ TRAKTID = {
         'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.fen', 'settings.xml'),
         'default'  : 'trakt.user',
         'data'     : ['trakt.user', 'trakt.token', 'trakt.refresh',  'trakt.expires', 'trakt.indicators_active', 'watched_indicators', 'trakt.sync_refresh_widgets', 'trakt.sync_interval'],
-        'activate' : 'RunPlugin(plugin://plugin.video.fen/?mode=trakt_authenticate)'}
+        'activate' : 'RunPlugin(plugin://plugin.video.fen/?mode=trakt_authenticate)'},
+    'twilight': {
+        'name'     : 'Twilight',
+        'plugin'   : 'plugin.video.twilight',
+        'saved'    : 'twilight',
+        'path'     : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight'),
+        'icon'     : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight', 'icon.png'),
+        'fanart'   : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight', 'fanart.png'),
+        'file'     : os.path.join(CONFIG.TRAKTFOLD, 'twilight_trakt'),
+        'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.twilight', 'settings.xml'),
+        'default'  : 'trakt.user',
+        'data'     : ['trakt.user', 'trakt.token', 'trakt.refresh',  'trakt.expires', 'trakt.indicators_active', 'watched_indicators', 'trakt.sync_refresh_widgets', 'trakt.sync_interval'],
+        'activate' : 'RunPlugin(plugin://plugin.video.twilight/?mode=trakt_authenticate)'}
 }
 
 
