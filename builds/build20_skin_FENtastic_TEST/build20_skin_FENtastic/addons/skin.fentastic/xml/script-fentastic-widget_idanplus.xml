@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="IdanPlusWidgets">
+        <include content="WidgetListCategoryStacked">
+            <param name="content_path" value="plugin://plugin.video.idanplus"/>
+            <param name="widget_header" value="[B]עידן פלוס - תפריט ראשי[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="25011"/>
+        </include>
+        <include content="WidgetListEpisodesStacked">
+            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.25011.path)]"/>
+            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.25011.label)]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="250111"/>
+        </include>
+    </include>
+</includes>

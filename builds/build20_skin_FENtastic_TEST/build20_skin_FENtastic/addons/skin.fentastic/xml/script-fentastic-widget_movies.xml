@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="MovieWidgets">
+        <include content="WidgetListCategoryStacked">
+            <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=FENtastic+-+%D7%A1%D7%A8%D7%98%D7%99%D7%9D+-+%D7%94%D7%90%D7%99%D7%96%D7%95%D7%A8+%D7%94%D7%90%D7%99%D7%A9%D7%99&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]איזור אישי[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="19011"/>
+        </include>
+        <include content="WidgetListEpisodesStacked">
+            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.19011.path)]"/>
+            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.19011.label)]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="190111"/>
+        </include>
+        <include content="WidgetListCategoryStacked">
+            <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=FENtastic+-+%D7%A1%D7%A8%D7%98%D7%99%D7%9D+-+%D7%A8%D7%A9%D7%99%D7%9E%D7%95%D7%AA&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]צפייה מהנה[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="19012"/>
+        </include>
+        <include content="WidgetListPosterStacked">
+            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.19012.path)]"/>
+            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.19012.label)]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="190121"/>
+        </include>
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=%D7%A1%D7%A8%D7%98%D7%99%D7%9D+-+%D7%9C%D7%A4%D7%99+%D7%A8%D7%A9%D7%AA%D7%95%D7%AA&amp;iconImage=networks&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]רשתות סטרימינג[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="19013"/>
+        </include>
+        <include content="WidgetListCategoryStacked">
+            <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=%D7%A1%D7%A8%D7%98%D7%99%D7%9D+-+%D7%9C%D7%A4%D7%99+%D7%96%27%D7%90%D7%A0%D7%A8&amp;iconImage=genres&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="[B]ז'אנרים[/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="19014"/>
+        </include>
+        <include content="WidgetListPosterStacked">
+            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.19014.path)]"/>
+            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.19014.label)]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="190141"/>
+        </include>
+    </include>
+</includes>
