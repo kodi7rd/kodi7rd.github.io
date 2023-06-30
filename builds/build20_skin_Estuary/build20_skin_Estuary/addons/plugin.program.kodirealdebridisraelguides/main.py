@@ -71,7 +71,7 @@ def show_guide(title, url):
 
 def main():
     # Get menu items list (file_title_map.json from GitHub)
-    file_title_map_github_link = "https://kodi7rd.github.io/build_guides_addon/assets/file_title_map.json"
+    file_title_map_github_link = "https://kodi7rd.github.io/custom_addons/build_guides_addon/assets/file_title_map.json"
     
     try:
         with urllib.request.urlopen(file_title_map_github_link, context=context) as response:
@@ -84,7 +84,7 @@ def main():
     menu_items = list(file_title_map.keys())
     
     # GitHub link for guides directory contains all guides .txt files
-    guides_directory_github_url = "https://kodi7rd.github.io/build_guides_addon/assets/guides/"
+    guides_directory_github_url = "https://kodi7rd.github.io/custom_addons/build_guides_addon/assets/guides/"
     
     while True:
         menu_item_selected_index_number = xbmcgui.Dialog().select("בחר נושא", menu_items)
@@ -92,7 +92,7 @@ def main():
             break
         else:
             title = menu_items[menu_item_selected_index_number]
-            # Generate full url for guide .txt file. Example: https://kodi7rd.github.io/build_guides_addon/assets/guides/<filename>.txt
+            # Generate full url for guide .txt file. Example: https://kodi7rd.github.io/custom_addons/build_guides_addon/assets/guides/<filename>.txt
             url = urljoin(guides_directory_github_url, file_title_map[title])
             show_guide(title, url)
 
