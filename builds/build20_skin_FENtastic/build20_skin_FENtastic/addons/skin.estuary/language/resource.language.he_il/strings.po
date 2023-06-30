@@ -315,31 +315,43 @@ msgstr "שידור אינו זמין"
 
 # KODI-RD-IL CUSTOM ADDITION:
 
-# Search Button
+# Voice Search - ButtonDialogKeyboard.xml
+
+msgctxt "#70000"
+msgid "Voice Search"
+msgstr "חיפוש קולי"
+
+# Search Button - Custom_1107_SearchDialog.xml
 
 msgctxt "#70001"
-msgid "Search movies"
+msgid "[B][COLOR blue]Search movies[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש סרט[/COLOR][/B]"
 
 msgctxt "#70002"
-msgid "Search shows"
+msgid "[B][COLOR blue]Search shows[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש סדרה[/COLOR][/B]"
 
 msgctxt "#70003"
-msgid "Search by year"
+msgid "[B][COLOR blue]Search by year[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש לפי שנה[/COLOR][/B]"
 
 msgctxt "#70004"
-msgid "Search actors/actresses"
+msgid "[B][COLOR blue]Search actors/actresses[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש שחקן[/COLOR][/B]"
 
 msgctxt "#70005"
-msgid "Search movie collections"
+msgid "[B][COLOR blue]Search movie collections[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש קולקציית סרטים[/COLOR][/B]"
 
 msgctxt "#70006"
-msgid "Search Trakt list"
+msgid "[B][COLOR blue]Search Trakt list[/COLOR][/B]"
 msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
+
+# Poster View Type - Variables.xml
+
+msgctxt "#700061"
+msgid "Genre:"
+msgstr "ז'אנר:"
 
 #######################################
 

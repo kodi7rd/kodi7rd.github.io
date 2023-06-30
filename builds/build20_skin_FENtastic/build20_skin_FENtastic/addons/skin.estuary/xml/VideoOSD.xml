@@ -179,8 +179,8 @@
 						<description>DarkSubs Subtitles Window Button</description>
 						<width>230</width>
 						<height>77</height>
-						<texturenofocus colordiffuse="grey_a">choose_subs.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">choose_subs.png</texturefocus>
+						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/choose_subs.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/choose_subs.png</texturefocus>
 						<onup>70046</onup>
 						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
 					</control>
@@ -229,8 +229,53 @@
 						<onclick>SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
 						<onclick>ActivateWindow(1101)</onclick>
 					</control>
+					<control type="togglebutton" id="70049">
+					<visible>System.AddonIsEnabled(script.black.bars.never)</visible>
+						<include>SetOfOnToggleRadio</include>
+						<include>ToggleButtonObj</include>
+						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
+					</control>
 				</control>
 			</control>
+			
+			
+				<control type="grouplist">
+					<left>0</left>
+					<centertop>20</centertop>
+					<width>850</width>
+					<height>50</height>
+					<align>left</align>
+					<include>Animation_BottomSlide</include>
+					<orientation>horizontal</orientation>
+					<itemgap>5</itemgap>
+					<visible>!Player.ShowInfo</visible>
+					<animation effect="fade" start="0" end="100" time="200" delay="1000">Visible</animation>
+					<include content="MediaFlag">
+					<param name="texture" value="$INFO[VideoPlayer.VideoCodec,flags/videocodec/,.png]" />
+					</include>
+					<include content="MediaFlag">
+					<param name="texture" value="$INFO[VideoPlayer.VideoResolution,flags/videoresolution/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.HdrType,flags/videohdr/,.png]" />
+						<param name="visible" value="!String.IsEmpty(VideoPlayer.HdrType)" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.VideoAspect,flags/aspectratio/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.AudioCodec,flags/audiocodec/,.png]" />
+					</include>
+					<include content="MediaFlag">
+						<param name="texture" value="$INFO[VideoPlayer.AudioChannels,flags/audiochannel/,.png]" />
+					</include>
+					<include content="MediaLabelFlag">
+						<param name="labelflag">$VAR[SetLabelflag]</param>
+						<param name="flagvisible">Player.Process(VideoFPS)</param>
+						<param name="freelabel">.fps</param>
+					</include>
+				</control>
+			
 			<control type="group" id="6000">
 				<top>60</top>
 				<animation type="WindowOpen" condition="!Window.IsVisible(fullscreeninfo)" reversible="False">

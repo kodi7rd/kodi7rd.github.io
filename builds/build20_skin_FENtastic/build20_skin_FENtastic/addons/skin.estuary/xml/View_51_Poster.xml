@@ -24,6 +24,15 @@
 				<texture colordiffuse="E6FFFFFF">dialogs/dialog-bg-nobo.png</texture>
 				<visible>Control.IsVisible(51)</visible>
 			</control>
+			
+				<!-- KODI-RD-IL ADDITION -->
+				<include content="ClearlogoArt">
+					<param name="top">-165</param>
+					<param name="left">45%</param>
+					<param name="visible">Control.IsVisible(51)</param>
+				</include>	
+				<!-- ##################### -->
+				
 			<control type="group">
 				<visible>Control.IsVisible(51)</visible>
 				<include>Visible_Right</include>
@@ -95,25 +104,28 @@
 						<height>32</height>
 						<texture>$VAR[ListWatchedIconVar]</texture>
 					</control>
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="label">
 						<left>695</left>
 						<top>400</top>
 						<right>50</right>
 						<height>40</height>
-						<label>[COLOR yellow]$INFO[ListItem.Label][/COLOR]$VAR[ListSubLabelVar]</label>
+						<label>$INFO[ListItem.Label]$VAR[ListSubLabelVar]</label>
 						<font>font45_title</font>
+						<textcolor>yellow</textcolor>
 						<shadowcolor>text_shadow</shadowcolor>
 					</control>
 					<control type="textbox">
 						<left>645</left>
-						<top>480</top>
+						<top>515</top>
 						<height>250</height>
 						<right>115</right>
-						<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+						<autoscroll time="3000" delay="7000" repeat="5000">true</autoscroll>	
 						<label>$VAR[PlotTextBoxVar]</label>
 						<shadowcolor>text_shadow</shadowcolor>
 						<visible>![ListItem.IsCollection + String.IsEmpty(ListItem.PlotOutline) + String.IsEmpty(ListItem.Plot)]</visible>
 					</control>
+					<!-- ##################### -->
 				</control>
 			</control>
 		</control>
@@ -158,7 +170,7 @@
 					<top>690</top>
 					<width>435</width>
 					<height>24</height>
-					<label>$INFO[ListItem.Property(WatchedEpisodes)]$INFO[ListItem.Property(TotalEpisodes), / ,]</label>
+					<label>$INFO[ListItem.Property(TotalSeasons)] $VAR[SeasonCorrectLabel] / $INFO[ListItem.Property(TotalEpisodes)] פרקים </label>
 					<font>font20_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
@@ -201,5 +213,26 @@
 				</include>
 			</control>
 		</control>
+		
+	<!-- KODI-RD-IL VARIABLES -->
 	</include>
+	<include name="ClearlogoArt">
+	<param name="top" default="-105"/>
+	<param name="left" default="50%"/>
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visible]</visible>
+				<control type="image">
+					<top>$PARAM[top]</top>
+					<left>$PARAM[left]</left>
+					<width>300</width>
+					<height>100</height>
+					<aspectratio scalediffuse="false" align="left" aligny="center">keep</aspectratio>
+					<texture>$VAR[clearartlogo]</texture>
+				</control>
+			</control>
+		</definition>
+	<!-- ##################### -->
+	</include>
+	
 </includes>
