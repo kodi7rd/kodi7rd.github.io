@@ -20,13 +20,15 @@
     <setting id="ch_33" default="true">9</setting>
     <setting id="ch_33b">0</setting>
     <setting id="ch_33b2">0</setting>
-    <setting id="ch_66" default="true">10</setting>
+    <setting id="ch_66">0</setting>
     <setting id="ch_97" default="true">11</setting>
     <setting id="ch_99" default="true">12</setting>
     <setting id="ch_ynet">0</setting>
+    <setting id="ch_walla">0</setting>
+    <setting id="ch_sport5" default="true">15</setting>
     <setting id="ch_100">0</setting>
     <setting id="ch_891">0</setting>
-    <setting id="ch_kabru" default="true">18</setting>
+    <setting id="ch_kabru">0</setting>
     <setting id="ch_musayof">0</setting>
     <setting id="ch_11_res" default="true" />
     <setting id="ch_11c_res" default="true" />
@@ -44,6 +46,7 @@
     <setting id="ch_97_res" default="true" />
     <setting id="ch_99_res" default="true" />
     <setting id="ch_ynet_res" default="true" />
+    <setting id="ch_walla_res" default="true" />
     <setting id="ch_kabru_res" default="true" />
     <setting id="rd_glglz" default="true">1</setting>
     <setting id="rd_88" default="true">2</setting>
