@@ -32,9 +32,9 @@ description="בילד סקין FENtastic - לבעלי מכשירים חזקים.
 
 name="להתעלם FENtastic"
 version="3.1.1"
-url="https://kodi7rd.github.io/builds/build20_skin_FENtastic_TEST/build20_skin_FENtastic-3.1.0.zip"
+url="https://kodi7rd.github.io/builds/build20_skin_FENtastic_TEST/build20_skin_FENtastic-3.1.1.zip"
 minor="https://"
-gui="https://"
+gui="https://kodi7rd.github.io/builds/build20_skin_FENtastic_TEST/build20_skin_FENtastic-3.1.1-Quick-Update.zip"
 kodi="20.0"
 theme="http://"
 icon="https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/build20_skin_FENtastic_icon.png"
