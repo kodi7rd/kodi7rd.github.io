@@ -49,10 +49,10 @@
 			<focusedlayout width="120">
 			<control type="image">
 				<visible>Control.HasFocus(43434)</visible>
-				<top>6</top>
-				<left>0</left>
-				<width>15</width>
-				<height>15</height>
+				<top>0</top>
+				<left>-10</left>
+				<width>25</width>
+				<height>25</height>
 				<aspectratio>keep</aspectratio>
 				<texture colordiffuse="yellow">overlays/arrowright.png</texture>
 			</control>
@@ -127,10 +127,10 @@
 			<focusedlayout width="120">
 			<control type="image">
 				<visible>Control.HasFocus(43435)</visible>
-				<top>6</top>
-				<left>0</left>
-				<width>15</width>
-				<height>15</height>
+				<top>0</top>
+				<left>-10</left>
+				<width>25</width>
+				<height>25</height>
 				<aspectratio>keep</aspectratio>
 				<texture colordiffuse="yellow">overlays/arrowright.png</texture>
 			</control>
@@ -207,7 +207,7 @@
 					<visible>$EXP[SkinZoomToggle]</visible>
 						<include content="OSDButtonAdvanced">
 							<param name="texture" value="kodirdil/zoom/minus-5-xxl.png"/>
-							<param name="textoffsetx">15</param>
+							<param name="textoffsetx">13</param>
 							<param name="label">$LOCALIZE[700038]</param>
 						</include>
 						<include condition="$EXP[LiveTvCondition]">Out</include>
