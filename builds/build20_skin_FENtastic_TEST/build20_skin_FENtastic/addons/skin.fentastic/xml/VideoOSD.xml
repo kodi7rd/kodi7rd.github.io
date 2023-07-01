@@ -206,7 +206,7 @@
 					<control type="radiobutton" id="598">
 					<visible>$EXP[SkinZoomToggle]</visible>
 						<include content="OSDButtonAdvanced">
-							<param name="texture" value="kodirdil/zoom/minus-5-xxl.png"/>
+							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
 							<param name="textoffsetx">13</param>
 							<param name="label">$LOCALIZE[700038]</param>
 						</include>
@@ -217,7 +217,7 @@
 						<include content="OSDButtonAdvanced">
 							<param name="label">$LOCALIZE[700037]</param>
 							<param name="textoffsetx">22</param>
-							<param name="texture" value="kodirdil/zoom/plus-5-xxl.png"/>
+							<param name="texture" value="kodirdil/zoom/zoom-in-hand.png"/>
 						</include>
 						<include condition="$EXP[LiveTvCondition]">In</include>
 					</control>
