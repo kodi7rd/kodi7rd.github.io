@@ -162,7 +162,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
     
     total_subtitles_found_text = (f"[COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR] | " 
                                   if total_subtitles_found_count > 0 
-                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות לתוכן זה[/COLOR] | סך הכל ")
+                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות בעברית לתוכן זה[/COLOR] | סך הכל ")
 
     subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | סך הכל "
                                    if total_subtitles_found_count > 0 and subtitles_matched_count == 0
