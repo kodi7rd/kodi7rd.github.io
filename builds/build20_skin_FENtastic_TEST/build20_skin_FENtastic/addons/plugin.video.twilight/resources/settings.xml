@@ -13,7 +13,7 @@
 			<group id="2" label="40003">
 				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40004" help="">
 					<level>0</level>
-					<default>80</default>
+					<default>75</default>
 					<constraints>
 						<minimum>10</minimum>
 						<step>1</step>
@@ -30,7 +30,7 @@
 				</setting>
 				<setting id="show_only_qualities_with_matches_found" type="boolean" label="40005" help="">
 					<level>0</level>
-					<default>false</default>
+					<default>true</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="enable_hebrew_subtitles_to_twilight_sources_matching">true</condition>
