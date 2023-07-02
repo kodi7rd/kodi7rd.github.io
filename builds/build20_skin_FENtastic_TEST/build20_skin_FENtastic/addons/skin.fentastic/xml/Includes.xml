@@ -46,7 +46,7 @@
 	<constant name="DepthBackground">-0.80</constant>
 	<constant name="DepthSideBlade">0.10</constant>
 	<constant name="bg_alpha">79</constant>
-	<constant name="dialogbuttons_itemgap">-20</constant>
+	<constant name="dialogbuttons_itemgap">20</constant>
 	<constant name="list_bottom">0</constant>
 	<constant name="list_bottom_offset">70</constant>
 	<constant name="list_top_offset">110</constant>
@@ -341,6 +341,7 @@
 				</control>
 			</itemlayout>
 			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
+				<!-- TODO Adjust focus item length -->
 				<control type="image">
 					<left>25</left>
 					<top>0</top>
@@ -971,11 +972,18 @@
 			<width>$PARAM[width]</width>
 			<height>$PARAM[height]</height>
 			<control type="image">
+				<left>-2</left>
+				<top>-2</top>
+				<right>-2</right>
+        <bottom>-2</bottom>
+				<texture diffuse="masks/landscape-502.png" colordiffuse="button_focus2">colors/grey.png</texture>
+			</control>
+			<control type="image">
 				<left>0</left>
 				<top>0</top>
 				<right>0</right>
 				<bottom>0</bottom>
-				<texture diffuse="masks/landscape-502.png" colordiffuse="dialog_tint">colors/white.png</texture>
+				<texture diffuse="masks/landscape-502.png" colordiffuse="dialog_bg">colors/white.png</texture>
 			</control>
 			<control type="label" id="$PARAM[header_id]">
 				<left>60</left>
