@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.1.5[/B][/COLOR]
+﻿[COLOR yellow][B]v3.1.6[/B][/COLOR]
+* Add support for English subtitles from Subscene website.
+[COLOR yellow][B]v3.1.5[/B][/COLOR]
 * Fix download subtitle from Wizdom error
 [COLOR yellow][B]v3.1.4[/B][/COLOR]
 * Improve subtitles matching by sync percentage
