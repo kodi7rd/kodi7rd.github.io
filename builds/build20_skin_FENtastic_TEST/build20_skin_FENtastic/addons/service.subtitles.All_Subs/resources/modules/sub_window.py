@@ -48,7 +48,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             while (self.close_window==False):
                 from resources.modules import general
                 if 'מתרגם' in general.show_msg:
-                    self.label_info.setLabel(general.show_msg+' - '+str(general.progress_msg))
+                    self.label_info.setLabel(general.show_msg +' - '+ str(general.progress_msg))
                 xbmc.sleep(500)
         def set_info_controls(self):
         
@@ -85,7 +85,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             list_index=self.list.getSelectedPosition()
             log.warning(self.full_list[list_index])
             log.warning('list_index:'+str(list_index))
-            self.label_info.setLabel('מוריד')
+            self.label_info.setLabel('מוריד' + ' | ' + self.video_file_name_label)
             params=self.get_params(self.full_list[list_index][4])
             download_data=unque(params["download_data"])
             download_data=json.loads(download_data)
@@ -105,18 +105,15 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             
             
             if fault_sub:
-                self.label_info.setLabel('תקלה בהורדה בחר אחרת')
+                self.label_info.setLabel('תקלה בהורדה בחר אחרת' + ' | ' + self.video_file_name_label)
             else:
-                self.label_info.setLabel('מוכן')
+                self.label_info.setLabel('מוכן' + ' | ' + self.video_file_name_label)
                 save_file_name(params["filename"])
                 self.last_sub_index,self.all_subs=get_db_data(self.full_list)
                 self.set_active_controls()
                 from resources.modules import general
                 general.show_msg="END"
                 
-                ############KODI-RD-IL###################
-                self.label_info.setLabel(self.video_file_name_label)
-                #########################################
         def click_c(self):
             global list_index
             
