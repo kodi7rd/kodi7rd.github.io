@@ -53,14 +53,12 @@ def get_subs(item):
        
     
     selected_lang=['heb']
-    if Addon.getSetting("English")== 'true':
-        selected_lang.append('eng')
     if Addon.getSetting("arab")== 'true':
         selected_lang.append('ara')
     if Addon.getSetting("spanish")== 'true':
         selected_lang.append('spa')
-        
-
+    if Addon.getSetting("English")== 'true':
+        selected_lang.append('eng')
     if len(Addon.getSetting("other_lang"))>0:
          all_lang=Addon.getSetting("other_lang").split(",")
          
@@ -267,8 +265,9 @@ def get_subs(item):
                     
                     if lk2  in all_lk:
                         continue
-                    if lang.lower() not in ok_lang:
-                        continue
+                    if Addon.getSetting("all_lang")== 'false': 
+                        if lang.lower() not in ok_lang:
+                            continue
                     all_lk.append(lk2)
                     xx+=1
                     

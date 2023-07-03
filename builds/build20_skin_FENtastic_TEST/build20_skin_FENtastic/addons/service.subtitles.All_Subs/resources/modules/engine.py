@@ -404,8 +404,12 @@ def get_subtitles(video_data):
     return f_result
 
 
-
-  
+def get_random_number():
+    import random
+    result=22
+    while (result == 20) or (result == 21) or (result == 22):
+        result=int(random.random()*22+1)
+    return result
 def translate_subs(input_file,output_file):
     
     
@@ -501,8 +505,8 @@ def translate_subs(input_file,output_file):
             # Requests doesn't support trailers
             # 'TE': 'trailers',
         }
-
-        base_url='https://t23.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='
+        num=get_random_number()
+        base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
         
         split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
         f_sub_pre=''
@@ -512,8 +516,12 @@ def translate_subs(input_file,output_file):
         ax2=split_string(text,1000)
        
         for items in ax2:
-            
-             translation=requests.get(base_url+items,headers=headers).text
+             try:
+                translation=requests.get(base_url+items,headers=headers).text
+             except:
+                num=get_random_number()
+                base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
+                translation=requests.get(base_url+items,headers=headers).text
 
              general.show_msg=' מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
              general.progress_msg=int(((xx* 100.0)/(len(ax2))) )

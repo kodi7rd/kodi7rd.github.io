@@ -28,11 +28,11 @@ def start():
             
             xbmc.sleep(100)
             timeout+=1
-            if timeout>200:#20 sec
+            if timeout>400:#40 sec
                 break
         log.warning(response)
         
-        if timeout>200:
+        if timeout>400:
             sys.exit(1)
         response=json.loads(response)
         if "hearing_imp" in str(response) and 'thumbnailImage' in str(response):
