@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import xbmcvfs,xbmcgui,xbmcaddon,xbmc
 from xbmcplugin import endOfDirectory, addDirectoryItem
 from xbmcgui import ListItem, Dialog
@@ -1959,7 +1958,8 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
 
             subtitle_cache_next().set('last_sub', last_sub_download)
             if all_setting["popup"]!="0" and isSuccess:
-                notify3(colorize_text('הכתוביות מוכנות','aqua'),2)
+                #notify3(colorize_text('הכתוביות מוכנות','aqua'),2) #Rafi
+                notify3(colorize_text('הכתוביות מוכנות %s | %s' %(colorize_text(str(highest_rating)+'%',"yellow"),source_prefix),'aqua'),2)
 
             myLogger("AutoSub sub ready: " + repr(sub))
 
@@ -2430,6 +2430,7 @@ def results_subs_processing(save_all_data,item,last_sub):
     all_eng=[]
     all_arb=[]
     all_spn=[]
+    all_the_rest=[] # Rafi:for user defined languages
 
     ############## Subs Proccessing ###############
     for save_data_value in save_all_data:
@@ -2482,6 +2483,10 @@ def results_subs_processing(save_all_data,item,last_sub):
                     all_spn.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
                 #else:
                 #    all_eng.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
+                
+                #Rafi - remove above comment to display the rest of the subs in "other languages", better in the eng group than not at all ... 
+                else:
+                    all_the_rest.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
 
     ############## Sort by Percentage ###############
     if all_setting["sort_subs"]=='true':
@@ -2489,8 +2494,9 @@ def results_subs_processing(save_all_data,item,last_sub):
         all_eng=sorted(all_eng, key=lambda x: x[5], reverse=True)
         all_arb=sorted(all_arb, key=lambda x: x[5], reverse=True)
         all_spn=sorted(all_spn, key=lambda x: x[5], reverse=True)
+        all_the_rest=sorted(all_the_rest, key=lambda x: x[5], reverse=True) #Rafi: sort the rest too, only reasonable if there is one more language
 
-    all_data=all_data+all_eng+all_arb+all_spn
+    all_data=all_data+all_eng+all_arb+all_spn+all_the_rest  #Rafi: and add it to all_data
 
     with open(last_sub+'_sort', 'w') as f:
         f.write(json.dumps(all_data))

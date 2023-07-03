@@ -357,8 +357,31 @@ class AutoSubsPlayer(xbmc.Player):
                     Debug("availableLangs '%s'" % availableLangs)
                     Debug('force_download: '+str(force_download) )
 
+#Rafi: Add/prefer using built-in subs for use-case when forced is NOT set, and there a heb sub-stream built-in was found
+                    preferredLang = 'heb'  # TBD , from setting?
+                    preferredLangFound = False
+                    activeBuiltinSubs = xbmc.Player().getSubtitles()
+                    Debug("Active Subs were: %s"%activeBuiltinSubs)
+                    
+                    if activeBuiltinSubs == preferredLang:  # Use-case of previously searched & found and downloaded subs . Nothing to do..
+                        preferredLangFound = True
+                        Debug('built-in activeBuiltinSubs (already ran/found) = %s'%activeBuiltinSubs)         
+                    else:
+                        s_index =0
+                        for s in availableLangs:
+                            Debug("test indexes s and  s_index = " + s + " " + str(s_index))
+                            if s == preferredLang:
+                                xbmc.Player().setSubtitleStream(s_index)  #   s_index)
+                                preferredLangFound = True
+                                Debug("Build in subs found: %s"%xbmc.Player().getSubtitles() )
+                                break
+                            s_index += 1
+                    
+                    Debug('built-in preferredLangFound = %s'%preferredLangFound)                            
+
                     if (xbmc.Player().isPlaying() and totalTime > excludeTime
-                        and force_download==True and not is_excluded ):
+#                        and force_download==True and not is_excluded ):
+                        and (force_download==True and preferredLangFound == False) and not is_excluded ):
                         self.run = False
                         #xbmc.sleep(1000)
                         Debug('Started: AutoSearching for Subs')
@@ -382,6 +405,9 @@ class AutoSubsPlayer(xbmc.Player):
                         #xbmc.executebuiltin('XBMC.ActivateWindow(SubtitleSearch)')
                     else:
                         Debug('Started: Subs found or Excluded')
+#Rafi: 
+                        if preferredLangFound == True: # and  all_setting["popup"] != "0"
+                            notify3('[COLOR aqua]נבחרו כתוביות קיימות בעברית[/COLOR]',2)
                         self.run = False
             except Exception as e:
                 Debug("AutoSub failed: %s" %e)
