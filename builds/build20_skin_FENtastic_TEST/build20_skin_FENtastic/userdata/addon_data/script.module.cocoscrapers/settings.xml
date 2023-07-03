@@ -47,7 +47,7 @@
     <setting id="provider.nyaa">true</setting>
     <setting id="provider.piratebay" default="true">true</setting>
     <setting id="provider.torlock" default="true">false</setting>
-    <setting id="provider.torrentapi" default="true">true</setting>
+    <setting id="provider.torrentapi" default="true">false</setting>
     <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
