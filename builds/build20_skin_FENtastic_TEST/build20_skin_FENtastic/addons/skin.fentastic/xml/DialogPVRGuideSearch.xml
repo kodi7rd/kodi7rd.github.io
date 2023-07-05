@@ -13,6 +13,7 @@
 				<param name="height" value="890" />
 				<param name="header_label" value="$LOCALIZE[19142]" />
 				<param name="header_id" value="2" />
+				<param name="diffusetexture" value="masks/landscape-502.png" />
 			</include>
 			<control type="edit" id="9">
 				<left>10</left>
@@ -26,25 +27,25 @@
 				<onright>9000</onright>
 				<onup>24</onup>
 				<ondown>10</ondown>
-				<colordiffuse>button_focus2</colordiffuse>
+				<colordiffuse>button_focus</colordiffuse>
 			</control>
 			<control type="textbox">
 				<description>Search help</description>
 				<left>30</left>
-				<top>160</top>
+				<top>175</top>
 				<width>1440</width>
 				<height>68</height>
 				<font>font12</font>
 				<textcolor>grey</textcolor>
 				<label>$LOCALIZE[19001] $LOCALIZE[19002]</label>
 			</control>
-			<control type="image">
+			<!-- <control type="image">
 				<left>10</left>
 				<top>210</top>
 				<width>1460</width>
 				<height>675</height>
 				<texture colordiffuse="button_focus2" border="40">buttons/dialogbutton-nofo.png</texture>
-			</control>
+			</control> -->
 			<control type="grouplist" id="5000">
 				<left>30</left>
 				<top>230</top>
@@ -190,13 +191,14 @@
 				</control>
 			</control>
 			<control type="grouplist" id="9000">
-				<top>80</top>
-				<left>1460</left>
+				<top>100</top>
+				<left>1480</left>
 				<onup>9000</onup>
 				<ondown>9000</ondown>
 				<onleft>6000</onleft>
 				<onright>5000</onright>
 				<width>1320</width>
+				<itemgap>dialogbuttons_itemgap</itemgap>
 				<orientation>vertical</orientation>
 				<include content="DefaultDialogButton">
 					<param name="id" value="26" />

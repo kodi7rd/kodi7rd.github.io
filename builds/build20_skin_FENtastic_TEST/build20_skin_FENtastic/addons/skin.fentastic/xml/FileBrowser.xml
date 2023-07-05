@@ -13,6 +13,7 @@
 				<param name="height" value="850" />
 				<param name="header_label" value="" />
 				<param name="header_id" value="411" />
+				<param name="diffusetexture" value="masks/dialog-bg-squareish.png" />
 			</include>
 			<control type="grouplist" id="9000">
 				<left>990</left>
@@ -84,11 +85,10 @@
 					</control>
 				</itemlayout>
 				<focusedlayout height="70" width="940">
-					<!-- TODO Adjust focus item length -->
 					<control type="image">
 						<left>25</left>
 						<top>0</top>
-						<right>25</right>
+						<right>0</right>
 						<height>71</height>
 						<visible>Control.HasFocus(450)</visible>
 						<texture colordiffuse="button_focus">masks/focus-long.png</texture>
@@ -143,11 +143,10 @@
 					</control>
 				</itemlayout>
 				<focusedlayout height="70" width="940">
-					<!-- TODO Adjust focus item length -->
 					<control type="image">
 						<left>25</left>
 						<top>0</top>
-						<right>25</right>
+						<right>0</right>
 						<height>71</height>
 						<visible>Control.HasFocus(451)</visible>
 						<texture colordiffuse="button_focus">masks/focus-long.png</texture>

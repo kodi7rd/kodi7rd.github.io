@@ -13,14 +13,15 @@
 				<param name="height" value="900" />
 				<param name="header_label" value="" />
 				<param name="header_id" value="2" />
+				<param name="diffusetexture" value="masks/dialog-bg-large.png" />
 			</include>
 			<control type="grouplist" id="3">
 				<description>Categories Area</description>
 				<left>29</left>
-				<top>80</top>
+				<top>85</top>
 				<width>400</width>
 				<height>596</height>
-				<itemgap>-25</itemgap>
+				<itemgap>dialogbuttons_itemgap</itemgap>
 				<orientation>vertical</orientation>
 				<onleft>9000</onleft>
 				<onright>5</onright>
@@ -29,17 +30,18 @@
 			</control>
 			<control type="button" id="10">
 				<description>Default Category Button</description>
-				<height>120</height>
-				<width>390</width>
+				<height>80</height>
+				<width>345</width>
 				<textoffsetx>20</textoffsetx>
 				<align>center</align>
 				<aligny>center</aligny>
 				<font>font25_title</font>
-				<texturenofocus colordiffuse="button_focus2" border="40">buttons/dialogbutton-nofo.png</texturenofocus>
+				<texturefocus colordiffuse="button_focus">masks/categorywidget.png</texturefocus>
+				<texturenofocus colordiffuse="button_focus2">masks/categorywidget-unfocused.png</texturenofocus>
 			</control>
 			<control type="grouplist" id="5">
 				<description>control area</description>
-				<left>429</left>
+				<left>404</left>
 				<top>100</top>
 				<width>1060</width>
 				<height>700</height>
@@ -119,13 +121,14 @@
 			<control type="radiobutton" id="20">
 				<left>29</left>
 				<top>700</top>
-				<width>390</width>
-				<height>120</height>
+				<width>345</width>
+				<height>80</height>
 				<font>font25_title</font>
 				<aligny>center</aligny>
 				<onclick>SettingsLevelChange</onclick>
 				<textoffsetx>100</textoffsetx>
 				<textoffsety>0</textoffsety>
+				<texturefocus colordiffuse="button_focus">masks/categorywidget.png</texturefocus>
 				<texturenofocus />
 				<radioposx>40</radioposx>
 				<radioposy>0</radioposy>

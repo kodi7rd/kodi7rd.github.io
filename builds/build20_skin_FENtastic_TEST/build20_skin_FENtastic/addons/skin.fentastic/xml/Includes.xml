@@ -341,11 +341,10 @@
 				</control>
 			</itemlayout>
 			<focusedlayout width="$PARAM[width]" height="$PARAM[height]">
-				<!-- TODO Adjust focus item length -->
 				<control type="image">
 					<left>25</left>
 					<top>0</top>
-					<right>0</right>
+					<right>25</right>
 					<bottom>0</bottom>
 					<texture colordiffuse="button_focus">masks/focus-long.png</texture>
 					<visible>Control.HasFocus($PARAM[list_id])</visible>
@@ -655,7 +654,7 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
-						<texture colordiffuse="button_focus">masks/focus.png</texture>
+						<texture colordiffuse="button_focus">masks/focus-long.png</texture>
 						<animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus($PARAM[list_id])">Conditional</animation>
 					</control>
 					<control type="image">
@@ -781,6 +780,7 @@
 					<include content="ImageWidget">
 						<param name="text_label" value="$LOCALIZE[31153]" />
 						<param name="button_label" value="$LOCALIZE[31144]" />
+						<param name="left">50</param>
 						<param name="button_onclick" value="$PARAM[imagewidget_onclick]"/>
 						<param name="button_id" value="$PARAM[group_id]333"/>
 						<param name="visible_2" value="false"/>
@@ -976,22 +976,23 @@
 				<top>-2</top>
 				<right>-2</right>
         <bottom>-2</bottom>
-				<texture diffuse="masks/landscape-502.png" colordiffuse="button_focus2">colors/grey.png</texture>
+				<texture colordiffuse="button_focus">$PARAM[diffusetexture]</texture>
 			</control>
 			<control type="image">
 				<left>0</left>
 				<top>0</top>
 				<right>0</right>
 				<bottom>0</bottom>
-				<texture diffuse="masks/landscape-502.png" colordiffuse="dialog_bg">colors/white.png</texture>
+				<texture colordiffuse="dialog_bg">$PARAM[diffusetexture]</texture>
 			</control>
 			<control type="label" id="$PARAM[header_id]">
-				<left>60</left>
+				<posx>0</posx> 
 				<top>20</top>
-				<right>100</right>
+				<width>$PARAM[width]</width> 
 				<height>70</height>
 				<font>font32_title</font>
 				<label>$PARAM[header_label]</label>
+				<align>center</align> 
 				<aligny>center</aligny>
 				<textcolor>button_focus</textcolor>
 				<shadowcolor>black</shadowcolor>

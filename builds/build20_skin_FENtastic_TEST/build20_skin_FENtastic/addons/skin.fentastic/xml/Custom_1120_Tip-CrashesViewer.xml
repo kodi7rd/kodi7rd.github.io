@@ -27,21 +27,22 @@
 				<param name="height" value="975" />
 				<param name="header_label" value="$INFO[Window(home).Property(TextViewer_Header)]" />
 				<param name="header_id" value="1" />
+				<param name="diffusetexture" value="masks/dialog-bg-squareish.png" />
 			</include>
 			<control type="label">
-				<left>1%</left>
-					<top>10</top>
+					<top>25</top>
 					<width>82%</width>
-					<height>675</height>
+					<height>70</height>
 					<shadowcolor>black</shadowcolor>
 					<font>font37</font>
+					<align>center</align>
 				<label>$INFO[Window(Home).Property(TextViewerHeader)]</label>
 			</control>
 			<control type="label">
 				<left>1%</left>
 					<top>85</top>
 					<width>82%</width>
-					<height>675</height>
+					<height>70</height>
 					<shadowcolor>black</shadowcolor>
 					<font>font37</font>
 				<label>$INFO[Window(Home).Property(TextViewerSubHeader)]</label>
@@ -50,7 +51,7 @@
 				<left>1%</left>
 					<top>85</top>
 					<width>82%</width>
-					<height>675</height>
+					<height>70</height>
 					<shadowcolor>black</shadowcolor>
 					<pagecontrol>61</pagecontrol>
 					<font>font37</font>
@@ -58,9 +59,9 @@
 				<visible>String.IsEmpty(Window(skinsettings).Property(Tip-Crashes))</visible>
 			</control>
 			<control type="textbox">
-				<left>2%</left>
+				<left>3%</left>
 				<top>105</top>
-				<width>79%</width>
+				<width>78%</width>
 				<height>820</height>
 				<shadowcolor>black</shadowcolor>
 				<pagecontrol>62</pagecontrol>
@@ -70,20 +71,20 @@
 				<autoscroll delay="10000" time="3000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
 			</control>
 			<control type="scrollbar" id="61">
-				<left>1390</left>
-				<top>70</top>
-				<bottom>-104</bottom>
-				<width>13</width>
+				<left>1393</left>
+				<top>113</top>
+				<bottom>-20</bottom>
+				<width>10</width>
 				<ondown>61</ondown>
 				<onup>61</onup>
 				<texturesliderbackground />
 				<visible>String.IsEmpty(Window(skinsettings).Property(Tip-Crashes))</visible>
 			</control>
 			<control type="scrollbar" id="62">
-				<left>1390</left>
-				<top>70</top>
-				<bottom>-104</bottom>
-				<width>13</width>
+				<left>1393</left>
+				<top>113</top>
+				<bottom>-20</bottom>
+				<width>10</width>
 				<ondown>61</ondown>
 				<onup>61</onup>
 				<texturesliderbackground />
