@@ -75,7 +75,7 @@
     <setting id="imdb_user" default="true" />
     <setting id="imdb_lists.sort_type" default="true">0</setting>
     <setting id="imdb_lists.sort_direction" default="true">0</setting>
-    <setting id="check_premium_account_status">true</setting>
+    <setting id="check_premium_account_status" default="true">false</setting>
     <setting id="provider.external" default="true">true</setting>
     <setting id="rd.token" default="true" />
     <setting id="rd.enabled" default="true">true</setting>
