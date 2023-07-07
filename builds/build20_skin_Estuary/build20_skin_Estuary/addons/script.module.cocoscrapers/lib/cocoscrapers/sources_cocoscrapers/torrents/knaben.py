@@ -1,55 +1,71 @@
 # -*- coding: utf-8 -*-
-# created by Venom for Fenomscrapers (updated 7-19-2022)
+# modified by umb for cocoscrapers (updated 6-26-2023)
 """
-	Fenomscrapers Project
+	cocoscrapers Project
 """
 
 import re
 from urllib.parse import quote_plus, unquote_plus
-# from cocoscrapers.modules import cfscrape # proxy in use not behind CloudFlare
+from cocoscrapers.modules import cache
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
 from cocoscrapers.modules import workers
 
 
 class source:
-	priority = 4
+	priority = 3
 	pack_capable = True
 	hasMovies = True
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		# self.base_link = "https://extratorrent.si" # dead
-		# self.base_link = "https://extratorrent.proxyninja.org" #v2 challenge now, tested 2-26-22
-		self.base_link = "https://extratorrent.unblockit.name" # 6-28-22
-		self.msearch_link = '/search/?new=1&search=%s&s_cat=1'
-		self.tvsearch_link = '/search/?new=1&search=%s&s_cat=2'
-		# self.packsearch_link = '/search/?page=2&new=1&search=%s&s_cat=2' # page1 appears broken, scrape page2 only for packs
-		self.min_seeders = 1
+		self.domains = ['knaben.eu',]
+		self._base_link = None
+		self.moviesearch = '/search/index.php?cat=003000000&q={0}&search=fast'
+		self.tvsearch = '/search/index.php?cat=002000000&q={0}&search=fast'
+		self.min_seeders = 0
+
+	@property
+	def base_link(self):
+		if not self._base_link:
+			self._base_link = cache.get(self.__get_base_url, 120, 'https://%s' % self.domains[0])
+		return self._base_link
+
+	def __get_base_url(self, fallback):
+		for domain in self.domains:
+			try:
+				url = 'https://%s' % domain
+				result = client.request(url, limit=1, timeout=5)
+				try: result = re.search('r<title>(.+?)</title>', result, re.I).group(1)
+				except: result = None
+				if result and 'Knaben' in result: return url
+			except:
+				source_utils.scraper_error('KNABEN')
+		return fallback
 
 	def sources(self, data, hostDict):
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
-			# self.scraper = cfscrape.create_scraper()
 			self.aliases = data['aliases']
 			self.year = data['year']
 			if 'tvshowtitle' in data:
 				self.title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				self.episode_title = data['title']
 				self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode']))
-				search_link = self.tvsearch_link
+				search_link = self.tvsearch
 			else:
 				self.title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				self.episode_title = None
 				self.hdlr = self.year
-				search_link = self.msearch_link
+				search_link = self.moviesearch
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', self.title), self.hdlr)
 			urls = []
-			url = '%s%s' % (self.base_link, search_link % quote_plus(query))
+			url = '%s%s' % (self.base_link, search_link.format(quote_plus(query)))
 			urls.append(url)
-			urls.append('%s%s' % (url, '&page=2')) # next page seems to be working once again
+			# if url.endswith('field=size&sorder=desc'): urls.append(url.rsplit("/", 1)[0] + '/2/')
+			# else: urls.append(url + '/2/')
 			# log_utils.log('urls = %s' % urls)
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
@@ -61,39 +77,34 @@ class source:
 			[i.join() for i in threads]
 			return self.sources
 		except:
-			source_utils.scraper_error('EXTRATORRENT')
+			source_utils.scraper_error('KNABEN')
 			return self.sources
 
 	def get_sources(self, url):
+		# log_utils.log('url = %s' % url)
 		try:
-			# results = self.scraper.get(url, timeout=10).text
-			results = client.request(url, timeout=10)
+			results = client.request(url, timeout=7)
 			if not results: return
-			rows = client.parseDOM(results, 'tr', attrs={'class': 'tlr'})
-			rows += client.parseDOM(results, 'tr', attrs={'class': 'tlz'})
+			rows = client.parseDOM(results, 'tr', attrs={'class': 'text-nowrap border-start'})
 		except:
-			source_utils.scraper_error('EXTRATORRENT')
+			source_utils.scraper_error('KNABEN')
 			return
-
 		for row in rows:
 			try:
-				row = re.sub(r'\n', '', row)
-				row = re.sub(r'\t', '', row)
 				columns = re.findall(r'<td.*?>(.+?)</td>', row, re.DOTALL)
 
-				url = re.search(r'href\s*=\s*["\'](magnet:[^"\']+)["\']', columns[0], re.I).group(1)
-				url = unquote_plus(url).replace('&amp;', '&').replace('&amp;', '&').replace(' ', '.').split('&tr')[0] # some links on extratorrent dbl "&amp;amp;"
-				url = source_utils.strip_non_ascii_and_unprintable(url)
-				if url in str(self.sources): continue
+				url = unquote_plus(columns[1]).replace('&amp;', '&')
+				try: url = re.search(r'(magnet:.+?)&tr=', url, re.I).group(1).replace(' ', '.')
+				except: continue
 				hash = re.search(r'btih:(.*?)&', url, re.I).group(1)
-				name = source_utils.clean_name(url.split('&dn=')[1])
+				name = source_utils.clean_name(unquote_plus(url.split('&dn=')[1])) # some links on kickass dbl encoded
 
 				if not source_utils.check_title(self.title, self.aliases, name, self.hdlr, self.year): continue
 				name_info = source_utils.info_from_name(name, self.title, self.year, self.hdlr, self.episode_title)
 				if source_utils.remove_lang(name_info, self.check_foreign_audio): continue
 				if self.undesirables and source_utils.remove_undesirables(name_info, self.undesirables): continue
 
-				if not self.episode_title: # filter for eps returned in movie query (rare but movie and show exists for Run in 2020)
+				if not self.episode_title: #filter for eps returned in movie query (rare but movie and show exists for Run in 2020)
 					ep_strings = [r'[.-]s\d{2}e\d{2}([.-]?)', r'[.-]s\d{2}([.-]?)', r'[.-]season[.-]?\d{1,2}[.-]?']
 					name_lower = name.lower()
 					if any(re.search(item, name_lower) for item in ep_strings): continue
@@ -105,27 +116,25 @@ class source:
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					dsize, isize = source_utils._size(columns[3])
+					dsize, isize = source_utils._size(columns[2].split('<')[0])
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)
-
-				self.sources_append({'provider': 'extratorrent', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
+				self.sources_append({'provider': 'knaben', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
-				source_utils.scraper_error('EXTRATORRENT')
+				source_utils.scraper_error('KNABEN')
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 		self.sources = []
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
-			# self.scraper = cfscrape.create_scraper()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
 
-			self.title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU')
+			self.title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 			self.aliases = data['aliases']
 			self.imdb = data['imdb']
 			self.year = data['year']
@@ -137,12 +146,12 @@ class source:
 			query = re.sub(r'[^A-Za-z0-9\s\.-]+', '', self.title)
 			if search_series:
 				queries = [
-						self.tvsearch_link % quote_plus(query + ' Season'),
-						self.tvsearch_link % quote_plus(query + ' Complete')]
+						self.tvsearch.format(quote_plus(query + ' Season')),
+						self.tvsearch.format(quote_plus(query + ' Complete'))]
 			else:
 				queries = [
-						self.tvsearch_link % quote_plus(query + ' S%s' % self.season_xx),
-						self.tvsearch_link % quote_plus(query + ' Season %s' % self.season_x)]
+							self.tvsearch.format(quote_plus(query + ' S%s' % self.season_xx)),
+							self.tvsearch.format(quote_plus(query + ' Season %s' % self.season_x))]
 			threads = []
 			append = threads.append
 			for url in queries:
@@ -152,31 +161,27 @@ class source:
 			[i.join() for i in threads]
 			return self.sources
 		except:
-			source_utils.scraper_error('EXTRATORRENT')
+			source_utils.scraper_error('KNABEN')
 			return self.sources
 
 	def get_sources_packs(self, link):
 		try:
-			# log_utils.log('link = %s' % link)
-			# results = self.scraper.get(link, timeout=10).text
-			results = client.request(link, timeout=10)
+			results = client.request(link, timeout=7)
 			if not results: return
-			rows = client.parseDOM(results, 'tr', attrs={'class': 'tlr'})
-			rows += client.parseDOM(results, 'tr', attrs={'class': 'tlz'})
+			rows = client.parseDOM(results, 'tr', attrs={'class': 'text-nowrap border-start'})
 		except:
-			source_utils.scraper_error('EXTRATORRENT')
+			source_utils.scraper_error('KNABEN')
 			return
 		for row in rows:
 			try:
-				row = re.sub(r'\n', '', row)
-				row = re.sub(r'\t', '', row)
 				columns = re.findall(r'<td.*?>(.+?)</td>', row, re.DOTALL)
-				url = re.search(r'href\s*=\s*["\'](magnet:[^"\']+)["\']', columns[0], re.I).group(1)
-				url = unquote_plus(url).replace('&amp;', '&').replace('&amp;', '&').replace(' ', '.').split('&tr')[0] # some links on extratorrent dbl "&amp;amp;"
-				url = source_utils.strip_non_ascii_and_unprintable(url)
-				if url in str(self.sources): continue
+
+				url = unquote_plus(columns[1]).replace('&amp;', '&')
+				try: url = re.search(r'(magnet:.+?)&tr=', url, re.I).group(1).replace(' ', '.')
+				except: continue
+				
 				hash = re.search(r'btih:(.*?)&', url, re.I).group(1)
-				name = source_utils.clean_name(url.split('&dn=')[1])
+				name = source_utils.clean_name(unquote_plus(url.split('&dn=')[1])) # some links on kickass dbl encoded
 
 				episode_start, episode_end = 0, 0
 				if not self.search_series:
@@ -195,7 +200,6 @@ class source:
 				name_info = source_utils.info_from_name(name, self.title, self.year, season=self.season_x, pack=package)
 				if source_utils.remove_lang(name_info, self.check_foreign_audio): continue
 				if self.undesirables and source_utils.remove_undesirables(name_info, self.undesirables): continue
-
 				try:
 					seeders = int(columns[4].replace(',', ''))
 					if self.min_seeders > seeders: continue
@@ -203,15 +207,14 @@ class source:
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					dsize, isize = source_utils._size(columns[3])
+					dsize, isize = source_utils._size(columns[2].split('<')[0])
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)
-
-				item = {'provider': 'extratorrent', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				item = {'provider': 'knaben', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
 			except:
-				source_utils.scraper_error('EXTRATORRENT')
+				source_utils.scraper_error('knaben')

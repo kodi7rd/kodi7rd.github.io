@@ -160,7 +160,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#32051"
-msgid "Premium Hosters"
+msgid "Hosters"
 msgstr ""
 
 msgctxt "#32052"
@@ -532,7 +532,7 @@ msgid "2) When prompted enter : [COLOR skyblue]%s[/COLOR]"
 msgstr ""
 
 msgctxt "#32515"
-msgid "PlexShare"
+msgid "Enable Plex Scraper"
 msgstr ""
 
 msgctxt "#32516"
@@ -641,4 +641,12 @@ msgstr ""
 
 msgctxt "#32544"
 msgid "See Active PlexShares"
+msgstr ""
+
+msgctxt "#32545"
+msgid "KNABEN"
+msgstr ""
+
+msgctxt "#32546"
+msgid "Plex Account Link"
 msgstr ""

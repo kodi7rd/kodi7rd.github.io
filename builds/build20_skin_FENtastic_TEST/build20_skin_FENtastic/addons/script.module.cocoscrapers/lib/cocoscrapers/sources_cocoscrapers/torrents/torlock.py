@@ -19,7 +19,7 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://torlock2.com"
+		self.base_link = "https://www.torlock2.com"
 		self.search_link = '/all/torrents/%s.html?sort=size'
 		self.min_seeders = 0
 
@@ -43,7 +43,21 @@ class source:
 			# log_utils.log('url = %s' % url)
 			results = client.request(url, timeout=5)
 			if not results: return self.sources
-			links = _LINKS.findall(results)[:15] # limit because torlock is slow and 2 requests
+			#links = _LINKS.findall(results)[:15] # limit because torlock is slow and 2 requests
+			links = []
+			rows = client.parseDOM(results, 'tr')
+			for row in rows:
+				columns = re.findall(r'<td.*?>(.+?)</td>', row, re.DOTALL)
+				for column in columns:
+					try:
+						linkpart = re.search(r'href\s*=\s*["\']/(.+?)["\']>', column, re.I).group(1).split('/')
+						linkpart1 = linkpart[1]
+						linkpart2 = linkpart[2]
+						link = '/torrent/'+linkpart1+'/'+linkpart2
+					except:
+						continue
+					if link:
+						links.append(link)
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 			threads = []

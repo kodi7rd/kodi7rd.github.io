@@ -1,59 +1,47 @@
 <settings version="2">
-    <setting id="provider.300mbfilms">true</setting>
-    <setting id="provider.myvideolink">true</setting>
-    <setting id="provider.rapidmoviez">true</setting>
-    <setting id="provider.rlsbb">true</setting>
-    <setting id="provider.scenerls">true</setting>
     <setting id="provider.plexshare" default="true">false</setting>
-    <setting id="plex.token" default="true" />
-    <setting id="plex.client_id" default="true" />
-    <setting id="plex.device_id" default="true" />
-    <setting id="plexshare.sourceTitle" default="true" />
-    <setting id="plexshare.accessToken" default="true" />
-    <setting id="plexshare.url" default="true" />
+    <setting id="plex.token" default="true"></setting>
+    <setting id="plex.client_id" default="true"></setting>
+    <setting id="plex.device_id" default="true"></setting>
+    <setting id="plexshare.sourceTitle" default="true"></setting>
+    <setting id="plexshare.accessToken" default="true"></setting>
+    <setting id="plexshare.url" default="true"></setting>
     <setting id="provider.easynews" default="true">false</setting>
-    <setting id="easynews.user" default="true" />
-    <setting id="easynews.password" default="true" />
+    <setting id="easynews.user" default="true"></setting>
+    <setting id="easynews.password" default="true"></setting>
     <setting id="easynews.moderation" default="true">false</setting>
     <setting id="easynews.title.chk" default="true">true</setting>
     <setting id="provider.gdrive" default="true">false</setting>
     <setting id="gdrive.title.chk" default="true">true</setting>
-    <setting id="gdrive.cloudflare_url" default="true" />
-    <setting id="provider.furk" default="true">false</setting>
-    <setting id="furk.user_name" default="true" />
-    <setting id="furk.user_pass" default="true" />
-    <setting id="furk.api" default="true" />
+    <setting id="gdrive.cloudflare_url" default="true"></setting>
     <setting id="provider.filepursuit" default="true">false</setting>
-    <setting id="filepursuit.api" default="true" />
+    <setting id="filepursuit.api" default="true"></setting>
     <setting id="provider.library" default="true">false</setting>
     <setting id="filter.undesirables" default="true">true</setting>
-    <setting id="undesirables.settings2" default="true" />
-    <setting id="undesirables.settings3" default="true" />
-    <setting id="undesirables.settings4" default="true" />
+    <setting id="undesirables.settings2" default="true"></setting>
+    <setting id="undesirables.settings3" default="true"></setting>
+    <setting id="undesirables.settings4" default="true"></setting>
     <setting id="filter.foreign.single.audio" default="true">true</setting>
-    <setting id="provider.1337x" default="true">false</setting>
+    <setting id="provider.1337x">true</setting>
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch" default="true">true</setting>
     <setting id="provider.ext" default="true">false</setting>
-    <setting id="provider.extratorrent" default="true">false</setting>
     <setting id="provider.eztv" default="true">true</setting>
     <setting id="provider.glodls" default="true">true</setting>
-    <setting id="provider.ibit" default="true">false</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
+    <setting id="provider.knaben">true</setting>
     <setting id="provider.kickass2" default="true">false</setting>
     <setting id="provider.limetorrents" default="true">false</setting>
     <setting id="provider.magnetdl" default="true">true</setting>
     <setting id="provider.nyaa">true</setting>
     <setting id="provider.piratebay" default="true">true</setting>
     <setting id="provider.torlock" default="true">false</setting>
-    <setting id="provider.torrentapi" default="true">false</setting>
     <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
-    <setting id="provider.torrentgalaxy" default="true">false</setting>
-    <setting id="provider.torrentio" default="true">true</setting>
+    <setting id="provider.torrentgalaxy">true</setting>
+    <setting id="provider.torrentio">true</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
-    <setting id="provider.torrentz2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
     <setting id="provider.ytsmx" default="true">false</setting>
     <setting id="debug.enabled" default="true">false</setting>

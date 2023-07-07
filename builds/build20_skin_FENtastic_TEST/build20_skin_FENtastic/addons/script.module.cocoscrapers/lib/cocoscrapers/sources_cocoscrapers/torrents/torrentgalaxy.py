@@ -21,7 +21,7 @@ class source:
 		self.language = ['en']
 # captcha ["torrentgalaxy.to", "torrentgalaxy.mx"
 # working ["torrentgalaxy.su", "https://tgx.rs"]
-		self.base_link = "https://torrentgalaxy.su"
+		self.base_link = "https://tgx.rs"
 		self.search_link = '/torrents.php?search=%s&sort=seeders&order=desc'
 		self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'} # cfscrape has some old User-Agents that fail
 		self.min_seeders = 0

@@ -222,14 +222,11 @@ def openSettings(query=None, id=addonInfo('id')):
 def getProviderDefaults():
 	provider_defaults = {}
 	try:
-		#for item in ET.parse(SETTINGS_PATH).findall('./section/category/group/setting'):
 		for item in mdParse(SETTINGS_PATH).getElementsByTagName("setting"): #holy shit look at that.
-			#setting_id = item.get('id')
 			setting_id = item.getAttribute('id') #minidom instead of element tree
 			if not setting_id.startswith('provider.'): continue
 			try: defaulttext = item.getElementsByTagName('default')[0].firstChild.data
 			except: defaulttext = 'false'
-			#if setting_id.startswith('provider.'): provider_defaults[setting_id] = item.find('default').text or 'false'
 			provider_defaults[setting_id] = defaulttext or 'false'
 	except: pass
 	return provider_defaults
@@ -237,8 +234,7 @@ def getProviderDefaults():
 def setProviderDefaults(provider_defaults=None):
 	try:
 		if provider_defaults is None: provider_defaults = getProviderDefaults()
-		for k, v in provider_defaults.items():
-			setSetting(k, v)
+		for k, v in provider_defaults.items(): setSetting(k, v)
 	except: return
 
 def hide():

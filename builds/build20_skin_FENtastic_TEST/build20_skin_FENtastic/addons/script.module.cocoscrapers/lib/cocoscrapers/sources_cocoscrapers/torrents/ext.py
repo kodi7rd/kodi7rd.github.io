@@ -19,6 +19,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = "https://ext.torrentbay.to" # "ext.to" V2 challenge as of 2-9-21
+		#self.base_link = 'https://extranet.torrentbay.net/'
 		self.search_link = "/search/?order=size&sort=desc&q=%s"
 		self.min_seeders = 0
 

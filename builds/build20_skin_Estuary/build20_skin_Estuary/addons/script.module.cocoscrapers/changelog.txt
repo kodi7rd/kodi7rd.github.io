@@ -1,9 +1,13 @@
+[COLOR red][B]Version 1.0.12[/B][/COLOR]
+- Removed TorrentAPI
+- Corrected RSLBB address
+- Added Knaben
+
 [COLOR red][B]Version 1.0.11[/B][/COLOR]
 - Changed timeout for Plex Shares
 - Changed Plex Server detection logic.
 - Corrected Error in logging code for using Kodi log.
 - Changed Plex media detection logic to use multiple files from same server if available.
-- Fixed "Cocoscrapers Default Providers" toggle.
 
 [COLOR red][B]Version 1.0.10[/B][/COLOR]
 - Added timeout for Plex Shares (10 Seconds)

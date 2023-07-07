@@ -60,7 +60,7 @@
 				</setting>
 			</group>
 		</category>
-		<category id="premium hosters" label="32051" help="32537">
+		<category id="hosters" label="32051" help="32537">
 			<group id="1">
 				<setting id="toggleAllHostersOff" type="action" label="32011" help="32535">
 					<level>0</level>
@@ -79,34 +79,7 @@
 					<control type="button" format="action"/>
 				</setting>
 			</group>
-			<group id="2">
-				<setting id="provider.300mbfilms" type="boolean" label="32062" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.myvideolink" type="boolean" label="32072" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.rapidmoviez" type="boolean" label="32082" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.rlsbb" type="boolean" label="32075" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.scenerls" type="boolean" label="32076" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
-			<group id="3" label="Plexshare">
+			<group id="2" label="32546">
 				<setting id="provider.plexshare" type="boolean" label="32515" help="">
 					<level>0</level>
 					<default>false</default>
@@ -290,7 +263,7 @@
 					</control>
 				</setting>
 			</group>
-			<group id="4" label="32044">
+			<group id="3" label="32044">
 				<setting id="provider.easynews" type="boolean" label="32065" help="">
 					<level>0</level>
 					<default>false</default>
@@ -418,57 +391,6 @@
 					</dependencies>
 					<control type="button" format="action"/>
 				</setting>
-				<setting id="provider.furk" type="boolean" label="32068" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="furk.user_name" type="string" label="32018" help="" parent="provider.furk">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="provider.furk">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>32018</heading>
-					</control>
-				</setting>
-				<setting id="furk.user_pass" type="string" label="32019" help="" parent="provider.furk">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="provider.furk">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>32019</heading>
-						<hidden>true</hidden>
-					</control>
-				</setting>
-				<setting id="furk.api" type="string" label="32022" help="" parent="provider.furk">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="provider.furk">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>32022</heading>
-					</control>
-				</setting>
 				<setting id="provider.filepursuit" type="boolean" label="32066" help="">
 					<level>0</level>
 					<default>false</default>
@@ -490,7 +412,7 @@
 					</control>
 				</setting>
 			</group>
-			<group id="5" label="32045">
+			<group id="4" label="32045">
 				<setting id="provider.library" type="boolean" label="32070" help="">
 					<level>0</level>
 					<default>false</default>
@@ -635,11 +557,6 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="provider.extratorrent" type="boolean" label="32106" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
 				<setting id="provider.eztv" type="boolean" label="32107" help="">
 					<level>0</level>
 					<default>true</default>
@@ -650,12 +567,12 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="provider.ibit" type="boolean" label="32543" help="">
+				<setting id="provider.isohunt2" type="boolean" label="32110" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="provider.isohunt2" type="boolean" label="32110" help="">
+				<setting id="provider.knaben" type="boolean" label="32545" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -690,11 +607,6 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="provider.torrentapi" type="boolean" label="32122" help="">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
 				<setting id="provider.torrentdownload" type="boolean" label="32123" help="">
 					<level>0</level>
 					<default>true</default>
@@ -712,15 +624,10 @@
 				</setting>
 				<setting id="provider.torrentio" type="boolean" label="32139" help="">
 					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.torrentproject2" type="boolean" label="32136" help="">
-					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="provider.torrentz2" type="boolean" label="32130" help="">
+				<setting id="provider.torrentproject2" type="boolean" label="32136" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
