@@ -7,12 +7,15 @@ msgid ""
 msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
+
 # Hebrew setting menu label
+
 msgctxt "#40000"
 msgid "התאמת כתוביות"
 msgstr "התאמת כתוביות"
 
 # Hebrew Subtitles Matching Settings
+
 msgctxt "#40001"
 msgid "התאמת כתוביות למקורות"
 msgstr "התאמת כתוביות למקורות"
@@ -34,6 +37,7 @@ msgid "הצג בסיכום כמות ההתאמות רק איכויות שנמצ�
 msgstr "הצג בסיכום כמות ההתאמות רק איכויות שנמצאו להן התאמות"
 
 # Subtitles Websites
+
 msgctxt "#40006"
 msgid "היכן לחפש כתוביות"
 msgstr "היכן לחפש כתוביות"
@@ -55,6 +59,7 @@ msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgstr "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 
 # Twilight sources_results.xml
+
 msgctxt "#400011"
 msgid "[B]Results[/B]"
 msgstr "[B]מקורות[/B]"
