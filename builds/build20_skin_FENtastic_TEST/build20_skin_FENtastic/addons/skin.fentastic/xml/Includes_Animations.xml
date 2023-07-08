@@ -147,4 +147,12 @@
 			<animation condition="$PARAM[condition]" effect="slide" start="0" end="$PARAM[end]" time="0">Conditional</animation>
 	</include>
 	
+	<include name="preFix_VideoOSdZoomFocused">
+		<animation condition="Container($PARAM[id]).Position(0)" effect="slide" start="0" end="0" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(1)" effect="slide" start="0" end="120" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(2)" effect="slide" start="0" end="240" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(3)" effect="slide" start="0" end="360" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(4)" effect="slide" start="0" end="480" time="120" tween="sine" easing="inout">Conditional</animation>
+	</include>
+	
 </includes>

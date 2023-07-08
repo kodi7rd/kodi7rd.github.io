@@ -85,6 +85,11 @@
 	<value>$INFO[Player.Process(VideoFPS)]</value>
 	</variable>
 	
+	<!-- video osd seeksteps focus-->
+	<variable name="SeekStepFocuedTexture">
+	<value>flags/flag.png</value>
+	</variable>
+	
 	<variable name="SetLabelflag">
 	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
@@ -740,7 +745,11 @@
 
 	<!-- EPISODES -->
 	<variable name="InfoPanelEpisode">
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">[COLOR button_focus][B]$LOCALIZE[31080][/B]:[/COLOR] $INFO[ListItem.EndTime][CR][CR][B]$INFO[ListItem.Plot][/B][CR][CR]</value>
+		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">[COLOR button_focus][B]$LOCALIZE[700039][/B]:[/COLOR] $INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[31080][/B]:[/COLOR] $INFO[ListItem.EndTime][CR][CR][B]$INFO[ListItem.Plot][/B][CR][CR]</value>
+	</variable>
+	
+	<variable name="NextPreviousIndicator">
+	<value>kodirdil/arrows/circle-down.png</value>
 	</variable>
 	
 	<variable name="clearartlogo">

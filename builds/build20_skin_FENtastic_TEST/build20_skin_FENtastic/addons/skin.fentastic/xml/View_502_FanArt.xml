@@ -11,6 +11,14 @@
 				<param name="list_id" value="502" />
 				<param name="viewtype_label" value="$LOCALIZE[20445]" />
 			</include>
+			<include content="NextPreviousIndicator">
+			<param name="indicator">HasNext</param>
+			<param name="flipy">false</param>
+				<include content="NextPreviousIndicator">
+					<param name="indicator">HasPrevious</param>
+					<param name="flipy">true</param>
+				</include>
+			</include>
 		</control>
 		<control type="group">
 			<depth>DepthContentPanel</depth>

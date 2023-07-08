@@ -1120,4 +1120,10 @@ msgctxt "#700038"
 msgid "OUT"
 msgstr ""
 
+# Episode List - Variables.xml
+
+msgctxt "#700039"
+msgid "Duration"
+msgstr ""
+
 ################################################################

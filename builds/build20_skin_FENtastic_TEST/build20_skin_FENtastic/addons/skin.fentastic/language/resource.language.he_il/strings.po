@@ -938,4 +938,10 @@ msgctxt "#700038"
 msgid "OUT"
 msgstr "OUT"
 
+# Episode List - Variables.xml
+
+msgctxt "#700039"
+msgid "Duration"
+msgstr "אורך"
+
 ################################################################

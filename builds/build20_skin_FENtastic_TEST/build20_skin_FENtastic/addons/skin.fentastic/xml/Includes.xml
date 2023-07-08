@@ -242,7 +242,6 @@
 		<param name="labelflag">$INFO[Player.Process(VideoFPS)]</param>
 		<param name="freelabel">fps</param>
 		<definition>
-			<control type="group">
 			<visible>!String.IsEmpty($PARAM[flagvisible])</visible>
 			<control type="image">
 				<top>4</top>
@@ -261,7 +260,6 @@
 				<font>font_flag</font>
 				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
 				</control>
-			</control>
 		</definition>
 		</include>
 	
@@ -454,11 +452,11 @@
 				<control type="group">
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(seasons) | Container.Content(episodes)</param>
-				<param name="end">650</param>
+				<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">550</param>
+				<param name="end">0</param>
 				</include>
 					<width>150</width>
 					<visible>System.AddonIsEnabled(resource.images.studios.white) + !String.IsEmpty($PARAM[infolabel_prefix]ListItem.Studio)</visible>
@@ -469,11 +467,11 @@
 				<control type="group">
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(seasons)</param>
-				<param name="end">650</param>
+				<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">535</param>
+				<param name="end">0</param>
 				</include>
 					<top>10</top>
 					<width>260</width>
@@ -490,11 +488,11 @@
 				<control type="group">
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(seasons)</param>
-				<param name="end">650</param>
+				<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">535</param>
+				<param name="end">0</param>
 				</include>
 					<top>10</top>
 					<width>180</width>
@@ -510,11 +508,11 @@
 				<control type="group">
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(seasons)</param>
-				<param name="end">650</param>
+				<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">535</param>
+				<param name="end">0</param>
 				</include>
 					<top>10</top>
 					<width>150</width>
@@ -529,11 +527,11 @@
 				<control type="group">
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(seasons)</param>
-				<param name="end">650</param>
+				<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
 				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">535</param>
+				<param name="end">0</param>
 				</include>
 					<top>10</top>
 					<width>180</width>
@@ -948,6 +946,8 @@
 		</definition>
 	</include>
 	<include name="DialogBackgroundCommons">
+	<param name="logovisible" default="true"/>
+	<definition>
 		<control type="image">
 			<left>-2000</left>
 			<top>-2000</top>
@@ -1008,6 +1008,7 @@
 				<onclick>noop</onclick>
 			</control> -->
 			<control type="radiobutton">
+			<visible>$PARAM[logovisible]</visible>
 				<right>30</right>
 				<top>25</top>
 				<width>48</width>
@@ -1035,6 +1036,7 @@
 				<visible>Skin.HasSetting(touchmode)</visible>
 			</control>
 		</control>
+	</definition>
 	</include>
 	<include name="TopBar">
 		<param name="sublabel">$INFO[Container.SortMethod,$LOCALIZE[31022]: ,  ∙  ]$INFO[Container.CurrentItem,, / ]$INFO[Container.NumItems]</param>
@@ -1768,6 +1770,7 @@
 		<animation effect="fade" time="1300">VisibleChange</animation>
 	</include>
 	
+	<!-- IMAX Button - not used currently.
 	<include name="ToggleButtonObj">
 	<param name="icon" default="imax_off_white.png"/>
 	<param name="focusdiffusecolor" default="cyan"/>
@@ -1781,6 +1784,7 @@
 		<alttexturenofocus colordiffuse="$PARAM[altnofocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</alttexturenofocus>
 		</definition>
 	</include>
+	-->
 	
 	<include name="RainDropAnimationBackground">
 		<control type="group">
@@ -1948,7 +1952,7 @@
 		<left>1025</left>
 		<width>650</width>
 		<height>100</height>
-		<ondown>87</ondown>
+		<ondown>200</ondown>
 		<onback>201</onback>
 		<orientation>horizontal</orientation>
 	</include>
@@ -1961,4 +1965,38 @@
 		<onclick>ZoomIn</onclick>
 	</include>
 
+	<include name="ZoomFocusd">
+		<control type="group">
+		<animation effect="fade" start="0" end="100" time="150" delay="50">Visible</animation>
+		<visible>Control.HasFocus($PARAM[Control_id])</visible>
+		<include content="preFix_VideoOSdZoomFocused">
+			<param name="id">$PARAM[id]</param>
+		</include>
+			<control type="image">
+				<top>850</top>
+				<left>0</left>
+				<width>120</width>
+				<height>50</height>
+				<texture colordiffuse="gray">$VAR[SeekStepFocuedTexture]</texture>
+				</control>
+			</control>
+		<nested />
+	</include>
+	
+	<include name="NextPreviousIndicator">
+		<control type="group">
+		<animation effect="fade" start="0" end="100" time="550">VisibleChange</animation>
+		<visible>Container.$PARAM[indicator]</visible>
+		<top>1010</top>
+		<left>300</left>
+			<control type="image">
+				<visible>Container.$PARAM[indicator]</visible>
+				<width>80</width>
+				<height>80</height>
+				<texture flipy="$PARAM[flipy]">$VAR[NextPreviousIndicator]</texture>
+			</control>
+		</control>
+		<nested />
+	</include>
+	
 </includes>
