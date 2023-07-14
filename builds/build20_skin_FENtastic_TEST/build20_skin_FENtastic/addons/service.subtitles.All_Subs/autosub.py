@@ -334,7 +334,7 @@ def sub_from_main(arg):
         xbmc.Player().pause()
         last_sub_index,all_subs=get_db_data(f_result)
         xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
-        window = MySubs('Subtitles - ' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
         return_result=json.dumps(action)
     elif action=='sub_window_unpause':
         tag_original=video_data['Tagline']
@@ -352,7 +352,7 @@ def sub_from_main(arg):
         
         last_sub_index,all_subs=get_db_data(f_result)
         xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
-        window = MySubs('Subtitles - ' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
         return_result=json.dumps(action)
     elif action=='next':
         from resources.modules import general

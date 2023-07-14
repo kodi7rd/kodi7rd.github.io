@@ -140,7 +140,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
                     pass
                 
                 if (self.last_sub_index==items[8]):
-                    added_string='[COLOR yellow][B][I]SELECTED >> '
+                    added_string='[COLOR yellow][B][I]כתובית נוכחית << '
                 elif val:
                     added_string='[COLOR deepskyblue][B][I]'
                 else:

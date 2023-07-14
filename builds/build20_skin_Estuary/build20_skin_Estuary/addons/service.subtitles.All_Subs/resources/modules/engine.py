@@ -1,3 +1,5 @@
+
+
 import xbmc,xbmcgui,time,xbmcplugin
 from resources.modules import log
 import pkgutil,json,re
@@ -12,8 +14,8 @@ global break_all
 from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 from resources.modules.general import Thread,CachedSubFolder,TransFolder,user_dataDir
 from resources.modules import cache
-
-
+global trans_result
+trans_result=[]
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
 #import requests
@@ -27,9 +29,35 @@ from resources.sources import subscene
 from resources.sources import wizdom
 
 que=urllib.parse.quote_plus
+unque=urllib.parse.unquote_plus
 Addon=xbmcaddon.Addon()
 addonPath = xbmc_tranlate_path(Addon.getAddonInfo("path"))
+class Bing(object):
+    def __init__(self):
+        self.url = "http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?"
 
+    def translate(self, from_lan, to_lan,content,):
+        data = {}
+        #data['from'] = '"' + from_lan + '"'
+        data['to'] = '"' + to_lan + '"'
+        data['texts'] = '["'
+        data['texts'] += content
+        data['texts'] += '"]'
+        data['options'] = "{}"
+        data['oncomplete'] = 'onComplete_3'
+        data['onerror'] = 'onError_3'
+        data['_'] = '1430745999189'
+        data = urllib.parse.urlencode(data).encode('utf-8')
+        strUrl = self.url + data.decode() + "&appId=%22ABB1C5A823DC3B7B1D5F4BDB886ED308B50D1919%22"
+        response = urllib.request.urlopen(strUrl)
+        str_data = response.read().decode('utf-8')
+        try:
+            tmp, str_data = str_data.split('"TranslatedText":')
+        except:
+            print (str_data)
+            return str_data
+        translate_data = str_data[1:str_data.find('"', 1)]
+        return translate_data
 def similar(w1, w2):
     from difflib import SequenceMatcher
     
@@ -410,9 +438,68 @@ def get_random_number():
     while (result == 20) or (result == 21) or (result == 22):
         result=int(random.random()*22+1)
     return result
+def get_translated(base_url,items,counter,headers):
+    import requests
+    global trans_result
+    translation='Error code'
+    count_error=0
+    while ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
+        try:
+            translation=requests.get(base_url+(items),headers=headers).text
+        except:
+            num=get_random_number()
+            base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
+            translation=requests.get(base_url+(items),headers=headers).text
+        if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
+            
+            bing=Bing()
+            log.warning('Error Found')
+            
+            x=bing.translate('en', 'he',que(items))
+            translation=unque(x)
+      
+            if ('onError_3' in translation):
+                time.sleep(1)
+                count_error+=1
+                if (count_error>5):
+                    log.warning('Error 5')
+                    break
+                
+    if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation):
+        translation='Error now:'+str(count_error)
+    trans_result.append((translation,counter))
+def c_get_keys():
+    import requests
+    
+    x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json').json()
+    return x
+def get_last_key():
+    try:
+        last_key_file=os.path.join(user_dataDir,'last_key.txt')
+        file = open(last_key_file, 'r') 
+        file_data= file.read()
+        file.close()
+    
+        file_data=int(file_data)
+    except:
+        file_data=0
+    return file_data
+def set_last_key(count_key):
+    last_key_file=os.path.join(user_dataDir,'last_key.txt')
+    file = open(last_key_file, 'w') 
+    file.write(str(count_key))
+    file.close()
+    
+def select_key(count_key):
+    x=cache.get(c_get_keys, 24,table='subs')
+    
+    
+    return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
+
+    
 def translate_subs(input_file,output_file):
-    
-    
+    global trans_result
+    trans_result=[]
     
     from resources.modules import general
     
@@ -475,7 +562,7 @@ def translate_subs(input_file,output_file):
         
         general.progress_msg=0
         for items in ax2:
-             general.show_msg=' מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
+             general.show_msg='GOOGLE מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
              general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
              if general.break_all:
                  break
@@ -486,8 +573,8 @@ def translate_subs(input_file,output_file):
              xx+=1
         f_sub_pre=f_sub_pre.replace('\r','\n')
         #all_text=f_sub_pre.replace(': ',':').replace('"# ','"#').split('\n')
-    else:
-        import requests
+    elif Addon.getSetting("translate_p")== '1':
+        
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -513,24 +600,129 @@ def translate_subs(input_file,output_file):
         xx=0
         
         general.progress_msg=0
-        ax2=split_string(text,1000)
-       
+        ax2=split_string(text,500)
+        thread=[]
+        counter=0
         for items in ax2:
-             try:
-                translation=requests.get(base_url+items,headers=headers).text
-             except:
-                num=get_random_number()
-                base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
-                translation=requests.get(base_url+items,headers=headers).text
+             thread.append(Thread(get_translated,base_url,items.replace('ה',''),counter,headers))
+             counter+=1
 
-             general.show_msg=' מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
+             general.show_msg='YANDEX מתרגם ' + encoding+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
              general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
              if general.break_all:
                  break
-             
-             f_sub_pre=f_sub_pre+translation
              xx+=1
-        f_sub_pre=f_sub_pre
+        for td in thread:
+            td.start()
+        while 1:
+            
+            still_alive=0
+            for threads in thread:
+                  
+                  if general.break_all:
+                     
+                     break
+                                    
+                  num_live=0
+                  string_dp=''
+
+                  still_alive=0
+                  for yy in range(0,len(thread)):
+                    if not thread[yy].is_alive():
+                      num_live=num_live+1
+                      
+                    else:
+                      still_alive=1
+                      
+                  
+                 
+                  
+                  
+                  
+            if still_alive==0:
+                    break
+        translation=sorted(trans_result, key=lambda x: x[1], reverse=False)
+        for sub_title,index in translation:
+            f_sub_pre=f_sub_pre+sub_title
+             
+    else:
+        general.show_msg='BING מתרגם ' 
+        import requests, uuid, json
+        
+        
+        count_key=get_last_key()
+        # Add your key and endpoint
+        nm,key,location,amount = select_key(count_key)
+        endpoint = "https://api.cognitive.microsofttranslator.com"
+
+        # location, also known as region.
+        # required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
+        
+
+        path = '/translate'
+        constructed_url = endpoint + path
+
+        params = {
+            'api-version': '3.0',
+            #'from': 'en',
+            'to': ['he']
+        }
+
+        headers = {
+            'Ocp-Apim-Subscription-Key': key,
+            # location required if you're using a multi-service or regional (not global) resource.
+            'Ocp-Apim-Subscription-Region': location,
+            'Content-type': 'application/json',
+            'X-ClientTraceId': str(uuid.uuid4())
+        }
+
+        split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+       
+        ax2=split_string(text,50000)
+        f_sub_pre=''
+        xx=0
+        
+        general.progress_msg=0
+        for items in ax2:
+            
+            general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
+            if general.break_all:
+                 break
+            body = [{
+                'text': items
+            }]
+            count_test=0
+            while count_test<amount:
+                general.show_msg='BING מתרגם ' + encoding+'\n'+nm+' '+str(count_key)+'/'+str(amount)+'\n'+str(int(((xx* 100.0)/(len(ax2))) ))+'%'
+                request = requests.post(constructed_url, params=params, headers=headers, json=body)
+                response = request.json()
+                try:
+                    f_sub_pre=f_sub_pre+response[0]['translations'][0]['text']
+                    
+                    set_last_key(count_key)
+                    break
+                except:
+                    general.show_msg=str(response)
+                    
+                    count_key+=1
+                    if (count_key>amount):
+                        count_key=0
+                    nm,key,location,amount = select_key(count_key)
+                    log.warning(f"DarkSubs Bing API: bing_translator_name={nm} | bing_api_key={key} | total_keys_amount={amount}")
+                    headers = {
+                        'Ocp-Apim-Subscription-Key': key,
+                        # location required if you're using a multi-service or regional (not global) resource.
+                        'Ocp-Apim-Subscription-Region': location,
+                        'Content-type': 'application/json',
+                        'X-ClientTraceId': str(uuid.uuid4())
+                    }
+                    count_test+=1
+             
+             
+             
+            xx+=1
+            # You can pass more than one object in body.
+            
     f_all=f_sub_pre.replace('\r\r','\n')
     
     source_dir = os.path.join(addonPath, 'resources', 'modules')
@@ -616,6 +808,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             log.warning('Found cache')
             break
     if not found:
+    
         sub_file=impmodule.download(download_data,MySubFolder)
         
     if language!='Hebrew'  and Addon.getSetting("auto_translate")=='true':

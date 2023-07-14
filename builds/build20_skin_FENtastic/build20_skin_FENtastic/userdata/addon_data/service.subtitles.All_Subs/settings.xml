@@ -13,7 +13,7 @@
     <setting id="other_lang" default="true" />
     <setting id="all_lang" default="true">false</setting>
     <setting id="auto_translate" default="true">true</setting>
-    <setting id="translate_p" default="true">0</setting>
+    <setting id="translate_p">2</setting>
     <setting id="subtitle_trans_cache">15</setting>
     <setting id="time_s">15</setting>
     <setting id="label0" default="true" />

@@ -208,14 +208,14 @@ if len(sys.argv) >= 2:
         xbmc.Player().pause()
         last_sub_index,all_subs=get_db_data(f_result)
         
-        window = MySubs('Subtitles - ' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
     elif action=='sub_window_unpause':
         f_result=cache.get(get_subtitles,24,video_data,table='subs')
         xbmc.executebuiltin('Dialog.Close(all,true)')
         
         last_sub_index,all_subs=get_db_data(f_result)
         
-        window = MySubs('Subtitles - ' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
     elif action=='next':
         from resources.modules import general
         general.with_dp=False

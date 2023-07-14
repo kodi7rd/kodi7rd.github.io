@@ -27,7 +27,8 @@ sub_color='white'
 
 def get_subs(item):
     global global_var
-    log.warning('Searching Wizdom')
+    log.warning(item)
+    log.warning('Searching Wizdom:'+str(type(item))+str(item))
     imdb=item['imdb']
     season=item['season']
     episode=item['episode']

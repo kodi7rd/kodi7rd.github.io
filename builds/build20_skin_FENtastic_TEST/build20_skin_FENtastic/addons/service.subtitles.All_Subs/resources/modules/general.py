@@ -117,6 +117,7 @@ def show_results(show_dp=True):
     show_dp=with_dp
     break_all=False
     log.warning('show_dp:'+str(show_dp))
+    time_out=0
     if (show_dp):
         dp = xbmcgui.DialogProgress()
         dp.create("מחפש כתוביות")
@@ -134,7 +135,12 @@ def show_results(show_dp=True):
                 dp.close()
                 break
             time.sleep(0.1)
-           
+            time_out+=1
+            if (time_out>600):
+                break_all=True
+                dp.close()
+                break
+        dp.close()
         '''
         menu2 = infoDialog("plugin://%s/"%addon_id)
         menu2.doModal()

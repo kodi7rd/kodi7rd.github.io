@@ -1,4 +1,19 @@
-﻿[COLOR yellow][B]v3.1.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.2.6[/B][/COLOR]
+* Adjust sub_window labels.
+* Small fixes.
+[COLOR yellow][B]v3.2.4[/B][/COLOR]
+* Bing machine translate now supports multiple API keys for high translations usage.
+[COLOR yellow][B]v3.2.3[/B][/COLOR]
+* Fix Bing machine translate bug for long subtitles.
+[COLOR yellow][B]v3.2.2[/B][/COLOR]
+* Add Bing machine translate support. (initial release)
+[COLOR yellow][B]v3.2.1[/B][/COLOR]
+* Fix Yandex machine translate special character bug.
+[COLOR yellow][B]v3.1.8[/B][/COLOR]
+* Fix Yandex machine translate duplicate lines bug.
+[COLOR yellow][B]v3.1.7[/B][/COLOR]
+* Improve machine translate from Yandex website translation speed.
+[COLOR yellow][B]v3.1.6[/B][/COLOR]
 * Add support for English subtitles from Subscene website.
 * Fix machine translate from Yandex website.
 [COLOR yellow][B]v3.1.5[/B][/COLOR]
