@@ -27,10 +27,10 @@
 			
 				<!-- KODI-RD-IL ADDITION -->
 				<include content="ClearlogoArt">
-					<param name="top">-165</param>
-					<param name="left">45%</param>
+					<param name="top">-150</param>
+					<param name="left">42%</param>
 					<param name="visible">Control.IsVisible(51)</param>
-				</include>	
+				</include>
 				<!-- ##################### -->
 				
 			<control type="group">
@@ -170,7 +170,7 @@
 					<top>690</top>
 					<width>435</width>
 					<height>24</height>
-					<label>$INFO[ListItem.Property(TotalSeasons)] $VAR[SeasonCorrectLabel] / $INFO[ListItem.Property(TotalEpisodes)] פרקים </label>
+					<label>$INFO[ListItem.Property(TotalSeasons)] $VAR[SeasonCorrectLabel] / $INFO[ListItem.Property(TotalEpisodes)] $LOCALIZE[700010] </label>
 					<font>font20_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
@@ -225,8 +225,8 @@
 				<control type="image">
 					<top>$PARAM[top]</top>
 					<left>$PARAM[left]</left>
-					<width>300</width>
-					<height>100</height>
+					<width>320</width>
+					<height>130</height>
 					<aspectratio scalediffuse="false" align="left" aligny="center">keep</aspectratio>
 					<texture>$VAR[clearartlogo]</texture>
 				</control>

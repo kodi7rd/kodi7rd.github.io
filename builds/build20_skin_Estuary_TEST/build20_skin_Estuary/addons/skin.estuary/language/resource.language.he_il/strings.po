@@ -313,48 +313,6 @@ msgctxt "#31079"
 msgid "Cast not available"
 msgstr "שידור אינו זמין"
 
-# KODI-RD-IL CUSTOM ADDITION:
-
-# Voice Search - ButtonDialogKeyboard.xml
-
-msgctxt "#70000"
-msgid "Voice Search"
-msgstr "חיפוש קולי"
-
-# Search Button - Custom_1107_SearchDialog.xml
-
-msgctxt "#70001"
-msgid "[B][COLOR blue]Search movies[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש סרט[/COLOR][/B]"
-
-msgctxt "#70002"
-msgid "[B][COLOR blue]Search shows[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש סדרה[/COLOR][/B]"
-
-msgctxt "#70003"
-msgid "[B][COLOR blue]Search by year[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש לפי שנה[/COLOR][/B]"
-
-msgctxt "#70004"
-msgid "[B][COLOR blue]Search actors/actresses[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש שחקן[/COLOR][/B]"
-
-msgctxt "#70005"
-msgid "[B][COLOR blue]Search movie collections[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש קולקציית סרטים[/COLOR][/B]"
-
-msgctxt "#70006"
-msgid "[B][COLOR blue]Search Trakt list[/COLOR][/B]"
-msgstr "[B][COLOR blue]חיפוש רשימת Trakt (נדרש חיבור פעיל)[/COLOR][/B]"
-
-# Poster View Type - Variables.xml
-
-msgctxt "#700061"
-msgid "Genre:"
-msgstr "ז'אנר:"
-
-#######################################
-
 msgctxt "#31080"
 msgid "Ends at"
 msgstr "שעת סיום"
@@ -789,3 +747,93 @@ msgstr "מערכת"
 #~ msgctxt "#31138"
 #~ msgid "Player process info"
 #~ msgstr "מידע על תהליך הנגן"
+
+################################################################
+
+# KODI-RD-IL CUSTOM ADDITION:
+
+# Voice Search - ButtonDialogKeyboard.xml
+
+msgctxt "#70000"
+msgid "Voice Search"
+msgstr "חיפוש קולי"
+
+# Search Button - Custom_1107_SearchDialog.xml
+
+msgctxt "#70001"
+msgid "Search movies"
+msgstr "חיפוש סרט"
+
+msgctxt "#70002"
+msgid "Search shows"
+msgstr "חיפוש סדרה"
+
+msgctxt "#70003"
+msgid "Search by year"
+msgstr "חיפוש לפי שנה"
+
+msgctxt "#70004"
+msgid "Search actors/actresses"
+msgstr "חיפוש שחקן"
+
+msgctxt "#70005"
+msgid "Search movie collections"
+msgstr "חיפוש קולקציית סרטים"
+
+msgctxt "#70006"
+msgid "Search Trakt list"
+msgstr "חיפוש רשימת Trakt"
+
+# Poster View Type - Variables.xml
+
+msgctxt "#70007"
+msgid "Genre"
+msgstr "ז'אנר"
+
+# Episode List + Poster View - View_50_List.xml + View_51_Poster.xml:
+
+msgctxt "#70008"
+msgid "Season"
+msgstr "עונה"
+
+msgctxt "#70009"
+msgid "Seasons"
+msgstr "עונות"
+
+msgctxt "#700010"
+msgid "Episodes"
+msgstr "פרקים"
+
+# DialogSeekVideoOSD in Player - VideoOSD.XML
+
+msgctxt "#700011"
+msgid "Show Seek Steps Window"
+msgstr "הצג חלון לקפיצות זמן מהירות"
+
+msgctxt "#700012"
+msgid "Forward Seek Steps"
+msgstr "דלג קדימה"
+
+msgctxt "#700013"
+msgid "Rewind Seek Steps"
+msgstr "דלג אחורה"
+
+msgctxt "#700014"
+msgid "Mins"
+msgstr "דקות"
+
+# Zoom Toggle Buttons in Player - VideoOSD.XML
+
+msgctxt "#700015"
+msgid "Show Zoom Toggle Buttons"
+msgstr "הצג כפתורי זום לוידאו"
+
+msgctxt "#700016"
+msgid "IN"
+msgstr "IN"
+
+msgctxt "#700017"
+msgid "OUT"
+msgstr "OUT"
+
+################################################################

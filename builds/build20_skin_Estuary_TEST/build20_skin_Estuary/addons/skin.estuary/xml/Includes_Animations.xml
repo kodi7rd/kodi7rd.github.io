@@ -135,4 +135,24 @@
 			<effect type="slide" start="0,0" end="0,1080" time="400" tween="cubic" easing="out" />
 		</animation>
 	</include>
+	
+	<include name="SetSlideAnimation">
+	<definition>
+	<param name="end" default="-400"/>
+	<animation condition="$PARAM[setproperty]" effect="slide" end="$PARAM[end]" time="0">Conditional</animation>
+	</definition>
+	</include>
+	
+	<include name="preFix_Flags_Positions">
+			<animation condition="$PARAM[condition]" effect="slide" start="0" end="$PARAM[end]" time="0">Conditional</animation>
+	</include>
+	
+	<include name="preFix_VideoOSdZoomFocused">
+		<animation condition="Container($PARAM[id]).Position(0)" effect="slide" start="0" end="0" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(1)" effect="slide" start="0" end="120" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(2)" effect="slide" start="0" end="240" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(3)" effect="slide" start="0" end="360" time="120" tween="sine" easing="inout">Conditional</animation>
+		<animation condition="Container($PARAM[id]).Position(4)" effect="slide" start="0" end="480" time="120" tween="sine" easing="inout">Conditional</animation>
+	</include>
+	
 </includes>

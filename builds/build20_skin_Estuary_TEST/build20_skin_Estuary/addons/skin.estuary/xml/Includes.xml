@@ -37,9 +37,14 @@
 	<constant name="list_bottom_offset">80</constant>
 	<constant name="list_top_offset">100</constant>
 	<constant name="list_item_height">75</constant>
+	<constant name="PadLeft">650</constant>
+	<constant name="PadfixLeft">550</constant>
+	<constant name="GlobalPadfixLeft">535</constant>
 	<expression name="infodialog_active">Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo) | Window.IsVisible(script-embuary-video.xml) | Window.IsVisible(script-embuary-person.xml) | Window.IsVisible(script-embuary-image.xml)</expression>
 	<expression name="sidebar_visible">ControlGroup(9000).HasFocus | Control.HasFocus(6130) | Control.HasFocus(6131)</expression>
-	<expression name="HomeScreenOff">!Window.IsActive(home)</expression>
+	<expression name="HomeScreenOff">![Window.IsActive(home) | Control.IsVisible(50) | Control.IsVisible(54) | Control.IsVisible(56) | Control.IsVisible(500) | Control.IsVisible(501) | Control.IsVisible(504)]</expression>
+	<expression name="SkinZoomToggle">Skin.HasSetting(ZoomToggle)</expression>
+	<expression name="LiveTvCondition">!VideoPlayer.Content(livetv)</expression>
 	<include name="CommonScrollbars">
 		<param name="bottom_offset">list_bottom_offset</param>
 		<definition>
@@ -189,7 +194,6 @@
 		<param name="labelflag">$INFO[Player.Process(VideoFPS)]</param>
 		<param name="freelabel">fps</param>
 		<definition>
-			<control type="group">
 			<visible>!String.IsEmpty($PARAM[flagvisible])</visible>
 			<control type="image">
 				<top>4</top>
@@ -208,7 +212,6 @@
 				<font>font_flag</font>
 				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
 				</control>
-			</control>
 		</definition>
 		</include>
 	
@@ -385,36 +388,6 @@
 			</control>
 		</definition>
 	</include>
-	
-	
-		<include name="MediaLabelFlag">
-		<param name="labelflag">$INFO[Player.Process(VideoFPS)]</param>
-		<param name="freelabel">fps</param>
-		<definition>
-			<control type="group">
-			<visible>!String.IsEmpty($PARAM[flagvisible])</visible>
-			<control type="image">
-				<top>4</top>
-				<left>0</left>
-				<width>120</width>
-				<height>53</height>
-				<texture border="1.1.1.1">flags/flag.png</texture>
-			</control>
-			<control type="label">
-				<top>20</top>
-				<left>0</left>
-				<width>120</width>
-				<height>24</height>
-				<align>center</align>
-				<aligny>center</aligny>
-				<font>font_flag</font>
-				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
-				</control>
-			</control>
-		</definition>
-		</include>
-	
-	
 	<include name="MediaFlags">
 		<param name="infolabel_prefix"></param>
 		<param name="resolution_var">$VAR[ResolutionFlagVar]</param>
@@ -429,16 +402,33 @@
 				<width>1920</width>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="group">
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(seasons) | Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
 					<width>150</width>
 					<visible>System.AddonIsEnabled(resource.images.studios.white) + !String.IsEmpty($PARAM[infolabel_prefix]ListItem.Studio)</visible>
 					<include content="MediaFlag">
-						<param name="texture" value="$INFO[$PARAM[infolabel_prefix]ListItem.Studio,resource://resource.images.studios.white/,.png]" />
+					<param name="texture" value="$INFO[$PARAM[infolabel_prefix]ListItem.Studio,resource://resource.images.studios.white/,.png]" />
 					</include>
 				</control>
 				<control type="group">
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(seasons)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
 					<top>10</top>
 					<width>260</width>
 					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.RatingAndVotes) + $EXP[HomeScreenOff]</visible>
+					<include>pre_fix_setview_flags</include>
 					<include content="InfoFlag">
 						<param name="imagesize">70</param>
 						<param name="imagetop">-20</param>
@@ -448,9 +438,18 @@
 					</include>
 				</control>
 				<control type="group">
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(seasons)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
 					<top>10</top>
 					<width>180</width>
 					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Premiered) + $EXP[HomeScreenOff]</visible>
+					<include>pre_fix_setview_flags</include>
 					<include content="InfoFlag">
 						<param name="imagesize">30</param>
 						<param name="imagetop">0</param>
@@ -459,19 +458,37 @@
 					</include>
 				</control>
 				<control type="group">
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(seasons)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
 					<top>10</top>
 					<width>150</width>
 					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Duration) + $EXP[HomeScreenOff]</visible>
+					<include>pre_fix_setview_flags</include>
 					<include content="InfoFlag">
 						<param name="labelleft">45</param>
 						<param name="icon" value="kodirdil/poster_view_icons/clock.png" />
 						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Duration(hh:mm:ss)]" />
 					</include>
 				</control>
-					<control type="group">
+				<control type="group">
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(seasons)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(episodes)</param>
+				<param name="end">0</param>
+				</include>
 					<top>10</top>
 					<width>180</width>
 					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Studio) + $EXP[HomeScreenOff]</visible>
+					<include>pre_fix_setview_flags</include>
 					<include content="InfoFlag">
 						<param name="icon" value="kodirdil/poster_view_icons/network.png" />
 						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Studio]" />
@@ -525,6 +542,23 @@
 			</control>
 		</control>
 	</include>
+	
+	<include name="pre_fix_setview_flags">
+			<include content="preFix_Flags_Positions">
+			<param name="condition">Control.IsVisible(55)</param>
+			<param name="end">GlobalPadfixLeft</param>
+		</include>
+	
+		<include content="preFix_Flags_Positions">
+			<param name="condition">Container.Content(seasons) | Control.IsVisible(502)</param>
+			<param name="end">PadLeft</param>
+		</include>
+		<include content="preFix_Flags_Positions">
+			<param name="condition">Container.Content(episodes)</param>
+			<param name="end">PadFixLeft</param>
+		</include>
+	</include>
+	
 	<include name="WeatherIconMyWeather">
 		<control type="group">
 			<width>268</width>
@@ -864,6 +898,8 @@
 		</definition>
 	</include>
 	<include name="DialogBackgroundCommons">
+	<param name="logovisible" default="true"/>
+	<definition>
 		<control type="image">
 			<left>-2000</left>
 			<top>-2000</top>
@@ -911,7 +947,7 @@
 				<aligny>center</aligny>
 				<shadowcolor>black</shadowcolor>
 			</control>
-			<control type="button" id="22002">
+			<!-- <control type="button" id="22002">
 				<description>button overlay to avoid closing in dialog area</description>
 				<left>0</left>
 				<top>0</top>
@@ -920,8 +956,9 @@
 				<texturefocus />
 				<texturenofocus />
 				<onclick>noop</onclick>
-			</control>
+			</control> -->
 			<control type="radiobutton">
+			<visible>$PARAM[logovisible]</visible>
 				<right>10</right>
 				<top>11</top>
 				<width>48</width>
@@ -949,6 +986,7 @@
 				<visible>Skin.HasSetting(touchmode)</visible>
 			</control>
 		</control>
+	</definition>
 	</include>
 	<include name="TopBar">
 		<param name="sublabel">$INFO[Container.SortMethod,$LOCALIZE[31022]: ,  ∙  ]$INFO[Container.CurrentItem,, / ]$INFO[Container.NumItems]</param>
@@ -1670,6 +1708,7 @@
 
 	<!-- MY INCLUDES -->
 	
+	<!-- IMAX Button - not used currently.
 	<include name="ToggleButtonObj">
 	<param name="icon" default="imax_off_white.png"/>
 	<param name="focusdiffusecolor" default="cyan"/>
@@ -1682,6 +1721,59 @@
 		<alttexturefocus colordiffuse="$PARAM[altfocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</alttexturefocus>
 		<alttexturenofocus colordiffuse="$PARAM[altnofocusdiffusecolor]">special://skin/media/kodirdil/imax/$PARAM[icon]</alttexturenofocus>
 		</definition>
+	</include>
+	-->
+	
+	<include name="DialogSeekVideoOSD">
+		<top>880</top>
+		<left>1025</left>
+		<width>650</width>
+		<height>100</height>
+		<ondown>200</ondown>
+		<onback>201</onback>
+		<orientation>horizontal</orientation>
+	</include>
+
+	<include name="Out">
+		<onclick>ZoomOut</onclick>
+	</include>
+
+	<include name="In">
+		<onclick>ZoomIn</onclick>
+	</include>
+
+	<include name="ZoomFocusd">
+		<control type="group">
+		<animation effect="fade" start="0" end="100" time="150" delay="50">Visible</animation>
+		<visible>Control.HasFocus($PARAM[Control_id])</visible>
+		<include content="preFix_VideoOSdZoomFocused">
+			<param name="id">$PARAM[id]</param>
+		</include>
+			<control type="image">
+				<top>850</top>
+				<left>0</left>
+				<width>120</width>
+				<height>50</height>
+				<texture colordiffuse="gray">$VAR[SeekStepFocuedTexture]</texture>
+				</control>
+			</control>
+		<nested />
+	</include>
+	
+	<include name="NextPreviousIndicator">
+		<control type="group">
+		<animation effect="fade" start="0" end="100" time="550">VisibleChange</animation>
+		<visible>Container.$PARAM[indicator]</visible>
+		<top>1010</top>
+		<left>300</left>
+			<control type="image">
+				<visible>Container.$PARAM[indicator]</visible>
+				<width>80</width>
+				<height>80</height>
+				<texture flipy="$PARAM[flipy]">$VAR[NextPreviousIndicator]</texture>
+			</control>
+		</control>
+		<nested />
 	</include>
 	
 </includes>

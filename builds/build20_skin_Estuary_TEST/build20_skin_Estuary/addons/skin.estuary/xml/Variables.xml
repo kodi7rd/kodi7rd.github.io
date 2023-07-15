@@ -78,6 +78,11 @@
 	<value>$INFO[Player.Process(VideoFPS)]</value>
 	</variable>
 	
+	<!-- video osd seeksteps focus-->
+	<variable name="SeekStepFocuedTexture">
+	<value>flags/flag.png</value>
+	</variable>
+	
 	<variable name="SetLabelflag">
 	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
@@ -105,7 +110,7 @@
 	<!-- KODI-RD-IL ADDITION -->
 	<variable name="PlotTextBoxVar">
 		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline][CR]]$INFO[ListItem.Genre]</value>
-		<value condition="!String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Plot)">[B][COLOR button_focus]$LOCALIZE[700061] [/COLOR][/B] [I][LOWERCASE]$INFO[ListItem.Genre][/I][/LOWERCASE][CR]$INFO[ListItem.Plot]</value>
+		<value condition="!String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Plot)">[B][COLOR button_focus]$LOCALIZE[70007]: [/COLOR][/B] [I][LOWERCASE]$INFO[ListItem.Genre][/I][/LOWERCASE][CR]$INFO[ListItem.Plot]</value>
 	</variable>
 	<!-- ##################### -->
 	<variable name="ShiftLeftTextBoxVar">
@@ -350,6 +355,8 @@
 		<value condition="Control.HasFocus(70054) + Playlist.IsRandom">$LOCALIZE[590]: $LOCALIZE[16041]</value>
 		<value condition="Control.HasFocus(70054)">$LOCALIZE[590]: $LOCALIZE[16039]</value>
 		<value condition="Control.HasFocus(70055)">$LOCALIZE[24013]</value>
+		<value condition="Control.HasFocus(599)">ZOOM IN</value>
+		<value condition="Control.HasFocus(598)">ZOOM OUT</value>
 	</variable>
 	<variable name="SkinSettingsHelpTextVar">
 		<value condition="Container(9000).HasFocus(1)">$LOCALIZE[31129]</value>
@@ -681,14 +688,21 @@
 	</variable>
 	
 	<!-- KODI-RD-IL VARIABLES -->
+
+	<!-- EPISODES -->	
+	<variable name="NextPreviousIndicator">
+	<value>kodirdil/arrows/circle-down.png</value>
+	</variable>
+	
 	<variable name="clearartlogo">
 	<value condition="!String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearlogo)]</value>
 	<value condition="String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearart)]</value>
 	</variable>
 	
 	<variable name="SeasonCorrectLabel">
-	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונה</value>
-	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונות</value>
+	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70008]</value>
+	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70009]</value>
 	</variable>
+	
 	<!-- ##################### -->
 </includes>
