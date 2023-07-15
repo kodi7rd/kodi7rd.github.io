@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>9000</defaultcontrol>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="group">
+			<centerleft>50%</centerleft>
+			<width>600</width>
+			<centertop>50%</centertop>
+			<height>700</height>
+			<include content="DialogBackgroundCommons">
+				<param name="width" value="600" />
+				<param name="height" value="485" />
+				<param name="header_label" value="$LOCALIZE[31072]" />
+				<param name="header_id" value="2" />
+				<param name="diffusetexture" value="masks/dialog-bg-squareish.png" />
+			</include>
+			<control type="panel" id="9000">
+				<include>ButtonMenuList</include>
+				<content>
+					<item>
+						<!-- Reload skin in Hebrew  -->
+						<label>$LOCALIZE[700017]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ReloadSkin()</onclick>
+					</item>
+					<item>
+						<!-- Skin settings in Hebrew  -->
+						<label>$LOCALIZE[700018]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(SkinSettings.xml)</onclick>
+					</item>
+					<item>
+						<label>$LOCALIZE[13012]</label>
+						<!-- Original - <onclick>Quit()</onclick> -->
+						<!-- Force Close Kodi Script:  -->
+						<onclick>RunScript(&quot;plugin.close.kodi&quot;)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<label>Toggle debugging</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>Skin.ToggleDebug()</onclick>
+					</item>
+				</content>
+			</control>
+		<include content="UpDownArrows">
+			<param name="container_id" value="9000" />
+			<param name="posx" value="276" />
+			<param name="up_posy" value="-40" />
+			<param name="down_posy" value="500" />
+			</include>
+		</control>
+	</controls>
+</window>
