@@ -899,7 +899,7 @@ msgid "Planned"
 msgstr "בתכנון"
 
 msgctxt "#700030"
-msgid "Cancelled"
+msgid "Canceled"
 msgstr "בוטלה"
 
 msgctxt "#700031"

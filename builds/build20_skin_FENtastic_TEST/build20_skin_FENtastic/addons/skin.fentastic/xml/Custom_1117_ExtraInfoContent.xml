@@ -5,7 +5,10 @@
 - Fixed empty Search window on new Kodi installs
 - Fixed stacked widget renaming
 - Updated widget list to circular ordering; topmost widget will now cycle to the bottom when moved up and vice versa
-- Extensive overhaul of UI
+- Brought back colored frame highlight for focused widget items
+- Moved progress back to focused items for widgets, removed progress from InfoPanel
+- Added tvshow progress to LandscapeInfo widgets
+- Extensive overhaul of UI. There are some parts of the skin that I don't use so if something looks off, please let me know by opening an issue in my Github repo
 - Other fixes/changes
 
 [B][COLOR button_focus]Version 1.0.13[/COLOR][/B]

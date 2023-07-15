@@ -1081,7 +1081,7 @@ msgid "Planned"
 msgstr ""
 
 msgctxt "#700030"
-msgid "Cancelled"
+msgid "Canceled"
 msgstr ""
 
 msgctxt "#700031"

@@ -57,10 +57,21 @@
 					</include>
 				</control>
 				<control type="textbox">
+					<visible>!String.IsEqual(System.Language,Hebrew)</visible>
 					<left>50</left>
 					<right>50</right>
 					<top>805</top>
 					<bottom>105</bottom>
+					<label>$VAR[PlotTextBoxVar]</label>
+					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
+				</control>
+				<control type="textbox">
+					<visible>String.IsEqual(System.Language,Hebrew)</visible>
+					<left>50</left>
+					<right>50</right>
+					<top>805</top>
+					<bottom>105</bottom>
+					<align>right</align>
 					<label>$VAR[PlotTextBoxVar]</label>
 					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 				</control>
