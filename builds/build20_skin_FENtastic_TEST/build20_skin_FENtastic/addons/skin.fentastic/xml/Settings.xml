@@ -55,9 +55,9 @@
 						<icon>icons/settings/sysinfo.png</icon>
 					</item>
 					<item>
-						<label>$LOCALIZE[31067]</label>
-						<onclick>ActivateWindow(eventlog)</onclick>
-						<icon>icons/settings/eventlog.png</icon>
+						<label>$LOCALIZE[700018]</label>
+						<onclick>ActivateWindow(skinsettings)</onclick>
+						<icon>defaultaddonlookandfeel.png</icon>
 					</item>
 				</content>
 			</control>
