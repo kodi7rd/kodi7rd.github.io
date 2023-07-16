@@ -2,7 +2,7 @@
 
 Telegram Group:
 
-http://bit.ly/kodi7rd
+http://bit.ly/kodi7rd1
 
 # For Build Wizard:
 Kodi File Manager > Add Source:
