@@ -7,7 +7,8 @@ import xbmc, xbmcgui
 def widget_monitor(list_id):
     if len(list_id) != 5:
         return
-    monitor, window = xbmc.Monitor(), xbmcgui.Window(10000)
+    monitor = xbmc.Monitor()
+    window = None
     try:
         delay = float(xbmc.getInfoLabel("Skin.String(category_widget_delay)")) / 1000
     except:
@@ -16,14 +17,17 @@ def widget_monitor(list_id):
         xbmc.getInfoLabel("Skin.HasSetting(category_widget_display_delay)") == "True"
     )
     stack_id = list_id + "1"
-    stack_control = window.getControl(int(stack_id))
-    stack_label_control = window.getControl(int(stack_id + "666"))
     poster_toggle, landscape_toggle = True, False
     while not monitor.abortRequested():
+        window_id = xbmcgui.getCurrentWindowId()
+        if window_id not in [10000, 11121]:
+            break
+        else:
+            window = xbmcgui.Window(window_id)
+            stack_control = window.getControl(int(stack_id))
+            stack_label_control = window.getControl(int(stack_id + "666"))
         monitor.waitForAbort(0.25)
         if list_id != str(window.getFocusId()):
-            break
-        if xbmcgui.getCurrentWindowId() != 10000:
             break
         last_path = window.getProperty("fentastic.%s.path" % list_id)
         cpath_path = xbmc.getInfoLabel("ListItem.FolderPath")
@@ -44,7 +48,7 @@ def widget_monitor(list_id):
                 switch_widget = False
             if xbmc.getCondVisibility("System.HasActiveModalDialog"):
                 switch_widget = False
-            if xbmcgui.getCurrentWindowId() != 10000:
+            if xbmcgui.getCurrentWindowId() not in [10000, 11121]:
                 switch_widget = False
             widget_label = xbmc.getInfoLabel("ListItem.Label")
             if display_delay:
