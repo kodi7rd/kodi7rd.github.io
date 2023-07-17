@@ -560,6 +560,7 @@
 							<shadowcolor>text_shadow</shadowcolor>
 							<align>center</align>
 							<aligny>center</aligny>
+							<autoscroll delay="1300" time="1500" repeat="2000">$PARAM[focused]</autoscroll>
 						</control>
 						<control type="textbox">
 							<visible>String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
@@ -572,6 +573,7 @@
 							<shadowcolor>text_shadow</shadowcolor>
 							<align>center</align>
 							<aligny>center</aligny>
+							<autoscroll delay="1300" time="1500" repeat="2000">$PARAM[focused]</autoscroll>
 						</control>
 					</control>
 				</focusedlayout>
@@ -605,8 +607,6 @@
 				<height>195</height>
 				<movement>3</movement>
 				<onright>$PARAM[list_id]</onright>
-				<!-- <onfocus>Control.Move($PARAM[list_id],-$INFO[Container($PARAM[list_id]).Position])</onfocus>
-				<onfocus>Control.Move($PARAM[list_id],$INFO[Window(home).Property(listposition)])</onfocus> -->
 				<include content="WidgetListCommonStacked">
 					<param name="list_id" value="$PARAM[list_id]"/>
 				</include>
@@ -631,24 +631,11 @@
 							<aspectratio>keep</aspectratio>
 						</control> -->
 						<control type="textbox">
-							<visible>!String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
 							<left>47</left>
 							<top>25</top>
 							<width>254</width>
 							<height>70</height>
 							<label>$INFO[ListItem.Label]</label>
-							<font>font25_narrow</font>
-							<shadowcolor>text_shadow</shadowcolor>
-							<align>center</align>
-							<aligny>center</aligny>
-						</control>
-						<control type="textbox">
-							<visible>String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
-							<left>47</left>
-							<top>25</top>
-							<width>254</width>
-							<height>70</height>
-							<label>$INFO[ListItem.Label] ($INFO[System.AddonUpdateCount])</label>
 							<font>font25_narrow</font>
 							<shadowcolor>text_shadow</shadowcolor>
 							<align>center</align>
@@ -691,7 +678,6 @@
 							<aspectratio>keep</aspectratio>
 						</control> -->
 						<control type="textbox">
-							<visible>!String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
 							<left>47</left>
 							<top>25</top>
 							<width>254</width>
@@ -701,18 +687,7 @@
 							<shadowcolor>text_shadow</shadowcolor>
 							<align>center</align>
 							<aligny>center</aligny>
-						</control>
-						<control type="textbox">
-							<visible>String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
-							<left>47</left>
-							<top>25</top>
-							<width>254</width>
-							<height>70</height>
-							<label>$INFO[ListItem.Label] ($INFO[System.AddonUpdateCount])</label>
-							<font>font25_narrow</font>
-							<shadowcolor>text_shadow</shadowcolor>
-							<align>center</align>
-							<aligny>center</aligny>
+							<autoscroll delay="1300" time="1500" repeat="2000">$PARAM[focused]</autoscroll>
 						</control>
 					</control>
 				</focusedlayout>
@@ -722,131 +697,6 @@
 			</control>
 		</definition>
 	</include>
-
-	<include name="WidgetListItems">
-		<param name="item_limit">51</param>
-		<param name="icon">$INFO[ListItem.Icon]</param>
-		<param name="icon_height">120</param>
-		<param name="additional_movie_items">false</param>
-		<param name="additional_tvshow_items">false</param>
-		<param name="visible">true</param>
-		<definition>
-			<include content="CategoryLabel">
-				<param name="label">$PARAM[widget_header]</param>
-				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="visible" value="$PARAM[visible]"/>
-			</include>
-			<include content="BusyListSpinner">
-				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="visible" value="$PARAM[visible]"/>
-				<param name="posy" value="300"/>
-			</include>
-			<control type="panel" id="$PARAM[list_id]">
-				<left>0</left>
-				<top>110</top>
-				<right>0</right>
-				<height>800</height>
-				<orientation>vertical</orientation>
-				<movement>1</movement>
-				<onright>$PARAM[list_id]</onright>
-				<onup>$PARAM[list_id]</onup>
-				<ondown>$PARAM[list_id]</ondown>
-				<onleft>SetFocus($PARAM[list_id],0,absolute)</onleft>
-				<!-- <onfocus>Control.Move($PARAM[list_id],-$INFO[Container($PARAM[list_id]).Position])</onfocus>
-				<onfocus>Control.Move($PARAM[list_id],$INFO[Window(home).Property(listposition)])</onfocus> -->
-				<!-- <onfocus>Container.SetFocusId($PARAM[list_id])</onfocus> -->
-
-				<include content="WidgetListCommon">
-					<param name="list_id" value="$PARAM[list_id]"/>
-				</include>
-				<visible>$PARAM[visible]</visible>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-				<itemlayout width="695" height="155">
-					<control type="group">
-						<left>70</left>
-						<control type="image">
-							<width>670</width>
-							<height>130</height>
-							<texture colordiffuse="button_focus2">dialogs/dialog-bg-nobo.png</texture>
-							<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-							<bordersize>20</bordersize>
-						</control>
-						<!-- <control type="image">
-							<centertop>74</centertop>
-							<left>58</left>
-							<width>200</width>
-							<height>$PARAM[icon_height]</height>
-							<texture fallback="DefaultFolder.png">$PARAM[icon]</texture>
-							<aspectratio>keep</aspectratio>
-						</control> -->
-						<control type="label">
-							<visible>!String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
-							<left>47</left>
-							<top>31</top>
-							<width>578</width>
-							<height>70</height>
-							<label>$INFO[ListItem.Label]</label>
-							<font>font27</font>
-							<shadowcolor>text_shadow</shadowcolor>
-							<align>center</align>
-							<aligny>center</aligny>
-						</control>
-					</control>
-				</itemlayout>
-				<focusedlayout width="695" height="155">
-					<control type="group">
-						<depth>DepthContentPopout</depth>
-						<left>70</left>
-						<animation type="Focus">
-							<effect type="zoom" start="100" end="104" time="200" tween="sine" easing="inout" center="261,70" />
-						</animation>
-						<animation type="Unfocus">
-							<effect type="zoom" start="104" end="100" time="200" tween="sine" easing="inout" center="261,70" />
-						</animation>
-						<control type="image">
-							<width>670</width>
-							<height>130</height>
-							<texture colordiffuse="button_focus2">dialogs/dialog-bg-nobo.png</texture>
-							<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
-							<bordersize>20</bordersize>
-						</control>
-						<control type="image">
-							<width>670</width>
-							<height>130</height>
-							<texture colordiffuse="button_focus">colors/grey.png</texture>
-							<bordersize>20</bordersize>
-							<include>Animation_FocusTextureFade</include>
-						</control>
-						<!-- <control type="image">
-							<centertop>74</centertop>
-							<left>58</left>
-							<width>200</width>
-							<height>$PARAM[icon_height]</height>
-							<texture fallback="DefaultFolder.png">$PARAM[icon]</texture>
-							<aspectratio>keep</aspectratio>
-						</control> -->
-						<control type="label">
-							<visible>!String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
-							<left>47</left>
-							<top>31</top>
-							<width>578</width>
-							<height>70</height>
-							<label>$INFO[ListItem.Label]</label>
-							<font>font27</font>
-							<shadowcolor>text_shadow</shadowcolor>
-							<align>center</align>
-							<aligny>center</aligny>
-							<scroll>$PARAM[focused]</scroll>
-						</control>
-					</control>
-				</focusedlayout>
-				<content target="$PARAM[widget_target]" limit="$PARAM[item_limit]">$PARAM[content_path]</content>
-				<include condition="$PARAM[additional_movie_items]" content="MovieSubmenuItems" />
-				<include condition="$PARAM[additional_tvshow_items]" content="TVShowSubmenuItems" />
-			</control>
-		</definition>
-	</include>
-
 
 	<include name="ImageWidget">
 		<param name="visible">true</param>
