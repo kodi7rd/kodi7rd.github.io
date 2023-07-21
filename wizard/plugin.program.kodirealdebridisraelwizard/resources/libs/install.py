@@ -55,9 +55,9 @@ def backup_twilightdata():
             # Create the destination directory if it does not exist
             os.makedirs(kodi_my_builds_twilight_db_files_dir, exist_ok=True)
             
-            # Copy all .db files, except views.db, to My_Builds/twilight_db_files dir for temp location - before wipe
+            # Copy all .db files, except navigator.db, to My_Builds/twilight_db_files dir for temp location - before wipe
             for item in os.listdir(twilight_db_files_dir):
-                if item in ["views.db", "navigator.db"]:
+                if item == "navigator.db":
                     logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Twilight {0} file from copy.".format(item))
                     continue
                 src_path = os.path.join(twilight_db_files_dir, item)
@@ -67,8 +67,8 @@ def backup_twilightdata():
         else:
             logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Skipping Saving Twilight Favorites & Data.")
             
-    except Exception:
-        pass
+    except Exception as e:
+        logging.log(f"Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - backup_twilightdata ERROR: {e}")
         
         
 def restore_twilightdata(): 
@@ -89,9 +89,9 @@ def restore_twilightdata():
             # Create userdata/addons_data/plugin.video.twilight/databases directory (doesn't exist after wipe)
             os.makedirs(twilight_db_files_dir, exist_ok=True)
             
-            # Move all .db files, except views.db, from My_Builds/twilight_db_files to Twilight databases dir    
+            # Move all .db files, except navigator.db, from My_Builds/twilight_db_files to Twilight databases dir    
             for item in os.listdir(kodi_my_builds_twilight_db_files_dir):
-                if item in ["views.db", "navigator.db"]:
+                if item == "navigator.db":
                     logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Twilight {0} file from move.".format(item))
                     continue
                 src_path = os.path.join(kodi_my_builds_twilight_db_files_dir, item)
@@ -107,8 +107,8 @@ def restore_twilightdata():
         else:
             logging.log("Custom KODI_RD_ISRAEL LOG: AFTER Wipe - Skipping Saving Twilight Favorites & Data.")
             
-    except Exception:
-        pass
+    except Exception as e:
+        logging.log(f"Custom KODI_RD_ISRAEL LOG: AFTER Wipe - restore_twilightdata ERROR: {e}")
     
 
 def backup_fendata():
@@ -131,9 +131,9 @@ def backup_fendata():
             # Create the destination directory if it does not exist
             os.makedirs(kodi_my_builds_fen_db_files_dir, exist_ok=True)
             
-            # Copy all .db files, except views.db, to My_Builds/fen_db_files dir for temp location - before wipe
+            # Copy all .db files, except navigator.db, to My_Builds/fen_db_files dir for temp location - before wipe
             for item in os.listdir(fen_db_files_dir):
-                if item in ["views.db", "navigator.db"]:
+                if item == "navigator.db":
                     logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from copy.".format(item))
                     continue
                 src_path = os.path.join(fen_db_files_dir, item)
@@ -143,8 +143,8 @@ def backup_fendata():
         else:
             logging.log("Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - Skipping Saving Fen Favorites & Data.")
             
-    except Exception:
-        pass
+    except Exception as e:
+        logging.log(f"Custom KODI_RD_ISRAEL LOG: BEFORE Wipe - backup_fendata ERROR: {e}")
         
         
 def restore_fendata(): 
@@ -165,9 +165,9 @@ def restore_fendata():
             # Create userdata/addons_data/plugin.video.fen/databases directory (doesn't exist after wipe)
             os.makedirs(fen_db_files_dir, exist_ok=True)
             
-            # Move all .db files, except views.db, from My_Builds/fen_db_files to fen databases dir    
+            # Move all .db files, except navigator.db, from My_Builds/fen_db_files to fen databases dir    
             for item in os.listdir(kodi_my_builds_fen_db_files_dir):
-                if item in ["views.db", "navigator.db"]:
+                if item == "navigator.db":
                     logging.log("Custom KODI_RD_ISRAEL LOG: Skipping Fen {0} file from move.".format(item))
                     continue
                 src_path = os.path.join(kodi_my_builds_fen_db_files_dir, item)
@@ -183,8 +183,8 @@ def restore_fendata():
         else:
             logging.log("Custom KODI_RD_ISRAEL LOG: AFTER Wipe - Skipping Saving Fen Favorites & Data.")
             
-    except Exception:
-        pass
+    except Exception as e:
+        logging.log(f"Custom KODI_RD_ISRAEL LOG: AFTER Wipe - restore_fendata ERROR: {e}")
     
 def wipe():
     from resources.libs import db
