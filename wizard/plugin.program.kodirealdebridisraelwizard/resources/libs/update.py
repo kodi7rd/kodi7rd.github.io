@@ -75,7 +75,7 @@ def wizard_update():
                                    '[COLOR {0}]Add-on updated[/COLOR]'.format(CONFIG.COLOR2))
                 logging.log("[Auto Update Wizard] Wizard updated to v{0}".format(ver))
                 tools.remove_file(os.path.join(CONFIG.ADDON_DATA, 'settings.xml'))
-                window.show_save_data_settings()
+                #window.show_save_data_settings()
             else:
                 logging.log("[Auto Update Wizard] Install New Wizard Ignored: {0}".format(ver))
         else:
