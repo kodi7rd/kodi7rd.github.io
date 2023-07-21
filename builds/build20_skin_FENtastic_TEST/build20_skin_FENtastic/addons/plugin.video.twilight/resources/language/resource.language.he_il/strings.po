@@ -8,6 +8,18 @@ msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
 
+# No Debrid account configured
+
+msgctxt "#32854"
+msgid "No Debrid Providers Enabled"
+msgstr "יש לחבר מנוי ריל דבריד ב\"חיבור שירותים\""
+
+# No Results
+
+msgctxt "#32760"
+msgid "No Results"
+msgstr "אין תוצאות"
+
 # Hebrew setting menu label
 
 msgctxt "#40000"
