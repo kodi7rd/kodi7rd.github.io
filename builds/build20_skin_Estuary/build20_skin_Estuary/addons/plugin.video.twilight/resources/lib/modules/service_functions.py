@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs
+import xbmcaddon
 import time
 import datetime
 from xml.dom.minidom import parse as mdParse
@@ -7,23 +8,23 @@ from windows import FontUtils, get_custom_xmls_version, download_custom_xmls
 from caches import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
 from indexers import real_debrid, premiumize, alldebrid, furk, easynews
+from modules import kodi_utils, settings
 from modules.debrid import debrid_enabled
 from modules.utils import jsondate_to_datetime, datetime_workaround
-from modules import kodi_utils, settings
 
 disable_enable_addon, update_local_addons, get_infolabel, run_plugin = kodi_utils.disable_enable_addon, kodi_utils.update_local_addons, kodi_utils.get_infolabel, kodi_utils.run_plugin
 ls, path_exists, translate_path, custom_context_main_menu_prop = kodi_utils.local_string, kodi_utils.path_exists, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop
-custom_context_prop, custom_info_prop, pause_settings_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.pause_settings_prop, kodi_utils.addon
+custom_context_prop, custom_info_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.addon
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
-get_window_id, Thread, make_window_properties, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.make_window_properties, settings.check_premium_account_status
-get_setting, set_setting, make_settings_dict, external = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict, kodi_utils.external
+get_window_id, Thread, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, settings.check_premium_account_status
+get_setting, set_setting, external, make_window_properties = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.external, kodi_utils.make_window_properties
 logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_twilight = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_twilight
 make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
 current_skin_prop, use_skin_fonts_prop, custom_skin_path = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.custom_skin_path
-notification, ok_dialog = kodi_utils.notification, kodi_utils.ok_dialog
-pause_settings_change, unpause_settings_change = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change
+notification, ok_dialog, trigger_settings_refresh = kodi_utils.notification, kodi_utils.ok_dialog, kodi_utils.trigger_settings_refresh
+refr_settings_prop, rem_props_prop = kodi_utils.refr_settings_prop, kodi_utils.rem_props_prop
 twilight_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025, 11121)
@@ -68,16 +69,9 @@ class DatabaseMaintenance:
 class CheckSettings:
 	def run(self):
 		logger(twilight_str, 'CheckSettingsFile Service Starting')
-		monitor = xbmc_monitor()
-		wait_for_abort = monitor.waitForAbort
-		clear_property('twilight_settings')
 		if not path_exists(userdata_path): make_directories(userdata_path)
 		addon().setSetting('dummy_setting', 'foo')
-		wait_for_abort(0.5)
-		make_settings_dict()
 		make_window_properties()
-		try: del monitor
-		except: pass
 		return logger(twilight_str, 'CheckSettingsFile Service Finished')
 
 class FirstRunActions:
@@ -273,16 +267,11 @@ class PremiumExpiryCheck:
 		if expiry <= 7: self.days_remaining.append((name, expiry))
 
 	def revoke(self):
-		pause_settings_change()
 		for item in self.expired_premium: set_setting(premium_check_setting_dict[item[0]], 'false')
-		unpause_settings_change()
-		make_settings_dict()
 
 class OnSettingsChangedActions:
 	def run(self):
-		if get_property(pause_settings_prop) != 'true':
-			make_settings_dict()
-			make_window_properties(override=True)
+		if get_property(kodi_utils.pause_settings_prop) != 'true': trigger_settings_refresh()
 
 class OnNotificationActions:
 	def run(self, sender, method, data):

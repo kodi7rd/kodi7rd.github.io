@@ -8,15 +8,22 @@
             <height>1080</height>
             <texture colordiffuse="FF000000">twilight_common/white.png</texture>
             <animation type="WindowOpen" reversible="false">
-                <effect type="fade" start="0" end="80" time="200" tween="sine" easing="in" />
+                <effect type="fade" start="0" end="80" time="120" />
             </animation>
         </control>
         <control type="group">
             <left>100</left>
             <top>135</top>
             <animation type="WindowOpen" reversible="false">
-                <effect type="zoom" start="50" end="100" time="200" center="auto" tween="quadratic" easing="out" />
+                <effect type="fade" end="100" time="200" />
             </animation>
+            <control type="image">
+                <left>-1</left>
+                <top>-1</top>
+                <height>812</height>
+                <width>1722</width>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+            </control>
             <control type="image">
                 <height>810</height>
                 <width>1720</width>
@@ -46,7 +53,7 @@
                 <control type="textbox" id="2001">
                     <top>50</top>
                     <left>20</left>
-                    <width>1120</width>
+                    <width>1100</width>
                     <height>690</height>
                     <font>font14</font> <!-- TWILIGHT_33 -->
                     <align>center</align>
@@ -55,10 +62,10 @@
                     <pagecontrol>2061</pagecontrol>
                 </control>
                 <control type="scrollbar" id="2061">
-                    <left>1155</left>
-                    <top>10</top>
-                    <width>15</width>
-                    <height>790</height>
+                    <left>1140</left>
+                    <top>35</top>
+                    <width>10</width>
+                    <height>740</height>
                     <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]">twilight_common/white.png</texturesliderbarfocus>
@@ -68,26 +75,23 @@
                     <orientation>vertical</orientation>
                 </control>
             </control>
-        </control>
-        <control type="group">
-            <animation type="WindowOpen" reversible="false">
-                <effect type="zoom" start="50" end="100" time="200" center="auto" tween="quadratic" easing="out" />
-            </animation>
-            <control type="image">
-                <top>515</top>
-                <left>30</left>
-                <width>50</width>
-                <height>50</height>
-                <visible>String.IsEqual(Window.Property(previous_display),true)</visible>
-                <texture>twilight_common/arrow_left.png</texture>
-            </control>
-            <control type="image">
-                <top>515</top>
-                <left>1840</left>
-                <width>50</width>
-                <height>50</height>
-                <visible>String.IsEqual(Window.Property(next_display),true)</visible>
-                <texture flipx="true">twilight_common/arrow_left.png</texture>
+            <control type="group">
+                <control type="image">
+                    <top>380</top>
+                    <left>-70</left>
+                    <width>50</width>
+                    <height>50</height>
+                    <visible>String.IsEqual(Window.Property(previous_display),true)</visible>
+                    <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                </control>
+                <control type="image">
+                    <top>380</top>
+                    <left>1740</left>
+                    <width>50</width>
+                    <height>50</height>
+                    <visible>String.IsEqual(Window.Property(next_display),true)</visible>
+                    <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                </control>
             </control>
         </control>
     </controls>

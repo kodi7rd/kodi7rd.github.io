@@ -9,19 +9,26 @@
             <height>1080</height>
             <texture colordiffuse="FF000000">twilight_common/white.png</texture>
             <animation type="WindowOpen" reversible="false">
-                <effect type="fade" start="0" end="80" time="200" tween="sine" easing="in" />
+                <effect type="fade" start="0" end="80" time="120" />
             </animation>
         </control>
         <control type="group">
             <left>100</left>
             <top>85</top>
             <animation type="WindowOpen" reversible="false">
-                <effect type="zoom" start="50" end="100" time="200" center="auto" tween="quadratic" easing="out" />
+                <effect type="fade" end="100" time="200" />
             </animation>
-            <!-- Twilight Logo and Background-->
+            <!-- Logo and Background-->
             <control type="group">
-                <width>1720</width>
                 <control type="image">
+                    <left>-1</left>
+                    <top>-1</top>
+                    <width>1722</width>
+                    <height>912</height>
+                    <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                </control>
+                <control type="image">
+                    <width>1720</width>
                     <height>910</height>
                     <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
                 </control>
@@ -70,7 +77,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 32616][/B] $INFO[Window.Property(poster.number),(x,)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 32616][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(poster.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2020)</visible>
                             </control>
                             <control type="label">
@@ -80,7 +87,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 32616][/B] $INFO[Window.Property(poster.number),(x,)]  |  $INFO[Container(2020).ListItem.Property(provider)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 32616][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2020).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2020)</visible>
                             </control>
                             <control type="fixedlist" id="2020">
@@ -180,7 +187,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 32617][/B] $INFO[Window.Property(fanart.number),(x,)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 32617][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(fanart.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2021)</visible>
                             </control>
                             <control type="label">
@@ -190,7 +197,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 32617][/B] $INFO[Window.Property(fanart.number),(x,)]  |  $INFO[Container(2021).ListItem.Property(provider)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 32617][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2021).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2021)</visible>
                             </control>
                             <control type="fixedlist" id="2021">
@@ -286,7 +293,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 33068][/B] $INFO[Window.Property(clearlogo.number),(x,)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 33068][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(clearlogo.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2022)</visible>
                             </control>
                             <control type="label">
@@ -296,7 +303,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]$ADDON[plugin.video.twilight 33068][/B] $INFO[Window.Property(clearlogo.number),(x,)]  |  $INFO[Container(2022).ListItem.Property(provider)]</label>
+                                <label>[B]$ADDON[plugin.video.twilight 33068][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2022).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2022)</visible>
                             </control>
                             <control type="fixedlist" id="2022">
@@ -398,7 +405,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Banner[/B] $INFO[Window.Property(banner.number),(x,)]</label>
+                                <label>[B]Banner[COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(banner.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2023)</visible>
                             </control>
                             <control type="label">
@@ -408,7 +415,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Banner[/B] $INFO[Window.Property(banner.number),(x,)]  |  $INFO[Container(2023).ListItem.Property(provider)]</label>
+                                <label>[B]Banner[COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2023).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2023)</visible>
                             </control>
                             <control type="fixedlist" id="2023">
@@ -504,7 +511,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Clearart[/B] $INFO[Window.Property(clearart.number),(x,)]</label>
+                                <label>[B]Clearart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(clearart.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2024)</visible>
                             </control>
                             <control type="label">
@@ -514,7 +521,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Clearart[/B] $INFO[Window.Property(clearart.number),(x,)]  |  $INFO[Container(2024).ListItem.Property(provider)]</label>
+                                <label>[B]Clearart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2024).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2024)</visible>
                             </control>
                             <control type="fixedlist" id="2024">
@@ -618,7 +625,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Landscape[/B] $INFO[Window.Property(landscape.number),(x,)]</label>
+                                <label>[B]Landscape[COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(landscape.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2025)</visible>
                             </control>
                             <control type="label">
@@ -628,7 +635,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Landscape[/B] $INFO[Window.Property(landscape.number),(x,)]  |  $INFO[Container(2025).ListItem.Property(provider)]</label>
+                                <label>[B]Landscape[COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2025).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2025)</visible>
                             </control>
                             <control type="fixedlist" id="2025">
@@ -724,7 +731,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Discart[/B] $INFO[Window.Property(discart.number),(x,)]</label>
+                                <label>[B]Discart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(discart.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2026)</visible>
                             </control>
                             <control type="label">
@@ -734,7 +741,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Discart[/B] $INFO[Window.Property(discart.number),(x,)]  |  $INFO[Container(2026).ListItem.Property(provider)]</label>
+                                <label>[B]Discart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2026).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2026)</visible>
                             </control>
                             <control type="fixedlist" id="2026">
@@ -834,7 +841,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Keyart[/B] $INFO[Window.Property(keyart.number),(x,)]</label>
+                                <label>[B]Keyart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(keyart.number)][/COLOR][/B]</label>
                                 <visible>!Control.HasFocus(2027)</visible>
                             </control>
                             <control type="label">
@@ -844,7 +851,7 @@
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>bottom</aligny>
-                                <label>[B]Keyart[/B] $INFO[Window.Property(keyart.number),(x,)]  |  $INFO[Container(2027).ListItem.Property(provider)]</label>
+                                <label>[B]Keyart[COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2027).ListItem.Property(provider)]</label>
                                 <visible>Control.HasFocus(2027)</visible>
                             </control>
                             <control type="fixedlist" id="2027">

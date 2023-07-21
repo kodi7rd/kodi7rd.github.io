@@ -5,7 +5,7 @@ from windows import BaseDialog, window_manager, window_player
 from apis import tmdb_api, imdb_api, omdb_api, trakt_api
 from indexers import dialogs, people
 from indexers.images import Images
-from modules import kodi_utils, watched_status, settings
+from modules import kodi_utils, settings, watched_status
 from modules.sources import Sources
 from modules.downloader import runner
 from modules.utils import change_image_resolution, adjust_premiered_date, get_datetime
@@ -35,10 +35,10 @@ tmdb_movies_companies, tmdb_tv_networks = tmdb_api.tmdb_movies_companies, tmdb_a
 imdb_reviews, imdb_trivia, imdb_blunders = imdb_api.imdb_reviews, imdb_api.imdb_trivia, imdb_api.imdb_blunders
 imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_videos
 fetch_ratings_info, trakt_comments = omdb_api.fetch_ratings_info, trakt_api.trakt_comments
-tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', '%02d'
+tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', 'x%s'
 youtube_check = 'plugin.video.youtube'
 setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'twilight_flags/ratings/%s'
-separator = '  •  '
+separator = '[COLOR $INFO[Window(10000).Property(twilight.highlight)]][B]  •  [/B][/COLOR]'
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
 plot_id, cast_id, recommended_id, reviews_id, comments_id, trivia_id, blunders_id, parentsguide_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055, 2056
 videos_id, posters_id, fanarts_id, year_id, genres_id, networks_id, collection_id = 2057, 2058, 2059, 2060, 2061, 2062, 2063
@@ -71,7 +71,7 @@ class Extras(BaseDialog):
 		if self.starting_position:
 			try:
 				window_id, focus = self.starting_position
-				self.sleep(500)
+				self.sleep(750)
 				self.setFocusId(window_id)
 				self.select_item(window_id, focus)
 			except: self.set_default_focus()
@@ -158,13 +158,14 @@ class Extras(BaseDialog):
 				if check == 'TMDb' and not active_extra_ratings: continue
 				self.setProperty('%s_rating' % prop, 'true'), self.set_label(win_prop + _id, rating), self.set_image(win_prop + 100 + _id, ratings_icon_base % icon)
 				active_extra_ratings = True
-		if win_prop == 4000 and active_extra_ratings:
-			self.setProperty('extra_ratings', 'true')
-			if 'TMDb' in current_settings and self.getProperty('TMDb_rating') == 'true': self.set_infoline1(remove_rating=True)
+		if win_prop == 4000 and self.getProperty('tmdb_rating') == 'true': self.set_infoline1(remove_rating=True)
 
 	def make_plot(self):
 		if not plot_id in self.enabled_lists: return
-		self.setProperty('plot', self.plot)
+		if self.tagline: plot = '[I]%s[/I][CR][CR]' % self.tagline
+		else: plot = ''
+		if self.plot: plot += self.plot
+		self.setProperty('plot', plot)
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -190,6 +191,9 @@ class Extras(BaseDialog):
 		try:
 			function = tmdb_movies_recommendations if self.media_type == 'movie' else tmdb_tv_recommendations
 			data = function(self.tmdb_id, 1)['results']
+			if len(data) in (20, 21):
+				try: data += function(self.tmdb_id, 2)['results'][1:]
+				except: pass
 			item_list = list(self.make_tmdb_listitems(data))
 			self.setProperty('recommended.number', count_insert % len(item_list))
 			self.item_action_dict[recommended_id] = 'tmdb_id'
@@ -679,9 +683,9 @@ class Extras(BaseDialog):
 		self.title, self.year, self.rootname = self.meta_get('title'), str(self.meta_get('year')), self.meta_get('rootname')
 		self.poster, self.fanart = self.original_poster(), self.original_fanart()
 		self.clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or ''
-		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '')
+		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '') or ''
 		self.rating = str(round(self.meta_get('rating'), 1)) if self.meta_get('rating') not in (0, 0.0, None) else None
-		self.mpaa, self.genre, self.network = self.meta_get('mpaa'), self.meta_get('genre'), self.meta_get('studio') or ''
+		self.mpaa, self.genre, self.network, self.tagline = self.meta_get('mpaa'), self.meta_get('genre'), self.meta_get('studio') or '', self.meta_get('tagline') or ''
 		self.status, self.duration_data = self.extra_info_get('status', '').replace('Series', ''), int(float(self.meta_get('duration'))/60)
 
 	def set_properties(self):

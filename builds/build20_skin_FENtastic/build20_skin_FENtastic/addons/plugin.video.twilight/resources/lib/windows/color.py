@@ -13,7 +13,7 @@ class SelectColor(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
 		self.kwargs = kwargs
-		self.current_setting = self.kwargs.get('default_setting')
+		self.current_setting = self.kwargs.get('current_setting')
 		self.window_id = 2000
 		self.selected = None
 		self.texture_location = colorpalette_path + '%s.png'

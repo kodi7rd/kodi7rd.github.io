@@ -8,10 +8,8 @@ from caches.main_cache import cache_object
 
 requests, sleep, confirm_dialog, ok_dialog, monitor = kodi_utils.requests, kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.monitor
 progress_dialog, dialog, get_icon, notification, ls = kodi_utils.progress_dialog, kodi_utils.dialog, kodi_utils.get_icon, kodi_utils.notification, kodi_utils.local_string
-get_setting, set_setting, Thread = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.Thread
-set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
-pause_settings_change, unpause_settings_change = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change
-
+get_setting, set_setting, Thread, manage_settings_reset = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.Thread, kodi_utils.manage_settings_reset
+set_temp_highlight, restore_highlight = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight
 base_url = 'https://api.real-debrid.com/rest/1.0/'
 auth_url = 'https://api.real-debrid.com/oauth/v2/'
 device_url = 'device/code?%s'
@@ -31,7 +29,6 @@ class RealDebridAPI:
 		self.break_auth_loop = False
 
 	def auth(self):
-		pause_settings_change()
 		self.secret = ''
 		self.client_ID = 'X245A4XAIBGVM'
 		line = '%s[CR]%s[CR]%s'
@@ -57,8 +54,10 @@ class RealDebridAPI:
 				progressDialog.update(content, progress)
 				continue
 			try:
+				manage_settings_reset()
 				set_setting('rd.client_id', response['client_id'])
 				set_setting('rd.secret', response['client_secret'])
+				manage_settings_reset(True)
 				self.secret = response['client_secret']
 				self.client_ID = response['client_id']
 				progressDialog.close()
@@ -75,40 +74,38 @@ class RealDebridAPI:
 			self.token = response['access_token']
 			self.refresh = response['refresh_token']
 			username = self.account_info()['username']
+			manage_settings_reset()
 			set_setting('rd.token', self.token)
 			set_setting('rd.refresh', self.refresh)
 			set_setting('rd.account_id', username)
 			set_setting('rd.enabled', 'true')
 			ok_dialog(text=32576)
-		unpause_settings_change()
-		make_settings_dict()
+			manage_settings_reset(True)
 
 	def refresh_token(self):
 		try:
-			pause_settings_change()
 			url = auth_url + 'token'
 			data = {'client_id': self.client_ID, 'client_secret': self.secret, 'code': self.refresh, 'grant_type': 'http://oauth.net/grant_type/device/1.0'}
 			response = requests.post(url, data=data).json()
 			self.token = response['access_token']
 			self.refresh = response['refresh_token']
+			manage_settings_reset()
 			set_setting('rd.token', self.token)
 			set_setting('rd.refresh', self.refresh)
-			unpause_settings_change()
-			make_settings_dict()
+			manage_settings_reset(True)
 			return True
 		except: return False
 
 	def revoke(self):
-		pause_settings_change()
+		manage_settings_reset()
 		set_setting('rd.client_id', '')
 		set_setting('rd.secret', '')
 		set_setting('rd.refresh', '')
 		set_setting('rd.token', '')
 		set_setting('rd.account_id', '')
 		set_setting('rd.enabled', 'false')
-		unpause_settings_change()
-		make_settings_dict()
 		notification('Real Debrid Authorization Reset', 3000)
+		manage_settings_reset(True)
 
 	def account_info(self):
 		url = 'user'
@@ -224,7 +221,6 @@ class RealDebridAPI:
 				if m2ts_check: m2ts_key, torrent_files = self._m2ts_key_value(torrent_files)
 				else: torrent_files = self.sort_cache_list([(item, max([i['filesize'] for i in item.values()])) for item in torrent_files])
 			compare_title = re.sub(r'[^A-Za-z0-9]+', '.', title.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
-			extras = [i for i in EXTRAS if not i == title.lower()]
 			for item in torrent_files:
 				try:
 					if not season and not m2ts_check:
@@ -232,7 +228,7 @@ class RealDebridAPI:
 						for value in item_values:
 							filename = re.sub(r'[^A-Za-z0-9-]+', '.', value.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
 							filename_info = filename.replace(compare_title, '')
-							if any(x in filename_info for x in extras): continue
+							if any(x in filename_info for x in EXTRAS): continue
 					torrent_keys = item.keys()
 					if len(torrent_keys) == 0: continue
 					torrent_keys = ','.join(torrent_keys)
@@ -251,7 +247,7 @@ class RealDebridAPI:
 						for i in correct_files:
 							compare_link = seas_ep_filter(season, episode, i['path'], split=True)
 							compare_link = re.sub(compare_title, '', compare_link)
-							if any(x in compare_link for x in extras): continue
+							if any(x in compare_link for x in EXTRAS): continue
 							else: match = True; break
 						if match: index = [i[0] for i in selected_files if i[1]['path'] == correct_files[0]['path']][0]; break
 					elif m2ts_check: match, index = True, [i[0] for i in selected_files if i[1]['id'] == m2ts_key][0]; break
@@ -260,7 +256,7 @@ class RealDebridAPI:
 						for value in selected_files:
 							filename = re.sub(r'[^A-Za-z0-9-]+', '.', value[1]['path'].rsplit('/', 1)[1].replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
 							filename_info = filename.replace(compare_title, '')
-							if any(x in filename_info for x in extras): continue
+							if any(x in filename_info for x in EXTRAS): continue
 							match, index = True, value[0]; break
 						if match: break
 				except: pass

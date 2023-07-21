@@ -1,14 +1,15 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.1.18[/B][/COLOR]
+- Full rewrite of settings handling within addon. Settings dict and window properties now no longer used. Twilight will probably be faster for users who leave the language invoker ON, and slower for those who don't. This is a change that affects every single part of Twilight, so any issues please forward them to my github.
+- View preferences are now saved as settings instead of their own database. As a result, you will need to re-set these values in Tools->Set Views.
+- "Custom Windows highlight color" setting will also need to be re-set.
+- Added "Cancel" button as an option when choosing resume point for playback. Will cancel playback of course.
+- Enabled "Browse Pack" for cached torrent movie results, as well as the already available PACK season/tv show results.
+- Redesign of custom windows including appearance and animations.
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.1.17[/B][/COLOR]
-
-[B]IMPORTANT:
-I have stumbled onto the fact that Twilight is being used in a build with a large number of users. I can confirm that is likely the case with a check of my API key's usage over the last month. There are a few possibilites to deal with this:
-1. The build needs to make a fork of Twilight and use their own API keys with a different addon name and addon id. Also my name FULLY removed from all code within the forked addon. Despite my anger towards this having happened, I am willing to help fork the addon. I'll even do the whole fork if needed.
-2. If 1. is not adhered to, I will stop Twilight working on whatever skin the build is based on. Yes, I know which skin that is but I will have no choice.
-3. If my API usage still does not come down, I will revoke all my API keys and render Twilight useless.
-I am serious when I say I DO NOT want Twilight used within builds. Whilst I have no real power to stop this happening, I would rather nuke the whole addon than have this continue. I have no problem nuking the addon if that is my only choice. I'm sure it won't come to that.
-
 [COLOR red][B]NOTE: "Enable Content for Extras Lists" setting has been reset this update. You will need to re-set your preferences again. Apologies.[/B][/COLOR]
 - New resolving code for Easynews. Give it a decent try to see if things improve. If things get worse, open an issue on my github and I will make a setting to choose between old and new method.
 - Made "TRAKT: Trending User Lists", "TRAKT: Popular User Lists" and "TRAKT: Search Lists" available to users who are not logged into trakt through Twilight.

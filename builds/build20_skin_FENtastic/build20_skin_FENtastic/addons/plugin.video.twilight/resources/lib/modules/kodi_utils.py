@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs
-from xbmcaddon import Addon
+# from xbmcaddon import Addon
+import xbmcaddon
 import sys
 import json
 import requests
@@ -12,7 +13,8 @@ from modules import icons
 
 try: xbmc_actor = xbmc.Actor
 except: xbmc_actor = None
-getLocalizedString = Addon().getLocalizedString
+twilight_addon_object = xbmcaddon.Addon()
+getLocalizedString = twilight_addon_object.getLocalizedString
 player, xbmc_player, numeric_input, xbmc_monitor, translatePath = xbmc.Player(), xbmc.Player, 1, xbmc.Monitor, xbmcvfs.translatePath
 ListItem, getSkinDir, log, getCurrentWindowId, Window = xbmcgui.ListItem, xbmc.getSkinDir, xbmc.log, xbmcgui.getCurrentWindowId, xbmcgui.Window
 File, exists, copy, delete, rmdir, rename = xbmcvfs.File, xbmcvfs.exists, xbmcvfs.copy, xbmcvfs.delete, xbmcvfs.rmdir, xbmcvfs.rename
@@ -35,17 +37,30 @@ database_path_raw = 'special://profile/addon_data/plugin.video.twilight/database
 
 ############KODI-RD-IL###################
 # ORIGINAL TWILIGHT LINE:
-#current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
+#current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
 # NEW CUSTOM LINE:
-current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'views.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'hebrew_subtitles.db')
+current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'hebrew_subtitles.db')
 #########################################
 
-twilight_settings_str, menu_cache_prop, highlight_prop, meta_filter_prop = 'twilight_settings', 'twilight.kodi_menu_cache', 'twilight.highlight', 'twilight.meta_filter'
-view_type_prop, props_made_prop, pause_settings_prop, build_content_prop = 'twilight.view_type_%s', 'twilight.window_properties_made', 'twilight.pause_settings', 'twilight.build_content'
-custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'twilight.custom_main_menu_context', 'twilight.custom_context_menu', 'twilight.custom_info_dialog'
-current_skin_prop, use_skin_fonts_prop = 'twilight.current_skin', 'twilight.use_skin_fonts'
-services_finished_prop, services_refresh_after_run_prop = 'twilight.services_run', 'twilight.services_refresh_after'
+single_ep_title_prop, single_ep_format_prop, include_year_prop, fanart_key_prop = 'twilight.single_ep_display', 'twilight.single_ep_format', 'twilight.include_year_in_title', 'twilight.fanart_client_key'
+datetime_offset_prop, limit_concurrent_prop, max_threads_prop, ignore_articles_prop = 'twilight.datetime.offset', 'twilight.limit_concurrent_threads', 'twilight.max_threads', 'twilight.ignore_articles'
+view_type_prop, current_langinvoker_prop, refr_settings_prop, rem_props_prop = 'twilight.%s', 'twilight.reuse_language_invoker', 'twilight.refresh_settings', 'twilight.remake_properties'
+season_title_prop, show_specials_prop, calendar_sort_prop, trakt_user_prop = 'twilight.use_season_title', 'twilight.show_specials', 'twilight.trakt.calendar_sort_order', 'twilight.trakt.user'
+extras_open_prop, image_resos_prop, fanart_data_prop, meta_language_prop = 'twilight.extras.open_action', 'twilight.image_resolutions', 'twilight.get_fanart_data', 'twilight.meta_language'
+wid_hidenext_prop, all_episodes_prop, show_unaired_prop, tmdb_api_prop = 'twilight.widget_hide_next_page', 'twilight.default_all_episodes', 'twilight.show_unaired', 'twilight.tmdb_api'
+custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'twilight.custom_context_main_menu', 'twilight.custom_context_menu', 'twilight.custom_info_dialog'
+meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop = 'twilight.meta_mpaa_region', 'twilight.meta_mpaa_prefix', 'twilight.widget_hide_watched'
 int_window_prop, pause_services_prop, suppress_sett_dict_prop = 'twilight.internal_results.%s', 'twilight.pause_services', 'twilight.suppress_settings_dict'
+nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop = 'twilight.nextep.sort_type', 'twilight.nextep.sort_order', 'twilight.nextep.include_unaired'
+watched_indic_prop, fanarttv_def_prop, nextep_inc_date_prop = 'twilight.watched_indicators', 'twilight.fanarttv.default', 'twilight.nextep.include_airdate'
+nextep_inc_unwatched_prop, nextep_airing_top_prop = 'twilight.nextep.include_unwatched', 'twilight.nextep.sort_airing_today_to_top'
+menu_cache_prop, highlight_prop, meta_filter_prop, pause_settings_prop = 'twilight.kodi_menu_cache', 'twilight.highlight', 'twilight.meta_filter', 'twilight.pause_settings_prop'
+current_skin_prop, use_skin_fonts_prop = 'twilight.current_skin', 'twilight.use_skin_fonts'
+settings_props = (current_langinvoker_prop, custom_context_main_menu_prop, custom_context_prop, custom_info_prop, menu_cache_prop, menu_cache_prop, limit_concurrent_prop,
+				max_threads_prop, wid_hidenext_prop, all_episodes_prop, show_unaired_prop, season_title_prop, show_specials_prop, calendar_sort_prop, ignore_articles_prop,
+				datetime_offset_prop, single_ep_title_prop, single_ep_format_prop, include_year_prop, extras_open_prop, tmdb_api_prop, image_resos_prop, fanart_data_prop,
+				meta_language_prop, meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop, fanart_key_prop, trakt_user_prop, watched_indic_prop, fanarttv_def_prop,
+				nextep_inc_date_prop, nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop, nextep_inc_unwatched_prop, nextep_airing_top_prop, highlight_prop)
 userdata_path = translatePath('special://profile/addon_data/plugin.video.twilight/')
 addon_settings = translatePath('special://home/addons/plugin.video.twilight/resources/settings.xml')
 user_settings = translatePath('special://profile/addon_data/plugin.video.twilight/settings.xml')
@@ -57,15 +72,14 @@ colorpalette_path = translatePath('special://profile/addon_data/plugin.video.twi
 navigator_db = translatePath(database_path_raw % current_dbs[0])
 watched_db = translatePath(database_path_raw % current_dbs[1])
 favorites_db = translatePath(database_path_raw % current_dbs[2])
-views_db = translatePath(database_path_raw % current_dbs[3])
-trakt_db = translatePath(database_path_raw % current_dbs[4])
-maincache_db = translatePath(database_path_raw % current_dbs[5])
-metacache_db = translatePath(database_path_raw % current_dbs[6])
-debridcache_db = translatePath(database_path_raw % current_dbs[7])
-external_db = translatePath(database_path_raw % current_dbs[8])
+trakt_db = translatePath(database_path_raw % current_dbs[3])
+maincache_db = translatePath(database_path_raw % current_dbs[4])
+metacache_db = translatePath(database_path_raw % current_dbs[5])
+debridcache_db = translatePath(database_path_raw % current_dbs[6])
+external_db = translatePath(database_path_raw % current_dbs[7])
 
 ############KODI-RD-IL###################
-hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[9])
+hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[8])
 #########################################
 
 myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
@@ -94,6 +108,7 @@ tvshow_dict_removals = ('fanart_added', 'cast', 'poster', 'rootname', 'imdb_id',
 episode_dict_removals = ('thumb', 'guest_stars')
 tmdb_dict_removals = ('adult', 'backdrop_path', 'genre_ids', 'original_language', 'original_title', 'overview', 'popularity', 'vote_count', 'video', 'origin_country', 'original_name')
 trakt_dict_removals = ('collected_at', 'released')
+view_ids = ('view.main', 'view.movies', 'view.tvshows', 'view.seasons', 'view.episodes', 'view.episodes_single', 'view.premium')
 video_extensions = ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', 'rmvb', 'mpd', 'ifo', 'mov', 'qt', 'divx', 'xvid', 'bivx', 'vob', 'nrg', 'img', 'iso', 'udf', 'pva',
 					'wmv', 'asf', 'asx', 'ogm', 'm2v', 'avi', 'bin', 'dat', 'mpg', 'mpeg', 'mp4', 'mkv', 'mk3d', 'avc', 'vp3', 'svq3', 'nuv', 'viv', 'dv', 'fli', 'flv', 'wpl',
 					'xspf', 'vdr', 'dvr-ms', 'xsp', 'mts', 'm2t', 'm2ts', 'evo', 'ogv', 'sdp', 'avs', 'rec', 'url', 'pxml', 'vc1', 'h264', 'rcv', 'rss', 'mpls', 'mpl', 'webm',
@@ -103,7 +118,7 @@ image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'p
 default_highlights = (('hoster.identify', 'FF0166FF'), ('torrent.identify', 'FFFF00FE'), ('provider.rd_colour', 'FF3C9900'), ('provider.pm_colour', 'FFFF3300'),
 					('provider.ad_colour', 'FFE6B800'), ('provider.furk_colour', 'FFE6002E'), ('provider.easynews_colour', 'FF00B3B2'),
 					('provider.debrid_cloud_colour', 'FF7A01CC'), ('provider.folders_colour', 'FFB36B00'), ('scraper_4k_highlight', 'FFFF00FE'),
-					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('twilight.highlight', 'FF008EB2'),
+					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('highlight', 'FF12A0C7'),
 					('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
 
 def get_icon(image_name):
@@ -135,29 +150,6 @@ def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None,
 	else: listitem.setInfo('video', {'plot': ' '})
 	add_item(handle, url, listitem, isFolder)
 
-def make_placeholder_listitem():
-	listitem = make_listitem()
-	listitem.setLabel('Empty')
-	listitem.setArt({'icon': empty_poster, 'poster': empty_poster, 'thumb': empty_poster, 'fanart': addon_fanart, 'banner': empty_poster, 'clearlogo': addon_clearlogo})
-	if kodi_version >= 20:
-		info_tag = listitem.getVideoInfoTag()
-		info_tag.setPlot(' ')
-	else: listitem.setInfo('video', {'plot': ' '})
-	return [('', listitem, False)]
-
-def make_fake_widget():
-	fake_widget_made = False
-	try:
-		if addon().getSetting('wait_for_services') == 'true':
-			fake_widget_made = True
-			handle = int(sys.argv[1])
-			set_property(services_refresh_after_run_prop, 'true')
-			add_items(handle, make_placeholder_listitem())
-			end_directory(handle, False)
-		else: set_property(services_finished_prop, 'true')
-	except: set_property(services_finished_prop, 'true')
-	return fake_widget_made
-
 def make_listitem():
 	return ListItem(offscreen=True)
 
@@ -181,13 +173,7 @@ def set_view_mode(view_type, content='files', is_external=None):
 	if is_external == None: is_external = external()
 	if is_external: return
 	view_id = get_property(view_type_prop % view_type)
-	if not view_id:
-		try:
-			dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-			dbcur = dbcon.cursor()
-			dbcur.execute("SELECT view_id FROM views WHERE view_type = ?", (str(view_type),))
-			view_id = dbcur.fetchone()[0]
-		except: return
+	if not view_id: view_id = get_setting(view_type) or None
 	try:
 		hold = 0
 		sleep(100)
@@ -197,9 +183,6 @@ def set_view_mode(view_type, content='files', is_external=None):
 			else: return
 		if view_id: execute_builtin('Container.SetViewMode(%s)' % view_id)
 	except: return
-
-def build_content():
-	return get_property(build_content_prop) != 'false'
 
 def append_path(_path):
 	sys.path.append(translatePath(_path))
@@ -217,7 +200,7 @@ def clear_property(prop):
 	return window.clearProperty(prop)
 
 def addon(addon_id='plugin.video.twilight'):
-	return Addon(id=addon_id)
+	return xbmcaddon.Addon(id=addon_id)
 
 def addon_installed(addon_id):
 	return get_visibility('System.HasAddon(%s)' % addon_id)
@@ -310,7 +293,7 @@ def run_addon(addon='plugin.video.twilight', block=False):
 	return execute_builtin('RunAddon(%s)' % addon, block)
 
 def external():
-	return get_infolabel('Container.PluginName') == ''
+	return 'twilight' not in get_infolabel('Container.PluginName')
 
 def home():
 	return getCurrentWindowId() == 10000
@@ -361,6 +344,17 @@ def restart_services():
 def update_local_addons():
 	execute_builtin('UpdateLocalAddons', True)
 	sleep(2500)
+
+def get_jsonrpc(request):
+	response = execute_JSON(json.dumps(request))
+	result = json.loads(response)
+	return result.get('result', None)
+
+def jsonrpc_get_directory(directory, properties=['title', 'file', 'thumbnail']):
+	command = {'jsonrpc': '2.0', 'id': 1, 'method': 'Files.GetDirectory', 'params': {'directory': directory, 'media': 'files', 'properties': properties}}
+	try: results = [i for i in get_jsonrpc(command).get('files') if i['file'].startswith('plugin://') and i['filetype'] == 'directory']
+	except: results = None
+	return results
 
 def make_global_list():
 	global global_list
@@ -433,6 +427,12 @@ def choose_view(view_type, content):
 	end_directory(handle)
 	set_view_mode(view_type, content, False)
 
+def set_view(view_type):
+	view_id = str(current_window_object().getFocusId())
+	set_setting(view_type, view_id)
+	set_property(view_type_prop % view_type, view_id)
+	notification(get_infolabel('Container.Viewmode').upper(), time=500)
+
 def set_temp_highlight(temp_highlight):
 	current_highlight = get_property(highlight_prop)
 	set_property(highlight_prop, temp_highlight)
@@ -440,28 +440,6 @@ def set_temp_highlight(temp_highlight):
 
 def restore_highlight(current_highlight):
 	set_property(highlight_prop, current_highlight)
-
-def set_view(view_type):
-	view_id = str(current_window_object().getFocusId())
-	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-	dbcur = dbcon.cursor()
-	dbcur.execute('''PRAGMA synchronous = OFF''')
-	dbcur.execute('''PRAGMA journal_mode = OFF''')
-	dbcur.execute("INSERT OR REPLACE INTO views VALUES (?, ?)", (view_type, view_id))
-	set_view_property(view_type, view_id)
-	notification(get_infolabel('Container.Viewmode').upper(), time=500)
-
-def set_view_property(view_type, view_id):
-	set_property(view_type_prop % view_type, view_id)
-
-def set_view_properties():
-	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
-	dbcur = dbcon.cursor()
-	dbcur.execute('''PRAGMA synchronous = OFF''')
-	dbcur.execute('''PRAGMA journal_mode = OFF''')
-	dbcur.execute("SELECT * FROM views")
-	view_ids = dbcur.fetchall()
-	for item in view_ids: set_view_property(item[0], item[1])
 
 def timeIt(func):
 	# Thanks to 123Venom
@@ -492,10 +470,6 @@ def focus_index(index, sleep_time=1000):
 	except: pass
 	hide_busy_dialog()
 
-def clear_settings_window_properties():
-	clear_property('twilight_settings')
-	notification(32576, 2500)
-
 def fetch_kodi_imagecache(image):
 	result = None
 	try:
@@ -524,6 +498,7 @@ def toggle_language_invoker():
 	new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 	with open(addon_xml, 'w') as f: f.write(new_xml)
 	set_setting('reuse_language_invoker', new_value)
+	set_property(current_langinvoker_prop, new_value)
 	ok_dialog(text=32576)
 	execute_builtin('ActivateWindow(Home)', True)
 	update_local_addons()
@@ -543,7 +518,7 @@ def upload_logfile(params):
 	if not path_exists(log_file): return ok_dialog(text=33039)
 	try:
 		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'Twilight %s' % addon().getAddonInfo('version')
+		UserAgent = 'Twilight %s' % twilight_addon_object.getAddonInfo('version')
 		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
 		if 'key' in response: ok_dialog(text='%s%s' % (url, response['key']))
 		else: ok_dialog(text=33039)
@@ -563,65 +538,22 @@ def open_settings(query, addon='plugin.video.twilight'):
 	else: execute_builtin('Addon.OpenSettings(%s)' % addon)
 
 def set_setting(setting_id, value):
-	addon().setSetting(setting_id, value)
+	twilight_addon_object.setSetting(setting_id, value)
 
-def get_setting(setting_id, fallback=None):
-	if get_property(suppress_sett_dict_prop): return addon().getSetting(setting_id)
-	try: settings_dict = json.loads(get_property(twilight_settings_str))
-	except: settings_dict = make_settings_dict()
-	if settings_dict is None or setting_id not in settings_dict:
-		settings_dict = get_setting_fallback(setting_id)
-		if not get_property(suppress_sett_dict_prop) == 'true':
-			make_settings_dict()
-			make_window_properties()
-	value = settings_dict.get(setting_id, '')
-	if value == '':
-		if fallback is None: return value
-		return fallback
-	return value
+def get_setting(setting_id, fallback=''):
+	return twilight_addon_object.getSetting(setting_id) or fallback
 
-def get_setting_fallback(setting_id):
-	return {setting_id: addon().getSetting(setting_id)}
+def make_window_properties():
+	for item in view_ids: set_property(view_type_prop % item, twilight_addon_object.getSetting(item))
+	for item in settings_props: set_property(item, twilight_addon_object.getSetting(item.replace('twilight.', '')))
 
-def make_settings_dict():
-	settings_dict = None
-	clear_property(twilight_settings_str)
-	if not get_property(suppress_sett_dict_prop) == 'true':
-		from xml.dom.minidom import parse as mdParse
-		try:
-			if not path_exists(userdata_path): make_directories(userdata_path)
-			settings_dict = {}
-			dict_update = settings_dict.update
-			for item in mdParse(user_settings).getElementsByTagName('setting'):
-				setting_id = item.getAttribute('id')
-				try: setting_value = item.firstChild.data
-				except: setting_value = None
-				if setting_value is None: setting_value = ''
-				dict_item = {setting_id: setting_value}
-				dict_update(dict_item)
-			set_property(twilight_settings_str, json.dumps(settings_dict))
-		except Exception as e:
-			settings_dict = None
-			set_property(suppress_sett_dict_prop, 'true')
-			logger('error in make_settings_dict', str(e))
-	return settings_dict
+def manage_settings_reset(cancel=False):
+	if cancel: trigger_settings_refresh()
+	else: set_property(pause_settings_prop, 'true'); sleep(500)
 
-def make_window_properties(override=False):
-	if override: make_properties = True
-	else: make_properties = get_property(props_made_prop) != 'true'
-	if make_properties:
-		__addon__ = addon()
-		set_view_properties()
-		set_property(menu_cache_prop, __addon__.getSetting('kodi_menu_cache'))
-		set_property(highlight_prop, __addon__.getSetting('twilight.highlight'))
-		set_property(meta_filter_prop, __addon__.getSetting('meta_filter'))
-		set_property(custom_context_main_menu_prop, __addon__.getSetting('custom_context_main_menu'))
-		set_property(custom_context_prop, __addon__.getSetting('custom_context_menu'))
-		set_property(custom_info_prop, __addon__.getSetting('custom_info_dialog'))
-		set_property(props_made_prop, 'true')
-
-def pause_settings_change():
-	set_property(pause_settings_prop, 'true')
-
-def unpause_settings_change():
-	clear_property(pause_settings_prop)
+def trigger_settings_refresh():
+	sleep(500)
+	set_property(refr_settings_prop, 'true')
+	set_property(rem_props_prop, 'true')
+	set_property(pause_settings_prop, 'false')
+	run_plugin({'mode': 'dummy_run'}, block=True)

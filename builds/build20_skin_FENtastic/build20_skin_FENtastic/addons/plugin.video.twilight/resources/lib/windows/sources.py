@@ -15,6 +15,7 @@ from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_d
 from modules.kodi_utils import json, Thread, dialog, select_dialog, ok_dialog, hide_busy_dialog, addon_fanart, empty_poster, fetch_kodi_imagecache, get_icon, local_string as ls
 # from modules.kodi_utils import logger
 
+resume_dict = {10: 'resume', 11: 'start_over', 12: 'cancel'}
 info_icons_dict = {'furk': get_icon('provider_furk'), 'easynews': get_icon('provider_easynews'), 'alldebrid': get_icon('provider_alldebrid'),
                 'real-debrid': get_icon('provider_realdebrid'), 'premiumize': get_icon('provider_premiumize'), 'ad_cloud': get_icon('provider_alldebrid'),
                 'rd_cloud': get_icon('provider_realdebrid'), 'pm_cloud': get_icon('provider_premiumize')}
@@ -203,12 +204,11 @@ class SourcesResults(BaseDialog):
                     set_property('quality_icon', quality_icon)
                     
                     ############KODI-RD-IL###################
-                    if enable_hebrew_subtitles_to_twilight_sources_matching:
-                        # NEW CUSTOM LINE:
-                        set_property('size_label', get('size_label', 'N/A') + subtitle_matches_text)
-                    else:
-                        # ORIGINAL TWILIGHT LINE:
-                        set_property('size_label', get('size_label', 'N/A'))
+                    # ORIGINAL TWILIGHT LINE:
+                    #set_property('size_label', get('size_label', 'N/A'))
+                    # CUSTOM NEW LINE:
+                    #########################################
+                    set_property('size_label', get('size_label', 'N/A') + subtitle_matches_text) if enable_hebrew_subtitles_to_twilight_sources_matching else set_property('size_label', get('size_label', 'N/A'))
                     #########################################
                     
                     set_property('extra_info', extra_info)
@@ -247,14 +247,13 @@ class SourcesResults(BaseDialog):
         if self.meta_get('media_type') == 'episode' and suppress_episode_plot(): plot = self.meta_get('tvshow_plot') or spoilers_str
         else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
         self.setProperty('plot', plot)
+        self.setProperty('total_results', self.total_results)
                     
         ############KODI-RD-IL###################
-        if enable_hebrew_subtitles_to_twilight_sources_matching:
-            # NEW CUSTOM LINE:
-            self.setProperty('total_results', subtitles_match_top_panel_text + self.total_results)
-        else:
-            # ORIGINAL TWILIGHT LINE:
-            self.setProperty('total_results', self.total_results)
+        # ORIGINAL TWILIGHT LINE:
+        #self.setProperty('total_results', self.total_results)
+        # CUSTOM NEW LINE:
+        self.setProperty('total_results', subtitles_match_top_panel_text + self.total_results if enable_hebrew_subtitles_to_twilight_sources_matching else self.total_results)
         #########################################
         
         self.setProperty('filters_ignored', self.filters_ignored)
@@ -312,11 +311,11 @@ class SourcesResults(BaseDialog):
                     down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source,
                                         'url': None, 'provider': scrape_provider, 'meta': meta_json, 'file_name': name, 'file_id': item_id}
             elif not uncached_torrent:
-                browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
-                                    'magnet_url': magnet_url, 'info_hash': info_hash}
                 down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
                                     'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
         if provider_source == 'torrent' and not uncached_torrent:
+            browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
+                                'magnet_url': magnet_url, 'info_hash': info_hash}
             add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
         if self.filter_applied: choices_append((clr_filter_str, 'clear_results_filter'))
         else: choices_append((filter_str, 'results_filter'))
@@ -398,7 +397,7 @@ class SourcesPlayback(BaseDialog):
         self.clear_modals()
 
     def onClick(self, controlID):
-        self.resume_choice = controlID == 10
+        self.resume_choice = resume_dict[controlID]
 
     def onAction(self, action):
         if action in self.closing_actions: self.is_canceled = True
@@ -423,9 +422,9 @@ class SourcesPlayback(BaseDialog):
         self.window_mode = 'resolver'
         self.set_resolver_properties()
 
-    def enable_resume(self, text):
+    def enable_resume(self, percent):
         self.window_mode = 'resume'
-        self.set_resume_properties(text)
+        self.set_resume_properties(percent)
 
     def busy_spinner(self, toggle='true'):
         self.setProperty('enable_busy_spinner', toggle)
@@ -455,9 +454,9 @@ class SourcesPlayback(BaseDialog):
         self.setProperty('window_mode', self.window_mode)
         self.setProperty('text', self.text)
 
-    def set_resume_properties(self, text):
+    def set_resume_properties(self, percent):
         self.setProperty('window_mode', self.window_mode)
-        self.set_label(2003, text)
+        self.setProperty('resume_percent', percent)
         self.setFocusId(10)
         self.update_resumer()
 
@@ -479,7 +478,7 @@ class SourcesPlayback(BaseDialog):
         count = 0
         while self.resume_choice is None:
             percent = int((float(count)/resume_timeout)*100)
-            if percent >= 100: self.resume_choice = True
+            if percent >= 100: self.resume_choice = 'resume'
             self.setProperty('percent', string(percent))
             count += 100
             self.sleep(100)

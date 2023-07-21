@@ -109,7 +109,7 @@ class EpisodeTools:
 		return Sources().playback_prep(url_params)
 
 def build_next_episode_manager():
-	def build_content(item):
+	def _process(item):
 		try:
 			listitem = make_listitem()
 			tmdb_id, title = item['media_ids']['tmdb'], item['title']
@@ -133,7 +133,7 @@ def build_next_episode_manager():
 	show_list = get_next_episodes(get_watched_info_tv(1))
 	try: exclude_list = trakt_get_hidden_items('progress_watched')
 	except: exclude_list = []
-	threads = list(make_thread_list(build_content, show_list))
+	threads = list(make_thread_list(_process, show_list))
 	[i.join() for i in threads]
 	item_list = sorted(list_items, key=lambda k: (k['sort_value'], title_key(k['sort_title'], settings.ignore_articles())), reverse=False)
 	item_list = [i['listitem'] for i in item_list]

@@ -28,19 +28,9 @@
 						<popup>false</popup>
 					</control>
 				</setting>
-				<setting id="show_only_qualities_with_matches_found" type="boolean" label="40005" help="">
-					<level>0</level>
-					<default>true</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="enable_hebrew_subtitles_to_twilight_sources_matching">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
 			</group>
-			<group id="3" label="40006">
-				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
+			<group id="3" label="40005">
+				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40006" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -50,7 +40,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40008" help="">
+				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40007" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -60,7 +50,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40009" help="">
+				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40008" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -70,7 +60,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="400010" help="">
+				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="40009" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -87,11 +77,6 @@
 			<!-- General -->
 			<group id="1" label="32001">
 				<setting id="auto_start_twilight" type="boolean" label="32017" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="wait_for_services" type="boolean" label="33140" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -123,7 +108,7 @@
 						<popup>false</popup>
 					</control>
 				</setting>
-				<setting id="twilight.highlight_name" type="string" label="32124" help="">
+				<setting id="highlight_name" type="string" label="32124" help="">
 					<level>0</level>
 					<default>[COLOR=FF008EB2]FF008EB2[/COLOR]</default>
 					<control type="button" format="action">
@@ -734,11 +719,32 @@
 			</group>
 			<!-- Image Resolution -->
 			<group id="2" label="32149">
-				<setting id="image_resolutions_name" type="string" label="32170" help="">
+				<setting id="image_resolutions" type="integer" label="32170" help="">
 					<level>0</level>
-					<default>$ADDON[plugin.video.twilight 32164]</default>
-					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.twilight/?mode=tmdb_image_resolutions_choice)</data>
+					<default>2</default>
+					<constraints>
+						<options>
+							<option label="32163">0</option>
+							<option label="32164">1</option>
+							<option label="32165">2</option>
+							<option label="32166">3</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="image_resolutions_amble" type="string" label="33103" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>33103</heading>
 					</control>
 				</setting>
 			</group>
@@ -2524,8 +2530,6 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-
-
 				<setting id="autoscrape_next_window_percentage" type="integer" label="32005" help="" parent="autoscrape_next_episode">
 					<level>0</level>
 					<default>95</default>
@@ -2559,16 +2563,6 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				
-
-
-
-
-
-
-
-
-
 				<setting id="auto_resume_episode" type="integer" label="32181" help="">
 					<level>0</level>
 					<default>0</default>
@@ -2584,18 +2578,6 @@
 			</group>
 			<!-- Playback Utilities -->
 			<group id="3" label="32122">
-				<setting id="playback.watched_percent" type="integer" label="33072" help="">
-					<level>0</level>
-					<default>90</default>
-					<constraints>
-						<minimum>65</minimum>
-						<step>1</step>
-						<maximum>95</maximum>
-					</constraints>
-					<control type="slider" format="integer">
-						<popup>false</popup>
-					</control>
-				</setting>
 				<setting id="playback.resume_percent" type="integer" label="33073" help="">
 					<level>0</level>
 					<default>5</default>
@@ -2608,10 +2590,17 @@
 						<popup>false</popup>
 					</control>
 				</setting>
-				<setting id="playback.widget_load_empty" type="boolean" label="33103" help="">
+				<setting id="playback.watched_percent" type="integer" label="33072" help="">
 					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
+					<default>90</default>
+					<constraints>
+						<minimum>65</minimum>
+						<step>1</step>
+						<maximum>95</maximum>
+					</constraints>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
 				</setting>
 				<setting id="playback.limit_resolve" type="boolean" label="33102" help="">
 					<level>0</level>
@@ -3170,9 +3159,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="twilight.highlight" type="string" help="">
+				<setting id="highlight" type="string" help="">
 					<level>0</level>
-					<default>FF008EB2</default>
+					<default>FF12A0C7</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3353,18 +3342,6 @@
 				<setting id="scraper_result_identify_colour" type="string" help="">
 					<level>0</level>
 					<default>FFFFFFFF</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition on="property" name="InfoBool">false</condition>
-						</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading/>
-					</control>
-				</setting>
-				<setting id="image_resolutions" type="string" help="">
-					<level>0</level>
-					<default>2</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3617,6 +3594,90 @@
 				<setting id="custom_skins.version" type="string" help="">
 					<level>0</level>
 					<default>0.0.0</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.main" type="string" help="">
+					<level>0</level>
+					<default>55</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.movies" type="string" help="">
+					<level>0</level>
+					<default>500</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.tvshows" type="string" help="">
+					<level>0</level>
+					<default>500</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.seasons" type="string" help="">
+					<level>0</level>
+					<default>55</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.episodes" type="string" help="">
+					<level>0</level>
+					<default>55</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.episodes_single" type="string" help="">
+					<level>0</level>
+					<default>55</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="view.premium" type="string" help="">
+					<level>0</level>
+					<default>55</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>

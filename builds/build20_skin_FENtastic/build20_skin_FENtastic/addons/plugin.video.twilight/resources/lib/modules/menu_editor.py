@@ -6,15 +6,17 @@ from modules import kodi_utils
 
 build_url, confirm_dialog, dialog, sleep, kodi_refresh = kodi_utils.build_url, kodi_utils.confirm_dialog, kodi_utils.dialog, kodi_utils.sleep, kodi_utils.kodi_refresh
 get_infolabel, select_dialog, notification, execute_builtin = kodi_utils.get_infolabel, kodi_utils.select_dialog, kodi_utils.notification, kodi_utils.execute_builtin
+external, open_settings, activate_window, container_update = kodi_utils.external, kodi_utils.open_settings, kodi_utils.activate_window, kodi_utils.container_update
 json, tp, ls, parse_qsl, get_icon = kodi_utils.json, kodi_utils.translate_path, kodi_utils.local_string, kodi_utils.parse_qsl, kodi_utils.get_icon
 get_setting, get_all_icon_vars = kodi_utils.get_setting, kodi_utils.get_all_icon_vars
 main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029)}
-twilight_str, pos_str, top_pos_str, top_str, exists_str, addq_str = ls(32036), ls(32707), ls(32708), ls(32709), ls(32727), ls(32728)
+pos_str, top_pos_str, top_str, exists_str, addq_str = ls(32707), ls(32708), ls(32709), ls(32727), ls(32728)
 move_str, remove_str, add_org_str, fol_add_str, orig_add_str, fol_menu_str, trak_add_str = ls(32716), ls(32717), ls(32718), ls(32719), ls(32721), ls(32725), ls(32720)
 res_str, brws_str, upd_str, reload_str, emove_str, eremove_str, eclear_str = ls(32722), ls(32706), ls(32723), ls(32724), ls(32712), ls(32713), '%s %s' % (ls(32671), ls(32129))
 eedelete_str, eeremove_str, eeclear_str, eefadd_str, eefadde_str, eesets_str, trlike_str = ls(32703), ls(32786), ls(32699), ls(32731), ls(32730), ls(33081), ls(32776)
 trunlike_str, trnew_str, trdel_str, eerem_disc_str, down_str, furk_add_str, furk_remove_str = ls(32783), ls(32780), ls(32781), ls(32698), ls(32747), ls(32769), ls(32766)
 furk_p_str, furk_up_str, cloud_link_str, cloud_unlink_str, choose_icon_str = ls(32767), ls(32768), ls(33078), ls(33079), ls(33137)
+tools_str, settings_str = '%s %s' % (ls(32641), ls(32456)), '%s %s' % (ls(32641), ls(32247))
 
 class MenuEditor:
 	def __init__(self, params):
@@ -23,6 +25,7 @@ class MenuEditor:
 		if 'menu_item' in self.params: self.menu_item = json.loads(self.params.get('menu_item'))
 		else: self.menu_item = dict(parse_qsl(get_infolabel('ListItem.FileNameAndPath').replace('plugin://plugin.video.twilight/?','')))
 		self.menu_item_get = self.menu_item.get
+		self.window_function = activate_window if external() else container_update
 
 	def edit_menu(self):
 		active_list, position = self.params_get('active_list'), int(self.params_get('position', '0'))
@@ -31,21 +34,24 @@ class MenuEditor:
 		menu_name_translated_display = menu_name_translated.replace('[B]', '').replace('[/B]', '')
 		external_list_item, shortcut_folder = self.menu_item_get('external_list_item', 'False') == 'True', self.menu_item_get('shortcut_folder', 'False') == 'True'
 		list_name =  main_list_name_dict[active_list]
-		listing = [(brws_str, self.browse)]
+		listing = []
+		append = listing.append
 		if len(active_list) != 1:
-			listing.append((move_str % menu_name_translated_display, self.move))
-			listing.append((remove_str % menu_name_translated_display, self.remove))
-		if not shortcut_folder:
-			listing.append((add_org_str % menu_name_translated_display, self.add_original_external))
-			listing.append((fol_add_str % menu_name_translated_display, self.shortcut_folder_add_item))
-		listing.append((orig_add_str % list_name, self.add_original))
-		listing.append((fol_menu_str % list_name, self.shortcut_folder_add_to_main_menu))
-		if get_setting('trakt.user', ''): listing.append((trak_add_str % list_name, self.add_trakt))
-		listing.append((res_str % list_name, self.restore))
-		listing.append((upd_str % list_name, self.check_update_list))
-		if not external_list_item: listing.append((reload_str % menu_name_translated_display, self.reload_menu_item))
+			append((move_str % menu_name_translated_display, self.move))
+			append((remove_str % menu_name_translated_display, self.remove))
+		if not shortcut_folder: append((add_org_str % menu_name_translated_display, self.add_original_external))
+		append((fol_add_str % menu_name_translated_display, self.shortcut_folder_add_item))
+		append((orig_add_str % list_name, self.add_original))
+		append((fol_menu_str % list_name, self.shortcut_folder_add_to_main_menu))
+		if get_setting('trakt.user', ''): append((trak_add_str % list_name, self.add_trakt))
+		append((res_str % list_name, self.restore))
+		append((upd_str % list_name, self.check_update_list))
+		if not external_list_item: append((reload_str % menu_name_translated_display, self.reload_menu_item))
+		append((brws_str, self.browse))
+		append((tools_str, self.open_tools))
+		append((settings_str, self.open_settings))
 		list_items = [{'line1': i[0]} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': twilight_str, 'narrow_window': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		function = select_dialog([i[1] for i in listing], **kwargs)
 		if function == None: return
 		self.params = {'active_list': active_list, 'list_name': list_name, 'menu_name': menu_name, 'menu_name_translated': menu_name_translated, 'position': position}
@@ -55,42 +61,50 @@ class MenuEditor:
 	def edit_menu_shortcut_folder(self):
 		listing = [(emove_str, 'move'), (eremove_str, 'remove'), (eclear_str, 'clear_all')]
 		list_items = [{'line1': i[0]} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': twilight_str, 'narrow_window': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		self.action = select_dialog([i[1] for i in listing], **kwargs)
 		if self.action == None: return
 		return self.shortcut_folder_contents_adjust()
 
 	def edit_menu_external(self):
 		mode, list_type, action = self.menu_item_get('mode'), self.menu_item_get('list_type'), self.menu_item_get('action')
+		listing = []
+		append = listing.append
 		if mode == 'navigator.build_shortcut_folder_list':
-			listing = [(self.remove_bold(eedelete_str), self.shortcut_folder_delete)]
+			append((self.remove_bold(eedelete_str), self.shortcut_folder_delete))
 		elif mode == 'get_search_term':
-			listing = [(self.remove_bold(eeremove_str), self.remove_search_history), (self.remove_bold(eeclear_str), self.clear_search_history)]
+			append((self.remove_bold(eeremove_str), self.remove_search_history), (self.remove_bold(eeclear_str), self.clear_search_history))
 		elif mode in ('playback.video', 'real_debrid.resolve_rd', 'alldebrid.resolve_ad', 'easynews.resolve_easynews', 'cloud.furk_direct', 'furk.furk_t_file_browser'):
-			listing = [(self.remove_bold(down_str), self.premium_file_download)]
+			append((self.remove_bold(down_str), self.premium_file_download))
 			if mode == 'furk.furk_t_file_browser':
-				if self.params_get('display_mode') == 'search': listing.append((self.remove_bold(furk_add_str), self.furk_add_file))
+				if self.params_get('display_mode') == 'search': append((self.remove_bold(furk_add_str), self.furk_add_file))
 				else:
-					listing.append((self.remove_bold(furk_remove_str), self.furk_remove_file))
-					if self.params_get('is_protected') == '0': listing.append((self.remove_bold(furk_p_str), self.furk_protect_file))
-					elif self.params_get('is_protected') == '1': listing.append((self.remove_bold(furk_up_str), self.furk_unprotect_file))
+					append((self.remove_bold(furk_remove_str), self.furk_remove_file))
+					if self.params_get('is_protected') == '0': append((self.remove_bold(furk_p_str), self.furk_protect_file))
+					elif self.params_get('is_protected') == '1': append((self.remove_bold(furk_up_str), self.furk_unprotect_file))
 		elif mode in ('real_debrid.browse_rd_cloud', 'alldebrid.browse_ad_cloud') or self.params_get('service') == 'FOLDERS':
-			listing = [(self.remove_bold(cloud_link_str), self.add_link_to_debrid_folders), (self.remove_bold(cloud_unlink_str), self.remove_link_to_debrid_folders)]
+			append((self.remove_bold(cloud_link_str), self.add_link_to_debrid_folders), (self.remove_bold(cloud_unlink_str), self.remove_link_to_debrid_folders))
 		else:
-			listing = [(self.remove_bold(eefadde_str), self.add_external), (self.remove_bold(eefadd_str), self.shortcut_folder_add_item)]
-			if action == 'tmdb_movies_sets': listing.append((self.remove_bold(eesets_str), self.movie_sets_to_collection))
+			append((self.remove_bold(eefadde_str), self.add_external))
+			append((self.remove_bold(eefadd_str), self.shortcut_folder_add_item))
+			if action == 'tmdb_movies_sets': append((self.remove_bold(eesets_str), self.movie_sets_to_collection))
 			elif mode == 'trakt.list.build_trakt_list':
 				if list_type == 'user_lists':
 					if not self.menu_item_get('user') == 'Trakt Official':
-						listing.extend([(self.remove_bold(trlike_str), self.trakt_like_list), (self.remove_bold(trunlike_str), self.trakt_unlike_list)])
+						append((self.remove_bold(trlike_str), self.trakt_like_list))
+						append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
 				elif list_type == 'my_lists':
-					listing.extend([(self.remove_bold(trnew_str), self.trakt_new_list), (self.remove_bold(trdel_str), self.trakt_delete_list)])
+					append((self.remove_bold(trnew_str), self.trakt_new_list))
+					append((self.remove_bold(trdel_str), self.trakt_delete_list))
 				elif list_type == 'liked_lists':
-					listing.append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
+					append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
 			elif list_type == 'discover_history':
-				listing.extend([(self.remove_bold(eerem_disc_str), self.remove_single_discover_history), (self.remove_bold(eeclear_str), self.remove_all_discover_history)])
+				append((self.remove_bold(eerem_disc_str), self.remove_single_discover_history))
+				append((self.remove_bold(eeclear_str), self.remove_all_discover_history))
+		append((tools_str, self.open_tools))
+		append((settings_str, self.open_settings))
 		list_items = [{'line1': i[0]} for i in listing]
-		kwargs = {'items': json.dumps(list_items), 'heading': twilight_str, 'narrow_window': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		function = select_dialog([i[1] for i in listing], **kwargs)
 		if function == None: return
 		return function()
@@ -215,7 +229,7 @@ class MenuEditor:
 		list_items.insert(position, self._add_external_info_to_item(self.menu_item, menu_name))
 		self._db_execute('set', choice_name, list_items, refresh=False)
 
-	def _menu_select(self, choice_items, menu_name, heading=twilight_str, multi_line='false', position_list=False):
+	def _menu_select(self, choice_items, menu_name, heading='', multi_line='false', position_list=False):
 		def _builder():
 			for item in choice_items:
 				item_get = item.get
@@ -254,7 +268,7 @@ class MenuEditor:
 		return [i for i in default_list_items if not i in list_items]
 
 	def _get_external_name_input(self, current_name):
-		new_name = dialog.input(twilight_str, defaultt=current_name)
+		new_name = dialog.input('', defaultt=current_name)
 		if new_name == current_name: return None
 		return new_name
 
@@ -299,7 +313,7 @@ class MenuEditor:
 			if self.action == 'remove':
 				if not confirm_dialog(): return notification(32736, 1500)
 				list_items = [i for i in list_items if str(i['name']) != str(list_name)]
-			else:
+			elif self.action == 'move':
 				if len(list_items) == 1: return notification(32736, 1500)
 				choice_items = [i for i in list_items if str(i['name']) != str(list_name)]
 				current_position = int(self.params_get('position', '0'))
@@ -309,7 +323,7 @@ class MenuEditor:
 		self._db_execute('set', active_list, list_items, 'shortcut_folder', True)
 
 	def shortcut_folder_make(self):
-		list_name = dialog.input(twilight_str)
+		list_name = dialog.input('')
 		if not list_name: return
 		self._db_execute('make_new_folder', list_name, list_type='shortcut_folder')
 
@@ -439,6 +453,12 @@ class MenuEditor:
 		params = {'mode': 'downloader', 'name': self.menu_item_get('name'), 'url': self.menu_item_get('url') or self.menu_item_get('url_dl'),
 					'action': self.params_get('action'), 'image': self.params_get('iconImage')}
 		runner(params)
+
+	def open_settings(self):
+		return open_settings('0.0')
+
+	def open_tools(self):
+		return self.window_function({'mode': 'navigator.tools'})
 
 	def remove_bold(self, _str):
 		return _str.replace('[B]', '').replace('[/B]', '')

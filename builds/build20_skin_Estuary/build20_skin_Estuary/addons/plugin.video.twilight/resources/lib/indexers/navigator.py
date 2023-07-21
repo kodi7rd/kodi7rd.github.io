@@ -10,7 +10,7 @@ add_item, set_content, end_directory, set_view_mode, add_items, get_setting = k.
 json, close_all_dialog, sleep, execute_builtin = k.json, k.close_all_dialog, k.sleep, k.execute_builtin
 download_directory, furk_active, easynews_active, source_folders_directory, get_icon = s.download_directory, s.furk_active, s.easynews_active, s.source_folders_directory, k.get_icon
 get_shortcut_folders, currently_used_list, get_shortcut_folder_contents, fanart = nc.get_shortcut_folders, nc.currently_used_list, nc.get_shortcut_folder_contents, k.addon_fanart
-set_sort_method, kodi_version, set_category = k.set_sort_method, k.kodi_version, k.set_category
+set_sort_method, kodi_version, set_category, container_refresh_input, get_property = k.set_sort_method, k.kodi_version, k.set_category, k.container_refresh_input, k.get_property
 vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092)
 tools_str, changelog_str, ext_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str = ls(32456), ls(32508), ls(32118), ls(32515), ls(32512), ls(33017), ls(32514)
 user_str, ml_str, ll_str, rec_str, cal_str, lv_str, lu_str, k_str, genre_select_str = ls(32065), ls(32454), ls(32502), ls(32503), ls(32081), ls(32509), ls(32853), ls(32538), ls(32847)
@@ -21,8 +21,7 @@ cloud_str, clca_str, trakt_str, imdb_str, coll_str, wlist_str, ls_str, fav_str =
 root_str, season_str, images_str, make_short_str, delete_str, mcol_str, res_hc, res_serv_str = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(33107), ls(33152)
 _in_str, mov_str, tv_str, edit_str, add_menu_str, s_folder_str, mset_str, local_str = ls(32484), ls(32028), ls(32029), ls(32705), ls(32730), ls(32731), ls(33080), ls(33104)
 new_str, spot_str, tips_str = ls(32857).upper(), ls(32858).upper(), ls(32546).upper()
-change_log_utils_str = '%s & %s' % (changelog_str, log_utils_str)
-clean_set_cache_str, search_str = '%s %s %s' % (clean_str, settings_str, cache_str), '%s %s' % (se_str, history_str)
+change_log_utils_str, search_str = '%s & %s' % (changelog_str, log_utils_str), '%s %s' % (se_str, history_str)
 clear_all_str, clear_meta_str, clear_list_str, clear_trakt_str = clca_str % all_str, clca_str % ls(32527), clca_str % ls_str, clca_str % trakt_str
 sources_folders_str, downloads_ins, because_str = '[B]%s (%s): %s[/B]\n     [COLOR=%s][I]%s[/I][/COLOR]', _in_str % (dl_str.upper(), '%s'), '[I]%s[/I]  [B]%s[/B]' % (ls(32474), '%s')
 premium_files_str, ep_lists_str, clear_all_amble = ls(32485), '%s %s' % (episodes_str, ls_str), '[B][I][COLOR=grey] (%s %s & %s)[/COLOR][/I][/B]' % (ls(32189), fav_str, search_str)
@@ -62,6 +61,10 @@ class Navigator:
 	def main(self):
 		add_items(int(sys.argv[1]), list(self.build_main_list(currently_used_list(self.list_name))))
 		self.end_directory()
+
+	def exit_media_menu(self):
+		params = get_property('twilight.exit_params')
+		if params: return container_refresh_input(params)
 
 	def discover_main(self):
 		self.add({'mode': 'discover.movie', 'media_type': 'movie', 'name': mov_str}, discover_main_ins % mov_str, 'discover')
@@ -203,9 +206,8 @@ class Navigator:
 		self.end_directory()
 
 	def maintenance(self):
-		self.add({'mode': 'clear_settings_window_properties', 'isFolder': 'false'}, clear_info_ins % clean_set_cache_str, 'settings')
-		self.add({'mode': 'clean_databases_cache', 'isFolder': 'false'}, clear_info_ins % clean_databases_str, 'settings')
 		self.add({'mode': 'check_corrupt_databases_cache', 'isFolder': 'false'}, clear_info_ins % corrupt_databases_str, 'settings')
+		self.add({'mode': 'clean_databases_cache', 'isFolder': 'false'}, clear_info_ins % clean_databases_str, 'settings')
 		self.add({'mode': 'clear_all_cache', 'isFolder': 'false'}, clear_all, 'settings')
 		self.add({'mode': 'clear_favorites_choice', 'isFolder': 'false'}, clear_info_ins % clear_fav_str, 'settings')
 		self.add({'mode': 'history.clear_search', 'isFolder': 'false'}, clear_info_ins % clear_search_str, 'settings')
@@ -226,7 +228,7 @@ class Navigator:
 		self.add({'mode': 'choose_view', 'view_type': 'view.tvshows', 'content': 'tvshows'},set_view_modes_ins % tv_str, 'settings', False)
 		self.add({'mode': 'choose_view', 'view_type': 'view.seasons', 'content': 'seasons'},set_view_modes_ins % season_str, 'settings', False)
 		self.add({'mode': 'choose_view', 'view_type': 'view.episodes', 'content': 'episodes'},set_view_modes_ins % episodes_str, 'settings', False)
-		self.add({'mode': 'choose_view', 'view_type': 'view.episode_lists', 'content': 'episodes'},set_view_modes_ins % ep_lists_str, 'settings', False)
+		self.add({'mode': 'choose_view', 'view_type': 'view.episodes_single', 'content': 'episodes'},set_view_modes_ins % ep_lists_str, 'settings', False)
 		self.add({'mode': 'choose_view', 'view_type': 'view.premium', 'content': 'files'},set_view_modes_ins % premium_files_str, 'settings', False)
 		self.end_directory()
 

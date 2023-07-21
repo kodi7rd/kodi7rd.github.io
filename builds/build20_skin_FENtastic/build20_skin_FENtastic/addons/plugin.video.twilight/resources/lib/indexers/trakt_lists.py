@@ -5,13 +5,13 @@ from indexers.tvshows import TVShows
 from modules import kodi_utils
 from modules.utils import paginate_list, sort_for_article
 from modules.settings import paginate, page_limit, jump_to_enabled, ignore_articles
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 ls, sys, make_listitem, build_url, Thread, add_items = kodi_utils.local_string, kodi_utils.sys, kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.Thread, kodi_utils.add_items
 add_dir, external, dialog, sleep, json, get_icon = kodi_utils.add_dir, kodi_utils.external, kodi_utils.dialog, kodi_utils.sleep, kodi_utils.json, kodi_utils.get_icon
-trakt_icon, fanart, twilight_clearlogo, add_item, build_content = get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.add_item, kodi_utils.build_content
+trakt_icon, fanart, twilight_clearlogo, add_item, set_property = get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.add_item, kodi_utils.set_property
 set_content, set_sort_method, set_view_mode, end_directory = kodi_utils.set_content, kodi_utils.set_sort_method, kodi_utils.set_view_mode, kodi_utils.end_directory
-make_placeholder, kodi_version, set_category, home = kodi_utils.make_placeholder_listitem, kodi_utils.kodi_version, kodi_utils.set_category, kodi_utils.home
+kodi_version, set_category, home, folder_path = kodi_utils.kodi_version, kodi_utils.set_category, kodi_utils.home, kodi_utils.folder_path
 trakt_fetch_collection_watchlist, get_trakt_list_contents = trakt_api.trakt_fetch_collection_watchlist, trakt_api.get_trakt_list_contents
 trakt_trending_popular_lists, trakt_get_lists = trakt_api.trakt_trending_popular_lists, trakt_api.trakt_get_lists
 trakt_search_lists, trakt_fetch_movie_sets = trakt_api.trakt_search_lists, trakt_api.trakt_fetch_movie_sets
@@ -52,7 +52,7 @@ def search_trakt_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	handle, search_title = int(sys.argv[1]), ''
-	if build_content():
+	try:
 		mode = params.get('mode')
 		page = params.get('new_page', '1')
 		search_title = params.get('query')
@@ -61,7 +61,7 @@ def search_trakt_lists(params):
 		if pages > page:
 			new_page = str(int(page) + 1)
 			add_dir({'mode': mode, 'query': search_title, 'new_page': new_page}, nextpage_str % new_page, handle, 'item_next')
-	else: add_items(handle, make_placeholder())
+	except: pass
 	set_content(handle, 'files')
 	set_category(handle, search_title.capitalize())
 	end_directory(handle)
@@ -101,11 +101,11 @@ def get_trakt_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	handle = int(sys.argv[1])
-	if build_content():
+	try:
 		list_type = params['list_type']
 		lists = trakt_get_lists(list_type)
 		add_items(handle, list(_process()))
-	else: add_items(handle, make_placeholder())
+	except: pass
 	set_content(handle, 'files')
 	set_category(handle, params.get('category_name', ''))
 	set_sort_method(handle, 'label')
@@ -147,14 +147,14 @@ def get_trakt_trending_popular_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	handle = int(sys.argv[1])
-	if build_content():
+	try:
 		page = params.get('new_page', '1')
 		new_page = str(int(page) + 1)
 		list_type = params['list_type']
 		lists = trakt_trending_popular_lists(list_type, page)
 		add_items(handle, list(_process()))
 		add_dir({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'new_page': new_page}, nextpage_str % new_page, handle, 'item_next')
-	else: add_items(handle, make_placeholder())
+	except: pass
 	set_content(handle, 'files')
 	set_category(handle, params.get('category_name', 'Trakt Lists'))
 	end_directory(handle)
@@ -162,20 +162,21 @@ def get_trakt_trending_popular_lists(params):
 
 def build_trakt_list(params):
 	handle, is_external, is_home, content, build, list_name = int(sys.argv[1]), external(), home(), 'movies', False, params.get('list_name')
-	if build_content():
-		def _process(function, _list): item_list_extend(function(_list).worker())
-		def _paginate_list(data, page_no, paginate_start):
-			if paginate(is_home):
-				limit = page_limit(is_home)
-				data, all_pages, total_pages = paginate_list(data, page_no, limit, paginate_start)
-				if is_home: paginate_start = limit
-			else: all_pages, total_pages = '', 1
-			return data, all_pages, total_pages, paginate_start
+	def _process(function, _list): item_list_extend(function(_list).worker())
+	def _paginate_list(data, page_no, paginate_start):
+		if paginate(is_home):
+			limit = page_limit(is_home)
+			data, all_pages, total_pages = paginate_list(data, page_no, limit, paginate_start)
+			if is_home: paginate_start = limit
+		else: all_pages, total_pages = '', 1
+		return data, all_pages, total_pages, paginate_start
+	try:
 		build = True
 		threads, item_list = [], []
 		item_list_extend = item_list.extend
 		user, slug, list_type = params.get('user'), params.get('slug'), params.get('list_type')
 		page_no, paginate_start = int(params.get('new_page', '1')), int(params.get('paginate_start', '0'))
+		if page_no == 1 and not is_external: set_property('twilight.exit_params', folder_path())
 		result = get_trakt_list_contents(list_type, user, slug)
 		trakt_list = [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(result)]
 		process_list, all_pages, total_pages, paginate_start = _paginate_list(trakt_list, page_no, paginate_start)
@@ -199,7 +200,7 @@ def build_trakt_list(params):
 			new_page = str(page_no + 1)
 			add_dir({'mode': 'trakt.list.build_trakt_list', 'user': user, 'slug': slug, 'new_page': new_page, 'list_type': list_type,
 					'list_name': list_name, 'paginate_start': paginate_start}, nextpage_str % new_page, handle, 'item_next')
-	else: add_items(handle, make_placeholder())
+	except: pass
 	set_content(handle, content)
 	set_category(handle, list_name)
 	end_directory(handle, False if is_external else None)
@@ -209,10 +210,8 @@ def build_trakt_list(params):
 
 def build_trakt_movie_sets(params):
 	handle, content, is_external = int(sys.argv[1]), 'movies', external()
-	if build_content():
-		collection_info = sort_for_article(trakt_fetch_movie_sets(), 'title', ignore_articles())
-		add_items(handle, Movies({'list': [i['id'] for i in collection_info]}).movie_sets_worker())
-	else: add_items(handle, make_placeholder())
+	try: add_items(handle, Movies({'list': [i['id'] for i in sort_for_article(trakt_fetch_movie_sets(), 'title', ignore_articles())]}).movie_sets_worker())
+	except: pass
 	set_content(handle, content)
 	set_category(handle, params.get('category_name', ''))
 	end_directory(handle, False if is_external else None)

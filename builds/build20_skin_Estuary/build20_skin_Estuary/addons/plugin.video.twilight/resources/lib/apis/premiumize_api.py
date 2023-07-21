@@ -6,12 +6,10 @@ from modules import kodi_utils
 from caches.main_cache import cache_object
 # logger = kodi_utils.logger
 
-json, sleep, confirm_dialog, ok_dialog = kodi_utils.json, kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog
-pause_settings_change, unpause_settings_change, Thread = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.Thread
-set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
-monitor, progress_dialog, dialog, urlencode, get_icon = kodi_utils.monitor, kodi_utils.progress_dialog, kodi_utils.dialog, kodi_utils.urlencode, kodi_utils.get_icon
 ls, notification, get_setting, set_setting, requests = kodi_utils.local_string, kodi_utils.notification, kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.requests
-
+monitor, progress_dialog, dialog, urlencode, get_icon = kodi_utils.monitor, kodi_utils.progress_dialog, kodi_utils.dialog, kodi_utils.urlencode, kodi_utils.get_icon
+set_temp_highlight, restore_highlight, manage_settings_reset = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.manage_settings_reset
+json, sleep, confirm_dialog, ok_dialog, Thread = kodi_utils.json, kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.Thread
 base_url = 'https://www.premiumize.me/api/'
 timeout = 20.0
 icon = get_icon('premiumize')
@@ -23,7 +21,6 @@ class PremiumizeAPI:
 		self.token = get_setting('pm.token')
 
 	def auth(self):
-		pause_settings_change()
 		self.token = ''
 		line = '%s[CR]%s[CR]%s'
 		data = {'response_type': 'device_code', 'client_id': self.client_id}
@@ -58,21 +55,20 @@ class PremiumizeAPI:
 		except: pass
 		restore_highlight(current_highlight)
 		if self.token:
+			manage_settings_reset()
 			account_info = self.account_info()
 			set_setting('pm.account_id', str(account_info['customer_id']))
 			set_setting('pm.enabled', 'true')
 			ok_dialog(text=32576)
-		unpause_settings_change()
-		make_settings_dict()
+			manage_settings_reset(True)
 
 	def revoke(self):
-		pause_settings_change()
+		manage_settings_reset()
 		set_setting('pm.token', '')
 		set_setting('pm.account_id', '')
 		set_setting('pm.enabled', 'false')
-		unpause_settings_change()
-		make_settings_dict()
 		notification('Premiumize Authorization Reset', 3000)
+		manage_settings_reset(True)
 
 	def account_info(self):
 		url = 'account/info'
@@ -109,14 +105,13 @@ class PremiumizeAPI:
 			if len(valid_results) == 0: return
 			if season:
 				episode_title = re.sub(r'[^A-Za-z0-9-]+', '.', title.replace('\'', '').replace('&', 'and').replace('%', '.percent')).lower()
-				extras = [i for i in EXTRAS if not i == title.lower()]
 				for item in valid_results:
 					if seas_ep_filter(season, episode, item['path'].split('/')[-1]): append(item)
 					if len(correct_files) == 0: continue
 					for i in correct_files:
 						compare_link = seas_ep_filter(season, episode, i['path'], split=True)
 						compare_link = re.sub(episode_title, '', compare_link)
-						if not any(x in compare_link for x in extras):
+						if not any(x in compare_link for x in EXTRAS):
 							file_url = i['link']
 							break
 			else:

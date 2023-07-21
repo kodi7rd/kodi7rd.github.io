@@ -12,14 +12,14 @@ set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content,
 sleep, kodi_version, xbmc_actor, set_category = kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
 string, ls, sys, external, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.movie_dict_removals
-poster_empty, fanart_empty, build_content, make_placeholder = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, kodi_utils.make_placeholder_listitem
+poster_empty, fanart_empty, set_property = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.set_property
 metadata_user_info, watched_indicators, jump_to_enabled, date_offset = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.date_offset
 extras_open_action, get_art_provider, get_resolution, page_limit = settings.extras_open_action, settings.get_art_provider, settings.get_resolution, settings.page_limit
 max_threads, widget_hide_next_page, include_year_in_title, paginate = settings.max_threads, settings.widget_hide_next_page, settings.include_year_in_title, settings.paginate
 twilight_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32645), ls(32646)
 hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
-run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
+run_plugin = 'RunPlugin(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
 tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'network_id', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
 				'tmdb_movies_certifications': 'certification', 'tmdb_movies_recommendations': 'tmdb_id', 'tmdb_movies_genres': 'genre_id', 'tmdb_movies_search': 'query',
@@ -39,91 +39,89 @@ class Movies:
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
 		self.items, self.new_page, self.total_pages, self.is_external, self.is_home, self.max_threads = [], {}, None, external(), home(), max_threads()
 		self.widget_hide_next_page = False if not self.is_home else widget_hide_next_page()
-		self.exit_list_params = self.params_get('exit_list_params', None) or folder_path()
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.append = self.items.append
 
 	def fetch_list(self):
 		handle = int(sys.argv[1])
-		if build_content():
-			try:
-				builder, mode = self.worker, self.params_get('mode')
-				try: page_no = int(self.params_get('new_page', '1'))
-				except: page_no = self.params_get('new_page')
-				if self.action in personal: var_module, import_function = personal[self.action]
-				else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
-				try: function = manual_function_import(var_module, import_function)
-				except: pass
-				if self.action in tmdb_main:
-					data = function(page_no)
-					self.list = [i['id'] for i in data['results']]
-					self.new_page = {'new_page': string(data['page'] + 1)}
-				elif self.action in tmdb_special:
-					if self.action == 'tmdb_movies_search_sets': builder = self.movie_sets_worker
-					key = tmdb_special[self.action]
-					function_var = self.params_get(key, None)
-					if not function_var: return
-					data = function(function_var, page_no)
-					self.list = [i['id'] for i in data['results']]
-					if data['total_pages'] > page_no: self.new_page = {'new_page': string(data['page'] + 1), key: function_var}
-				elif self.action in personal:
-					data = function('movie', page_no)
-					if self.action == 'recent_watched_movies': all_pages, total_pages = '', 1
-					else: data, all_pages, total_pages = self.paginate_list(data, page_no)
-					self.list = [i['media_id'] for i in data]
-					if total_pages > 2: self.total_pages = total_pages
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
-				elif self.action in trakt_main:
-					self.id_type = 'trakt_dict'
-					data = function(page_no)
-					try: self.list = [i['movie']['ids'] for i in data]
-					except: self.list = [i['ids'] for i in data]
-					if self.action not in ('trakt_movies_top10_boxoffice', 'trakt_recommendations'): self.new_page = {'new_page': string(page_no + 1)}
-				elif self.action in trakt_personal:
-					self.id_type = 'trakt_dict'
-					data = function('movies', page_no)
-					if self.action == 'trakt_collection_lists': all_pages, total_pages = '', 1
-					else: data, all_pages, total_pages = self.paginate_list(data, page_no)
-					self.list = [i['media_ids'] for i in data]
-					if total_pages > 2: self.total_pages = total_pages
-					try:
-						if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
-					except: pass
-				elif self.action in imdb_personal:
-					self.id_type = 'imdb_id'
-					list_id = self.params_get('list_id', None)
-					data, next_page = function('movie', list_id, page_no)
-					self.list = [i['imdb_id'] for i in data]
-					if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
-				elif self.action == 'tmdb_movies_discover':
-					name, query = self.params_get('name'), self.params_get('query')
-					if page_no == 1:
-						from indexers.discover import set_history
-						set_history('movie', name, query)
-					data = function(query, page_no)
-					self.list = [i['id'] for i in data['results']]
-					if data['total_pages'] > page_no: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
-				elif self.action  == 'tmdb_movies_sets':
-					data = sorted(movieset_meta(self.params_get('tmdb_id'), metadata_user_info())['parts'], key=lambda k: k['release_date'] or '2050')
-					self.list = [i['id'] for i in data]
-				elif self.action == 'imdb_movies_oscar_winners':
-					data = oscar_winners
-					self.list = data[page_no-1]
-					if len(data) > page_no: self.new_page = {'new_page': string(page_no + 1)}
-				if self.total_pages and not self.is_external:
-					jump_to = jump_to_enabled()
-					if jump_to != 3:
-						url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-									'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
-									'paginate_start': self.paginate_start}
-						add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
-				add_items(handle, builder())
-				if self.new_page and not self.widget_hide_next_page:
-					self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'category_name': self.category_name})
-					add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
+		try:
+			builder, mode = self.worker, self.params_get('mode')
+			try: page_no = int(self.params_get('new_page', '1'))
+			except: page_no = self.params_get('new_page')
+			if page_no == 1 and not self.is_external: set_property('twilight.exit_params', folder_path())
+			if self.action in personal: var_module, import_function = personal[self.action]
+			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+			try: function = manual_function_import(var_module, import_function)
 			except: pass
-		else: add_items(handle, make_placeholder())
+			if self.action in tmdb_main:
+				data = function(page_no)
+				self.list = [i['id'] for i in data['results']]
+				self.new_page = {'new_page': string(data['page'] + 1)}
+			elif self.action in tmdb_special:
+				if self.action == 'tmdb_movies_search_sets': builder = self.movie_sets_worker
+				key = tmdb_special[self.action]
+				function_var = self.params_get(key, None)
+				if not function_var: return
+				data = function(function_var, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['total_pages'] > page_no: self.new_page = {'new_page': string(data['page'] + 1), key: function_var}
+			elif self.action in personal:
+				data = function('movie', page_no)
+				if self.action == 'recent_watched_movies': all_pages, total_pages = '', 1
+				else: data, all_pages, total_pages = self.paginate_list(data, page_no)
+				self.list = [i['media_id'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
+			elif self.action in trakt_main:
+				self.id_type = 'trakt_dict'
+				data = function(page_no)
+				try: self.list = [i['movie']['ids'] for i in data]
+				except: self.list = [i['ids'] for i in data]
+				if self.action not in ('trakt_movies_top10_boxoffice', 'trakt_recommendations'): self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in trakt_personal:
+				self.id_type = 'trakt_dict'
+				data = function('movies', page_no)
+				if self.action == 'trakt_collection_lists': all_pages, total_pages = '', 1
+				else: data, all_pages, total_pages = self.paginate_list(data, page_no)
+				self.list = [i['media_ids'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				try:
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
+				except: pass
+			elif self.action in imdb_personal:
+				self.id_type = 'imdb_id'
+				list_id = self.params_get('list_id', None)
+				data, next_page = function('movie', list_id, page_no)
+				self.list = [i['imdb_id'] for i in data]
+				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
+			elif self.action == 'tmdb_movies_discover':
+				name, query = self.params_get('name'), self.params_get('query')
+				if page_no == 1:
+					from indexers.discover import set_history
+					set_history('movie', name, query)
+				data = function(query, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['total_pages'] > page_no: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
+			elif self.action  == 'tmdb_movies_sets':
+				data = sorted(movieset_meta(self.params_get('tmdb_id'), metadata_user_info())['parts'], key=lambda k: k['release_date'] or '2050')
+				self.list = [i['id'] for i in data]
+			elif self.action == 'imdb_movies_oscar_winners':
+				data = oscar_winners
+				self.list = data[page_no-1]
+				if len(data) > page_no: self.new_page = {'new_page': string(page_no + 1)}
+			if self.total_pages and not self.is_external:
+				jump_to = jump_to_enabled()
+				if jump_to != 3:
+					url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
+								'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
+								'paginate_start': self.paginate_start}
+					add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
+			add_items(handle, builder())
+			if self.new_page and not self.widget_hide_next_page:
+				self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
+				add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
+		except: pass
 		set_content(handle, content_type)
 		set_category(handle, ls(self.category_name))
 		end_directory(handle, False if self.is_external else None)
@@ -162,7 +160,7 @@ class Movies:
 			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'is_external': self.is_external})
 			play_options_params = build_url({'mode': 'playback_choice', 'media_type': 'movie', 'poster': poster, 'meta': tmdb_id})
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id, 'poster': poster, 'playcount': playcount,
-										'progress': progress, 'exit_menu': self.exit_list_params, 'is_external': self.is_external})
+										'progress': progress, 'is_external': self.is_external})
 			if self.open_extras:
 				url_params = extras_params
 				cm_append((play_str, run_plugin % play_params))
@@ -175,7 +173,7 @@ class Movies:
 				clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'})
 				cm_append((clearprog_str, run_plugin % clearprog_params))
 			cm_append((watchedstr % self.watched_title, run_plugin % watched_status_params))
-			if not self.is_external: cm_append((exit_str, container_refresh % self.exit_list_params))
+			if not self.is_external: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
 			display = rootname if self.include_year else title
 			if kodi_version >= 20:
 				if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))

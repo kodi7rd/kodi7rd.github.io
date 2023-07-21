@@ -11,8 +11,8 @@ CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
 logger, notification, player, confirm_dialog, get_property = kodi_utils.logger, kodi_utils.notification, kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.get_property
 requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, kodi_utils.execute_builtin, kodi_utils.select_dialog, kodi_utils.kodi_refresh
-set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
-pause_settings_change, unpause_settings_change, progress_dialog = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.progress_dialog
+set_temp_highlight, restore_highlight = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight
+progress_dialog = kodi_utils.progress_dialog
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
 folder_path, get_icon, remove_keys, trakt_dict_removals = kodi_utils.folder_path, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
 ignore_articles, lists_sort_order = settings.ignore_articles, settings.lists_sort_order
@@ -123,25 +123,19 @@ def trakt_refresh_token():
 		'grant_type': 'refresh_token', 'refresh_token': get_setting('trakt.refresh')}
 	response = call_trakt("oauth/token", data=data, with_auth=False)
 	if response:
-		pause_settings_change()
 		set_setting('trakt.token', response["access_token"])
 		set_setting('trakt.refresh', response["refresh_token"])
 		set_setting('trakt.expires', str(time.time() + 7776000))
-		unpause_settings_change()
-		make_settings_dict()
 
 def trakt_authenticate(dummy):
 	code = trakt_get_device_code()
 	token = trakt_get_device_token(code)
 	if token:
-		pause_settings_change()
 		set_setting('trakt.token', token["access_token"])
 		set_setting('trakt.refresh', token["refresh_token"])
 		set_setting('trakt.expires', str(time.time() + 7776000))
 		set_setting('trakt.indicators_active', 'true')
 		set_setting('watched_indicators', '1')
-		unpause_settings_change()
-		make_settings_dict()
 		sleep(1000)
 		try:
 			user = call_trakt('/users/me')
@@ -156,15 +150,12 @@ def trakt_authenticate(dummy):
 def trakt_revoke_authentication(dummy):
 	data = {'token': get_setting('trakt.token'), 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
 	response = call_trakt("oauth/revoke", data=data, with_auth=False)
-	pause_settings_change()
 	set_setting('trakt.user', '')
 	set_setting('trakt.expires', '')
 	set_setting('trakt.token', '')
 	set_setting('trakt.refresh', '')
 	set_setting('trakt.indicators_active', 'false')
 	set_setting('watched_indicators', '0')
-	unpause_settings_change()
-	make_settings_dict()
 	clear_all_trakt_cache_data(silent=True, refresh=False)
 	notification('Trakt Account Authorization Reset', 3000)
 
@@ -429,7 +420,7 @@ def get_trakt_list_selection(list_choice=None):
 	return selection
 
 def make_new_trakt_list(params):
-	list_title = dialog.input(ls(32036))
+	list_title = dialog.input('')
 	if not list_title: return
 	list_name = unquote(list_title)
 	data = {'name': list_name, 'privacy': 'private', 'allow_comments': False}

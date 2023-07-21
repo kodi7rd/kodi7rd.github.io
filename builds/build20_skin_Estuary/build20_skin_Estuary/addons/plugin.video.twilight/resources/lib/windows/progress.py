@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from windows import BaseDialog
-from modules.kodi_utils import addon_icon, local_string as ls
+from modules.kodi_utils import addon_icon
 # from modules.kodi_utils import logger
 
 class Progress(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
 		self.is_canceled = False
-		self.heading = kwargs.get('heading', ls(32036))
+		self.heading = kwargs.get('heading', '')
 		self.icon = kwargs.get('icon', addon_icon)
 
 	def run(self):

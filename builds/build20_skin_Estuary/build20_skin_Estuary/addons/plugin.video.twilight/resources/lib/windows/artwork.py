@@ -6,7 +6,7 @@ from modules.settings import get_art_provider
 # from modules.kodi_utils import logger
 
 list_ids = {'poster': 2020, 'fanart': 2021, 'clearlogo': 2022, 'banner': 2023, 'clearart': 2024, 'landscape': 2025, 'discart': 2026, 'keyart': 2027}
-custom_key, count_name, count_insert = 'custom_%s', '%s.number', '%02d'
+custom_key, count_name, count_insert = 'custom_%s', '%s.number', 'x%s'
 
 class SelectArtwork(BaseDialog):
 	def __init__(self, *args, **kwargs):

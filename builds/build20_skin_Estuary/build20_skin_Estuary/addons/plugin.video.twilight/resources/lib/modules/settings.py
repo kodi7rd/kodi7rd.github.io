@@ -1,8 +1,21 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import translate_path, get_property, tmdb_default_api, fanarttv_default_api, get_setting, current_skin, path_exists, \
-								custom_xml_path, custom_skin_path, default_skin_path
-# from modules.kodi_utils import logger
+from modules import kodi_utils
+# logger = kodi_utils.logger
 
+translate_path, get_property, tmdb_default_api, fanarttv_default_api = kodi_utils.translate_path, kodi_utils.get_property, kodi_utils.tmdb_default_api, kodi_utils.fanarttv_default_api
+get_setting, current_skin, path_exists, custom_xml_path = kodi_utils.get_setting, kodi_utils.current_skin, kodi_utils.path_exists, kodi_utils.custom_xml_path
+custom_skin_path, default_skin_path = kodi_utils.custom_skin_path, kodi_utils.default_skin_path
+datetime_offset_prop, limit_concurrent_prop, max_threads_prop = kodi_utils.datetime_offset_prop, kodi_utils.limit_concurrent_prop, kodi_utils.max_threads_prop 
+wid_hidenext_prop, all_episodes_prop, show_unaired_prop = kodi_utils.wid_hidenext_prop, kodi_utils.all_episodes_prop, kodi_utils.show_unaired_prop
+season_title_prop, show_specials_prop, calendar_sort_prop = kodi_utils.season_title_prop, kodi_utils.show_specials_prop, kodi_utils.calendar_sort_prop
+ignore_articles_prop, single_ep_title_prop, single_ep_format_prop = kodi_utils.ignore_articles_prop, kodi_utils.single_ep_title_prop, kodi_utils.single_ep_format_prop
+include_year_prop, extras_open_prop, tmdb_api_prop = kodi_utils.include_year_prop, kodi_utils.extras_open_prop, kodi_utils.tmdb_api_prop
+image_resos_prop, fanart_data_prop, meta_language_prop = kodi_utils.image_resos_prop, kodi_utils.fanart_data_prop, kodi_utils.meta_language_prop
+meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop = kodi_utils.meta_mpaa_region_prop, kodi_utils.meta_mpaa_prefix_prop, kodi_utils.wid_hide_watched_prop
+fanart_key_prop, trakt_user_prop, watched_indic_prop = kodi_utils.fanart_key_prop, kodi_utils.trakt_user_prop, kodi_utils.watched_indic_prop
+nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop = kodi_utils.nextep_sort_prop, kodi_utils.nextep_order_prop, kodi_utils.nextep_inc_unaired_prop
+nextep_inc_unwatched_prop, nextep_airing_top_prop = kodi_utils.nextep_inc_unwatched_prop, kodi_utils.nextep_airing_top_prop
+fanarttv_def_prop, nextep_inc_date_prop = kodi_utils.fanarttv_def_prop, kodi_utils.nextep_inc_date_prop
 download_directories_dict = {'movie': 'movie_download_directory', 'episode': 'tvshow_download_directory', 'thumb_url': 'image_download_directory',
 							'image_url': 'image_download_directory','image': 'image_download_directory', 'premium': 'premium_download_directory',
 							None: 'premium_download_directory', 'None': False}
@@ -24,6 +37,9 @@ resolution_tuple = ({'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profi
 					{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632', 'clearlogo': 'original'},
 					{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original', 'clearlogo': 'original'})
 
+def get_setting_property(property_id, fallback=''):
+	return get_property(property_id) or get_setting(property_id.replace('twilight.', ''), fallback)
+
 def skin_location(skin_xml):
 	user_skin = current_skin()
 	if '32860' in get_setting('custom_skins.enable'): return translate_path(default_skin_path)
@@ -32,9 +48,6 @@ def skin_location(skin_xml):
 
 def use_skin_fonts():
 	return get_setting('use_skin_fonts')
-
-def date_offset():
-	return int(get_setting('datetime.offset', '0')) + 5
 
 def results_format():
 	return str(get_setting('results.list_format', 'List').lower())
@@ -73,23 +86,14 @@ def limit_resolve():
 def disable_content_lookup():
 	return get_setting('playback.disable_content_lookup') == 'true'
 
-def widget_load_empty():
-	return get_setting('playback.widget_load_empty', 'true') == 'true'
-
 def easynews_max_retries():
 	return int(get_setting('playback.easynews_max_retries', '1'))
 
 def display_sleep_time():
 	return 100
 
-def show_specials():
-	return get_setting('show_specials', 'false') == 'true'
-
 def show_unaired_watchlist():
 	return get_setting('show_unaired_watchlist', 'false') == 'true'
-
-def include_year_in_title(media_type):
-	return int(get_setting('include_year_in_title', '0')) in year_in_title_dict[media_type]
 	
 def movies_directory():
 	return translate_path(get_setting('movies_directory'))
@@ -119,14 +123,8 @@ def page_limit(is_home):
 def jump_to_enabled():
 	return int(get_setting('paginate.jump_to', '0'))
 
-def ignore_articles():
-	return get_setting('ignore_articles', 'false') == 'true'
-
 def use_year_in_search():
 	return get_setting('meta_use_year_in_search') == 'true'
-
-def default_all_episodes():
-	return int(get_setting('default_all_episodes'))
 
 def quality_filter(setting):
 	return get_setting(setting).split(', ')
@@ -178,9 +176,6 @@ def trakt_sync_interval():
 def trakt_sync_refresh_widgets():
 	return get_setting('trakt.sync_refresh_widgets', 'true') == 'true'
 
-def calendar_sort_order():
-	return int(get_setting('trakt.calendar_sort_order', '0'))
-
 def lists_sort_order(setting):
 	return int(get_setting('sort.%s' % setting, '0'))
 
@@ -201,25 +196,8 @@ def easynews_active():
 	else: easynews_status = False
 	return easynews_status
 
-def watched_indicators():
-	if get_setting('trakt.user') == '': return 0
-	return int(get_setting('watched_indicators','0'))
-
 def tv_progress_location():
 	return int(get_setting('tv_progress_location', '0'))
-
-def max_threads():
-	if not get_setting('limit_concurrent_threads', 'false') == 'true': return 60
-	return int(get_setting('max_threads', '60'))
-
-def widget_hide_next_page():
-	return get_setting('widget_hide_next_page', 'false') == 'true'
-
-def widget_hide_watched():
-	return get_setting('widget_hide_watched', 'false') == 'true'
-
-def extras_open_action(media_type):
-	return int(get_setting('extras.open_action', '0')) in extras_open_action_dict[media_type]
 
 def extras_enable_extra_ratings():
 	return get_setting('extras.enable_extra_ratings', 'true') == 'true'
@@ -293,33 +271,6 @@ def auto_resume(media_type):
 	if auto_resume == '2' and auto_play(media_type): return True
 	else: return False
 
-def use_season_title():
-	return get_setting('use_season_title', 'true') == 'true'
-
-def show_unaired():
-	return get_setting('show_unaired', 'true') == 'true'
-
-def single_ep_format():
-	return single_ep_format_dict[get_setting('single_ep_format', '1')]
-
-def single_ep_display_title():
-	return int(get_setting('single_ep_display', '0'))
-
-def nextep_display_settings():
-	include_airdate = get_setting('nextep.include_airdate') == 'true'
-	return {'unaired_color': 'red', 'unwatched_color': 'darkgoldenrod', 'include_airdate': include_airdate}
-
-def nextep_content_settings():
-	sort_type = int(get_setting('nextep.sort_type', '0'))
-	sort_order = int(get_setting('nextep.sort_order', '0'))
-	sort_direction = sort_order == 0
-	sort_key = 'twilight.last_played' if sort_type == 0 else 'twilight.first_aired' if sort_type == 1 else 'twilight.name'
-	include_unaired = get_setting('nextep.include_unaired') == 'true'
-	include_unwatched = int(get_setting('nextep.include_unwatched', '0'))
-	sort_airing_today_to_top = get_setting('nextep.sort_airing_today_to_top', 'false') == 'true'
-	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
-			'include_unaired': include_unaired, 'include_unwatched': include_unwatched, 'sort_airing_today_to_top': sort_airing_today_to_top}
-
 def scraping_settings():
 	highlight_type = int(get_setting('highlight.type', '0'))
 	if highlight_type == 3: return {'highlight_type': highlight_type}
@@ -346,36 +297,12 @@ def scraping_settings():
 			'alldebrid': ad_highlight, 'rd_cloud': debrid_cloud_highlight, 'pm_cloud': debrid_cloud_highlight, 'ad_cloud': debrid_cloud_highlight, 'furk': furk_highlight,
 			'easynews': easynews_highlight, 'folders': folders_highlight, '4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD}
 
-def get_fanart_data():
-	return get_setting('get_fanart_data') == 'true'
-
-def fanarttv_client_key():
-	return get_setting('fanart_client_key', fanarttv_default_api)
-
-def tmdb_api_key():
-	return get_setting('tmdb_api', tmdb_default_api)
-
-def omdb_api_key():
-	return get_setting('omdb_api', '')
-
-def fanarttv_default():
-	return get_setting('fanarttv.default', 'false') == 'true'
-
-def get_resolution():
-	return resolution_tuple[int(get_setting('image_resolutions', '2'))]
-
-def get_language():
-	return get_setting('meta_language', 'en')
-
-def get_mpaa_region():
-	return get_setting('meta_mpaa_region', 'US')
-
-def get_mpaa_prefix():
-	return get_setting('meta_mpaa_prefix', '')
-
 def get_art_provider():
 	if not get_fanart_data(): return default_art_provider_tuple
 	return art_provider_dict[fanarttv_default()]
+
+def omdb_api_key():
+	return get_setting('omdb_api', '')
 
 def metadata_user_info():
 	tmdb_api = tmdb_api_key()
@@ -389,3 +316,89 @@ def metadata_user_info():
 	else: fanart_client_key = ''
 	return {'extra_fanart_enabled': extra_fanart_enabled, 'image_resolution': image_resolution , 'language': meta_language, 'mpaa_region': mpaa_region,
 			'mpaa_prefix': mpaa_prefix, 'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched}
+
+def default_all_episodes():
+	return int(get_setting_property(all_episodes_prop))
+
+def max_threads():
+	if not get_setting_property(limit_concurrent_prop, 'false') == 'true': return 60
+	return int(get_setting_property(max_threads_prop, '60'))
+
+def widget_hide_next_page():
+	return get_setting_property(wid_hidenext_prop, 'false') == 'true'
+
+def show_unaired():
+	return get_setting_property(show_unaired_prop, 'true') == 'true'
+
+def use_season_title():
+	return get_setting_property(season_title_prop, 'true') == 'true'
+
+def show_specials():
+	return get_setting_property(show_specials_prop, 'false') == 'true'
+
+def calendar_sort_order():
+	return int(get_setting_property(calendar_sort_prop, '0'))
+
+def ignore_articles():
+	return get_setting_property(ignore_articles_prop, 'false') == 'true'
+
+def date_offset():
+	return int(get_setting_property(datetime_offset_prop, '0')) + 5
+
+def single_ep_display_title():
+	return int(get_setting_property(single_ep_title_prop, '0'))
+
+def single_ep_format():
+	return single_ep_format_dict[get_setting_property(single_ep_format_prop, '1')]
+
+def include_year_in_title(media_type):
+	return int(get_setting_property(include_year_prop, '0')) in year_in_title_dict[media_type]
+
+def extras_open_action(media_type):
+	return int(get_setting_property(extras_open_prop, '0')) in extras_open_action_dict[media_type]
+
+def tmdb_api_key():
+	return get_setting_property(tmdb_api_prop, tmdb_default_api)
+
+def get_fanart_data():
+	return get_setting_property(fanart_data_prop) == 'true'
+
+def get_resolution():
+	return resolution_tuple[int(get_setting_property(image_resos_prop, '2'))]
+
+def get_language():
+	return get_setting_property(meta_language_prop, 'en')
+
+def get_mpaa_region():
+	return get_setting_property(meta_mpaa_region_prop, 'US')
+
+def get_mpaa_prefix():
+	return get_setting_property(meta_mpaa_prefix_prop, '')
+
+def widget_hide_watched():
+	return get_setting_property(wid_hide_watched_prop, 'false') == 'true'
+
+def fanarttv_client_key():
+	return get_setting_property(fanart_key_prop, fanarttv_default_api)
+
+def watched_indicators():
+	if get_setting_property(trakt_user_prop) == '': return 0
+	return int(get_setting_property(watched_indic_prop, '0'))
+
+def fanarttv_default():
+	return get_setting_property(fanarttv_def_prop, 'false') == 'true'
+
+def nextep_display_settings():
+	include_airdate = get_setting_property(nextep_inc_date_prop, 'false') == 'true'
+	return {'unaired_color': 'red', 'unwatched_color': 'darkgoldenrod', 'include_airdate': include_airdate}
+
+def nextep_content_settings():
+	sort_type = int(get_setting_property(nextep_sort_prop, '0'))
+	sort_order = int(get_setting_property(nextep_order_prop, '0'))
+	sort_direction = sort_order == 0
+	sort_key = 'twilight.last_played' if sort_type == 0 else 'twilight.first_aired' if sort_type == 1 else 'twilight.name'
+	include_unaired = get_setting_property(nextep_inc_unaired_prop, 'false') == 'true'
+	include_unwatched = int(get_setting_property(nextep_inc_unwatched_prop, '0'))
+	sort_airing_today_to_top = get_setting_property(nextep_airing_top_prop, 'false') == 'true'
+	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
+			'include_unaired': include_unaired, 'include_unwatched': include_unwatched, 'sort_airing_today_to_top': sort_airing_today_to_top}

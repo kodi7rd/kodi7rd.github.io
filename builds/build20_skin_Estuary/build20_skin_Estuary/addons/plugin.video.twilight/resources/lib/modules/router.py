@@ -1,12 +1,27 @@
 # -*- coding: utf-8 -*-
-from modules.kodi_utils import external, parse_qsl, get_property, services_finished_prop, make_fake_widget
-# from modules.kodi_utils import logger
+from modules import kodi_utils
+# logger = kodi_utils.logger
+
+rem_props_prop, run_plugin, current_langinvoker_prop = kodi_utils.rem_props_prop, kodi_utils.run_plugin, kodi_utils.current_langinvoker_prop
+external, parse_qsl, get_property, set_property = kodi_utils.external, kodi_utils.parse_qsl, kodi_utils.get_property, kodi_utils.set_property
+make_window_properties, refr_settings_prop  = kodi_utils.make_window_properties, kodi_utils.refr_settings_prop
 
 def sys_exit_check():
-	return external()
+	return restart_for_settings() or (get_property(current_langinvoker_prop) == 'true' and external())
+
+def restart_for_settings():
+	if get_property(refr_settings_prop) == 'true':
+		set_property(refr_settings_prop, 'false')
+		run_plugin({'mode': 'dummy_run'}, block=True)
+		return True
+	return False
+
+def remake_properties_check():
+	if get_property(rem_props_prop) != 'false':
+		set_property(rem_props_prop, 'false')
+		make_window_properties()
 
 def routing(sys):
-	if not get_property(services_finished_prop) == 'true' and make_fake_widget(): return
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	_get = params.get
 	mode = _get('mode', 'navigator.main')
@@ -176,13 +191,6 @@ def routing(sys):
 		if mode == 'alldebrid.revoke_authentication':
 			from apis.alldebrid_api import AllDebridAPI
 			return AllDebridAPI().revoke()
-	if '_settings' in mode:
-		if mode == 'open_settings':
-			from modules.kodi_utils import open_settings
-			return open_settings(_get('query', '0.0'), _get('addon', 'plugin.video.twilight'))
-		if mode == 'clear_settings_window_properties':
-			from modules.kodi_utils import clear_settings_window_properties
-			return clear_settings_window_properties()
 	if '_cache' in mode:
 		import caches
 		if mode == 'clear_cache':
@@ -243,3 +251,6 @@ def routing(sys):
 	if mode == 'debrid.browse_packs':
 		from modules.sources import Sources
 		return Sources().debridPacks(_get('provider'), _get('name'), _get('magnet_url'), _get('info_hash'))
+	if mode == 'open_settings':
+		from modules.kodi_utils import open_settings
+		return open_settings(_get('query', '0.0'), _get('addon', 'plugin.video.twilight'))

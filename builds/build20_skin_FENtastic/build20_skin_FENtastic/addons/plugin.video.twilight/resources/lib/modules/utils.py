@@ -6,7 +6,7 @@ import _strptime
 import unicodedata
 from random import random
 from html import unescape
-from importlib import import_module
+from importlib import import_module, reload as reload_module
 from datetime import datetime, timedelta, date
 from modules.settings import max_threads
 from modules.kodi_utils import sleep, Thread, activeCount, json, get_setting, local_string as ls
@@ -19,6 +19,9 @@ def change_image_resolution(image, replace_res):
 
 def manual_function_import(location, function_name):
 	return getattr(import_module(location), function_name)
+
+def reload_module(location):
+	return reload_module(manual_module_import(location))
 
 def manual_module_import(location):
 	return import_module(location)
@@ -213,6 +216,8 @@ def replace_html_codes(txt):
 	txt = txt.replace("<br/><br/>", "\n")
 	txt = txt.replace("&quot;", "\"")
 	txt = txt.replace("&amp;", "&")
+	txt = txt.replace("[spoiler]", "")
+	txt = txt.replace("[/spoiler]", "")
 	return txt
 
 def gen_file_hash(file):

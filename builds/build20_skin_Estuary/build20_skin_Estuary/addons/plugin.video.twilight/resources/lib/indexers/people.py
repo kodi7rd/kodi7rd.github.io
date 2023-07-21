@@ -75,7 +75,7 @@ def person_search(query=None):
 				image = tmdb_image_url % item['profile_path'] if item['profile_path'] else default_image
 				yield {'line1': item['name'], 'line2': ', '.join(known_for_list) if known_for_list else '', 'icon': image}
 		list_items = list(_builder())
-		kwargs = {'items': json.dumps(list_items), 'heading': ls(32036), 'multi_line': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'multi_line': 'true'}
 		person = select_dialog(data, **kwargs)
 		if person == None: return None, None, None
 		actor_id = int(person['id'])
