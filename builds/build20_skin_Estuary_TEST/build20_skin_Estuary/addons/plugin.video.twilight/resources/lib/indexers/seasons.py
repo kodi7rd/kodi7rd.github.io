@@ -11,7 +11,7 @@ kodi_version, xbmc_actor, set_category = kodi_utils.kodi_version, kodi_utils.xbm
 adjust_premiered_date_function, get_datetime_function, get_watched_status, get_watched_info = adjust_premiered_date, get_datetime, get_watched_status_season, get_watched_info_tv
 metadata_user_info, watched_indicators_info, show_unaired_info = settings.metadata_user_info, settings.watched_indicators, settings.show_unaired
 get_art_provider, show_specials, use_season_title_info = settings.get_art_provider, settings.show_specials, settings.use_season_title
-poster_empty, fanart_empty, build_content, make_placeholder = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.build_content, kodi_utils.make_placeholder_listitem
+poster_empty, fanart_empty = kodi_utils.empty_poster, kodi_utils.addon_fanart
 twilight_str, trakt_str, season_str, watched_str, unwatched_str, season_str = ls(32036), ls(32037), ls(32537), ls(32642), ls(32643), ls(32537)
 extras_str, options_str, refr_widg_str = ls(32645), ls(32646), '[B]%s[/B]' % ls(32611)
 string, run_plugin, unaired_label, tmdb_poster_prefix = str, 'RunPlugin(%s)', '[COLOR red][I]%s[/I][/COLOR]', 'https://image.tmdb.org/t/p/'
@@ -113,35 +113,33 @@ def build_season_list(params):
 				yield (url_params, listitem, True)
 			except: pass
 	handle, is_external, category_name = int(sys.argv[1]), external(), season_str
-	if build_content():
-		meta_user_info, watched_indicators, show_unaired = metadata_user_info(), watched_indicators_info(), show_unaired_info()
-		watched_info, current_date, use_season_title = get_watched_info(watched_indicators), get_datetime_function(), use_season_title_info()
-		image_resolution, hide_watched = meta_user_info['image_resolution']['poster'], is_external and meta_user_info['widget_hide_watched']
-		fanart_enabled = meta_user_info['extra_fanart_enabled']
-		meta = tvshow_meta('tmdb_id', params['tmdb_id'], meta_user_info, current_date)
-		meta_get = meta.get
-		tmdb_id, tvdb_id, imdb_id, show_title, show_year = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('title'), meta_get('year') or '2050'
-		orig_title, status, show_plot, total_aired_eps = meta_get('original_title', ''), meta_get('status'), meta_get('plot'), meta_get('total_aired_eps')
-		str_tmdb_id, str_tvdb_id, rating, genre, premiered = string(tmdb_id), string(tvdb_id), meta_get('rating'), meta_get('genre'), meta_get('premiered')
-		cast, mpaa, votes, trailer, studio, country = meta_get('cast', []), meta_get('mpaa'), meta_get('votes'), string(meta_get('trailer')), meta_get('studio'), meta_get('country')
-		episode_run_time, season_data, total_seasons = meta_get('duration'), meta_get('season_data'), meta_get('total_seasons')
-		poster_main, poster_backup, fanart_main, fanart_backup, clearlogo_main, clearlogo_backup = get_art_provider()
-		fanart_default = poster_main == 'poster2'
-		show_poster = meta_get('custom_poster') or meta_get(poster_main) or meta_get(poster_backup) or poster_empty
-		show_fanart = meta_get('custom_fanart') or meta_get(fanart_main) or meta_get(fanart_backup) or fanart_empty
-		show_clearlogo = meta_get('custom_clearlogo') or meta_get(clearlogo_main) or meta_get(clearlogo_backup) or ''
-		if fanart_enabled:
-			show_banner = meta_get('custom_banner') or meta_get('banner') or ''
-			show_clearart = meta_get('custom_clearart') or meta_get('clearart') or ''
-			show_landscape = meta_get('custom_landscape') or meta_get('landscape') or ''
-			season_art = meta_get('season_art', {})
-		else: show_banner, show_clearart, show_landscape, season_art = '', '', '', {}
-		if not show_specials(): season_data = [i for i in season_data if not i['season_number'] == 0]
-		season_data.sort(key=lambda k: k['season_number'])
-		watched_title = trakt_str if watched_indicators == 1 else twilight_str
-		add_items(handle, list(_process()))
-		category_name = show_title
-	else: add_items(handle, make_placeholder())
+	meta_user_info, watched_indicators, show_unaired = metadata_user_info(), watched_indicators_info(), show_unaired_info()
+	watched_info, current_date, use_season_title = get_watched_info(watched_indicators), get_datetime_function(), use_season_title_info()
+	image_resolution, hide_watched = meta_user_info['image_resolution']['poster'], is_external and meta_user_info['widget_hide_watched']
+	fanart_enabled = meta_user_info['extra_fanart_enabled']
+	meta = tvshow_meta('tmdb_id', params['tmdb_id'], meta_user_info, current_date)
+	meta_get = meta.get
+	tmdb_id, tvdb_id, imdb_id, show_title, show_year = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('title'), meta_get('year') or '2050'
+	orig_title, status, show_plot, total_aired_eps = meta_get('original_title', ''), meta_get('status'), meta_get('plot'), meta_get('total_aired_eps')
+	str_tmdb_id, str_tvdb_id, rating, genre, premiered = string(tmdb_id), string(tvdb_id), meta_get('rating'), meta_get('genre'), meta_get('premiered')
+	cast, mpaa, votes, trailer, studio, country = meta_get('cast', []), meta_get('mpaa'), meta_get('votes'), string(meta_get('trailer')), meta_get('studio'), meta_get('country')
+	episode_run_time, season_data, total_seasons = meta_get('duration'), meta_get('season_data'), meta_get('total_seasons')
+	poster_main, poster_backup, fanart_main, fanart_backup, clearlogo_main, clearlogo_backup = get_art_provider()
+	fanart_default = poster_main == 'poster2'
+	show_poster = meta_get('custom_poster') or meta_get(poster_main) or meta_get(poster_backup) or poster_empty
+	show_fanart = meta_get('custom_fanart') or meta_get(fanart_main) or meta_get(fanart_backup) or fanart_empty
+	show_clearlogo = meta_get('custom_clearlogo') or meta_get(clearlogo_main) or meta_get(clearlogo_backup) or ''
+	if fanart_enabled:
+		show_banner = meta_get('custom_banner') or meta_get('banner') or ''
+		show_clearart = meta_get('custom_clearart') or meta_get('clearart') or ''
+		show_landscape = meta_get('custom_landscape') or meta_get('landscape') or ''
+		season_art = meta_get('season_art', {})
+	else: show_banner, show_clearart, show_landscape, season_art = '', '', '', {}
+	if not show_specials(): season_data = [i for i in season_data if not i['season_number'] == 0]
+	season_data.sort(key=lambda k: k['season_number'])
+	watched_title = trakt_str if watched_indicators == 1 else twilight_str
+	add_items(handle, list(_process()))
+	category_name = show_title
 	set_content(handle, content_type)
 	set_category(handle, category_name)
 	end_directory(handle, False if is_external else None)

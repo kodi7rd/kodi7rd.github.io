@@ -1,6 +1,4 @@
 
-[COLOR dodgerblue][B]Filter Results Window[/B][/COLOR]
-
 You can now filter results AFTER you have scraped for them in Twilight.
 
 The 4 choices are "Filter by Quality", "Filter by Provider", "Filter Title", "Filter Extra Info"

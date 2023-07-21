@@ -10,7 +10,7 @@ json, ls, close_all_dialog, external = kodi_utils.json, kodi_utils.local_string,
 build_url, dialog, unquote, execute_builtin, select_dialog = kodi_utils.build_url, kodi_utils.dialog, kodi_utils.unquote, kodi_utils.execute_builtin, kodi_utils.select_dialog
 notification, kodi_refresh, numeric_input = kodi_utils.notification, kodi_utils.kodi_refresh, kodi_utils.numeric_input
 insert_string_4, insert_string_5 = '%s %s %s %s', '%s %s %s %s %s'
-twilight_str, delete_str, search_str, hist_str, vid_str, mov_str, key_str = ls(32036), ls(32785), ls(32450), ls(32486), ls(32491), ls(32028), ls(32092)
+delete_str, search_str, hist_str, vid_str, mov_str, key_str = ls(32785), ls(32450), ls(32486), ls(32491), ls(32028), ls(32092)
 tv_str, furk_str, easy_str, peop_str, imdb_str, coll_str = ls(32029), ls(32069), ls(32070), ls(32507), ls(32064), ls(33080)
 clear_history_list = [(insert_string_4 % (delete_str, mov_str, search_str, hist_str), 'movie_queries'),
 					(insert_string_4 % (delete_str, tv_str, search_str, hist_str), 'tvshow_queries'), 
@@ -41,7 +41,7 @@ def get_search_term(params):
 	elif search_type == 'trakt_lists':
 		url_params, string = {'mode': 'trakt.list.search_trakt_lists'}, ''
 	params_query = params.get('query', None)
-	query = params_query or dialog.input(twilight_str)
+	query = params_query or dialog.input('')
 	if not query: return
 	query = unquote(query)
 	if search_type == 'media_title' and not params_query and use_year_in_search():
@@ -78,7 +78,7 @@ def remove_from_search_history(params):
 def clear_search_history():
 	try:
 		list_items = [{'line1': item[0]} for item in clear_history_list]
-		kwargs = {'items': json.dumps(list_items), 'heading': twilight_str, 'narrow_window': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		setting_id = select_dialog([item[1] for item in clear_history_list], **kwargs)
 		if setting_id == None: return
 		clear_all_history(setting_id)

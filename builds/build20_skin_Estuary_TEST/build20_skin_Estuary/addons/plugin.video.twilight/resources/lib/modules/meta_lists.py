@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from modules.kodi_utils import local_string as ls
 
-years_movies = range(datetime.today().year, 1899, -1)
+years_movies = [
+		2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995,
+		1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980, 1979, 1978, 1977, 1976, 1975, 1974, 1973, 1972, 1971, 1970, 1969, 1968, 1967, 1966,
+		1965, 1964, 1963, 1962, 1961, 1960, 1959, 1958, 1957, 1956, 1955, 1954, 1953, 1952, 1951, 1950, 1949, 1948, 1947, 1946, 1945, 1944, 1943, 1942, 1941, 1940, 1939, 1938, 1937,
+		1936, 1935, 1934, 1933, 1932, 1931, 1930, 1929, 1928, 1927, 1926, 1925, 1924, 1923, 1922, 1921, 1920, 1919, 1918, 1917, 1916, 1915, 1914, 1913, 1912, 1911, 1910, 1909, 1908,
+		1907, 1906, 1905, 1904, 1903, 1902, 1901, 1900
+	]
 
-years_tvshows = range(datetime.today().year, 1941, -1)
+years_tvshows = [
+		2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995,
+		1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980, 1979, 1978, 1977, 1976, 1975, 1974, 1973, 1972, 1971, 1970, 1969, 1968, 1967, 1966,
+		1965, 1964, 1963, 1962, 1961, 1960, 1959, 1958, 1957, 1956, 1955, 1954, 1953, 1952, 1951, 1950, 1949, 1948, 1947, 1946, 1945, 1944, 1943, 1942
+	]
 
-decades_movies = [i for i in years_movies if not i % 10]
+decades_movies = [2020, 2010, 2000, 1990, 1980, 1970, 1960, 1950, 1940, 1930, 1920, 1910, 1900]
 
-decades_tvshows = [i for i in years_tvshows if not i % 10] + ['1940']
+decades_tvshows = [2020, 2010, 2000, 1990, 1980, 1970, 1960, 1950, 1940]
 
 oscar_winners = (
 		(545611, 776503, 581734, 496243, 490132, 399055, 376867, 314365, 194662, 76203, 68734, 74643, 45269, 12162, 12405, 6977, 1422, 1640, 70, 122),
@@ -58,6 +67,27 @@ meta_languages = [
 		{'iso': 'es', 'name': 'Spanish'},          {'iso': 'sv', 'name': 'Swedish'},
 		{'iso': 'tr', 'name': 'Turkish'},          {'iso': 'ar-SA', 'name': 'Arabic Saudi Arabia'}
 	]
+
+language_choices =  {
+		'None': 'None',              'Afrikaans': 'afr',            'Albanian': 'alb',             'Arabic': 'ara',
+		'Armenian': 'arm',           'Basque': 'baq',               'Bengali': 'ben',              'Bosnian': 'bos',
+		'Breton': 'bre',             'Bulgarian': 'bul',            'Burmese': 'bur',              'Catalan': 'cat',
+		'Chinese': 'chi',            'Croatian': 'hrv',             'Czech': 'cze',                'Danish': 'dan',
+		'Dutch': 'dut',              'English': 'eng',              'Esperanto': 'epo',            'Estonian': 'est',
+		'Finnish': 'fin',            'French': 'fre',               'Galician': 'glg',             'Georgian': 'geo',
+		'German': 'ger',             'Greek': 'ell',                'Hebrew': 'heb',               'Hindi': 'hin',
+		'Hungarian': 'hun',          'Icelandic': 'ice',            'Indonesian': 'ind',           'Italian': 'ita',
+		'Japanese': 'jpn',           'Kazakh': 'kaz',               'Khmer': 'khm',                'Korean': 'kor',
+		'Latvian': 'lav',            'Lithuanian': 'lit',           'Luxembourgish': 'ltz',        'Macedonian': 'mac',
+		'Malay': 'may',              'Malayalam': 'mal',            'Manipuri': 'mni',             'Mongolian': 'mon',
+		'Montenegrin': 'mne',        'Norwegian': 'nor',            'Occitan': 'oci',              'Persian': 'per',
+		'Polish': 'pol',             'Portuguese': 'por',           'Portuguese(Brazil)': 'pob',   'Romanian': 'rum',
+		'Russian': 'rus',            'Serbian': 'scc',              'Sinhalese': 'sin',            'Slovak': 'slo',
+		'Slovenian': 'slv',          'Spanish': 'spa',              'Swahili': 'swa',              'Swedish': 'swe',
+		'Syriac': 'syr',             'Tagalog': 'tgl',              'Tamil': 'tam',                'Telugu': 'tel',
+		'Thai': 'tha',               'Turkish': 'tur',              'Ukrainian': 'ukr',            'Urdu': 'urd',
+		'Vietnamese': 'vie'
+	}
 
 regions = [
 		{'code': 'AF', 'name': ls(32893)},   {'code': 'AL', 'name': ls(32894)},   {'code': 'DZ', 'name': ls(32895)},   {'code': 'AQ', 'name': ls(32896)},
@@ -142,52 +172,6 @@ networks = (
 		{'id':2243,'name':'DC Universe','logo': 'network_dcuniverse'},                {'id':2076,'name':'Paramount Network','logo': 'network_paramount'},
 		{'id':4330,'name':'Paramount+','logo': 'network_paramountplus'},              {'id': 3353, 'name': 'Peacock', 'logo': 'network_peacock'},
 		{'id':4353,'name':'Discovery+','logo': 'network_discoveryplus'}
-	)
-
-language_choices =  {
-		'None': 'None',              'Afrikaans': 'afr',            'Albanian': 'alb',             'Arabic': 'ara',
-		'Armenian': 'arm',         'Basque': 'baq',               'Bengali': 'ben',              'Bosnian': 'bos',
-		'Breton': 'bre',           'Bulgarian': 'bul',            'Burmese': 'bur',              'Catalan': 'cat',
-		'Chinese': 'chi',          'Croatian': 'hrv',             'Czech': 'cze',                'Danish': 'dan',
-		'Dutch': 'dut',            'English': 'eng',              'Esperanto': 'epo',            'Estonian': 'est',
-		'Finnish': 'fin',          'French': 'fre',               'Galician': 'glg',             'Georgian': 'geo',
-		'German': 'ger',           'Greek': 'ell',                'Hebrew': 'heb',               'Hindi': 'hin',
-		'Hungarian': 'hun',        'Icelandic': 'ice',            'Indonesian': 'ind',           'Italian': 'ita',
-		'Japanese': 'jpn',         'Kazakh': 'kaz',               'Khmer': 'khm',                'Korean': 'kor',
-		'Latvian': 'lav',          'Lithuanian': 'lit',           'Luxembourgish': 'ltz',        'Macedonian': 'mac',
-		'Malay': 'may',            'Malayalam': 'mal',            'Manipuri': 'mni',             'Mongolian': 'mon',
-		'Montenegrin': 'mne',      'Norwegian': 'nor',            'Occitan': 'oci',              'Persian': 'per',
-		'Polish': 'pol',           'Portuguese': 'por',           'Portuguese(Brazil)': 'pob',   'Romanian': 'rum',
-		'Russian': 'rus',          'Serbian': 'scc',              'Sinhalese': 'sin',            'Slovak': 'slo',
-		'Slovenian': 'slv',        'Spanish': 'spa',              'Swahili': 'swa',              'Swedish': 'swe',
-		'Syriac': 'syr',           'Tagalog': 'tgl',              'Tamil': 'tam',                'Telugu': 'tel',
-		'Thai': 'tha',             'Turkish': 'tur',              'Ukrainian': 'ukr',            'Urdu': 'urd',
-		'Vietnamese': 'vie'
-	}
-
-media_lists = (
-		"'tmdb_movies%'",
-		"'tmdb_tv%'",
-		"'tmdb_popular_people%'",
-		"'tmdb_images_person%'",
-		"'tmdb_media%'",
-		"'tmdb_company%'",
-		"'trakt_movies%'",
-		"'trakt_tv%'",
-		"'trakt_trending_user_lists%'",
-		"'trakt_popular_user_lists%'",
-		"'imdb_%'",
-		"'tmdb_people%'",
-		"'imdb_keyword%'",
-		"'imdb_blunders%'",
-		"'twilight_discover%'",
-		"'twilight_FURK_T_FILE%'",
-		"'twilight_pm_instant_transfer%'",
-		"'twilight_rd_check_hash%'",
-		"'TWILIGHT_AD_%'",
-		"'TWILIGHT_RD_%'",
-		"'TWILIGHT_FOLDER_%'",
-		"'https%'"
 	)
 
 watch_providers = [
@@ -364,3 +348,28 @@ watch_providers = [
 		{'name': 'Popflick', 'id': 1832, 'logo': 'https://image.tmdb.org/t/p/original/wbKHI2d5417yAAY7QestC3qnXyo.jpg', 'priority': 233},
 		{'name': 'Viaplay', 'id': 76, 'logo': 'https://image.tmdb.org/t/p/original/cvl65OJnz14LUlC3yGK1KHj8UYs.jpg', 'priority': 236}
 	]
+
+media_lists = (
+		"'tmdb_movies%'",
+		"'tmdb_tv%'",
+		"'tmdb_popular_people%'",
+		"'tmdb_images_person%'",
+		"'tmdb_media%'",
+		"'tmdb_company%'",
+		"'trakt_movies%'",
+		"'trakt_tv%'",
+		"'trakt_trending_user_lists%'",
+		"'trakt_popular_user_lists%'",
+		"'imdb_%'",
+		"'tmdb_people%'",
+		"'imdb_keyword%'",
+		"'imdb_blunders%'",
+		"'twilight_discover%'",
+		"'twilight_FURK_T_FILE%'",
+		"'twilight_pm_instant_transfer%'",
+		"'twilight_rd_check_hash%'",
+		"'TWILIGHT_AD_%'",
+		"'TWILIGHT_RD_%'",
+		"'TWILIGHT_FOLDER_%'",
+		"'https%'"
+	)

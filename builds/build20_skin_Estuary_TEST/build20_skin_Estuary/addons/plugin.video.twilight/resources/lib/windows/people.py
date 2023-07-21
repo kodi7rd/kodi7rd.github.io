@@ -4,20 +4,24 @@ from apis.tmdb_api import tmdb_people_info, tmdb_people_full_info
 from apis.imdb_api import imdb_videos, imdb_people_trivia
 from indexers import dialogs
 from indexers.images import Images
+from modules import kodi_utils, settings
 from modules.utils import calculate_age, get_datetime
-from modules.kodi_utils import notification, show_busy_dialog, hide_busy_dialog, get_icon, addon_fanart, Thread, empty_poster, execute_builtin, local_string as ls
-from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution, metadata_user_info, extras_windowed_playback
-# from modules.kodi_utils import logger
+# logger = kodi_utils.logger
 
+addon_fanart, Thread, empty_poster, execute_builtin, ls = kodi_utils.addon_fanart, kodi_utils.Thread, kodi_utils.empty_poster, kodi_utils.execute_builtin, kodi_utils.local_string
+notification, show_busy_dialog, hide_busy_dialog, get_icon = kodi_utils.notification, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.get_icon
+get_resolution, metadata_user_info, extras_windowed_playback = settings.get_resolution, settings.metadata_user_info, settings.extras_windowed_playback
+extras_enable_scrollbars, extras_exclude_non_acting = settings.extras_enable_scrollbars, settings.extras_exclude_non_acting
 tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 backup_cast_thumbnail = get_icon('genre_family')
 roles_exclude = ('himself', 'herself', 'self', 'narrator', 'voice', 'voice (voice)')
 button_ids = [10, 11, 50]
 genres_exclude = (10763, 10764, 10767)		
-gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: 'N/A'}
+gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: ''}
 more_from_movies_id, more_from_tvshows_id, trivia_id, videos_id, more_from_director_id = 2050, 2051, 2052, 2053, 2054
 tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
 empty_check = (None, 'None', '')
+separator, count_insert = '[COLOR $INFO[Window(10000).Property(twilight.highlight)]][B]  •  [/B][/COLOR]', 'x%s'
 _images = Images().run
 
 class People(BaseDialog):
@@ -29,7 +33,7 @@ class People(BaseDialog):
 		self.set_starting_constants()
 		self.make_person_data()
 		self.set_properties()
-		self.tasks = (self.set_infoline1, self.set_infoline2, self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
+		self.tasks = (self.set_infoline1, self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
 
 	def onInit(self):
 		self.set_home_property('window_loaded', 'true')
@@ -38,7 +42,7 @@ class People(BaseDialog):
 		if self.starting_position:
 			try:
 				window_id, focus = self.starting_position
-				self.sleep(500)
+				self.sleep(750)
 				self.setFocusId(window_id)
 				self.select_item(window_id, focus)
 			except: self.set_default_focus()
@@ -101,14 +105,10 @@ class People(BaseDialog):
 				return window_player(self)
 
 	def set_infoline1(self):
-		label = '[B]%s: [/B] %s ' % (ls(32845), self.person_gender) if self.person_gender else ''
-		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_gender else '', ls(32827), self.person_age) if self.person_age else ''
-		self.set_label(2001, label)
-
-	def set_infoline2(self):
-		label = '[B]%s: [/B] %s ' % (ls(32825), self.person_birthday) if self.person_birthday else ''
-		label += '[B]%s%s: [/B] %s' % ('  •  ' if self.person_birthday else '', ls(32826), self.person_deathday) if self.person_deathday else ''
-		self.set_label(3001, label)
+		gender, age = self.person_gender or None, '%syo' % self.person_age if self.person_age else None
+		birthday = self.person_birthday
+		if birthday and self.person_deathday: birthday += '  [B]-[/B]  %s' % self.person_deathday
+		self.set_label(2001, separator.join([i for i in (gender, age, birthday) if i]))
 
 	def make_movies(self):
 		self.make_more_from('movie')
@@ -192,7 +192,7 @@ class People(BaseDialog):
 			else: list_type, _id, data, date_key = 'movie', more_from_director_id, self.director_data, 'release_date'
 			data = self.sort_items_by_release(data, date_key)
 			item_list = list(self.make_tmdb_listitems(data, list_type))
-			self.setProperty('more_from_%s.number' % media_type, '(x%02d)' % len(item_list))
+			self.setProperty('more_from_%s.number' % media_type, count_insert % len(item_list))
 			self.item_action_dict[_id] = 'tmdb_id'
 			self.add_items(_id, item_list)
 		except: pass
@@ -210,7 +210,7 @@ class People(BaseDialog):
 		try:
 			self.all_videos = imdb_videos(self.imdb_id)
 			item_list = list(builder())
-			self.setProperty('imdb_videos.number', '(x%02d)' % len(item_list))
+			self.setProperty('imdb_videos.number', count_insert % len(item_list))
 			self.item_action_dict[videos_id] = 'content_list'
 			self.add_items(videos_id, item_list)
 		except: pass
@@ -228,7 +228,7 @@ class People(BaseDialog):
 		try:
 			self.all_trivia = imdb_people_trivia(self.person_imdb_id)
 			item_list = list(builder())
-			self.setProperty('imdb_trivia.number', '(x%02d)' % len(item_list))
+			self.setProperty('imdb_trivia.number', count_insert % len(item_list))
 			self.item_action_dict[trivia_id] = 'content_list'
 			self.add_items(trivia_id, item_list)
 		except: pass

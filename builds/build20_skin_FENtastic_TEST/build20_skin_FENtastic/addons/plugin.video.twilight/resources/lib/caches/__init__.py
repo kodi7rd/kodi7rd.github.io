@@ -9,7 +9,7 @@ from modules.utils import make_thread_list
 # logger = kodi_utils.logger
 
 database, delete_file, navigator_db, watched_db, favorites_db = kodi_utils.database, kodi_utils.delete_file, kodi_utils.navigator_db, kodi_utils.watched_db, kodi_utils.favorites_db
-views_db, trakt_db, maincache_db, metacache_db, debridcache_db = kodi_utils.views_db, kodi_utils.trakt_db, kodi_utils.maincache_db, kodi_utils.metacache_db, kodi_utils.debridcache_db
+trakt_db, maincache_db, metacache_db, debridcache_db = kodi_utils.trakt_db, kodi_utils.maincache_db, kodi_utils.metacache_db, kodi_utils.debridcache_db
 ls, notification, confirm_dialog, ok_dialog, open_file = kodi_utils.local_string, kodi_utils.notification, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.open_file
 external_db, databases_path, current_dbs, kodi_refresh, sleep = kodi_utils.external_db, kodi_utils.databases_path, kodi_utils.current_dbs, kodi_utils.kodi_refresh, kodi_utils.sleep
 path_exists, list_dirs, progress_dialog, make_directory = kodi_utils.path_exists, kodi_utils.list_dirs, kodi_utils.progress_dialog, kodi_utils.make_directory
@@ -34,10 +34,6 @@ def check_databases():
     # Favorites
     dbcon = database.connect(favorites_db)
     dbcon.execute("""CREATE TABLE IF NOT EXISTS favourites (db_type text, tmdb_id text, title text, unique (db_type, tmdb_id))""")
-    dbcon.close()
-    # Views
-    dbcon = database.connect(views_db)
-    dbcon.execute("""CREATE TABLE IF NOT EXISTS views (view_type text, view_id text, unique (view_type))""")
     dbcon.close()
     # Trakt
     dbcon = database.connect(trakt_db)
@@ -124,7 +120,6 @@ def check_corrupt_databases():
         (navigator_db, ('navigator',), 'NAVIGATOR'),
         (watched_db, ('watched_status', 'progress'), 'WATCHED'),
         (favorites_db, ('favourites',), 'FAVORITES'),
-        (views_db, ('views',), 'VIEWS'),
         (trakt_db, ('trakt_data', 'watched_status', 'progress'), 'TRAKT'),
         (maincache_db, ('maincache',), 'MAIN'),
         (metacache_db, ('metadata', 'season_metadata', 'function_cache'), 'META'),
@@ -206,7 +201,7 @@ def clear_cache(cache_type, silent=False):
 
 def clear_all_cache():
     if not confirm_dialog(): return
-    progressDialog = progress_dialog(32036)
+    progressDialog = progress_dialog()
     line = '%s....[CR]%s'
     caches = (('meta', '%s %s' % (ls(32527), ls(32524))), ('internal_scrapers', '%s %s' % (ls(32096), ls(32524))), ('external_scrapers', '%s %s' % (ls(32118), ls(32524))),
             ('trakt', ls(32087)), ('imdb', '%s %s' % (ls(32064), ls(32524))), ('list', '%s %s' % (ls(32815), ls(32524))),

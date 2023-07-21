@@ -6,12 +6,11 @@ from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
+path_exists, maincache_db, requests, Thread, get_icon = kodi_utils.path_exists, kodi_utils.maincache_db, kodi_utils.requests, kodi_utils.Thread, kodi_utils.get_icon
 show_busy_dialog, confirm_dialog, database, clear_property = kodi_utils.show_busy_dialog, kodi_utils.confirm_dialog, kodi_utils.database, kodi_utils.clear_property
-progress_dialog, notification, hide_busy_dialog, monitor = kodi_utils.progress_dialog, kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.monitor
 ls, get_setting, set_setting, sleep, ok_dialog = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.sleep, kodi_utils.ok_dialog
-set_temp_highlight, restore_highlight, make_settings_dict = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.make_settings_dict
-pause_settings_change, unpause_settings_change, get_icon = kodi_utils.pause_settings_change, kodi_utils.unpause_settings_change, kodi_utils.get_icon
-path_exists, maincache_db, requests, Thread = kodi_utils.path_exists, kodi_utils.maincache_db, kodi_utils.requests, kodi_utils.Thread
+progress_dialog, notification, hide_busy_dialog, monitor = kodi_utils.progress_dialog, kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.monitor
+set_temp_highlight, restore_highlight, manage_settings_reset = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.manage_settings_reset
 base_url = 'https://api.alldebrid.com/v4/'
 user_agent = 'twilight_for_kodi'
 timeout = 20.0
@@ -23,7 +22,6 @@ class AllDebridAPI:
 		self.break_auth_loop = False
 
 	def auth(self):
-		pause_settings_change()
 		self.token = ''
 		line = '%s[CR]%s[CR]%s'
 		url = base_url + 'pin/get?agent=%s' % user_agent
@@ -59,22 +57,21 @@ class AllDebridAPI:
 		except: pass
 		restore_highlight(current_highlight)
 		if self.token:
+			manage_settings_reset()
 			sleep(2000)
 			account_info = self._get('user')
 			set_setting('ad.account_id', str(account_info['user']['username']))
 			set_setting('ad.enabled', 'true')
 			ok_dialog(text=32576)
-		unpause_settings_change()
-		make_settings_dict()
+			manage_settings_reset(True)
 
 	def revoke(self):
-		pause_settings_change()
+		manage_settings_reset()
 		set_setting('ad.token', '')
 		set_setting('ad.account_id', '')
 		set_setting('ad.enabled', 'false')
-		unpause_settings_change()
-		make_settings_dict()
 		notification('All Debrid Authorization Reset', 3000)
+		manage_settings_reset(True)
 
 	def account_info(self):
 		response = self._get('user')

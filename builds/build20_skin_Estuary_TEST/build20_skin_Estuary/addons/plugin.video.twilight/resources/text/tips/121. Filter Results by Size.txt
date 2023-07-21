@@ -1,6 +1,4 @@
 
-[COLOR dodgerblue][B]Filter Results by Size[/B][/COLOR]
-
 The setting for Filter Results by Size is located at Settings->Sorting & Filtering.
 
 When you enter your internet speed (in Mbit/s), Twilight will determine the maximum allowable size of results based on the duration of the Movie/Episode.

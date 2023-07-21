@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from modules import service_functions
-from modules.kodi_utils import Thread, xbmc_monitor, get_property, set_property, kodi_refresh, services_finished_prop, \
-								services_refresh_after_run_prop, logger, local_string as ls
+from modules.kodi_utils import Thread, xbmc_monitor, logger, local_string as ls
 
 twilight_str = ls(32036).upper()
 on_notification_actions = service_functions.OnNotificationActions()
@@ -34,8 +33,6 @@ class TwilightMonitor(xbmc_monitor):
 		except: pass
 		try: service_functions.AutoRun().run()
 		except: pass
-		set_property(services_finished_prop, 'true')
-		if get_property(services_refresh_after_run_prop) == 'true': kodi_refresh()
 			
 
 	def onSettingsChanged(self):

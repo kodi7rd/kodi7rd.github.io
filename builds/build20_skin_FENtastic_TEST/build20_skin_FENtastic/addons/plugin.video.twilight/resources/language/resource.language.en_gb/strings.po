@@ -2354,7 +2354,7 @@ msgid "Multiselect..."
 msgstr ""
 
 msgctxt "#32790"
-msgid "Resume from [B]%s%%[/B]?"
+msgid "Settings Refreshed"
 msgstr ""
 
 msgctxt "#32791"
@@ -3607,7 +3607,7 @@ msgid "Limit Resolve Attempts to Selected Result Only"
 msgstr ""
 
 msgctxt "#33103"
-msgid "Load Empty Widget Container on Playback Start"
+msgid "Clear Meta Cache for changes to take effect"
 msgstr ""
 
 msgctxt "#33104"
@@ -3751,15 +3751,11 @@ msgid "[B]Browse...[/B]"
 msgstr ""
 
 msgctxt "#33138"
-msgid "Press [B]BACK[/B] to Exit"
+msgid "Press [B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]BACK[/COLOR][/B] to Exit"
 msgstr ""
 
 msgctxt "#33139"
-msgid "Press [B]RIGHT[/B] to Skip"
-msgstr ""
-
-msgctxt "#33140"
-msgid "Wait for Twilight Services to Initiate Before Making Widgets"
+msgid "Press [B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]RIGHT[/COLOR][/B] to Skip"
 msgstr ""
 
 msgctxt "#33141"
@@ -3834,6 +3830,12 @@ msgctxt "#33158"
 msgid "Comments"
 msgstr ""
 
+###################################################################################################################################
+
+msgctxt "#33140"
+msgid ""
+msgstr ""
+
 # KODI-RD-IL Custom Hebrew Strings
 
 # Hebrew setting menu label
@@ -3860,36 +3862,32 @@ msgctxt "#40004"
 msgid "אחוז (%)"
 msgstr ""
 
-msgctxt "#40005"
-msgid "הצג בסיכום כמות ההתאמות רק איכויות שנמצאו להן התאמות"
-msgstr ""
-
 # Subtitles Websites
 
-msgctxt "#40006"
+msgctxt "#40005"
 msgid "היכן לחפש כתוביות"
 msgstr ""
 
-msgctxt "#40007"
+msgctxt "#40006"
 msgid "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
 msgstr ""
 
-msgctxt "#40008"
+msgctxt "#40007"
 msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
 msgstr ""
 
-msgctxt "#40009"
+msgctxt "#40008"
 msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
 msgstr ""
 
-msgctxt "#400010"
+msgctxt "#40009"
 msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgstr ""
 
 # Twilight sources_results.xml
 
-msgctxt "#400011"
+msgctxt "#400010"
 msgid "[B]Results[/B]"
 msgstr ""
 
-#########################################
+###################################################################################################################################

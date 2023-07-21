@@ -1,6 +1,4 @@
 
-[COLOR dodgerblue][B]Custom Actions[/B][/COLOR]
-
 In Settings-->Features-->Custom Actions there are a few settings you can try that will attempt to make various Twilight specific adjustments to default Kodi behavior.
 
 - "Open Twilight Menu Editor Instead of Kodi Context Menu (Menus)": When enabled, this will open Twilight's "Menu Editor" feature when the context menu is used on Root/Movies/TV Shows menus.

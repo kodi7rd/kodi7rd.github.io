@@ -6,7 +6,7 @@ from modules import debrid, kodi_utils, settings, metadata, watched_status
 from modules.player import TwilightPlayer
 from modules.source_utils import internal_sources, external_sources, internal_folders_import, scraper_names, get_cache_expiry, make_alias_dict
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, manual_function_import
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 select_dialog, confirm_dialog, get_setting, close_all_dialog = kodi_utils.select_dialog, kodi_utils.confirm_dialog, kodi_utils.get_setting, kodi_utils.close_all_dialog
 json, show_busy_dialog, hide_busy_dialog, xbmc_player = kodi_utils.json, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.xbmc_player
@@ -484,7 +484,7 @@ class Sources():
 
 	def _make_resume_dialog(self, percent):
 		if not self.progress_dialog: self._make_progress_dialog()
-		self.progress_dialog.enable_resume(text=ls(32790) % percent)
+		self.progress_dialog.enable_resume(percent)
 		return self.progress_dialog.resume_choice
 
 	def _make_nextep_dialog(self, default_action='cancel', play_type='autoplay_nextep', focus_button=10):
@@ -538,6 +538,7 @@ class Sources():
 		return TwilightPlayer().run(link, 'video')
 
 	def play_file(self, results, source={}):
+		self.playback_successful, self.cancel_all_playback = None, False
 		try:
 			hide_busy_dialog()
 			url = None
@@ -573,11 +574,11 @@ class Sources():
 			if not self.continue_resolve_check(): return self._kill_progress_dialog()
 			hide_busy_dialog()
 			self.playback_percent = self.get_playback_percent()
+			if self.playback_percent == None: return self._kill_progress_dialog()
 			if not self.resolve_dialog_made: self._make_resolve_dialog()
 			if self.background: sleep(1000)
 			monitor = kodi_utils.monitor
 			url = None
-			self.playback_successful, self.cancel_all_playback = None, False
 			for count, item in enumerate(items, 1):
 				try:
 					hide_busy_dialog()
@@ -621,18 +622,19 @@ class Sources():
 		except: pass
 
 	def get_playback_percent(self):
-		if self.media_type == 'episode' and any((self.random, self.random_continual)): return 0
+		if self.media_type == 'episode' and any((self.random, self.random_continual)): return 0.0
 		percent = get_progress_percent(get_bookmarks(settings.watched_indicators(), self.media_type), self.tmdb_id, self.season, self.episode)
-		if percent:
-			percent = self.get_resume_status(percent)
-			if percent == 0: erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
-		else: percent = 0
-		return percent
+		if not percent: return 0.0
+		action = self.get_resume_status(percent)
+		if action == 'cancel': return None
+		if action == 'start_over':
+			erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
+			return 0.0
+		return float(percent)
 
 	def get_resume_status(self, percent):
 		if settings.auto_resume(self.media_type): return float(percent)
-		confirm = self._make_resume_dialog(percent)
-		return float(percent) if confirm == True else 0
+		return self._make_resume_dialog(percent)
 
 	def playback_failed_action(self):
 		self._kill_progress_dialog()

@@ -1,6 +1,4 @@
 
-[COLOR dodgerblue][B]Link Media to Debrid Cloud or Local Folders[/B][/COLOR]
-
 Sometimes within Twilight, the Debrid Cloud or Folder Scrapers do not detect the movie/tv show being searched for, even though it may be present in your Cloud or Folders. Often this has to do with the naming of the folders, but sometimes it is to do with inaccurate Metadata.
 
 You can 'Link' a Cloud Folder or Local Folder to a particular movie/tv show, essentially telling Twilight what the contents of that folder are. Twilight will then honor that setting when searching, and return the folder's contents as a result when that movie/tv show is searched for.

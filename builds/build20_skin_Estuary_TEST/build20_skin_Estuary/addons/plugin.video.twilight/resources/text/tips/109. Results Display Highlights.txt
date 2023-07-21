@@ -1,6 +1,4 @@
 
-[COLOR dodgerblue][B]Results Display Highlights[/B][/COLOR]
-
 Twilight allows you to choose how colors will be used to distinguish between scraper results.
 
 Go to Settings->Results->Results Color Highlights and choose firstly your desired setting for "Highlight Results Based On".

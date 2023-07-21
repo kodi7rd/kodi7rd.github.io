@@ -12,10 +12,10 @@ set_property, clear_property, convert_language, get_visibility, hide_busy_dialog
 Thread, json, ls, xbmc_player, translate_path, execute_builtin, sleep = ku.Thread, ku.json, ku.local_string, ku.xbmc_player, ku.translate_path, ku.execute_builtin, ku.sleep
 make_listitem, volume_checker, list_dirs, get_setting, get_infolabel = ku.make_listitem, ku.volume_checker, ku.list_dirs, ku.get_setting, ku.get_infolabel
 close_all_dialog, notification, select_dialog, poster_empty, fanart_empty = ku.close_all_dialog, ku.notification, ku.select_dialog, ku.empty_poster, ku.addon_fanart
-auto_nextep_settings, disable_content_lookup, widget_load_empty, playback_settings = st.auto_nextep_settings, st.disable_content_lookup, st.widget_load_empty, st.playback_settings
+auto_nextep_settings, disable_content_lookup, playback_settings = st.auto_nextep_settings, st.disable_content_lookup, st.playback_settings
 get_art_provider, get_fanart_data, watched_indicators, auto_resume = st.get_art_provider, st.get_fanart_data, st.watched_indicators, st.auto_resume
 clear_local_bookmarks, set_bookmark, mark_movie, mark_episode = ws.clear_local_bookmarks, ws.set_bookmark, ws.mark_movie, ws.mark_episode
-build_content_prop, kodi_version, xbmc_actor = ku.build_content_prop, ku.kodi_version, ku.xbmc_actor
+kodi_version, xbmc_actor = ku.kodi_version, ku.xbmc_actor
 total_time_errors = ('0.0', '', 0.0, None)
 video_fullscreen_check = 'Window.IsActive(fullscreenvideo)'
 
@@ -32,7 +32,6 @@ class TwilightPlayer(xbmc_player):
 
 	def play_video(self, url, obj):
 		self.set_constants(url, obj)
-		self.suppress_widget_content()
 		volume_checker()
 		self.play(self.url, self.make_listing())
 		if not self.is_generic:
@@ -41,7 +40,6 @@ class TwilightPlayer(xbmc_player):
 			else:
 				self.sources_object.playback_successful = self.playback_successful
 				self.sources_object.cancel_all_playback = self.cancel_all_playback
-				self.set_build_content('true')
 				if self.cancel_all_playback: self.kill_dialog()
 				self.stop()
 			try: del self.kodi_monitor
@@ -66,7 +64,6 @@ class TwilightPlayer(xbmc_player):
 			resolve_percent = round(resolve_percent + 26.0/100, 1)
 			self.sources_object.progress_dialog.update_resolver(percent=resolve_percent)
 			sleep(100)
-		self.set_build_content('true')
 
 	def playback_close_dialogs(self):
 		if self.monitor_playback:
@@ -87,14 +84,14 @@ class TwilightPlayer(xbmc_player):
 				else: self.autoplay_nextep, self.autoscrape_nextep = self.sources_object.autoplay_nextep, self.sources_object.autoscrape_nextep
 			else: play_random_continual, self.autoplay_nextep, self.autoscrape_nextep = False, False, False
 			while total_check_time <= 30 and not get_visibility(video_fullscreen_check):
-				sleep(500)
-				total_check_time += 0.5
+				sleep(250)
+				total_check_time += 0.25
 			hide_busy_dialog()
 			sleep(1000)
 			while self.isPlayingVideo():
 				try:
 					try: self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
-					except: sleep(500); continue
+					except: sleep(250); continue
 					if not ensure_dialog_dead:
 						ensure_dialog_dead = True
 						self.playback_close_dialogs()
@@ -109,13 +106,11 @@ class TwilightPlayer(xbmc_player):
 					if not self.subs_searched: self.run_subtitles()
 				except: pass
 			hide_busy_dialog()
-			self.set_build_content('true')
 			if not self.media_marked: self.media_watched_marker()
 			clear_local_bookmarks()
 			self.clear_playback_properties()
 		except:
 			hide_busy_dialog()
-			self.set_build_content('true')
 			self.sources_object.playback_successful = False
 			self.sources_object.cancel_all_playback = True
 			return self.kill_dialog()
@@ -261,17 +256,6 @@ class TwilightPlayer(xbmc_player):
 	def set_resume_point(self, listitem):
 		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))
 
-	def suppress_widget_content(self):
-		if widget_load_empty(): Thread(target=self.set_suppress).start()
-
-	def set_suppress(self):
-		self.set_build_content('false')
-		sleep(10000)
-		self.set_build_content('true')
-
-	def set_build_content(self, prop):
-		set_property(build_content_prop, prop)
-
 	def info_next_ep(self):
 		self.nextep_info_gathered = True
 		try:
@@ -326,7 +310,6 @@ class TwilightPlayer(xbmc_player):
 	def run_error(self):
 		try: self.sources_object.playback_successful = False
 		except: pass
-		self.set_build_content('true')
 		self.clear_playback_properties()
 		notification(32121, 3500)
 		return False
