@@ -8,17 +8,31 @@ msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
 
-# No Debrid account configured
+# Connect Debrid/Trakt Services
 
-msgctxt "#32854"
-msgid "No Debrid Providers Enabled"
-msgstr "יש לחבר מנוי ריל דבריד ב\"חיבור שירותים\""
+msgctxt "#32517"
+msgid "Authorize Debrid Services"
+msgstr "סרוק את קוד ה-QR במצלמת הטלפון שלך או"
+
+msgctxt "#32700"
+msgid "Navigate to: [B]%s[/B]"
+msgstr "היכנס ל: [B]%s[/B]"
+
+msgctxt "#32701"
+msgid "Enter the following code: [B]%s[/B]"
+msgstr "והכנס את הקוד הבא: [B]%s[/B]"
 
 # No Results
 
 msgctxt "#32760"
 msgid "No Results"
 msgstr "אין תוצאות"
+
+# No Debrid account configured
+
+msgctxt "#32854"
+msgid "No Debrid Providers Enabled"
+msgstr "יש לחבר מנוי ריל דבריד ב\"חיבור שירותים\""
 
 # Hebrew setting menu label
 
