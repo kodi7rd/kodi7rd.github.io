@@ -2,7 +2,7 @@
 
 Telegram Group:
 
-http://bit.ly/kodi7rd1
+https://linktr.ee/kodi7rd
 
 # Kodi + Real Debrid Israel Landing Page:
 
