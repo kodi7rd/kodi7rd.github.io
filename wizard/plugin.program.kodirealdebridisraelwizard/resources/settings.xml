@@ -174,6 +174,7 @@
         <setting type="lsep" label="שמירת הגדרות בזמן התקנת הבילד:"/>
         <setting id="keepfavourites" type="bool" label="Favourites.xml שמירת מועדפים קודי" default="false"/>
         <setting id="keeptwilightdata" type="bool" label="שמירת מועדפי Twilight (הסרטים/הסדרות שלי)" default="true"/>
+        <setting id="keepfentasticdata" type="bool" label="שמירת עיצוב FENtastic" default="false"/>
         <setting id="keepsources" type="bool" label="Sources.xml שמירת" default="false"/>
         <setting id="keepprofiles" type="bool" label="שמירת פרופילים" default="false"/>
         <setting id="keepplayercore" type="bool" label="שמירת My playercorefactory.xml" default="false"/>

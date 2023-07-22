@@ -316,6 +316,7 @@ def save_menu():
     login = 'true' if CONFIG.KEEPLOGIN == 'true' else 'false'
     fendata = 'true' if CONFIG.KEEPFENDATA == 'true' else 'false'
     twilightdata = 'true' if CONFIG.KEEPTWILIGHTDATA == 'true' else 'false'
+    fentasticdata = 'true' if CONFIG.KEEPFENTASTICDATA == 'true' else 'false'
     favourites = 'true' if CONFIG.KEEPFAVS == 'true' else 'false'
     sources = 'true' if CONFIG.KEEPSOURCES == 'true' else 'false'
     advanced = 'true' if CONFIG.KEEPADVANCED == 'true' else 'false'
@@ -336,6 +337,7 @@ def save_menu():
     directory.add_file('Trakt שמירת חשבון: {0}'.format(trakt.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptrakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_file('Debrid שמירת חשבון: {0}'.format(debrid.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)
     directory.add_file('(הסרטים/הסדרות שלי) Twilight שמירת מועדפי: {0}'.format(twilightdata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptwilightdata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    directory.add_file('FENtastic שמירת עיצוב: {0}'.format(fentasticdata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfentasticdata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('שמירת הגדרות קודי פנימיות: {0}'.format(guisettings.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepguisettings'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Favourites.xml שמירת מועדפים קודי: {0}'.format(favourites.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfavourites'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Sources.xml שמירת: {0}'.format(sources.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepsources'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)

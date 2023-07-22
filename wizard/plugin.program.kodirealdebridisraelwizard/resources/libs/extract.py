@@ -30,10 +30,12 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import tools
 from resources.libs.common import custom_save_data_config
+from resources.libs import install
 
 
                        
 ########################################################################################################################################################
+
 # KODI RD ISRAEL - Custom Save Data Config
 try:
     logging.log_notify(CONFIG.ADDONTITLE,
@@ -48,6 +50,7 @@ try:
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPTWILIGHTDATA: " + CONFIG.KEEPTWILIGHTDATA, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFENTASTICDATA: " + CONFIG.KEEPFENTASTICDATA, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY BEFORE: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
@@ -83,6 +86,7 @@ try:
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPLOGIN: " + CONFIG.KEEPLOGIN, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFENDATA: " + CONFIG.KEEPFENDATA, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPTWILIGHTDATA: " + CONFIG.KEEPTWILIGHTDATA, level=xbmc.LOGINFO)
+    logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFENTASTICDATA: " + CONFIG.KEEPFENTASTICDATA, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPFAVS: " + CONFIG.KEEPFAVS, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPSOURCES: " + CONFIG.KEEPSOURCES, level=xbmc.LOGINFO)
     logging.log("EXTRACT.PY AFTER: CONFIG.KEEPADVANCED: " + CONFIG.KEEPADVANCED, level=xbmc.LOGINFO)
@@ -231,4 +235,7 @@ def all_with_progress(_in, _out, dp, ignore, title):
                            "[COLOR {0}]Extract Cancelled[/COLOR]".format(CONFIG.COLOR2))
         sys.exit()
         
+    # KODI_RD_ISRAEL    
+    install.restore_fentasticdata()
+    
     return prog, errors, error

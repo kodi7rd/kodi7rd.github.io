@@ -11,7 +11,7 @@
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>650</width>
-                <height>750</height>
+                <height>780</height>
                 <texture border="2">Background/ContentPanel.png</texture>
             </control>
             <control type="image">
@@ -135,6 +135,24 @@
                 <radioheight>45</radioheight>
                 <radioposx>530</radioposx>
                 <label>שמירת מועדפי Twilight (הסרטים/הסדרות שלי)</label>
+                <font>font13</font>
+				<textcolor>FFCCCC00</textcolor>
+                <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
+                <texturenofocus>RadioButton/MenuItemNF.png</texturenofocus>
+                <textureradioonfocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioonnofocus>
+                <textureradioofffocus colordiffuse="FF12B2E7">RadioButton/radiobutton-focus.png</textureradioofffocus>
+                <textureradiooffnofocus>RadioButton/radiobutton-nofocus.png</textureradiooffnofocus>
+            </control>
+            <control type="radiobutton" id="320">
+                <width>610</width>
+                <height>40</height>
+                <textwidth>565</textwidth>
+                <align>right</align>
+                <textoffsetx>45</textoffsetx>
+                <radioheight>45</radioheight>
+                <radioposx>530</radioposx>
+                <label>שמירת עיצוב FENtastic</label>
                 <font>font13</font>
 				<textcolor>FFCCCC00</textcolor>
                 <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
@@ -424,7 +442,7 @@
         <control type="group" id="9001">
             <control type="button" id="201">
                 <left>350</left>
-                <top>660</top>
+                <top>690</top>
                 <width>300</width>
                 <height>90</height>
                 <font>font13</font>

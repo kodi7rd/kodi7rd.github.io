@@ -44,6 +44,7 @@ def set_custom_save_data_variables_from_github():
     CONFIG.KEEPLOGIN = str(custom_save_data_config.get('CONFIG.KEEPLOGIN', CONFIG.KEEPLOGIN)).lower() if 'CONFIG.KEEPLOGIN' in custom_save_data_config else CONFIG.KEEPLOGIN
     CONFIG.KEEPFENDATA = str(custom_save_data_config.get('CONFIG.KEEPFENDATA', CONFIG.KEEPFENDATA)).lower() if 'CONFIG.KEEPFENDATA' in custom_save_data_config else CONFIG.KEEPFENDATA
     CONFIG.KEEPTWILIGHTDATA = str(custom_save_data_config.get('CONFIG.KEEPTWILIGHTDATA', CONFIG.KEEPTWILIGHTDATA)).lower() if 'CONFIG.KEEPTWILIGHTDATA' in custom_save_data_config else CONFIG.KEEPTWILIGHTDATA
+    CONFIG.KEEPFENTASTICDATA = str(custom_save_data_config.get('CONFIG.KEEPFENTASTICDATA', CONFIG.KEEPFENTASTICDATA)).lower() if 'CONFIG.KEEPFENTASTICDATA' in custom_save_data_config else CONFIG.KEEPFENTASTICDATA
     CONFIG.KEEPFAVS = str(custom_save_data_config.get('CONFIG.KEEPFAVS', CONFIG.KEEPFAVS)).lower() if 'CONFIG.KEEPFAVS' in custom_save_data_config else CONFIG.KEEPFAVS
     CONFIG.KEEPSOURCES = str(custom_save_data_config.get('CONFIG.KEEPSOURCES', CONFIG.KEEPSOURCES)).lower() if 'CONFIG.KEEPSOURCES' in custom_save_data_config else CONFIG.KEEPSOURCES
     CONFIG.KEEPADVANCED = str(custom_save_data_config.get('CONFIG.KEEPADVANCED', CONFIG.KEEPADVANCED)).lower() if 'CONFIG.KEEPADVANCED' in custom_save_data_config else CONFIG.KEEPADVANCED

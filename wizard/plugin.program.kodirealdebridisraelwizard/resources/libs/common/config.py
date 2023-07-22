@@ -256,6 +256,7 @@ class Config:
         self.KEEPFAVS = self.get_setting('keepfavourites')
         self.KEEPFENDATA = self.get_setting('keepfendata')
         self.KEEPTWILIGHTDATA = self.get_setting('keeptwilightdata')
+        self.KEEPFENTASTICDATA = self.get_setting('keepfentasticdata')
         self.KEEPSOURCES = self.get_setting('keepsources')
         self.KEEPPROFILES = self.get_setting('keepprofiles')
         self.KEEPPLAYERCORE = self.get_setting('keepplayercore')
