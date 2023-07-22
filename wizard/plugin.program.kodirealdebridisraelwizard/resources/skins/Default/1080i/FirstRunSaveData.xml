@@ -134,7 +134,7 @@
                 <textoffsetx>45</textoffsetx>
                 <radioheight>45</radioheight>
                 <radioposx>530</radioposx>
-                <label>שמירת מועדפי Twilight (הסרטים/הסדרות שלי)</label>
+                <label>Twilight שמירת נתוני</label>
                 <font>font13</font>
 				<textcolor>FFCCCC00</textcolor>
                 <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
@@ -152,7 +152,7 @@
                 <textoffsetx>45</textoffsetx>
                 <radioheight>45</radioheight>
                 <radioposx>530</radioposx>
-                <label>שמירת עיצוב FENtastic</label>
+                <label>שמירת עיצוב סקין FENtastic</label>
                 <font>font13</font>
 				<textcolor>FFCCCC00</textcolor>
                 <texturefocus colordiffuse="FF12B2E7">RadioButton/MenuItemFO.png</texturefocus>
