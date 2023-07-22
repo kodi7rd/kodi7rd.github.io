@@ -25,7 +25,7 @@
                 <top>450</top>
                 <width max="140">auto</width>
                 <height max="140">auto</height>
-                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinners/loading-spinner.png</texture>
+                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinner.png</texture>
                 <visible>!Container(5000).OnScrollPrevious + !Container(5000).OnScrollNext</visible>
                 <animation effect="fade" time="320" delay="400">Visible</animation>
                 <animation effect="rotate" end="360" center="auto" time="1200" loop="true" reversible="false" condition="true">Conditional</animation>

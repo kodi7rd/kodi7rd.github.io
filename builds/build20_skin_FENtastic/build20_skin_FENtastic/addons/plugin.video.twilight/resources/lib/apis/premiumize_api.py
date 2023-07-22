@@ -26,7 +26,12 @@ class PremiumizeAPI:
 		data = {'response_type': 'device_code', 'client_id': self.client_id}
 		url = 'https://www.premiumize.me/token'
 		response = self._post(url, data)
-		content = line % (ls(32517), ls(32700) % response.get('verification_uri'), ls(32701) % '[COLOR orangered]%s[/COLOR]' % response.get('user_code'))
+		user_code = response['user_code']
+		try:
+			from modules.utils import copy2clip
+			copy2clip(user_code)
+		except: pass
+		content = line % (ls(32517), ls(32700) % response.get('verification_uri'), ls(32701) % '[COLOR orangered]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('orangered')
 		progressDialog = progress_dialog('%s %s' % (ls(32061), ls(32057)), get_icon('pm_qrcode'))
 		progressDialog.update(content, 0)

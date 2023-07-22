@@ -147,7 +147,7 @@ class Extras(BaseDialog):
 			else: return
 
 	def make_ratings(self, win_prop=4000):
-		data, current_settings = self.get_extra_ratings(self.imdb_id)
+		data, current_settings = self.get_extra_ratings()
 		if not data: return
 		active_extra_ratings = False
 		if self.rating: data['tmdb']['rating'] = self.rating
@@ -404,11 +404,11 @@ class Extras(BaseDialog):
 			self.add_items(collection_id, item_list)
 		except: pass
 
-	def get_extra_ratings(self, imdb_id):
+	def get_extra_ratings(self):
 		if not self.display_extra_ratings: return None, None
 		current_settings = extras_enabled_ratings()
 		if not current_settings: return None, None
-		data = fetch_ratings_info(imdb_id, self.omdb_api)
+		data = self.meta_get('extra_ratings', None) or fetch_ratings_info(self.meta, self.omdb_api)
 		if not data: return None, None
 		return data, current_settings
 

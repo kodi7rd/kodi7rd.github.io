@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from windows import BaseDialog
-from modules.kodi_utils import Thread, empty_poster
-from modules.settings import get_art_provider
+from modules.settings import get_art_provider, avoid_episode_spoilers
 # from modules.kodi_utils import logger
 
 button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'autoscrape_nextep': {10: 'play', 11: 'close', 12: 'cancel'}}
@@ -41,16 +40,17 @@ class NextEpisode(BaseDialog):
 	def set_properties(self):
 		self.setProperty('play_type', self.play_type)
 		self.setProperty('title', self.meta['title'])
-		self.setProperty('poster', self.original_poster())
-		self.setProperty('fanart', self.original_fanart())
+		self.setProperty('thumb', self.get_thumb())
 		self.setProperty('clearlogo', self.original_clearlogo())
 		self.setProperty('next_ep_title', self.meta['title'])
 		self.setProperty('next_ep_season', '%02d' % self.meta['season'])
 		self.setProperty('next_ep_episode', '%02d' % self.meta['episode'])
 		self.setProperty('next_ep_ep_name', self.meta['ep_name'])
 
-	def original_poster(self):
-		return self.meta.get('custom_poster') or self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or empty_poster
+	def get_thumb(self):
+		if avoid_episode_spoilers(): thumb = self.original_fanart()
+		else: thumb = self.meta.get('ep_thumb', None) or self.original_fanart()
+		return thumb
 
 	def original_fanart(self):
 		return self.meta.get('custom_fanart') or self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or ''

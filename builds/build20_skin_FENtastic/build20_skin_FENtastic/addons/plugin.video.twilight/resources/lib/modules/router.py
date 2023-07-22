@@ -7,7 +7,8 @@ external, parse_qsl, get_property, set_property = kodi_utils.external, kodi_util
 make_window_properties, refr_settings_prop  = kodi_utils.make_window_properties, kodi_utils.refr_settings_prop
 
 def sys_exit_check():
-	return restart_for_settings() or (get_property(current_langinvoker_prop) == 'true' and external())
+	if get_property(current_langinvoker_prop) == 'true' and external(): return True
+	return restart_for_settings()
 
 def restart_for_settings():
 	if get_property(refr_settings_prop) == 'true':
@@ -83,13 +84,13 @@ def routing(sys):
 			return build_episode_list(params)
 		if mode == 'build_in_progress_episode':
 			from indexers.episodes import build_single_episode
-			return build_single_episode('episode.progress')
+			return build_single_episode('episode.progress', params)
 		if mode == 'build_recently_watched_episode':
 			from indexers.episodes import build_single_episode
-			return build_single_episode('episode.recently_watched')
+			return build_single_episode('episode.recently_watched', params)
 		if mode == 'build_next_episode':
 			from indexers.episodes import build_single_episode
-			return build_single_episode('episode.next')
+			return build_single_episode('episode.next', params)
 		if mode == 'build_my_calendar':
 			from indexers.episodes import build_single_episode
 			return build_single_episode('episode.trakt', params)

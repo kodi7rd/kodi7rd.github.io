@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 from xml.dom.minidom import parseString as mdParse
-from caches.main_cache import cache_object
+# from caches.main_cache import cache_object
+from caches.meta_cache import metacache
+from modules.metadata import movie_expiry, tvshow_expiry
+from modules.utils import get_datetime, get_current_timestamp
 from modules.kodi_utils import make_session
 # from modules.kodi_utils import logger
 
-EXPIRY_1_WEEK = 168
 url = 'http://www.omdbapi.com/?apikey=%s&i=%s&tomatoes=True&r=xml'
-cache_string = 'imdb_ratings_by_omdb_%s'
 session = make_session('http://www.omdbapi.com/')
 
 class OMDbAPI:
-	def fetch_info(self, imdb_id, api_key):
+	def fetch_info(self, meta, api_key):
+		imdb_id = meta.get('imdb_id')
 		if not imdb_id or not api_key: return {}
 		self.api_key = api_key
-		string = cache_string % imdb_id
-		return cache_object(self.process_result, string, imdb_id, json=False, expiration=EXPIRY_1_WEEK)
+		data = self.process_result(imdb_id, meta)
+		return data
 
-	def process_result(self, imdb_id):
+	def process_result(self, imdb_id, meta):
 		data = {}
 		self.result = self.get_result(imdb_id)
 		if not self.result: return {}
@@ -36,6 +38,10 @@ class OMDbAPI:
 				'imdb': {'rating': imdb_rating, 'icon': imdb_icon},
 				'tmdb': {'rating': '', 'icon': tmdb_icon},
 				}
+		media_type = meta.get('mediatype')
+		expiry_function = movie_expiry if media_type == 'movie' else tvshow_expiry
+		meta['extra_ratings'] = data
+		metacache.set(media_type, 'tmdb_id', meta, expiry_function(get_datetime(), meta), get_current_timestamp())
 		return data
 
 	def get_result(self, imdb_id):
@@ -50,19 +56,3 @@ class OMDbAPI:
 		return self.result_get(rating_name, '').replace('N/A', '')
 
 fetch_ratings_info = OMDbAPI().fetch_info
-
-def refresh_omdb_meta_data(imdb_id):
-	from modules.kodi_utils import path_exists, clear_property, database, maincache_db
-	try:
-		if not path_exists(maincache_db): return
-		insert = cache_string % imdb_id
-		dbcon = database.connect(maincache_db, timeout=40.0, isolation_level=None)
-		dbcur = dbcon.cursor()
-		dbcur.execute('''PRAGMA synchronous = OFF''')
-		dbcur.execute('''PRAGMA journal_mode = OFF''')
-		dbcur.execute("SELECT id FROM maincache WHERE id LIKE ?", (insert,))
-		omdb_results = [str(i[0]) for i in dbcur.fetchall()]
-		if not omdb_results: return
-		dbcur.execute("DELETE FROM maincache WHERE id == ?", (insert,))
-		for i in omdb_results: clear_property(i)
-	except: pass

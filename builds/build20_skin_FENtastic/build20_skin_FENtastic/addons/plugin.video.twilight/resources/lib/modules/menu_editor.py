@@ -8,6 +8,7 @@ build_url, confirm_dialog, dialog, sleep, kodi_refresh = kodi_utils.build_url, k
 get_infolabel, select_dialog, notification, execute_builtin = kodi_utils.get_infolabel, kodi_utils.select_dialog, kodi_utils.notification, kodi_utils.execute_builtin
 external, open_settings, activate_window, container_update = kodi_utils.external, kodi_utils.open_settings, kodi_utils.activate_window, kodi_utils.container_update
 json, tp, ls, parse_qsl, get_icon = kodi_utils.json, kodi_utils.translate_path, kodi_utils.local_string, kodi_utils.parse_qsl, kodi_utils.get_icon
+show_busy_dialog, hide_busy_dialog, unquote, get_directory = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.unquote, kodi_utils.jsonrpc_get_directory
 get_setting, get_all_icon_vars = kodi_utils.get_setting, kodi_utils.get_all_icon_vars
 main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029)}
 pos_str, top_pos_str, top_str, exists_str, addq_str = ls(32707), ls(32708), ls(32709), ls(32727), ls(32728)
@@ -17,6 +18,7 @@ eedelete_str, eeremove_str, eeclear_str, eefadd_str, eefadde_str, eesets_str, tr
 trunlike_str, trnew_str, trdel_str, eerem_disc_str, down_str, furk_add_str, furk_remove_str = ls(32783), ls(32780), ls(32781), ls(32698), ls(32747), ls(32769), ls(32766)
 furk_p_str, furk_up_str, cloud_link_str, cloud_unlink_str, choose_icon_str = ls(32767), ls(32768), ls(33078), ls(33079), ls(33137)
 tools_str, settings_str = '%s %s' % (ls(32641), ls(32456)), '%s %s' % (ls(32641), ls(32247))
+default_path = 'plugin://plugin.video.twilight'
 
 class MenuEditor:
 	def __init__(self, params):
@@ -31,7 +33,7 @@ class MenuEditor:
 		active_list, position = self.params_get('active_list'), int(self.params_get('position', '0'))
 		menu_name = self.menu_item_get('name')
 		menu_name_translated = ls(menu_name)
-		menu_name_translated_display = menu_name_translated.replace('[B]', '').replace('[/B]', '')
+		menu_name_translated_display = self._remove_bold(menu_name_translated)
 		external_list_item, shortcut_folder = self.menu_item_get('external_list_item', 'False') == 'True', self.menu_item_get('shortcut_folder', 'False') == 'True'
 		list_name =  main_list_name_dict[active_list]
 		listing = []
@@ -71,36 +73,36 @@ class MenuEditor:
 		listing = []
 		append = listing.append
 		if mode == 'navigator.build_shortcut_folder_list':
-			append((self.remove_bold(eedelete_str), self.shortcut_folder_delete))
+			append((self._remove_bold(eedelete_str), self.shortcut_folder_delete))
 		elif mode == 'get_search_term':
-			append((self.remove_bold(eeremove_str), self.remove_search_history), (self.remove_bold(eeclear_str), self.clear_search_history))
+			append((self._remove_bold(eeremove_str), self.remove_search_history), (self._remove_bold(eeclear_str), self.clear_search_history))
 		elif mode in ('playback.video', 'real_debrid.resolve_rd', 'alldebrid.resolve_ad', 'easynews.resolve_easynews', 'cloud.furk_direct', 'furk.furk_t_file_browser'):
-			append((self.remove_bold(down_str), self.premium_file_download))
+			append((self._remove_bold(down_str), self.premium_file_download))
 			if mode == 'furk.furk_t_file_browser':
-				if self.params_get('display_mode') == 'search': append((self.remove_bold(furk_add_str), self.furk_add_file))
+				if self.params_get('display_mode') == 'search': append((self._remove_bold(furk_add_str), self.furk_add_file))
 				else:
-					append((self.remove_bold(furk_remove_str), self.furk_remove_file))
-					if self.params_get('is_protected') == '0': append((self.remove_bold(furk_p_str), self.furk_protect_file))
+					append((self._remove_bold(furk_remove_str), self.furk_remove_file))
+					if self.params_get('is_protected') == '0': append((self._remove_bold(furk_p_str), self.furk_protect_file))
 					elif self.params_get('is_protected') == '1': append((self.remove_bold(furk_up_str), self.furk_unprotect_file))
 		elif mode in ('real_debrid.browse_rd_cloud', 'alldebrid.browse_ad_cloud') or self.params_get('service') == 'FOLDERS':
-			append((self.remove_bold(cloud_link_str), self.add_link_to_debrid_folders), (self.remove_bold(cloud_unlink_str), self.remove_link_to_debrid_folders))
+			append((self._remove_bold(cloud_link_str), self.add_link_to_debrid_folders), (self._remove_bold(cloud_unlink_str), self.remove_link_to_debrid_folders))
 		else:
-			append((self.remove_bold(eefadde_str), self.add_external))
-			append((self.remove_bold(eefadd_str), self.shortcut_folder_add_item))
-			if action == 'tmdb_movies_sets': append((self.remove_bold(eesets_str), self.movie_sets_to_collection))
+			append((self._remove_bold(eefadde_str), self.add_external))
+			append((self._remove_bold(eefadd_str), self.shortcut_folder_add_item))
+			if action == 'tmdb_movies_sets': append((self._remove_bold(eesets_str), self.movie_sets_to_collection))
 			elif mode == 'trakt.list.build_trakt_list':
 				if list_type == 'user_lists':
 					if not self.menu_item_get('user') == 'Trakt Official':
-						append((self.remove_bold(trlike_str), self.trakt_like_list))
-						append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
+						append((self._remove_bold(trlike_str), self.trakt_like_list))
+						append((self._remove_bold(trunlike_str), self.trakt_unlike_list))
 				elif list_type == 'my_lists':
-					append((self.remove_bold(trnew_str), self.trakt_new_list))
-					append((self.remove_bold(trdel_str), self.trakt_delete_list))
+					append((self._remove_bold(trnew_str), self.trakt_new_list))
+					append((self._remove_bold(trdel_str), self.trakt_delete_list))
 				elif list_type == 'liked_lists':
-					append((self.remove_bold(trunlike_str), self.trakt_unlike_list))
+					append((self._remove_bold(trunlike_str), self.trakt_unlike_list))
 			elif list_type == 'discover_history':
-				append((self.remove_bold(eerem_disc_str), self.remove_single_discover_history))
-				append((self.remove_bold(eeclear_str), self.remove_all_discover_history))
+				append((self._remove_bold(eerem_disc_str), self.remove_single_discover_history))
+				append((self._remove_bold(eeclear_str), self.remove_all_discover_history))
 		append((tools_str, self.open_tools))
 		append((settings_str, self.open_settings))
 		list_items = [{'line1': i[0]} for i in listing]
@@ -220,7 +222,7 @@ class MenuEditor:
 		choice_items = self._get_main_menu_items([])
 		choice = self._menu_select([i[1] for i in choice_items], '')
 		if choice == None: return notification(32736, 1500)
-		name = self._clean_name(self.params_get('name'))
+		name = self._fix_name(self.params_get('name'))
 		choice_name, choice_list = choice_items[choice]
 		list_items = navigator_cache.currently_used_list(choice_list['action'])
 		menu_name = self._get_external_name_input(name) or name
@@ -228,79 +230,6 @@ class MenuEditor:
 		if position == None: return notification(32736, 1500)
 		list_items.insert(position, self._add_external_info_to_item(self.menu_item, menu_name))
 		self._db_execute('set', choice_name, list_items, refresh=False)
-
-	def _menu_select(self, choice_items, menu_name, heading='', multi_line='false', position_list=False):
-		def _builder():
-			for item in choice_items:
-				item_get = item.get
-				line2 = pos_str % (menu_name, ls(item_get('name', None) or item_get('list_name')) if position_list else '')
-				iconImage = item_get('iconImage', None)
-				if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
-				else: icon = get_icon('folder')
-				yield {'line1': ls(item_get('name')), 'line2': line2, 'icon':icon}
-		list_items = list(_builder())
-		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': get_icon('top')})
-		index_list = [list_items.index(i) for i in list_items]
-		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': multi_line}
-		return select_dialog(index_list, **kwargs)
-
-	def _icon_select(self, default_icon=''):
-		all_icons = get_all_icon_vars()
-		if default_icon:
-			try:
-				all_icons.remove(default_icon)
-				all_icons.insert(0, default_icon)
-			except: pass
-			list_items = [{'line1': i if i != default_icon else '%s (default)' % default_icon, 'icon': get_icon(i)} for i in all_icons]
-		else: list_items = [{'line1': i, 'icon': get_icon(i)} for i in all_icons]
-		kwargs = {'items': json.dumps(list_items), 'heading': choose_icon_str}
-		icon_choice = select_dialog(all_icons, **kwargs) or default_icon or 'folder'
-		return icon_choice
-
-	def _clean_name(self, name):
-		name = name.replace('[B]', '').replace('[/B]', '').replace(':', '')
-		name = ' '.join(i.lower().title() for i in name.split())
-		name = name.replace('  ', ' ').replace('Tv', 'TV')
-		return name
-
-	def _get_removed_items(self, active_list):
-		default_list_items, list_items = navigator_cache.get_main_lists(active_list)
-		return [i for i in default_list_items if not i in list_items]
-
-	def _get_external_name_input(self, current_name):
-		new_name = dialog.input('', defaultt=current_name)
-		if new_name == current_name: return None
-		return new_name
-
-	def _add_external_info_to_item(self, menu_item, menu_name=None, add_all_params=True):
-		if add_all_params:
-			self.params.pop('mode', None)
-			menu_item.update(self.params)
-		if menu_name: menu_item['name'] = menu_name
-		menu_item['external_list_item'] = 'True'
-		icon_choice = self._icon_select(default_icon=menu_item.get('iconImage', 'folder'))
-		menu_item['iconImage'] = icon_choice
-		return menu_item
-
-	def _get_main_menu_items(self, active_list):
-		choice_list = [i for i in default_menu_items if i != active_list]
-		return [(i, main_menu_items[i]) for i in choice_list]
-
-	def _remove_active_shortcut_folder(self, main_menu_items_list, folder_name):
-		for x in main_menu_items_list:
-			try:
-				match = [i for i in x[1] if str(i['name']) == str(folder_name)][0]
-				new_list = [i for i in x[1] if i != match]
-				self._db_execute('set', x[0], new_list, refresh=False)
-			except: pass
-
-	def _db_execute(self, db_action, list_name, list_contents=[], list_type='edited', refresh=True):
-		if db_action == 'set': navigator_cache.set_list(list_name, list_type, list_contents)
-		elif db_action == 'delete': navigator_cache.delete_list(list_name, list_type)
-		elif db_action == 'make_new_folder': navigator_cache.set_list(list_name, 'shortcut_folder', list_contents)
-		notification(32576, 1500)
-		sleep(200)
-		if refresh: kodi_refresh()
 
 	def shortcut_folder_contents_adjust(self):
 		active_list = self.params_get('active_list')
@@ -333,15 +262,14 @@ class MenuEditor:
 		elif shortcut_folders:
 			choice = self._menu_select([{'name': i[0], 'iconImage': 'folder'} for i in shortcut_folders], '')
 			if choice == None: return notification(32736, 1500)
-			shortcut_folders[choice]
 			choice_name, choice_list = shortcut_folders[choice]
 		else:
 			if not confirm_dialog(text=32702, default_control=10): return notification(32736, 1500)
 			self.shortcut_folder_make()
 			try: choice_name, choice_list = navigator_cache.get_shortcut_folders()[0]
 			except: return notification(32736, 1500)
-		list_items = eval(choice_list)
-		name = self._clean_name(self.params_get('name') or self.params_get('menu_name_translated'))
+		list_items = choice_list
+		name = self._remove_bold(self.params_get('name') or self.params_get('menu_name_translated'))
 		menu_name = self._get_external_name_input(name) or name
 		icon_choice = self._icon_select(default_icon=self.params_get('iconImage', None) or self.menu_item_get('iconImage') or 'folder')
 		self.menu_item.update({'name': menu_name, 'iconImage': icon_choice})
@@ -358,7 +286,6 @@ class MenuEditor:
 		elif shortcut_folders:
 			choice = self._menu_select([{'name': i[0], 'iconImage': 'folder'} for i in shortcut_folders], '')
 			if choice == None: return notification(32736, 1500)
-			shortcut_folders[choice]
 			name = shortcut_folders[choice][0]
 		else:
 			if not confirm_dialog(text=32702, default_control=10): return notification(32736, 1500)
@@ -380,6 +307,23 @@ class MenuEditor:
 		folder_name = self.menu_item_get('name')
 		self._db_execute('delete', folder_name, list_type='shortcut_folder')
 		self._remove_active_shortcut_folder(main_menu_items_list, folder_name)
+
+	def shortcut_folder_browse_for_content(self):
+		list_name = self.params_get('list_name')
+		choice_name, list_items = list_name, navigator_cache.get_shortcut_folder_contents(list_name)		
+		browsed_result = self._path_browser()
+		if browsed_result == None: return
+		self.menu_item = dict(parse_qsl(browsed_result['file'].replace('plugin://plugin.video.twilight/?','')))
+		name, icon = self._remove_bold(browsed_result['label']), self._get_icon_var(browsed_result['thumbnail'])
+		menu_name = self._get_external_name_input(name) or name
+		icon_choice = self._icon_select(default_icon=icon)
+		self.menu_item.update({'name': menu_name, 'iconImage': icon_choice})
+		if list_items:
+			position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True)
+			if position == None: return notification(32736, 1500)
+		else: position = 0
+		list_items.insert(position, self.menu_item)
+		self._db_execute('set', choice_name, list_items, 'shortcut_folder')
 
 	def trakt_like_list(self):
 		from apis.trakt_api import trakt_like_a_list
@@ -460,5 +404,105 @@ class MenuEditor:
 	def open_tools(self):
 		return self.window_function({'mode': 'navigator.tools'})
 
-	def remove_bold(self, _str):
-		return _str.replace('[B]', '').replace('[/B]', '')
+	def _menu_select(self, choice_items, menu_name, heading='', multi_line='false', position_list=False):
+		def _builder():
+			for item in choice_items:
+				item_get = item.get
+				line2 = pos_str % (menu_name, ls(item_get('name', None) or item_get('list_name')) if position_list else '')
+				iconImage = item_get('iconImage', None)
+				if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
+				else: icon = get_icon('folder')
+				yield {'line1': ls(item_get('name')), 'line2': line2, 'icon':icon}
+		list_items = list(_builder())
+		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': get_icon('top')})
+		index_list = [list_items.index(i) for i in list_items]
+		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': multi_line}
+		return select_dialog(index_list, **kwargs)
+
+	def _icon_select(self, default_icon=''):
+		all_icons = get_all_icon_vars()
+		if default_icon:
+			try:
+				all_icons.remove(default_icon)
+				all_icons.insert(0, default_icon)
+			except: pass
+			list_items = [{'line1': i if i != default_icon else '%s (default)' % default_icon, 'icon': get_icon(i)} for i in all_icons]
+		else: list_items = [{'line1': i, 'icon': get_icon(i)} for i in all_icons]
+		kwargs = {'items': json.dumps(list_items), 'heading': choose_icon_str}
+		icon_choice = select_dialog(all_icons, **kwargs) or default_icon or 'folder'
+		return icon_choice
+
+	def _remove_bold(self, _str):
+		return _str.replace('[B]', '').replace('[/B]', '').replace(':', '')
+
+	def _fix_name(self, name):
+		name = name.replace('[B]', '').replace('[/B]', '').replace(':', '')
+		name = ' '.join(i.lower().title() for i in name.split())
+		name = name.replace('  ', ' ').replace('Tv', 'TV')
+		return name
+
+	def _get_removed_items(self, active_list):
+		default_list_items, list_items = navigator_cache.get_main_lists(active_list)
+		return [i for i in default_list_items if not i in list_items]
+
+	def _get_external_name_input(self, current_name):
+		new_name = dialog.input('', defaultt=current_name)
+		if new_name == current_name: return None
+		return new_name
+
+	def _add_external_info_to_item(self, menu_item, menu_name=None, add_all_params=True):
+		if add_all_params:
+			self.params.pop('mode', None)
+			menu_item.update(self.params)
+		if menu_name: menu_item['name'] = menu_name
+		menu_item['external_list_item'] = 'True'
+		icon_choice = self._icon_select(default_icon=menu_item.get('iconImage', 'folder'))
+		menu_item['iconImage'] = icon_choice
+		return menu_item
+
+	def _get_main_menu_items(self, active_list):
+		choice_list = [i for i in default_menu_items if i != active_list]
+		return [(i, main_menu_items[i]) for i in choice_list]
+
+	def _remove_active_shortcut_folder(self, main_menu_items_list, folder_name):
+		for x in main_menu_items_list:
+			try:
+				match = [i for i in x[1] if str(i['name']) == str(folder_name)][0]
+				new_list = [i for i in x[1] if i != match]
+				self._db_execute('set', x[0], new_list, refresh=False)
+			except: pass
+
+	def _db_execute(self, db_action, list_name, list_contents=[], list_type='edited', refresh=True):
+		if db_action == 'set': navigator_cache.set_list(list_name, list_type, list_contents)
+		elif db_action == 'delete': navigator_cache.delete_list(list_name, list_type)
+		elif db_action == 'make_new_folder': navigator_cache.set_list(list_name, 'shortcut_folder', list_contents)
+		notification(32576, 1500)
+		sleep(200)
+		if refresh: kodi_refresh()
+
+	def _path_browser(self, label='', file=default_path, thumbnail=''):
+		show_busy_dialog()
+		results = get_directory(file)
+		hide_busy_dialog()
+		list_items, function_items = [], []
+		if file != default_path:
+			list_items.append({'line1': 'Use [B]%s[/B] As Path' % self._remove_bold(label), 'icon': thumbnail})
+			function_items.append(json.dumps({'label': label, 'file': file, 'thumbnail': thumbnail}))
+		list_items.extend([{'line1': '%s >>' % i['label'], 'icon': i['thumbnail']} for i in results])
+		function_items.extend([json.dumps({'label': i['label'], 'file': i['file'], 'thumbnail': i['thumbnail']}) for i in results])
+		kwargs = {'items': json.dumps(list_items)}
+		choice = select_dialog(function_items, **kwargs)
+		if choice == None: return None
+		choice = json.loads(choice)
+		if choice['file'] == file: return choice
+		else: return self._path_browser(**choice)
+
+	def _get_icon_var(self, icon_path):
+		try:
+			all_icons = get_all_icon_vars(include_values=True)
+			icon_value = unquote(icon_path)
+			icon_value = icon_value.replace('image://', '').replace('.png/', '').replace('.png', '')
+			icon_value = icon_value.split('/')[-1]
+			icon_var = [i[0] for i in all_icons if i[1] == icon_value][0]
+		except: icon_var = 'folder'
+		return icon_var

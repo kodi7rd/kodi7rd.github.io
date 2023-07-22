@@ -11,9 +11,13 @@ minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync
 #########################################
 
 from windows import BaseDialog
-from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data, suppress_episode_plot
-from modules.kodi_utils import json, Thread, dialog, select_dialog, ok_dialog, hide_busy_dialog, addon_fanart, empty_poster, fetch_kodi_imagecache, get_icon, local_string as ls
-# from modules.kodi_utils import logger
+from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data, avoid_episode_spoilers
+from modules import kodi_utils
+# logger = kodi_utils.logger
+
+json, Thread, dialog, select_dialog, ok_dialog = kodi_utils.json, kodi_utils.Thread, kodi_utils.dialog, kodi_utils.select_dialog, kodi_utils.ok_dialog
+hide_busy_dialog, addon_fanart, empty_poster = kodi_utils.hide_busy_dialog, kodi_utils.addon_fanart, kodi_utils.empty_poster
+fetch_kodi_imagecache, get_icon, ls = kodi_utils.fetch_kodi_imagecache, kodi_utils.get_icon, kodi_utils.local_string
 
 resume_dict = {10: 'resume', 11: 'start_over', 12: 'cancel'}
 info_icons_dict = {'furk': get_icon('provider_furk'), 'easynews': get_icon('provider_easynews'), 'alldebrid': get_icon('provider_alldebrid'),
@@ -174,7 +178,7 @@ class SourcesResults(BaseDialog):
                             if 'Uncached' in item['cache_provider']:
                                 if 'seeders' in item: set_property('source_type', 'UNCACHED (%d SEEDERS)' % get('seeders', 0))
                                 else: set_property('source_type', 'UNCACHED')
-                                set_property('highlight', 'dimgray')
+                                set_property('highlight', 'FF7C7C7C')
                             else:
                                 if highlight_type == 0: key = 'torrent_highlight'
                                 elif highlight_type == 1: key = provider_lower
@@ -244,7 +248,7 @@ class SourcesResults(BaseDialog):
         self.setProperty('fanart', self.original_fanart())
         self.setProperty('clearlogo', self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or '')
         self.setProperty('title', self.meta_get('title'))
-        if self.meta_get('media_type') == 'episode' and suppress_episode_plot(): plot = self.meta_get('tvshow_plot') or spoilers_str
+        if self.meta_get('media_type') == 'episode' and avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or spoilers_str
         else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
         self.setProperty('plot', plot)
         self.setProperty('total_results', self.total_results)
@@ -448,7 +452,7 @@ class SourcesPlayback(BaseDialog):
     def set_resolver_properties(self):
         if self.meta_get('media_type') == 'movie': self.text = self.meta_get('plot')
         else:
-            if suppress_episode_plot(): plot = self.meta_get('tvshow_plot') or '* Hidden to Prevent Spoilers *'
+            if avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or spoilers_str
             else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
             self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (self.meta_get('season'), self.meta_get('episode'), self.meta_get('ep_name', 'N/A').upper(), plot)
         self.setProperty('window_mode', self.window_mode)

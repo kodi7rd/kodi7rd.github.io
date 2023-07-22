@@ -172,6 +172,20 @@ def build_episode_list(params):
 	set_view_mode(list_view, content_type, is_external)
 
 def build_single_episode(list_type, params={}):
+	def paginate_list(data):
+		from modules.utils import paginate_list
+		is_home = kodi_utils.home()
+		paginate_start = int(params.get('paginate_start', '0'))
+		try: page_no = int(params.get('new_page', '1'))
+		except: page_no = params.get('new_page')
+		if settings.paginate(is_home):
+			limit = settings.page_limit(is_home)
+			data, all_pages, total_pages = paginate_list(data, page_no, limit, paginate_start)
+			if is_home: paginate_start = limit
+		else: all_pages, total_pages = '', 1
+		if total_pages > page_no: new_page = page_no + 1
+		else: new_page = None
+		return data, all_pages, total_pages, new_page, paginate_start
 	def _get_category_name():
 		cat_name = category_name_dict[list_type]
 		if isinstance(cat_name, dict): cat_name = cat_name[params.get('recently_aired')]

@@ -3595,7 +3595,7 @@ msgid "Resync Internal (mins)"
 msgstr ""
 
 msgctxt "#33100"
-msgid "Suppress Episode Plot in Twilight Custom Windows"
+msgid "Avoid Episode Spoilers in Twilight Custom Windows"
 msgstr ""
 
 msgctxt "#33101"
@@ -3758,6 +3758,10 @@ msgctxt "#33139"
 msgid "Press [B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]RIGHT[/COLOR][/B] to Skip"
 msgstr ""
 
+msgctxt "#33140"
+msgid "Add Content"
+msgstr ""
+
 msgctxt "#33141"
 msgid "Open Tools Menu"
 msgstr ""
@@ -3830,11 +3834,11 @@ msgctxt "#33158"
 msgid "Comments"
 msgstr ""
 
-###################################################################################################################################
-
-msgctxt "#33140"
-msgid ""
+msgctxt "#33159"
+msgid "None (Monochrome)"
 msgstr ""
+
+###################################################################################################################################
 
 # KODI-RD-IL Custom Hebrew Strings
 

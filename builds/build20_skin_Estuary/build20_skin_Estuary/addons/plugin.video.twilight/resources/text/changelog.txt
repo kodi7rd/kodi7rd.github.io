@@ -1,5 +1,12 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.1.19[/B][/COLOR]
+- Added "Add Content" item to Shortcut Folders. Using this, you can browse Twilight directories and add content to your Shortcut folders from within them.
+- Added "None (Monochrome)" option to Settings->Results->Highlight Results Based On". This will give a results window based only on gray shades.
+- Added auto copying to clipboard of debrid auth codes and log upload url's on supported OS's.
+- Renamed setting "Suppress Episode Plot in Twilight Custom Windows" to "Avoid Episode Spoilers in Twilight Custom Windows" as this will now include avoiding the next episode's thumb displaying in the next episode window popup.
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.1.18[/B][/COLOR]
 - Full rewrite of settings handling within addon. Settings dict and window properties now no longer used. Twilight will probably be faster for users who leave the language invoker ON, and slower for those who don't. This is a change that affects every single part of Twilight, so any issues please forward them to my github.
 - View preferences are now saved as settings instead of their own database. As a result, you will need to re-set these values in Tools->Set Views.

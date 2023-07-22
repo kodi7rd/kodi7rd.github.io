@@ -35,6 +35,10 @@ class RealDebridAPI:
 		url = auth_url + device_url % 'client_id=%s&new_credentials=yes' % self.client_ID
 		response = requests.get(url, timeout=timeout).json()
 		user_code = response['user_code']
+		try:
+			from modules.utils import copy2clip
+			copy2clip(user_code)
+		except: pass
 		content = line % (ls(32517), ls(32700) % 'https://real-debrid.com/device', ls(32701) % '[COLOR seagreen]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('seagreen')
 		progressDialog = progress_dialog('%s %s' % (ls(32054), ls(32057)), get_icon('rd_qrcode'))

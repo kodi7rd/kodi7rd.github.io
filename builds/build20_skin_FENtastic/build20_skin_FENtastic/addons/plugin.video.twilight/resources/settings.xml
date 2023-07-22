@@ -519,11 +519,6 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="suppress_episode_plot" type="boolean" label="33100" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
 				<setting id="show_unaired_watchlist" type="boolean" label="32525" help="">
 					<level>0</level>
 					<default>true</default>
@@ -589,6 +584,11 @@
 						</options>
 					</constraints>
 					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="avoid_episode_spoilers" type="boolean" label="33100" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
 				</setting>
 			</group>
 			<!-- Trakt Calendar -->
@@ -2170,6 +2170,7 @@
 							<option label="32240">0</option>
 							<option label="32583">1</option>
 							<option label="32241">2</option>
+							<option label="33159">3</option>
 						</options>
 					</constraints>
 					<control type="spinner" format="string"/>
