@@ -168,7 +168,7 @@
     <setting id="provider.debrid_cloud_colour_name" default="true">[COLOR=FF7A01CC]FF7A01CC[/COLOR]</setting>
     <setting id="provider.folders_colour_name" default="true">[COLOR=FFB36B00]FFB36B00[/COLOR]</setting>
     <setting id="scraper_4k_highlight_name" default="true">[COLOR=FFFF00FE]FFFF00FE[/COLOR]</setting>
-    <setting id="scraper_1080p_highlight_name" default="true">[COLOR=FFE6B800]FFE6B800[/COLOR]</setting>
+    <setting id="scraper_1080p_highlight_name" default="true">[COLOR=FF3CFA38]FF3CFA38[/COLOR]</setting>
     <setting id="scraper_720p_highlight_name" default="true">[COLOR=FF3C9900]FF3C9900[/COLOR]</setting>
     <setting id="scraper_SD_highlight_name" default="true">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
     <setting id="scraper_flag_identify_colour_name" default="true">[COLOR=FF7C7C7C]FF7C7C7C[/COLOR]</setting>
