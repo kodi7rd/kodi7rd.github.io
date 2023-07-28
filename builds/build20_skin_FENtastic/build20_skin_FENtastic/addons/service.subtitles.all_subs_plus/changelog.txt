@@ -1,3 +1,13 @@
+2.1.0
+** All Subs Plus by Burekas **
+- Languages: Added 'French' and 'Russian'
+- Languages: Added 'Hebrew' as an option now
+- Languages: Machine Translation - Now from any language to any language
+- Languages: Added new setting - Preferred Language (For Prioirty and Machine Translation)
+- Languages: Fixed additional languages setting
+- Autosubs: New setting - Avoid when video already contains built-in subs in preferred language
+- General code fixes, code cleanup, refactoring and imporvements
+
 2.0.4
 ** All Subs Plus by Burekas **
 - Bug fix: Wizdom subtitles download

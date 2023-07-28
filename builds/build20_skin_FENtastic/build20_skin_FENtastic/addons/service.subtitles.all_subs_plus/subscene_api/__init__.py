@@ -402,12 +402,7 @@ class SubtitleAPI:
             nm = itt['name']
             lang = itt['lang']
 
-            if lang.lower() == 'english':
-                nthumb = 'en'
-            elif lang.lower() == 'hebrew':
-                nthumb = 'he'
-            else:
-                nthumb = ''
+            nthumb = xbmc.convertLanguage(lang, xbmc.ISO_639_1)
 
             nlabel = lang.capitalize()
             nlabel2 = colorize_text(nm,color_subscene)

@@ -116,13 +116,13 @@ subscene_languages = {
     'Hebrew': {'id': 22, '3let': 'heb', '2let': 'he', 'name': 'Hebrew'}
 
 }
-if MyAddon.getSetting("English")== 'true':
+if MyAddon.getSetting("english")== 'true':
   subscene_languages = {
     'Hebrew': {'id': 22, '3let': 'heb', '2let': 'he', 'name': 'Hebrew'},
     'English': {'id': 13, '3let': 'eng', '2let': 'en', 'name': 'English'}
 }
 
-if MyAddon.getSetting("arab")== 'true':
+if MyAddon.getSetting("arabic")== 'true':
     subscene_languages.update(all_nam_lang['ara'])
 if MyAddon.getSetting("spanish")== 'true':
     subscene_languages.update(all_nam_lang['spa'])
@@ -241,7 +241,7 @@ def search_subscene(item,mode_subtitle):
     #myLogger(item['tvshow'])
     lang=[]
     lang.append('heb')
-    if MyAddon.getSetting("English")== 'true':
+    if MyAddon.getSetting("english")== 'true':
         lang.append('eng')
     if item['tvshow']:
         num_of_subs,subtitle,subtitle_list=search_tvshow(item['tvshow'], item['season'], item['episode'], lang, filename,mode_subtitle)

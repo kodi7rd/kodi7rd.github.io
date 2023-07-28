@@ -94,6 +94,7 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
                                                                                   nthumb
                                                                                   )
 
+
                 json_data={'url':url,
                          'label':nlabel,
                          'label2':nlabel2,

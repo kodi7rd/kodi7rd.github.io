@@ -29,16 +29,20 @@
 		<setting id="storage"  type="folder"   label="בחר תיקיית כתוביות מקומית" default="" visible= "eq(-1,true)"/>
 	</category>
 	<category label="32040">
-		<setting id="English" label="אנגלית" type="bool" default="false" />
-		<setting id="arab" label="ערבית" type="bool" default="false" />
+		<setting id="hebrew" label="עברית" type="bool" default="true" />
+		<setting id="english" label="אנגלית" type="bool" default="false" />
+		<setting id="russian" label="רוסית" type="bool" default="false" />
+		<setting id="arabic" label="ערבית" type="bool" default="false" />
+		<setting id="french" label="צרפתית" type="bool" default="false" />
 		<setting id="spanish" label="ספרדית" type="bool" default="false" />
-
-		<setting label="שפות נוספות" type="lsep"/>
-		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
-		<setting label="הוסף שפות עם פסיק בניהם לפי תקן " type="lsep"/>
+		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
+		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/>
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
+		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
 		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
-
+		<setting label=" " type="lsep"/>
+		<setting id="preferred_lang" label="שפה מועדפת" type="enum" values="לפי הגדרות קודי|ספרדית|צרפתית|ערבית|רוסית|אנגלית|עברית" default="5"/>
+		<setting label=" " type="lsep"/>
 		<setting id="auto_translate" label="תירגום מכונה אוטומטי" type="bool" default="false" />
 	</category>
     <category label="32041">
@@ -53,26 +57,27 @@
 		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/> -->
 		<setting label="32016" type="lsep"/>
 		<setting id="autosub" label="32017" type="bool" default="false" />
-		<setting id="force" label="32034" type="bool" default="true" visible="eq(-1,true)" enable="eq(-1,true)" />
-		<setting id="popup" label="32037" type="enum" lvalues="32044|32048|32049" default="2" visible="eq(-2,true)" enable="eq(-2,true)"/>
+		<setting id="force" label="32034" type="bool" default="false" visible="eq(-1,true)" enable="eq(-1,true)" />
+		<setting id="avoid_on_built_in" label="32050" type="bool" default="true" visible="eq(-2,true)" enable="eq(-2,true)" />
+		<setting id="popup" label="32037" type="enum" lvalues="32044|32048|32049" default="2" visible="eq(-3,true)" enable="eq(-3,true)"/>
 		<!-- <setting id="popup" label="32037" type="bool" default="true" visible="eq(-2,true)" enable="eq(-2,true)" /> -->
-		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="1" visible="eq(-3,true)" enable="eq(-3,true)"/>
+		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="1" visible="eq(-4,true)" enable="eq(-4,true)"/>
 		<!-- <setting id="pause" label="32021" type="bool" default="false" visible="eq(-3,true)" enable="eq(-3,true)"/> -->
-		<setting id="exlude_local_files_smb" label="אל תחפש כתוביות לתוכן מקומי SMB" type="bool" default="false" visible="eq(-4,true)" enable="eq(-4,true)"/>
-		<setting id="ExcludeTime" type="number" label="32018" default="15" visible= "eq(-5,true)" enable="eq(-5,true)"/>
+		<setting id="exlude_local_files_smb" label="אל תחפש כתוביות לתוכן מקומי SMB" type="bool" default="false" visible="eq(-5,true)" enable="eq(-5,true)"/>
+		<setting id="ExcludeTime" type="number" label="32018" default="15" visible= "eq(-6,true)" enable="eq(-6,true)"/>
 
-		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" visible= "eq(-6,true)" enable="eq(-6,true)" />
-		<setting id="ExcludeAddos" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-7,true)" enable="eq(-1,true) + eq(-7,true)" />
-		<setting id="ExcludeAddosOption2" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-8,true)" enable="eq(-2,true) + eq(-8,true)" />
-		<setting id="ExcludeAddos2" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-9,true)" enable="eq(-1,true) + eq(-3,true) + eq(-9,true)" />
-		<setting id="ExcludeAddosOption3" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-10,true)" enable="eq(-2,true) + eq(-4,true) + eq(-10,true)" />
-		<setting id="ExcludeAddos3" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-11,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-11,true)" />
-		<setting id="ExcludeAddosOption4" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-12,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-12,true)" />
-		<setting id="ExcludeAddos4" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-13,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-13,true)" />
-		<setting id="ExcludeAddosOption5" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-14,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-14,true)" />
-		<setting id="ExcludeAddos5" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-15,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-15,true)" />
-		<setting id="ExcludeAddosOption6" type="bool" label="כאן תכניס כמה שאתה רוצה רק עם פסיק ביניהם" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-16,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-16,true)" />
-		<setting id="ExcludeAddos6" type="text" source="video" label="אל תכלול הרחבות" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-17,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-17,true)" />
+		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" visible= "eq(-7,true)" enable="eq(-7,true)" />
+		<setting id="ExcludeAddos" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-8,true)" enable="eq(-1,true) + eq(-8,true)" />
+		<setting id="ExcludeAddosOption2" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-9,true)" enable="eq(-2,true) + eq(-9,true)" />
+		<setting id="ExcludeAddos2" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-10,true)" enable="eq(-1,true) + eq(-3,true) + eq(-10,true)" />
+		<setting id="ExcludeAddosOption3" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-11,true)" enable="eq(-2,true) + eq(-4,true) + eq(-11,true)" />
+		<setting id="ExcludeAddos3" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-12,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-12,true)" />
+		<setting id="ExcludeAddosOption4" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-13,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-13,true)" />
+		<setting id="ExcludeAddos4" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-14,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-14,true)" />
+		<setting id="ExcludeAddosOption5" type="bool" label="32019" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-15,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-15,true)" />
+		<setting id="ExcludeAddos5" type="text" source="video" label="32020" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-16,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-16,true)" />
+		<setting id="ExcludeAddosOption6" type="bool" label="כאן תכניס כמה שאתה רוצה רק עם פסיק ביניהם" default="false" visible= "eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-17,true)" enable="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true) + eq(-17,true)" />
+		<setting id="ExcludeAddos6" type="text" source="video" label="אל תכלול הרחבות" default="" visible= "eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-18,true)" enable="eq(-1,true) + eq(-3,true) + eq(-5,true) + eq(-7,true) + eq(-9,true) + eq(-11,true) + eq(-18,true)" />
 
 
     </category>

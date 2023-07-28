@@ -248,7 +248,7 @@ def search_subscene_old(item,mode_subtitle):
     global sc_subtitle
     import requests
     selected_lang=['heb']
-    if MyAddon.getSetting("arab")== 'true':
+    if MyAddon.getSetting("arabic")== 'true':
         selected_lang.append('ara')
     if MyAddon.getSetting("spanish")== 'true':
         selected_lang.append('spa')
@@ -628,7 +628,7 @@ def subcenter_search_old(item,mode_subtitle):
         ok=True
         lang=[]
         lang.append('he')
-        if all_setting["English"]== 'true':
+        if all_setting["english"]== 'true':
           lang.append('eng')
         for result in results['data']:
             total_downloads = 0
