@@ -1126,4 +1126,36 @@ msgctxt "#700039"
 msgid "Duration"
 msgstr ""
 
+# Player OSD Pause Window - Custom_1122_OsdFullScreen.xml
+
+msgctxt "#700040"
+msgid "Paused"
+msgstr ""
+
+# Player Label Empty While Pausing Pause Window - Custom_1122_OsdFullScreen.xml
+
+msgctxt "#700041"
+msgid "Info Not Available"
+msgstr ""
+
+# Continue InfoPanel - Variables.xml:
+
+msgctxt "#700042"
+msgid "Age Limit"
+msgstr ""
+
+# Idan Plus Channels Button VideoOSD.xml + Custom_1123_IdanPlusChannelsAndRadios.xml
+
+msgctxt "#700043"
+msgid "Idan Plus Channels"
+msgstr ""
+
+msgctxt "#700044"
+msgid "Radio Channels"
+msgstr ""
+
+msgctxt "#700045"
+msgid "Idan Plus And Radio Channels"
+msgstr ""
+
 ################################################################

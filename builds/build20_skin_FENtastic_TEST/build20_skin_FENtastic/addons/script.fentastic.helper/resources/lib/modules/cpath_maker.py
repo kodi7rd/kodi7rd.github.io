@@ -47,8 +47,11 @@ main_include_dict = {
 }
 widget_types = (
     ("Poster", "WidgetListPoster"),
+    ("BigPoster", "WidgetListBigPoster"),
     ("Landscape", "WidgetListLandscape"),
+    ("BigLandscape", "WidgetListBigLandscape"),
     ("LandscapeInfo", "WidgetListEpisodes"),
+    ("BigLandscapeInfo", "WidgetListBigEpisodes"),
     ("Category", "WidgetListCategory"),
 )
 default_path = "addons://sources/video"
@@ -331,7 +334,7 @@ class CPaths:
                 return widget_type
         return None
 
-    def widget_type(self, label="Choose widget display type", type_limit=4):
+    def widget_type(self, label="Choose widget display type", type_limit=7):
         choice = dialog.select(label, [i[0] for i in widget_types[0:type_limit]])
         if choice == -1:
             return None

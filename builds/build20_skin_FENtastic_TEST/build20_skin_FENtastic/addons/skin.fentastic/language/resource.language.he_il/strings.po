@@ -944,4 +944,36 @@ msgctxt "#700039"
 msgid "Duration"
 msgstr "אורך"
 
+# Player OSD Pause Window - Custom_1122_OsdFullScreen.xml
+
+msgctxt "#700040"
+msgid "Paused"
+msgstr "מושהה"
+
+# Player Label Empty While Pausing Pause Window - Custom_1122_OsdFullScreen.xml
+
+msgctxt "#700041"
+msgid "Info Not Available"
+msgstr "מידע לא זמין"
+
+# Continue InfoPanel - Variables.xml:
+
+msgctxt "#700042"
+msgid "Age Limit"
+msgstr "הגבלת גיל"
+
+# Idan Plus Channels Button VideoOSD.xml + Custom_1123_IdanPlusChannelsAndRadios.xml
+
+msgctxt "#700043"
+msgid "Idan Plus Channels"
+msgstr "ערוצי עידן"
+
+msgctxt "#700044"
+msgid "Radio Channels"
+msgstr "ערוצי רדיו"
+
+msgctxt "#700045"
+msgid "Idan Plus And Radio Channels"
+msgstr "ערוצי עידן פלוס / ערוצי רדיו"
+
 ################################################################

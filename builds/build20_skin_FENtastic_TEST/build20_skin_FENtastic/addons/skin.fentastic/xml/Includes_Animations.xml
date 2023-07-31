@@ -143,6 +143,27 @@
 	</definition>
 	</include>
 	
+	<include name="lefttoright_fix">
+		<animation type="WindowOpen">
+			<effect type="slide" start="-150" end="0" time="150" tween="sine" easing="inout"/>
+			<effect type="fade" start="0" end="100" time="150" delay="50"/>
+		</animation>
+		<animation type="WindowClose">
+			<effect type="slide" start="0" end="-150" time="150" tween="sine" easing="inout"/>
+			<effect type="fade" start="100" end="0" time="150" delay="50"/>
+		</animation>
+	</include>
+	<include name="righttoleft_fix">
+		<animation type="WindowOpen">
+			<effect type="slide" start="150" end="0" time="250" tween="sine" easing="inout"/>
+			<effect type="fade" start="0" end="100" time="250" delay="50"/>
+			</animation>
+		<animation type="WindowClose">
+			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
+			<effect type="fade" start="100" end="0" time="250" delay="50"/>
+		</animation>
+	</include>
+	
 	<include name="preFix_Flags_Positions">
 			<animation condition="$PARAM[condition]" effect="slide" start="0" end="$PARAM[end]" time="0">Conditional</animation>
 	</include>
