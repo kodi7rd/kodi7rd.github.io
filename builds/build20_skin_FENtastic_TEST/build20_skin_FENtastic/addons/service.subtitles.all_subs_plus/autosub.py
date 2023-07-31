@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import xbmc,xbmcaddon,xbmcvfs
+import xbmc,xbmcaddon,xbmcvfs,xbmcplugin
 from xbmcvfs import  mkdirs
 import time,json,hashlib
 import os,re,linecache
@@ -8,7 +8,7 @@ import sys,base64
 import cache,threading
 
 from service import search_all,change_background
-from service import running,action,searchstring,notify3
+from service import running,action,searchstring,notify3,colorize_text,getKodiPreferredPlayerLanugageCode
 from service import MyAddon,__settings__,MyScriptID,all_setting,download_next,location,last_sub_download,getParams,subtitle_cache_next
 #from service import links_wizdom,links_ktuvit,links_open,links_subscene,links_subcenter,links_local,imdbid,base_aa
 
@@ -335,16 +335,9 @@ class AutoSubsPlayer(xbmc.Player):
                     Debug("totalTime: '%s'" % totalTime)
                     Debug("excludeTime: '%s'" % excludeTime)
 
-                    # Force override subtitles even if the video file already contains subtitles
-                    force_download=True
-                    if all_setting["force"]=='true':
-                        force_download=True
-                    if all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
-                        force_download=False
-
-                    videoFullPath = xbmc.Player().getPlayingFile()
-
+                    #--------------------------------------------------------------------------
                     # Check if the video source is excluded from using the AutoSub feature
+                    videoFullPath = xbmc.Player().getPlayingFile()
                     try:
                         is_excluded = isExcluded(videoFullPath)
                     except:
@@ -353,35 +346,33 @@ class AutoSubsPlayer(xbmc.Player):
 
                     Debug('isExcluded: '+repr(is_excluded))
 
-                    availableLangs = xbmc.Player().getAvailableSubtitleStreams()
-                    Debug("availableLangs '%s'" % availableLangs)
-                    Debug('force_download: '+str(force_download) )
+                    #--------------------------------------------------------------------------
 
-#Rafi: Add/prefer using built-in subs for use-case when forced is NOT set, and there a heb sub-stream built-in was found
-                    preferredLang = 'heb'  # TBD , from setting?
-                    preferredLangFound = False
-                    activeBuiltinSubs = xbmc.Player().getSubtitles()
-                    Debug("Active Subs were: %s"%activeBuiltinSubs)
-                    
-                    if activeBuiltinSubs == preferredLang:  # Use-case of previously searched & found and downloaded subs . Nothing to do..
-                        preferredLangFound = True
-                        Debug('built-in activeBuiltinSubs (already ran/found) = %s'%activeBuiltinSubs)         
-                    else:
-                        s_index =0
-                        for s in availableLangs:
-                            Debug("test indexes s and  s_index = " + s + " " + str(s_index))
-                            if s == preferredLang:
-                                xbmc.Player().setSubtitleStream(s_index)  #   s_index)
-                                preferredLangFound = True
-                                Debug("Build in subs found: %s"%xbmc.Player().getSubtitles() )
-                                break
-                            s_index += 1
-                    
-                    Debug('built-in preferredLangFound = %s'%preferredLangFound)                            
+                    avoid_autosubs_on_built_in_subs = all_setting["avoid_on_built_in"]
+                    Debug("Avoid when there is built-in subs: '%s'" % (avoid_autosubs_on_built_in_subs))
+                    useBuiltInSub = False
+                    if avoid_autosubs_on_built_in_subs:
+                        availableLangs = xbmc.Player().getAvailableSubtitleStreams() # return availabe built-in subs languages
+                        if len(availableLangs) > 0:
+                            preferredLang = getKodiPreferredPlayerLanugageCode(all_setting)
+                            Debug("Preferred language '%s'" % (preferredLang))
+                            Debug("Available built-in subs languages: %s" % availableLangs)
+                            useBuiltInSub = preferredLang in availableLangs
 
-                    if (xbmc.Player().isPlaying() and totalTime > excludeTime
-#                        and force_download==True and not is_excluded ):
-                        and (force_download==True and preferredLangFound == False) and not is_excluded ):
+                    Debug('useBuiltInSub: ' + str(useBuiltInSub))
+
+                    #--------------------------------------------------------------------------
+
+                    # Force override subtitles even if the video file already contains subtitles
+                    force_download=True
+                    if all_setting["force"]=='true':
+                        force_download=True
+                    if all_setting["force"]=='false' and xbmc.getCondVisibility("VideoPlayer.HasSubtitles"):
+                        force_download=False
+                    Debug('force_download: ' + str(force_download))
+
+                    if (xbmc.Player().isPlaying() and totalTime > excludeTime and not is_excluded
+                        and (force_download or not useBuiltInSub)):
                         self.run = False
                         #xbmc.sleep(1000)
                         Debug('Started: AutoSearching for Subs')
@@ -404,14 +395,28 @@ class AutoSubsPlayer(xbmc.Player):
                             Debug('running: ' + repr(running))
                         #xbmc.executebuiltin('XBMC.ActivateWindow(SubtitleSearch)')
                     else:
-                        Debug('Started: Subs found or Excluded')
-#Rafi: 
-                        if preferredLangFound == True: # and  all_setting["popup"] != "0"
-                            notify3('[COLOR aqua]נבחרו כתוביות קיימות בעברית[/COLOR]',2)
+                        if useBuiltInSub:
+                            Debug("The video already contains subtitles in preferred language")
+
+                            activeBuiltinSubs = xbmc.Player().getSubtitles() # return current built-in/loaded subs language
+                            Debug("Current active built-in sub language: '%s'" % activeBuiltinSubs)
+
+                            if activeBuiltinSubs != preferredLang:
+                                Debug("Setting preferred active built-in sub")
+                                indexPreferredLangSub = availableLangs.index(preferredLang)
+                                xbmc.Player().setSubtitleStream(indexPreferredLangSub)
+                            else:
+                                Debug("Preferred active built-in sub is already set")
+
+                            if all_setting["popup"]!="0":
+                                notify3(colorize_text('הכתוביות כבר כלולות','aqua'),2)
+
+                        else:
+                            Debug('Subs found or excluded')
                         self.run = False
             except Exception as e:
                 Debug("AutoSub failed: %s" %e)
-                notify3('[COLOR aqua]AutoSub נכשל[/COLOR]',2)
+                notify3(colorize_text('AutoSub נכשל','aqua'),2)
                 # if all_setting["pause"]=='1': #resume
                 #     xbmc.Player().pause()
                 pass

@@ -520,7 +520,12 @@ def upload_logfile(params):
 		with open_file(log_file) as f: text = f.read()
 		UserAgent = 'Twilight %s' % twilight_addon_object.getAddonInfo('version')
 		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
-		if 'key' in response: ok_dialog(text='%s%s' % (url, response['key']))
+		if 'key' in response:
+			try:
+				from modules.utils import copy2clip
+				copy2clip('%s%s' % (url, response['key']))
+			except: pass
+			ok_dialog(text='%s%s' % (url, response['key']))
 		else: ok_dialog(text=33039)
 	except: ok_dialog(text=33039)
 	hide_busy_dialog()

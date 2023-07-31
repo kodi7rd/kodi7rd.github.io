@@ -7,11 +7,11 @@ from modules.watched_status import get_recently_watched
 
 tp, ls, sys, build_url, notification, addon, make_listitem, list_dirs = k.translate_path, k.local_string, k.sys, k.build_url, k.notification, k.addon, k.make_listitem, k.list_dirs
 add_item, set_content, end_directory, set_view_mode, add_items, get_setting = k.add_item, k.set_content, k.end_directory, k.set_view_mode, k.add_items, k.get_setting
-json, close_all_dialog, sleep, execute_builtin = k.json, k.close_all_dialog, k.sleep, k.execute_builtin
+json, close_all_dialog, sleep, execute_builtin, select_dialog, external = k.json, k.close_all_dialog, k.sleep, k.execute_builtin, k.select_dialog, k.external
 download_directory, furk_active, easynews_active, source_folders_directory, get_icon = s.download_directory, s.furk_active, s.easynews_active, s.source_folders_directory, k.get_icon
 get_shortcut_folders, currently_used_list, get_shortcut_folder_contents, fanart = nc.get_shortcut_folders, nc.currently_used_list, nc.get_shortcut_folder_contents, k.addon_fanart
 set_sort_method, kodi_version, set_category, container_refresh_input, get_property = k.set_sort_method, k.kodi_version, k.set_category, k.container_refresh_input, k.get_property
-vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092)
+vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str, add_cont_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092), ls(33140)
 tools_str, changelog_str, ext_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str = ls(32456), ls(32508), ls(32118), ls(32515), ls(32512), ls(33017), ls(32514)
 user_str, ml_str, ll_str, rec_str, cal_str, lv_str, lu_str, k_str, genre_select_str = ls(32065), ls(32454), ls(32502), ls(32503), ls(32081), ls(32509), ls(32853), ls(32538), ls(32847)
 recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, multi_str, coco_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32789), ls(32522)
@@ -291,7 +291,7 @@ class Navigator:
 		genre_list = json.loads(genre_list)
 		list_items = list(_builder())
 		kwargs = {'items': json.dumps(list_items), 'heading': genre_select_str, 'multi_choice': 'true'}
-		genre_ids = k.select_dialog(function_list, **kwargs)
+		genre_ids = select_dialog(function_list, **kwargs)
 		if genre_ids == None: return
 		genre_id = ','.join(genre_ids)
 		if menu_type == 'movie': url = {'mode': 'build_movie_list', 'action': 'tmdb_movies_genres', 'genre_id': genre_id}
@@ -390,7 +390,7 @@ class Navigator:
 					name = i[0]
 					listitem = make_listitem()
 					url = build_url({'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': 'folder', 'shortcut_folder': 'True',
-									'external_list_item': 'True'})
+									'external_list_item': 'True', 'show_new': 'True'})
 					cm.append((delete_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_delete'})))
 					listitem.addContextMenuItems(cm)
 					listitem.setLabel(name)
@@ -406,6 +406,49 @@ class Navigator:
 		_make_new_item()
 		folders = get_shortcut_folders()
 		if folders: add_items(int(sys.argv[1]), list(_builder()))
+		self.end_directory()
+
+	def build_shortcut_folder_list(self):
+		def _make_new_item():
+			icon = get_icon('new')
+			url = build_url({'mode': 'menu_editor.shortcut_folder_browse_for_content', 'list_name': list_name})
+			listitem = make_listitem()
+			listitem.setLabel('[I]%s...[/I]' % add_cont_str)
+			listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
+			if kodi_version >= 20:
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
+			else: listitem.setInfo('video', {'plot': ' '})
+			add_item(int(sys.argv[1]), url, listitem, False)
+		def _process():
+			for item_position, item in enumerate(contents):
+				try:
+					cm = []
+					item_get = item.get
+					name = item_get('name', 'Error: No Name')
+					iconImage = item_get('iconImage', None)
+					if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
+					else: icon = get_icon('folder')
+					menu_editor_url = build_url({'mode': 'menu_editor.edit_menu_shortcut_folder', 'active_list': list_name, 'position': item_position})
+					cm.append((edit_str, run_plugin % menu_editor_url))
+					listitem = make_listitem()
+					listitem.setLabel(name)
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
+					if kodi_version >= 20:
+						info_tag = listitem.getVideoInfoTag()
+						info_tag.setMediaType('video')
+						info_tag.setPlot(' ')
+					else: listitem.setInfo('video', {'plot': ' '})
+					listitem.addContextMenuItems(cm)
+					listitem.setProperty('twilight.context_main_menu_params', menu_editor_url)
+					isFolder = item.get('isFolder', 'true') == 'true'
+					yield (build_url(item), listitem, isFolder)
+				except: pass
+		list_name = self.params_get('name')
+		contents = get_shortcut_folder_contents(list_name)
+		if self.params_get('show_new') == 'True' and not external(): _make_new_item()
+		add_items(int(sys.argv[1]), list(_process()))
 		self.end_directory()
 
 	def tips(self):
@@ -435,36 +478,6 @@ class Navigator:
 			if media_type == 'movie': name, tmdb_id = item['title'], item['media_id']
 			else: name, tmdb_id = '%s - %sx%s' % (item['title'], str(item['season']), str(item['episode'])), item['media_ids']['tmdb']
 			self.add({'mode': mode, 'action': action, 'tmdb_id': tmdb_id}, name, 'because_you_watched', False)
-		self.end_directory()
-
-	def build_shortcut_folder_list(self):
-		def _process():
-			for item_position, item in enumerate(contents):
-				try:
-					cm = []
-					item_get = item.get
-					name = item_get('name', 'Error: No Name')
-					iconImage = item_get('iconImage', None)
-					if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
-					else: icon = get_icon('folder')
-					menu_editor_url = build_url({'mode': 'menu_editor.edit_menu_shortcut_folder', 'active_list': list_name, 'position': item_position})
-					cm.append((edit_str, run_plugin % menu_editor_url))
-					listitem = make_listitem()
-					listitem.setLabel(name)
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
-					if kodi_version >= 20:
-						info_tag = listitem.getVideoInfoTag()
-						info_tag.setMediaType('video')
-						info_tag.setPlot(' ')
-					else: listitem.setInfo('video', {'plot': ' '})
-					listitem.addContextMenuItems(cm)
-					listitem.setProperty('twilight.context_main_menu_params', menu_editor_url)
-					isFolder = item.get('isFolder', 'true') == 'true'
-					yield (build_url(item), listitem, isFolder)
-				except: pass
-		list_name = self.params_get('name')
-		contents = get_shortcut_folder_contents(list_name)
-		add_items(int(sys.argv[1]), list(_process()))
 		self.end_directory()
 
 	def build_main_list(self, list_items):

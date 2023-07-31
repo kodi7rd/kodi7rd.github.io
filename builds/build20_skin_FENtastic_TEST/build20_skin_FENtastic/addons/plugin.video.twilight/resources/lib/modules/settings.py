@@ -109,8 +109,8 @@ def source_folders_directory(media_type, source):
 	if get_setting(setting) not in ('', 'None', None): return translate_path( get_setting(setting))
 	else: return False
 
-def suppress_episode_plot():
-	return get_setting('suppress_episode_plot', 'false') == 'true'
+def avoid_episode_spoilers():
+	return get_setting('avoid_episode_spoilers', 'false') == 'true'
 
 def paginate(is_home):
 	paginate_lists = int(get_setting('paginate.lists', '0'))
@@ -273,7 +273,7 @@ def auto_resume(media_type):
 
 def scraping_settings():
 	highlight_type = int(get_setting('highlight.type', '0'))
-	if highlight_type == 3: return {'highlight_type': highlight_type}
+	if highlight_type == 3: return {'highlight_type': 2, '4k': 'FF2E2E2E', '1080p': 'FF2E2E2E', '720p': 'FF2E2E2E', 'sd': 'FF2E2E2E'}
 	hoster_highlight, torrent_highlight, furk_highlight, easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', '', '', '', ''
 	rd_highlight, pm_highlight, ad_highlight, highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', '', '', '', ''
 	if highlight_type in (0, 1):

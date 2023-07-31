@@ -95,7 +95,7 @@
                 <top>552</top>
                 <width>30</width>
                 <height>30</height>
-                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinners/loading-spinner.png</texture>
+                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinner.png</texture>
                 <animation effect="fade" time="320" delay="400">Visible</animation>
                 <animation effect="rotate" end="360" center="auto" time="1200" loop="true" reversible="false" condition="true">Conditional</animation>
                 <animation effect="fade" start="70" time="1200" condition="true" pulse="true">Conditional</animation>

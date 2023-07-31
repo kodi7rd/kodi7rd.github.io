@@ -29,8 +29,13 @@ class AllDebridAPI:
 		response = response['data']
 		expires_in = int(response['expires_in'])
 		poll_url = response['check_url']
+		user_code = response['pin']
+		try:
+			from modules.utils import copy2clip
+			copy2clip(user_code)
+		except: pass
 		sleep_interval = 5
-		content = line % (ls(32517), ls(32700) % response.get('base_url'), ls(32701) % '[COLOR goldenrod]%s[/COLOR]' % response.get('pin'))
+		content = line % (ls(32517), ls(32700) % response.get('base_url'), ls(32701) % '[COLOR goldenrod]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('goldenrod')
 		progressDialog = progress_dialog('%s %s' % (ls(32063), ls(32057)), get_icon('ad_qrcode'))
 		progressDialog.update(content, 0)

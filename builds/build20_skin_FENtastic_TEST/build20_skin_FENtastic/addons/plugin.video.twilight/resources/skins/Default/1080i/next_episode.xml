@@ -15,20 +15,26 @@
             <top>20</top>
             <height>160</height>
             <control type="image">
+                <left>-1</left>
+                <top>-1</top>
+                <width>286</width>
+                <height>162</height>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+            </control>
+            <control type="image">
                 <width>284</width>
                 <texture colordiffuse="FF000000" diffuse="twilight_diffuse/landscape_w284_h160.png">twilight_common/white.png</texture>
             </control>
             <control type="image">
                 <width>284</width>
                 <aspectratio>scale</aspectratio>
-                <texture diffuse="twilight_diffuse/landscape_w284_h160.png">$INFO[Window.Property(fanart)]</texture>
-                <animation effect="fade" start="100" end="40" time="0">WindowOpen</animation>
+                <texture diffuse="twilight_diffuse/landscape_w284_h160.png">$INFO[Window.Property(thumb)]</texture>
+                <animation effect="fade" start="100" end="65" time="0">WindowOpen</animation>
             </control>
             <control type="image">
-                <top>75</top>
-                <left>42</left>
-                <height max="80">auto</height>
-                <width max="200">auto</width>
+                <top>80</top>
+                <left>72</left>
+                <width>140</width>
                 <texture>$INFO[Window.Property(clearlogo)]</texture>
                 <aspectratio>keep</aspectratio>
                 <animation effect="fade" start="100" end="80" time="0">WindowOpen</animation>
@@ -42,7 +48,7 @@
                 <aligny>top</aligny>
                 <aspectratio aligny="top">keep</aspectratio>
                 <texture colordiffuse="B3CCCCCC">twilight_common/twilight.png</texture>
-                <animation effect="fade" start="100" end="50" time="0">WindowOpen</animation>
+                <animation effect="fade" start="100" end="70" time="0">WindowOpen</animation>
             </control>
             <control type="group">
                 <left>275</left>

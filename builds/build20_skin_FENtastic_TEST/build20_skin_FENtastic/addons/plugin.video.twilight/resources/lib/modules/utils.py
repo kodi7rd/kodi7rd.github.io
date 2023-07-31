@@ -320,3 +320,24 @@ def download_github_zip(repo, file, destination):
 		logger('download_github_zip error', str(e))
 		status = False
 	return status
+
+def copy2clip(txt):
+	from sys import platform
+	if platform == "win32":
+		try:
+			from subprocess import check_call
+			cmd = 'echo ' + txt.replace('&', '^&').strip() + '|clip'
+			return check_call(cmd, shell=True)
+		except: pass
+	elif platform == "darwin":
+		try:
+			from subprocess import check_call
+			cmd = 'echo ' + txt.strip() + '|pbcopy'
+			return check_call(cmd, shell=True)
+		except: pass
+	elif platform == "linux":
+		try:
+			from subprocess import Popen, PIPE
+			p = Popen(['xsel', '-pi'], stdin=PIPE)
+			p.communicate(input=txt)
+		except: pass

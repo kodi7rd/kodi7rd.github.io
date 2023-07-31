@@ -40,24 +40,33 @@ class OSDBServer:
         if ( self.osdb_token ) :
             searchlist  = []
             lang=[]
-            lang.append('heb')
 
-            if all_setting["English"]== 'true':
-               lang.append('eng')
-            if all_setting["arab"]== 'true':
-               lang.append('ara')
-            if all_setting["spanish"]== 'true':
-               lang.append('spa')
-            if all_setting["all_lang"]== 'true':
-               lang.append('ALL')
-            if len(all_setting["other_lang"])>0:
-               all_lang=all_setting["other_lang"].split(",")
-               for items in all_lang:
-                 lang.append(str(items))
-            myLogger('Lang: ' + repr(lang))
+            # lang.append('heb')
+            if all_setting["hebrew"] == 'true':
+                lang.append(xbmc.convertLanguage("Hebrew", xbmc.ISO_639_2))
+            if all_setting["english"] == 'true':
+                lang.append(xbmc.convertLanguage("English", xbmc.ISO_639_2))
+            if all_setting["russian"] == 'true':
+                lang.append(xbmc.convertLanguage("Russian", xbmc.ISO_639_2))
+            if all_setting["arabic"] == 'true':
+                lang.append(xbmc.convertLanguage("Arabic", xbmc.ISO_639_2))
+            if all_setting["french"] == 'true':
+                lang.append(xbmc.convertLanguage("French", xbmc.ISO_639_2))
+            if all_setting["spanish"] == 'true':
+                lang.append(xbmc.convertLanguage("Spanish", xbmc.ISO_639_2))
+            if all_setting["all_lang"] == 'true':
+                lang.append('ALL')
+            if len(all_setting["other_lang"]) > 0:
+                all_lang=all_setting["other_lang"].split(",")
+                for item in all_lang:
+                    # full_lang = str(xbmc.convertLanguage(item, xbmc.ENGLISH_NAME))
+                    # short_lang = xbmc.convertLanguage(full_lang, xbmc.ISO_639_1)
+                    # lang.append(str(short_lang))
+                    lang.append(str(item))
+            myLogger('OS Langs: ' + repr(lang))
             if len(tvshow) > 0:
-               a=1
-               OS_search_string = ("%s S%.2dE%.2d" % (tvshow,int(season),int(episode),)).replace(" ","+")
+                a=1
+                OS_search_string = ("%s S%.2dE%.2d" % (tvshow,int(season),int(episode),)).replace(" ","+")
 
             else:
                 if str(year) == "" and xbmc.Player().isPlaying():
@@ -118,7 +127,7 @@ class OSDBServer:
 
 
     def download(self, ID, dest):
-        from service import convert_to_utf
+        #from service import convert_to_utf
         try:
             import zlib, base64
             down_id=[ID,]
