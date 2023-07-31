@@ -38,7 +38,8 @@ fetch_ratings_info, trakt_comments = omdb_api.fetch_ratings_info, trakt_api.trak
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', 'x%s'
 youtube_check = 'plugin.video.youtube'
 setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'twilight_flags/ratings/%s'
-separator = '[COLOR $INFO[Window(10000).Property(twilight.highlight)]][B]  •  [/B][/COLOR]'
+separator = '[COLOR %s][B]  •  [/B][/COLOR]'
+custom_highlight_var_dict = {'skin.arctic.horizon.2': '$VAR[ColorHighlight]]'}
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
 plot_id, cast_id, recommended_id, reviews_id, comments_id, trivia_id, blunders_id, parentsguide_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055, 2056
 videos_id, posters_id, fanarts_id, year_id, genres_id, networks_id, collection_id = 2057, 2058, 2059, 2060, 2061, 2062, 2063
@@ -56,12 +57,12 @@ _images = Images().run
 
 class Extras(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.control_id = None
 		self.set_starting_constants(kwargs)
 		self.set_properties()
-		self.tasks = (self.set_artwork, self.set_infoline1, self.set_infoline2, self.make_ratings, self.make_plot, self.make_cast, self.make_recommended,
-					self.make_reviews, self.make_comments, self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres,
+		self.tasks = (self.set_artwork, self.set_infoline1, self.set_infoline2, self.make_ratings, self.make_cast, self.make_recommended, self.make_reviews,
+					self.make_comments, self.make_trivia, self.make_blunders, self.make_parentsguide, self.make_videos, self.make_year, self.make_genres,
 					self.make_network, self.make_posters, self.make_fanart, self.make_collection)
 
 	def onInit(self):
@@ -160,12 +161,12 @@ class Extras(BaseDialog):
 				active_extra_ratings = True
 		if win_prop == 4000 and self.getProperty('tmdb_rating') == 'true': self.set_infoline1(remove_rating=True)
 
-	def make_plot(self):
+	def make_plot_and_tagline(self):
 		if not plot_id in self.enabled_lists: return
-		if self.tagline: plot = '[I]%s[/I][CR][CR]' % self.tagline
-		else: plot = ''
-		if self.plot: plot += self.plot
-		self.setProperty('plot', plot)
+		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '') or ''
+		if not self.plot: return
+		self.tagline = self.meta_get('tagline') or ''
+		if self.tagline: self.plot = '[I]%s[/I][CR][CR]%s' % (self.tagline, self.plot)
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -664,6 +665,7 @@ class Extras(BaseDialog):
 		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
 
 	def set_starting_constants(self, kwargs):
+		self.separator = separator % self.highlight_var()
 		self.meta = kwargs['meta']
 		self.meta_get = self.meta.get
 		self.media_type, self.options_media_type = self.meta_get('mediatype'), kwargs['options_media_type']
@@ -683,22 +685,31 @@ class Extras(BaseDialog):
 		self.title, self.year, self.rootname = self.meta_get('title'), str(self.meta_get('year')), self.meta_get('rootname')
 		self.poster, self.fanart = self.original_poster(), self.original_fanart()
 		self.clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(self.clearlogo_main) or self.meta_get(self.clearlogo_backup) or ''
-		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '') or ''
 		self.rating = str(round(self.meta_get('rating'), 1)) if self.meta_get('rating') not in (0, 0.0, None) else None
-		self.mpaa, self.genre, self.network, self.tagline = self.meta_get('mpaa'), self.meta_get('genre'), self.meta_get('studio') or '', self.meta_get('tagline') or ''
-		self.status, self.duration_data = self.extra_info_get('status', '').replace('Series', ''), int(float(self.meta_get('duration'))/60)
+		self.mpaa, self.genre, self.network = self.meta_get('mpaa'), self.meta_get('genre'), self.meta_get('studio') or ''
+		self.status, self.duration_data = self.extra_info_get('status', '').replace(' Series', ''), int(float(self.meta_get('duration'))/60)
+		self.status_infoline_value = self.make_status_infoline()
+		self.make_plot_and_tagline()
 
 	def set_properties(self):
 		self.assign_buttons()
-		self.setProperty('media_type', self.media_type), self.setProperty('title', self.title), self.setProperty('year', self.year)
+		self.setProperty('media_type', self.media_type), self.setProperty('title', self.title), self.setProperty('year', self.year), self.setProperty('plot', self.plot)
 		self.setProperty('genre', self.genre), self.setProperty('network', self.network), self.setProperty('enable_scrollbars', self.enable_scrollbars)
 
+	def make_status_infoline(self):
+		status_str = self.status
+		if self.media_type == 'tvshow' and self.status == 'Returning':
+			try: next_aired_date = self.extra_info_get('next_episode_to_air')['air_date']
+			except: next_aired_date = None
+			if next_aired_date: status_str = '%s %s' % (self.status, adjust_premiered_date(next_aired_date, date_offset())[0].strftime('%d %B %Y'))
+		return status_str
+
 	def set_infoline1(self, remove_rating=False):
-		self.set_label(2001, separator.join([i for i in (self.year, None if remove_rating else self.rating, self.mpaa, self.get_duration(), self.status) if i]))
+		self.set_label(2001, self.separator.join([i for i in (self.year, None if remove_rating else self.rating, self.mpaa, self.get_duration(), self.status_infoline_value) if i]))
 
 	def set_infoline2(self):
-		if self.media_type == 'movie': line2 = separator.join([self.get_progress(), self.get_finish()])
-		else: line2 = separator.join([i for i in (self.get_next_episode(), self.get_last_aired(), self.get_next_aired()) if i])
+		if self.media_type == 'movie': line2 = self.separator.join([self.get_progress(), self.get_finish()])
+		else: line2 = self.separator.join([i for i in (self.get_next_episode(), self.get_last_aired(), self.get_next_aired()) if i])
 		self.set_label(3001, line2)
 
 	def youtube_installed_check(self):
@@ -708,7 +719,7 @@ class Extras(BaseDialog):
 
 class ShowTextMedia(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.text = kwargs.get('text')
 		self.position = kwargs.get('current_index', None)
 		self.text_is_list = isinstance(self.text, list)

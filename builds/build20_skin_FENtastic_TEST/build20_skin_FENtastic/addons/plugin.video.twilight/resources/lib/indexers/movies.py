@@ -9,7 +9,7 @@ from modules.watched_status import get_watched_info_movie, get_watched_status_mo
 meta_function, get_datetime_function, add_item, twilight_clearlogo, home = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.addon_clearlogo, kodi_utils.home
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
 set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
-sleep, kodi_version, xbmc_actor, set_category = kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.xbmc_actor, kodi_utils.set_category
+sleep, xbmc_actor, set_category, json = kodi_utils.sleep, kodi_utils.xbmc_actor, kodi_utils.set_category, kodi_utils.json
 string, ls, sys, external, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.movie_dict_removals
 poster_empty, fanart_empty, set_property = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.set_property
@@ -17,7 +17,7 @@ metadata_user_info, watched_indicators, jump_to_enabled, date_offset = settings.
 extras_open_action, get_art_provider, get_resolution, page_limit = settings.extras_open_action, settings.get_art_provider, settings.get_resolution, settings.page_limit
 max_threads, widget_hide_next_page, include_year_in_title, paginate = settings.max_threads, settings.widget_hide_next_page, settings.include_year_in_title, settings.paginate
 twilight_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32645), ls(32646)
-hide_str, exit_str, clearprog_str, nextpage_str, jumpto_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
+hide_str, exit_str, clearprog_str, nextpage_str, jump2_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 run_plugin = 'RunPlugin(%s)'
 tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
@@ -113,10 +113,9 @@ class Movies:
 			if self.total_pages and not self.is_external:
 				jump_to = jump_to_enabled()
 				if jump_to != 3:
-					url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-								'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
-								'paginate_start': self.paginate_start}
-					add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
+					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name, 'refreshed': 'true'}})
+					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': self.total_pages, 'all_pages': all_pages,
+							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump', isFolder=False)
 			add_items(handle, builder())
 			if self.new_page and not self.widget_hide_next_page:
 				self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
@@ -129,7 +128,7 @@ class Movies:
 			if self.params_get('refreshed') == 'true': sleep(1000)
 			set_view_mode(view_mode, content_type, self.is_external)
 		
-	def build_movie_content(self, item_position, _id):
+	def build_movie_content(self, _position, _id):
 		try:
 			meta = meta_function(self.id_type, _id, self.meta_user_info, self.current_date, self.current_time)
 			if not meta or 'blank_entry' in meta: return
@@ -175,48 +174,39 @@ class Movies:
 			cm_append((watchedstr % self.watched_title, run_plugin % watched_status_params))
 			if not self.is_external: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
 			display = rootname if self.include_year else title
-			if kodi_version >= 20:
-				if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
-				info_tag = listitem.getVideoInfoTag()
-				info_tag.setMediaType('movie')
-				info_tag.setTitle(display)
-				info_tag.setOriginalTitle(meta_get('original_title'))
-				info_tag.setPlot(meta_get('plot'))
-				info_tag.setYear(int(year))
-				info_tag.setRating(meta_get('rating'))
-				info_tag.setVotes(meta_get('votes'))
-				info_tag.setMpaa(meta_get('mpaa'))
-				info_tag.setDuration(meta_get('duration'))
-				info_tag.setCountries(meta_get('country'))
-				info_tag.setTrailer(meta_get('trailer'))
-				info_tag.setPremiered(meta_get('premiered'))
-				info_tag.setTagLine(meta_get('tagline'))
-				info_tag.setStudios((meta_get('studio') or '',))
-				info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
-				info_tag.setIMDBNumber(imdb_id)
-				info_tag.setGenres(meta_get('genre').split(', '))
-				info_tag.setWriters(meta_get('writer').split(', '))
-				info_tag.setDirectors(meta_get('director').split(', '))
-				info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
-				info_tag.setPlaycount(playcount)
-				if progress:
-					info_tag.setResumePoint(float(progress))
-					set_properties({'WatchedProgress': progress, 'twilight.in_progress': 'true'})
-			else:
-				if progress: set_properties({'WatchedProgress': progress, 'resumetime': progress, 'twilight.in_progress': 'true'})
-				meta.update({'playcount': playcount, 'overlay': overlay})
-				listitem.setCast(meta_get('cast', []))
-				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
-				listitem.setInfo('video', remove_keys(meta, dict_removals))
+			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('movie')
+			info_tag.setTitle(display)
+			info_tag.setOriginalTitle(meta_get('original_title'))
+			info_tag.setPlot(meta_get('plot'))
+			info_tag.setYear(int(year))
+			info_tag.setRating(meta_get('rating'))
+			info_tag.setVotes(meta_get('votes'))
+			info_tag.setMpaa(meta_get('mpaa'))
+			info_tag.setDuration(meta_get('duration'))
+			info_tag.setCountries(meta_get('country'))
+			info_tag.setTrailer(meta_get('trailer'))
+			info_tag.setPremiered(meta_get('premiered'))
+			info_tag.setTagLine(meta_get('tagline'))
+			info_tag.setStudios((meta_get('studio') or '',))
+			info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id)})
+			info_tag.setIMDBNumber(imdb_id)
+			info_tag.setGenres(meta_get('genre').split(', '))
+			info_tag.setWriters(meta_get('writer').split(', '))
+			info_tag.setDirectors(meta_get('director').split(', '))
+			info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
+			info_tag.setPlaycount(playcount)
+			if progress:
+				info_tag.setResumePoint(float(progress))
+				set_properties({'WatchedProgress': progress})
 			listitem.setLabel(display)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart,
 							'clearlogo': clearlogo, 'landscape': landscape, 'thumb': landscape, 'discart': discart, 'keyart': keyart})
-			set_properties({'twilight.sort_order': string(item_position), 'twilight.playcount': string(playcount), 'twilight.extras_params': extras_params, 'twilight.clearprog_params': clearprog_params,
-							'twilight.options_params': options_params, 'twilight.unwatched_params': watched_status_params, 'twilight.watched_params': watched_status_params})
-			if self.is_external: set_properties({'twilight.external': 'true'})
-			if self.custom_order: self.append(((url_params, listitem, False), item_position))
-			else: self.append((url_params, listitem, False))
+			set_properties({'twilight.extras_params': extras_params, 'twilight.clearprog_params': clearprog_params, 'twilight.options_params': options_params,
+							'twilight.unwatched_params': watched_status_params, 'twilight.watched_params': watched_status_params})
+			self.append(((url_params, listitem, False), _position))
 		except: pass
 
 	def worker(self):
@@ -226,14 +216,17 @@ class Movies:
 		self.open_extras, self.watched_title = extras_open_action('movie'), trakt_str if self.watched_indicators == 1 else twilight_str
 		self.fanart_enabled, self.home_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_home and self.meta_user_info['widget_hide_watched']
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-		if self.custom_order: threads = list(make_thread_list_multi_arg(self.build_movie_content, self.list, self.max_threads))
-		else: threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, self.max_threads))
-		[i.join() for i in threads]
-		try: self.items.sort(key=lambda k: int(k[1].getProperty('twilight.sort_order')))
-		except: pass
+		if self.custom_order:
+			threads = list(make_thread_list_multi_arg(self.build_movie_content, self.list, self.max_threads))
+			[i.join() for i in threads]
+		else:
+			threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, self.max_threads))
+			[i.join() for i in threads]
+			self.items.sort(key=lambda k: k[1])
+			self.items = [i[0] for i in self.items]
 		return self.items
 
-	def build_movie_sets_content(self, item_position, _id):
+	def build_movie_sets_content(self, _position, _id):
 		try:
 			cm = []
 			cm_append = cm.append
@@ -257,19 +250,16 @@ class Movies:
 			cm_append((addmenu_str, run_plugin % build_url({'mode': 'menu_editor.add_external', 'name': title, 'iconImage': poster})))
 			cm_append((addshortcut_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': title, 'iconImage': poster})))
 			cm_append((add_coll_str, run_plugin % build_url({'mode': 'movie_sets_to_collection_choice', 'collection_id': tmdb_id})))
-			if kodi_version >= 20:
-				if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
-				info_tag = listitem.getVideoInfoTag()
-				info_tag.setMediaType('movie')
-				info_tag.setPlot(plot)
-			else: listitem.setInfo('video', {'mediatype': 'movie', 'plot': plot})
+			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('movie')
+			info_tag.setPlot(plot)
 			listitem.setLabel(title)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'landscape': landscape,
 							'thumb': landscape, 'discart': discart, 'keyart': keyart})
-			listitem.setProperty('twilight.sort_order', string(item_position))
 			listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': poster}))
-			self.append((url, listitem, True))
+			self.append(((url, listitem, True), _position))
 		except: pass
 
 	def movie_sets_worker(self):
@@ -278,7 +268,8 @@ class Movies:
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()[0:4]
 		threads = list(make_thread_list_enumerate(self.build_movie_sets_content, self.list, self.max_threads))
 		[i.join() for i in threads]
-		self.items.sort(key=lambda k: int(k[1].getProperty('twilight.sort_order')))
+		self.items.sort(key=lambda k: k[1])
+		self.items = [i[0] for i in self.items]
 		return self.items
 
 	def paginate_list(self, data, page_no):

@@ -9,7 +9,7 @@ from modules import kodi_utils
 json, select_dialog, dialog, show_busy_dialog, hide_busy_dialog = kodi_utils.json, kodi_utils.select_dialog, kodi_utils.dialog, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
 notification, get_icon, unquote, kodi_refresh, ls = kodi_utils.notification, kodi_utils.get_icon, kodi_utils.unquote, kodi_utils.kodi_refresh, kodi_utils.local_string
 add_items, set_content, set_category, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.end_directory
-build_url, make_listitem, kodi_version, sys = kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.kodi_version, kodi_utils.sys
+build_url, make_listitem, sys = kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.sys
 addon_fanart, addon_clearlogo = kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
 tmdb_image_url = 'https://image.tmdb.org/t/p/h632/%s'
 default_image = get_icon('genre_family')
@@ -38,11 +38,9 @@ def person_direct_search(query):
 			listitem = make_listitem()
 			listitem.setLabel(actor_name)
 			listitem.setArt({'icon': actor_image, 'poster': actor_image, 'thumb': actor_image, 'fanart': addon_fanart, 'banner': actor_image, 'clearlogo': ''})
-			if kodi_version >= 20:
-				info_tag = listitem.getVideoInfoTag()
-				info_tag.setMediaType('movie')
-				info_tag.setPlot(known_for)
-			else: listitem.setInfo('video', {'plot': known_for})
+			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('movie')
+			info_tag.setPlot(known_for)
 			yield (url, listitem, False)
 	query = unquote(query)
 	try: data = tmdb_people_info(query)

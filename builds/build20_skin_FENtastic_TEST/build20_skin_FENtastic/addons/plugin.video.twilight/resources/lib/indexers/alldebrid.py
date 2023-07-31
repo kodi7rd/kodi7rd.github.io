@@ -9,7 +9,7 @@ from modules.utils import clean_file_name, normalize
 json, build_url, make_listitem, sys, ls = kodi_utils.json, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.sys, kodi_utils.local_string
 default_ad_icon, fanart, twilight_clearlogo, set_view_mode = kodi_utils.get_icon('alldebrid'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.set_view_mode
 add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
-show_busy_dialog, hide_busy_dialog, show_text, kodi_version = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.kodi_version
+show_busy_dialog, hide_busy_dialog, show_text = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text
 folder_str, file_str, archive_str, down_str = ls(32742).upper(), ls(32743).upper(), ls(32982), '[B]%s[/B]' % ls(32747)
 linked_str, addlink_str, clearlink_str = ls(33074).upper(), ls(33078), ls(33079)
 extensions = supported_video_extensions()
@@ -37,11 +37,9 @@ def ad_torrent_cloud(folder_id=None):
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_ad_icon, 'poster': default_ad_icon, 'thumb': default_ad_icon, 'fanart': fanart,
 								'banner': default_ad_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': clean_folder_name, 'iconImage': default_ad_icon,
 									'service': 'AD'}))
 				yield (url, listitem, True)
@@ -74,11 +72,9 @@ def browse_ad_cloud(folder):
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_ad_icon, 'poster': default_ad_icon, 'thumb': default_ad_icon, 'fanart': fanart,
 								'banner': default_ad_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setPlot(' ')
-					info_tag.setMediaType('video')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setPlot(' ')
+				info_tag.setMediaType('video')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': default_ad_icon,
 									'action': 'cloud.alldebrid'}))
 				yield (url, listitem, False)

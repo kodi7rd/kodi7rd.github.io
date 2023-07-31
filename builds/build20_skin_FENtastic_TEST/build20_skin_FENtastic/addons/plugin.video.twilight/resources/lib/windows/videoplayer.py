@@ -5,8 +5,9 @@ from modules.kodi_utils import Thread
 
 class VideoPlayer(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.video = kwargs['video']
+		self.setProperty('highlight_var', self.highlight_var(force=True))
 
 	def onInit(self):
 		Thread(target=self.monitor).start()

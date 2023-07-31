@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 from random import choice
 from datetime import date
-from apis.trakt_api import trakt_get_hidden_items
 from modules import kodi_utils, settings
 from modules.sources import Sources
 from modules.metadata import episodes_meta, all_episodes_meta
-from modules.watched_status import get_next_episodes, get_watched_info_tv
+from modules.watched_status import get_next_episodes, get_watched_info_tv, get_hidden_progress_items
 from modules.utils import adjust_premiered_date, get_datetime, make_thread_list, title_key
 # logger = kodi_utils.logger
 
-ls, sys, build_url, json, notification, focus_index = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.json, kodi_utils.notification, kodi_utils.focus_index 
 Thread, get_property, set_property, add_dir, add_items = kodi_utils.Thread, kodi_utils.get_property, kodi_utils.set_property, kodi_utils.add_dir, kodi_utils.add_items
 make_listitem, set_content, end_directory, set_view_mode = kodi_utils.make_listitem, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode
-trakt_icon, addon_fanart, twilight_clearlogo, kodi_version = kodi_utils.get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
-included_str, excluded_str, heading, window_prop = ls(32804).upper(), ls(32805).upper(), ls(32806), 'twilight.random_episode_history'
+get_icon, addon_fanart, twilight_clearlogo = kodi_utils.get_icon, kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
+ls, sys, build_url, json, notification = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.json, kodi_utils.notification 
+watched_indicators, ignore_articles = settings.watched_indicators, settings.ignore_articles
+hidden_ind_str, hidden_str, heading, window_prop = ' [COLOR=red][B][%s][/B][/COLOR]', ls(32804).upper(), ls(32806), 'twilight.random_episode_history'
 
 class EpisodeTools:
 	def __init__(self, meta, nextep_settings=None):
@@ -114,33 +114,31 @@ def build_next_episode_manager():
 		try:
 			listitem = make_listitem()
 			tmdb_id, title = item['media_ids']['tmdb'], item['title']
-			if tmdb_id in exclude_list: color, action, status, sort_value = 'red', 'unhide', excluded_str, 1
-			else: color, action, status, sort_value = 'green', 'hide', included_str, 0
-			display = '[COLOR=%s][%s][/COLOR] %s' % (color, status, title)
-			url_params = {'mode': 'trakt.hide_unhide_trakt_items', 'action': action, 'media_type': 'shows', 'media_id': tmdb_id, 'section': 'progress_watched'}
+			if tmdb_id in hidden_list: display, action = title + hidden_ind_str % hidden_str, 'unhide'
+			else: display, action = title, 'hide'
+			url_params = {'mode': mode, 'action': action, 'media_type': 'shows', 'media_id': tmdb_id, 'section': 'progress_watched'}
 			url = build_url(url_params)
 			listitem.setLabel(display)
-			listitem.setArt({'poster': trakt_icon, 'fanart': addon_fanart, 'icon': trakt_icon, 'clearlogo': twilight_clearlogo})
-			if kodi_version >= 20:
-				info_tag = listitem.getVideoInfoTag()
-				info_tag.setMediaType('video')
-				info_tag.setPlot(' ')
-			else: listitem.setInfo('video', {'plot': ' '})
-			append({'listitem': (url, listitem, False), 'sort_value': sort_value, 'sort_title': title})
+			listitem.setArt({'poster': icon, 'fanart': addon_fanart, 'icon': icon, 'clearlogo': twilight_clearlogo})
+			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('video')
+			info_tag.setPlot(' ')
+			append({'listitem': (url, listitem, False), 'sort_title': title})
 		except: pass
 	handle = int(sys.argv[1])
 	list_items = []
 	append = list_items.append
-	show_list = get_next_episodes(get_watched_info_tv(1))
-	try: exclude_list = trakt_get_hidden_items('progress_watched')
-	except: exclude_list = []
+	indicators = watched_indicators()
+	show_list = get_next_episodes(get_watched_info_tv(indicators))
+	hidden_list = get_hidden_progress_items(indicators)
+	if indicators == 0: icon, mode = get_icon('folder'), 'hide_unhide_progress_items'
+	else: icon, mode = get_icon('trakt'), 'trakt.hide_unhide_progress_items'
 	threads = list(make_thread_list(_process, show_list))
 	[i.join() for i in threads]
-	item_list = sorted(list_items, key=lambda k: (k['sort_value'], title_key(k['sort_title'], settings.ignore_articles())), reverse=False)
+	item_list = sorted(list_items, key=lambda k: (title_key(k['sort_title'], ignore_articles())), reverse=False)
 	item_list = [i['listitem'] for i in item_list]
 	add_dir({'mode': 'nill'}, '[I][COLOR=grey2]%s[/COLOR][/I]' % heading.upper(), handle, iconImage='settings', isFolder=False)
 	add_items(handle, item_list)
 	set_content(handle, '')
 	end_directory(handle, cacheToDisc=False)
 	set_view_mode('view.main', '')
-	focus_index(1)

@@ -1,5 +1,17 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.01[/B][/COLOR]
+[COLOR red][B]IMPORTANT: Make sure the Tikipeter Repo has updated to version 1.0.1. If not, manually force an update, otherwise this is the last update of Twilight you will receive.[/B][/COLOR]
+- Fixed(?) Next Episodes code to speed up the showing of that menu. Still a good idea to HIDE the progress of any shows you aren't interested in continuing to watch. But either way, a couple of bugs were found that were slowing that menu down.
+- Added "TV Shows Progress Manager" to the Tools menu. This allows you to "hide" TV Shows from progress lists. Works with Trakt or Twilight as the Watched Status Provider.
+- Added returning date to infoline of TV Show status in Twilight Extras. i.e. instead of "Returning", Extras will now display "Returning 29 July 2023" if that info is available.
+- Added "Oxygen" & "Discover ID" to TV Show Networks.
+- Added setting "Auto fix Invoker Mismatch on Update" to Settings->General. Enable this and Twilight will not prompt before fixing a reuselanguageinvoker mismatch upon update. Only relevant for users who have the invoker turned OFF.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.1.20[/B][/COLOR]
+- Quick update for compatibility with custom skins.
+
 [COLOR dodgerblue][B]Version 3.1.19[/B][/COLOR]
 - Added "Add Content" item to Shortcut Folders. Using this, you can browse Twilight directories and add content to your Shortcut folders from within them.
 - Added "None (Monochrome)" option to Settings->Results->Highlight Results Based On". This will give a results window based only on gray shades.

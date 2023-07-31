@@ -104,23 +104,4 @@ def get_total_subtitles_found_list_from_hebrew_subtitles_db():
         # Log any errors that occur while reading the database
         kodi_utils.logger("KODI-RD-IL", f"Error while reading hebrew_subtitles_db and setting total_subtitles_found_count parameter: {str(e)}")
         return []
-          
-
-def clear_twilight_providers_db():
-
-    """Clears the db cache for TWILIGHT providers by deleting the `providers.db` file used by the TWILIGHT Kodi addon.
-    
-    Args:
-        None
-
-    Returns:
-        None
-    """
-    # Clear providers cache
-    try:
-        from caches.providers_cache import ExternalProvidersCache
-        ExternalProvidersCache().delete_cache(silent=True)
-        kodi_utils.logger("KODI-RD-IL", "Cleared providers.db cache")
-    except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"Error clearing providers.db cache: {str(e)}")
     

@@ -23,10 +23,12 @@ seasons = ["Specials", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "
            "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth", "Twenty-fifth", "Twenty-sixth",
            "Twenty-seventh", "Twenty-eighth", "Twenty-ninth"]
            
-SUBTITLE_SEARCH_LANGUAGE = ['hebrew']
+# Default value for SUBTITLE_SEARCH_LANGUAGE
+SS_SUBTITLE_SEARCH_LANGUAGE = ['hebrew']
+
 #########################################
 
-def search_hebrew_subtitles(media_metadata):
+def search_for_subtitles(media_metadata, language='Hebrew'):
 
     """
     Searches for Hebrew subtitles on the Subscene website.
@@ -44,6 +46,14 @@ def search_hebrew_subtitles(media_metadata):
         return []
     
     # Set up variables
+    global SS_SUBTITLE_SEARCH_LANGUAGE  # Use the global variable
+
+    if language == 'English':
+    
+        # Temporarily set the subtitle search language based on the 'language' parameter
+        ORIGINAL_SS_SUBTITLE_SEARCH_LANGUAGE = SS_SUBTITLE_SEARCH_LANGUAGE
+        SS_SUBTITLE_SEARCH_LANGUAGE = ['english']
+    
     subscene_subtitles_list = []
 
     # Get metadata values from the media_metadata dictionary
@@ -52,7 +62,7 @@ def search_hebrew_subtitles(media_metadata):
     season = str(media_metadata.get("season", DEFAULT_SEASON))
     episode = str(media_metadata.get("episode", DEFAULT_EPISODE))
     year = media_metadata.get("year", DEFAULT_YEAR)
-    kodi_utils.logger("KODI-RD-IL", f"Searching in [SUBSCENE]: media_type: {media_type} Title: {title}: Season: {season} Episode: {episode} Year: {year}")
+    kodi_utils.logger("KODI-RD-IL", f"Searching in [SUBSCENE] in {language} language: media_type: {media_type} Title: {title}: Season: {season} Episode: {episode} Year: {year}")
     
     try:
         if media_type == "tv":
@@ -134,11 +144,15 @@ def search_hebrew_subtitles(media_metadata):
                         if ('S%sE%s.'%(padded_season_number, padded_episode_number)).lower() not in subtitle_filename.lower() and ('S%sE%s '%(padded_season_number, padded_episode_number)).lower() not in subtitle_filename.lower() and ('S%s.'%(padded_season_number)).lower() not in subtitle_filename.lower():
                             continue
                             
-                    if subtitle_language.lower() not in SUBTITLE_SEARCH_LANGUAGE:
+                    if subtitle_language.lower() not in SS_SUBTITLE_SEARCH_LANGUAGE:
                         continue
                     
                     subscene_subtitles_list.append(subtitle_filename)
-                        
+
+        if language == 'English':
+            # Reset the subtitle search language to the original value
+            SS_SUBTITLE_SEARCH_LANGUAGE = ORIGINAL_SS_SUBTITLE_SEARCH_LANGUAGE                       
+        
         return subscene_subtitles_list
         
     except Exception as e:

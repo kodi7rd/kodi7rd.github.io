@@ -10,7 +10,7 @@ from modules.utils import clean_file_name, normalize, jsondate_to_datetime
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
 add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 default_rd_icon, fanart, twilight_clearlogo = kodi_utils.get_icon('realdebrid'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
-ls, sys, make_listitem, build_url, kodi_version = kodi_utils.local_string, kodi_utils.sys, kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.kodi_version
+ls, sys, make_listitem, build_url = kodi_utils.local_string, kodi_utils.sys, kodi_utils.make_listitem, kodi_utils.build_url
 folder_str, file_str, down_str = ls(32742).upper(), ls(32743).upper(), '[B]%s[/B]' % ls(32747)
 linked_str, addlink_str, clearlink_str = ls(33074).upper(), ls(33078), ls(33079)
 extensions = supported_video_extensions()
@@ -38,11 +38,9 @@ def rd_torrent_cloud():
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_rd_icon, 'poster': default_rd_icon, 'thumb': default_rd_icon, 'fanart': fanart,
 								'banner': default_rd_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': clean_folder_name, 'iconImage': default_rd_icon,
 									'service': 'RD'}))
 				yield (url, listitem, True)
@@ -76,11 +74,9 @@ def rd_downloads():
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_rd_icon, 'poster': default_rd_icon, 'thumb': default_rd_icon, 'fanart': fanart,
 								'banner': default_rd_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': default_rd_icon,
 									'action': 'cloud.realdebrid_direct'}))
 				yield (url, listitem, True)
@@ -112,11 +108,9 @@ def browse_rd_cloud(folder_id):
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_rd_icon, 'poster': default_rd_icon, 'thumb': default_rd_icon, 'fanart': fanart,
 								'banner': default_rd_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': default_rd_icon,
 									'action': 'cloud.realdebrid'}))
 				yield (url, listitem, False)
