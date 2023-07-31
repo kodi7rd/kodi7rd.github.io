@@ -149,7 +149,9 @@ if len(sys.argv) >= 2:
         thread.append(Thread(show_results))
 
         thread[0].start()
-    
+        subs=xbmc.Player().getSubtitles()
+        log.warning('Found subs:')
+        log.warning(subs)
         f_result=cache.get(get_subtitles,0,video_data,table='subs')
         if (f_result):
             last_sub_index,all_subs=get_db_data(f_result)

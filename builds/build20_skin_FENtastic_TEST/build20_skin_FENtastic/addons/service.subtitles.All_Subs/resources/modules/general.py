@@ -76,14 +76,14 @@ class OverlayText:
         # icon
         w2 = 95#int(int(20.0 * 0.7) * viewport_w / 20.0)
         h2 = int(95 * viewport_h / 1088.0)
-        x2 = 570
+        x2 = 170
         y2 = int(30)
         
         # background
-        w3 = 800#int(int(20.0 * 0.7) * viewport_w / 20.0)
-        h3 = int(100 * viewport_h / 1088.0)
-        x3 = 540
-        y3 = int(30)
+        w3 = 1800#int(int(20.0 * 0.7) * viewport_w / 20.0)
+        h3 = 150
+        x3 = 50
+        y3 = 20
         
         
         return x, y, w, h,x2, y2, w2, h2,x3, y3, w3, h3
@@ -132,11 +132,12 @@ def show_results(show_dp=True):
                 break
             if (show_msg=="END"):
                 break_all=True
+                
                 dp.close()
                 break
             time.sleep(0.1)
             time_out+=1
-            if (time_out>600):
+            if (time_out>1200):
                 break_all=True
                 dp.close()
                 break
@@ -153,6 +154,7 @@ def show_results(show_dp=True):
             cond=xbmc.abortRequested
         log.warning(cond)
         close_overlay=False
+        time_out=0
         with OverlayText() as _overlay:
           
           while (not cond) and (xbmc.Player().isPlaying()):
@@ -166,10 +168,14 @@ def show_results(show_dp=True):
                 
             if _overlay.isShowing():
                 if (show_msg!="END"):
-                    _overlay.setText(show_msg)
+                    add_str=""
+                    for i in range(0,int(120-(time_out/10))):
+                        add_str+='_';
+                    _overlay.setText(show_msg+'\n'+add_str)
 
             time.sleep(0.1)
-            if (show_msg=="END"):
+            time_out+=1
+            if (show_msg=="END") or (time_out>1200):
                 close_overlay=True
                 _overlay.close()
                 
@@ -314,18 +320,23 @@ def get_db_data(f_result):
     for i in list_sub:
         all_subs[i[0]]=x
         x+=1
-    max_index=0
+   
+    max_index=-1
     for items in f_result:
-        
+       
         c_sub_name=items[8]
         
         try:
             val=all_subs[c_sub_name]
+            
             a_index=val
+            
             if a_index>max_index:
                 last_sub_index=c_sub_name
+                
                 max_index=a_index
-        except:
+        except Exception as e:
+            
             pass
     return last_sub_index,all_subs
     

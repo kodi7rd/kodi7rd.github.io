@@ -1,5 +1,5 @@
 
-
+import random
 import xbmc,xbmcgui,time,xbmcplugin
 from resources.modules import log
 import pkgutil,json,re
@@ -10,6 +10,7 @@ from urllib.parse import  unquote_plus, unquote,  quote
 import threading
 import urllib.parse
 import chardet,unicodedata
+import random
 global break_all
 from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 from resources.modules.general import Thread,CachedSubFolder,TransFolder,user_dataDir
@@ -65,23 +66,27 @@ def similar(w1, w2):
     return int(round(s.ratio()*100))
 
 def sort_subtitles(save_all_data,video_data):
+    from resources.modules import general
     highest_rating=0
-    
-    ############KODI-RD-IL###################
-    # Original DarkSubs Line:
-    #release_names=['bluray','hdtv','dvdrip','bdrip','web-dl','hdcam','hdrip','webrip']
+    general.show_msg="מסדר כתוביות 0/"+str(len(save_all_data))
     
     release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
                      'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
                      'web','web-dl','web dl','web-dlrip','webrip','web-rip',
                      'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
                      'telecine','hdts','telesync']
+                     
+    # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
+    site_id_order = ['[Kt]', '[Wiz]', '[Op]', '[SS]', '[Bs]']
     #########################################
     
     all_data = []
     all_eng = []
     Quality = (xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
+    count=0
     for save_data_value in save_all_data:
+          general.show_msg="מסדר כתוביות %d/%d"%(count,(len(save_all_data)))
+          count+=1
           json_value = json.loads(json.dumps(save_data_value))
           
           if 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value and 'sync' in json_value and 'hearing_imp' in json_value:
@@ -105,7 +110,12 @@ def sort_subtitles(save_all_data,video_data):
               array_subs.append(item_2)
               array_subs.append(item_2)
            
-           precent = similar(array_original,array_subs)
+           if ('כתובית מובנית' in json_value['label2']):
+               precent=100
+           else:
+                precent=similar(array_original,array_subs)
+
+           #if precent==0:
            
            # Video file array
            array_original = video_data['Tagline'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
@@ -138,17 +148,18 @@ def sort_subtitles(save_all_data,video_data):
            
            if 'language=Hebrew' not in json_value['url'] and 'language=he' not in json_value['url'] and ('language=' in  json_value['url'] or 'Hebrew' not in json_value['label']):
                
-               all_eng.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename']))
+               all_eng.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
            else:
 
-             all_data.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename']))
+             all_data.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
       
     
-    all_data=sorted(all_data, key=lambda x: x[5], reverse=True)
-    all_eng=sorted(all_eng, key=lambda x: x[5], reverse=True)
+    # Sort by precent (index 5) and then by site_id (index 9) using custom order specified in site_id_order.
+    all_data=sorted(all_data, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+    all_eng=sorted(all_eng, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
     
     all_data=all_data+all_eng
-    log.warning(all_data)
+ 
     return all_data
 def lowercase_with_underscores(_str):   ####### burekas
     return unicodedata.normalize('NFKD', _str).encode('utf-8','ignore').decode('utf-8')
@@ -367,6 +378,8 @@ def c_get_subtitles(video_data):
     break_all=False
     ExcludeTime = int((Addon.getSetting('time_s')))
     
+    
+       
     while 1:
         elapsed_time = time.time() - start_time
         still_alive=0
@@ -429,6 +442,8 @@ def get_subtitles(video_data):
     
     xbmc.sleep(100)
     
+    
+    
     return f_result
 
 
@@ -482,7 +497,11 @@ def get_last_key():
     
         file_data=int(file_data)
     except:
-        file_data=0
+        if Addon.getSetting("bing_translate_keys_method") == '1':
+            x=cache.get(c_get_keys, 24,table='subs')
+            file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
+        else:
+            file_data=0
     return file_data
 def set_last_key(count_key):
     last_key_file=os.path.join(user_dataDir,'last_key.txt')
@@ -704,9 +723,12 @@ def translate_subs(input_file,output_file):
                 except:
                     general.show_msg=str(response)
                     
-                    count_key+=1
-                    if (count_key>amount):
-                        count_key=0
+                    if Addon.getSetting("bing_translate_keys_method") == '1':
+                        count_key = random.randint(0, amount - 1) # Generate random number from 0 to keys count
+                    else:
+                        count_key+=1
+                        if (count_key>amount):
+                            count_key=0
                     nm,key,location,amount = select_key(count_key)
                     log.warning(f"DarkSubs Bing API: bing_translator_name={nm} | bing_api_key={key} | total_keys_amount={amount}")
                     headers = {
@@ -772,6 +794,17 @@ def translate_subs(input_file,output_file):
 
 def download_sub(source,download_data,MySubFolder,language,filename):
     log.warning('Download sub')
+    log.warning('filename: ')
+    log.warning(filename)
+    from resources.modules import general
+    try:
+        x=int(download_data['url'])
+        log.warning(x)
+        xbmc.Player().setSubtitleStream(x)
+        return 'Dont use'
+    except:
+        pass
+    
     ext=['.srt','.sub','.sup','.idx']
     Addon=xbmcaddon.Addon()
     try:
@@ -808,8 +841,10 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             log.warning('Found cache')
             break
     if not found:
-    
-        sub_file=impmodule.download(download_data,MySubFolder)
+        try:
+            sub_file=impmodule.download(download_data,MySubFolder)
+        except:
+            general.break_all=True
         
     if language!='Hebrew'  and Addon.getSetting("auto_translate")=='true':
         
@@ -826,6 +861,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         if not os.path.exists(trans_file):
             translate_subs(sub_file,trans_file)
         sub_file=trans_file
-    
-    
+    log.warning(general.break_all)
+    if general.break_all:
+        return 'Dont use'
     return sub_file
