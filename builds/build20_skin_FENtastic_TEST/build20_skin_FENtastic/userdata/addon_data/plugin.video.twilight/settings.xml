@@ -1,5 +1,6 @@
 <settings version="2">
     <setting id="auto_start_twilight" default="true">false</setting>
+    <setting id="auto_invoker_fix" default="true">false</setting>
     <setting id="kodi_menu_cache">true</setting>
     <setting id="limit_concurrent_threads" default="true">true</setting>
     <setting id="max_threads" default="true">60</setting>
@@ -41,13 +42,13 @@
     <setting id="show_specials" default="true">false</setting>
     <setting id="use_season_title" default="true">false</setting>
     <setting id="show_unaired" default="true">true</setting>
-    <setting id="suppress_episode_plot" default="true">false</setting>
     <setting id="show_unaired_watchlist" default="true">true</setting>
     <setting id="include_year_in_title" default="true">0</setting>
     <setting id="default_all_episodes" default="true">0</setting>
     <setting id="single_ep_display" default="true">0</setting>
     <setting id="single_ep_format" default="true">0</setting>
     <setting id="tv_progress_location" default="true">0</setting>
+    <setting id="avoid_episode_spoilers" default="true">false</setting>
     <setting id="trakt.calendar_sort_order" default="true">0</setting>
     <setting id="trakt.calendar_previous_days" default="true">0</setting>
     <setting id="trakt.calendar_future_days" default="true">7</setting>
@@ -168,7 +169,7 @@
     <setting id="provider.debrid_cloud_colour_name" default="true">[COLOR=FF7A01CC]FF7A01CC[/COLOR]</setting>
     <setting id="provider.folders_colour_name" default="true">[COLOR=FFB36B00]FFB36B00[/COLOR]</setting>
     <setting id="scraper_4k_highlight_name" default="true">[COLOR=FFFF00FE]FFFF00FE[/COLOR]</setting>
-    <setting id="scraper_1080p_highlight_name" default="true">[COLOR=FF3CFA38]FF3CFA38[/COLOR]</setting>
+    <setting id="scraper_1080p_highlight_name">[COLOR=FF3CFA38]FF3CFA38[/COLOR]</setting>
     <setting id="scraper_720p_highlight_name" default="true">[COLOR=FF3C9900]FF3C9900[/COLOR]</setting>
     <setting id="scraper_SD_highlight_name" default="true">[COLOR=FF0166FF]FF0166FF[/COLOR]</setting>
     <setting id="scraper_flag_identify_colour_name" default="true">[COLOR=FF7C7C7C]FF7C7C7C[/COLOR]</setting>
@@ -212,7 +213,7 @@
     <setting id="meta_language">he</setting>
     <setting id="meta_mpaa_region" default="true">US</setting>
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1690207252</setting>
+    <setting id="database.maintenance.due">1691001815</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -231,7 +232,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.1.18</setting>
+    <setting id="version_number">3.2.01</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</setting>
     <setting id="highlight" default="true">FF12A0C7</setting>
