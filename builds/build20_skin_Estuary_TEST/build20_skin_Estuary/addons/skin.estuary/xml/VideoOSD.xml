@@ -196,24 +196,32 @@
 					<ondown>noop</ondown>
 					<onleft>70048</onleft>
 					<onright>804</onright>
-					<control type="radiobutton" id="598">
-					<visible>$EXP[SkinZoomToggle]</visible>
-						<include content="OSDButtonAdvanced">
-							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
-							<param name="textoffsetx">13</param>
-							<param name="label">$LOCALIZE[700017]</param>
+					<control type="radiobutton" id="70046">
+						<include content="OSDButton">
+							<param name="texture" value="osd/fullscreen/buttons/settings-subtitle.png"/>
 						</include>
-						<include condition="$EXP[LiveTvCondition]">Out</include>
+						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
-					<control type="radiobutton" id="599">
-						<visible>$EXP[SkinZoomToggle]</visible>
-						<include content="OSDButtonAdvanced">
-							<param name="label">$LOCALIZE[700016]</param>
-							<param name="textoffsetx">22</param>
-							<param name="texture" value="kodirdil/zoom/zoom-in-hand.png"/>
-						</include>
-						<include condition="$EXP[LiveTvCondition]">In</include>
+					<control type="button" id="700450">
+						<description>Manual Subtitles Delay Sync</description>
+						<width>100</width>
+						<height>100</height>
+						<texturenofocus colordiffuse="grey_a"></texturenofocus>
+						<texturefocus colordiffuse="button_focus"></texturefocus>
+						<onclick>SubtitleDelay</onclick>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
+					<control type="button" id="700451">
+						<description>DarkSubs Subtitles Window Button</description>
+						<width>225</width>
+						<height>76</height>
+						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/choose_subs.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/choose_subs.png</texturefocus>
+						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+					</control>
+					<!--
 					<control type="radiobutton" id="600">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/previous.png"/>
@@ -221,6 +229,7 @@
 						<onclick>PlayerControl(Previous)</onclick>
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(livetv)]</visible>
 					</control>
+					-->
 					<control type="radiobutton" id="601">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/rewind.png"/>
@@ -269,6 +278,7 @@
 						<onclick>PlayerControl(Forward)</onclick>
 						<visible>[Player.SeekEnabled + !VideoPlayer.Content(livetv)] + !Player.Paused</visible>
 					</control>
+					<!--
 					<control type="radiobutton" id="607">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/next.png"/>
@@ -276,6 +286,7 @@
 						<onclick>PlayerControl(Next)</onclick>
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
 					</control>
+					-->
 					<control type="radiobutton" id="608">
 						<textureradioonfocus colordiffuse="white">osd/fullscreen/buttons/record-white.png</textureradioonfocus>
 						<textureradioonnofocus>osd/fullscreen/buttons/record-white.png</textureradioonnofocus>
@@ -343,28 +354,51 @@
 						<onclick>ActivateWindow(videoplaylist)</onclick>
 						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
-					<control type="button" id="700451">
-						<description>DarkSubs Subtitles Window Button</description>
-						<width>230</width>
-						<height>77</height>
-						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/choose_subs.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/choose_subs.png</texturefocus>
-						<onup>70046</onup>
-						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
+					<control type="button" id="700452">
+						<description>Switch to next Audio track</description>
+						<texturenofocus colordiffuse="grey_a">kodirdil/next_audio_track/next_audio_track.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/next_audio_track/next_audio_track.png</texturefocus>
+						<width>76</width>
+						<height>76</height>
+						<visible>Integer.IsGreater(VideoPlayer.AudioStreamCount,1)</visible>
+						<onclick>AudioNextLanguage</onclick>
 					</control>
-					<control type="radiobutton" id="70046">
-						<include content="OSDButton">
-							<param name="texture" value="osd/fullscreen/buttons/settings-subtitle.png"/>
+					<control type="button" id="600450">
+						<description>Idan Plus Channels Menu</description>
+						<width>76</width>
+						<height>76</height>
+						<texturenofocus colordiffuse="grey_a">osd/fullscreen/buttons/channels.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">osd/fullscreen/buttons/channels.png</texturefocus>
+						<onclick>ActivateWindow(1123)</onclick>
+						<visible>!VideoPlayer.Content(LiveTV)</visible>
+					</control>
+					<control type="radiobutton" id="598">
+					<visible>$EXP[SkinZoomToggle]</visible>
+						<include content="OSDButtonAdvanced">
+							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
+							<param name="textoffsetx">13</param>
+							<param name="label">$LOCALIZE[700017]</param>
 						</include>
-						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
-						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+						<include condition="$EXP[LiveTvCondition]">Out</include>
 					</control>
+					<control type="radiobutton" id="599">
+						<visible>$EXP[SkinZoomToggle]</visible>
+						<include content="OSDButtonAdvanced">
+							<param name="label">$LOCALIZE[700016]</param>
+							<param name="textoffsetx">22</param>
+							<param name="texture" value="kodirdil/zoom/zoom-in-hand.png"/>
+						</include>
+						<include condition="$EXP[LiveTvCondition]">In</include>
+					</control>
+					<!-- Info button - unused because Pause Window (Custom_1122_PlayerPauseWindow.xml)
 					<control type="radiobutton" id="70043">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/information.png"/>
 						</include>
 						<onclick>Info</onclick>
 					</control>
+					-->
+					<!--
 					<control type="radiobutton" id="70044">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/bookmarks.png"/>
@@ -372,6 +406,7 @@
 						<onclick>ActivateWindow(videobookmarks)</onclick>
 						<visible>!VideoPlayer.Content(livetv)</visible>
 					</control>
+					-->
 					<control type="radiobutton" id="70045">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/teletext.png"/>
@@ -410,6 +445,8 @@
 			
 			
 				<control type="grouplist">
+				<visible>!Player.Paused | !Skin.HasSetting(ShowPlayerPauseWindow)</visible>
+				<animation effect="fade" start="0" end="100" time="450">VisibleChange</animation>
 					<left>0</left>
 					<centertop>20</centertop>
 					<width>1800</width>

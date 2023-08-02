@@ -45,6 +45,9 @@
 	<expression name="HomeScreenOff">![Window.IsActive(home) | Control.IsVisible(50) | Control.IsVisible(54) | Control.IsVisible(56) | Control.IsVisible(500) | Control.IsVisible(501) | Control.IsVisible(504)]</expression>
 	<expression name="SkinZoomToggle">Skin.HasSetting(ZoomToggle)</expression>
 	<expression name="LiveTvCondition">!VideoPlayer.Content(livetv)</expression>
+	<expression name="PausedTended_Prefix">Skin.HasSetting(ShowPlayerPauseWindow) + Player.Paused + !String.IsEmpty(VideoPlayer.Plot) + !Window.IsActive(1123)</expression>
+	<expression name="Label_Visible_Prefix">VideoPlayer.Content(movies) | VideoPlayer.Content(tvshows) | VideoPlayer.Content(seasons) | VideoPlayer.Content(episodes) + ![String.IsEmpty(VideoPlayer.Genre) | String.IsEmpty(VideoPlayer.Year)]</expression>
+	<expression name="fakebuttonsync">Control.HasFocus(700450)</expression>
 	<include name="CommonScrollbars">
 		<param name="bottom_offset">list_bottom_offset</param>
 		<definition>
@@ -109,6 +112,29 @@
 		<texturenofocus />
 		<label></label>
 		<font></font>
+	</include>
+	
+	<include name="syncfakebutton">
+						<control type="image" id="2232320">
+						<visible>!$EXP[fakebuttonsync]</visible>
+						<top>60</top>
+						<left>80</left>
+						<description>Manual Subtitles Delay Sync</description>
+						<width>140</width>
+						<height>140</height>
+						<texture>kodirdil/subtitles_window/sync_subtitle.png</texture>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+					</control>
+					<control type="image" id="2232320">
+					<visible>$EXP[fakebuttonsync]</visible>
+						<top>60</top>
+						<left>80</left>
+						<description>Manual Subtitles Delay Sync</description>
+						<width>140</width>
+						<height>140</height>
+						<texture colordiffuse="button_focus">kodirdil/subtitles_window/sync_subtitle.png</texture>
+						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+					</control>
 	</include>
 	<include name="RatingCircle">
 		<param name="animation">False</param>
@@ -210,7 +236,7 @@
 				<align>center</align>
 				<aligny>center</aligny>
 				<font>font_flag</font>
-				<label fallback="n/a">$PARAM[labelflag]$PARAM[freelabel]</label>
+				<label fallback="$LOCALIZE[700024]">$PARAM[labelflag]$PARAM[freelabel]</label>
 				</control>
 		</definition>
 		</include>
@@ -426,7 +452,7 @@
 				<param name="end">0</param>
 				</include>
 					<top>10</top>
-					<width>260</width>
+					<width>240</width>
 					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.RatingAndVotes) + $EXP[HomeScreenOff]</visible>
 					<include>pre_fix_setview_flags</include>
 					<include content="InfoFlag">
@@ -474,6 +500,26 @@
 						<param name="labelleft">45</param>
 						<param name="icon" value="kodirdil/poster_view_icons/clock.png" />
 						<param name="label" value="$INFO[$PARAM[infolabel_prefix]ListItem.Duration(hh:mm:ss)]" />
+					</include>
+				</control>
+				<control type="group">
+				<visible>String.IsEqual(ListItem.DBTYPE,tvhsow) | Container.Content(tvshows) + ![String.IsEmpty(ListItem.Status)]</visible>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(tvshows)</param>
+				<param name="end">0</param>
+				</include>
+				<include content="SetSlideAnimation">
+				<param name="setproperty">Container.Content(tvshows)</param>
+				<param name="end">0</param>
+				</include>
+					<top>10</top>
+					<width>120</width>
+					<visible>!String.IsEmpty($PARAM[infolabel_prefix]ListItem.Status) + $EXP[HomeScreenOff]</visible>
+					<include>pre_fix_setview_flags</include>
+					<include content="InfoFlag">
+						<param name="labelleft">45</param>
+						<param name="icon" value="kodirdil/poster_view_icons/tvshow_status.png" />
+						<param name="label" value="$VAR[SetHebStatus]" />
 					</include>
 				</control>
 				<control type="group">
@@ -1746,7 +1792,7 @@
 		<control type="group">
 		<animation effect="fade" start="0" end="100" time="150" delay="50">Visible</animation>
 		<visible>Control.HasFocus($PARAM[Control_id])</visible>
-		<include content="preFix_VideoOSdZoomFocused">
+		<include content="preFix_VideoOSDZoomFocused">
 			<param name="id">$PARAM[id]</param>
 		</include>
 			<control type="image">
@@ -1775,5 +1821,200 @@
 		</control>
 		<nested />
 	</include>
+	
+	<include name="SetPauseTendedFlagsVideosOSd">
+	<param name="flag_w" default="125"/>
+	<param name="flag_h" default="50"/>
+	<param name="base_flag_icon" default="flag.png"/>
+	<param name="label_top" default="0"/>
+	<param name="label_left" default="0"/>
+	<param name="label_width" default="125"/>
+	<param name="label_height" default="50"/>
+	<param name="groupwidth" default="$PARAM[groupwidth]"/>
+	<definition>
+	<control type="group">
+	<width>$PARAM[groupwidth]</width>
+	<visible>!String.IsEmpty(VideoPlayer.$PARAM[label]) | !String.IsEmpty($PARAM[label2]) | !String.IsEmpty(VideoPlayer.$PARAM[label3])</visible>
+		<control type="image">
+			<top>0</top>
+			<left>0</left>
+			<width>$PARAM[flag_w]</width>
+			<height>$PARAM[flag_h]</height>
+			<texture>flags/$PARAM[base_flag_icon]</texture>
+		</control>
+		<control type="image">
+			<top>0</top>
+			<left>0</left>
+			<width>$PARAM[flag_w]</width>
+			<height>$PARAM[flag_h]</height>
+			<texture>flags/$PARAM[icon]/$INFO[VideoPlayer.$PARAM[label3]].png</texture>
+		</control>
+		<control type="label" id="1">
+			<description>buffering value</description>
+			<label>[B]$INFO[VideoPlayer.$PARAM[label]]$INFO[$PARAM[label2]] $PARAM[freetext][/B]</label>
+			<top>$PARAM[label_top]</top>
+			<left>$PARAM[label_left]</left>
+			<width>$PARAM[label_width]</width>
+			<height>$PARAM[label_height]</height>
+			<aligny>center</aligny>
+			<align>center</align>
+			<font>font20_title</font>
+		</control>
+	</control>
+	<nested />
+	</definition>
+	</include>
+	
+	<include name="Label_prefix">
+		<control type="textbox" id="1">
+			<animation type="Visible">
+				<effect type="slide" start="150" end="0" time="250" tween="sine" easing="inout"/>
+				<effect type="fade" start="50" end="100" time="250" delay="150"/>
+			</animation>
+			<animation type="Hidden">
+				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
+				<effect type="fade" start="100" end="0" time="250" delay="150"/>
+			</animation>
+			<visible>$EXP[PausedTended_Prefix]</visible>
+			<visible>$PARAM[visible]</visible>
+				<description>buffering value</description>
+				<label fallback="$LOCALIZE[700024]">[B][COLOR $PARAM[color]]$INFO[Control.GetLabel($PARAM[id])][/COLOR][/B]</label>
+				<centerleft>$PARAM[centerleft]%</centerleft>
+				<centertop>$PARAM[centertop]%</centertop>
+				<width>700</width>
+				<height>220</height>
+				<aligny>center</aligny>
+				<align>center</align>
+				<font>$PARAM[font_prefix]</font>
+			</control>
+			<nested />
+	</include>
+
+	
+	<include name="SetFadeLabel">
+		<include content="TimeFadeLabel">
+			<param name="id">$PARAM[id]</param>
+		</include>
+	</include>
+	
+	<include name="TimeFadeLabel">
+		<param name="id" default="$PARAM[id]"/>
+	<definition>
+		
+	<control type="fadelabel" id="$PARAM[id]">
+		<animation effect="fade" start="0" end="100" time="400">VisibleChange</animation>
+        <description>My First fadelabel</description>
+        <left>-2000</left>
+        <top>-2060</top>
+        <width>1</width>
+        <scrollout>true</scrollout>
+        <pauseatend>500</pauseatend>
+        <label>6</label>
+        <info>VideoPlayer.Genre</info>
+		<info>VideoPlayer.Year</info>
+        <font>font10</font>
+        <textcolor>FFB2D4F5</textcolor>
+        <textoffsetx>20</textoffsetx>
+        <scroll>true</scroll>
+        <randomize>true</randomize>
+  </control>
+  <nested />
+  </definition>
+ </include>
+	
+	<include name="ContentTarget">
+		<content condition="!VideoPlayer.Content(LiveTv)">$INFO[Control.GetLabel(9102)]</content>
+		<content condition="VideoPlayer.Content(LiveTv)">pvr://channels/tv/*</content>
+	</include>
+		
+	<include name="ListPrompLevel">
+		<control type="group">
+					<animation type="WindowOpen">
+					<effect type="slide" start="-50" end="0" time="250" tween="sine" easing="inout"/>
+					<effect type="fade" start="0" end="100" time="250" delay="50"/>
+					</animation>
+					<animation type="WindowClose">
+					<effect type="slide" start="0" end="-50" time="250" tween="sine" easing="inout"/>
+					<effect type="fade" start="100" end="0" time="250" delay="50"/>
+					</animation>
+
+					<centerleft>14%</centerleft>
+					<centertop>55%</centertop>
+					<width>400</width>
+					<height>400</height>
+					<control type="list" id="$PARAM[id]">
+					<top>30</top>
+					<left>40</left>
+	                <onright>1123</onright>
+	                <ondown>9103</ondown>
+	                <onback>9000</onback>
+	                <orientation>vertical</orientation>
+					<pulseonselect>true</pulseonselect>
+	                <itemlayout width="200" height="125">
+
+	                    <control type="label">
+	                        <posx>0</posx>
+	                        <posy>0</posy>
+	                        <width>200</width>
+	                        <height>100</height>
+	                        <font>font45</font>
+							<aligny>center</aligny>
+							<align>center</align>
+	                        <textcolor>white</textcolor>
+	                        <shadowcolor>black</shadowcolor>
+	                        <label>$INFO[ListItem.property(textTitle)]</label>
+	                    </control>
+	                </itemlayout>
+	                <focusedlayout width="200" height="125">
+					<control type="group">
+					<animation type="Focus">
+					<effect type="zoom" start="100,100" center="auto" end="115,115" time="50"/>
+					</animation>
+					<control type="image">
+					<visible>Control.HasFocus($PARAM[id])</visible>
+					<top>0</top>
+					<left>0</left>
+					<width>200</width>
+					<height>100</height>
+					<texture colordiffuse="button_focus" diffuse="masks/landscape1.png">colors/white.png</texture>
+					</control>
+	                    <control type="label">
+	                        <posx>0</posx>
+	                        <posy>0</posy>
+	                        <width>200</width>
+	                        <height>100</height>
+	                        <font>font45</font>
+	                        <aligny>center</aligny>
+							<align>center</align>
+	                        <textcolor>white</textcolor>
+	                        <shadowcolor>black</shadowcolor>
+	                        <label>$INFO[ListItem.property(textTitle)]</label>
+	
+	                    </control>
+					</control>
+	                </focusedlayout>
+	                <content>
+	                    <item>
+	                        <label>$PARAM[content1]</label>
+	                        <property name="textTitle">$PARAM[label1]</property>
+	                    </item>
+	                    <item>
+	                        <label>$PARAM[content2]</label>
+	                        <property name="textTitle">$PARAM[label2]</property>
+	                    </item>
+	                </content>
+	            </control>
+			</control>
+		</include>
+		
+		<include name="SetPrompLevel">
+			<include content="ListPrompLevel">
+				<param name="content1">plugin://plugin.video.idanplus/?iconimage=C%253A%255CUsers%255Cneta%255CAppData%255CRoaming%255CKodi%255Caddons%255Cplugin.video.idanplus%255Cicon.png&amp;mode=1&amp;module&amp;moredata&amp;name=%5bB%5d%d7%98%d7%9c%d7%95%d7%99%d7%96%d7%99%d7%94%5b%2fB%5d&amp;url&quot</param>
+				<param name="content2">plugin://plugin.video.idanplus/?iconimage=C%253A%255CUsers%255Cneta%255CAppData%255CRoaming%255CKodi%255Caddons%255Cplugin.video.idanplus%255Cicon.png&amp;mode=3&amp;module&amp;moredata&amp;name=%5bB%5d%d7%a8%d7%93%d7%99%d7%95%5b%2fB%5d&amp;url&quot</param>
+				<param name="id">$PARAM[id]</param>
+				<param name="label1">$PARAM[label1]</param>
+				<param name="label2">$PARAM[label2]</param>
+			</include>
+		</include>
 	
 </includes>

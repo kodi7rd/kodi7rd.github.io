@@ -24,11 +24,6 @@
 						<onclick>RunScript(&quot;plugin.close.kodi&quot;)</onclick>
 						<visible>System.ShowExitButton</visible>
 					</item>
-					<item>
-						<label>Toggle debugging</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>Skin.ToggleDebug()</onclick>
-					</item>
 				</content>
 			</control>
 		</control>
