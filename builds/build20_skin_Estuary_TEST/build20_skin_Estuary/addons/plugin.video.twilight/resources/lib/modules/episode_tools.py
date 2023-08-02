@@ -41,8 +41,8 @@ class EpisodeTools:
 			custom_title = self.meta_get('custom_title', None)
 			title = custom_title or self.meta_get('title')
 			display_name = '%s - %dx%.2d' % (title, int(season), int(episode))
-			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_data['title'],
-						'episode': episode, 'premiered': airdate, 'plot': ep_data['plot']})
+			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_data['title'], 'ep_thumb': ep_data.get('thumb', None),
+							'episode': episode, 'premiered': airdate, 'plot': ep_data['plot']})
 			url_params = {'media_type': 'episode', 'tmdb_id': self.meta_get('tmdb_id'), 'tvshowtitle': self.meta_get('rootname'), 'season': season,
 						'episode': episode, 'background': 'true', 'nextep_settings': self.nextep_settings, 'play_type': play_type, 'meta': json.dumps(self.meta)}
 			if play_type == 'autoscrape_nextep': url_params['prescrape'] = 'false'
@@ -78,9 +78,10 @@ class EpisodeTools:
 			query = title + ' S%.2dE%.2d' % (season, episode)
 			display_name = '%s - %dx%.2d' % (title, season, episode)
 			ep_name, plot = chosen_episode['title'], chosen_episode['plot']
+			ep_thumb = chosen_episode.get('thumb', None)
 			try: premiered = adjust_premiered_date(chosen_episode['premiered'], adjust_hours)[1]
 			except: premiered = chosen_episode['premiered']
-			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_name,
+			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_name, 'ep_thumb': ep_thumb,
 							'episode': episode, 'premiered': premiered, 'plot': plot})
 			url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'tvshowtitle': self.meta_get('rootname'), 'season': season, 'episode': episode,
 						'autoplay': 'true', 'meta': json.dumps(self.meta)}

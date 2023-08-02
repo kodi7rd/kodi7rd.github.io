@@ -212,3 +212,7 @@ msgstr ""
 msgctxt "#32049"
 msgid "Minimal"
 msgstr ""
+
+msgctxt "#32050"
+msgid "Avoid when video already contains built-in subs"
+msgstr ""

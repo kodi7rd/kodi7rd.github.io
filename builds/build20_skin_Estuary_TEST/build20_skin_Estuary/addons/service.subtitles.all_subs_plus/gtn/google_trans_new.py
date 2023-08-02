@@ -93,6 +93,9 @@ class google_translator:
     :type proxies: class : dict; like: {'http': 'http:171.112.169.47:19934/', 'https': 'https:171.112.169.47:19934/'}
 
     '''
+
+    TIMESTAMP_PREFIX = "Line_n"
+
     def __init__(self,url_suffix="co.il",timeout=15,proxies=None):
         self.proxies = proxies
         if url_suffix not in URLS_SUFFIX:
@@ -114,27 +117,37 @@ class google_translator:
         freq = freq_initial
         return freq
 
+    def timestamp_replacement(self,index):
+        replacement = self.TIMESTAMP_PREFIX+str(index)
+        return replacement
+
     def translate(self,text,lang_tgt='auto',lang_src='auto',pronounce = False):
+
+        #LANGUAGES full names are not good for the api. Only language codes
+        '''
         try:
-            lang = LANGUAGES[lang_src]
+            lang_src = LANGUAGES[lang_src]
         except :
             lang_src = 'auto'
         try:
-            lang = LANGUAGES[lang_tgt]
+            lang_tgt = LANGUAGES[lang_tgt]
         except :
             lang_tgt = 'he'
+        '''
+
         arr_text=text.split('\r\n')
 
         if len(arr_text) < 2:
             arr_text=text.split('\n')
-        
+
         arr_data={}
         counter=0
         all_clean_text=[]
         for line in arr_text:
             if '-->' in line:
-                arr_data['Line_n'+str(counter)]=line
-                all_clean_text.append('Line_n'+str(counter))
+                timestamp_line = self.timestamp_replacement(counter)
+                arr_data[timestamp_line]=line
+                all_clean_text.append(timestamp_line)
             else:
                 all_clean_text.append(line)
             counter+=1
@@ -161,6 +174,7 @@ class google_translator:
                                      data=freq,
                                      headers=headers,
                                     )
+
         try:
             if self.proxies == None or type(self.proxies) != dict :
                 self.proxies = {}
@@ -175,11 +189,11 @@ class google_translator:
                     if 1:#try :
                         try:
                             response = (decoded_line + ']')
-                            
+
                             response = json.loads(response)
                         except:
                             response = (decoded_line )
-                            
+
                             response = json.loads(response)
                         response = list(response)
                         response = json.loads(response[0][2])
@@ -197,10 +211,15 @@ class google_translator:
                                     translate_text += sentence.strip()+"\r\n" if "\r\n" not in sentence.strip() else sentence.strip()
                                 else:
                                     translate_text += "\r\n" if "\r\n\r\n" in sentence else ""
-                            
-                            
-                            for items in arr_data:
-                                translate_text=translate_text.replace(items.upper()+"\r",arr_data[items]+"\r")
+
+
+                            isupper = True if self.TIMESTAMP_PREFIX.upper() in translate_text else False
+                            for item in arr_data:
+                                item_key = item
+                                if isupper:
+                                    item = item.upper()
+
+                                translate_text=translate_text.replace(item+"\r",arr_data[item_key]+"\r")
 
                             if pronounce == False :
                                 return translate_text
@@ -248,7 +267,7 @@ class google_translator:
                                     url=self.url,
                                     data=freq,
                                     headers=headers)
-        
+
         try:
             if self.proxies == None or type(self.proxies) != dict:
                 self.proxies = {}

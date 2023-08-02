@@ -212,3 +212,7 @@ msgstr "הצג הכול"
 msgctxt "#32049"
 msgid "Minimal"
 msgstr "מינימלי"
+
+msgctxt "#32050"
+msgid "Avoid when video already contains built-in subs"
+msgstr "הימנע משימוש כאשר קיימות כתוביות מובנות"

@@ -22,7 +22,7 @@ autoplay_next_episode, autoscrape_next_episode, limit_resolve = settings.autopla
 get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watched_status.get_bookmarks
 erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
-playback_attempt_pause = settings.playback_attempt_pause
+playback_attempt_pause, get_art_provider = settings.playback_attempt_pause, settings.get_art_provider
 sd_check = ('SD', 'CAM', 'TELE', 'SYNC')
 rd_info, pm_info, ad_info = ('apis.real_debrid_api', 'RealDebridAPI'), ('apis.premiumize_api', 'PremiumizeAPI'), ('apis.alldebrid_api', 'AllDebridAPI')
 debrids = {'Real-Debrid': rd_info, 'rd_cloud': rd_info, 'rd_browse': rd_info, 'Premiumize.me': pm_info, 'pm_cloud': pm_info, 'pm_browse': pm_info,
@@ -457,9 +457,11 @@ class Sources():
 			episodes_data = metadata.episodes_meta(self.season, self.meta, meta_user_info)
 			try:
 				episode_data = [i for i in episodes_data if i['episode'] == self.episode][0]
+				art_providers = get_art_provider()
+				thumb = episode_data.get('thumb', None) or self.meta.get('custom_fanart') or self.meta.get(art_providers[2]) or self.meta.get(art_providers[3]) or ''
 				self.meta['tvshow_plot'] = self.meta['plot']
 				self.meta.update({'media_type': 'episode', 'season': episode_data['season'], 'episode': episode_data['episode'], 'premiered': episode_data['premiered'],
-								'ep_name': episode_data['title'], 'plot': episode_data['plot']})
+								'ep_name': episode_data['title'], 'ep_thumb': episode_data.get('thumb', None), 'plot': episode_data['plot']})
 			except: pass
 
 	def _get_module(self, module_type, function):

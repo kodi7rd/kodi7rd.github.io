@@ -1,9 +1,0 @@
-<advancedsettings>
-	<cache>
-		<memorysize>139460608</memorysize> <!-- 133MB Cache (Uses 400MB RAM) -->
-		<readfactor>10</readfactor>
-	</cache>
-	<network>
-		<disableipv6>true</disableipv6>
-	</network>
-</advancedsettings>

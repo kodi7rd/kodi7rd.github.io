@@ -42,7 +42,7 @@
                     <textcolor>FFFFFFFF</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[B]$INFO[Window.Property(total_results)][/B] [UPPERCASE]$ADDON[plugin.video.twilight 400010] [COLOR=$INFO[Window(10000).Property(twilight.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
+                    <label>[B]$INFO[Window.Property(total_results)][/B] [UPPERCASE]$ADDON[plugin.video.twilight 400010] [COLOR $INFO[Window(10000).Property(twilight.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
                     <animation effect="slide" start="0,0" end="0,-15" time="0" center="auto" condition="String.StartsWith(Window.Property(window_format),media) + !String.IsEmpty(Window.Property(clearlogo))">Conditional</animation>
                 </control>
             </control>
@@ -200,7 +200,6 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1300">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2000)">Conditional</animation>
                                 <top>15</top>
@@ -301,7 +300,6 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1300">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
@@ -706,13 +704,12 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1030">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2001)">Conditional</animation>
                                 <top>15</top>
                                 <height>110</height>
                                 <control type="image">
-                                    <width>1035</width>
+                                    <width>1030</width>
                                     <texture colordiffuse="FFCCCCCC" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="image">
@@ -807,7 +804,6 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1030">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
@@ -992,8 +988,8 @@
                     <onright>2062</onright>
                     <scrolltime tween="cubic" easing="out">500</scrolltime>
                     <orientation>Vertical</orientation>
-                    <focusposition>2</focusposition>
-                    <movement>3</movement>
+                    <focusposition>1</focusposition>
+                    <movement>4</movement>
                     <itemlayout height="120" width="1180">
                         <control type="image">
                             <left>0</left>
@@ -1091,7 +1087,6 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1180">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <top>15</top>
                                 <height>110</height>
@@ -1192,7 +1187,6 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1180">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
@@ -1465,7 +1459,6 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="935">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2003)">Conditional</animation>
                                 <top>15</top>
@@ -1568,7 +1561,6 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="935">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
@@ -1830,7 +1822,6 @@
                     </itemlayout>
                     <focusedlayout condition="String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1700">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <animation effect="fade" start="100" end="60" time="0" condition="!Control.HasFocus(2004)">Conditional</animation>
                                 <top>15</top>
@@ -1919,7 +1910,6 @@
                     </focusedlayout>
                     <focusedlayout condition="!String.IsEqual(Window.Property(window_style),contrast)" height="120" width="1700">
                         <control type="group">
-                            <animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="auto">Focus</animation>
                             <control type="group">
                                 <left>0</left>
                                 <top>15</top>
@@ -2033,7 +2023,7 @@
                 </control>
                 <control type="scrollbar" id="2064">
                     <top>110</top>
-                    <left>1830</left>
+                    <left>1890</left>
                     <width>15</width>
                     <height>945</height>
                     <onleft>2004</onleft>

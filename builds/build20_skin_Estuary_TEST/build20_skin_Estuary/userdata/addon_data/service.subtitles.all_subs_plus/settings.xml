@@ -11,24 +11,29 @@
     <setting id="subscene">true</setting>
     <setting id="storage_en" default="true">false</setting>
     <setting id="storage" default="true" />
-    <setting id="English">true</setting>
-    <setting id="arab" default="true">false</setting>
+    <setting id="hebrew">true</setting>
+    <setting id="english">true</setting>
+    <setting id="russian" default="true">false</setting>
+    <setting id="arabic" default="true">false</setting>
+    <setting id="french" default="true">false</setting>
     <setting id="spanish" default="true">false</setting>
+    <setting id="dummy_setting2" default="true" />
     <setting id="other_lang" default="true" />
     <setting id="all_lang" default="true">false</setting>
+    <setting id="preferred_lang">6</setting>
     <setting id="auto_translate">true</setting>
-    <setting id="popup">true</setting>
     <setting id="nextsub" default="true">no</setting>
     <setting id="json_cache" default="true">false</setting>
     <setting id="history_log" default="true">false</setting>
     <setting id="sort_subs">true</setting>
     <setting id="sync_percent">85</setting>
     <setting id="Debug" default="true">false</setting>
-    <setting id="dummy_setting2" default="true" />
     <setting id="autosub" default="true">false</setting>
-    <setting id="force">false</setting>
-    <setting id="pause" default="true">0</setting>
-    <setting id="local_files" default="true">false</setting>
+    <setting id="force" default="true">false</setting>
+    <setting id="avoid_on_built_in">true</setting>
+    <setting id="popup">2</setting>
+    <setting id="pause">0</setting>
+    <setting id="exlude_local_files_smb" default="true">false</setting>
     <setting id="ExcludeTime">1</setting>
     <setting id="ExcludeAddosOption" default="true">false</setting>
     <setting id="ExcludeAddos" default="true" />
@@ -43,7 +48,7 @@
     <setting id="ExcludeAddosOption6" default="true">false</setting>
     <setting id="ExcludeAddos6" default="true" />
     <setting id="result_style">4</setting>
-    <setting id="enable_custom_colors" default="true">true</setting>
+    <setting id="enable_custom_colors">true</setting>
     <setting id="color_result_wizdom" default="true">white</setting>
     <setting id="color_result_wizdom_custom" default="true" />
     <setting id="color_result_ktuvit" default="true">limegreen</setting>
@@ -59,4 +64,6 @@
     <setting id="size">27</setting>
     <setting id="color" default="true">0</setting>
     <setting id="background_level" default="true">0</setting>
+    <setting id="arab" default="true">false</setting>
+    <setting id="local_files" default="true">false</setting>
 </settings>

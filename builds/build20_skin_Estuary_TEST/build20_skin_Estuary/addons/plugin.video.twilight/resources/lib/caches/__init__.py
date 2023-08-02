@@ -217,13 +217,11 @@ def clear_all_cache():
     ok_dialog(text=32576)
 
 def refresh_cached_data(meta):
-    from caches.meta_cache import metacache
-    media_type, tmdb_id, imdb_id = meta['mediatype'], meta['tmdb_id'], meta['imdb_id']
-    try: metacache.delete(media_type, 'tmdb_id', tmdb_id, meta)
-    except: return notification(32574)
-    from apis.imdb_api import refresh_imdb_meta_data
-    from apis.omdb_api import refresh_omdb_meta_data
-    refresh_imdb_meta_data(imdb_id)
-    refresh_omdb_meta_data(imdb_id)
-    notification(32576)
-    kodi_refresh()
+	from caches.meta_cache import metacache
+	media_type, tmdb_id, imdb_id = meta['mediatype'], meta['tmdb_id'], meta['imdb_id']
+	try: metacache.delete(media_type, 'tmdb_id', tmdb_id, meta)
+	except: return notification(32574)
+	from apis.imdb_api import refresh_imdb_meta_data
+	refresh_imdb_meta_data(imdb_id)
+	notification(32576)
+	kodi_refresh()

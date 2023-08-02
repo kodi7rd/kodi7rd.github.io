@@ -130,9 +130,9 @@ class Confirm(BaseDialog):
 		self.heading = kwargs['heading']
 		self.default_control = kwargs['default_control']
 		self.selected = None
+		self.set_properties()
 
 	def onInit(self):
-		self.set_properties()
 		self.setFocusId(self.default_control)
 
 	def run(self):
@@ -159,8 +159,6 @@ class OK(BaseDialog):
 		self.ok_label = kwargs.get('ok_label')
 		self.text = kwargs['text']
 		self.heading = kwargs['heading']
-
-	def onInit(self):
 		self.set_properties()
 
 	def run(self):
