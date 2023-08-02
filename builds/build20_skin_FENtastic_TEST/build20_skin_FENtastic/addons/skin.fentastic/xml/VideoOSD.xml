@@ -445,7 +445,7 @@
 			
 			
 				<control type="grouplist">
-				<visible>!Player.Paused</visible>
+				<visible>!Player.Paused | !Skin.HasSetting(ShowPlayerPauseWindow)</visible>
 				<animation effect="fade" start="0" end="100" time="450">VisibleChange</animation>
 					<left>0</left>
 					<centertop>20</centertop>
