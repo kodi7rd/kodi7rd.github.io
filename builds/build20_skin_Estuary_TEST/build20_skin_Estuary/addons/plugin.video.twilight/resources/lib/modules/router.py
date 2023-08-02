@@ -222,9 +222,6 @@ def routing(sys):
 	if mode == 'person_direct.search':
 		from indexers.people import person_direct_search
 		return person_direct_search(_get('query'))
-	if mode == 'restart_services':
-		from modules.kodi_utils import restart_services
-		return restart_services()
 	if mode == 'kodi_refresh':
 		from modules.kodi_utils import kodi_refresh
 		return kodi_refresh()
@@ -255,3 +252,6 @@ def routing(sys):
 	if mode == 'open_settings':
 		from modules.kodi_utils import open_settings
 		return open_settings(_get('query', '0.0'), _get('addon', 'plugin.video.twilight'))
+	if mode == 'hide_unhide_progress_items':
+		from modules.watched_status import hide_unhide_progress_items
+		hide_unhide_progress_items(params)

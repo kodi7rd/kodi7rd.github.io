@@ -273,7 +273,7 @@ def auto_resume(media_type):
 
 def scraping_settings():
 	highlight_type = int(get_setting('highlight.type', '0'))
-	if highlight_type == 3: return {'highlight_type': 2, '4k': 'FF2E2E2E', '1080p': 'FF2E2E2E', '720p': 'FF2E2E2E', 'sd': 'FF2E2E2E'}
+	if highlight_type == 3: return {'highlight_type': 2, '4k': 'FF000000', '1080p': 'FF000000', '720p': 'FF000000', 'sd': 'FF000000'}
 	hoster_highlight, torrent_highlight, furk_highlight, easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', '', '', '', ''
 	rd_highlight, pm_highlight, ad_highlight, highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', '', '', '', ''
 	if highlight_type in (0, 1):
@@ -396,7 +396,7 @@ def nextep_content_settings():
 	sort_type = int(get_setting_property(nextep_sort_prop, '0'))
 	sort_order = int(get_setting_property(nextep_order_prop, '0'))
 	sort_direction = sort_order == 0
-	sort_key = 'twilight.last_played' if sort_type == 0 else 'twilight.first_aired' if sort_type == 1 else 'twilight.name'
+	sort_key = 'last_played' if sort_type == 0 else 'first_aired' if sort_type == 1 else 'name'
 	include_unaired = get_setting_property(nextep_inc_unaired_prop, 'false') == 'true'
 	include_unwatched = int(get_setting_property(nextep_inc_unwatched_prop, '0'))
 	sort_airing_today_to_top = get_setting_property(nextep_airing_top_prop, 'false') == 'true'

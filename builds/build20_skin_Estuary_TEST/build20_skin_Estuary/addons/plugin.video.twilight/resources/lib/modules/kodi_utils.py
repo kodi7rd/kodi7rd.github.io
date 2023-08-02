@@ -25,7 +25,6 @@ endOfDirectory, addSortMethod, listdir, mkdir, mkdirs = xbmcplugin.endOfDirector
 addDirectoryItem, addDirectoryItems, setContent, setCategory = xbmcplugin.addDirectoryItem, xbmcplugin.addDirectoryItems, xbmcplugin.setContent, xbmcplugin.setPluginCategory
 window_xml_left_action, window_xml_right_action, window_xml_up_action, window_xml_down_action, window_xml_info_action = 1, 2, 3, 4, 11
 window_xml_selection_actions, window_xml_closing_actions, window_xml_context_actions = (7, 100), (9, 10, 13, 92), (101, 108, 117)
-kodi_version = int(get_infolabel('System.BuildVersion')[0:2])
 img_url = 'https://i.imgur.com/%s.png'
 empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.item_next
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
@@ -144,10 +143,8 @@ def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None,
 	listitem = make_listitem()
 	listitem.setLabel(list_name)
 	listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': addon_clearlogo})
-	if kodi_version >= 20:
-		info_tag = listitem.getVideoInfoTag()
-		info_tag.setPlot(' ')
-	else: listitem.setInfo('video', {'plot': ' '})
+	info_tag = listitem.getVideoInfoTag()
+	info_tag.setPlot(' ')
 	add_item(handle, url, listitem, isFolder)
 
 def make_listitem():
@@ -273,8 +270,11 @@ def get_window_id():
 def current_window_object():
 	return Window(get_window_id())
 
+def kodi_version():
+	return int(get_infolabel('System.BuildVersion')[0:2])
+
 def get_video_database_path():
-	return translate_path('special://profile/Database/MyVideos%s.db' % myvideos_db_paths[kodi_version])
+	return translate_path('special://profile/Database/MyVideos%s.db' % myvideos_db_paths[kodi_version()])
 
 def show_busy_dialog():
 	return execute_builtin('ActivateWindow(busydialognocancel)')
@@ -335,11 +335,6 @@ def disable_enable_addon(addon_name='plugin.video.twilight'):
 		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': False}}))
 		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': True}}))
 	except: pass
-
-def restart_services():
-	execute_builtin('ActivateWindow(Home)', True)
-	sleep(1000)
-	Thread(target=disable_enable_addon).start()
 
 def update_local_addons():
 	execute_builtin('UpdateLocalAddons', True)
@@ -418,10 +413,8 @@ def choose_view(view_type, content):
 	listitem.setLabel(set_view_str)
 	params_url = build_url({'mode': 'set_view', 'view_type': view_type})
 	listitem.setArt({'icon': settings_icon, 'poster': settings_icon, 'thumb': settings_icon, 'fanart': addon_fanart, 'banner': settings_icon, 'clearlogo': addon_clearlogo})
-	if kodi_version >= 20:
-		info_tag = listitem.getVideoInfoTag()
-		info_tag.setPlot(' ')
-	else: listitem.setInfo('video', {'plot': ' '})
+	info_tag = listitem.getVideoInfoTag()
+	info_tag.setPlot(' ')
 	add_item(handle, params_url, listitem, False)
 	set_content(handle, content)
 	end_directory(handle)
@@ -520,12 +513,13 @@ def upload_logfile(params):
 		with open_file(log_file) as f: text = f.read()
 		UserAgent = 'Twilight %s' % twilight_addon_object.getAddonInfo('version')
 		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
+		user_code = response['key']
 		if 'key' in response:
 			try:
 				from modules.utils import copy2clip
-				copy2clip('%s%s' % (url, response['key']))
+				copy2clip('%s%s' % (url, user_code))
 			except: pass
-			ok_dialog(text='%s%s' % (url, response['key']))
+			ok_dialog(text='%s%s' % (url, user_code))
 		else: ok_dialog(text=33039)
 	except: ok_dialog(text=33039)
 	hide_busy_dialog()
@@ -557,7 +551,6 @@ def manage_settings_reset(cancel=False):
 	else: set_property(pause_settings_prop, 'true'); sleep(500)
 
 def trigger_settings_refresh():
-	sleep(500)
 	set_property(refr_settings_prop, 'true')
 	set_property(rem_props_prop, 'true')
 	set_property(pause_settings_prop, 'false')

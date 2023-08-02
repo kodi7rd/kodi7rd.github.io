@@ -302,7 +302,8 @@ def paginate_list(item_list, page, limit=20, paginate_start=0):
 		pages = list(chunks(item_list, limit))
 		all_pages = json.dumps(pages)
 	all_pages = json.dumps(pages)
-	return pages[page - 1], all_pages, len(pages)
+	result = (pages[page - 1], all_pages, len(pages))
+	return result
 
 def download_github_zip(repo, file, destination):
 	from io import BytesIO

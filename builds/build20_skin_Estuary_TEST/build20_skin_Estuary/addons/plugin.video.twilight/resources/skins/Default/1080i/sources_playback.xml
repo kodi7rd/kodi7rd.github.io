@@ -48,7 +48,7 @@
                     <textcolor>FFFFFFFF</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE]$ADDON[plugin.video.twilight 33138] | $ADDON[plugin.video.twilight 33139][/UPPERCASE]</label>
+                    <label>[UPPERCASE]$ADDON[plugin.video.twilight 33138] [B][COLOR $INFO[Window().Property(highlight_var)]]|[/COLOR][/B] $ADDON[plugin.video.twilight 33139][/UPPERCASE]</label>
                     <visible>String.IsEqual(Window.Property(window_mode),resolver) + !String.IsEqual(Window.Property(enable_busy_spinner),true)</visible>
                 </control>
             </control>
@@ -363,42 +363,42 @@
                         <left>300</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),75)</visible>
                     </control>
                     <control type="image">
                         <left>320</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),80)</visible>
                     </control>
                     <control type="image">
                         <left>340</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),85)</visible>
                     </control>
                     <control type="image">
                         <left>360</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),90)</visible>
                     </control>
                     <control type="image">
                         <left>380</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),95)</visible>
                     </control>
                     <control type="image">
                         <left>400</left>
                         <width>15</width>
                         <height>15</height>
-                        <texture colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/white.png</texture>
+                        <texture colordiffuse="Window().Property(highlight_var)">twilight_common/white.png</texture>
                         <visible>Integer.IsGreaterOrEqual(Window().Property(percent),99)</visible>
                     </control>
                 

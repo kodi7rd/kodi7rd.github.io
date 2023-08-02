@@ -7,7 +7,7 @@ button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'a
 
 class NextEpisode(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.closed = False
 		self.meta = kwargs.get('meta')
 		self.selected = kwargs.get('default_action', 'cancel')

@@ -13,6 +13,11 @@ tvshows_append = 'external_ids,videos,credits,content_ratings,alternative_titles
 timeout = 20.0
 session = make_session(base_url)
 
+def tmdb_network_details(network_id):
+	string = 'tmdb_network_details_%s' % network_id
+	url = '%s/network/%s?api_key=%s' % (base_url, network_id, tmdb_api_key())
+	return cache_object(get_tmdb, string, url, expiration=EXPIRY_1_WEEK)
+
 def tmdb_keywords_by_query(query):
 	string = 'tmdb_keywords_by_query_%s' % query
 	url = '%s/search/keyword?api_key=%s&query=%s' % (base_url, tmdb_api_key(), query)

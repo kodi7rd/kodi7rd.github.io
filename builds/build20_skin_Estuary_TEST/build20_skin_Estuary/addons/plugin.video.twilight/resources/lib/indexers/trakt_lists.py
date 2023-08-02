@@ -11,7 +11,7 @@ ls, sys, make_listitem, build_url, Thread, add_items = kodi_utils.local_string, 
 add_dir, external, dialog, sleep, json, get_icon = kodi_utils.add_dir, kodi_utils.external, kodi_utils.dialog, kodi_utils.sleep, kodi_utils.json, kodi_utils.get_icon
 trakt_icon, fanart, twilight_clearlogo, add_item, set_property = get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.add_item, kodi_utils.set_property
 set_content, set_sort_method, set_view_mode, end_directory = kodi_utils.set_content, kodi_utils.set_sort_method, kodi_utils.set_view_mode, kodi_utils.end_directory
-kodi_version, set_category, home, folder_path = kodi_utils.kodi_version, kodi_utils.set_category, kodi_utils.home, kodi_utils.folder_path
+set_category, home, folder_path = kodi_utils.set_category, kodi_utils.home, kodi_utils.folder_path
 trakt_fetch_collection_watchlist, get_trakt_list_contents = trakt_api.trakt_fetch_collection_watchlist, trakt_api.get_trakt_list_contents
 trakt_trending_popular_lists, trakt_get_lists = trakt_api.trakt_trending_popular_lists, trakt_api.trakt_get_lists
 trakt_search_lists, trakt_fetch_movie_sets = trakt_api.trakt_search_lists, trakt_api.trakt_fetch_movie_sets
@@ -42,11 +42,9 @@ def search_trakt_lists(params):
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.addContextMenuItems(cm)
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': editor_display, 'iconImage': 'trakt'}))
 				yield (url, listitem, True)
@@ -91,11 +89,9 @@ def get_trakt_lists(params):
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.addContextMenuItems(cm)
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': editor_display, 'iconImage': 'trakt'}))
 				yield (url, listitem, True)
@@ -138,11 +134,9 @@ def get_trakt_trending_popular_lists(params):
 				listitem.addContextMenuItems(cm)
 				listitem.setLabel(display)
 				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': editor_display, 'iconImage': 'trakt'}))
 				yield (url, listitem, True)
 			except: pass
@@ -161,7 +155,6 @@ def get_trakt_trending_popular_lists(params):
 	set_view_mode('view.main')
 
 def build_trakt_list(params):
-	handle, is_external, is_home, content, build, list_name = int(sys.argv[1]), external(), home(), 'movies', False, params.get('list_name')
 	def _process(function, _list): item_list_extend(function(_list).worker())
 	def _paginate_list(data, page_no, paginate_start):
 		if paginate(is_home):
@@ -170,21 +163,26 @@ def build_trakt_list(params):
 			if is_home: paginate_start = limit
 		else: all_pages, total_pages = '', 1
 		return data, all_pages, total_pages, paginate_start
+	handle, is_external, is_home, content, list_name = int(sys.argv[1]), external(), home(), 'movies', params.get('list_name')
 	try:
-		build = True
 		threads, item_list = [], []
 		item_list_extend = item_list.extend
 		user, slug, list_type = params.get('user'), params.get('slug'), params.get('list_type')
 		page_no, paginate_start = int(params.get('new_page', '1')), int(params.get('paginate_start', '0'))
 		if page_no == 1 and not is_external: set_property('twilight.exit_params', folder_path())
-		result = get_trakt_list_contents(list_type, user, slug)
+		with_auth = list_type == 'my_lists'
+		result = get_trakt_list_contents(list_type, user, slug, with_auth)
 		trakt_list = [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(result)]
 		process_list, all_pages, total_pages, paginate_start = _paginate_list(trakt_list, page_no, paginate_start)
+		new_params = {'mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'list_name': list_name,
+						'user': user, 'slug': slug, 'paginate_start': paginate_start}
 		if total_pages > 2 and not is_external:
 				jump_to = jump_to_enabled()
-				if jump_to != 3: add_dir({'mode': 'navigate_to_page_choice', 'media_type': 'Media', 'user': user, 'slug': slug, 'current_page': page_no, 'total_pages': total_pages,
-								'transfer_mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'list_name': list_name, 'all_pages': all_pages, 'jump_to_enabled': jump_to,
-								'paginate_start': paginate_start}, jump2_str, handle, 'item_jump', isFolder=False)
+				if jump_to != 3:
+					new_params['refreshed'] = 'true'
+					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': total_pages, 'all_pages': all_pages,
+							'jump_to_enabled': jump_to, 'paginate_start': paginate_start, 'url_params': json.dumps(new_params)},
+							jump2_str, handle, 'item_jump', isFolder=False)
 		movie_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'movie'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
 		tvshow_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'show'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
 		content = 'movies' if len(movie_list['list']) > len(tvshow_list['list']) else 'tvshows'
@@ -198,13 +196,13 @@ def build_trakt_list(params):
 		add_items(handle, [i[0] for i in item_list])
 		if total_pages > page_no:
 			new_page = str(page_no + 1)
-			add_dir({'mode': 'trakt.list.build_trakt_list', 'user': user, 'slug': slug, 'new_page': new_page, 'list_type': list_type,
-					'list_name': list_name, 'paginate_start': paginate_start}, nextpage_str % new_page, handle, 'item_next')
+			new_params['new_page'] = new_page
+			add_dir(new_params, nextpage_str % new_page, handle, 'item_next')
 	except: pass
 	set_content(handle, content)
 	set_category(handle, list_name)
 	end_directory(handle, False if is_external else None)
-	if not is_external and build:
+	if not is_external:
 		if params.get('refreshed') == 'true': sleep(1000)
 		set_view_mode('view.%s' % content, content, is_external)
 

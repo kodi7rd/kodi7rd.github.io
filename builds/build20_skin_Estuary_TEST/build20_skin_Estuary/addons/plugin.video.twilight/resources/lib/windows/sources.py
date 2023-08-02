@@ -41,7 +41,7 @@ resume_timeout = 10000
 
 class SourcesResults(BaseDialog):
     def __init__(self, *args, **kwargs):
-        BaseDialog.__init__(self, args)
+        BaseDialog.__init__(self, *args)
         self.window_format = kwargs.get('window_format', 'list')
         self.window_style = kwargs.get('window_style', 'contrast')
         self.window_id = kwargs.get('window_id', 2000)
@@ -240,7 +240,7 @@ class SourcesResults(BaseDialog):
             kodi_utils.logger("KODI-RD-IL", f"total_quality_counts: {str(total_quality_counts)}")
             
             # Sync Percentage Matching
-            subtitles_match_top_panel_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count, total_quality_counts)
+            results_language_text, total_subtitles_found_text, subtitles_matched_count_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count, total_quality_counts)
         #########################################
         
         self.setProperty('window_format', self.window_format)
@@ -257,7 +257,7 @@ class SourcesResults(BaseDialog):
         # ORIGINAL TWILIGHT LINE:
         #self.setProperty('total_results', self.total_results)
         # CUSTOM NEW LINE:
-        self.setProperty('total_results', subtitles_match_top_panel_text + self.total_results if enable_hebrew_subtitles_to_twilight_sources_matching else self.total_results)
+        self.setProperty('total_results', self.total_results + kodi_utils.local_string(400011) + " | " + results_language_text + " | " + total_subtitles_found_text + "\n" + subtitles_matched_count_text if enable_hebrew_subtitles_to_twilight_sources_matching else self.total_results + kodi_utils.local_string(400011))
         #########################################
         
         self.setProperty('filters_ignored', self.filters_ignored)
@@ -389,8 +389,9 @@ class SourcesResults(BaseDialog):
 
 class SourcesPlayback(BaseDialog):
     def __init__(self, *args, **kwargs):
-        BaseDialog.__init__(self, args)
+        BaseDialog.__init__(self, *args)
         self.meta = kwargs.get('meta')
+        self.highlight_value = self.highlight_var(force=True)
         self.is_canceled, self.skip_resolve, self.resume_choice = False, False, None
         self.meta_get = self.meta.get
         self.enable_scraper()
@@ -439,6 +440,7 @@ class SourcesPlayback(BaseDialog):
         poster = self.meta_get('custom_poster') or self.meta_get(poster_main) or self.meta_get(poster_backup) or empty_poster
         fanart = self.meta_get('custom_fanart') or self.meta_get(fanart_main) or self.meta_get(fanart_backup) or addon_fanart
         clearlogo = self.meta_get('custom_clearlogo') or self.meta_get(clearlogo_main) or self.meta_get(clearlogo_backup) or ''
+        self.setProperty('highlight_var', self.highlight_value)
         self.setProperty('window_mode', self.window_mode)
         self.setProperty('title', title)
         self.setProperty('fanart', fanart)
@@ -455,6 +457,7 @@ class SourcesPlayback(BaseDialog):
             if avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or spoilers_str
             else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
             self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (self.meta_get('season'), self.meta_get('episode'), self.meta_get('ep_name', 'N/A').upper(), plot)
+        self.setProperty('highlight_var', self.highlight_value)
         self.setProperty('window_mode', self.window_mode)
         self.setProperty('text', self.text)
 
@@ -489,7 +492,7 @@ class SourcesPlayback(BaseDialog):
 
 class SourcesInfo(BaseDialog):
     def __init__(self, *args, **kwargs):
-        BaseDialog.__init__(self, args)
+        BaseDialog.__init__(self, *args)
         self.item = kwargs['item']
         self.item_get_property = self.item.getProperty
         self.set_properties()
@@ -529,7 +532,7 @@ class SourcesInfo(BaseDialog):
 
 class SourcesChoice(BaseDialog):
     def __init__(self, *args, **kwargs):
-        BaseDialog.__init__(self, args)
+        BaseDialog.__init__(self, *args)
         self.window_id = 5001
         self.xml_choices = kwargs.get('xml_choices')
         self.xml_items = []

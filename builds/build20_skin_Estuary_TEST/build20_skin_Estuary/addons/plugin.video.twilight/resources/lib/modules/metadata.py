@@ -4,19 +4,17 @@ from caches.meta_cache import metacache
 from modules.utils import jsondate_to_datetime, subtract_dates
 # from modules.kodi_utils import logger
 
-movie_data, tvshow_data = tmdb_api.movie_details, tmdb_api.tvshow_details
+movie_data, tvshow_data, english_translation = tmdb_api.movie_details, tmdb_api.tvshow_details, tmdb_api.english_translation
 default_fanart_movies, default_fanart_tvshows = fanarttv_api.default_fanart_nometa_movies, fanarttv_api.default_fanart_nometa_tv
 movie_external, tvshow_external, season_episodes_details = tmdb_api.movie_external_id, tmdb_api.tvshow_external_id, tmdb_api.season_episodes_details, 
-subtract_dates_function, english_translation_function = subtract_dates, tmdb_api.english_translation
 movie_set_data, metacache_get, metacache_set, fanarttv_get = tmdb_api.movie_set_details, metacache.get, metacache.set, fanarttv_api.get
 metacache_get_season, metacache_set_season = metacache.get_season, metacache.set_season
-jsondate_to_datetime_function = jsondate_to_datetime
 backup_resolutions = {'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632', 'clearlogo': 'original'}
 default_custom_artwork = {'custom_poster': '', 'custom_fanart': '', 'custom_clearlogo': ''}
 writer_credits = ('Author', 'Writer', 'Screenplay', 'Characters')
 alt_titles_check, trailers_check, finished_show_check, empty_value_check = ('US', 'GB', 'UK', ''), ('Trailer', 'Teaser'), ('Ended', 'Canceled'), ('', 'None', None)
 tmdb_image_url, youtube_url, date_format = 'https://image.tmdb.org/t/p/%s%s', 'plugin://plugin.video.youtube/play/?video_id=%s', '%Y-%m-%d'
-EXPIRES_6_HOURS, EXPIRES_1_DAYS, EXPIRES_4_DAYS, EXPIRES_7_DAYS, EXPIRES_14_DAYS, EXPIRES_30_DAYS, EXPIRES_182_DAYS = 0.25, 1, 4, 7, 14, 30, 182
+EXPIRES_1_DAYS, EXPIRES_4_DAYS, EXPIRES_7_DAYS, EXPIRES_14_DAYS, EXPIRES_30_DAYS, EXPIRES_182_DAYS = 1, 4, 7, 14, 30, 182
 invalid_error_codes = (6, 34, 37)
 
 def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
@@ -50,7 +48,7 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 		elif data.get('status_code') in invalid_error_codes:
 			if id_type == 'tmdb_id': meta = {'tmdb_id': media_id, 'imdb_id': 'tt0000000', 'tvdb_id': '0000000', 'fanart_added': True, 'blank_entry': True}
 			else: meta = {'tmdb_id': '0000000', 'imdb_id': media_id, 'tvdb_id': '0000000', 'fanart_added': True, 'blank_entry': True}
-			metacache_set('movie', id_type, meta, EXPIRES_6_HOURS, current_time)
+			metacache_set('movie', id_type, meta, EXPIRES_1_DAYS, current_time)
 			return meta
 		if language != 'en':
 			if data['overview'] in empty_value_check:
@@ -208,7 +206,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 			if id_type == 'tmdb_id': meta = {'tmdb_id': media_id, 'imdb_id': 'tt0000000', 'tvdb_id': '0000000', 'fanart_added': True, 'blank_entry': True}
 			elif id_type == 'imdb_id': meta = {'tmdb_id': '0000000', 'imdb_id': media_id, 'tvdb_id': '0000000', 'fanart_added': True, 'blank_entry': True}
 			else: meta = {'tmdb_id': '0000000', 'imdb_id': 'tt0000000', 'tvdb_id': media_id, 'fanart_added': True, 'blank_entry': True}
-			metacache_set('tvshow', id_type, meta, EXPIRES_6_HOURS, current_time)
+			metacache_set('tvshow', id_type, meta, EXPIRES_1_DAYS, current_time)
 			return meta
 		if language != 'en':
 			if data['overview'] in empty_value_check:
@@ -359,7 +357,7 @@ def movieset_meta(media_id, user_info, current_time=None):
 		if not data: return None
 		elif 'status_code' in data and data.get('status_code') in invalid_error_codes:
 			meta = {'tmdb_id': media_id, 'fanart_added': True, 'blank_entry': True}
-			metacache_set('movie_set', id_type, meta, EXPIRES_6_HOURS, current_time)
+			metacache_set('movie_set', id_type, meta, EXPIRES_1_DAYS, current_time)
 			return meta
 		if extra_fanart_enabled: fanart_data, all_fanart_images = fanarttv_get('movies', '', data['id'], fanart_client_key)
 		else: fanart_data, all_fanart_images = None, None
@@ -442,14 +440,14 @@ def tvshow_meta_external_id(external_source, external_id):
 
 def english_translation(media_type, media_id, user_info):
 	key = 'title' if media_type == 'movie' else 'name'
-	translations = english_translation_function(media_type, media_id, user_info['tmdb_api'])
+	translations = english_translation(media_type, media_id, user_info['tmdb_api'])
 	try: english = [i['data'][key] for i in translations if i['iso_639_1'] == 'en'][0]
 	except: english = ''
 	return english
 
 def movie_expiry(current_date, meta):
 	try:
-		difference = subtract_dates_function(current_date, jsondate_to_datetime_function(meta['premiered'], date_format, remove_time=True))
+		difference = subtract_dates(current_date, jsondate_to_datetime(meta['premiered'], date_format, remove_time=True))
 		if difference < 0: expiration = abs(difference) + 1
 		elif difference <= 14: expiration = EXPIRES_7_DAYS
 		elif difference <= 30: expiration = EXPIRES_14_DAYS
@@ -459,10 +457,10 @@ def movie_expiry(current_date, meta):
 
 def tvshow_expiry(current_date, meta):
 	try:
-		if meta['status'] in finished_show_check: return EXPIRES_30_DAYS
-		next_episode_to_air = meta['extra_info'].get('next_episode_to_air', None)
-		if not next_episode_to_air: return EXPIRES_1_DAYS
-		expiration = subtract_dates_function(jsondate_to_datetime_function(next_episode_to_air['air_date'], date_format, remove_time=True), current_date)
-		if expiration <= 0: return EXPIRES_1_DAYS
-	except: return EXPIRES_4_DAYS
-	return max(expiration - EXPIRES_1_DAYS, EXPIRES_1_DAYS)
+		if meta['status'] in finished_show_check: expiration = EXPIRES_30_DAYS
+		else:
+			data = subtract_dates(jsondate_to_datetime(meta['extra_info']['next_episode_to_air']['air_date'], date_format, remove_time=True), current_date) - EXPIRES_1_DAYS
+			if data <= 1: expiration = EXPIRES_1_DAYS
+			else: expiration = data
+	except: expiration = EXPIRES_4_DAYS
+	return expiration

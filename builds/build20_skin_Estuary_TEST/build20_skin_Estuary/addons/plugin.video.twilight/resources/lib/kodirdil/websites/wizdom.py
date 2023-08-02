@@ -17,7 +17,7 @@ DEFAULT_TITLE = 0
 #########################################
 
 
-def search_hebrew_subtitles(media_metadata):
+def search_for_subtitles(media_metadata):
 
     """
     Given metadata for a media file, fetches a list of available Hebrew subtitles
