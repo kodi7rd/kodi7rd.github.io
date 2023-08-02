@@ -1,18 +1,4 @@
-﻿[COLOR yellow][B]v3.4.6[/B][/COLOR]
-* Subtitles sorting now sorts by sync percentage then by site_id (website source name) by a specific order: [Kt], [Wiz], [Op], [SS], [Bs].
-[COLOR yellow][B]v3.4.5[/B][/COLOR]
-* Add setting to Bing machine translate - search available key by rising/random order.
-[COLOR yellow][B]v3.4.4[/B][/COLOR]
-* Improve Ktuvit website subtitle search code.
-* Adjust general.show_msg labels appearance.
-[COLOR yellow][B]v3.4.1[/B][/COLOR]
-* Improve embedded Hebrew subtitles code.
-* Add user notification for chosen subtitle. Example: Hebrew | ktuvit | 57% | John.Wick.1080p.RARBG.srt
-[COLOR yellow][B]v3.3.8[/B][/COLOR]
-* Auto select embedded Hebrew subtitles if exists.
-* Also supports choosing embedded subtitles from DarkSubs sub window.
-* Bing Machine Translate - Change keys finding method to choose random key every attempt.
-[COLOR yellow][B]v3.2.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.2.6[/B][/COLOR]
 * Adjust sub_window labels.
 * Small fixes.
 [COLOR yellow][B]v3.2.4[/B][/COLOR]

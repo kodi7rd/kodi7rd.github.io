@@ -30,6 +30,11 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             log.warning(video_data)
             self.video_data=video_data
             self.setGeometry(wd, hd, 9, 1,pos_x=px, pos_y=py)
+            
+            ############KODI-RD-IL###################
+            self.total_subs_count=len(f_list)
+            #########################################
+            
             self.all_subs=all_subs
             self.last_sub_index=last_sub_index
             self.set_info_controls()
@@ -43,27 +48,25 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             while (self.close_window==False):
                 from resources.modules import general
                 if 'מתרגם' in general.show_msg:
-                    self.label_info.setLabel(general.show_msg+' - '+str(general.progress_msg))
+                    self.label_info.setLabel(general.show_msg +' - '+ str(general.progress_msg))
                 xbmc.sleep(500)
         def set_info_controls(self):
-            
-            # Total Subtitles Found Count Label
-            self.total_subs_count=len(self.list_o)
-            self.label = pyxbmct.Label(f"[B]{str(self.total_subs_count)} כתוביות נמצאו[/B]")
-            self.placeControl(self.label,  7, 0, 3, 1)
-            #########################################
-            
-            # Video File Name Label
-            self.video_file_name_label = f"[B][COLOR deepskyblue]{self.video_data['Tagline']}[/COLOR][/B]"
+        
+            ############KODI-RD-IL###################
+            # File Name Label
+            self.video_file_name_label = f"[B][COLOR yellow]{self.video_data['Tagline']}[/COLOR][/B]"
             self.label_info = pyxbmct.Label(self.video_file_name_label)
             self.placeControl(self.label_info,  0, 0, 1, 1)
+
+            # Total Subtitles Count Label
+            self.label = pyxbmct.Label(f"[B]{str(self.total_subs_count)} כתוביות נמצאו[/B]")
+            self.placeControl(self.label,  7, 0, 3, 1)
             #########################################
             
             self.list = pyxbmct.List()
             self.placeControl(self.list, 1, 0, 7, 1)
             self.connect(self.list, self.click_list)
             
-            # Close button
             self.button = pyxbmct.Button('[B]סגור[/B]')
             self.placeControl(self.button, 8, 0)
             # Connect control to close the window.
@@ -82,7 +85,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             list_index=self.list.getSelectedPosition()
             log.warning(self.full_list[list_index])
             log.warning('list_index:'+str(list_index))
-            self.label_info.setLabel('[B]מוריד[/B]' + ' | ' + self.video_file_name_label)
+            self.label_info.setLabel('מוריד' + ' | ' + self.video_file_name_label)
             params=self.get_params(self.full_list[list_index][4])
             download_data=unque(params["download_data"])
             download_data=json.loads(download_data)
@@ -90,34 +93,27 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_index):
             language=(params["language"])
             filename=(params["filename"])
             fault_sub=False
-            embbded=False
             try:
                 sub_file=download_sub(source,download_data,MySubFolder,language,filename)
                 xbmc.sleep(100)
-                if sub_file!='Dont use':
-                    xbmc.Player().setSubtitles(sub_file)
-                else:
-                    embbded=True
+                xbmc.Player().setSubtitles(sub_file)
                 log.warning('My Window Sub result:'+str(sub_file))
-                
+            
             except:
                 fault_sub=True
             
             
             
             if fault_sub:
-                self.label_info.setLabel('[B]תקלה בהורדה בחר אחרת[/B]' + ' | ' + self.video_file_name_label)
+                self.label_info.setLabel('תקלה בהורדה בחר אחרת' + ' | ' + self.video_file_name_label)
             else:
-                if embbded:
-                   self.label_info.setLabel('[B]נבחרה כתובית מובנית, המתן מספר שניות[/B]' + ' | ' + self.video_file_name_label)
-                   save_file_name(unque(params["filename"]))
-                else:
-                    self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)
-                    save_file_name(params["filename"])
+                self.label_info.setLabel('מוכן' + ' | ' + self.video_file_name_label)
+                save_file_name(params["filename"])
                 self.last_sub_index,self.all_subs=get_db_data(self.full_list)
                 self.set_active_controls()
                 from resources.modules import general
                 general.show_msg="END"
+                
         def click_c(self):
             global list_index
             

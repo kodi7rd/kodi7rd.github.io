@@ -24,7 +24,6 @@ monit = xbmc.Monitor()
 ab_req=monit.abortRequested()
 log.warning('Starting %s Service!!!'%MyScriptName)
 
-global found_embed_ok
 
 global video_id,pre_video_id,trigger
 global current_list_item,break_wait
@@ -33,8 +32,7 @@ current_list_item=""
 video_id=""
 pre_video_id=""
 trigger=False
-found_embed_ok=False
-que=urllib.parse.quote_plus
+    
 def isExcluded(movieFullPath,current_list_item):
     excluded_addons=['idanplus','sdarot.tv','youtube','kids_new']
 
@@ -62,108 +60,8 @@ def isExcluded(movieFullPath,current_list_item):
             log.warning("isExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%items )
             return False
     return True
-def find_for_break():
-    counter=0
-    vidtime=0
-        
-    
-    
-    log.warning('Wating for video')
-    once=True
-    subs=[]
-    while counter<50:
-        
-        try:
-          subs=xbmc.Player().getAvailableSubtitleStreams()
-          if len(subs)>0:
-            break
-          
-          vidtime = xbmc.Player().getTime()
-          if vidtime>0:
-                if once:
-                    vidtime_pre=vidtime
-                    once=False
-                totalTime = xbmc.Player().getTotalTime()
-                if vidtime_pre!=vidtime:
-                    break
-                vidtime_pre=vidtime
-                
-          
-          
-        except:
-          pass
-        counter+=1
-        xbmc.sleep(100)
-        log.warning('Vid Time:'+str(vidtime))
-    if 'heb' in subs:
-        log.warning('Break All')
-        general.break_all=True
-def find_embed(f_result):
-    global found_embed_ok
-    found_embed_ok=False
-    counter=0
-    vidtime=0
-        
-    
-    
-    log.warning('Wating for video')
-    once=True
-    while counter<50:
-        
-        try:
-          subs=xbmc.Player().getAvailableSubtitleStreams()
-          #if len(subs)>0:
-          #  break
-          vidtime = xbmc.Player().getTime()
-          if vidtime>0:
-                if once:
-                    vidtime_pre=vidtime
-                    once=False
-                totalTime = xbmc.Player().getTotalTime()
-                if vidtime_pre!=vidtime:
-                    log.warning(vidtime)
-                    log.warning(vidtime_pre)
-                    break
-                vidtime_pre=vidtime
-                
-          
-          
-        except:
-          pass
-        counter+=1
-        xbmc.sleep(100)
-        log.warning('Vid Time:'+str(vidtime))
-    log.warning('counter:'+str(counter))
-    
-    log.warning('subs:')
-    log.warning(subs)
-    index_heb=0
-    for items in subs:
-        if items=='heb':
-            general.break_all=True
-            log.warning('Placing Stream Sub: '+str(index_heb))
-            xbmc.Player().setSubtitleStream(index_heb)
-            found_embed_ok=True
-            if (general.show_msg!="END"):
-                # general.show_msg="כתובית מובנית נבחרה" #KODI-RD-IL - Use notify instead of show_msg (personal perference)
-                notify( "[COLOR yellow]נבחרה כתובית מובנית בעברית[/COLOR]" )
-            else:
-                notify( "[COLOR yellow]נבחרה כתובית מובנית בעברית[/COLOR]" )
-            
-            video_data=get_video_data()
-            
-            save_data=video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']+'כתובית מובנית'
-            if (video_data['Tagline']!=""):
-                save_file_name(que(save_data))
-            break
-        index_heb+=1
-    xbmc.sleep(500)
-    general.show_msg="END"
-def place_sub(f_result,last_sub_index,all_subs):
-    log.warning('Place sub:')
-    
-    
-    notify( "[COLOR yellow]מוריד כתובית נבחרת[/COLOR]" )
+def place_sub(f_result):
+    last_sub_index,all_subs=get_db_data(f_result)
     selected_sub=f_result[0]
     for items in f_result:
         if (last_sub_index==items[8]):
@@ -171,9 +69,6 @@ def place_sub(f_result,last_sub_index,all_subs):
             break
     c_sub_file=None
     for items in f_result:
-        #general.show_msg="מוריד כתובית נבחרת" # KODI-RD-IL: Commented
-        if general.break_all:
-            break
         params=get_params(selected_sub[4],"")
         download_data=unque(params["download_data"])
         download_data=json.loads(download_data)
@@ -181,51 +76,42 @@ def place_sub(f_result,last_sub_index,all_subs):
         language=(params["language"])
         filename=unque(params["filename"])
         try:
-        
             sub_file=download_sub(source,download_data,MySubFolder,language,filename)
             fault=False
             log.warning('Auto Sub result:'+str(sub_file))
-            if (sub_file!='Dont use'):
+            xbmc.sleep(100)
+            xbmc.Player().setSubtitles(sub_file)
+            log.warning('1')
+            save_file_name(params["filename"])
+            f_count=0
+            max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
+            log.warning('2')
+            for filename_o in os.listdir(CachedSubFolder):
                 
-                notify( f"[COLOR yellow]{language} | {source} | {str(items[5])}% | {filename}[/COLOR]" )
+                f_count+=1
             
-            
-                xbmc.sleep(100)
-                xbmc.Player().setSubtitles(sub_file)
-                log.warning('1')
-                save_file_name(params["filename"])
-                f_count=0
-                max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
-                log.warning('2')
-                for filename_o in os.listdir(CachedSubFolder):
+            if (f_count>max_sub_cache):
+                    for filename_o in os.listdir(CachedSubFolder):
+                        f = os.path.join(CachedSubFolder, filename_o)
+                        os.remove(f) 
+            log.warning(sub_file)
+            try:
+                file_type=(os.path.splitext(sub_file)[1])
+            except:
+                file_type=""
+            c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
+            if not os.path.exists(c_sub_file):
+                    if file_type=='.idx'  or file_type=='.sup':
+                        shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
+                    shutil.copy(sub_file,c_sub_file)
                     
-                    f_count+=1
-                
-                if (f_count>max_sub_cache):
-                        for filename_o in os.listdir(CachedSubFolder):
-                            f = os.path.join(CachedSubFolder, filename_o)
-                            os.remove(f) 
-                log.warning(sub_file)
-                try:
-                    file_type=(os.path.splitext(sub_file)[1])
-                except:
-                    file_type=""
-                c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
-                if not os.path.exists(c_sub_file):
-                        if file_type=='.idx'  or file_type=='.sup':
-                            shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
-                        shutil.copy(sub_file,c_sub_file)
-                break
-            else:
-                
-                c_sub_file='Dont use'
+            break
         except Exception as e:
             log.warning('Error in Sub:'+str(e))
             selected_sub=items
             fault=True
             
-    
-            
+        
     return c_sub_file
 def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
     
@@ -238,7 +124,7 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
             except:
                 val=None
                 pass
-
+            
             if (last_sub_index==items[8]):
                 added_string='[COLOR deepskyblue][B][I]>> '
             elif val:
@@ -248,7 +134,7 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
             if xbmc.Player().isPlaying():
                 sub_name=added_string+str(items[5])+ "% "+'[/COLOR]'+items[1]
                 if ('[B][I]' in added_string):
-                    sub_name=sub_name+'[/I]'
+                    sub_name=sub_name+'[/I][/B]'
                 if video_data['file_original_path'].replace("."," ").lower() in items[1].replace("."," ").lower() and len(video_data['file_original_path'].replace("."," "))>5 or items[5]>80:
                          #json_value['label2']='[COLOR gold] GOLD [B]'+json_value['label2']+'[/B][/COLOR]'
                          sub_name='[COLOR gold] GOLD [B]'+sub_name+'[/B][/COLOR]'
@@ -306,77 +192,8 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1):
                           "sync": "",
                           "hearing_imp":""})
     return sub_final_data
-def add_demo_embbded(f_result_temp):
-    index_sub=0
-    video_data=get_video_data()
-    f_result_start=[]
-    download_data={}
-    download_data['url']=str(index_sub)
-    download_data['file_name']=str(index_sub)
-    save_data=video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']+'כתובית מובנית'
+   
     
-    url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=bsplayer" % (MyScriptID,
-                                                        que(json.dumps(download_data)),
-                                                        que(que(que(save_data))),
-                                                        "Hebrew")
-    json_value={'url':url,
-                         'label':"Hebrew",
-                         'label2':'[LOC] '+' כתובית מובנית',
-                         'iconImage':"0",
-                         'thumbnailImage':"he",
-                         'hearing_imp':'false',
-                         'site_id':'[LOC]',
-                         'sub_color':'GOLD',
-                         'filename':que(save_data),
-                         'sync': 'true'}
-                         
-                    
-    f_result_start.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename']))
-    
-    for items in f_result_temp:
-        f_result_start.append(items)
-    return f_result_start
-def add_embbded(f_result):
-        video_data=get_video_data()
-        subs=xbmc.Player().getAvailableSubtitleStreams()
-        log.warning('Embbeded subs Engine:')
-        log.warning(subs)
-        
-        index_sub=0
-        
-        f_result_start=[]
-        for items in subs:
-            
-            if items=='heb':
-                download_data={}
-                download_data['url']=str(index_sub)
-                download_data['file_name']=str(index_sub)
-                save_data=video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']+'כתובית מובנית'
-                
-                url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=bsplayer" % (MyScriptID,
-                                                                    que(json.dumps(download_data)),
-                                                                    que(que(que(save_data))),
-                                                                    "Hebrew")
-                json_value={'url':url,
-                                     'label':"Hebrew",
-                                     'label2':'[LOC] '+' כתובית מובנית',
-                                     'iconImage':"0",
-                                     'thumbnailImage':"he",
-                                     'hearing_imp':'false',
-                                     'site_id':'[LOC]',
-                                     'sub_color':'GOLD',
-                                     'filename':que(save_data),
-                                     'sync': 'true'}
-                                     
-                                
-                f_result_start.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename']))
-                
-            index_sub+=1
-       
-        for items in f_result_start:
-        
-            f_result.insert(0, items)
-        return f_result
 def get_params(argv2,argv1):
     if argv2!="None":
         param = dict(parse_qsl(argv2.replace('?','')))
@@ -436,9 +253,6 @@ def sub_from_main(arg):
         
         
         log.warning(video_data)
-        
-     
-        
         from resources import main
         main.from_autosub=True
         tag_original=video_data['Tagline']
@@ -452,57 +266,47 @@ def sub_from_main(arg):
         video_data['Tagline']=tag_original
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-        f_result=add_embbded(f_result)
-  
         last_sub_index,all_subs=get_db_data(f_result)
-
         return_result=display_subtitle(f_result,video_data,last_sub_index,all_subs,argv1)
         log.warning(return_result)
-        #xbmc.Player().setSubtitleStream(1)
+        
     
     elif action=='download':
         
         
-        
-        log.warning(params["filename"])
+       
         sub_file=download_sub(source,download_data,MySubFolder,language,filename)
         fault=False
-        if (sub_file!='Dont use'):
-        
-            log.warning('Auto Sub result:'+str(sub_file))
-            xbmc.sleep(100)
-            xbmc.Player().setSubtitles(sub_file)
-            save_file_name(filename)
-            f_count=0
-            max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
-            for filename_o in os.listdir(CachedSubFolder):
-                
-                f_count+=1
+        log.warning('Auto Sub result:'+str(sub_file))
+        xbmc.sleep(100)
+        xbmc.Player().setSubtitles(sub_file)
+        save_file_name(filename)
+        f_count=0
+        max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
+        for filename_o in os.listdir(CachedSubFolder):
             
-            if (f_count>max_sub_cache):
-                    for filename_o in os.listdir(CachedSubFolder):
-                        f = os.path.join(CachedSubFolder, filename_o)
-                        os.remove(f) 
-      
+            f_count+=1
+        
+        if (f_count>max_sub_cache):
+                for filename_o in os.listdir(CachedSubFolder):
+                    f = os.path.join(CachedSubFolder, filename_o)
+                    os.remove(f) 
+  
 
-            try:
-                file_type=(os.path.splitext(sub_file)[1])
-            except:
-                file_type=""
-            c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
-            
-            if not os.path.exists(c_sub_file):
-                    if file_type=='.idx' or file_type=='.sup':
-                        shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
-                    
-                    shutil.copy(sub_file,c_sub_file)
-                    
-        else:
-            notify('[COLOR yellow]נבחרה כתובית מובנית, המתן מספר שניות[/COLOR]')
-            log.warning(filename)
-            save_file_name(filename)
+        try:
+            file_type=(os.path.splitext(sub_file)[1])
+        except:
+            file_type=""
+        c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
+
+        if not os.path.exists(c_sub_file):
+                if file_type=='.idx' or file_type=='.sup':
+                    shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
+                
+                shutil.copy(sub_file,c_sub_file)
+                
         return_result=json.dumps(sub_file)
-        
+    
     elif action=='open_settings':
         xbmcaddon.Addon().openSettings()
         return_result=json.dumps(action)
@@ -528,7 +332,6 @@ def sub_from_main(arg):
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         xbmc.executebuiltin('Dialog.Close(all,true)')
         xbmc.Player().pause()
-        f_result=add_embbded(f_result)
         last_sub_index,all_subs=get_db_data(f_result)
         xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
@@ -546,7 +349,7 @@ def sub_from_main(arg):
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         xbmc.executebuiltin('Dialog.Close(all,true)')
-        f_result=add_embbded(f_result)
+        
         last_sub_index,all_subs=get_db_data(f_result)
         xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
@@ -573,7 +376,6 @@ def sub_from_main(arg):
         video_data['Tagline']=tag_original
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-        f_result=add_embbded(f_result)
         last_sub_index,all_subs=get_db_data(f_result)
         next_one=False
         selected_sub=None
@@ -599,8 +401,8 @@ def sub_from_main(arg):
             sub_file=download_sub(source,download_data,MySubFolder,language,filename)
             log.warning('Next Sub result:'+str(sub_file))
             general.show_msg="מוכן"
-            if (sub_file!='Dont use'):
-                xbmc.Player().setSubtitles(sub_file)
+            
+            xbmc.Player().setSubtitles(sub_file)
             save_file_name(params["filename"])
             
         else:
@@ -630,7 +432,6 @@ def sub_from_main(arg):
         video_data['Tagline']=tag_original
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-        f_result=add_embbded(f_result)
         last_sub_index,all_subs=get_db_data(f_result)
         pre_one=None
         found=None
@@ -655,16 +456,11 @@ def sub_from_main(arg):
             language=(params["language"])
             filename=params["filename"]
             sub_file=download_sub(source,download_data,MySubFolder,language,filename)
-            
             log.warning('previous Sub result:'+str(sub_file))
             general.show_msg=sub_file
             xbmc.sleep(100)
-            if (sub_file!='Dont use'):
-                xbmc.Player().setSubtitles(sub_file)
-                save_file_name(params["filename"])
-            else:
-                save_file_name(unque(params["filename"]))
-                
+            xbmc.Player().setSubtitles(sub_file)
+            save_file_name(params["filename"])
         else:
             general.show_msg="זאת הכתובית הראשונה"
             xbmc.sleep(800)
@@ -727,10 +523,10 @@ class KodiMonitor(xbmc.Monitor):
             
     def onNotification( self, sender, method, data):
         global video_id,pre_video_id,trigger
-        global current_list_item,break_wait,found_embed_ok
+        global current_list_item,break_wait
         Addon=xbmcaddon.Addon()
         from resources.modules import general
-        last_sub_index=""
+        
         if method=='Player.OnStop':
             trigger=False
             
@@ -764,7 +560,7 @@ class KodiMonitor(xbmc.Monitor):
             if  trigger:
                 trigger=False
                 totalTime=0
-                f_result=None
+                
                 
                 
                 force_download=True
@@ -778,7 +574,7 @@ class KodiMonitor(xbmc.Monitor):
                 if Addon.getSetting("autosub")=='true':
                   try:
                       movieFullPath = xbmc.Player().getPlayingFile()
-
+                      
                       excluded=isExcluded(movieFullPath,current_list_item)
                   except: pass
                   if not excluded:
@@ -811,18 +607,8 @@ class KodiMonitor(xbmc.Monitor):
                         video_data['Tagline']=tag_original
                         
                         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-                        
-                        temp=add_demo_embbded(f_result)
-                        general.show_msg="מחפש כתובית קודמת"
-                        last_sub_index,all_subs=get_db_data(temp)
-                        
-                        if (last_sub_index=="") or 'כתובית מובנית' in unque(last_sub_index):
-                          thread=[]
-                          thread.append(Thread(find_for_break))
-                          thread[0].start()
-                      
-                        if len(f_result)>0 and 'כתובית מובנית' not in unque(last_sub_index):
-                            sub_name=place_sub(f_result,last_sub_index,all_subs)
+                        if len(f_result)>0:
+                            sub_name=place_sub(f_result)
                         
                     except Exception as e:
                         import linecache
@@ -832,13 +618,22 @@ class KodiMonitor(xbmc.Monitor):
                         lineno = tb.tb_lineno
                         filename = f.f_code.co_filename
                         linecache.checkcache(filename)
-                        log.warning('Error in subs:'+str(e)+','+'line:'+str(lineno))
-                    if not found_embed_ok:
-                        if sub_name:
-                            general.show_msg="[COLOR lightblue]כתובית מוכנה[/COLOR]"
-                        else:
-                            general.show_msg="[COLOR red]אין כתוביות[/COLOR]"
+                        line = linecache.getline(filename, lineno, f.f_globals)
                         
+                        log.warning('ERROR IN Downloading:'+str(lineno))
+                        log.warning('inline:'+line)
+                        log.warning(e)
+                        notify(str(e))
+                    
+                    
+                    if  Addon.getSetting("pause")=='true':
+                        xbmc.Player().pause()
+                    
+                    if sub_name:
+                        general.show_msg="[COLOR lightblue]כתובית מוכנה[/COLOR]"
+                    else:
+                        general.show_msg="[COLOR red]אין כתוביות[/COLOR]"
+                    
                     
                     
                     
@@ -869,20 +664,12 @@ class KodiMonitor(xbmc.Monitor):
                       except:
                         break
                   log.warning('totalTime::'+str(totalTime))
-                  if totalTime < ExcludeTime and excluded:
+                  if totalTime < ExcludeTime:
                     xbmc.Player().setSubtitles("")
-                  log.warning(sub_name)
-                  if (sub_name) and sub_name!='Dont use':
+                  if (sub_name):
                     log.warning('Place SUb::'+str(sub_name))
                     xbmc.Player().setSubtitles(sub_name)
-                  if (last_sub_index=="") or 'כתובית מובנית' in unque(last_sub_index) and f_result:
-                      thread=[]
-                      thread.append(Thread(find_embed,f_result))
-                      thread[0].start()
                   xbmc.sleep(2000)
-                  if (sub_name) and sub_name!='Dont use':
-                    xbmc.Player().setSubtitles(sub_name)
-                  
                   general.show_msg="END"
                     
 monitor=KodiMonitor()

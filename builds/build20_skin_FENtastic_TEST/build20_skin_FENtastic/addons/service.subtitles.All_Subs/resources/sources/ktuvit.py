@@ -1,4 +1,4 @@
-import xbmcaddon,xbmcvfs,os,time
+import xbmcaddon,xbmcvfs,os
 global global_var,stop_all,site_id,sub_color#global
 global_var=[]
 from resources.modules import log
@@ -222,46 +222,34 @@ def download(download_data,MySubFolder):
         'Cache-Control': 'no-cache',
         'TE': 'Trailers',
         }
-    count=0
+
     data = id
-    result="הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית"
-    while ("הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית" in result):
-        x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
-        
+    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
+    log.warning(response)
 
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Connection': 'keep-alive',
-            'Referer': 'https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id,
-            'Upgrade-Insecure-Requests': '1',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-            'TE': 'Trailers',
-            }
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id,
+        'Upgrade-Insecure-Requests': '1',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+        'TE': 'Trailers',
+        }
 
-        params = (
-        ('DownloadIdentifier', json.loads(x['d'])['DownloadIdentifier']),
-        )
+    params = (
+    ('DownloadIdentifier', json.loads(response['d'])['DownloadIdentifier']),
+    )
 
-        response = requests.get('https://www.ktuvit.me/Services/DownloadFile.ashx', headers=headers, params=params, cookies=login_cook)
-       
-    
-        time.sleep(0.1)
-        log.warning('Fault subs ktuvit:'+str(count))
-        result=response.text
-
-        count+=1
-        if (count>10):
-            break
+    response = requests.get('https://www.ktuvit.me/Services/DownloadFile.ashx', headers=headers, params=params, cookies=login_cook)
     headers=(response.headers)
-    
+
     file_name=headers['Content-Disposition'].split("filename=")[1]
 
     archive_file = os.path.join(MyTmp, file_name)
     # Throw an error for bad status codes
-    log.warning(headers)
     response.raise_for_status()
    
     with open(archive_file, 'wb') as handle:
@@ -269,6 +257,5 @@ def download(download_data,MySubFolder):
             handle.write(block)
     log.warning(archive_file)
     sub_file=extract(archive_file,MySubFolder)
-    log.warning(sub_file)
     return sub_file
              

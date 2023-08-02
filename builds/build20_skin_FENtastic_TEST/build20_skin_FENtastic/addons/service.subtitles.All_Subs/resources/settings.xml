@@ -33,7 +33,6 @@
 		<setting label="תרגום מכונה" type="lsep"/>
 		<setting id="auto_translate" label="תירגום מכונה אוטומטי ?" type="bool" default="true" />
 		<setting id="translate_p" type="enum" label="מתרגם אוטומטי" values="Google|Yandex|Bing" default="0" visible= "eq(-1,true)" enable="eq(-1,true)"/>
-		<setting id="bing_translate_keys_method" type="enum" label="סדר חיפוש מפתחות" values="עולה|אקראי" default="1" visible= "eq(-1,2)" enable="eq(-1,2)"/>
 		<setting id="subtitle_trans_cache"  type="number"  label="מספר כתובית מקסימלי בקאש" visible="true" default="15"/>
 	</category>
     <category label="הגדרות כלליות">
@@ -42,8 +41,6 @@
 		<setting tfype="sep"/>
 
 		<setting id="force" label="הורד למרות שיש כתוביות" type="bool" default="true" />
-		
-		
 		<setting type="sep"/>
 		
 		<setting label="הורדת כתוביות אוטומטית" type="lsep"/>
