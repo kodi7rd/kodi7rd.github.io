@@ -190,6 +190,8 @@ class SPaths:
             self.make_default_xml()
 
 
-def remake_all_spaths():
+def remake_all_spaths(silent=False):
     for item in "search_history":
         SPaths(item).remake_search_history()
+    if not silent:
+        xbmcgui.Dialog().ok("FENtastic", "Search history remade")
