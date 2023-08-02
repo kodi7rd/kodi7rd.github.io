@@ -944,13 +944,13 @@ msgctxt "#700039"
 msgid "Duration"
 msgstr "אורך"
 
-# Player OSD Pause Window - Custom_1122_OsdFullScreen.xml
+# Player OSD Pause Window - Custom_1122_PlayerPauseWindow.xml
 
 msgctxt "#700040"
 msgid "Paused"
 msgstr "מושהה"
 
-# Player Label Empty While Pausing Pause Window - Custom_1122_OsdFullScreen.xml
+# Player Label Empty While Pausing Pause Window - Custom_1122_PlayerPauseWindow.xml
 
 msgctxt "#700041"
 msgid "Info Not Available"
@@ -975,5 +975,11 @@ msgstr "ערוצי רדיו"
 msgctxt "#700045"
 msgid "Idan Plus And Radio Channels"
 msgstr "ערוצי עידן פלוס / ערוצי רדיו"
+
+# ShowPlayerPauseWindow Seting- Custom_1101_SettingsList.xml
+
+msgctxt "#700046"
+msgid "Show information window on playback pause"
+msgstr "הצג חלון מידע בעצירת הניגון"
 
 ################################################################

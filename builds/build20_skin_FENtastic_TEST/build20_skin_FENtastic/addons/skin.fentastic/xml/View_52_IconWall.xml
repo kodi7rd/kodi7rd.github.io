@@ -6,7 +6,7 @@
 			<include>OpenClose_Right</include>
 			<include>Visible_Right</include>
 			<control type="panel" id="52">
-				<centerleft>51%</centerleft>
+				<centerleft>51.2%</centerleft>
 				<top>0</top>
 				<width>92%</width>
 				<height>100%</height>
@@ -61,12 +61,12 @@
 				<focusedlayout height="280" width="440" condition="Container.Content() | Container.Content(files) | Container.Content(tags) | Container.Content(playlists) | [Container.Content(studios) + System.AddonIsEnabled(resource.images.studios.white)]">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<animation type="Focus">
+						<!-- <animation type="Focus">
 							<effect type="zoom" start="100" end="112" time="200" tween="sine" easing="inout" center="auto" />
 						</animation>
 						<animation type="Unfocus">
 							<effect type="zoom" start="112" end="100" time="200" tween="sine" easing="inout" center="auto" />
-						</animation>
+						</animation> -->
 						<top>150</top>
 						<control type="image">
 							<width>396</width>
@@ -76,6 +76,7 @@
 							<bordersize>20</bordersize>
 						</control>
 						<control type="image">
+							<include>FocusBounce</include>
 							<width>396</width>
 							<height>245</height>
 							<texture colordiffuse="button_focus">masks/landscape.png</texture>
@@ -135,12 +136,12 @@
 					<control type="group">
 						<depth>DepthContentPopout</depth>
 						<top>120</top>
-						<animation type="Focus">
+						<!-- <animation type="Focus">
 							<effect type="zoom" start="100" end="112" time="200" tween="sine" easing="inout" center="auto" />
 						</animation>
 						<animation type="Unfocus">
 							<effect type="zoom" start="112" end="100" time="200" tween="sine" easing="inout" center="auto" />
-						</animation>
+						</animation> -->
 						<control type="image">
 							<width>330</width>
 							<height>140</height>

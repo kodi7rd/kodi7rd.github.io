@@ -4,6 +4,7 @@
 	<backgroundcolor>background</backgroundcolor>
 	<onload condition="!Skin.HasSetting(firsttimerun)">ActivateWindow(1112)</onload>
   <onload condition="Skin.HasSetting(firsttimerun)">RunScript(script.fentastic.helper,mode=check_for_update&amp;skin_id=skin.fentastic)</onload>
+	<onload>RunScript(script.fentastic.helper,mode=check_for_profile_change&amp;skin_id=skin.fentastic)</onload>
   <onload condition="String.IsEmpty(Window(Home).Property(fentastic.starting_widgets))">RunScript(script.fentastic.helper,mode=starting_widgets)</onload>
   <onload condition="String.IsEmpty(Window(Home).Property(fentastic.starting_widgets))">SetProperty(fentastic.starting_widgets,true)</onload>
 	<controls>
@@ -475,8 +476,8 @@
 							<control type="group">
 								<depth>DepthContentPopout</depth>
 								<top>130</top>
-								<animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
-								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation>
+								<!-- <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
+								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation> -->
 								<include content="InfoWallMusicLayout">
 									<param name="fallback_image" value="DefaultFavourites.png" />
 									<param name="list_id" value="$PARAM[list_id]" />
@@ -826,12 +827,13 @@
 								<texture>$INFO[ListItem.Art(thumb)]</texture>
 							</control>
 							<control type="label">
+								<include>FocusBounce</include>
 								<left>104</left>
 								<top>0</top>
 								<height>95</height>
-								<width>355</width>
+								<width>315</width>
 								<aligny>center</aligny>
-								<font>font37</font>
+								<font>font45</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
 							</control>
@@ -848,9 +850,9 @@
 								<left>104</left>
 								<top>0</top>
 								<height>95</height>
-								<width>355</width>
+								<width>315</width>
 								<aligny>center</aligny>
-								<font>font37</font>
+								<font>font45</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
 							</control>
@@ -969,35 +971,30 @@
 							<param name="onclick" value="ActivateWindow(shutdownmenu)" />
 							<param name="icon" value="icons/power.png" />
 							<param name="label" value="$LOCALIZE[33060]" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 						<include content="IconButton">
 							<param name="control_id" value="802" />
 							<param name="onclick" value="ActivateWindow(settings)" />
 							<param name="icon" value="icons/settings.png" />
 							<param name="label" value="$LOCALIZE[21417]" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 						<include content="IconButton" condition="Skin.HasSetting(NoSearchResultsWindow)">
 							<param name="control_id" value="803" />
 							<param name="onclick" value="ActivateWindow(1107)" />
 							<param name="icon" value="icons/search.png" />
 							<param name="label" value="$LOCALIZE[137]" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 						<include content="IconButton" condition="!Skin.HasSetting(NoSearchResultsWindow) + Skin.HasSetting(DefaultSearchWindowBehavior)">
 							<param name="control_id" value="804" />
 							<param name="onclick" value="RunScript(script.fentastic.helper,mode=search_input)" />
 							<param name="icon" value="icons/search.png" />
 							<param name="label" value="$LOCALIZE[137]" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 						<include content="IconButton" condition="!Skin.HasSetting(NoSearchResultsWindow) + !Skin.HasSetting(DefaultSearchWindowBehavior)">
 							<param name="control_id" value="805" />
 							<param name="onclick" value="RunScript(script.fentastic.helper,mode=open_search_window)" />
 							<param name="icon" value="icons/search.png" />
 							<param name="label" value="$LOCALIZE[137]" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 						<include content="IconButton">
 							<param name="control_id" value="806" />
@@ -1005,7 +1002,6 @@
 							<param name="icon" value="icons/now-playing/fullscreen.png" />
 							<param name="label" value="$LOCALIZE[31000]" />
 							<param name="visible" value="Player.HasMedia" />
-							<!-- <param name="focused" value="$PARAM[control_id]" /> -->
 						</include>
 					</control>
 				</control>

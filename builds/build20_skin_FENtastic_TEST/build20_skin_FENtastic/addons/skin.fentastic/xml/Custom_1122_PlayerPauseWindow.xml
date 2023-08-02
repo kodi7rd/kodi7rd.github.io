@@ -13,7 +13,7 @@
 			<effect type="slide" start="0" end="-150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>60%</centerleft>
 				<centertop>50%</centertop>
 				<width>1702</width>
@@ -29,7 +29,7 @@
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>60%</centerleft>
 				<centertop>50%</centertop>
 				<width>1002</width>
@@ -45,7 +45,7 @@
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>77%</centerleft>
 				<centertop>30%</centertop>
 				<width>282</width>
@@ -61,7 +61,7 @@
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>77%</centerleft>
 				<centertop>30%</centertop>
 				<width>282</width>
@@ -77,7 +77,7 @@
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>81.5%</centerleft>
 				<centertop>30%</centertop>
 				<width>22</width>
@@ -93,7 +93,7 @@
 			<effect type="slide" start="0" end="-150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>24%</centerleft>
 				<centertop>50%</centertop>
 				<width>392</width>
@@ -110,7 +110,7 @@
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>78%</centerleft>
 				<centertop>65%</centertop>
 				<width>220</width>
@@ -127,7 +127,7 @@
 				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<description>buffering value</description>
 					<label>[COLOR button_focus][B]$LOCALIZE[31080]:[/B][/COLOR] $INFO[Player.FinishTime][CR][COLOR button_focus][B]$LOCALIZE[700039]:[/B] [/COLOR]$INFO[VideoPlayer.Duration(hh:mm:ss)]</label>
 					<centerleft>54.5%</centerleft>
@@ -147,7 +147,7 @@
 				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
-					<visible>$EXP[PuasedTended_PreFIx]</visible>
+					<visible>$EXP[PausedTended_Prefix]</visible>
 					<description>buffering value</description>
 					<label>$LOCALIZE[700040]</label>
 					<centerleft>75.5%</centerleft>
@@ -167,7 +167,7 @@
 			<effect type="slide" start="0" end="-150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="150"/>
 			</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<centerleft>18.0%</centerleft>
 				<centertop>25.5%</centertop>
 				<width>122</width>
@@ -184,7 +184,7 @@
 				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
-					<visible>$EXP[PuasedTended_PreFIx]</visible>
+					<visible>$EXP[PausedTended_Prefix]</visible>
 					<description>buffering value</description>
 					<label fallback="n/a">[B][COLOR yellow]$VAR[NowPlayingLabelVar][/COLOR][/B]</label>
 					<centerleft>54.5%</centerleft>
@@ -204,10 +204,10 @@
 				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
-				<visible>$EXP[PuasedTended_PreFIx]</visible>
+				<visible>$EXP[PausedTended_Prefix]</visible>
 				<left>1385</left>
 				<top>-1200</top>
-				<visible>$EXP[Label_Visible_preFix]</visible>
+				<visible>$EXP[Label_Visible_Prefix]</visible>
 				<left>-45</left>
 				<control type="image">
 					<centertop>80%</centertop>
@@ -233,7 +233,7 @@
 				<param name="centerleft">54.5</param>
 				<param name="centertop">68</param>
 				<param name="font_prefix">font10</param>
-				<param name="visible">$EXP[Label_Visible_preFix]</param>
+				<param name="visible">$EXP[Label_Visible_Prefix]</param>
 				<animation effect="fade" start="0" end="100" time="400">VisibleChange</animation>
 			</include>
 				<control type="textbox" id="1">
@@ -245,7 +245,7 @@
 				<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
-					<visible>$EXP[PuasedTended_PreFIx]</visible>
+					<visible>$EXP[PausedTended_Prefix]</visible>
 					<description>buffering value</description>
 					<label>$VAR[Episode_prefix]</label>
 					<centerleft>77%</centerleft>
@@ -266,7 +266,7 @@
 				<effect type="fade" start="100" end="0" time="250" delay="150"/>
 				</animation>
 				<autoscroll time="4000" fade="4000" repeat="4500">System.IdleTime(5) + Player.Paused</autoscroll>
-					<visible>$EXP[PuasedTended_PreFIx]</visible>
+					<visible>$EXP[PausedTended_Prefix]</visible>
 					<description>buffering value</description>
 					<label fallback="$LOCALIZE[700041]">[B]$INFO[VideoPlayer.Plot][/B]</label>
 					<centerleft>54.5%</centerleft>
@@ -287,7 +287,7 @@
 		<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 		<effect type="fade" start="100" end="0" time="250" delay="150"/>
 		</animation>
-		<visible>$EXP[PuasedTended_PreFIx]</visible>
+		<visible>$EXP[PausedTended_Prefix]</visible>
 		<centertop>82%</centertop>
 		<centerleft>56.5%</centerleft>
 			<width>840</width>

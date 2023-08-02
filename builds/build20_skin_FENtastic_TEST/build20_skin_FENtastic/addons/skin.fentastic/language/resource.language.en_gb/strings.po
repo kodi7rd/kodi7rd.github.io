@@ -1126,13 +1126,13 @@ msgctxt "#700039"
 msgid "Duration"
 msgstr ""
 
-# Player OSD Pause Window - Custom_1122_OsdFullScreen.xml
+# Player OSD Pause Window - Custom_1122_PlayerPauseWindow.xml
 
 msgctxt "#700040"
 msgid "Paused"
 msgstr ""
 
-# Player Label Empty While Pausing Pause Window - Custom_1122_OsdFullScreen.xml
+# Player Label Empty While Pausing Pause Window - Custom_1122_PlayerPauseWindow.xml
 
 msgctxt "#700041"
 msgid "Info Not Available"
@@ -1156,6 +1156,12 @@ msgstr ""
 
 msgctxt "#700045"
 msgid "Idan Plus And Radio Channels"
+msgstr ""
+
+# ShowPlayerPauseWindow Seting- Custom_1101_SettingsList.xml
+
+msgctxt "#700046"
+msgid "Show information window on playback pause"
 msgstr ""
 
 ################################################################

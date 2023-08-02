@@ -182,6 +182,7 @@
 			</control>
 			<control type="group" id="200">
 				<include>Animation_BottomSlide</include>
+				<include>syncfakebutton</include>
 				<control type="grouplist" id="201">
 					<left>20</left>
 					<top>90</top>
@@ -207,8 +208,8 @@
 						<description>Manual Subtitles Delay Sync</description>
 						<width>100</width>
 						<height>100</height>
-						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/sync_subtitle.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/sync_subtitle.png</texturefocus>
+						<texturenofocus colordiffuse="grey_a"></texturenofocus>
+						<texturefocus colordiffuse="button_focus"></texturefocus>
 						<onclick>SubtitleDelay</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
@@ -390,7 +391,7 @@
 						</include>
 						<include condition="$EXP[LiveTvCondition]">In</include>
 					</control>
-					<!-- Info button - unused because Pause Window (Custom_1122_OsdFullScreen.xml)
+					<!-- Info button - unused because Pause Window (Custom_1122_PlayerPauseWindow.xml)
 					<control type="radiobutton" id="70043">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/information.png"/>
