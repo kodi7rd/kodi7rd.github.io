@@ -12,7 +12,7 @@
     <setting id="show_weatherinfo" type="bool">false</setting>
     <setting id="movieresults" type="bool">true</setting>
     <setting id="homemenunotvshowsbutton" type="bool">false</setting>
-    <setting id="showplayerpausewindow" type="bool">false</setting>
+    <setting id="showplayerpausewindow" type="bool">true</setting>
     <setting id="tvshowkeywordresults" type="bool">false</setting>
     <setting id="circle_rating" type="bool">true</setting>
     <setting id="nofocusanimations" type="bool">true</setting>
