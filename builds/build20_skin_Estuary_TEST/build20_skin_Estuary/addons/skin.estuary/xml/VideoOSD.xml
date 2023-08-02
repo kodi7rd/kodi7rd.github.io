@@ -182,6 +182,7 @@
 			</control>
 			<control type="group" id="200">
 				<include>Animation_BottomSlide</include>
+				<include>syncfakebutton</include>
 				<control type="grouplist" id="201">
 					<left>20</left>
 					<top>90</top>
