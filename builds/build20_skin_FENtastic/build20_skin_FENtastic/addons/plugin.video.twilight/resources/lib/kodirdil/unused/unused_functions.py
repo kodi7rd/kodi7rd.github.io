@@ -126,3 +126,40 @@ def subtitle_name_to_twilight_source_file_name_matching(total_subtitles_found_li
         kodi_utils.logger("KODI-RD-IL", f"Error in subtitle matching: {e}")
         
     return subtitles_matched_count, subtitle_matches_text
+          
+
+def clear_twilight_providers_db():
+
+    """Clears the db cache for TWILIGHT providers by deleting the `providers.db` file used by the TWILIGHT Kodi addon.
+    
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    # Clear providers cache
+    try:
+        from caches.providers_cache import ExternalProvidersCache
+        ExternalProvidersCache().delete_cache(silent=True)
+        kodi_utils.logger("KODI-RD-IL", "Cleared providers.db cache")
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"Error clearing providers.db cache: {str(e)}")
+
+
+from xbmcvfs import translatePath
+import os
+last_searched_media_path = translatePath(kodi_utils.database_path_raw % 'last_searched_media.txt') 
+
+def _get_last_searched_media():
+    # Load the last searched media identifier from the text file if it exists
+    if os.path.exists(last_searched_media_path):
+        with open(last_searched_media_path, "r") as file:
+            return eval(file.read())  # Convert the string representation back to a tuple
+    return None
+    
+
+def _set_last_searched_media(media_identifier):
+    # Write the media identifier to the text file
+    with open(last_searched_media_path, "w") as file:
+        file.write(repr(media_identifier))  # Convert the tuple to a string representation

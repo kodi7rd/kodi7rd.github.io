@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import time
-from sys import exit as sysexit
-from modules import kodi_utils
 from caches.main_cache import cache_object
+from modules import kodi_utils
+from modules.utils import copy2clip
 # logger = kodi_utils.logger
 
 ls, notification, get_setting, set_setting, requests = kodi_utils.local_string, kodi_utils.notification, kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.requests
@@ -27,9 +27,7 @@ class PremiumizeAPI:
 		url = 'https://www.premiumize.me/token'
 		response = self._post(url, data)
 		user_code = response['user_code']
-		try:
-			from modules.utils import copy2clip
-			copy2clip(user_code)
+		try: copy2clip(user_code)
 		except: pass
 		content = line % (ls(32517), ls(32700) % response.get('verification_uri'), ls(32701) % '[COLOR orangered]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('orangered')
@@ -190,7 +188,7 @@ class PremiumizeAPI:
 			transfer_info = _transfer_info(transfer_id)
 			line3 = transfer_info['message']
 			progressDialog.update(line % (line1, line2, line3), int(float(transfer_info['progress']) * 100))
-			if monitor.abortRequested() == True: return sysexit()
+			if monitor.abortRequested() == True: return
 			try:
 				if progressDialog.iscanceled():
 					return _return_failed(ls(32736), cancelled=True)

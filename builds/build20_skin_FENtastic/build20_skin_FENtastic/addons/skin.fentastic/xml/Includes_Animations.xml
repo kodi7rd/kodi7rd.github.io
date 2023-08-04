@@ -4,6 +4,18 @@
 		<animation effect="fade" start="0" end="100" time="200" tween="sine">Focus</animation>
 		<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
 	</include>
+	<include name="FocusBounce">
+		<animation type="Focus" condition="!Skin.HasSetting(NoFocusAnimations)" reversible="false">
+			<effect type="zoom" end="105" time="75" tween="sine" easing="out" center="auto" />
+			<effect type="zoom" end="95" time="225" tween="sine" delay="100" easing="out" center="auto" />
+		</animation>
+	</include>
+	<include name="FocusBounceMenus">
+		<animation type="Focus" condition="!Skin.HasSetting(NoFocusAnimations)" reversible="false">
+			<effect type="zoom" end="125" time="75" tween="sine" easing="out" center="auto" />
+			<effect type="zoom" end="80" time="225" tween="sine" delay="100" easing="out" center="auto" />
+		</animation>
+	</include>
 	<include name="Animation_DialogPopupOpenClose">
 		<animation type="WindowOpen" reversible="false">
 			<effect type="zoom" start="80" end="100" center="50%,50%" delay="160" tween="back" time="240" />
@@ -143,11 +155,32 @@
 	</definition>
 	</include>
 	
+	<include name="lefttoright_fix">
+		<animation type="WindowOpen">
+			<effect type="slide" start="-150" end="0" time="150" tween="sine" easing="inout"/>
+			<effect type="fade" start="0" end="100" time="150" delay="50"/>
+		</animation>
+		<animation type="WindowClose">
+			<effect type="slide" start="0" end="-150" time="150" tween="sine" easing="inout"/>
+			<effect type="fade" start="100" end="0" time="150" delay="50"/>
+		</animation>
+	</include>
+	<include name="righttoleft_fix">
+		<animation type="WindowOpen">
+			<effect type="slide" start="150" end="0" time="250" tween="sine" easing="inout"/>
+			<effect type="fade" start="0" end="100" time="250" delay="50"/>
+			</animation>
+		<animation type="WindowClose">
+			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
+			<effect type="fade" start="100" end="0" time="250" delay="50"/>
+		</animation>
+	</include>
+	
 	<include name="preFix_Flags_Positions">
 			<animation condition="$PARAM[condition]" effect="slide" start="0" end="$PARAM[end]" time="0">Conditional</animation>
 	</include>
 	
-	<include name="preFix_VideoOSdZoomFocused">
+	<include name="preFix_VideoOSDZoomFocused">
 		<animation condition="Container($PARAM[id]).Position(0)" effect="slide" start="0" end="0" time="120" tween="sine" easing="inout">Conditional</animation>
 		<animation condition="Container($PARAM[id]).Position(1)" effect="slide" start="0" end="120" time="120" tween="sine" easing="inout">Conditional</animation>
 		<animation condition="Container($PARAM[id]).Position(2)" effect="slide" start="0" end="240" time="120" tween="sine" easing="inout">Conditional</animation>

@@ -7,6 +7,10 @@ import http.client as httplib
 
 ########### Settings ####################
 search_hebrew_subtitles_in_opensubtitles = kodi_utils.get_setting('search_hebrew_subtitles_in_opensubtitles', 'true') == 'true'
+
+# Default value for SUBTITLE_SEARCH_LANGUAGE
+OPS_SUBTITLE_SEARCH_LANGUAGE = ['heb']
+
 #########################################
 
 ########### Constants ###################
@@ -51,11 +55,11 @@ class OSDBServer:
         login = self.server.LogIn("", "", "en", "XBMC_Subtitles_Unofficial")
         self.osdb_token = login["token"]
 
-    def search_subtitles(self, media_metadata):
+    def search_subtitles(self, media_metadata, language):
         '''given: media_metadata dictionary
         return: List of subtitle file names based on search results from opensubtitles server'''
     
-        searchlist = create_search_list_to_opensubtitles_api(media_metadata)
+        searchlist = create_search_list_to_opensubtitles_api(media_metadata, language)
         
         # Perform the opensubtitles_search_results and return a list of subtitle file names
         opensubtitles_search_results = self.server.SearchSubtitles(self.osdb_token, searchlist)
@@ -66,7 +70,7 @@ class OSDBServer:
             return []
             
             
-def search_hebrew_subtitles(media_metadata):
+def search_for_subtitles(media_metadata, language='Hebrew'):
 
     '''Search for Hebrew subtitles for a given media using the OpenSubtitles server.
 
@@ -82,18 +86,30 @@ def search_hebrew_subtitles(media_metadata):
     if not search_hebrew_subtitles_in_opensubtitles:
         kodi_utils.logger("KODI-RD-IL", f"SETTING search_hebrew_subtitles_in_opensubtitles is: {search_hebrew_subtitles_in_opensubtitles}. Skipping [OPENSUBTITLES] website...")
         return []
+        
+    global OPS_SUBTITLE_SEARCH_LANGUAGE  # Use the global variable
+
+    if language == 'English':
+    
+        # Temporarily set the subtitle search language based on the 'language' parameter
+        ORIGINAL_OPS_SUBTITLE_SEARCH_LANGUAGE = OPS_SUBTITLE_SEARCH_LANGUAGE
+        OPS_SUBTITLE_SEARCH_LANGUAGE = ['eng']
 
     # Initialize the subtitle list and perform the opensubtitles_search_results
     opensubtitles_subtitles_list = []
     
-    opensubtitles_subtitles_list = OSDBServer().search_subtitles(media_metadata)
+    opensubtitles_subtitles_list = OSDBServer().search_subtitles(media_metadata, language)
+
+    if language == 'English':
+        # Reset the subtitle search language to the original value
+        OPS_SUBTITLE_SEARCH_LANGUAGE = ORIGINAL_OPS_SUBTITLE_SEARCH_LANGUAGE
     
     if opensubtitles_subtitles_list is None:
         return []
     return opensubtitles_subtitles_list
 
 
-def create_search_list_to_opensubtitles_api(media_metadata):
+def create_search_list_to_opensubtitles_api(media_metadata, language):
 
     '''given: media_metadata dictionary
     return: List of dictionaries of search criteria for opensubtitles server search'''
@@ -104,7 +120,7 @@ def create_search_list_to_opensubtitles_api(media_metadata):
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     year = media_metadata.get("year", DEFAULT_YEAR)
     imdb_id = media_metadata.get("imdb_id", "")
-    kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES]: media_type: '{media_type}' title: {title} year: {year} season: {season} episode: {episode} imdb_id: {imdb_id}")
+    kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES] in {language} language: media_type: '{media_type}' title: {title} year: {year} season: {season} episode: {episode} imdb_id: {imdb_id}")
 
     # Define the search list
     searchlist = []
@@ -116,7 +132,7 @@ def create_search_list_to_opensubtitles_api(media_metadata):
         OS_search_string = f"{title} S{season:02d}E{episode:02d}".replace(" ", "+")
 
         searchlist.append({
-            'sublanguageid': 'heb',
+            'sublanguageid': ",".join(OPS_SUBTITLE_SEARCH_LANGUAGE),
             'query': OS_search_string,
             'season': season,
             'episode': episode
@@ -125,7 +141,7 @@ def create_search_list_to_opensubtitles_api(media_metadata):
     elif imdb_id:
         kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES] based on movie_type 'movie' parameters: imdb_id")
         searchlist.append({
-            'sublanguageid': 'heb',
+            'sublanguageid': ",".join(OPS_SUBTITLE_SEARCH_LANGUAGE),
             'imdbid': imdb_id.replace('tt', '')
         })
         
@@ -134,7 +150,7 @@ def create_search_list_to_opensubtitles_api(media_metadata):
         kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES] based on movie_type 'movie' parameters: title, year. (IMDb ID not found)")
         OS_search_string = title.replace(" ", "+")
         searchlist.append({
-            'sublanguageid': 'heb',
+            'sublanguageid': ",".join(OPS_SUBTITLE_SEARCH_LANGUAGE),
             'query': OS_search_string,
             'year': year
         })

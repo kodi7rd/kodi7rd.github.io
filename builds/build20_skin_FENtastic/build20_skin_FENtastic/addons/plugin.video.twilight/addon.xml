@@ -1,4 +1,4 @@
-<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.1.19">
+<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.2.01">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.19.1"/>
@@ -9,34 +9,6 @@
     </extension>
     <extension library="resources/lib/service.py" point="xbmc.service"/>
     <extension library="resources/lib/" point="xbmc.python.module"/>
-    <extension point="kodi.context.item">
-        <menu id="kodi.core.main">
-            <item library="resources/contextmenu/refresh_widgets.py">
-                <label>[B]$ADDON[plugin.video.twilight 32611][/B]</label>
-                <visible>String.IsEqual(ListItem.Property(twilight.external),true) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-            <item library="resources/contextmenu/mark_watched.py">
-                <label>[B]$ADDON[plugin.video.twilight 33130][/B]</label>
-                <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(twilight.external),true) + String.IsEqual(ListItem.Property(twilight.playcount),0) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-            <item library="resources/contextmenu/mark_unwatched.py">
-                <label>[B]$ADDON[plugin.video.twilight 33131][/B]</label>
-                <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(twilight.external),true) + String.IsEqual(ListItem.Property(twilight.playcount),1) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-            <item library="resources/contextmenu/clear_progress.py">
-                <label>32651</label>
-                <visible>[String.IsEqual(ListItem.dbtype,movie) | String.IsEqual(ListItem.dbtype,episode)] + String.IsEqual(ListItem.Property(twilight.external),true) + String.IsEqual(ListItem.Property(twilight.in_progress),true) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-            <item library="resources/contextmenu/options.py">
-                <label>32646</label>
-                <visible>String.IsEqual(ListItem.Property(twilight.external),true) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-            <item library="resources/contextmenu/extras.py">
-                <label>32645</label>
-                <visible>String.IsEqual(ListItem.Property(twilight.external),true) + !String.StartsWith(Window(home).Property(twilight.kodi_version),20)</visible>
-            </item>
-        </menu>
-    </extension>
     <extension point="xbmc.addon.metadata">
 		<!-- Disabled because: FENtastic skin with widgets crashing issues -->
         <!-- <reuselanguageinvoker>true</reuselanguageinvoker> -->

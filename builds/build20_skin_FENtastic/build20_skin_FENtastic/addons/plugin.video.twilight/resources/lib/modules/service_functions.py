@@ -33,13 +33,6 @@ premium_check_function_dict = {'Real-Debrid': real_debrid.active_days, 'Premiumi
 premium_check_setting_dict = {'Real-Debrid': 'rd.enabled', 'Premiumize.me': 'pm.enabled', 'AllDebrid': 'ad.enabled',
 								'Furk': 'provider.furk', 'Easynews': 'provider.easynews'}
 
-class SetKodiVersion:
-	def run(self):
-		logger(twilight_str, 'SetKodiVersion Service Starting')
-		kodi_version = get_infolabel('System.BuildVersion')
-		set_property('twilight.kodi_version', kodi_version)
-		return logger(twilight_str, 'SetKodiVersion Service Finished - Kodi Version Detected: %s' % kodi_version)
-
 class InitializeDatabases:
 	def run(self):
 		logger(twilight_str, 'InitializeDatabases Service Starting')
@@ -105,9 +98,11 @@ class ReuseLanguageInvokerCheck:
 			invoker_instance.data = current_addon_setting
 			new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 			with open(addon_xml, 'w') as f: f.write(new_xml)
-			if confirm_dialog(text='%s\n%s' % (ls(33021), ls(33020))):
-				update_local_addons()
-				disable_enable_addon()
+			if not get_setting('auto_invoker_fix') == 'true' and not confirm_dialog(text='%s\n%s' % (ls(33021), ls(33020))):
+				return logger(twilight_str, 'ReuseLanguageInvokerCheck Service Finished')
+			execute_builtin('ActivateWindow(Home)', True)
+			update_local_addons()
+			disable_enable_addon()
 		return logger(twilight_str, 'ReuseLanguageInvokerCheck Service Finished')
 
 class TraktMonitor:

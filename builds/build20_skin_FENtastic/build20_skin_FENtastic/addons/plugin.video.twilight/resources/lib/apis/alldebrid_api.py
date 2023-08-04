@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import time
-from sys import exit as sysexit
 from caches.main_cache import cache_object
 from modules import kodi_utils
+from modules.utils import copy2clip
 # logger = kodi_utils.logger
 
 path_exists, maincache_db, requests, Thread, get_icon = kodi_utils.path_exists, kodi_utils.maincache_db, kodi_utils.requests, kodi_utils.Thread, kodi_utils.get_icon
@@ -30,9 +30,7 @@ class AllDebridAPI:
 		expires_in = int(response['expires_in'])
 		poll_url = response['check_url']
 		user_code = response['pin']
-		try:
-			from modules.utils import copy2clip
-			copy2clip(user_code)
+		try: copy2clip(user_code)
 		except: pass
 		sleep_interval = 5
 		content = line % (ls(32517), ls(32700) % response.get('base_url'), ls(32701) % '[COLOR goldenrod]%s[/COLOR]' % user_code)
@@ -221,7 +219,7 @@ class AllDebridAPI:
 				line3 = transfer_info['status']
 				progress = 0
 			progressDialog.update(line % (line1, line2, line3), progress)
-			if monitor.abortRequested() == True: return sysexit()
+			if monitor.abortRequested() == True: return
 			try:
 				if progressDialog.iscanceled():
 					return _return_failed(32736, cancelled=True)

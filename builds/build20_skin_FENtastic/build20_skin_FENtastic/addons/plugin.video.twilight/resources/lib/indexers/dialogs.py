@@ -4,7 +4,7 @@ from windows import open_window, create_window
 from caches import refresh_cached_data
 from indexers.people import person_data_dialog
 from modules import kodi_utils, source_utils, settings, metadata
-from modules.utils import get_datetime, title_key
+from modules.utils import get_datetime, title_key, adjust_premiered_date
 # logger = kodi_utils.logger
 
 ok_dialog, container_content, close_all_dialog, external = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external
@@ -24,7 +24,7 @@ extras_open_action, get_art_provider, fanarttv_default, ignore_articles = settin
 clear_scrapers_cache, get_aliases_titles, make_alias_dict = source_utils.clear_scrapers_cache, source_utils.get_aliases_titles, source_utils.make_alias_dict
 toggle_all, enable_disable, set_default_scrapers = source_utils.toggle_all, source_utils.enable_disable, source_utils.set_default_scrapers
 autoscrape_next_episode, audio_filters, extras_enabled_ratings = settings.autoscrape_next_episode, settings.audio_filters, settings.extras_enabled_ratings
-quality_filter, watched_indicators = settings.quality_filter, settings.watched_indicators
+quality_filter, watched_indicators, date_offset = settings.quality_filter, settings.watched_indicators, settings.date_offset
 single_ep_list = ('episode.progress', 'episode.recently_watched', 'episode.next_trakt', 'episode.next_twilight', 'episode.trakt_recently_aired', 'episode.trakt_calendar')
 scraper_names = [ls(32118).upper(), ls(32069).upper(), ls(32070).upper(), ls(32098).upper(), ls(32097).upper(), ls(32099).upper(), ls(32108).upper()]
 network_str, created_by_str, last_aired_str, next_aired_str, seasons_str, episodes_str, favorites_str = ls(32480), ls(32633), ls(32634), ls(32635), ls(32636), ls(32506), ls(32453)
@@ -189,9 +189,10 @@ def navigate_to_page_choice(params):
 	def _builder():
 		for i in start_list:
 			try:
-				if i == 1 and widget_content:
-					line1 = from_widget_str
-				elif jump_to == 0: line1 = '%s %s' % (page_str, str(i))
+				if i == 1 and widget_content: line1 = from_widget_str
+				elif jump_to == 0:
+					line1 = '%s %s' % (page_str, str(i))
+					if i == current_page: line1 = '[COLOR %s][B]%s   |   %s[/B][/COLOR]' % (twilight_highlight, line1, current_page_str)
 				else:
 					page_contents = all_pages[i-1]
 					first_entry, last_entry = page_contents[0]['title'], page_contents[-1]['title']
@@ -200,13 +201,14 @@ def navigate_to_page_choice(params):
 					else: line_end = '%s - %s' % (first_alpha, last_alpha)
 					if jump_to == 1: line1 = line_end
 					else: line1 = '%s %s   |   %s' % (page_str, str(i), line_end)
-					if i == current_page: line1 = '[COLOR %s][B]%s   |   %s[/B][/COLOR]' % (get_property(highlight_prop), line1, current_page_str)
+					if i == current_page: line1 = '[COLOR %s][B]%s   |   %s[/B][/COLOR]' % (twilight_highlight, line1, current_page_str)
 			except: line1 = ''
 			yield {'line1': line1}
 	try:
 		total_pages, all_pages = int(params.get('total_pages')), json.loads(params.get('all_pages'))
 		if all_pages[0] == []: widget_content = True
 		else: widget_content = False
+		twilight_highlight = get_property(highlight_prop)
 		start_list = [i for i in range(1, total_pages+1)]
 		ignore, jump_to, current_page = ignore_articles(), int(params.get('jump_to_enabled', '0')), int(params.get('current_page'))
 		list_items = list(_builder())
@@ -215,8 +217,8 @@ def navigate_to_page_choice(params):
 		if new_page == None or new_page == current_page: return
 		if new_page == 1 and widget_content: function, paginate_start = container_refresh_input, '0'
 		else: function, paginate_start = container_update, params.get('paginate_start', '0')
-		url_params = {'mode': params.get('transfer_mode', ''), 'action': params.get('transfer_action', ''), 'new_page': new_page, 'media_type': params.get('media_type', ''),
-					'query': params.get('query', ''), 'user': params.get('user', ''), 'slug': params.get('slug', ''), 'paginate_start': paginate_start, 'refreshed': 'true'}
+		url_params = json.loads(params['url_params'])
+		url_params['new_page'] = new_page
 		function(url_params)
 	except: return
 
@@ -867,7 +869,6 @@ def options_menu_choice(params, meta=None):
 		if menu_type in single_ep_list:
 			listing_append((ls(32838), '%s %s' % (ls(32838), title), 'browse'))
 			listing_append((ls(32544).replace(' %s', ''), ls(32544) % (title, season), 'browse_season'))
-			if menu_type == 'episode.next_trakt' and watched_indicators() == 1: listing_append((ls(32599), '', 'nextep_manager'))
 	if menu_type in ('movie', 'tvshow'):
 		if get_setting('trakt.user', ''): listing_append((ls(32198), '', 'trakt_manager'))
 		listing_append((ls(32197), '', 'favorites_choice'))
@@ -944,8 +945,6 @@ def options_menu_choice(params, meta=None):
 		return window_function({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
 	elif choice == 'browse_season':
 		return window_function({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season})
-	elif choice == 'nextep_manager':
-		return window_function({'mode': 'build_next_episode_manager'})
 	elif choice == 'recommended':
 		close_all_dialog()
 		mode, action = ('build_movie_list', 'tmdb_movies_recommendations') if menu_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_recommendations')
@@ -1022,14 +1021,18 @@ def media_extra_info_choice(params):
 			append('[B]%s:[/B] %s' % (genres_str, meta['genre']))
 			append('[B]%s:[/B] %s' % (network_str, meta['studio']))
 			append('[B]%s:[/B] %s' % (created_by_str, extra_info['created_by']))
-			if extra_info.get('last_episode_to_air', False):
+			try:
 				last_ep = extra_info['last_episode_to_air']
-				lastep_str = '[%s] S%.2dE%.2d - %s' % (last_ep['air_date'], last_ep['season_number'], last_ep['episode_number'], last_ep['name'])
-				append('[B]%s:[/B] %s' % (last_aired_str, lastep_str))
-			if extra_info.get('next_episode_to_air', False):
+				append('[B]%s:[/B] %s - [B]S%.2dE%.2d[/B] - %s' \
+					% (last_aired_str, adjust_premiered_date(last_ep['air_date'], date_offset())[0].strftime('%d %B %Y'),
+						last_ep['season_number'], last_ep['episode_number'], last_ep['name']))
+			except: pass
+			try:
 				next_ep = extra_info['next_episode_to_air']
-				nextep_str = '[%s] S%.2dE%.2d - %s' % (next_ep['air_date'], next_ep['season_number'], next_ep['episode_number'], next_ep['name'])
-				append('[B]%s:[/B] %s' % (next_aired_str, nextep_str))
+				append('[B]%s:[/B] %s - [B]S%.2dE%.2d[/B] - %s' \
+					% (next_aired_str, adjust_premiered_date(next_ep['air_date'], date_offset())[0].strftime('%d %B %Y'),
+						next_ep['season_number'], next_ep['episode_number'], next_ep['name']))
+			except: pass
 			append('[B]%s:[/B] %s' % (seasons_str, meta['total_seasons']))
 			append('[B]%s:[/B] %s' % (episodes_str, meta['total_aired_eps']))
 			append('[B]%s:[/B] %s' % (homepage_str, extra_info['homepage']))

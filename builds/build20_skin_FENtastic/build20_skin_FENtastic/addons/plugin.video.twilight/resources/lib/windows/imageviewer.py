@@ -10,7 +10,7 @@ nextpage_str = ls(32799)
 
 class ThumbImageViewer(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.window_id = 2000
 		self.current_page = 1
 		self.selected = None
@@ -115,7 +115,7 @@ class ThumbImageViewer(BaseDialog):
 
 class SlideShow(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.window_id = 5000
 		self.all_images = kwargs.get('all_images')
 		self.index = kwargs.get('index')

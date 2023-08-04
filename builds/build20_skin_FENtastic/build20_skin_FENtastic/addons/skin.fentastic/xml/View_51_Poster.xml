@@ -160,17 +160,17 @@
 					<texture diffuse="masks/poster-50.png" fallback="DefaultMovies.png" background="true">$VAR[PosterThumbVar]</texture>
 				</control>
 				<control type="image">
-					<left>340</left>
-					<top>640</top>
-					<width>140</width>
-					<height>80</height>
+					<left>281</left>
+					<top>521</top>
+					<width>200</width>
+					<height>200</height>
 					<texture>overlays/overlay-bg2.png</texture>
 					<visible>String.IsEqual(ListItem.DBtype,movie) + !Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
 				</control>
 				<control type="label">
-					<left>294</left>
-					<top>690</top>
+					<left>275</left>
+					<top>680</top>
 					<width>180</width>
 					<label>$INFO[ListItem.Property(WatchedProgress)]%</label>
 					<font>font20_title</font>
@@ -180,6 +180,16 @@
 					<visible>Container.Content(movies)</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
 				</control>
+					<control type="image">
+					<animation effect="fade" start="0" end="100" time="400">VisibleChange</animation>
+					<visible>!String.IsEmpty(ListItem.Studio)</visible>
+				<left>22</left>
+				<top>0</top>
+					<width>110</width>
+					<height>80</height>
+					<aspectratio align="left" aligny="center" scalediffuse="false">keep</aspectratio>
+					<texture>kodirdil/studiologos/$INFO[ListItem.Studio].png</texture>
+				</control>	
 				<control type="group">
 				<left>433</left>
 				<top>-14</top>

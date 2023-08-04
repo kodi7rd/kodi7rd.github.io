@@ -15,23 +15,29 @@ from kodirdil.websites import subscene
 #########################################
 
 ########### Settings ####################
-minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '80'))
+minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
+search_for_english_subtitles_when_no_hebrew_subtitles_found = kodi_utils.get_setting('search_for_english_subtitles_when_no_hebrew_subtitles_found', 'false') == 'true'
 #########################################
 
 ########### Constants ###################
 hebrew_subtitles_websites_info = {
-    'ktuvit': {'website': ktuvit, 'short_name': '[KT]'},
-    'wizdom': {'website': wizdom, 'short_name': '[WIZ]'},
-    'opensubtitles': {'website': opensubtitles, 'short_name': '[OPS]'},
-    'subscene': {'website': subscene, 'short_name': '[SS]'}
+    'ktuvit': {'website': ktuvit, 'short_name': '[HEB|KT]'},
+    'wizdom': {'website': wizdom, 'short_name': '[HEB|WIZ]'},
+    'opensubtitles': {'website': opensubtitles, 'short_name': '[HEB|OPS]'},
+    'subscene': {'website': subscene, 'short_name': '[HEB|SS]'}
     }
     
+english_subtitles_websites_info = {
+    'opensubtitles': {'website': opensubtitles, 'short_name': '[ENG|OPS]'},
+    'subscene': {'website': subscene, 'short_name': '[ENG|SS]'}
+    }
     
 release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
                  'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
                  'web','web-dl','web dl','web-dlrip','webrip','web-rip',
                  'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
                  'telecine','hdts','telesync']
+                 
 #########################################
 
 def search_hebrew_subtitles_for_selected_media(media_type, title, season, episode, year, tmdb_id):
@@ -66,18 +72,50 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     # Search for subtitles in all websites and combine them into a single list
     combined_subtitles_list = []
     website_subtitles_dict = {}
+    global GLOBAL_HEBREW_SUBTITLES_FOUND
+    GLOBAL_HEBREW_SUBTITLES_FOUND = False
+
     for website_info in hebrew_subtitles_websites_info.values():
         try:
-            hebrew_subtitles_list = website_info['website'].search_hebrew_subtitles(media_metadata)
+            hebrew_subtitles_list = website_info['website'].search_for_subtitles(media_metadata)
             website_subtitles_dict[website_info['short_name']] = hebrew_subtitles_list
             combined_subtitles_list.extend(hebrew_subtitles_list)
             kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(hebrew_subtitles_list)}")   
             kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+            if combined_subtitles_list:  # If Hebrew subtitles are found
+                GLOBAL_HEBREW_SUBTITLES_FOUND = True
             
         except Exception as e:
-            kodi_utils.logger("KODI-RD-IL", f"Error in searching subtitles from {website_info['website']}: {str(e)}")
+            kodi_utils.logger("KODI-RD-IL", f"Error in searching Hebrew subtitles from {website_info['website']}: {str(e)}")
             kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
     
+    kodi_utils.logger("KODI-RD-IL", f"GLOBAL_HEBREW_SUBTITLES_FOUND={GLOBAL_HEBREW_SUBTITLES_FOUND} | SETTING search_for_english_subtitles_when_no_hebrew_subtitles_found={search_for_english_subtitles_when_no_hebrew_subtitles_found}")
+    
+    # If the combined list is empty, search for English subtitles on the supported websites
+    if not GLOBAL_HEBREW_SUBTITLES_FOUND and search_for_english_subtitles_when_no_hebrew_subtitles_found:
+    
+        # Reset lists
+        combined_subtitles_list = []
+        website_subtitles_dict = {}
+        
+        kodi_utils.logger("KODI-RD-IL", f"No Hebrew subtitles found. Searching for English subtitles...")
+        for website_info in english_subtitles_websites_info.values():
+            try:
+
+                english_subtitles_list = website_info['website'].search_for_subtitles(media_metadata, language='English')
+                website_subtitles_dict[website_info['short_name']] = english_subtitles_list
+                combined_subtitles_list.extend(english_subtitles_list)
+                kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(english_subtitles_list)}")
+                kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+            except Exception as e:
+                kodi_utils.logger("KODI-RD-IL", f"Error in searching English subtitles from {website_info['website']}: {str(e)}")
+                kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+    else:
+        kodi_utils.logger("KODI-RD-IL", f"Skipping Searching for English subtitles...")
+        
     # Convert the combined list to an OrderedDict to remove duplicates while preserving order
     unique_subtitles_dict = OrderedDict.fromkeys(combined_subtitles_list)
     
@@ -88,7 +126,7 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     
     kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list: {str(unique_subtitles_list)}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-    
+
     # Write the unique subtitles list to the hebrew_subtitles_db cache table if it is not empty
     db_utils.write_unique_subtitles_to_hebrew_subtitles_db(unique_subtitles_list, website_subtitles_dict)
   
@@ -159,11 +197,29 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] | [COLOR yellow]מחפש התאמה מעל 90%[/COLOR] | [COLOR FF0166FF]SD: 0[/COLOR] | [COLOR FF3C9900]720P: 0[/COLOR] | [COLOR FF3CFA38]1080P: 3[/COLOR] | [COLOR FFFF00FE]4K: 2[/COLOR] | סך הכל '
     """
     
-    total_subtitles_found_text = (f"[COLOR deepskyblue]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR] | " 
-                                  if total_subtitles_found_count > 0 
-                                  else "[B][COLOR deepskyblue]לא נמצאו כתוביות בעברית לתוכן זה[/COLOR] | סך הכל ")
+    global GLOBAL_HEBREW_SUBTITLES_FOUND
+    
+    results_language_text = "[COLOR deepskyblue]שפת חיפוש כתוביות:[/COLOR] "
 
-    subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% התאמה לכתוביות[/COLOR] | סך הכל "
+    if not GLOBAL_HEBREW_SUBTITLES_FOUND and not search_for_english_subtitles_when_no_hebrew_subtitles_found:
+        results_language_text += "[COLOR deepskyblue]עברית[/COLOR]"
+    else:
+        results_language_text += (
+            "[COLOR deepskyblue]עברית[/COLOR]"
+            if GLOBAL_HEBREW_SUBTITLES_FOUND
+            else "[COLOR deepskyblue]אנגלית + תרגום מכונה[/COLOR] [COLOR red](לא נמצאו כתוביות בעברית)[/COLOR]"
+        )
+
+    total_subtitles_found_text = (
+    "[COLOR FFFE9900]נמצאה כתובית אחת[/COLOR]"
+    if total_subtitles_found_count == 1
+    else (
+        f"[COLOR FFFE9900]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR]"
+        if total_subtitles_found_count > 0
+        else "[COLOR red]לא נמצאו כתוביות לתוכן זה[/COLOR]"
+    )
+)
+    subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% סיכוי התאמה לכתוביות[/COLOR]"
                                    if total_subtitles_found_count > 0 and subtitles_matched_count == 0
                                    else "")
     if subtitles_matched_count > 0:
@@ -174,18 +230,30 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         count_720p = total_quality_counts.get("720p", 0)
         count_sd = total_quality_counts.get("SD", 0)
         
-        text_minimum_sync_percent = f"[COLOR yellow]כמות מקורות עם התאמה מעל {minimum_sync_percent}% (לפי איכות):[/COLOR] |"
-        text_sd = f"[COLOR FF0166FF] SD: {count_sd}[/COLOR] |" if count_sd > 0 else ""
-        text_720p = f"[COLOR FF3C9900] 720P: {count_720p}[/COLOR] |" if count_720p > 0 else ""
-        text_1080p = f"[COLOR FF3CFA38] 1080P: {count_1080p}[/COLOR] |" if count_1080p > 0 else ""
-        text_4k = f"[COLOR FFFF00FE] 4K: {count_4k}[/COLOR] |" if count_4k > 0 else ""
+        text_minimum_sync_percent = f"[COLOR yellow]כמות מקורות עם סיכוי התאמה מעל {minimum_sync_percent}% (לפי איכות):[/COLOR]"
+
+        # Create a list to store the text messages for each quality
+        quality_texts = []
+
+        # Add the text for each quality to the list if the count is greater than 0
+        if count_sd > 0:
+            quality_texts.append(f"[COLOR FF0166FF]SD: {count_sd}[/COLOR]")
+        if count_720p > 0:
+            quality_texts.append(f"[COLOR FF3C9900]720P: {count_720p}[/COLOR]")
+        if count_1080p > 0:
+            quality_texts.append(f"[COLOR FF3CFA38]1080P: {count_1080p}[/COLOR]")
+        if count_4k > 0:
+            quality_texts.append(f"[COLOR FFFF00FE]4K: {count_4k}[/COLOR]")
+            
+        # Join the quality texts using " |" seperator
+        subtitles_matched_count_text = " | ".join(quality_texts)
         
-        subtitles_matched_count_text = (f"{text_minimum_sync_percent}{text_sd}{text_720p}{text_1080p}{text_4k} סך הכל ")
+        subtitles_matched_count_text = f"{text_minimum_sync_percent} {subtitles_matched_count_text}"
         
     kodi_utils.logger("KODI-RD-IL", f"TWILIGHT sources with matched subtitles: {subtitles_matched_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
-    return total_subtitles_found_text + subtitles_matched_count_text
+    return results_language_text, total_subtitles_found_text, subtitles_matched_count_text
     
     
 def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_twilight_source_file_name, quality):
@@ -230,7 +298,7 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
     if highest_sync_percent >= minimum_sync_percent:
     
         subtitles_matched_count = 1
-        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]"
+        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% סיכוי התאמה של[/COLOR][/B]"
         
         # Increment the quality count if a match is found
         if quality in quality_counts_for_source:

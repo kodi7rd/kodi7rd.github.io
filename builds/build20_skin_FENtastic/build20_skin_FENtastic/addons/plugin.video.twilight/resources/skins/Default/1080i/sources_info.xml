@@ -23,7 +23,7 @@
                     <top>-1</top>
                     <width>1337</width>
                     <height>947</height>
-                    <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                    <texture border="16" colordiffuse="$INFO[Window.Property(highlight)]">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
                     <width>1335</width>

@@ -9,7 +9,7 @@ select_deselect_ids = (selectall_id, deselectall_id)
 
 class Select(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.window_id = 2025
 		self.kwargs = kwargs
 		self.enumerate = self.kwargs.get('enumerate', 'false')
@@ -123,7 +123,7 @@ class Select(BaseDialog):
 
 class Confirm(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.ok_label = kwargs['ok_label']
 		self.cancel_label = kwargs['cancel_label']
 		self.text = kwargs['text']
@@ -155,7 +155,7 @@ class Confirm(BaseDialog):
 
 class OK(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.ok_label = kwargs.get('ok_label')
 		self.text = kwargs['text']
 		self.heading = kwargs['heading']

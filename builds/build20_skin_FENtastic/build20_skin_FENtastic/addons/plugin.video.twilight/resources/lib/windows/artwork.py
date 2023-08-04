@@ -10,7 +10,7 @@ custom_key, count_name, count_insert = 'custom_%s', '%s.number', 'x%s'
 
 class SelectArtwork(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.kwargs = kwargs
 		self.kwargs_get = self.kwargs.get
 		self.images = self.kwargs_get('images')

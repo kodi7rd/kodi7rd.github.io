@@ -15,7 +15,7 @@ add_items, set_sort_method, set_content, end_directory, sys = kodi_utils.add_ite
 player, confirm_dialog, ok_dialog, addon_fanart, build_url = kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.addon_fanart, kodi_utils.build_url
 show_busy_dialog, hide_busy_dialog, make_directory, open_file = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.make_directory, kodi_utils.open_file
 set_view_mode, make_listitem, list_dirs = kodi_utils.set_view_mode, kodi_utils.make_listitem, kodi_utils.list_dirs
-twilight_clearlogo, sleep, kodi_version, set_category = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.kodi_version, kodi_utils.set_category
+twilight_clearlogo, sleep, set_category = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.set_category
 poster_empty, get_setting, select_dialog = kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 sources = Sources()
 ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
@@ -124,7 +124,7 @@ class Downloader:
 		if not self.confirm_download(): return self.return_notification(_notification=32736)
 		self.get_download_folder()
 		if not self.get_destination_folder(): return self.return_notification(_notification=32736)
-		self.download_runner(self.url, self.final_destination, self.extension)
+		self.download_runner()
 
 	def download_prep(self):
 		if 'meta' in self.params:
@@ -147,9 +147,9 @@ class Downloader:
 		self.source = self.params_get('source')
 		self.final_name = None
 
-	def download_runner(self, url, folder_dest, ext):
-		dest = os.path.join(folder_dest, self.final_name + ext)
-		self.start_download(url, dest)
+	def download_runner(self):
+		self.final_destination = os.path.join(self.final_destination, self.final_name + self.extension)
+		self.start_download()
 
 	def get_url_and_headers(self):
 		url = self.params_get('url')
@@ -248,7 +248,7 @@ class Downloader:
 		self.extension = ext
 
 	def download_check(self):
-		self.resp = self.get_response(self.url, self.headers, 0)
+		self.resp = self.get_response()
 		if not self.resp: return False
 		try: self.content = int(self.resp.headers['Content-Length'])
 		except: self.content = 0
@@ -261,7 +261,7 @@ class Downloader:
 		hide_busy_dialog()
 		return True
 
-	def start_download(self, url, dest):
+	def start_download(self):
 		if self.action not in ('image', 'meta.pack'):
 			show_notifications = True
 			notification_frequency = 25
@@ -269,20 +269,19 @@ class Downloader:
 			show_notifications = False
 			notification_frequency = 0
 		notify, total, errors, count, resume, sleep_time  = 25, 0, 0, 0, 0, 0
-		f = open_file(dest, 'w')
+		f = open_file(self.final_destination, 'w')
 		chunk  = None
 		chunks = []
 		while True:
 			downloaded = total
 			for c in chunks: downloaded += len(c)
 			percent = min(round(float(downloaded)*100 / self.content), 100)
-			playing = player.isPlaying()
 			if show_notifications:
 				if percent >= notify:
 					notify += notification_frequency
 					try:
 						line1 = '%s - [I]%s[/I]' % (str(percent)+'%', self.final_name)
-						if not playing: notification(line1, 3000, self.image)
+						if not player.isPlaying(): notification(line1, 3000, self.image)
 					except: pass
 			chunk = None
 			error = False
@@ -297,7 +296,7 @@ class Downloader:
 							f.write(c)
 							del c
 						f.close()
-						return self.finish_download(self.final_name, self.media_type, True, self.image)
+						return self.finish_download(True)
 			except Exception as e:
 				error = True
 				sleep_time = 10
@@ -326,34 +325,30 @@ class Downloader:
 				sleep(sleep_time*1000)
 			if (self.resumable and errors > 0) or errors >= 10:
 				if (not self.resumable and resume >= 50) or resume >= 500:
-					return self.finish_download(self.final_name, self.media_type, False, self.image)
+					return self.finish_download(False)
 				resume += 1
 				errors  = 0
 				if self.resumable:
 					chunks  = []
-					self.resp = self.get_response(url, self.headers, total)
+					self.resp = self.get_response(total)
 				else: pass
 
-	def get_response(self, url, headers, size):
+	def get_response(self, size=0):
 		try:
+			headers = self.headers
 			if size > 0:
 				size = int(size)
 				headers['Range'] = 'bytes=%d-' % size
-			req = Request(url, headers=headers)
+			req = Request(self.url, headers=headers)
 			resp = urlopen(req, context=ctx, timeout=30)
 			return resp
 		except: return None
 
-	def finish_download(self, title, media_type, downloaded, image):
+	def finish_download(self, downloaded):
 		if self.action == 'meta.pack' or self.media_type == 'thumb_url': return
-		if self.media_type == 'image_url':
-			if downloaded: notification('[I]%s[/I]' % ls(32576), 2500, image)
-			else: notification('[I]%s[/I]' % ls(32691), 2500, image)
-		else:
-			playing = player.isPlaying()
-			if downloaded: text = '[B]%s[/B] : %s' % (title, '[COLOR forestgreen]%s %s[/COLOR]' % (ls(32107), ls(32576)))
-			else: text = '[B]%s[/B] : %s' % (title, '[COLOR red]%s %s[/COLOR]' % (ls(32107), ls(32490)))
-			if not downloaded or not playing: ok_dialog(text=text)
+		if self.media_type == 'image_url': return notification('[I]%s[/I]' % ls(32576) if downloaded else ls(32691), 2500, self.image)
+		text = '[B]%s[/B] : %s' % (self.final_name, '%s %s' % (ls(32107), ls(32576) if downloaded else ls(32490)))
+		if downloaded and not player.isPlaying(): ok_dialog(text=text)
 
 	def confirm_download(self):
 		return True if self.action in ('image', 'meta.pack') else confirm_dialog(heading=self.final_name, text='%s[CR]%s' % (ls(32688) % self.mb, ls(32689)))
@@ -373,11 +368,9 @@ def download_manager(params):
 				listitem = make_listitem()
 				listitem.setLabel(clean_file_name(normalize(path)))
 				listitem.setArt({'fanart': addon_fanart, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('files')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('files', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('files')
+				info_tag.setPlot(' ')
 				yield (url, listitem, info[1])
 			except: pass
 	handle = int(sys.argv[1])

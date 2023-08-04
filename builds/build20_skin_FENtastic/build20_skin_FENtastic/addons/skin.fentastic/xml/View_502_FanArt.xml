@@ -6,8 +6,8 @@
 			<visible>Control.IsVisible(502)</visible>
 			<include>Visible_Left</include>
 			<include content="ListContainer">
-				<param name="left" value="-5" />
-				<param name="right" value="1195" />
+				<param name="left" value="20" />
+				<param name="right" value="1220" />
 				<param name="list_id" value="502" />
 				<param name="viewtype_label" value="$LOCALIZE[20445]" />
 			</include>
@@ -60,7 +60,7 @@
 					<visible>!String.IsEqual(System.Language,Hebrew)</visible>
 					<left>50</left>
 					<right>50</right>
-					<top>805</top>
+					<top>770</top>
 					<bottom>105</bottom>
 					<label>$VAR[PlotTextBoxVar]</label>
 					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>

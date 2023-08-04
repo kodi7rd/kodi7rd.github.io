@@ -4,9 +4,9 @@
 	<backgroundcolor>background</backgroundcolor>
 	<onload condition="!Skin.HasSetting(firsttimerun)">ActivateWindow(1112)</onload>
   <onload condition="Skin.HasSetting(firsttimerun)">RunScript(script.fentastic.helper,mode=check_for_update&amp;skin_id=skin.fentastic)</onload>
+	<onload>RunScript(script.fentastic.helper,mode=check_for_profile_change&amp;skin_id=skin.fentastic)</onload>
   <onload condition="String.IsEmpty(Window(Home).Property(fentastic.starting_widgets))">RunScript(script.fentastic.helper,mode=starting_widgets)</onload>
   <onload condition="String.IsEmpty(Window(Home).Property(fentastic.starting_widgets))">SetProperty(fentastic.starting_widgets,true)</onload>
-	<!-- <onload condition="String.IsEmpty(Window(Home).Property(fentastic.initialize_spaths))">RunScript(script.fentastic.helper,mode=initialize_spaths)</onload> -->
 	<controls>
 		<control type="button" id="20000">
 			<include>HiddenObject</include>
@@ -35,6 +35,7 @@
 			<imagepath background="true" colordiffuse="bg_overlay">$VAR[HomeFanartVar]</imagepath>
 			<visible>!Player.HasMedia</visible>
 		</control>
+		<!-- TODO Implement auto-trailers -->
 		<control type="group">
 			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
 			<!-- WIDGETS GROUP -->
@@ -475,8 +476,8 @@
 							<control type="group">
 								<depth>DepthContentPopout</depth>
 								<top>130</top>
-								<animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
-								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation>
+								<!-- <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
+								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation> -->
 								<include content="InfoWallMusicLayout">
 									<param name="fallback_image" value="DefaultFavourites.png" />
 									<param name="list_id" value="$PARAM[list_id]" />
@@ -798,6 +799,7 @@
 						<scrolltime tween="cubic" easing="out">500</scrolltime>
 						<focusedlayout height="95">
 							<control type="group">
+								<visible>Control.HasFocus(9000)</visible>
 								<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
 								<control type="image">
 									<left>0</left>
@@ -825,12 +827,13 @@
 								<texture>$INFO[ListItem.Art(thumb)]</texture>
 							</control>
 							<control type="label">
+								<include>FocusBounce</include>
 								<left>104</left>
 								<top>0</top>
 								<height>95</height>
-								<width>355</width>
+								<width>315</width>
 								<aligny>center</aligny>
-								<font>font37</font>
+								<font>font45</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
 							</control>
@@ -847,9 +850,9 @@
 								<left>104</left>
 								<top>0</top>
 								<height>95</height>
-								<width>355</width>
+								<width>315</width>
 								<aligny>center</aligny>
-								<font>font37</font>
+								<font>font45</font>
 								<label>$INFO[ListItem.Label]</label>
 								<shadowcolor>text_shadow</shadowcolor>
 							</control>
@@ -1156,15 +1159,15 @@
 				<top>30</top>
 				<left>90</left>
         <control type="image">
-          <left>19</left>
-          <top>0</top>
+          <left>-55</left>
+          <top>-20</top>
           <aspectratio>keep</aspectratio>
-          <width>130</width>
-          <height>56</height>
-          <texture colordiffuse="button_focus">special://skin/media/logos/K-logo.png</texture>
+          <width>230</width>
+          <height>98</height>
+          <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture>
         </control>
         <control type="image">
-          <left>59</left>
+          <left>55</left>
           <top>0</top>
           <aspectratio>keep</aspectratio>
           <width>192</width>

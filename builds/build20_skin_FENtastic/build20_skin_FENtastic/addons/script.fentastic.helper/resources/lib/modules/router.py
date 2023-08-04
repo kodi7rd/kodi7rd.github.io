@@ -24,6 +24,11 @@ def routing():
 
         return check_for_update(_get("skin_id"))
 
+    if mode == "check_for_profile_change":
+        from modules.version_monitor import check_for_profile_change
+
+        return check_for_profile_change(_get("skin_id"))
+
     if mode == "manage_widgets":
         from modules.cpath_maker import CPaths
 
