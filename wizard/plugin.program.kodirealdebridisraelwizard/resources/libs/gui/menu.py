@@ -330,8 +330,6 @@ def save_menu():
         
     directory.add_dir('שמורים Trakt נתוני', {'mode': 'trakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
     directory.add_dir('שמורים Debrid נתוני', {'mode': 'realdebrid'}, icon=CONFIG.ICONDEBRID, themeit=CONFIG.THEME1)
-    directory.add_file('ייבוא נתונים שמורים', {'mode': 'managedata', 'name': 'import'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-    directory.add_file('ייצוא נתונים שמורים', {'mode': 'managedata', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('- לחץ להפעלה או ביטול של ההגדרה -', themeit=CONFIG.THEME3)
     directory.add_file('GitHub-קבל הגדרות שמירת נתונים מ: {0}'.format(github_custom_save_data_config.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'use_github_custom_save_data_config'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Trakt שמירת חשבון: {0}'.format(trakt.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeptrakt'}, icon=CONFIG.ICONTRAKT, themeit=CONFIG.THEME1)
@@ -351,6 +349,8 @@ def save_menu():
         directory.add_file('ייצוא רשימת הרחבות שמורות', {'mode': 'whitelist', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('(הסרטים/הסדרות שלי) Fen שמירת מועדפי: {0}'.format(fendata.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepfendata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     directory.add_file('Addons33.db שמירת: {0}'.format(addons33db.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepaddons33db'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_file('ייבוא נתונים שמורים', {'mode': 'managedata', 'name': 'import'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+    #directory.add_file('ייצוא נתונים שמורים', {'mode': 'managedata', 'name': 'export'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
     #directory.add_dir('Keep Login Info', {'mode': 'login'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
     #directory.add_file('Save Login Info: {0}'.format(login.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keeplogin'}, icon=CONFIG.ICONLOGIN, themeit=CONFIG.THEME1)
     #directory.add_file('Profiles.xml שמירת': {0}'.format(profiles.replace('true', on).replace('false', off)), {'mode': 'togglesetting', 'name': 'keepprofiles'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
