@@ -14,9 +14,8 @@
 			<texturenofocus />
 			<onclick>Action(close)</onclick>
 		</control>
-		
+		<include>SetSeekStepdVideoOSD</include>
 		<control type="group">
-		<visible>Skin.HasSetting(SeekStepsVideoOSD)</visible>
 		<visible>Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + !ControlGroup(202).HasFocus()</visible>
 		<visible>!VideoPlayer.Content(livetv)</visible>
 		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
@@ -25,16 +24,8 @@
 			<control type="group">
 			<top>780</top>
 			<left>820</left>
-			<include content="DialogBackgroundCommons">
-				<param name="visible" value="false"/>
-				<param name="logovisible" value="false"/>
-				<param name="width" value="600" />
-				<param name="height" value="100" />
-				<param name="header_label" value="$LOCALIZE[700012]" />
-				<param name="header_id" value="2" />
-			</include>
 			</control>
-	<control type="list" id="43434">
+		<control type="list" id="43434">
 		<include>DialogSeekVideoOSD</include>
 			<itemlayout width="120">
 				<control type="label">
@@ -88,7 +79,6 @@
 		<control type="group">
 		<left>-1015</left>
 		<top>-20</top>
-		<visible>Skin.HasSetting(SeekStepsVideoOSD)</visible>
 		<visible>Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + !ControlGroup(202).HasFocus()</visible>
 		<visible>!VideoPlayer.Content(livetv)</visible>
 		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
@@ -96,16 +86,9 @@
 			<control type="group">
 			<top>780</top>
 			<left>815</left>
-			<include content="DialogBackgroundCommons">
-				<param name="width" value="600" />
-				<param name="logovisible" value="false"/>
-				<param name="height" value="100" />
-				<param name="header_label" value="$LOCALIZE[700013]" />
-				<param name="header_id" value="2" />
-			</include>
 			</control>
-	<control type="list" id="43435">
-		<include>DialogSeekVideoOSD</include>
+			<control type="list" id="43435">
+			<include>DialogSeekVideoOSD</include>
 			<itemlayout width="120">
 				<control type="label">
 					<top>0</top>
@@ -191,9 +174,8 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
-					<onup condition="!Skin.HasSetting(SeekStepsVideoOSD)">87</onup>
-					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + Skin.HasSetting(SeekStepsVideoOSD)">Control.SetFocus(43434,0)</onup>
-					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + Skin.HasSetting(SeekStepsVideoOSD)">Control.SetFocus(43435,0)</onup>
+					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606)">Control.SetFocus(43434,0)</onup>
+					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601)">Control.SetFocus(43435,0)</onup>
 					<ondown>noop</ondown>
 					<onleft>70048</onleft>
 					<onright>804</onright>

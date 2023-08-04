@@ -70,13 +70,6 @@
 						<onclick>NextSubtitle</onclick>
 						<visible>VideoPlayer.HasSubtitles</visible>
 					</control>
-					<control type="radiobutton" id="11109">
-						<width>700</width>
-						<include>DialogSettingButton</include>
-						<label>$LOCALIZE[700011]</label>
-						<onclick>Skin.ToggleSetting(SeekStepsVideoOSD)</onclick>
-						<selected>Skin.HasSetting(SeekStepsVideoOSD)</selected>		
-					</control>
 					<control type="radiobutton" id="11110">
 						<width>700</width>
 						<include>DialogSettingButton</include>
