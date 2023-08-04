@@ -51,7 +51,6 @@
     <setting id="traktresults" type="bool">false</setting>
     <setting id="circle_none" type="bool">false</setting>
     <setting id="hidetvshowresults" type="bool">false</setting>
-    <setting id="seekstepsvideoosd" type="bool">true</setting>
     <setting id="hidemoviekeywordresults" type="bool">true</setting>
     <setting id="homemenunovideosbutton" type="bool">true</setting>
     <setting id="homemenunofavbutton" type="bool">false</setting>

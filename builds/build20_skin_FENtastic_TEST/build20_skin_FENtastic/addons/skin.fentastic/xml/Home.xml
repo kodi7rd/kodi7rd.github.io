@@ -1159,15 +1159,15 @@
 				<top>30</top>
 				<left>90</left>
         <control type="image">
-          <left>19</left>
-          <top>0</top>
+          <left>-55</left>
+          <top>-20</top>
           <aspectratio>keep</aspectratio>
-          <width>130</width>
-          <height>56</height>
-          <texture colordiffuse="button_focus">special://skin/media/logos/K-logo.png</texture>
+          <width>230</width>
+          <height>98</height>
+          <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture>
         </control>
         <control type="image">
-          <left>59</left>
+          <left>55</left>
           <top>0</top>
           <aspectratio>keep</aspectratio>
           <width>192</width>

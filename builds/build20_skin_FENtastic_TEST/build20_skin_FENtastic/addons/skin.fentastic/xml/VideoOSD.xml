@@ -16,7 +16,6 @@
 		</control>
 		
 		<control type="group">
-		<visible>Skin.HasSetting(SeekStepsVideoOSD)</visible>
 		<visible>Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + !ControlGroup(202).HasFocus()</visible>
 		<visible>!VideoPlayer.Content(livetv)</visible>
 		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
@@ -88,7 +87,6 @@
 		<control type="group">
 		<left>-1015</left>
 		<top>-20</top>
-		<visible>Skin.HasSetting(SeekStepsVideoOSD)</visible>
 		<visible>Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + !ControlGroup(202).HasFocus()</visible>
 		<visible>!VideoPlayer.Content(livetv)</visible>
 		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
@@ -191,9 +189,8 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
-					<onup condition="!Skin.HasSetting(SeekStepsVideoOSD)">87</onup>
-					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + Skin.HasSetting(SeekStepsVideoOSD)">Control.SetFocus(43434,0)</onup>
-					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + Skin.HasSetting(SeekStepsVideoOSD)">Control.SetFocus(43435,0)</onup>
+					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606)">Control.SetFocus(43434,0)</onup>
+					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601)">Control.SetFocus(43435,0)</onup>
 					<ondown>noop</ondown>
 					<onleft>70048</onleft>
 					<onright>804</onright>
