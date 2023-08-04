@@ -21,16 +21,15 @@ gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: ''}
 more_from_movies_id, more_from_tvshows_id, trivia_id, videos_id, more_from_director_id = 2050, 2051, 2052, 2053, 2054
 tmdb_list_ids = (more_from_movies_id, more_from_tvshows_id, more_from_director_id)
 empty_check = (None, 'None', '')
-separator, count_insert = '[COLOR $INFO[Window(10000).Property(twilight.highlight)]][B]  •  [/B][/COLOR]', 'x%s'
+separator, count_insert = '[COLOR %s][B]  •  [/B][/COLOR]', 'x%s'
 _images = Images().run
 
 class People(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.control_id = None
-		self.kwargs = kwargs
 		self.current_year = get_datetime(string=True).split('-')[0]
-		self.set_starting_constants()
+		self.set_starting_constants(kwargs)
 		self.make_person_data()
 		self.set_properties()
 		self.tasks = (self.set_infoline1, self.make_trivia, self.make_videos, self.make_movies, self.make_tvshows, self.make_director)
@@ -108,7 +107,7 @@ class People(BaseDialog):
 		gender, age = self.person_gender or None, '%syo' % self.person_age if self.person_age else None
 		birthday = self.person_birthday
 		if birthday and self.person_deathday: birthday += '  [B]-[/B]  %s' % self.person_deathday
-		self.set_label(2001, separator.join([i for i in (gender, age, birthday) if i]))
+		self.set_label(2001, self.separator.join([i for i in (gender, age, birthday) if i]))
 
 	def make_movies(self):
 		self.make_more_from('movie')
@@ -155,9 +154,9 @@ class People(BaseDialog):
 		place_of_birth = person_info.get('place_of_birth')
 		if place_of_birth: self.person_place_of_birth = place_of_birth
 		else: self.person_place_of_birth = ''
-		biography = person_info.get('biography')
+		biography = person_info.get('biography', None)
 		if biography: self.person_biography = biography
-		else: self.person_biography = ls(32760)
+		else: self.person_biography = ''
 		birthday = person_info.get('birthday')
 		if birthday: self.person_birthday = birthday
 		else: self.person_birthday = ''
@@ -275,15 +274,16 @@ class People(BaseDialog):
 								'actor_id': self.person_id, 'reference_tmdb_id': self.reference_tmdb_id, 'is_external': self.is_external}
 		if set_starting_position: self.current_params['starting_position'] = [self.control_id, self.get_position(self.control_id)]
 
-	def set_starting_constants(self):
+	def set_starting_constants(self, kwargs):
+		self.separator = separator % self.highlight_var()
 		self.item_action_dict = {}
 		self.current_params, self.new_params = {}, {}
 		self.person_id = None
-		self.is_external = self.kwargs.get('is_external', 'false').lower()
-		self.query = self.kwargs.get('query', '')
-		self.actor_id = self.kwargs.get('actor_id', '')
-		self.reference_tmdb_id = self.kwargs.get('reference_tmdb_id', '')
-		self.starting_position = self.kwargs.get('starting_position', None)
+		self.is_external = kwargs.get('is_external', 'false').lower()
+		self.query = kwargs.get('query', '')
+		self.actor_id = kwargs.get('actor_id', '')
+		self.reference_tmdb_id = kwargs.get('reference_tmdb_id', '')
+		self.starting_position = kwargs.get('starting_position', None)
 		self.enable_scrollbars = extras_enable_scrollbars()
 		self.exclude_non_acting = extras_exclude_non_acting()
 		self.poster_resolution = get_resolution()['poster']

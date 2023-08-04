@@ -5,16 +5,16 @@ from caches import check_databases, trakt_cache
 from caches.main_cache import cache_object
 from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movie_meta_external_id, tvshow_meta_external_id
-from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, replace_html_codes, jsondate_to_datetime as js2date, title_key
+from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, replace_html_codes, copy2clip, title_key, jsondate_to_datetime as js2date
 
 CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af', '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
 logger, notification, player, confirm_dialog, get_property = kodi_utils.logger, kodi_utils.notification, kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.get_property
-requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, kodi_utils.execute_builtin, kodi_utils.select_dialog, kodi_utils.kodi_refresh
-set_temp_highlight, restore_highlight = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight
-progress_dialog = kodi_utils.progress_dialog
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
 folder_path, get_icon, remove_keys, trakt_dict_removals = kodi_utils.folder_path, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
+set_temp_highlight, restore_highlight, manage_settings_reset = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.manage_settings_reset
+requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, kodi_utils.execute_builtin, kodi_utils.select_dialog, kodi_utils.kodi_refresh
+progress_dialog = kodi_utils.progress_dialog
 ignore_articles, lists_sort_order = settings.ignore_articles, settings.lists_sort_order
 show_unaired_watchlist, metadata_user_info = settings.show_unaired_watchlist, settings.metadata_user_info
 clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cache.clear_all_trakt_cache_data, trakt_cache.cache_trakt_object, trakt_cache.clear_trakt_calendar
@@ -92,7 +92,10 @@ def trakt_get_device_token(device_codes):
 		start = time.time()
 		expires_in = device_codes['expires_in']
 		sleep_interval = device_codes['interval']
-		content = '[CR]%s[CR]%s' % (ls(32700) % str(device_codes['verification_url']), ls(32701) % '[COLOR red]%s[/COLOR]' % str(device_codes['user_code']))
+		user_code = str(device_codes['user_code'])
+		try: copy2clip(user_code)
+		except: pass
+		content = '[CR]%s[CR]%s' % (ls(32700) % str(device_codes['verification_url']), ls(32701) % '[COLOR red]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('red')
 		progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), get_icon('trakt_qrcode'))
 		progressDialog.update(content, 0)
@@ -123,19 +126,23 @@ def trakt_refresh_token():
 		'grant_type': 'refresh_token', 'refresh_token': get_setting('trakt.refresh')}
 	response = call_trakt("oauth/token", data=data, with_auth=False)
 	if response:
+		manage_settings_reset()
 		set_setting('trakt.token', response["access_token"])
 		set_setting('trakt.refresh', response["refresh_token"])
 		set_setting('trakt.expires', str(time.time() + 7776000))
+		manage_settings_reset(True)
 
 def trakt_authenticate(dummy):
 	code = trakt_get_device_code()
 	token = trakt_get_device_token(code)
 	if token:
+		manage_settings_reset()
 		set_setting('trakt.token', token["access_token"])
 		set_setting('trakt.refresh', token["refresh_token"])
 		set_setting('trakt.expires', str(time.time() + 7776000))
 		set_setting('trakt.indicators_active', 'true')
 		set_setting('watched_indicators', '1')
+		manage_settings_reset(True)
 		sleep(1000)
 		try:
 			user = call_trakt('/users/me')
@@ -150,12 +157,14 @@ def trakt_authenticate(dummy):
 def trakt_revoke_authentication(dummy):
 	data = {'token': get_setting('trakt.token'), 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
 	response = call_trakt("oauth/revoke", data=data, with_auth=False)
+	manage_settings_reset()
 	set_setting('trakt.user', '')
 	set_setting('trakt.expires', '')
 	set_setting('trakt.token', '')
 	set_setting('trakt.refresh', '')
 	set_setting('trakt.indicators_active', 'false')
 	set_setting('watched_indicators', '0')
+	manage_settings_reset(True)
 	clear_all_trakt_cache_data(silent=True, refresh=False)
 	notification('Trakt Account Authorization Reset', 3000)
 
@@ -362,7 +371,7 @@ def remove_from_collection(data):
 	if 'trakt_collection' in folder_path(): kodi_refresh()
 	return result
 
-def hide_unhide_trakt_items(params):
+def hide_unhide_progress_items(params):
 	action, media_type, media_id, list_type = params['action'], params['media_type'], params['media_id'], params['section']
 	media_type = 'movies' if media_type in ('movie', 'movies') else 'shows'
 	url = 'users/hidden/%s' % list_type if action == 'hide' else 'users/hidden/%s/remove' % list_type
@@ -377,13 +386,10 @@ def trakt_search_lists(search_title, page_no):
 	string = 'trakt_search_lists_%s_%s' % (search_title, page_no)
 	return cache_object(_process, string, 'dummy_arg', False, 4)
 
-def get_trakt_list_contents(list_type, user, slug):
+def get_trakt_list_contents(list_type, user, slug, with_auth):
 	string = 'trakt_list_contents_%s_%s_%s' % (list_type, user, slug)
-	if user == 'Trakt Official':
-		params = {'path': 'lists/%s/items', 'path_insert': slug, 'params': {'extended':'full'}, 'method': 'sort_by_headers'}
-	else:
-		with_auth = make_trakt_slug(user) == make_trakt_slug(get_setting('trakt.user', ''))
-		params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': with_auth, 'method': 'sort_by_headers'}
+	if user == 'Trakt Official': params = {'path': 'lists/%s/items', 'path_insert': slug, 'params': {'extended':'full'}, 'method': 'sort_by_headers'}
+	else: params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': with_auth, 'method': 'sort_by_headers'}
 	return cache_trakt_object(get_trakt, string, params)
 
 def trakt_trending_popular_lists(list_type, page_no):

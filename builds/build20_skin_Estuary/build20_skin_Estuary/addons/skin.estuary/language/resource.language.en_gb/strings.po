@@ -982,6 +982,10 @@ msgctxt "#70009"
 msgid "Seasons"
 msgstr ""
 
+msgctxt "#700091"
+msgid "Episode"
+msgstr ""
+
 msgctxt "#700010"
 msgid "Episodes"
 msgstr ""
@@ -1018,10 +1022,64 @@ msgctxt "#700017"
 msgid "OUT"
 msgstr ""
 
+# Status Label Hebrew Translation For TV Shows - Variables.xml
+
+msgctxt "#700018"
+msgid "Returning Series"
+msgstr ""
+
+msgctxt "#700019"
+msgid "In Production"
+msgstr ""
+
+msgctxt "#700020"
+msgid "Planned"
+msgstr ""
+
+msgctxt "#700021"
+msgid "Canceled"
+msgstr ""
+
+msgctxt "#700022"
+msgid "Ended"
+msgstr ""
+
+# Player OSD Pause Window - Custom_1122_PlayerPauseWindow.xml
+
+msgctxt "#700023"
+msgid "Paused"
+msgstr ""
+
+# Player Label Empty While Pausing Pause Window - Custom_1122_PlayerPauseWindow.xml
+
+msgctxt "#700024"
+msgid "Info Not Available"
+msgstr ""
+
 # Episode List - Variables.xml
 
-msgctxt "#700039"
+msgctxt "#700025"
 msgid "Duration"
+msgstr ""
+
+# Idan Plus Channels Button VideoOSD.xml + Custom_1123_IdanPlusChannelsAndRadios.xml
+
+msgctxt "#700026"
+msgid "Idan Plus Channels"
+msgstr ""
+
+msgctxt "#700027"
+msgid "Radio Channels"
+msgstr ""
+
+msgctxt "#700028"
+msgid "Idan Plus And Radio Channels"
+msgstr ""
+
+# ShowPlayerPauseWindow Seting- Custom_1101_SettingsList.xml
+
+msgctxt "#700029"
+msgid "Show information window on playback pause"
 msgstr ""
 
 ################################################################

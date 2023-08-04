@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from apis.trakt_api import trakt_watched_status_mark, trakt_official_status, trakt_progress, trakt_get_hidden_items
+from caches.main_cache import main_cache, timedelta
 from caches.trakt_cache import clear_trakt_collection_watchlist_data
 from modules import kodi_utils, settings, metadata
 from modules.utils import get_datetime, adjust_premiered_date, sort_for_article, make_thread_list
@@ -13,6 +14,21 @@ date_offset, metadata_user_info, tv_progress_location = settings.date_offset, se
 WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
 finished_show_check = ('Ended', 'Canceled')
+progress_db_string = 'twilight_hidden_progress_items'
+
+def get_hidden_progress_items(watched_indicators):
+	try:
+		if watched_indicators == 0: return main_cache.get(progress_db_string) or []
+		else: return trakt_get_hidden_items('progress_watched')
+	except: return []
+
+def hide_unhide_progress_items(params):
+	action, tmdb_id = params['action'], int(params.get('media_id', '0'))
+	current_items = main_cache.get(progress_db_string) or []
+	if action == 'hide': current_items.append(tmdb_id)
+	else: current_items.remove(tmdb_id)#unhide
+	main_cache.set(progress_db_string, current_items, timedelta(days=1825))
+	return kodi_refresh()
 
 def get_database(watched_indicators=None):
 	return indicators_dict[watched_indicators or watched_indicators_function()]
@@ -43,7 +59,7 @@ def get_recently_watched(media_type, short_list=1, dummy1=None):
 						for i in get_watched_info_tv(watched_indicators)], key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)
 		else:
 			seen = set()
-			data = sorted([{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'last_played': i[4], 'title': i[3]}
+			data = sorted([{'media_ids': {'tmdb': int(i[0])}, 'season': int(i[1]), 'episode': int(i[2]), 'title': i[3], 'last_played': i[4]}
 						for i in sorted(get_watched_info_tv(watched_indicators), key=lambda x: (x[4], x[0], x[1], x[2]), reverse=True) if not (i[0] in seen or seen.add(i[0]))],
 						key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)
 	if short_list: return data[0:20]
@@ -170,10 +186,8 @@ def get_in_progress_tvshows(dummy_arg, page_no):
 	watched_info = get_watched_info_tv(watched_indicators)
 	watched_info.sort(key=lambda x: (x[0], x[4]), reverse=True)
 	prelim_data = [{'media_id': i[0], 'title': i[3], 'last_played': i[4]} for i in watched_info if not (i[0] in duplicates or duplicates_add(i[0]))]
-	if watched_indicators == 1:
-		try: exclude_list = trakt_get_hidden_items('progress_watched')
-		except: exclude_list = []
-		prelim_data = [i for i in prelim_data if not int(i['media_id']) in exclude_list]
+	hidden_items = get_hidden_progress_items(watched_indicators)
+	prelim_data = [i for i in prelim_data if not int(i['media_id']) in hidden_items]
 	threads = list(make_thread_list(_process, prelim_data))
 	[i.join() for i in threads]
 	if lists_sort_order('progress') == 0: data = sort_for_article(data, 'title', ignore_articles())
@@ -196,9 +210,9 @@ def get_watched_items(media_type, page_no):
 		def _process(item):
 			tmdb_id = item['media_id']
 			meta = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
-			watched_status = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))
+			playcount = get_watched_status_tvshow(watched_info, tmdb_id, meta.get('total_aired_eps'))[0]
 			status = meta.get('status', '')
-			if watched_status[0] == 1:
+			if playcount == 1:
 				if exclude_still_airing and status not in finished_show_check: return
 				data_append(item)
 		watched_info = get_watched_info_tv(watched_indicators)

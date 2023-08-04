@@ -3,7 +3,7 @@ from caches.main_cache import main_cache
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
-add_dir, add_items, set_content, end_directory, kodi_version = kodi_utils.add_dir, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.kodi_version
+add_dir, add_items, set_content, end_directory = kodi_utils.add_dir, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 ls, sys, build_url, make_listitem, get_icon = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.get_icon
 set_view_mode, unquote, set_category = kodi_utils.set_view_mode, kodi_utils.unquote, kodi_utils.set_category
 icon, fanart, twilight_clearlogo = get_icon('search_history'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
@@ -35,11 +35,9 @@ def search_history(params):
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external'}))
 				yield (url, listitem, False)
 			except: pass

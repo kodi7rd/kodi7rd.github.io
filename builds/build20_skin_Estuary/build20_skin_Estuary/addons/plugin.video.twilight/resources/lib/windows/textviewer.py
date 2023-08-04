@@ -4,7 +4,7 @@ from windows import BaseDialog
 
 class TextViewer(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.heading = kwargs.get('heading')
 		self.text = kwargs.get('text')
 		self.font_size = kwargs.get('font_size')

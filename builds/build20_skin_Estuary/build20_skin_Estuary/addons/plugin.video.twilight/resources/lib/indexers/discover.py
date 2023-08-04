@@ -12,7 +12,7 @@ get_property, dialog, notification, select_dialog, run_plugin = kodi_utils.get_p
 add_items, show_text, container_refresh, focus_index, add_item = kodi_utils.add_items, kodi_utils.show_text, kodi_utils.container_refresh, kodi_utils.focus_index, kodi_utils.add_item
 ls, build_url, make_listitem, set_property, set_content = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_property, kodi_utils.set_content
 end_directory, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.maincache_db
-clear_property, confirm_dialog, numeric_input, kodi_version = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input, kodi_utils.kodi_version
+clear_property, confirm_dialog, numeric_input = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input
 default_icon, fanart, default_poster, default_cast, twilight_clearlogo = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family', kodi_utils.addon_clearlogo
 set_category = kodi_utils.set_category
 years_movies, years_tvshows, movie_genres, tvshow_genres = meta_lists.years_movies, meta_lists.years_tvshows, meta_lists.movie_genres, meta_lists.tvshow_genres
@@ -340,11 +340,9 @@ class Discover:
 					listitem = make_listitem()
 					listitem.setLabel(display)
 					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon, 'clearlogo': twilight_clearlogo})
-					if kodi_version >= 20:
-						info_tag = listitem.getVideoInfoTag()
-						info_tag.setMediaType('video')
-						info_tag.setPlot(' ')
-					else: listitem.setInfo('video', {'plot': ' '})
+					info_tag = listitem.getVideoInfoTag()
+					info_tag.setMediaType('video')
+					info_tag.setPlot(' ')
 					cm_append(('[B]%s[/B]' % remove_str,'RunPlugin(%s)'% build_url(remove_single_params)))
 					cm_append(('[B]%s[/B]' % clear_str,'RunPlugin(%s)'% build_url(remove_all_params)))
 					cm_append((add_menu_str, 'RunPlugin(%s)'% build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'discover'})))
@@ -441,11 +439,9 @@ class Discover:
 		listitem = make_listitem()
 		listitem.setLabel(list_name)
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
-		if kodi_version >= 20:
-			info_tag = listitem.getVideoInfoTag()
-			info_tag.setMediaType('video')
-			info_tag.setPlot(' ')
-		else: listitem.setInfo('video', {'plot': ' '})
+		info_tag = listitem.getVideoInfoTag()
+		info_tag.setMediaType('video')
+		info_tag.setPlot(' ')
 		add_item(handle, url, listitem, isFolder)
 
 	def _end_directory(self):

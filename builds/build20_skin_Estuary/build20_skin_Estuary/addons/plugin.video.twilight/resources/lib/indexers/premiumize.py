@@ -12,7 +12,7 @@ json, make_listitem, build_url, ls, sys = kodi_utils.json, kodi_utils.make_listi
 add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
 confirm_dialog, ok_dialog, kodi_refresh, dialog = kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.kodi_refresh, kodi_utils.dialog
-default_pm_icon, fanart, twilight_clearlogo, kodi_version = kodi_utils.get_icon('premiumize'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
+default_pm_icon, fanart, twilight_clearlogo = kodi_utils.get_icon('premiumize'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
 folder_str, file_str, down_str = ls(32742).upper(), ls(32743).upper(), '[B]%s[/B]' % ls(32747)
 extensions = supported_video_extensions()
 Premiumize = PremiumizeAPI()
@@ -46,11 +46,9 @@ def pm_torrent_cloud(folder_id=None, folder_name=None):
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_pm_icon, 'poster': default_pm_icon, 'thumb': default_pm_icon, 'fanart': fanart,
 								'banner': default_pm_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				yield (url, listitem, is_folder)
 			except: pass
 	try:
@@ -96,11 +94,9 @@ def pm_transfers():
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': default_pm_icon, 'poster': default_pm_icon, 'thumb': default_pm_icon, 'fanart': fanart,
 								'banner': default_pm_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				yield (url, listitem, is_folder)
 			except: pass
 	try: transfer_files = Premiumize.transfers_list()['transfers']

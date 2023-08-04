@@ -5,7 +5,7 @@ from modules import kodi_utils
 
 ls, sys, build_url, make_listitem, set_view_mode = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_view_mode
 add_items, set_content, set_category, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.end_directory
-default_imdb_icon, fanart, twilight_clearlogo, kodi_version = kodi_utils.get_icon('imdb'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.kodi_version
+default_imdb_icon, fanart, twilight_clearlogo = kodi_utils.get_icon('imdb'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
 
 def imdb_build_user_lists(params):
 	def _builder():
@@ -22,11 +22,9 @@ def imdb_build_user_lists(params):
 				listitem.setLabel(title)
 				listitem.setArt({'icon': default_imdb_icon, 'poster': default_imdb_icon, 'thumb': default_imdb_icon, 'fanart': fanart,
 								'banner': default_imdb_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': 'imdb'}))
 				yield (url, listitem, True)
 			except: pass
@@ -55,13 +53,11 @@ def imdb_build_keyword_results(params):
 				listitem.addContextMenuItems(cm)
 				listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': 'imdb'}))
 				listitem.setLabel('%02d | %s' % (count, keyword.upper()))
-				listitem.setArt({'icon': default_imdb_icon, 'poster': default_imdb_icon, 'thumb': default_imdb_icon, 'fanart': fanart,
-								'banner': default_imdb_icon, 'clearlogo': twilight_clearlogo})
-				if kodi_version >= 20:
-					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
-					info_tag.setPlot(' ')
-				else: listitem.setInfo('video', {'plot': ' '})
+				listitem.setArt({'icon': default_imdb_icon, 'poster': default_imdb_icon, 'thumb': default_imdb_icon,
+								'fanart': fanart, 'banner': default_imdb_icon, 'clearlogo': twilight_clearlogo})
+				info_tag = listitem.getVideoInfoTag()
+				info_tag.setMediaType('video')
+				info_tag.setPlot(' ')
 				yield (url, listitem, True)
 			except: pass
 	handle = int(sys.argv[1])

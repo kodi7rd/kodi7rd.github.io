@@ -40,8 +40,20 @@
 	<variable name="NowPlayingPosterVar">
 		<value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
 		<value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
-		<value condition="String.IsEmpty(Player.Icon) + VideoPlayer.Content(livetv)">DefaultTVShows.png</value>
-		<value>$INFO[Player.Icon]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value>DefaultTVShows.png</value>
+	</variable>
+		<variable name="NowPlayingLabelVar">
+		<value condition="!String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.TvShowTitle]</value>
+		<value>$INFO[VideoPlayer.Title]</value>
+	</variable>
+	<variable name="NowPlayingFanartVar">
+		<value condition="!String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Art(tvshow.fanart))">$INFO[Player.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+	<value>DefaultNoPreview.png</value>
 	</variable>
 	<variable name="ShiftThumbVar">
 		<value condition="!String.IsEmpty(Listitem.Art(poster))">$INFO[Listitem.Art(poster)]</value>
@@ -702,6 +714,19 @@
 	<variable name="SeasonCorrectLabel">
 	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70008]</value>
 	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70009]</value>
+	</variable>
+	
+	<!-- TV Show InfoPanel Status Hebrew Translation -->
+	<variable name="SetHebStatus">
+	<value condition="String.IsEqual(ListItem.Status,returning series)">$LOCALIZE[700018]</value>
+	<value condition="String.IsEqual(ListItem.Status,in production)">$LOCALIZE[700019]</value>
+	<value condition="String.IsEqual(ListItem.Status,planned)">$LOCALIZE[700020]</value>
+	<value condition="String.IsEqual(ListItem.Status,canceled)">$LOCALIZE[700021]</value>
+	<value condition="String.IsEqual(ListItem.Status,ended)">$LOCALIZE[700022]</value>
+	</variable>
+	
+	<variable name="Episode_prefix">
+	<value condition="VideoPlayer.Content(episodes)">[B][COLOR white]$LOCALIZE[70008][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Season][/COLOR][/B] / [B][COLOR white]$LOCALIZE[700091][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Episode][/COLOR][/B]</value>
 	</variable>
 	
 	<!-- ##################### -->

@@ -800,6 +800,10 @@ msgctxt "#70009"
 msgid "Seasons"
 msgstr "עונות"
 
+msgctxt "#700091"
+msgid "Episode"
+msgstr "פרק"
+
 msgctxt "#700010"
 msgid "Episodes"
 msgstr "פרקים"
@@ -835,5 +839,65 @@ msgstr "IN"
 msgctxt "#700017"
 msgid "OUT"
 msgstr "OUT"
+
+# Status Label Hebrew Translation For TV Shows - Variables.xml
+
+msgctxt "#700018"
+msgid "Returning Series"
+msgstr "משודרת"
+
+msgctxt "#700019"
+msgid "In Production"
+msgstr "בהפקה"
+
+msgctxt "#700020"
+msgid "Planned"
+msgstr "בתכנון"
+
+msgctxt "#700021"
+msgid "Canceled"
+msgstr "בוטלה"
+
+msgctxt "#700022"
+msgid "Ended"
+msgstr "הסתיימה"
+
+# Player OSD Pause Window - Custom_1122_PlayerPauseWindow.xml
+
+msgctxt "#700023"
+msgid "Paused"
+msgstr "מושהה"
+
+# Player Label Empty While Pausing Pause Window - Custom_1122_PlayerPauseWindow.xml
+
+msgctxt "#700024"
+msgid "Info Not Available"
+msgstr "מידע לא זמין"
+
+# Episode List - Variables.xml
+
+msgctxt "#700025"
+msgid "Duration"
+msgstr "אורך"
+
+# Idan Plus Channels Button VideoOSD.xml + Custom_1123_IdanPlusChannelsAndRadios.xml
+
+msgctxt "#700026"
+msgid "Idan Plus Channels"
+msgstr "ערוצי עידן"
+
+msgctxt "#700027"
+msgid "Radio Channels"
+msgstr "ערוצי רדיו"
+
+msgctxt "#700028"
+msgid "Idan Plus And Radio Channels"
+msgstr "ערוצי עידן פלוס / ערוצי רדיו"
+
+# ShowPlayerPauseWindow Seting- Custom_1101_SettingsList.xml
+
+msgctxt "#700029"
+msgid "Show information window on playback pause"
+msgstr "הצג חלון מידע בעצירת הניגון"
 
 ################################################################

@@ -11,7 +11,7 @@ palette_list = ['basic', 'material_design', 'webcolors', 'rainbow']
 
 class SelectColor(BaseDialog):
 	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, args)
+		BaseDialog.__init__(self, *args)
 		self.kwargs = kwargs
 		self.current_setting = self.kwargs.get('current_setting')
 		self.window_id = 2000

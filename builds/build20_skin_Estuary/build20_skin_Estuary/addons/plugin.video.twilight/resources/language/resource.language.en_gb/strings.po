@@ -1591,7 +1591,7 @@ msgid "Currently"
 msgstr ""
 
 msgctxt "#32599"
-msgid "Next Episode Manager"
+msgid "TV Shows Progress Manager"
 msgstr ""
 
 msgctxt "#32600"
@@ -2410,15 +2410,11 @@ msgid "Unwatched"
 msgstr ""
 
 msgctxt "#32804"
-msgid "Included"
-msgstr ""
-
-msgctxt "#32805"
-msgid "Excluded"
+msgid "Hidden"
 msgstr ""
 
 msgctxt "#32806"
-msgid "Select TV Show to Hide/Unhide from Trakt Progress:"
+msgid "Select TV Show to Hide/Unhide from Progress:"
 msgstr ""
 
 msgctxt "#32807"
@@ -3751,11 +3747,11 @@ msgid "[B]Browse...[/B]"
 msgstr ""
 
 msgctxt "#33138"
-msgid "Press [B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]BACK[/COLOR][/B] to Exit"
+msgid "Press [B][COLOR $INFO[Window().Property(highlight_var)]]BACK[/COLOR][/B] to Exit"
 msgstr ""
 
 msgctxt "#33139"
-msgid "Press [B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]RIGHT[/COLOR][/B] to Skip"
+msgid "Press [B][COLOR $INFO[Window().Property(highlight_var)]]RIGHT[/COLOR][/B] to Skip"
 msgstr ""
 
 msgctxt "#33140"
@@ -3806,10 +3802,6 @@ msgctxt "#33151"
 msgid "Use Chapter Info For Alert When Available"
 msgstr ""
 
-msgctxt "#33152"
-msgid "Restart Twilight Services"
-msgstr ""
-
 msgctxt "#33153"
 msgid "Watched (Still Airing) TV Shows Location"
 msgstr ""
@@ -3838,7 +3830,19 @@ msgctxt "#33159"
 msgid "None (Monochrome)"
 msgstr ""
 
+msgctxt "#33160"
+msgid "Auto fix Invoker Mismatch on Update"
+msgstr ""
+
 ###################################################################################################################################
+
+msgctxt "#32805"
+msgid ""
+msgstr ""
+
+msgctxt "#33152"
+msgid ""
+msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
 
@@ -3859,39 +3863,43 @@ msgid "הפעל התאמת כתוביות בעת חיפוש מקורות"
 msgstr ""
 
 msgctxt "#40003"
-msgid "חפש כתוביות עם אחוז התאמה מעל:"
+msgid "חפש התאמות באנגלית (עבור תרגום מכונה) כשלא נמצאו כתוביות בעברית"
 msgstr ""
 
 msgctxt "#40004"
+msgid "חפש כתוביות עם סיכוי התאמה מעל:"
+msgstr ""
+
+msgctxt "#40005"
 msgid "אחוז (%)"
 msgstr ""
 
 # Subtitles Websites
 
-msgctxt "#40005"
+msgctxt "#40006"
 msgid "היכן לחפש כתוביות"
 msgstr ""
 
-msgctxt "#40006"
+msgctxt "#40007"
 msgid "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
 msgstr ""
 
-msgctxt "#40007"
+msgctxt "#40008"
 msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
 msgstr ""
 
-msgctxt "#40008"
+msgctxt "#40009"
 msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
 msgstr ""
 
-msgctxt "#40009"
+msgctxt "#400010"
 msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgstr ""
 
 # Twilight sources_results.xml
 
-msgctxt "#400010"
-msgid "[B]Results[/B]"
+msgctxt "#400011"
+msgid " Results"
 msgstr ""
 
 ###################################################################################################################################

@@ -9,9 +9,19 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="search_for_english_subtitles_when_no_hebrew_subtitles_found" type="boolean" label="40003" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_twilight_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 			</group>
-			<group id="2" label="40003">
-				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40004" help="">
+			<group id="2" label="40004">
+				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40005" help="">
 					<level>0</level>
 					<default>75</default>
 					<constraints>
@@ -29,8 +39,8 @@
 					</control>
 				</setting>
 			</group>
-			<group id="3" label="40005">
-				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40006" help="">
+			<group id="3" label="40006">
+				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -40,7 +50,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40007" help="">
+				<setting id="search_hebrew_subtitles_in_wizdom" type="boolean" label="40008" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -50,7 +60,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40008" help="">
+				<setting id="search_hebrew_subtitles_in_opensubtitles" type="boolean" label="40009" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -60,7 +70,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="40009" help="">
+				<setting id="search_hebrew_subtitles_in_subscene" type="boolean" label="400010" help="">
 					<level>0</level>
 					<default>true</default>
 					<dependencies>
@@ -77,6 +87,11 @@
 			<!-- General -->
 			<group id="1" label="32001">
 				<setting id="auto_start_twilight" type="boolean" label="32017" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="auto_invoker_fix" type="boolean" label="33160" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -2756,16 +2771,6 @@
 				<setting id="tools.toggle_language_invoker" type="action" label="33017" help="">
 					<level>0</level>
 					<data>RunPlugin(plugin://plugin.video.twilight/?mode=toggle_language_invoker)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="tools.restart_services" type="action" label="33152" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=restart_services)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

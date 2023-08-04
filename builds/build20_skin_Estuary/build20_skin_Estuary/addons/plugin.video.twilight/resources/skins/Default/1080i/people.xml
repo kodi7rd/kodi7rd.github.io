@@ -177,6 +177,7 @@
                 </control>
                 <!-- Biography -->
                 <control type="group">
+                    <visible>!String.IsEqual(Window.Property(biography),)</visible>
                     <height>760</height>
                     <control type="group">
                         <control type="label">

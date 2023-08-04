@@ -6,7 +6,7 @@ from modules.watched_status import get_watched_info_tv, get_watched_status_tvsho
 # logger = kodi_utils.logger
 
 sleep, meta_function, get_datetime_function, add_item, xbmc_actor, home = kodi_utils.sleep, tvshow_meta, get_datetime, kodi_utils.add_item, kodi_utils.xbmc_actor, kodi_utils.home
-kodi_version, get_watched_function, get_watched_info_function, set_category = kodi_utils.kodi_version, get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category
+get_watched_function, get_watched_info_function, set_category, json = get_watched_status_tvshow, get_watched_info_tv, kodi_utils.set_category, kodi_utils.json
 set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
 string, ls, sys, external, add_items, add_dir = str, kodi_utils.local_string, kodi_utils.sys, kodi_utils.external, kodi_utils.add_items, kodi_utils.add_dir
 make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.remove_keys, kodi_utils.tvshow_dict_removals
@@ -14,7 +14,7 @@ metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.met
 extras_open_action, get_art_provider, default_all_episodes, page_limit = settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes, settings.page_limit
 poster_empty, fanart_empty, include_year_in_title, set_property = kodi_utils.empty_poster, kodi_utils.addon_fanart, settings.include_year_in_title, kodi_utils.set_property
 max_threads, widget_hide_next_page, twilight_clearlogo = settings.max_threads, settings.widget_hide_next_page, kodi_utils.addon_clearlogo
-twilight_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jumpto_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
+twilight_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jump2_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
 extras_str, options_str, refr_widg_str = ls(32645), ls(32646), '[B]%s[/B]' % ls(32611)
 run_plugin, container_update = 'RunPlugin(%s)', 'Container.Update(%s)'
 tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air','tmdb_tv_upcoming')
@@ -106,10 +106,9 @@ class TVShows:
 			if self.total_pages and not self.is_external:
 				jump_to = jump_to_enabled()
 				if jump_to != 3:
-					url_params = {'mode': 'navigate_to_page_choice', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-								'transfer_action': self.action, 'query': self.params_get('search_name', ''), 'all_pages': all_pages, 'jump_to_enabled': jump_to,
-								'paginate_start': self.paginate_start}
-					add_dir(url_params, jumpto_str, handle, 'item_jump', isFolder=False)
+					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name, 'refreshed': 'true'}})
+					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': self.total_pages, 'all_pages': all_pages,
+							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump', isFolder=False)
 			add_items(handle, self.worker())
 			if self.new_page and not self.widget_hide_next_page:
 						self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
@@ -122,7 +121,7 @@ class TVShows:
 			if self.params_get('refreshed') == 'true': sleep(1000)
 			set_view_mode(view_mode, content_type, self.is_external)
 
-	def build_tvshow_content(self, item_position, _id):
+	def build_tvshow_content(self, _position, _id):
 		try:
 			meta = meta_function(self.id_type, _id, self.meta_user_info, self.current_date, self.current_time)
 			if not meta or 'blank_entry' in meta: return
@@ -171,41 +170,33 @@ class TVShows:
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'thumb': landscape,
 							'landscape': landscape, 'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo})
-			if kodi_version >= 20:
-				if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
-				info_tag = listitem.getVideoInfoTag()
-				info_tag.setMediaType('tvshow')
-				info_tag.setTitle(display)
-				info_tag.setTvShowTitle(title)
-				info_tag.setOriginalTitle(meta_get('original_title'))
-				info_tag.setTvShowStatus(meta_get('status'))
-				info_tag.setPlot(meta_get('plot'))
-				info_tag.setYear(int(year))
-				info_tag.setRating(meta_get('rating'))
-				info_tag.setVotes(meta_get('votes'))
-				info_tag.setMpaa(meta_get('mpaa'))
-				info_tag.setDuration(meta_get('duration'))
-				info_tag.setCountries(meta_get('country'))
-				info_tag.setTrailer(meta_get('trailer'))
-				info_tag.setPremiered(meta_get('premiered'))
-				info_tag.setTagLine(meta_get('tagline'))
-				info_tag.setStudios((meta_get('studio') or '',))
-				info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
-				info_tag.setIMDBNumber(imdb_id)
-				info_tag.setGenres(meta_get('genre').split(', '))
-				info_tag.setWriters(meta_get('writer').split(', '))
-				info_tag.setDirectors(meta_get('director').split(', '))
-				info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
-				info_tag.setPlaycount(playcount)
-			else:
-				meta.update({'playcount': playcount, 'overlay': overlay})
-				listitem.setCast(meta_get('cast', []))
-				listitem.setInfo('video', remove_keys(meta, dict_removals))
-				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
-			set_properties({'twilight.sort_order': string(item_position), 'twilight.playcount': string(playcount), 'twilight.extras_params': extras_params, 'twilight.options_params': options_params})
-			if self.is_external: set_properties({'twilight.external': 'true'})
-			if self.custom_order: self.append(((url_params, listitem, self.is_folder), item_position))
-			else: self.append((url_params, listitem, self.is_folder))
+			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('tvshow')
+			info_tag.setTitle(display)
+			info_tag.setTvShowTitle(title)
+			info_tag.setOriginalTitle(meta_get('original_title'))
+			info_tag.setTvShowStatus(meta_get('status'))
+			info_tag.setPlot(meta_get('plot'))
+			info_tag.setYear(int(year))
+			info_tag.setRating(meta_get('rating'))
+			info_tag.setVotes(meta_get('votes'))
+			info_tag.setMpaa(meta_get('mpaa'))
+			info_tag.setDuration(meta_get('duration'))
+			info_tag.setCountries(meta_get('country'))
+			info_tag.setTrailer(meta_get('trailer'))
+			info_tag.setPremiered(meta_get('premiered'))
+			info_tag.setTagLine(meta_get('tagline'))
+			info_tag.setStudios((meta_get('studio') or '',))
+			info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
+			info_tag.setIMDBNumber(imdb_id)
+			info_tag.setGenres(meta_get('genre').split(', '))
+			info_tag.setWriters(meta_get('writer').split(', '))
+			info_tag.setDirectors(meta_get('director').split(', '))
+			info_tag.setCast([xbmc_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in meta_get('cast', [])])
+			info_tag.setPlaycount(playcount)
+			set_properties({'twilight.extras_params': extras_params, 'twilight.options_params': options_params})
+			self.append(((url_params, listitem, self.is_folder), _position))
 		except: pass
 
 	def worker(self):
@@ -215,11 +206,14 @@ class TVShows:
 		self.fanart_enabled, self.home_hide_watched = self.meta_user_info['extra_fanart_enabled'], self.is_home and self.meta_user_info['widget_hide_watched']
 		self.is_folder, self.watched_title = False if self.open_extras else True, trakt_str if self.watched_indicators == 1 else twilight_str
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
-		if self.custom_order: threads = list(make_thread_list_multi_arg(self.build_tvshow_content, self.list, self.max_threads))
-		else: threads = list(make_thread_list_enumerate(self.build_tvshow_content, self.list, self.max_threads))
-		[i.join() for i in threads]
-		try: self.items.sort(key=lambda k: int(k[1].getProperty('twilight.sort_order')))
-		except: pass
+		if self.custom_order:
+			threads = list(make_thread_list_multi_arg(self.build_tvshow_content, self.list, self.max_threads))
+			[i.join() for i in threads]
+		else:
+			threads = list(make_thread_list_enumerate(self.build_tvshow_content, self.list, self.max_threads))
+			[i.join() for i in threads]
+			self.items.sort(key=lambda k: k[1])
+			self.items = [i[0] for i in self.items]
 		return self.items
 
 	def paginate_list(self, data, page_no):

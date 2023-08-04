@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
 import time
-from sys import exit as sysexit
-from modules import kodi_utils
 from caches.main_cache import cache_object
+from modules.utils import copy2clip
+from modules import kodi_utils
+from modules.utils import copy2clip
 # logger = kodi_utils.logger
 
 requests, sleep, confirm_dialog, ok_dialog, monitor = kodi_utils.requests, kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.monitor
@@ -35,9 +36,7 @@ class RealDebridAPI:
 		url = auth_url + device_url % 'client_id=%s&new_credentials=yes' % self.client_ID
 		response = requests.get(url, timeout=timeout).json()
 		user_code = response['user_code']
-		try:
-			from modules.utils import copy2clip
-			copy2clip(user_code)
+		try: copy2clip(user_code)
 		except: pass
 		content = line % (ls(32517), ls(32700) % 'https://real-debrid.com/device', ls(32701) % '[COLOR seagreen]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('seagreen')
@@ -369,7 +368,7 @@ class RealDebridAPI:
 			progressDialog = progress_dialog(ls(32733), icon)
 			while status == 'magnet_conversion' and progress_timeout > 0:
 				progressDialog.update(line % (line1, line2, line3), progress_timeout)
-				if monitor.abortRequested() == True: return sysexit()
+				if monitor.abortRequested() == True: return
 				try:
 					if progressDialog.iscanceled():
 						return _return_failed(32736, cancelled=True)
