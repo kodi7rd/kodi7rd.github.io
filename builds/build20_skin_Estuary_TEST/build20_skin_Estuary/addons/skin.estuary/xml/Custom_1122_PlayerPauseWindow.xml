@@ -18,7 +18,7 @@
 				<centertop>50%</centertop>
 				<width>1702</width>
 				<height>592</height>
-				<texture diffuse="masks/landscape-502.png">lists/contentpanel-fade.png</texture>
+				<texture diffuse="masks/landscape-502.png">kodirdil/backgrounds/contentpanel-fade.png</texture>
 		</control>	
 		<control type="image" id="1">
 			<animation type="Visible">
@@ -34,7 +34,7 @@
 				<centertop>50%</centertop>
 				<width>1002</width>
 				<height>592</height>
-				<texture flipx="true" diffuse="masks/landscape-502.png">lists/contentpanel-fade.png</texture>
+				<texture flipx="true" diffuse="masks/landscape-502.png">kodirdil/backgrounds/contentpanel-fade.png</texture>
 			</control>
 			<control type="image" id="1">
 			<animation type="Visible">
