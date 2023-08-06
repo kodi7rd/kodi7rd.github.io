@@ -982,4 +982,18 @@ msgctxt "#700046"
 msgid "Show information window on playback pause"
 msgstr "הצג חלון מידע בעצירת הניגון"
 
+# Continue FENtastic Search Results Window - Custom_1121_SearchResults.xml:
+
+msgctxt "#700047"
+msgid "[B]Your search history is currently empty. Would you like to perform a new search or return to the home screen?[/B]"
+msgstr "[B]היסטוריית החיפוש שלך ריקה כרגע. האם אתה מעוניין לבצע חיפוש חדש או לחזור למסך הבית?[/B]"
+
+msgctxt "#700048"
+msgid "[B]New search[/B]"
+msgstr "[B]חיפוש חדש[/B]"
+
+msgctxt "#700049"
+msgid "[B]Return to the home screen[/B]"
+msgstr "[B]חזרה למסך הבית[/B]"
+
 ################################################################

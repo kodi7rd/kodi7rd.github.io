@@ -1133,7 +1133,7 @@
 		<param name="visible_2">true</param>
 		<param name="visible_3">true</param>
 		<param name="button2_label">$LOCALIZE[31116]</param>
-		<param name="button3_label">Return to the home screen</param>
+		<param name="button3_label">$LOCALIZE[700049]</param>
 		<param name="button2_onclick">true</param>
 		<definition>
 			<control type="group" id="$PARAM[button_id]889">
