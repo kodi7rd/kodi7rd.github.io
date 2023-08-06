@@ -34,13 +34,13 @@
                     <texture>twilight_common/twilight.png</texture>
                 </control>
                 <control type="label">
-                    <left>75</left>
+                    <left>-355</left>
                     <top>22</top>
                     <width max="1600">auto</width>
                     <height>55</height>
                     <font>font10</font> <!-- TWILIGHT_21 -->
                     <textcolor>FFFFFFFF</textcolor>
-                    <align>left</align>
+                    <align>right</align>
                     <aligny>center</aligny>
                     <label>[B]$INFO[Window.Property(total_results)][/B] [UPPERCASE][COLOR $INFO[Window(10000).Property(twilight.highlight)]]$INFO[Window.Property(filters_ignored)][/COLOR][/UPPERCASE]</label>
                     <animation effect="slide" start="0,0" end="0,-15" time="0" center="auto" condition="String.StartsWith(Window.Property(window_format),media) + !String.IsEmpty(Window.Property(clearlogo))">Conditional</animation>
@@ -947,7 +947,7 @@
                 <visible>String.IsEqual(Window.Property(window_format),medialist)</visible>
                 <top>20</top>
                 <control type="image">
-                    <top>15</top>
+                    <top>60</top>
                     <left>70</left>
                     <height max="250">auto</height>
                     <width max="1130">auto</width>
