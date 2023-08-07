@@ -53,14 +53,14 @@
 						<param name="height">119</param>
 						<param name="label-left">-18</param>
 						<param name="label-top">32</param>
-						<param name="cornerdiffuse">overlays/overlay-bg5.png</param>
+						<param name="cornerdiffuse">overlays/overlaybg5.png</param>
 					</include>
 				</control>
 				<control type="textbox">
 					<visible>!String.IsEqual(System.Language,Hebrew)</visible>
 					<left>50</left>
 					<right>50</right>
-					<top>770</top>
+					<top>805</top>
 					<bottom>105</bottom>
 					<label>$VAR[PlotTextBoxVar]</label>
 					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
