@@ -137,6 +137,29 @@
 						<texture colordiffuse="button_focus">kodirdil/subtitles_window/sync_subtitle.png</texture>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
+					
+		
+				
+	</include>
+	<include name="FrameBox">
+	<param name="visible" default="1123"/>
+	<param name="flip" default="false"/>
+	<param name="colordif" default="limegreen"/>
+	<param name="icon" default="gradient-box.png"/>
+	<definition>
+		<control type="image">
+		<include>Visible_Fade_fix</include>
+		<include>righttoleft_fix</include>
+		<animation effect="fade" end="250">VisibleChange</animation>
+		<visible>Control.HasFocus($PARAM[visible])</visible>
+			<top>0</top>
+			<left>0</left>
+			<width>310</width>
+			<height>192</height>
+			<texture colordiffuse="$PARAM[colordif]" diffuse="masks/landscape1.png" flipx="$PARAM[flip]">$VAR[BoxFrame]$PARAM[icon]</texture>
+		</control>
+		<nested />
+	</definition>
 	</include>
 	<include name="RatingCircle">
 		<param name="animation">False</param>
@@ -1910,6 +1933,14 @@
 	</definition>
 	</include>
 	
+	<include name="FrameBorder">
+		<include content="FrameBox">
+			<include content="FrameBox">
+				<param name="flip">true</param>
+				<param name="colordif">blue</param>
+			</include>	
+		</include>
+	</include>
 	<include name="Label_prefix">
 		<control type="textbox" id="1">
 			<animation type="Visible">

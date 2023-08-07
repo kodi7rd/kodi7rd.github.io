@@ -29,6 +29,11 @@
 		<animation effect="fade" end="100" time="200">Visible</animation>
 		<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
 	</include>
+	<include name="Visible_Fade_fix">
+		<animation effect="fade" end="100" time="150">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="250">Hidden</animation>
+		<animation type="zoom" center="auto" start="100,100" end="80,80" time="150">Hidden</animation>
+	</include>
 	<include name="OpenClose_Fade">
 		<animation effect="fade" end="100" time="200">WindowOpen</animation>
 		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>

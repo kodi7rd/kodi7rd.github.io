@@ -67,6 +67,11 @@
 		
 		</control>
 		<control type="group">
+		<left>1215</left>
+		<top>460</top>
+		<include>FrameBorder</include>
+		</control>
+		<control type="group">
 		<include>righttoleft_fix</include>
 			<top>235</top>
 			<left>825</left>
