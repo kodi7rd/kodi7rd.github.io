@@ -144,7 +144,7 @@
 	<include name="FrameBox">
 	<param name="visible" default="1123"/>
 	<param name="flip" default="false"/>
-	<param name="colordif" default="limegreen"/>
+	<param name="colordif" default="blue"/>
 	<param name="icon" default="gradient-box.png"/>
 	<definition>
 		<control type="image">
