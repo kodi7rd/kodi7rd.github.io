@@ -4,9 +4,10 @@
     <setting id="kodi_menu_cache">true</setting>
     <setting id="limit_concurrent_threads" default="true">true</setting>
     <setting id="max_threads" default="true">60</setting>
+    <setting id="addon_fanart" default="true" />
+    <setting id="addon_fanart.restore" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="highlight_name" default="true">[COLOR=FF008EB2]FF008EB2[/COLOR]</setting>
-    <setting id="use_skin_fonts" default="true">true</setting>
-    <setting id="custom_skins.enable" default="true">$ADDON[plugin.video.twilight 32860]</setting>
+    <setting id="use_custom_skins" default="true">true</setting>
     <setting id="trakt.indicators_active" default="true">false</setting>
     <setting id="watched_indicators" default="true">0</setting>
     <setting id="amble.indicators" default="true" />
@@ -69,6 +70,7 @@
     <setting id="meta_mpaa_prefix" default="true" />
     <setting id="meta_use_year_in_search" default="true">false</setting>
     <setting id="meta_filter">false</setting>
+    <setting id="trakt.amble" default="true" />
     <setting id="trakt.user" default="true" />
     <setting id="tmdb_api" default="true">b370b60447737762ca38457bd77579b3</setting>
     <setting id="fanart_amble1" default="true" />
@@ -79,6 +81,7 @@
     <setting id="imdb_lists.sort_direction" default="true">0</setting>
     <setting id="check_premium_account_status" default="true">false</setting>
     <setting id="provider.external" default="true">true</setting>
+    <setting id="rd.amble" default="true" />
     <setting id="rd.token" default="true" />
     <setting id="rd.enabled" default="true">true</setting>
     <setting id="rd.account_id" default="true" />
@@ -90,6 +93,7 @@
     <setting id="check.rd_cloud" default="true">false</setting>
     <setting id="results.sort_rdcloud_first" default="true">true</setting>
     <setting id="rd.priority" default="true">10</setting>
+    <setting id="pm.amble" default="true" />
     <setting id="pm.token" default="true" />
     <setting id="pm.enabled" default="true">true</setting>
     <setting id="pm.account_id" default="true" />
@@ -101,6 +105,7 @@
     <setting id="check.pm_cloud" default="true">false</setting>
     <setting id="results.sort_pmcloud_first" default="true">true</setting>
     <setting id="pm.priority" default="true">10</setting>
+    <setting id="ad.amble" default="true" />
     <setting id="ad.token" default="true" />
     <setting id="ad.enabled" default="true">true</setting>
     <setting id="ad.account_id" default="true" />
@@ -129,8 +134,8 @@
     <setting id="easynews.lang_filters" default="true">eng</setting>
     <setting id="check.easynews" default="true">false</setting>
     <setting id="en.priority" default="true">7</setting>
+    <setting id="folders.amble" default="true" />
     <setting id="provider.folders" default="true">false</setting>
-    <setting id="browse.folders" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="folders.title_filter" default="true">true</setting>
     <setting id="check.folders" default="true">false</setting>
     <setting id="results.sort_folders_first" default="true">true</setting>
@@ -232,7 +237,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.2.01</setting>
+    <setting id="version_number">3.2.02</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</setting>
     <setting id="highlight" default="true">FF12A0C7</setting>
@@ -253,7 +258,7 @@
     <setting id="scraper_result_identify_colour" default="true">FFFFFFFF</setting>
     <setting id="extras.tvshow.button10" default="true">tvshow_browse</setting>
     <setting id="extras.tvshow.button11" default="true">show_trailers</setting>
-    <setting id="extras.tvshow.button12" default="true">show_keywords</setting>
+    <setting id="extras.tvshow.button12" default="true">show_trakt_manager</setting>
     <setting id="extras.tvshow.button13" default="true">show_images</setting>
     <setting id="extras.tvshow.button14" default="true">show_extrainfo</setting>
     <setting id="extras.tvshow.button15" default="true">show_genres</setting>
@@ -261,7 +266,7 @@
     <setting id="extras.tvshow.button17" default="true">show_options</setting>
     <setting id="extras.movie.button10" default="true">movies_play</setting>
     <setting id="extras.movie.button11" default="true">show_trailers</setting>
-    <setting id="extras.movie.button12" default="true">show_keywords</setting>
+    <setting id="extras.movie.button12" default="true">show_trakt_manager</setting>
     <setting id="extras.movie.button13" default="true">show_images</setting>
     <setting id="extras.movie.button14" default="true">show_extrainfo</setting>
     <setting id="extras.movie.button15" default="true">show_genres</setting>
@@ -275,6 +280,8 @@
     <setting id="view.episodes" default="true">55</setting>
     <setting id="view.episodes_single" default="true">55</setting>
     <setting id="view.premium" default="true">55</setting>
+    <setting id="browse.folders" default="true">$ADDON[plugin.video.twilight 32652]</setting>
+    <setting id="custom_skins.enable" default="true">$ADDON[plugin.video.twilight 32860]</setting>
     <setting id="extras.enable_menus" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="extras.enabled_menus" default="true">2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062</setting>
     <setting id="image_resolutions_name" default="true">$ADDON[plugin.video.twilight 32164]</setting>
@@ -286,4 +293,5 @@
     <setting id="results.progress_flags_direction" default="true">1</setting>
     <setting id="subtitles.language" default="true">English</setting>
     <setting id="subtitles.secondary_language" default="true">None</setting>
+    <setting id="use_skin_fonts" default="true">true</setting>
 </settings>
