@@ -82,7 +82,17 @@ class SelectColor(BaseDialog):
 	def palette_check(self):
 		if self.path_exists(colorpalette_path): status = True
 		else:
-			self.notification(33110)
-			from modules.utils import download_github_zip
-			status = download_github_zip('color_palette', 'color_palette2', colorpalette_path)
+			self.busy_dialog()
+			try:
+				from zipfile import ZipFile
+				from modules.kodi_utils import colorpalette_zip_path, userdata_path
+				zipfile = ZipFile(colorpalette_zip_path)
+				zipfile.extractall(path=userdata_path)
+				if self.path_exists(colorpalette_path): status = True
+				else: status = False
+			except: status = False
+			self.busy_dialog('false')
 		return status
+
+	def busy_dialog(self, state='true'):
+		self.setProperty('show_busy_dialog', state)

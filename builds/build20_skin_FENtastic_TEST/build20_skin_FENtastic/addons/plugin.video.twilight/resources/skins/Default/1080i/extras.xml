@@ -10,6 +10,7 @@
                 <texture colordiffuse="FF000000">twilight_common/white.png</texture>
             </control>
             <control type="image" id="202">
+                <aspectratio>scale</aspectratio>
                 <animation effect="fade" start="100" end="25" time="800">WindowOpen</animation>
             </control>
         </control>

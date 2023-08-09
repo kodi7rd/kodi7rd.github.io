@@ -18,7 +18,7 @@ numeric_input, container_update, activate_window = kodi_utils.numeric_input, kod
 poster_empty, fanart_empty, clear_property, highlight_prop = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.clear_property, kodi_utils.highlight_prop
 addon_icon, database, maincache_db, custom_context_prop = kodi_utils.addon_icon, kodi_utils.database, kodi_utils.maincache_db, kodi_utils.custom_context_prop
 movie_extras_buttons_defaults, tvshow_extras_buttons_defaults = kodi_utils.movie_extras_buttons_defaults, kodi_utils.tvshow_extras_buttons_defaults
-extras_button_label_values, path_exists, custom_skin_path = kodi_utils.extras_button_label_values, kodi_utils.path_exists, kodi_utils.custom_skin_path
+extras_button_label_values = kodi_utils.extras_button_label_values
 get_language, extras_enabled_menus, active_internal_scrapers, auto_play = settings.get_language, settings.extras_enabled_menus, settings.active_internal_scrapers, settings.auto_play
 extras_open_action, get_art_provider, fanarttv_default, ignore_articles = settings.extras_open_action, settings.get_art_provider, settings.fanarttv_default, settings.ignore_articles
 clear_scrapers_cache, get_aliases_titles, make_alias_dict = source_utils.clear_scrapers_cache, source_utils.get_aliases_titles, source_utils.make_alias_dict
@@ -36,28 +36,32 @@ tagline_str, premiered_str, rating_str, votes_str, runtime_str, easy_serv_str = 
 genres_str, budget_str, revenue_str, director_str, writer_str = ls(32624), ls(32625), ls(32626), ls(32627), ls(32628)
 title_str, year_str, season_str, episode_str = ls(32228), ls(32543), ls(32537), ls(32203).lower().capitalize()
 
-def custom_skins_choice(params):
-	current_version = get_setting('custom_skins.version', '0.0.0')
-	currently_enabled = '32859' in get_setting('custom_skins.enable')
-	new_setting_value = '32860' if currently_enabled else '32859'
-	if not currently_enabled:
-		if path_exists(translate_path(custom_skin_path)) and current_version != '0.0.0': success = True
-		else:
-			show_busy_dialog()
-			from windows import download_custom_xmls, get_custom_xmls_version
-			latest_version = get_custom_xmls_version()
-			if latest_version:
-				success = download_custom_xmls()
-				hide_busy_dialog()
-				if success:
-					set_setting('custom_skins.version', latest_version)
-					ok_dialog(text=ls(33125) % latest_version)
-				else: notification(32574)
-			else:
-				notification(32574)
-				success = False
-	else: success = True
-	if success: set_setting('custom_skins.enable', '$ADDON[plugin.video.twilight %s]' % new_setting_value)
+def restore_addon_fanart_choice(params):
+	if not confirm_dialog(): return
+	set_setting('addon_fanart', '')
+
+def auth_accounts_choice(params):
+	service, active = params['service'], params['active'] == 'True'
+	line1 = '%s [B]%s[/B]?' % (ls(32059), service.upper()) if active else '%s [B]%s[/B]?' % (ls(32057), service.upper())
+	if not confirm_dialog(heading=32805, text=line1, ok_label=32824, cancel_label=32828): return
+	if active and not confirm_dialog(ok_label=32824, cancel_label=32828): return
+	if service == 'realdebrid':
+		from apis.real_debrid_api import RealDebridAPI
+		if active: RealDebridAPI().revoke()
+		else: RealDebridAPI().auth()
+	elif service == 'premiumize':
+		from apis.premiumize_api import PremiumizeAPI
+		if active: PremiumizeAPI().revoke()
+		else: PremiumizeAPI().auth()
+	elif service == 'alldebrid':
+		from apis.alldebrid_api import AllDebridAPI
+		if active: AllDebridAPI().revoke()
+		else: AllDebridAPI().auth()
+	else:#trakt
+		from apis import trakt_api
+		if active: trakt_api.trakt_revoke_authentication()
+		else: trakt_api.trakt_authenticate()
+	return kodi_refresh()
 
 def default_highlight_colors_choice(params):
 	silent = params.get('silent', 'false') != 'false'
@@ -283,21 +287,6 @@ def genres_choice(media_type, genres, poster, return_genres=False):
 	list_items = [{'line1': i['genre'], 'icon': poster} for i in genre_list]
 	kwargs = {'items': json.dumps(list_items)}
 	return select_dialog([{'mode': mode, 'action': action, 'genre_id': i['value'][0]} for i in genre_list], **kwargs)
-
-def imdb_keywords_choice(media_type, imdb_id, poster):
-	from apis.imdb_api import imdb_keywords
-	show_busy_dialog()
-	keywords_info = imdb_keywords(imdb_id)
-	if len(keywords_info) == 0:
-		hide_busy_dialog()
-		notification(32760, 2500)
-		return None
-	meta_type = 'movie' if media_type == 'movies' else 'tvshow'
-	mode = 'build_%s_list' % meta_type
-	list_items = [{'line1': i, 'icon': poster} for i in keywords_info]
-	kwargs = {'items': json.dumps(list_items), 'enable_context_menu': 'true', 'media_type': media_type}
-	hide_busy_dialog()
-	return select_dialog([{'mode': mode, 'action': 'imdb_keywords_list_contents', 'list_id': i} for i in keywords_info], **kwargs)
 
 def imdb_videos_choice(videos, poster):
 	try: videos = json.loads(videos)
@@ -595,15 +584,6 @@ def enable_scrapers_choice(params={}):
 		if i in cloud_scrapers and i in choice: set_setting(cloud_scrapers[i], 'true')
 	manage_settings_reset(True)
 
-def folder_sources_choice(params):
-	if params['folder_path']:
-		browse = confirm_dialog(text=33109, ok_label=32838, cancel_label=33108, default_control=10)
-		if browse is None: return
-		if browse: function, params['mode'] = container_update, 'navigator.folder_navigator'
-		else: function, params['mode'] = run_plugin, 'folder_scraper_manager_choice'
-	else: function, params['mode'] = run_plugin, 'folder_scraper_manager_choice'
-	function(params)
-
 def folder_scraper_manager_choice(params):
 	def _set_settings(refresh=True):
 		manage_settings_reset()
@@ -816,9 +796,9 @@ def options_menu_choice(params, meta=None):
 	def _builder():
 		for item in listing: yield {'line1': item[0], 'line2': item[1] or item[0], 'icon': poster}
 	params_get = params.get
-	tmdb_id, content, poster = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None)
+	tmdb_id, content, poster, season_poster = params_get('tmdb_id', None), params_get('content', None), params_get('poster', None), params_get('season_poster', None)
 	is_external, from_extras = params_get('is_external') in (True, 'True', 'true'), params_get('from_extras', 'false') == 'true'
-	season, episode = params_get('season', ''), params_get('episode', '')
+	season, episode, in_progress_menu = params_get('season', ''), params_get('episode', ''), params_get('in_progress_menu', 'false') == 'true'
 	if not content: content = container_content()[:-1]
 	menu_type = content
 	if content.startswith('episode.'): content = 'episode'
@@ -826,9 +806,8 @@ def options_menu_choice(params, meta=None):
 		function = metadata.movie_meta if content == 'movie' else metadata.tvshow_meta
 		meta = function('tmdb_id', tmdb_id, metadata_user_info(), get_datetime())
 	meta_get = meta.get
-	rootname = meta_get('rootname', None)
+	rootname, title, year, imdb_id, tvdb_id = meta_get('rootname', None), meta_get('title'), meta_get('year'), meta_get('imdb_id', None), meta_get('tvdb_id', None)
 	window_function = activate_window if is_external else container_update
-	title, year, imdb_id, tvdb_id = meta_get('title'), meta_get('year'), meta_get('imdb_id', None), meta_get('tvdb_id', None)
 	listing = []
 	listing_append = listing.append
 	custom_context_menu = get_property(custom_context_prop) == 'true'
@@ -895,6 +874,7 @@ def options_menu_choice(params, meta=None):
 		listing_append((ls(32604) % (ls(32028) if menu_type == 'movie' else ls(32029)), ls(32497) % rootname, 'clear_media_cache'))
 		listing_append((ls(33043), ls(33066) % rootname, 'set_media_artwork'))
 	if menu_type in ('movie', 'episode') or menu_type in single_ep_list: listing_append((ls(32637), '', 'clear_scrapers_cache'))
+	if in_progress_menu: listing_append((ls(32599), '', 'nextep_manager'))
 	listing_append(('%s %s' % (ls(32118), ls(32513)), '', 'open_external_scrapers_choice'))
 	if not from_extras: listing_append(('%s %s' % (ls(32641), ls(32456)), '', 'open_tools'))
 	listing_append(('%s %s' % (ls(32641), ls(32247)), '', 'open_settings'))
@@ -913,15 +893,15 @@ def options_menu_choice(params, meta=None):
 		return run_plugin({'mode': 'watched_status.mark_episode', 'action': watched_action, 'title': title, 'year': year, 'tmdb_id': tmdb_id,
 							'tvdb_id': tvdb_id, 'season': season, 'episode': episode})
 	elif choice == 'mark_watched_tvshow':
-		return run_plugin({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})
+		return run_plugin({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'icon': poster})
 	elif choice == 'mark_unwatched_tvshow':
-		return run_plugin({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_unwatched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})
+		return run_plugin({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_unwatched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'icon': poster})
 	elif choice == 'mark_watched_season':
 		return run_plugin({'mode': 'watched_status.mark_season', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id,
-							'tvdb_id': tvdb_id, 'season': season})
+							'tvdb_id': tvdb_id, 'season': season, 'icon': season_poster})
 	elif choice == 'mark_unwatched_season':
 		return run_plugin({'mode': 'watched_status.mark_season', 'action': 'mark_as_unwatched', 'title': title, 'year': year, 'tmdb_id': tmdb_id,
-							'tvdb_id': tvdb_id, 'season': season})
+							'tvdb_id': tvdb_id, 'season': season, 'icon': season_poster})
 	elif choice == 'clear_progress':
 		return run_plugin({'mode': 'watched_status.erase_bookmark', 'media_type': content, 'tmdb_id': tmdb_id, 'season': season, 'episode': episode, 'refresh': 'true'})
 	elif choice == 'refresh_widgets':
@@ -945,6 +925,8 @@ def options_menu_choice(params, meta=None):
 		return window_function({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
 	elif choice == 'browse_season':
 		return window_function({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season})
+	elif choice == 'nextep_manager':
+		return window_function({'mode': 'build_next_episode_manager'})
 	elif choice == 'recommended':
 		close_all_dialog()
 		mode, action = ('build_movie_list', 'tmdb_movies_recommendations') if menu_type == 'movie' else ('build_tvshow_list', 'tmdb_tv_recommendations')
@@ -953,9 +935,9 @@ def options_menu_choice(params, meta=None):
 		close_all_dialog()
 		return random_choice({'meta': meta, 'poster': poster})
 	elif choice == 'trakt_manager':
-		return trakt_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': meta_get('imdb_id'), 'tvdb_id': meta_get('tvdb_id', 'None'), 'media_type': content, 'icon': poster})
+		return trakt_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id or 'None', 'media_type': content, 'icon': poster})
 	elif choice == 'favorites_choice':
-		return favorites_choice({'media_type': content, 'tmdb_id': tmdb_id, 'title': meta_get('title')})
+		return favorites_choice({'media_type': content, 'tmdb_id': tmdb_id, 'title': title})
 	elif choice == 'exit_menu':
 		return run_plugin({'mode': 'navigator.exit_media_menu'})
 	elif choice == 'toggle_autoplay':

@@ -190,12 +190,8 @@ msgctxt "#32046"
 msgid "Enable Content for Extras Lists"
 msgstr ""
 
-msgctxt "#32047"
-msgid "Attempt to use Skin Fonts in Twilight Windows"
-msgstr ""
-
 msgctxt "#32048"
-msgid "Attempt to Reload Widgets After Refresh"
+msgid "Attempt to Reload Widgets After Resync"
 msgstr ""
 
 msgctxt "#32049"
@@ -355,7 +351,7 @@ msgid "Trakt Cache"
 msgstr ""
 
 msgctxt "#32088"
-msgid "Show Uncached Torrents"
+msgid "Uncached"
 msgstr ""
 
 msgctxt "#32089"
@@ -614,12 +610,8 @@ msgctxt "#32152"
 msgid "Filter Results"
 msgstr ""
 
-msgctxt "#32153"
-msgid "Clear Filter"
-msgstr ""
-
 msgctxt "#32154"
-msgid "Filter by Quality"
+msgid "Pause & Wait"
 msgstr ""
 
 msgctxt "#32155"
@@ -631,7 +623,7 @@ msgid "Include 3D Results"
 msgstr ""
 
 msgctxt "#32157"
-msgid "Filter by Provider"
+msgid "Assign Addon Background Image..."
 msgstr ""
 
 msgctxt "#32158"
@@ -679,7 +671,7 @@ msgid "Widgets Only"
 msgstr ""
 
 msgctxt "#32169"
-msgid "Filter Extra Info"
+msgid "Filter by [B]Extra Info[/B]..."
 msgstr ""
 
 msgctxt "#32170"
@@ -1239,7 +1231,7 @@ msgid "Set Views"
 msgstr ""
 
 msgctxt "#32511"
-msgid "Set Sources Folders (My Services->Sources Folders)"
+msgid "[I]Manage Folders at Tools->Accounts Manager[/I]"
 msgstr ""
 
 msgctxt "#32512"
@@ -1911,7 +1903,7 @@ msgid "[B]Preparing sources[/B]"
 msgstr ""
 
 msgctxt "#32679"
-msgid "Filter Title"
+msgid "Filter by [B]Title[/B]..."
 msgstr ""
 
 msgctxt "#32680"
@@ -2411,6 +2403,10 @@ msgstr ""
 
 msgctxt "#32804"
 msgid "Hidden"
+msgstr ""
+
+msgctxt "#32805"
+msgid "Accounts Manager"
 msgstr ""
 
 msgctxt "#32806"
@@ -3631,7 +3627,7 @@ msgid "Browse Folder or Edit Settings"
 msgstr ""
 
 msgctxt "#33110"
-msgid "Downloading Color Palette"
+msgid "Extracting Color Palette. Please Wait."
 msgstr ""
 
 msgctxt "#33111"
@@ -3802,6 +3798,10 @@ msgctxt "#33151"
 msgid "Use Chapter Info For Alert When Available"
 msgstr ""
 
+msgctxt "#33152"
+msgid "[I]Manage Account Authorization at Tools->Accounts Manager[/I]"
+msgstr ""
+
 msgctxt "#33153"
 msgid "Watched (Still Airing) TV Shows Location"
 msgstr ""
@@ -3834,13 +3834,17 @@ msgctxt "#33160"
 msgid "Auto fix Invoker Mismatch on Update"
 msgstr ""
 
+msgctxt "#33161"
+msgid "Restore Default Background Image"
+msgstr ""
+
 ###################################################################################################################################
 
-msgctxt "#32805"
+msgctxt "#32047"
 msgid ""
 msgstr ""
 
-msgctxt "#33152"
+msgctxt "#32153"
 msgid ""
 msgstr ""
 

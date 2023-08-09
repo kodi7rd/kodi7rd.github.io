@@ -8,6 +8,42 @@ msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
 
+# Account Manager (navigator.py)
+
+msgctxt "#32057"
+msgid "Authorize"
+msgstr "לחץ כדי לחבר"
+
+msgctxt "#32059"
+msgid "Revoke Authorization"
+msgstr "מחובר (לחץ לניתוק)"
+
+# Dialog Messages
+
+msgctxt "#32576"
+msgid "Success"
+msgstr "בוצע בהצלחה"
+
+msgctxt "#32580"
+msgid "Are you sure?"
+msgstr "האם אתה בטוח?"
+
+msgctxt "#32824"
+msgid "Yes"
+msgstr "כן"
+
+msgctxt "#32828"
+msgid "No"
+msgstr "לא"
+
+msgctxt "#32839"
+msgid "OK"
+msgstr "אישור"
+
+msgctxt "#32840"
+msgid "Cancel"
+msgstr "ביטול"
+
 # Connect Debrid/Trakt Services
 
 msgctxt "#32517"

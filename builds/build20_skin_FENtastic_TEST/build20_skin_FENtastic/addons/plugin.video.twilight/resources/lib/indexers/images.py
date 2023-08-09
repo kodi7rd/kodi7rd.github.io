@@ -21,7 +21,7 @@ class Images():
 		elif self.mode == 'imdb_image_results': self.imdb_image_results()
 		elif self.mode == 'popular_people_image_results': self.popular_people_image_results()
 		elif self.mode == 'browser_image': self.browser_image(params['folder_path'])
-		elif self.mode == 'slideshow_image': return self.slideshow_image()
+		elif self.mode == 'imageviewer': return self.imageviewer()
 		elif self.mode == 'delete_image': return self.delete_image()
 		hide_busy_dialog()
 		if len(self.list_items) == 0: return notification(32575)
@@ -32,9 +32,9 @@ class Images():
 		hide_busy_dialog()
 		open_window(('windows.imageviewer', 'ThumbImageViewer'), 'thumbviewer.xml', list_items=self.list_items, next_page_params= self.next_page_params, ImagesInstance=self)
 
-	def slideshow_image(self):
+	def imageviewer(self):
 		hide_busy_dialog()
-		return open_window(('windows.imageviewer', 'SlideShow'), 'slideshow.xml', all_images=self.params['all_images'], index=int(self.params['current_index']))
+		return open_window(('windows.imageviewer', 'ImageViewer'), 'imageviewer.xml', all_images=self.params['all_images'], index=int(self.params['current_index']))
 
 	def popular_people_image_results(self):
 		def builder():
@@ -73,7 +73,7 @@ class Images():
 		image_info, next_page = imdb_images(imdb_id, page_no)
 		image_info.sort(key=lambda x: x['title'])
 		all_images = [(i['image'], '%s_%s' % (media_title, i['title'])) for i in image_info]
-		image_action = json.dumps({'mode': 'slideshow_image', 'all_images': all_images})
+		image_action = json.dumps({'mode': 'imageviewer', 'all_images': all_images})
 		self.list_items = list(builder(rolling_count))
 		rolling_count += len(image_info)
 		if len(image_info) == 48:
@@ -125,7 +125,7 @@ class Images():
 		imdb_images = [(i['image'], '%s_%s_%03d' % (actor_name, i['title'], count), i['thumb']) for count, i in enumerate(imdb_image_info, rolling_count+1)]
 		all_images.extend(imdb_images)
 		rolling_count += len(imdb_images)
-		image_action = json.dumps({'mode': 'slideshow_image', 'all_images': all_images})
+		image_action = json.dumps({'mode': 'imageviewer', 'all_images': all_images})
 		self.list_items = list(builder())
 		if len(imdb_image_info) == 48:
 			if len(rolling_count_list) == page_no: rolling_count_list.insert(page_no, rolling_count)
@@ -157,7 +157,7 @@ class Images():
 		image_info = results['results']
 		image_info.sort(key=lambda x: x['file_path'])
 		all_images = [(tmdb_image_base % ('original', i['file_path']), (i['media']['title']) if 'title' in i['media'] else i['media']['name']) for i in image_info]
-		image_action = json.dumps({'mode': 'slideshow_image', 'all_images': all_images})
+		image_action = json.dumps({'mode': 'imageviewer', 'all_images': all_images})
 		self.list_items = list(builder())
 		self.next_page_params = {'mode': 'people_tagged_image_results', 'actor_id': actor_id, 'actor_name': actor_name}
 
@@ -184,7 +184,7 @@ class Images():
 		thumbs_info = [i for i in thumbs_info if i.endswith(image_extensions)]
 		image_info = [i for i in image_info if i in thumbs_info]
 		all_images = [(os.path.join(folder_path, i), i) for i in image_info if i in thumbs_info]
-		image_action = json.dumps({'mode': 'slideshow_image', 'all_images': all_images, 'page_no': 'final_page'})
+		image_action = json.dumps({'mode': 'imageviewer', 'all_images': all_images, 'page_no': 'final_page'})
 		self.list_items = list(builder())
 		self.next_page_params = {}
 		if return_items: return self.list_items

@@ -241,9 +241,11 @@ def seas_ep_filter(season, episode, release_title, split=False, return_match=Fal
 	str_ep_plus_1, str_ep_minus_1 = string(episode+1), string(episode-1)
 	release_title = re.sub(r'[^A-Za-z0-9-]+', '.', unquote(release_title).replace('\'', '')).lower()
 	string1 = r'(s<<S>>[.-]?e[p]?[.-]?<<E>>[.-])'
-	string2 = r'(season[.-]?<<S>>[.-]?episode[.-]?<<E>>[.-])'
+	string2 = r'(season[.-]?<<S>>[.-]?episode[.-]?<<E>>[.-])|([s]?<<S>>[x.]<<E>>[.-])'
 	string3 = r'(s<<S>>e<<E1>>[.-]?e?<<E2>>[.-])'
 	string4 = r'([.-]<<S>>[.-]?<<E>>[.-])'
+	string5 = r'(episode[.-]?<<E>>[.-])'
+	string6 = r'([.-]e[p]?[.-]?<<E>>[.-])'
 	string_list = []
 	string_list_append = string_list.append
 	string_list_append(string1.replace('<<S>>', season_fill).replace('<<E>>', episode_fill))

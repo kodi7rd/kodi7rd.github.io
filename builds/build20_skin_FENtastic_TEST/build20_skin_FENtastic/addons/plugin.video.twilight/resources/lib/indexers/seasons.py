@@ -58,19 +58,21 @@ def build_season_list(params):
 				url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season_number})
 				extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_external': is_external})
 				options_params = build_url({'mode': 'options_menu_choice', 'content': 'season', 'tmdb_id': tmdb_id, 'poster': show_poster, 'playcount': playcount,
-											'progress': progress, 'season': season_number, 'is_external': is_external})
+											'progress': progress, 'season': season_number, 'is_external': is_external, 'season_poster': poster})
 				cm_append((extras_str, run_plugin % extras_params))
 				cm_append((options_str, run_plugin % options_params))
 				if not playcount:
 					cm_append((watched_str % watched_title, run_plugin % build_url({'mode': 'watched_status.mark_season', 'action': 'mark_as_watched', 'title': show_title,
-																					'year': show_year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number})))
+																				'year': show_year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number, 'icon': poster})))
 				if progress:
 					if hide_watched: continue
 					cm_append((unwatched_str % watched_title, run_plugin % build_url({'mode': 'watched_status.mark_season', 'action': 'mark_as_unwatched', 'title': show_title,
-																					'year': show_year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number})))
+																				'year': show_year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number, 'icon': poster})))
 					set_properties({'watchedepisodes': string(watched), 'unwatchedepisodes': string(unwatched)})
 				set_properties({'totalepisodes': string(episode_count), 'watchedprogress': string(progress), 'twilight.extras_params': extras_params, 'twilight.options_params': options_params})
-				if is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				if is_external:
+					cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+					set_properties({'twilight.external': 'true'})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('season')
 				info_tag.setTitle(title)
