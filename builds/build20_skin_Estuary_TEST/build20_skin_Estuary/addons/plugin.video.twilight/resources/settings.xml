@@ -123,6 +123,32 @@
 						<popup>false</popup>
 					</control>
 				</setting>
+				<setting id="addon_fanart" type="path" label="32157" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<writable>false</writable>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="button" format="image">
+						<heading>32157</heading>
+					</control>
+				</setting>
+				<setting id="addon_fanart.restore" type="string" label="33161" parent="addon_fanart" help="">
+					<level>0</level>
+					<default>$ADDON[plugin.video.twilight 32652]</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="!is" setting="addon_fanart"/>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>RunPlugin(plugin://plugin.video.twilight/?mode=restore_addon_fanart_choice)</data>
+					</control>
+				</setting>
 				<setting id="highlight_name" type="string" label="32124" help="">
 					<level>0</level>
 					<default>[COLOR=FF008EB2]FF008EB2[/COLOR]</default>
@@ -130,20 +156,10 @@
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=highlight_color_choice)</data>
 					</control>
 				</setting>
-				<setting id="use_skin_fonts" type="boolean" label="32047" help="">
+				<setting id="use_custom_skins" type="boolean" label="33124" help="">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
-				</setting>
-				<setting id="custom_skins.enable" type="string" label="33124" help="">
-					<level>0</level>
-					<default>$ADDON[plugin.video.twilight 32860]</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.twilight/?mode=custom_skins_choice)</data>
-					</control>
 				</setting>
 			</group>
 			<!-- Watched Indicators -->
@@ -811,6 +827,21 @@
 		<category id="meta accounts" label="32684" help="">
 			<!-- Trakt -->
 			<group id="1" label="32037">
+				<setting id="trakt.amble" type="string" label="33152" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32180</heading>
+					</control>
+				</setting>
 				<setting id="trakt.user" type="string" label="32056" help="">
 					<level>0</level>
 					<default/>
@@ -824,36 +855,6 @@
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>32056</heading>
-					</control>
-				</setting>
-				<setting id="open_trakt_authenticate" type="action" label="32057" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=trakt.trakt_authenticate)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="trakt.user"/>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="open_trakt_de-authenticate" type="action" label="32059" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=trakt.trakt_revoke_authentication)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="!is" setting="trakt.user"/>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
 					</control>
 				</setting>
 			</group>
@@ -993,6 +994,21 @@
 			</group>
 			<!-- Real Debrid -->
 			<group id="3" label="32054">
+				<setting id="rd.amble" type="string" label="33152" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32180</heading>
+					</control>
+				</setting>
 				<setting id="rd.token" type="string" label="rd token" help="">
 					<level>0</level>
 					<default/>
@@ -1037,39 +1053,6 @@
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>32056</heading>
-					</control>
-				</setting>
-				<setting id="open_rd_authenticate" type="action" label="32057" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=real_debrid.authenticate)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="rd.token"/>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="open_rd_de-authenticate" type="action" label="32059" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=real_debrid.revoke_authentication)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<and>
-								<condition operator="!is" setting="rd.token"/>
-								<condition operator="is" setting="rd.enabled">true</condition>
-							</and>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
 					</control>
 				</setting>
 				<setting id="rd.torrent.enabled" type="boolean" label="33015" help="">
@@ -1196,6 +1179,21 @@
 			</group>
 			<!-- Premiumize -->
 			<group id="4" label="32061">
+				<setting id="pm.amble" type="string" label="33152" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32180</heading>
+					</control>
+				</setting>
 				<setting id="pm.token" type="string" label="pm token" help="">
 					<level>0</level>
 					<default/>
@@ -1240,39 +1238,6 @@
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>32056</heading>
-					</control>
-				</setting>
-				<setting id="open_pm_authenticate" type="action" label="32057" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=premiumize.authenticate)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="pm.token"/>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="open_pm_de-authenticate" type="action" label="32059" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=premiumize.revoke_authentication)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<and>
-								<condition operator="!is" setting="pm.token"/>
-								<condition operator="is" setting="pm.enabled">true</condition>
-							</and>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
 					</control>
 				</setting>
 				<setting id="pm.torrent.enabled" type="boolean" label="33015" help="">
@@ -1399,6 +1364,21 @@
 			</group>
 			<!-- All Debrid -->
 			<group id="5" label="32063">
+				<setting id="ad.amble" type="string" label="33152" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32180</heading>
+					</control>
+				</setting>
 				<setting id="ad.token" type="string" label="ad token" help="">
 					<level>0</level>
 					<default/>
@@ -1443,39 +1423,6 @@
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>32056</heading>
-					</control>
-				</setting>
-				<setting id="open_ad_authenticate" type="action" label="32057" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=alldebrid.authenticate)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="ad.token"/>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="open_ad_de-authenticate" type="action" label="32059" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=alldebrid.revoke_authentication)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="visible">
-							<and>
-								<condition operator="!is" setting="ad.token"/>
-								<condition operator="is" setting="ad.enabled">true</condition>
-							</and>
-						</dependency>
-					</dependencies>
-					<control type="button" format="action">
-						<close>true</close>
 					</control>
 				</setting>
 				<setting id="ad.torrent.enabled" type="boolean" label="33015" help="">
@@ -1861,21 +1808,25 @@
 			</group>
 			<!-- Folders 1-5 -->
 			<group id="8" label="32108">
+				<setting id="folders.amble" type="string" label="32511" help="">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32180</heading>
+					</control>
+				</setting>
 				<setting id="provider.folders" type="boolean" label="32055" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
-				</setting>
-				<setting id="browse.folders" type="string" label="32511" help="">
-					<level>0</level>
-					<default>$ADDON[plugin.video.twilight 32652]</default>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<close>true</close>
-						<data>ActivateWindow(Videos,plugin://plugin.video.twilight/?mode=navigator.sources_folders,return)</data>
-					</control>
 				</setting>
 				<setting id="folders.title_filter" type="boolean" label="32172" help="">
 					<level>0</level>
@@ -2490,6 +2441,7 @@
 						<options>
 							<option label="32764">0</option>
 							<option label="32840">1</option>
+							<option label="32154">2</option>
 						</options>
 					</constraints>
 					<dependencies>
@@ -3389,7 +3341,7 @@
 				</setting>
 				<setting id="extras.tvshow.button12" type="string" label="tvshow.button12" help="">
 					<level>0</level>
-					<default>show_keywords</default>
+					<default>show_trakt_manager</default>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -3509,7 +3461,7 @@
 				</setting>
 				<setting id="extras.movie.button12" type="string" label="movie.button12" help="">
 					<level>0</level>
-					<default>show_keywords</default>
+					<default>show_trakt_manager</default>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

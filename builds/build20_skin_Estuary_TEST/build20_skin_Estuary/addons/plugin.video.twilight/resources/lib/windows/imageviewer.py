@@ -39,7 +39,7 @@ class ThumbImageViewer(BaseDialog):
 			else:
 				thumb_params = chosen_listitem.getProperty('action')
 				thumb_params = json.loads(thumb_params)
-				if thumb_params['mode'] == 'slideshow_image':
+				if thumb_params['mode'] == 'imageviewer':
 					thumb_params['current_index'] = position
 					ending_position = self.ImagesInstance.run(thumb_params)
 					self.select_item(self.window_id, ending_position)
@@ -113,7 +113,7 @@ class ThumbImageViewer(BaseDialog):
 		self.setProperty('page_no', str(self.current_page))
 		self.setProperty('fanart', addon_fanart)
 
-class SlideShow(BaseDialog):
+class ImageViewer(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, *args)
 		self.window_id = 5000

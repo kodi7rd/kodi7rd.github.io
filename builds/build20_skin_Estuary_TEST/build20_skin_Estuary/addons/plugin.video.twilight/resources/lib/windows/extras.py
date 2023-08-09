@@ -27,7 +27,7 @@ options_menu_choice, extras_menu_choice, imdb_videos_choice = dialogs.options_me
 get_progress_percent, get_bookmarks, get_watched_info_movie = watched_status.get_progress_percent, watched_status.get_bookmarks, watched_status.get_watched_info_movie
 trakt_manager_choice, random_choice, playback_choice, favorites_choice = dialogs.trakt_manager_choice, dialogs.random_choice, dialogs.playback_choice, dialogs.favorites_choice
 get_watched_status_movie, get_watched_info_tv, get_next_episodes = watched_status.get_watched_status_movie, watched_status.get_watched_info_tv, watched_status.get_next_episodes
-trailer_choice, imdb_keywords_choice, media_extra_info, genres_choice = dialogs.trailer_choice, dialogs.imdb_keywords_choice, dialogs.media_extra_info_choice, dialogs.genres_choice
+trailer_choice, media_extra_info, genres_choice = dialogs.trailer_choice, dialogs.media_extra_info_choice, dialogs.genres_choice
 person_search, person_data_dialog = people.person_search, people.person_data_dialog
 tmdb_movies_year, tmdb_tv_year, tmdb_movies_genres, tmdb_tv_genres = tmdb_api.tmdb_movies_year, tmdb_api.tmdb_tv_year, tmdb_api.tmdb_movies_genres, tmdb_api.tmdb_tv_genres
 tmdb_movies_recommendations, tmdb_tv_recommendations, tmdb_company_id = tmdb_api.tmdb_movies_recommendations, tmdb_api.tmdb_tv_recommendations, tmdb_api.tmdb_company_id
@@ -143,7 +143,7 @@ class Extras(BaseDialog):
 					end_index = self.show_text_media(text=self.get_attribute(self, chosen_var), current_index=self.get_position(self.control_id))
 					self.select_item(self.control_id, end_index)
 			elif self.control_id in art_ids:
-				end_index = _images({'mode': 'slideshow_image', 'all_images': self.get_attribute(self, chosen_var), 'current_index': self.get_position(self.control_id)})
+				end_index = _images({'mode': 'imageviewer', 'all_images': self.get_attribute(self, chosen_var), 'current_index': self.get_position(self.control_id)})
 				self.select_item(self.control_id, end_index)
 			else: return
 
@@ -567,8 +567,8 @@ class Extras(BaseDialog):
 			return False
 		except: return True
 
-	def show_text_media(self, text='', poster=None, current_index=None):
-		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text or self.plot, poster=poster or self.poster, current_index=current_index)
+	def show_text_media(self, text, poster=None, current_index=None):
+		return self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=poster or self.poster, current_index=current_index)
 
 	def tvshow_browse(self):
 		close_all_dialog()
@@ -580,6 +580,9 @@ class Extras(BaseDialog):
 		url_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': self.tmdb_id}
 		Sources().playback_prep(url_params)
 
+	def show_plot(self):
+		return self.show_text_media(text=self.plot)
+
 	def show_trailers(self):
 		if not self.youtube_installed_check(): return self.notification('Youtube Plugin needed for playback')
 		chosen = trailer_choice(self.media_type, self.poster, self.tmdb_id, self.meta_get('trailer'), self.meta_get('all_trailers'))
@@ -589,14 +592,6 @@ class Extras(BaseDialog):
 		self.set_current_params(set_starting_position=False)
 		self.window_player_url = chosen
 		return window_player(self)
-
-	def show_keywords(self):
-		base_media = 'movies' if self.media_type == 'movie' else 'tv'
-		keyword_params = imdb_keywords_choice(base_media, self.imdb_id, self.poster)
-		if not keyword_params: return
-		close_all_dialog()
-		self.selected = self.folder_runner(keyword_params)
-		self.close()
 
 	def show_images(self):
 		return _images({'mode': 'imdb_image_results', 'imdb_id': self.imdb_id, 'media_title': self.rootname, 'page_no': 1, 'rolling_count_list': [0]})
@@ -658,7 +653,7 @@ class Extras(BaseDialog):
 			button_action = self.get_setting(setting_id_base + str(item))
 			self.setProperty(label_base % item, ls(extras_button_label_values[self.media_type][button_action]))
 			self.button_action_dict[item] = button_action
-		self.button_action_dict[50] = 'show_text_media'
+		self.button_action_dict[50] = 'show_plot'
 
 	def set_current_params(self, set_starting_position=True):
 		self.current_params = {'mode': 'extras_menu_choice', 'tmdb_id': self.tmdb_id, 'media_type': self.media_type, 'is_external': self.is_external}

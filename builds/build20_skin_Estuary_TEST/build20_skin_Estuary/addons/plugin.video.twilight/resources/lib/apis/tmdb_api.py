@@ -2,8 +2,8 @@
 import datetime
 from caches.main_cache import cache_object
 from caches.meta_cache import cache_function
-from modules.settings import tmdb_api_key, get_language
-from modules.kodi_utils import make_session, get_property, meta_filter_prop, tmdb_dict_removals, remove_keys
+from modules.settings import tmdb_api_key, get_meta_filter, get_language
+from modules.kodi_utils import make_session, tmdb_dict_removals, remove_keys
 # from modules.kodi_utils import logger
 
 EXPIRY_4_HOURS, EXPIRY_2_DAYS, EXPIRY_1_WEEK = 4, 48, 168
@@ -143,7 +143,7 @@ def tmdb_movies_recommendations(tmdb_id, page_no):
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
 def tmdb_movies_search(query, page_no):
-	meta_filter = get_property(meta_filter_prop)
+	meta_filter = get_meta_filter()
 	if '|' in query:
 		query, year = query.split('|')
 		string = 'tmdb_movies_search_%s_%s_%s_%s' % (query, year, page_no, meta_filter)
@@ -173,9 +173,8 @@ def tmdb_tv_discover(query, page_no):
 	return cache_object(get_tmdb, string, url)
 
 def tmdb_tv_popular(page_no):
-	meta_filter = get_property(meta_filter_prop)
-	string = 'tmdb_tv_popular_%s_%s' % (page_no, meta_filter)
-	url = '%s/tv/popular?api_key=%s&language=en-US&region=US&with_original_language=en&include_adult=%s&page=%s' % (base_url, tmdb_api_key(), meta_filter, page_no)
+	string = 'tmdb_tv_popular_%s' % page_no
+	url = '%s/tv/popular?api_key=%s&language=en-US&region=US&with_original_language=en&page=%s' % (base_url, tmdb_api_key(), page_no)
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
 def tmdb_tv_premieres(page_no):
@@ -240,7 +239,7 @@ def tmdb_tv_recommendations(tmdb_id, page_no):
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)
 
 def tmdb_tv_search(query, page_no):
-	meta_filter = get_property(meta_filter_prop)
+	meta_filter = get_meta_filter()
 	if '|' in query:
 		query, year = query.split('|')
 		string = 'tmdb_tv_search_%s_%s_%s_%s' % (query, year, page_no, meta_filter)
@@ -266,7 +265,7 @@ def tmdb_people_full_info(actor_id, language=None):
 	return cache_object(get_tmdb, string, url, expiration=EXPIRY_1_WEEK)
 
 def tmdb_people_info(query):
-	meta_filter = get_property(meta_filter_prop)
+	meta_filter = get_meta_filter()
 	string = 'tmdb_people_info_%s_%s' % (query, meta_filter)
 	url = '%s/search/person?api_key=%s&language=en-US&include_adult=%s&query=%s' % (base_url, tmdb_api_key(), meta_filter, query)
 	return cache_object(get_tmdb, string, url, expiration=EXPIRY_4_HOURS)['results']

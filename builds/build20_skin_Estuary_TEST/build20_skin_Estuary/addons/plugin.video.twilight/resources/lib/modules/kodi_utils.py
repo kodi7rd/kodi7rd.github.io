@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import xbmc, xbmcgui, xbmcplugin, xbmcvfs
-# from xbmcaddon import Addon
-import xbmcaddon
+import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 import sys
 import json
 import requests
@@ -28,9 +26,8 @@ window_xml_selection_actions, window_xml_closing_actions, window_xml_context_act
 img_url = 'https://i.imgur.com/%s.png'
 empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.item_next
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
-custom_skins_version_path = 'https://github.com/Tikipeter/custom_skins/raw/main/version.txt'
-custom_xml_path = 'special://profile/addon_data/plugin.video.twilight/custom_skins/%s/resources/skins/Default/1080i/%s'
-custom_skin_path = 'special://profile/addon_data/plugin.video.twilight/custom_skins/'
+custom_xml_path = 'special://home/addons/plugin.video.twilight/resources/skins/Custom/%s/resources/skins/Default/1080i/%s'
+custom_skin_path = 'special://home/addons/plugin.video.twilight/resources/skins/Custom/'
 default_skin_path = 'special://home/addons/plugin.video.twilight'
 database_path_raw = 'special://profile/addon_data/plugin.video.twilight/databases/%s'
 
@@ -54,20 +51,22 @@ nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop = 'twilight.nextep.
 watched_indic_prop, fanarttv_def_prop, nextep_inc_date_prop = 'twilight.watched_indicators', 'twilight.fanarttv.default', 'twilight.nextep.include_airdate'
 nextep_inc_unwatched_prop, nextep_airing_top_prop = 'twilight.nextep.include_unwatched', 'twilight.nextep.sort_airing_today_to_top'
 menu_cache_prop, highlight_prop, meta_filter_prop, pause_settings_prop = 'twilight.kodi_menu_cache', 'twilight.highlight', 'twilight.meta_filter', 'twilight.pause_settings_prop'
-current_skin_prop, use_skin_fonts_prop = 'twilight.current_skin', 'twilight.use_skin_fonts'
+current_skin_prop = 'twilight.current_skin'
 settings_props = (current_langinvoker_prop, custom_context_main_menu_prop, custom_context_prop, custom_info_prop, menu_cache_prop, menu_cache_prop, limit_concurrent_prop,
 				max_threads_prop, wid_hidenext_prop, all_episodes_prop, show_unaired_prop, season_title_prop, show_specials_prop, calendar_sort_prop, ignore_articles_prop,
 				datetime_offset_prop, single_ep_title_prop, single_ep_format_prop, include_year_prop, extras_open_prop, tmdb_api_prop, image_resos_prop, fanart_data_prop,
 				meta_language_prop, meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop, fanart_key_prop, trakt_user_prop, watched_indic_prop, fanarttv_def_prop,
-				nextep_inc_date_prop, nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop, nextep_inc_unwatched_prop, nextep_airing_top_prop, highlight_prop)
+				nextep_inc_date_prop, nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop, nextep_inc_unwatched_prop, nextep_airing_top_prop, highlight_prop,
+				meta_filter_prop)
 userdata_path = translatePath('special://profile/addon_data/plugin.video.twilight/')
 addon_settings = translatePath('special://home/addons/plugin.video.twilight/resources/settings.xml')
 user_settings = translatePath('special://profile/addon_data/plugin.video.twilight/settings.xml')
 addon_icon = translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_icon.png')
-addon_fanart = translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_fanart.png')
+addon_fanart = twilight_addon_object.getSetting('addon_fanart') or translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_fanart.png')
 addon_clearlogo = translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_clearlogo.png')
 databases_path = translatePath('special://profile/addon_data/plugin.video.twilight/databases/')
 colorpalette_path = translatePath('special://profile/addon_data/plugin.video.twilight/color_palette2/')
+colorpalette_zip_path = translatePath('special://home/addons/plugin.video.twilight/resources/media/color_palette2.zip')
 navigator_db = translatePath(database_path_raw % current_dbs[0])
 watched_db = translatePath(database_path_raw % current_dbs[1])
 favorites_db = translatePath(database_path_raw % current_dbs[2])
@@ -84,16 +83,16 @@ hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[8])
 myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
-extras_button_label_values = {'movie': {'movies_play': 32174, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798,  'show_extrainfo': 32605,
+extras_button_label_values = {'movie': {'movies_play': 32174, 'show_trailers': 32606, 'show_images': 32798,  'show_extrainfo': 32605,
 						'show_genres': 32470, 'show_director': 32627, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
-						'playback_choice': 32187, 'show_favorites_manager': 32197},
-						'tvshow': {'tvshow_browse': 32838, 'show_trailers': 32606, 'show_keywords': 32092, 'show_images': 32798, 'show_extrainfo': 32605,
+						'playback_choice': 32187, 'show_favorites_manager': 32197, 'show_plot': 32842},
+						'tvshow': {'tvshow_browse': 32838, 'show_trailers': 32606, 'show_images': 32798, 'show_extrainfo': 32605,
 						'show_genres': 32470, 'play_nextep': 33115, 'show_options': 32516, 'show_recommended': 32503, 'show_trakt_manager': 33117,
-						'play_random_episode': 32613, 'show_favorites_manager': 32197}}
-movie_extras_buttons_defaults = [('extras.movie.button10', 'movies_play'), ('extras.movie.button11', 'show_trailers'), ('extras.movie.button12', 'show_keywords'),
+						'play_random_episode': 32613, 'show_favorites_manager': 32197, 'show_plot': 32842}}
+movie_extras_buttons_defaults = [('extras.movie.button10', 'movies_play'), ('extras.movie.button11', 'show_trailers'), ('extras.movie.button12', 'show_trakt_manager'),
 					('extras.movie.button13', 'show_images'), ('extras.movie.button14', 'show_extrainfo'), ('extras.movie.button15', 'show_genres'),
 					('extras.movie.button16', 'show_director'), ('extras.movie.button17', 'show_options')]
-tvshow_extras_buttons_defaults = [('extras.tvshow.button10', 'tvshow_browse'), ('extras.tvshow.button11', 'show_trailers'), ('extras.tvshow.button12', 'show_keywords'),
+tvshow_extras_buttons_defaults = [('extras.tvshow.button10', 'tvshow_browse'), ('extras.tvshow.button11', 'show_trailers'), ('extras.tvshow.button12', 'show_trakt_manager'),
 					('extras.tvshow.button13', 'show_images'), ('extras.tvshow.button14', 'show_extrainfo'), ('extras.tvshow.button15', 'show_genres'),
 					('extras.tvshow.button16', 'play_nextep'), ('extras.tvshow.button17', 'show_options')]
 movie_dict_removals = ('fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers', 'fanart', 'banner', 'clearlogo', 'clearlogo2', 'clearart',
@@ -300,6 +299,9 @@ def home():
 
 def folder_path():
 	return get_infolabel('Container.FolderPath')
+
+def path_check(string):
+	return string in folder_path()
 
 def reload_skin():
 	execute_builtin('ReloadSkin()')
