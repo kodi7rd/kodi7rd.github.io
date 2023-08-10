@@ -11,8 +11,8 @@
     <setting id="trakt.indicators_active" default="true">false</setting>
     <setting id="watched_indicators" default="true">0</setting>
     <setting id="amble.indicators" default="true" />
-    <setting id="trakt.sync_interval" default="true">30</setting>
-    <setting id="trakt.sync_refresh_widgets" default="true">false</setting>
+    <setting id="trakt.sync_interval">15</setting>
+    <setting id="trakt.sync_refresh_widgets">true</setting>
     <setting id="datetime.offset" default="true">0</setting>
     <setting id="movie_download_directory" default="true">special://profile/addon_data/plugin.video.twilight/Movies Downloads/</setting>
     <setting id="tvshow_download_directory" default="true">special://profile/addon_data/plugin.video.twilight/TV Show Downloads/</setting>
