@@ -37,6 +37,7 @@ class TVShows:
 		self.widget_hide_next_page = False if not self.is_home else widget_hide_next_page()
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
+		self.in_progress_menu = 'true' if self.action == 'in_progress_tvshows' else 'false'
 		self.append = self.items.append
 	
 	def fetch_list(self):
@@ -144,7 +145,7 @@ class TVShows:
 				landscape = meta_get('custom_landscape') or meta_get('landscape') or ''
 			else: banner, clearart, landscape = '', '', ''
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'tvshow', 'tmdb_id': tmdb_id, 'poster': poster, 'playcount': playcount,
-										'progress': progress, 'is_external': self.is_external})
+										'progress': progress, 'is_external': self.is_external, 'in_progress_menu': self.in_progress_menu})
 			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_external': self.is_external})
 			if self.all_episodes:
 				if self.all_episodes == 1 and total_seasons > 1: url_params = build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
@@ -157,20 +158,22 @@ class TVShows:
 			cm_append((options_str, run_plugin % options_params))
 			if not playcount:
 				cm_append((watched_str % self.watched_title, run_plugin % build_url({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year,
-																					'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})))
+																					'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'icon': poster})))
 			elif self.home_hide_watched: return
 			if progress:
 				cm_append((unwatched_str % self.watched_title, run_plugin % build_url({'mode': 'watched_status.mark_tvshow', 'action': 'mark_as_unwatched', 'title': title,
-																						'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id})))
+																						'year': year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'icon': poster})))
 				set_properties({'watchedepisodes': string(total_watched), 'unwatchedepisodes': string(total_unwatched)})
 			set_properties({'watchedprogress': string(progress), 'totalepisodes': string(total_aired_eps), 'totalseasons': string(total_seasons)})
-			if not self.is_external: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
+			if self.is_external:
+				cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				set_properties({'twilight.external': 'true'})
+			else: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
 			display = rootname if self.include_year else title
 			listitem.setLabel(display)
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'thumb': landscape,
 							'landscape': landscape, 'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo})
-			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('tvshow')
 			info_tag.setTitle(display)

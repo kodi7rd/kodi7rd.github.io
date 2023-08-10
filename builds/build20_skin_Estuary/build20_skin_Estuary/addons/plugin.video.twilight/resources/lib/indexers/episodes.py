@@ -82,7 +82,9 @@ def build_episode_list(params):
 						clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'episode', 'tmdb_id': tmdb_id,
 													'season': season, 'episode': episode, 'refresh': 'true'})
 						cm_append((clearprog_str, run_plugin % clearprog_params))
-				if is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				if is_external:
+					cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+					set_properties({'twilight.external': 'true'})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('episode')
 				info_tag.setTitle(display)
@@ -257,7 +259,7 @@ def build_single_episode(list_type, params={}):
 				display = '%s%s%s%s%s' % (upper(title_string), color_tags[0], seas_ep, ep_name, color_tags[1])
 			if not item_get('duration'): item['duration'] = meta_get('duration')
 			options_params = build_url({'mode': 'options_menu_choice', 'content': list_type, 'tmdb_id': tmdb_id, 'season': season, 'episode': episode,
-										'poster': show_poster, 'playcount': playcount, 'progress': progress, 'is_external': is_external})
+										'poster': show_poster, 'playcount': playcount, 'progress': progress, 'is_external': is_external, 'in_progress_menu': 'true'})
 			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'episode', 'is_external': is_external})
 			play_options_params = build_url({'mode': 'playback_choice', 'media_type': 'episode', 'poster': show_poster, 'meta': tmdb_id, 'season': season, 'episode': episode})
 			url_params = build_url({'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'season': season, 'episode': episode})
@@ -279,7 +281,9 @@ def build_single_episode(list_type, params={}):
 					clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'episode', 'tmdb_id': tmdb_id,
 												'season': season, 'episode': episode, 'refresh': 'true'})
 					cm_append((clearprog_str, run_plugin % clearprog_params))
-			if is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+			if is_external:
+				cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				set_properties({'twilight.external': 'true'})
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('episode')
 			info_tag.setTitle(display)

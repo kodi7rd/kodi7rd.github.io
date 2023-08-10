@@ -5,7 +5,7 @@ from apis.premiumize_api import PremiumizeAPI
 from apis.alldebrid_api import AllDebridAPI
 from modules import kodi_utils
 from modules.utils import make_thread_list
-from modules.settings import enabled_debrids_check
+from modules.settings import enabled_debrids_check, authorized_debrid_check
 # logger = kodi_utils.logger
 
 show_busy_dialog, hide_busy_dialog, notification = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification
@@ -15,6 +15,9 @@ debrid_list_modules = [('Real-Debrid', RealDebridAPI), ('Premiumize.me', Premium
 
 def debrid_enabled():
 	return [i[0] for i in debrid_list if enabled_debrids_check(i[1])]
+
+def debrid_authed():
+	return [i[0] for i in debrid_list if authorized_debrid_check(i[1])]
 
 def debrid_type_enabled(debrid_type, enabled_debrids):
 	return [i[0] for i in debrid_list if i[0] in enabled_debrids and get_setting('%s.%s.enabled' % (i[1], debrid_type)) == 'true']

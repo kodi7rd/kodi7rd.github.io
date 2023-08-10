@@ -305,7 +305,7 @@
 					<ondown condition="Control.HasFocus(704)">12104</ondown>
 					<ondown condition="Control.HasFocus(255)">13103</ondown>
 					<onleft>608</onleft>
-					<onright>600</onright>
+					<onright>70046</onright>
 					<control type="radiobutton" id="804">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/home.png"/>
@@ -337,15 +337,6 @@
 						<onclick>ActivateWindow(videoplaylist)</onclick>
 						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
-					<control type="button" id="700452">
-						<description>Switch to next Audio track</description>
-						<texturenofocus colordiffuse="grey_a">kodirdil/next_audio_track/next_audio_track.png</texturenofocus>
-						<texturefocus colordiffuse="button_focus">kodirdil/next_audio_track/next_audio_track.png</texturefocus>
-						<width>76</width>
-						<height>76</height>
-						<visible>Integer.IsGreater(VideoPlayer.AudioStreamCount,1)</visible>
-						<onclick>AudioNextLanguage</onclick>
-					</control>
 					<control type="button" id="600450">
 						<description>Idan Plus Channels Menu</description>
 						<width>76</width>
@@ -354,6 +345,15 @@
 						<texturefocus colordiffuse="button_focus">osd/fullscreen/buttons/channels.png</texturefocus>
 						<onclick>ActivateWindow(1123)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV)</visible>
+					</control>
+					<control type="button" id="700452">
+						<description>Switch to next Audio track</description>
+						<texturenofocus colordiffuse="grey_a">kodirdil/next_audio_track/next_audio_track.png</texturenofocus>
+						<texturefocus colordiffuse="button_focus">kodirdil/next_audio_track/next_audio_track.png</texturefocus>
+						<width>76</width>
+						<height>76</height>
+						<visible>Integer.IsGreater(VideoPlayer.AudioStreamCount,1)</visible>
+						<onclick>AudioNextLanguage</onclick>
 					</control>
 					<control type="radiobutton" id="598">
 					<visible>$EXP[SkinZoomToggle]</visible>

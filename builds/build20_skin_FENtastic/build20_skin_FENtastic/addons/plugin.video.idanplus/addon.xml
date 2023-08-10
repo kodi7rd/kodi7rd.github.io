@@ -11,7 +11,7 @@
 		<extension library="resources/" point="xbmc.python.module" />
 		<extension library="resources/lib/" point="xbmc.python.module" />
 		<extension point="xbmc.addon.metadata">
-			<reuselanguageinvoker>true</reuselanguageinvoker>
+			<reuselanguageinvoker>false</reuselanguageinvoker>
 			<assets>
 				<icon>icon.png</icon>
 				<fanart>fanart.jpg</fanart>

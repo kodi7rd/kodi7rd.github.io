@@ -20,7 +20,6 @@ blunders_url = 'title/%s/goofs'
 parentsguide_url = 'title/%s/parentalguide'
 images_url = 'title/%s/mediaindex?page=%s'
 videos_url = '_json/video/%s'
-keywords_url = 'title/%s/keywords?'
 keywords_search_url = 'find?s=kw&q=%s'
 people_images_url = 'name/%s/mediaindex?page=%s'
 people_trivia_url = 'name/%s/trivia'
@@ -114,12 +113,6 @@ def imdb_people_images(imdb_id, page_no):
 	string = 'imdb_people_images_%s_%s' % (imdb_id, str(page_no))
 	params = {'url': url, 'action': 'imdb_images', 'next_page': 1}
 	return cache_object(get_imdb, string, params, False, 168)
-
-def imdb_keywords(imdb_id):
-	url = base_url % keywords_url % imdb_id
-	string = 'imdb_keywords_%s' % imdb_id
-	params = {'url': url, 'action': 'imdb_keywords'}
-	return cache_object(get_imdb, string, params, False, 168)[0]
 
 def imdb_year_check(imdb_id):
 	url = year_check_url % imdb_id
@@ -409,17 +402,6 @@ def get_imdb(params):
 			new_dict['content'] = '\n\n'.join(['%02d. %s' % (count, i) for count, i in enumerate(listings, 1)])
 			new_dict['total_count'] = len(listings)
 			imdb_append(new_dict)
-	elif action == 'imdb_keywords':
-		def _process():
-			for item in items:
-				try:
-					keyword = re.search(r'" >(.+?)</a>', item, re.DOTALL).group(1)
-					yield keyword
-				except: pass
-		result = get_correct_imdb_data(url)
-		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})
-		imdb_list = list(_process())
-		imdb_list = sorted(imdb_list)
 	elif action == 'imdb_keyword_search':
 		def _process():
 			for item in items:

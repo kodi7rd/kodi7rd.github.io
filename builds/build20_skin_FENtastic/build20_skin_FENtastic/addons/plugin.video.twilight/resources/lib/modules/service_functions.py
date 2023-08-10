@@ -4,7 +4,7 @@ import xbmcaddon
 import time
 import datetime
 from xml.dom.minidom import parse as mdParse
-from windows import FontUtils, get_custom_xmls_version, download_custom_xmls
+from windows import FontUtils
 from caches import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
 from indexers import real_debrid, premiumize, alldebrid, furk, easynews
@@ -22,9 +22,9 @@ logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_twilight = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_twilight
 make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
-current_skin_prop, use_skin_fonts_prop, custom_skin_path = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.custom_skin_path
+current_skin_prop = kodi_utils.current_skin_prop
 notification, ok_dialog, trigger_settings_refresh = kodi_utils.notification, kodi_utils.ok_dialog, kodi_utils.trigger_settings_refresh
-refr_settings_prop, rem_props_prop = kodi_utils.refr_settings_prop, kodi_utils.rem_props_prop
+refr_settings_prop, rem_props_prop, pause_settings_prop = kodi_utils.refr_settings_prop, kodi_utils.rem_props_prop, kodi_utils.pause_settings_prop
 twilight_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025, 11121)
@@ -79,7 +79,17 @@ class FirstRunActions:
 
 	def update_action(self, addon_version):
 		''' Put code that needs to run once on update here'''
-		return
+		kodi_utils.manage_settings_reset()
+		setting_base = 'extras.%s.button'
+		button_ids = (10, 11, 12, 13, 14, 15, 16, 17)
+		for media_type in ('movie', 'tvshow'):
+			setting_id_base = setting_base % media_type
+			for button in button_ids:
+				button_action = get_setting(setting_id_base + str(button))
+				if button_action == 'show_keywords':
+					logger(setting_id_base + str(button), button_action)
+					set_setting(setting_id_base + str(button), 'show_trakt_manager')
+		kodi_utils.manage_settings_reset(True)
 
 	def remove_alpha(self, string):
 		try: result = ''.join(c for c in string if (c.isdigit() or c =='.'))
@@ -184,7 +194,7 @@ class CustomFonts:
 		logger(twilight_str, 'CustomFonts Service Starting')
 		monitor, player = xbmc_monitor(), xbmc_player()
 		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
-		for item in (current_skin_prop, use_skin_fonts_prop): clear_property(item)
+		clear_property(current_skin_prop)
 		font_utils = FontUtils()
 		while not monitor.abortRequested():
 			font_utils.execute_custom_fonts()
@@ -196,21 +206,6 @@ class CustomFonts:
 		try: del player
 		except: pass
 		return logger(twilight_str, 'CustomFonts Service Finished')
-
-class CheckCustomXMLs:
-	def run(self):
-		logger(twilight_str, 'CheckCustomXMLs Service Starting')
-		if '32859' in get_setting('custom_skins.enable', '$ADDON[plugin.video.twilight 32860]'):
-			current_version = get_setting('custom_skins.version', '0.0.0')
-			latest_version = get_custom_xmls_version()
-			logger(twilight_str, 'CheckCustomXMLs Service - Current: %s Latest: %s' % (current_version, latest_version))
-			if current_version != latest_version or not path_exists(translate_path(custom_skin_path)):
-				success = download_custom_xmls()
-				if success:
-					set_setting('custom_skins.version', latest_version)
-					notification(ls(33125) % latest_version, 5000)
-				logger(twilight_str, 'CheckCustomXMLs Service - Attempted XMLs Update. Success? %s' % success)
-		logger(twilight_str, 'CheckCustomXMLs Service Finished')
 
 class ClearSubs:
 	def run(self):
@@ -266,11 +261,14 @@ class PremiumExpiryCheck:
 
 class OnSettingsChangedActions:
 	def run(self):
-		if get_property(kodi_utils.pause_settings_prop) != 'true': trigger_settings_refresh()
+		if get_property(pause_settings_prop) != 'true': trigger_settings_refresh()
 
 class OnNotificationActions:
 	def run(self, sender, method, data):
 		if sender == 'xbmc':
-			if method in ('GUI.OnScreensaverActivated', 'System.OnSleep'): set_property(pause_services_prop, 'true')
-			elif method in ('GUI.OnScreensaverDeactivated', 'System.OnWake'): clear_property(pause_services_prop)
-
+			if method in ('GUI.OnScreensaverActivated', 'System.OnSleep'):
+				set_property(pause_services_prop, 'true')
+				logger('OnNotificationActions', 'PAUSING Twilight Services Due to Device Sleep')
+			elif method in ('GUI.OnScreensaverDeactivated', 'System.OnWake'):
+				clear_property(pause_services_prop)
+				logger('OnNotificationActions', 'UNPAUSING Twilight Services Due to Device Awake')

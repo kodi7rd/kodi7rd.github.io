@@ -11,10 +11,10 @@ CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
 logger, notification, player, confirm_dialog, get_property = kodi_utils.logger, kodi_utils.notification, kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.get_property
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
-folder_path, get_icon, remove_keys, trakt_dict_removals = kodi_utils.folder_path, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
+path_check, get_icon, remove_keys, trakt_dict_removals = kodi_utils.path_check, kodi_utils.get_icon, kodi_utils.remove_keys, kodi_utils.trakt_dict_removals
 set_temp_highlight, restore_highlight, manage_settings_reset = kodi_utils.set_temp_highlight, kodi_utils.restore_highlight, kodi_utils.manage_settings_reset
 requests, execute_builtin, select_dialog, kodi_refresh = kodi_utils.requests, kodi_utils.execute_builtin, kodi_utils.select_dialog, kodi_utils.kodi_refresh
-progress_dialog = kodi_utils.progress_dialog
+progress_dialog, external = kodi_utils.progress_dialog, kodi_utils.external
 ignore_articles, lists_sort_order = settings.ignore_articles, settings.lists_sort_order
 show_unaired_watchlist, metadata_user_info = settings.show_unaired_watchlist, settings.metadata_user_info
 clear_all_trakt_cache_data, cache_trakt_object, clear_trakt_calendar = trakt_cache.clear_all_trakt_cache_data, trakt_cache.cache_trakt_object, trakt_cache.clear_trakt_calendar
@@ -132,7 +132,7 @@ def trakt_refresh_token():
 		set_setting('trakt.expires', str(time.time() + 7776000))
 		manage_settings_reset(True)
 
-def trakt_authenticate(dummy):
+def trakt_authenticate(dummy=''):
 	code = trakt_get_device_code()
 	token = trakt_get_device_token(code)
 	if token:
@@ -154,7 +154,7 @@ def trakt_authenticate(dummy):
 	notification('Trakt Error Authorizing', 3000)
 	return False
 
-def trakt_revoke_authentication(dummy):
+def trakt_revoke_authentication(dummy=''):
 	data = {'token': get_setting('trakt.token'), 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
 	response = call_trakt("oauth/revoke", data=data, with_auth=False)
 	manage_settings_reset()
@@ -335,7 +335,7 @@ def remove_from_list(user, slug, data):
 	if result['deleted']['movies'] + result['deleted']['shows'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'my_lists' in folder_path(): kodi_refresh()
+	if path_check('my_lists') or external(): kodi_refresh()
 	return result
 
 def add_to_watchlist(data):
@@ -351,7 +351,7 @@ def remove_from_watchlist(data):
 	if result['deleted']['movies'] + result['deleted']['shows'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'trakt_watchlist' in folder_path(): kodi_refresh()
+	if path_check('trakt_watchlist') or external(): kodi_refresh()
 	return result
 
 def add_to_collection(data, multi=False):
@@ -368,7 +368,7 @@ def remove_from_collection(data):
 	if result['deleted']['movies'] + result['deleted']['episodes'] == 0: return notification(32574, 3000)
 	notification(32576, 3000)
 	trakt_sync_activities()
-	if 'trakt_collection' in folder_path(): kodi_refresh()
+	if path_check('trakt_collection') or external(): kodi_refresh()
 	return result
 
 def hide_unhide_progress_items(params):

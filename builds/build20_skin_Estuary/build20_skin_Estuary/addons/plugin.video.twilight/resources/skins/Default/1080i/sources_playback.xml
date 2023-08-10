@@ -10,6 +10,7 @@
             </control>
             <control type="image">
                 <texture>$INFO[Window.Property(fanart)]</texture>
+                <aspectratio>scale</aspectratio>
                 <animation effect="fade" start="100" end="25">WindowOpen</animation>
             </control>
         </control>

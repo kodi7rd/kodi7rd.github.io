@@ -2,20 +2,19 @@
 import re
 from xml.dom.minidom import parse as mdParse
 from modules import kodi_utils
-from modules.settings import skin_location, use_skin_fonts
+from modules.settings import skin_location, use_custom_skins
 from modules.utils import manual_function_import
 
 window_xml_dialog, logger, player, notification, delete_folder = kodi_utils.window_xml_dialog, kodi_utils.logger, kodi_utils.player, kodi_utils.notification, kodi_utils.delete_folder
-requests, get_setting, custom_skins_version_path, custom_skin_path = kodi_utils.requests, kodi_utils.get_setting, kodi_utils.custom_skins_version_path, kodi_utils.custom_skin_path
 make_listitem, sleep, open_file, path_exists, confirm_dialog = kodi_utils.make_listitem, kodi_utils.sleep, kodi_utils.open_file, kodi_utils.path_exists, kodi_utils.confirm_dialog
 closing_actions, selection_actions, context_actions = kodi_utils.window_xml_closing_actions, kodi_utils.window_xml_selection_actions, kodi_utils.window_xml_context_actions
+json, clear_property, run_plugin, Thread, get_visibility = kodi_utils.json, kodi_utils.clear_property, kodi_utils.run_plugin, kodi_utils.Thread, kodi_utils.get_visibility
 show_busy_dialog, hide_busy_dialog, addon_enabled, getSkinDir = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.addon_enabled, kodi_utils.getSkinDir
+up_action, down_action, get_setting = kodi_utils.window_xml_up_action, kodi_utils.window_xml_down_action, kodi_utils.get_setting
 build_url, execute_builtin, set_property, get_property = kodi_utils.build_url, kodi_utils.execute_builtin, kodi_utils.set_property, kodi_utils.get_property
 translate_path, get_infolabel, list_dirs, current_skin = kodi_utils.translate_path, kodi_utils.get_infolabel, kodi_utils.list_dirs, kodi_utils.current_skin
-current_skin_prop, use_skin_fonts_prop, addon_installed = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.addon_installed
+current_skin_prop, addon_installed = kodi_utils.current_skin_prop, kodi_utils.addon_installed
 left_action, right_action, info_action = kodi_utils.window_xml_left_action, kodi_utils.window_xml_right_action, kodi_utils.window_xml_info_action
-json, clear_property, run_plugin, Thread = kodi_utils.json, kodi_utils.clear_property, kodi_utils.run_plugin, kodi_utils.Thread
-up_action, down_action = kodi_utils.window_xml_up_action, kodi_utils.window_xml_down_action
 extras_keys, folder_options = ('upper', 'uppercase', 'italic', 'capitalize', 'black', 'mono', 'symbol'), ('xml', '1080', '720', '1080p', '720p', '1080i', '720i', '16x9')
 needed_font_values = ((21, False, 'font10'), (26, False, 'font12'), (30, False, 'font13'), (33, False, 'font14'), (38, False, 'font16'), (60, True, 'font60'))
 addon_skins_folder = 'special://home/addons/plugin.video.twilight/resources/skins/Default/1080i/'
@@ -45,24 +44,6 @@ def create_window(import_info, skin_xml, **kwargs):
 	except Exception as e:
 		logger('error in create_window', str(e))
 		return notification(32574)
-
-def get_custom_xmls_version():
-	try:
-		repo_version = requests.get(custom_skins_version_path).text[:5]
-		return repo_version
-	except: return None
-
-def download_custom_xmls():
-	try:
-		from modules.utils import download_github_zip
-		remove_custom_xmls()
-		success = download_github_zip('custom_skins', 'custom_skins', translate_path(custom_skin_path))
-		return success
-	except: return False
-
-def remove_custom_xmls():
-	try: delete_folder(translate_path(custom_skin_path), force=True)
-	except: pass
 
 def window_manager(obj):
 	def close():
@@ -177,7 +158,7 @@ class BaseDialog(window_xml_dialog):
 		if not custom_var: return get_infolabel('Window(10000).Property(twilight.highlight)')
 		if 'custom_skins' in self.args[1]: var = custom_var
 		elif force:
-			if '32859' in self.get_setting('custom_skins.enable', '32860'): var = custom_var
+			if use_custom_skins(): var = custom_var
 			else: var = 'Window(10000).Property(twilight.highlight)'
 		else: var = 'Window(10000).Property(twilight.highlight)'
 		result = get_infolabel(var)
@@ -233,6 +214,9 @@ class BaseDialog(window_xml_dialog):
 
 	def get_infolabel(self, label):
 		return get_infolabel(label)
+
+	def get_visibility(self, command):
+		return get_visibility(command)
 	
 	def open_window(self, import_info, skin_xml, **kwargs):
 		return open_window(import_info, skin_xml, **kwargs)
@@ -281,11 +265,11 @@ class FontUtils:
 		replacement_values_append = replacement_values.append
 		skin_folder = self.get_skin_folder()
 		if skin_folder: skin_font_xml = translate_path('special://skin/%s/Font.xml' % skin_folder)
-		if skin_font_xml and self.use_skin_fonts == 'true': self.skin_font_info = self.get_font_info(skin_font_xml) or self.default_font_info()
+		if skin_font_xml: self.skin_font_info = self.get_font_info(skin_font_xml) or self.default_font_info()
 		else: self.skin_font_info = self.default_font_info()
 		for item in needed_font_values: replacement_values_append(self.match_font(*item))
 		for item in list_dirs(translate_path(addon_skins_folder))[1]: self.replace_font(item, replacement_values)
-		for item in ((current_skin_prop, self.current_skin), (use_skin_fonts_prop, self.use_skin_fonts)): set_property(*item)
+		set_property(current_skin_prop, self.current_skin)
 
 	def get_skin_folder(self):
 		skin_folder = None
@@ -296,9 +280,8 @@ class FontUtils:
 		return skin_folder
 
 	def skin_change_check(self):
-		self.current_skin, self.use_skin_fonts = current_skin(), use_skin_fonts()
+		self.current_skin = current_skin()
 		if self.current_skin != get_property(current_skin_prop): return True
-		if self.use_skin_fonts != get_property(use_skin_fonts_prop): return True
 		return False
 
 	def match_font(self, size, bold, fallback):

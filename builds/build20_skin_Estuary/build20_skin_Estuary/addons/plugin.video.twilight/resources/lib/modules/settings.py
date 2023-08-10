@@ -14,7 +14,7 @@ image_resos_prop, fanart_data_prop, meta_language_prop = kodi_utils.image_resos_
 meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop = kodi_utils.meta_mpaa_region_prop, kodi_utils.meta_mpaa_prefix_prop, kodi_utils.wid_hide_watched_prop
 fanart_key_prop, trakt_user_prop, watched_indic_prop = kodi_utils.fanart_key_prop, kodi_utils.trakt_user_prop, kodi_utils.watched_indic_prop
 nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop = kodi_utils.nextep_sort_prop, kodi_utils.nextep_order_prop, kodi_utils.nextep_inc_unaired_prop
-nextep_inc_unwatched_prop, nextep_airing_top_prop = kodi_utils.nextep_inc_unwatched_prop, kodi_utils.nextep_airing_top_prop
+nextep_inc_unwatched_prop, nextep_airing_top_prop, meta_filter_prop = kodi_utils.nextep_inc_unwatched_prop, kodi_utils.nextep_airing_top_prop, kodi_utils.meta_filter_prop
 fanarttv_def_prop, nextep_inc_date_prop = kodi_utils.fanarttv_def_prop, kodi_utils.nextep_inc_date_prop
 download_directories_dict = {'movie': 'movie_download_directory', 'episode': 'tvshow_download_directory', 'thumb_url': 'image_download_directory',
 							'image_url': 'image_download_directory','image': 'image_download_directory', 'premium': 'premium_download_directory',
@@ -22,7 +22,7 @@ download_directories_dict = {'movie': 'movie_download_directory', 'episode': 'tv
 results_style_dict = {'true': 'contrast', 'false': 'non_contrast'}
 results_window_numbers_dict = {'list': 2000, 'infolist': 2001, 'medialist': 2002, 'rows': 2003, 'widelist': 2004}
 year_in_title_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
-default_action_dict = {'0': 'play', '1': 'cancel'}
+default_action_dict = {'0': 'play', '1': 'cancel', '2': 'pause'}
 extras_open_action_dict = {'movie': (1, 3), 'tvshow': (2, 3)}
 paginate_dict = {True: 'paginate.limit_widgets', False: 'paginate.limit_addon'}
 prescrape_scrapers_tuple = ('furk', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud')
@@ -42,12 +42,12 @@ def get_setting_property(property_id, fallback=''):
 
 def skin_location(skin_xml):
 	user_skin = current_skin()
-	if '32860' in get_setting('custom_skins.enable'): return translate_path(default_skin_path)
+	if not use_custom_skins(): return translate_path(default_skin_path)
 	if path_exists(translate_path(custom_xml_path % (user_skin, skin_xml))): return translate_path(custom_skin_path + user_skin)
 	return translate_path(default_skin_path)
 
-def use_skin_fonts():
-	return get_setting('use_skin_fonts')
+def use_custom_skins():
+	return get_setting('use_custom_skins', 'true') == 'true'
 
 def results_format():
 	return str(get_setting('results.list_format', 'List').lower())
@@ -65,6 +65,9 @@ def store_resolved_torrent_to_cloud(debrid_service, pack):
 
 def enabled_debrids_check(debrid_service):
 	if not get_setting('%s.enabled' % debrid_service) == 'true': return False
+	return authorized_debrid_check(debrid_service)
+
+def authorized_debrid_check(debrid_service):
 	if get_setting('%s.token' % debrid_service) in (None, ''): return False
 	return True
 
@@ -368,6 +371,9 @@ def get_resolution():
 
 def get_language():
 	return get_setting_property(meta_language_prop, 'en')
+
+def get_meta_filter():
+	return get_setting_property(meta_filter_prop, 'true')
 
 def get_mpaa_region():
 	return get_setting_property(meta_mpaa_region_prop, 'US')

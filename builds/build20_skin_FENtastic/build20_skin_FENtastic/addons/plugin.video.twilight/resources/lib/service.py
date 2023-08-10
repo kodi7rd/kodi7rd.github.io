@@ -25,8 +25,6 @@ class TwilightMonitor(xbmc_monitor):
 		Thread(target=service_functions.CustomActions().run).start()
 		Thread(target=service_functions.CustomFonts().run).start()
 		Thread(target=service_functions.PremiumExpiryCheck().run).start()
-		try: service_functions.CheckCustomXMLs().run()
-		except: pass
 		try: service_functions.ClearSubs().run()
 		except: pass
 		try: service_functions.AutoRun().run()

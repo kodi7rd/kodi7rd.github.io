@@ -679,13 +679,16 @@ class Sources():
 				else: notification('%s %s S%02dE%02d' % (ls(32801), self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')), 6500, self.meta.get('poster'))
 				if not action: action = default_action
 				if action == 'cancel': return False
+				elif action == 'pause':
+					player.stop()
+					return False
+				elif action == 'play':
+					self._make_resolve_dialog()
+					player.stop()
+					return True
 				else:
-					if action == 'play':
-						self._make_resolve_dialog()
-						player.stop()
-					else:
-						while player.isPlayingVideo(): sleep(100)
-						self._make_resolve_dialog()
+					while player.isPlayingVideo(): sleep(100)
+					self._make_resolve_dialog()
 					return True
 			else: return False
 		else: return False

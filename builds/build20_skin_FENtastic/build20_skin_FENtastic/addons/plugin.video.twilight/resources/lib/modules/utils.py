@@ -308,7 +308,7 @@ def paginate_list(item_list, page, limit=20, paginate_start=0):
 def download_github_zip(repo, file, destination):
 	from io import BytesIO
 	from zipfile import ZipFile
-	from modules.kodi_utils import requests, path_exists, userdata_path
+	from modules.kodi_utils import requests, path_exists, userdata_path, translate_path
 	try:
 		url = 'https://github.com/Tikipeter/%s/raw/main/%s.zip' % (repo, file)
 		result = requests.get(url, stream=True)

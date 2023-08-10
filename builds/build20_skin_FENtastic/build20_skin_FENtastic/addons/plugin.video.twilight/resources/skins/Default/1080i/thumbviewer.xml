@@ -13,6 +13,7 @@
             <top>0</top>
             <width>1920</width>
             <height>1080</height>
+            <aspectratio>scale</aspectratio>
             <texture>$INFO[Window.Property(fanart)]</texture>
             <animation effect="fade" end="35" time="0">WindowOpen</animation>
         </control>
@@ -55,7 +56,7 @@
                 <control type="label">
                     <left>75</left>
                     <top>22</top>
-                    <width>1560</width>
+                    <width>1520</width>
                     <height>20</height>
                     <font>font10</font> <!-- TWILIGHT_21 -->
                     <textcolor>FFFFFFFF</textcolor>

@@ -347,7 +347,7 @@ class Downloader:
 	def finish_download(self, downloaded):
 		if self.action == 'meta.pack' or self.media_type == 'thumb_url': return
 		if self.media_type == 'image_url': return notification('[I]%s[/I]' % ls(32576) if downloaded else ls(32691), 2500, self.image)
-		text = '[B]%s[/B] : %s' % (self.final_name, '%s %s' % (ls(32107), ls(32576) if downloaded else ls(32490)))
+		text = '[B]%s[/B] : %s' % (self.final_name.replace('.', ' ').replace('_', ' '), '%s %s' % (ls(32107), ls(32576) if downloaded else ls(32490)))
 		if downloaded and not player.isPlaying(): ok_dialog(text=text)
 
 	def confirm_download(self):

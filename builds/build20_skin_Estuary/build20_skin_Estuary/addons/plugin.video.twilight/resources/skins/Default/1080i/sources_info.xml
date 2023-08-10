@@ -131,7 +131,7 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.twilight 32605]: [/B][/COLOR]$INFO[Window.Property(extra_info)][/UPPERCASE]</label>
+                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.twilight 32605]: [/B][/COLOR]$INFO[Window.Property(extraInfo)][/UPPERCASE]</label>
                 </control>
                 <control type="textbox">
                     <top>340</top>

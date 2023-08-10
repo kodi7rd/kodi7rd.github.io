@@ -249,5 +249,33 @@
                 </control>
             </control>
         </control>
+        <control type="grouplist">
+            <top>500</top>
+            <left>130</left>
+            <width>1662</width>
+            <height>70</height>
+            <orientation>horizontal</orientation>
+            <itemgap>10</itemgap>
+            <align>center</align>
+            <visible>String.IsEqual(Window.Property(show_busy_dialog),true)</visible>
+            <control type="image">
+                <width max="70">auto</width>
+                <height max="70">auto</height>
+                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinner.png</texture>
+                <animation effect="fade" time="320" delay="400">Visible</animation>
+                <animation effect="rotate" end="360" center="auto" time="1200" loop="true" reversible="false" condition="true">Conditional</animation>
+                <animation effect="fade" start="70" time="1200" condition="true" pulse="true">Conditional</animation>
+            </control>
+            <control type="label">
+                <width max="1700">auto</width>
+                <height>70</height>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
+                <font>font14</font> <!-- TWILIGHT_33 -->
+                <label>[B]$ADDON[plugin.video.twilight 33110][/B]</label>
+            </control>
+        </control>
     </controls>
 </window>

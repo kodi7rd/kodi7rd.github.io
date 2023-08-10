@@ -172,9 +172,11 @@ class Movies:
 				clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'})
 				cm_append((clearprog_str, run_plugin % clearprog_params))
 			cm_append((watchedstr % self.watched_title, run_plugin % watched_status_params))
-			if not self.is_external: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
+			if self.is_external:
+				cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				set_properties({'twilight.external': 'true'})
+			else: cm_append((exit_str, run_plugin % build_url({'mode': 'navigator.exit_media_menu'})))
 			display = rootname if self.include_year else title
-			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('movie')
 			info_tag.setTitle(display)
@@ -247,10 +249,13 @@ class Movies:
 			else: banner, clearart, landscape, discart, keyart = '', '', '', '', ''
 			url = build_url({'mode': 'build_movie_list', 'action': 'tmdb_movies_sets', 'tmdb_id': tmdb_id})
 			listitem = make_listitem()
+			set_property = listitem.setProperty
 			cm_append((addmenu_str, run_plugin % build_url({'mode': 'menu_editor.add_external', 'name': title, 'iconImage': poster})))
 			cm_append((addshortcut_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': title, 'iconImage': poster})))
 			cm_append((add_coll_str, run_plugin % build_url({'mode': 'movie_sets_to_collection_choice', 'collection_id': tmdb_id})))
-			if self.is_external: cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+			if self.is_external:
+				cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
+				set_property('twilight.external', 'true')
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('movie')
 			info_tag.setPlot(plot)
@@ -258,7 +263,7 @@ class Movies:
 			listitem.addContextMenuItems(cm)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'landscape': landscape,
 							'thumb': landscape, 'discart': discart, 'keyart': keyart})
-			listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': poster}))
+			set_property('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': title, 'iconImage': poster}))
 			self.append(((url, listitem, True), _position))
 		except: pass
 

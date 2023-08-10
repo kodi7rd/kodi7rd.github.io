@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1123">
-<defaultcontrol always="true">9102</defaultcontrol>
+<defaultcontrol always="true">1123</defaultcontrol>
 	<controls>
 		
 				<control type="image">
@@ -65,6 +65,11 @@
 		<label>$INFO[Container(1123).ListItem.Plot]</label>
 		</control>
 		
+		</control>
+		<control type="group">
+		<left>1215</left>
+		<top>460</top>
+		<include>FrameBorder</include>
 		</control>
 		<control type="group">
 		<include>righttoleft_fix</include>

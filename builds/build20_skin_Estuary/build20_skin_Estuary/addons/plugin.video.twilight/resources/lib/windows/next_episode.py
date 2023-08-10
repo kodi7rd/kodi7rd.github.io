@@ -3,6 +3,7 @@ from windows import BaseDialog
 from modules.settings import get_art_provider, avoid_episode_spoilers
 # from modules.kodi_utils import logger
 
+pause_time_before_end, hold_pause_time = 3, 1800
 button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'autoscrape_nextep': {10: 'play', 11: 'close', 12: 'cancel'}}
 
 class NextEpisode(BaseDialog):
@@ -59,7 +60,18 @@ class NextEpisode(BaseDialog):
 		return self.meta.get('custom_clearlogo') or self.meta.get(self.clearlogo_main) or self.meta.get(self.clearlogo_backup) or ''
 
 	def monitor(self):
+		total_time = self.player.getTotalTime()
 		while self.player.isPlaying():
+			remaining_time = round(total_time - self.player.getTime())
 			if self.closed: break
+			elif self.play_type == 'autoplay_nextep' and self.selected == 'pause' and remaining_time <= pause_time_before_end:
+				self.player.pause()
+				break
 			self.sleep(1000)
+		if self.selected == 'pause':
+			end_pause = 0
+			while hold_pause_time >= end_pause and self.selected == 'pause':
+				self.sleep(1000)
+				end_pause += 1
+			if self.selected != 'cancel': self.player.pause()
 		self.close()

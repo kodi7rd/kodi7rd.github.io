@@ -55,10 +55,10 @@
                 </control>
                 <control type="image" id="200">
                     <left>640</left>
-                    <top>110</top>
-                    <width>250</width>
-                    <height>250</height>
-                    <aspectratio aligny="top">stretch</aspectratio>
+                    <top>70</top>
+                    <width>280</width>
+                    <height>300</height>
+                    <aspectratio aligny="bottom">keep</aspectratio>
                 </control>
                 <control type="label" id="2000">
                     <width>910</width>

@@ -1,5 +1,18 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.02[/B][/COLOR]
+- Moved authorizing of accounts to Tools->Accounts Manager. Accounts included here are RD, PM, AD, Trakt & Sources Folders.
+- Moved "Filter Results" in the source results window from the context menu to a left hand sideblade. Press LEFT when source results are showing to expose a menu that you can use to filter the results. Includes by Quality, Provider, Keywords etc.
+- Fixed "Custom Actions" not working on widget items.
+- Fixed "Include Adult Content" setting not being applied.
+- Added "Pause & Wait" to options for Autoplay Next Episode's "When No Interaction with Window" setting. This will pause playback with a couple of seconds left until end until you choose a Next Episode option. After 30mins the next episode playback will be cancelled.
+- Added "Default Background Image" to Settings->General. Here you can browse for an image, and set it as the default background image that Twilight will use throughout the addon.
+- Added "Plot" to actions that can be assigned to Extras' buttons.
+- Replaced "Keywords" Extras Button with "Trakt Manager" as Keywords no longer work.
+- Re-added some additional checks of Season/Episode tagging for files. Let's see if they cause any false positives...
+- Integrated Custom Skins (currently only AH) and color palette icons into Twilight. This will make Twilight nearly double in size, but with the coming plans I have for the distribution of the addon it was needed. Twilight will still only be around 2.5MB when installed and around 600KB when zipped.
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.2.01[/B][/COLOR]
 [COLOR red][B]IMPORTANT: Make sure the Tikipeter Repo has updated to version 1.0.1. If not, manually force an update, otherwise this is the last update of Twilight you will receive.[/B][/COLOR]
 - Fixed(?) Next Episodes code to speed up the showing of that menu. Still a good idea to HIDE the progress of any shows you aren't interested in continuing to watch. But either way, a couple of bugs were found that were slowing that menu down.

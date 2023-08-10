@@ -14,9 +14,9 @@
 	<include name="CategoryLabel">
 		<param name="visible">true</param>
 		<param name="item_treshold">0</param>
-		<param name="label_focus">$INFO[Container($PARAM[list_id]).ListItem.Title,[COLOR button_focus][B] | [/B][/COLOR]]</param>
-		<param name="label_focus_episodes">$INFO[Container($PARAM[list_id]).ListItem.TVShowTitle,[COLOR button_focus][B] | [/B][/COLOR]]$INFO[Container($PARAM[list_id]).ListItem.Title,[COLOR button_focus][B] | [/B][/COLOR]]</param>
-		<param name="label_focus_collections">$INFO[Container($PARAM[list_id]).ListItem.Label,[COLOR button_focus][B] | [/B][/COLOR]]</param>
+		<param name="label_focus">$INFO[Container($PARAM[list_id]).ListItem.TVShowTitle, [COLOR button_focus][B] | [/COLOR][/B]]</param>
+		<param name="label_focus1">$INFO[Container($PARAM[list_id]).ListItem.Label, [COLOR button_focus][B] | [/COLOR][/B]]</param>
+		<param name="label_focus_collections"></param>
 		<definition>
 		<control type="group" id="$PARAM[list_id]665">
 			<left>75</left>
@@ -34,17 +34,12 @@
 			<control type="label">
 				<label>$PARAM[label]$PARAM[label_focus]</label>
 				<shadowcolor>text_shadow</shadowcolor>
-				<visible>!String.IsEqual(ListItem.DBType,episode) + Control.HasFocus($PARAM[list_id])</visible>
+				<visible>String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) + Control.HasFocus($PARAM[list_id])</visible>
 			</control>
 			<control type="label">
-				<label>$PARAM[label]$PARAM[label_focus_episodes]</label>
+				<label>$PARAM[label]$PARAM[label_focus1]</label>
 				<shadowcolor>text_shadow</shadowcolor>
-				<visible>String.IsEqual(ListItem.DBType,episode) + Control.HasFocus($PARAM[list_id])</visible>
-			</control>
-			<control type="label">
-				<label>$PARAM[label]$PARAM[label_focus_collections]</label>
-				<shadowcolor>text_shadow</shadowcolor>
-				<visible>[String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)] + Control.HasFocus($PARAM[list_id])</visible>
+				<visible>![String.IsEqual(ListItem.DBType,episode) + Stgring.IsEqual(ListItem.DBType,tvshow)] + Control.HasFocus($PARAM[list_id])</visible>
 			</control>
 		</control>
 		</definition>
@@ -1133,7 +1128,7 @@
 		<param name="visible_2">true</param>
 		<param name="visible_3">true</param>
 		<param name="button2_label">$LOCALIZE[31116]</param>
-		<param name="button3_label">Return to the home screen</param>
+		<param name="button3_label">$LOCALIZE[700049]</param>
 		<param name="button2_onclick">true</param>
 		<definition>
 			<control type="group" id="$PARAM[button_id]889">

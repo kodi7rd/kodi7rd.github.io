@@ -17,7 +17,7 @@ To Use:
 Go to Settings->Provider Accounts->'Folders1-5'. Turn ON 'Enable Folder Scrapers'. Also set any additional settings needed here.
 
 Then...
-1. Go to My Services->Sources Folders
+1. Go to Tools->Manage Accounts->LOCAL:Sources Folders
 2. Enter a 'Movie Folder' and 'TV Show Folder' for each of the Folder Scrapers (1 thru 5).
 
 NOTE: You don't need to set both a Movie and TV Show folder for each of the Folder Scrapers, just leave which ever you don't want to use blank.

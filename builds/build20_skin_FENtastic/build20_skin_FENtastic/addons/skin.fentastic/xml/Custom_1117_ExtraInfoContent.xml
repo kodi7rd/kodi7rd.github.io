@@ -3,7 +3,9 @@
   <include name="Changelog">
     <label>[B][COLOR button_focus]Version $INFO[System.AddonVersion(skin.fentastic)][/COLOR][/B]
 - Added BigPoster, BigLandscape, and BigLandscapeInfo widget display types
-- Updated InfoWall, WideInfoWall, Wall, and WideWall views to use bigger artwork
+- Updated Wall views to use bigger artwork
+- Increased visibility of raindrop background
+- Added icon silhouettes to category widgets
 - Added titles for movies/tvshows/episodes to widget labels
 - Added MPAA ratings to InfoPanel for movies/tvshows/episodes
 - Added studios to InfoPanel for tvshows/episodes
@@ -15,7 +17,6 @@
 - Removed %, progress is now shown as '33' instead of '33%'
 - Removed alternate InfoPanel
 - Fixed profile change bug
-- Other fixes/changes
 
 [B][COLOR button_focus]Version 1.0.15[/COLOR][/B]
 - Small bug fix for TRAKT search widget

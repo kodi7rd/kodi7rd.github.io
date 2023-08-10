@@ -8,10 +8,11 @@ from modules.utils import get_datetime, adjust_premiered_date, sort_for_article,
 # logger = kodi_utils.logger
 
 ls, database, notification, kodi_refresh = kodi_utils.local_string, kodi_utils.database, kodi_utils.notification, kodi_utils.kodi_refresh
-sleep, progressDialogBG, Thread, get_video_database_path = kodi_utils.sleep, kodi_utils.progressDialogBG, kodi_utils.Thread, kodi_utils.get_video_database_path
+sleep, progress_dialog, Thread, get_video_database_path = kodi_utils.sleep, kodi_utils.progress_dialog, kodi_utils.Thread, kodi_utils.get_video_database_path
 watched_indicators_function, lists_sort_order, ignore_articles = settings.watched_indicators, settings.lists_sort_order, settings.ignore_articles
 date_offset, metadata_user_info, tv_progress_location = settings.date_offset, settings.metadata_user_info, settings.tv_progress_location
 WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
+twilight_str, trakt_str, watched_str, unwatched_str, season_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32537)
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
 finished_show_check = ('Ended', 'Canceled')
 progress_db_string = 'twilight_hidden_progress_items'
@@ -276,16 +277,19 @@ def mark_movie(params):
 	refresh_container(refresh)
 
 def mark_tvshow(params):
-	action, tmdb_id = params.get('action'), params.get('tmdb_id')
+	title, year, action, tmdb_id, icon = params.get('title', ''), params.get('year', ''), params.get('action'), params.get('tmdb_id'), params.get('icon', None)
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
 	watched_indicators = watched_indicators_function()
-	progressDialogBG.create(ls(32577), '')
+	heading = watched_str if action == 'mark_as_watched' else unwatched_str
 	if watched_indicators == 1:
 		if not trakt_watched_status_mark(action, 'shows', tmdb_id, tvdb_id): return notification(32574)
 		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+		heading = heading % trakt_str
+	else: heading = heading % twilight_str
+	progressDialog = progress_dialog(heading, icon)
+	sleep(200)
 	data_base = get_database(watched_indicators)
-	title, year = params.get('title', ''), params.get('year', '')
 	meta_user_info = metadata_user_info()
 	current_date = get_datetime()
 	insert_list = []
@@ -301,28 +305,32 @@ def mark_tvshow(params):
 		for ep in ep_data:
 			season_number = ep['season']
 			ep_number = ep['episode']
-			display = 'S%.2dE%.2d' % (int(season_number), int(ep_number))
-			progressDialogBG.update(int(float(count)/float(total)*100), ls(32577), '%s' % display)
+			display = '%s - S%.2dE%.2d' % (title, int(season_number), int(ep_number))
+			progressDialog.update(display, int(float(count)/float(total)*100))
 			episode_date, premiered = adjust_premiered_date(ep['premiered'], date_offset())
 			if episode_date and current_date < episode_date: continue
 			insert_append(make_batch_insert(action, 'episode', tmdb_id, season_number, ep_number, last_played, title))
 	batch_watched_status_mark(watched_indicators, insert_list, action)
-	progressDialogBG.close()
+	progressDialog.close()
 	refresh_container()
 
 def mark_season(params):
 	season = int(params.get('season'))
 	if season == 0: return notification(32490)
-	action, title, year, tmdb_id = params.get('action'), params.get('title'), params.get('year'), params.get('tmdb_id')
+	insert_list = []
+	insert_append = insert_list.append
+	action, title, year, tmdb_id, icon = params.get('action'), params.get('title'), params.get('year'), params.get('tmdb_id'), params.get('icon')
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
 	watched_indicators = watched_indicators_function()
-	insert_list = []
-	insert_append = insert_list.append
-	progressDialogBG.create(ls(32577), '')
+	heading = watched_str if action == 'mark_as_watched' else unwatched_str
 	if watched_indicators == 1:
 		if not trakt_watched_status_mark(action, 'season', tmdb_id, tvdb_id, season): return notification(32574)
 		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+		heading = heading % trakt_str
+	else: heading = heading % twilight_str
+	progressDialog = progress_dialog(heading, icon)
+	sleep(200)
 	data_base = get_database(watched_indicators)
 	meta_user_info = metadata_user_info()
 	current_date = get_datetime()
@@ -332,13 +340,13 @@ def mark_season(params):
 	for count, item in enumerate(ep_data, 1):
 		season_number = item['season']
 		ep_number = item['episode']
-		display = 'S%.2dE%.2d' % (season_number, ep_number)
+		display = '%s - %s %s - E%.2d' % (title, season_str, season_number, ep_number)
 		episode_date, premiered = adjust_premiered_date(item['premiered'], date_offset())
 		if episode_date and current_date < episode_date: continue
-		progressDialogBG.update(int(float(count) / float(len(ep_data)) * 100), ls(32577), '%s' % display)
+		progressDialog.update(display, int(float(count)/float(len(ep_data))*100))
 		insert_append(make_batch_insert(action, 'episode', tmdb_id, season_number, ep_number, last_played, title))
 	batch_watched_status_mark(watched_indicators, insert_list, action)
-	progressDialogBG.close()
+	progressDialog.close()
 	refresh_container()
 
 def mark_episode(params):
