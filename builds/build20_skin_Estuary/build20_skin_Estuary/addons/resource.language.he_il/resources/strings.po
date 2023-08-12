@@ -5344,7 +5344,7 @@ msgstr "חיפוש כתוביות בקבצי RAR"
 
 msgctxt "#13250"
 msgid "Browse for subtitle..."
-msgstr "בחירת כתובית..."
+msgstr "בחירת כתובית מקומית (לא ללחוץ! תוקע את קודי)"
 
 msgctxt "#13251"
 msgid "Move item"
