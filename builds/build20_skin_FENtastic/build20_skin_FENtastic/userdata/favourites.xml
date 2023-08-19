@@ -6,4 +6,5 @@
     <favourite name="[B]עידן+ פלוס[/B]" thumb="special://home/media/build_icons/Idan_Plus/idan_plus.png">RunAddon(plugin.video.idanplus)</favourite>
     <favourite name="[B][COLOR yellow]אשף ההתקנה - Wizard[/COLOR][/B]" thumb="special://home/media/build_icons/Wizard/wizard.png">RunAddon(&quot;plugin.program.kodirealdebridisraelwizard&quot;)</favourite>
     <favourite name="[B][COLOR blue]עדכון מהיר[/COLOR][/B]" thumb="special://home/media/build_icons/Wizard/fast_update.png">PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=gui&amp;name=%D7%91%D7%99%D7%9C%D7%93+%D7%A1%D7%A7%D7%99%D7%9F+FENtastic+-+%D7%9C%D7%9E%D7%9B%D7%A9%D7%99%D7%A8%D7%99%D7%9D+%D7%97%D7%96%D7%A7%D7%99%D7%9D%21&quot;)</favourite>
+    <favourite name="[B]הגדרות DarkSubs[/B]" thumb="special://home/addons/service.subtitles.All_Subs/icon.png">Addon.OpenSettings(service.subtitles.All_Subs)</favourite>
 </favourites>
