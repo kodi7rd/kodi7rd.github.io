@@ -22,7 +22,7 @@
     <setting id="undesirables.settings3" default="true"></setting>
     <setting id="undesirables.settings4" default="true"></setting>
     <setting id="filter.foreign.single.audio" default="true">true</setting>
-    <setting id="provider.1337x">true</setting>
+    <setting id="provider.1337x" default="true">false</setting>
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch" default="true">true</setting>
