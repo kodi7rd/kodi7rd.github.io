@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.5.4[/B][/COLOR]
+﻿[COLOR yellow][B]v3.5.5[/B][/COLOR]
+* Change embedded subs color to orange.
+[COLOR yellow][B]v3.5.4[/B][/COLOR]
 * Change notify color to yellow.
 [COLOR yellow][B]v3.5.3[/B][/COLOR]
 * Change to one clean cache button for all cache (subtitles + machine translate folders).

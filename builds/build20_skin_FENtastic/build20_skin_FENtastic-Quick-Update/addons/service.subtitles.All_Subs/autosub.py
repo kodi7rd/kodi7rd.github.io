@@ -323,7 +323,7 @@ def add_demo_embbded(f_result_temp):
                          'thumbnailImage':"he",
                          'hearing_imp':'false',
                          'site_id':'[LOC]',
-                         'sub_color':'GOLD',
+                         'sub_color':'orange',
                          'filename':que(save_data),
                          'sync': 'true'}
                          
@@ -361,7 +361,7 @@ def add_embbded(f_result):
                                      'thumbnailImage':"he",
                                      'hearing_imp':'false',
                                      'site_id':'[LOC]',
-                                     'sub_color':'GOLD',
+                                     'sub_color':'orange',
                                      'filename':que(save_data),
                                      'sync': 'true'}
                                      
