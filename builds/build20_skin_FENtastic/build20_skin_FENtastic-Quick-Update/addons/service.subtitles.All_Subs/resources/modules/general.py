@@ -282,8 +282,11 @@ def get_video_data():
     video_data['OriginalTitle']=clean_name(video_data['OriginalTitle'])
     
     return video_data
-def save_file_name(filename,language="None"):
-    video_data=get_video_data()
+def save_file_name(filename,language):
+      
+    video_data_tagline = quote(get_video_data()['Tagline'])
+    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+    
     try:
         from sqlite3 import dbapi2 as database
     except:
@@ -295,28 +298,34 @@ def save_file_name(filename,language="None"):
     dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
                   "language TEXT, "
                   "filename TEXT, "
-                  "video_data TEXT);" % ('list_subs_cache'))
+                  "video_data_tagline TEXT, "
+                  "video_data_file_original_path TEXT);" % ('list_subs_cache'))
 
 
     dbcur.execute("SELECT * FROM list_subs_cache ")
     list_sub = dbcur.fetchall()
-    dbcur.execute("INSERT INTO list_subs_cache Values ('{0}','{1}','{2}')".format(language,filename,quote(video_data['Tagline'])))
+    dbcur.execute("INSERT INTO list_subs_cache Values ('{0}','{1}','{2}','{3}')".format(language,filename,video_data_tagline,video_data_file_original_path))
 
     dbcon.commit()
     dbcon.close()
 def get_db_data(f_result):
+      
+    video_data_tagline = quote(get_video_data()['Tagline'])
+    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+    
     try:
       from sqlite3 import dbapi2 as database
     except:
       from pysqlite2 import dbapi2 as database
-    video_data=get_video_data()
+    
     cacheFile=os.path.join(user_dataDir,'database.db')
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
     dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
                   "language TEXT, "
                   "filename TEXT, "
-                  "video_data TEXT);" % ('list_subs_cache'))
+                  "video_data_tagline TEXT, "
+                  "video_data_file_original_path TEXT);" % ('list_subs_cache'))
                   
     dbcur.execute("SELECT * FROM list_subs_cache")
     list_sub = dbcur.fetchall()
@@ -324,16 +333,16 @@ def get_db_data(f_result):
     dbcon.close()
     
     all_subs={}
-    for sub_language, sub_name, video_tagline in list_sub:
-        if video_tagline == quote(video_data['Tagline']):
+    for sub_language, sub_name, tagline, file_original_path in list_sub:
+        if tagline == video_data_tagline or file_original_path == video_data_file_original_path:
             all_subs.setdefault(sub_name, []).append(sub_language)
             
     last_sub_name_in_cache=''
     last_sub_language_in_cache = ''
     
     # Get the LATEST indexed cached subtitles+language for current video Tagline. (reversed list - first row is the last indexed)
-    for sub_language, sub_name, video_tagline in reversed(list_sub):
-        if video_tagline == quote(video_data['Tagline']):
+    for sub_language, sub_name, tagline, file_original_path in reversed(list_sub):
+        if tagline == video_data_tagline or file_original_path == video_data_file_original_path:
             last_sub_name_in_cache = sub_name
             last_sub_language_in_cache = sub_language
             break

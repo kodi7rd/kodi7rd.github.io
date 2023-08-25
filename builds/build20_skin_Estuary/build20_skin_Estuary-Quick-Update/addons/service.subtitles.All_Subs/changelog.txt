@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.6.0[/B][/COLOR]
+﻿[COLOR yellow][B]v3.6.1[/B][/COLOR]
+* Improve subtitles cache accuracy per specific video source played.
+[COLOR yellow][B]v3.6.0[/B][/COLOR]
 * Add setting to enable/disable automatic download of embedded Hebrew subtitles:
 הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)
 * When the setting is ON - Will always choose embedded Hebrew subtitles when exists (UNLESS you have different subtitles selected in cache).
