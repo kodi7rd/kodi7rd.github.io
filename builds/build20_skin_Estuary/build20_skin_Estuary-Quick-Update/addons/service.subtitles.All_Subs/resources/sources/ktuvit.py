@@ -178,7 +178,7 @@ def get_subs(item):
      
             json_data={'url':url,
                              'label':"Hebrew",
-                             'label2':site_id+nm,
+                             'label2':site_id+' '+nm,
                              'iconImage':"0",
                              'thumbnailImage':"he",
                              'hearing_imp':'false',

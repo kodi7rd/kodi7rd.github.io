@@ -17,7 +17,6 @@
 		<setting label="פרטי התחברות ל-OpenSubtitles (לא באמת נחוץ)" type="lsep"/>
 		<setting id="OSuser2" type="text" label="שם משתמש ב-OpenSubtitles" default=""/>
 		<setting id="OSpass2" type="text" option = "hidden" label="סיסמה ב-OpenSubtitles" default=""/>
-		<setting id="get_subs" type="text" option = "hidden" label="סיסמה ב-OpenSubtitles" default="" visible="false" />
 	</category>
 	
 	<category label="שפות">
@@ -29,10 +28,10 @@
 		
 		<setting label="תרגום מכונה" type="lsep"/>
 		<setting id="auto_translate" label="הפעל תרגום מכונה" type="bool" default="true" />
-		<setting id="translate_p" type="enum" label="מקור תרגום" values="Google|Yandex|Bing" default="0" visible= "eq(-1,true)" enable="eq(-1,true)"/>
-		<setting id="bing_translate_keys_method" type="enum" label="סדר חיפוש מפתחות" values="עולה|אקראי" default="1" visible= "eq(-1,2)" enable="eq(-1,2)"/>
+		<setting id="translate_p" type="enum" label="מקור תרגום" values="Google|Yandex|Bing" default="0" visible= "eq(-1,true)"/>
+		<setting id="bing_translate_keys_method" type="enum" label="סדר חיפוש מפתחות" values="עולה|אקראי" default="1" visible= "eq(-2,true) + eq(-1,2)"/>
 		
-		<setting label="שפות נוספות" type="lsep"/>
+		<setting label="שפות נוספות (הגדר קוד שפה על פי הקישור למטה)" type="lsep"/>
 		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
 		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
@@ -41,20 +40,24 @@
 	
     <category label="הגדרות כלליות">
 		
-		<setting label="Debug" type="lsep"/>
-		<setting id="Debug" label="Debug" type="bool" default="false" />
-		<setting id="show_debug" type="bool" label="show_debug" default="false" />
+		<setting label="Log DEBUG" type="lsep"/>
+		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="false" />
 		
-		<setting label="הורדת כתוביות אוטומטית" type="lsep"/>
-		<setting id="autosub" label="אפשר הורדת כתוביות אוטומטית" type="bool" default="true" />
+		<setting label="הורדת כתוביות אוטומטית (יש להפעיל מחדש את קודי לאחר שינוי!)" type="lsep"/>
+		<setting id="autosub" label="אפשר הורדה אוטומטית של כתוביות מהרשת" type="bool" default="true" />
 		<setting id="force" label="הורד למרות שיש כתוביות" type="bool" default="true" />
+		<setting id="enable_autosub_notify" label="הצג התראות מידע אודות הכתובית שנבחרה" type="bool" default="true" />
+		
+		<setting label="ניתן לכבות אם אתה נתקל הרבה בכתובית מובנית עם פיסוק הפוך:" type="lsep"/>
+		<setting id="auto_place_hebrew_embedded_subs" label="אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)" type="bool" default="true" />
+		<setting type="sep"/>
+		
+		<setting label="זמן חיפוש כתוביות" type="lsep"/>
+		<setting id="time_s"  type="number"  label="זמן חיפוש מקסימלי (בשניות)" visible="true" default="10"/>
 		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />
+		<setting id="ExcludeTime" type="number" label="אל תוריד לסרטון קצר מ- (דקות)" default="15"/>
 		
-		<setting label="זמן חיפוש" type="lsep"/>
-		<setting id="time_s"  type="number"  label="זמן חיפוש מקסימלי (בשניות)" visible="true" default="15"/>
-		<setting id="ExcludeTime" type="number" label="אל תוריד לסרטון קצר מ- (שניות)" default="15"/>
-		
-		<setting label="אל תכלול הרחבה פסיק בניהם" type="lsep"/>
+		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
 		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
         <setting id="ExcludeAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
     </category>
@@ -62,17 +65,17 @@
 	<category label="הגדרות קאש">
 	
 		<setting label="ניקוי קאש" type="lsep"/>
-		<setting id="clean_cache_on_startup" label="נקה קאש אוטומטית בעת הפעלת קודי" type="bool" default="true" />
+		<setting id="clean_cache_on_startup" label="נקה קאש אוטומטית בעת הפעלת קודי" type="bool" default="false" />
 		<setting label="[COLOR blue]לחץ כדי לנקות קאש כתוביות[/COLOR]" type="action" action="RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)" />
 		
 		<setting label="הגדרות נוספות" type="lsep"/>
 		<setting id="subtitle_trans_cache"  type="number"  label="מספר כתוביות מקסימלי בקאש" visible="true" default="15"/>
     </category>
 	
-	<category label="חלון כתוביות">
+	<category label="חלון כתוביות DarkSubs">
 		<setting label="מיקום וגודל חלון כתוביות DarkSubs" type="lsep"/>
-		<setting id="subs_width" label="רוחב חלון" type="number" default="1140"/>
-		<setting id="subs_hight" label="גובה חלון" type="number" default="360" />
+		<setting id="subs_width" label="רוחב חלון" type="number" default="1145"/>
+		<setting id="subs_height" label="גובה חלון" type="number" default="360" />
 		<setting id="subs_px" label="מיקום X" type="number" default="1" />
 		<setting id="subs_py" label="מיקום Y" type="number" default="7" />
     </category>

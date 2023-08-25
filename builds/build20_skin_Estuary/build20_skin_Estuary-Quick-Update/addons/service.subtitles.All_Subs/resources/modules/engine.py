@@ -803,7 +803,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         x=int(download_data['url'])
         log.warning(x)
         xbmc.Player().setSubtitleStream(x)
-        return 'Dont use'
+        return 'HebSubEmbeddedSelected'
     except:
         pass
     
@@ -863,7 +863,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         if not os.path.exists(trans_file):
             translate_subs(sub_file,trans_file)
         sub_file=trans_file
-    log.warning(general.break_all)
+    log.warning(f"general.break_all: {general.break_all}")
     if general.break_all:
-        return 'Dont use'
+        return 'HebSubEmbeddedSelected'
     return sub_file

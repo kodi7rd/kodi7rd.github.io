@@ -21,7 +21,7 @@ TransFolder = xbmc_tranlate_path(os.path.join(user_dataDir, 'trans_subs'))
 
 
 # Notify function from modules/general.py
-def notify(msg_id, times=1500, icon=iconx,sound=False):
+def notify(msg_id, times=2000, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
 
 # clear(table=None) function from modules/cache.py
@@ -82,6 +82,14 @@ def clean_machine_translate_folders():
         shutil.rmtree(TransFolder)
     except: pass
     xbmcvfs.mkdirs(TransFolder)
+    xbmc.sleep(300)
+
+    if not os.path.exists(CachedSubFolder):
+         os.makedirs(CachedSubFolder)
+
+
+    if not os.path.exists(TransFolder):
+         os.makedirs(TransFolder)
 
 
 # Get command line arguments
@@ -95,6 +103,6 @@ if len(args) > 1:
 # Clear subs DB cache action
 if action == "clean_all_cache":
     clear_sources_db(['subs'])
-    clear_database_db(['list_sub'])
+    clear_database_db(['list_subs_cache'])
     clean_machine_translate_folders()
     notify( "קאש כתוביות נוקה" )

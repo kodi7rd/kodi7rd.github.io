@@ -35,20 +35,20 @@ def get_params():
 
 
                 
-def display_subtitle(f_result,video_data,last_sub_index,all_subs):
+def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs):
     all_d=[]
 
     for items in f_result:
             try:
-                val=all_subs[items[8]]
+                val = all_subs.get(items[8])
               
             except:
                 val=None
                 pass
             
-            if (last_sub_index==items[8]):
-                added_string='[COLOR deepskyblue][B][I]>> '
-            elif val:
+            if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
+                added_string='[COLOR yellow][B][I]כתובית נוכחית << '
+            elif val and items[0] in val:
                 added_string='[COLOR deepskyblue][B][I]'
             else:
                 added_string='[COLOR gold]'
@@ -58,7 +58,7 @@ def display_subtitle(f_result,video_data,last_sub_index,all_subs):
                     sub_name=sub_name+'[/I][/B]'
                 if video_data['file_original_path'].replace("."," ").lower() in items[1].replace("."," ").lower() and len(video_data['file_original_path'].replace("."," "))>5 or items[5]>80:
                          #json_value['label2']='[COLOR gold] GOLD [B]'+json_value['label2']+'[/B][/COLOR]'
-                         sub_name='[COLOR gold] GOLD [B]'+sub_name+'[/B][/COLOR]'
+                         sub_name='[COLOR gold] GOLD '+sub_name+'[/COLOR]'
             else:
                 sub_name=items[1]
             try:
@@ -154,8 +154,8 @@ if len(sys.argv) >= 2:
         log.warning(subs)
         f_result=cache.get(get_subtitles,0,video_data,table='subs')
         if (f_result):
-            last_sub_index,all_subs=get_db_data(f_result)
-            all_d=display_subtitle(f_result,video_data,last_sub_index,all_subs)
+            last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+            all_d=display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs)
         else:
             cache.clear(['subs'])
             general.show_msg="אין כתוביות"
@@ -188,7 +188,7 @@ if len(sys.argv) >= 2:
                 listitem =  xbmcgui.ListItem(label=sub_file)
                 
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sub_file, listitem=listitem,isFolder=False)
-                save_file_name(filename)
+                save_file_name(filename,language)
                 c_sub_file=os.path.join(CachedSubFolder,source+language+filename)
                 if not os.path.exists(c_sub_file):
                     shutil.copy(sub_file,c_sub_file)
@@ -208,16 +208,16 @@ if len(sys.argv) >= 2:
         f_result=cache.get(get_subtitles,24,video_data,table='subs')
         xbmc.executebuiltin('Dialog.Close(all,true)')
         xbmc.Player().pause()
-        last_sub_index,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
         
-        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
     elif action=='sub_window_unpause':
         f_result=cache.get(get_subtitles,24,video_data,table='subs')
         xbmc.executebuiltin('Dialog.Close(all,true)')
         
-        last_sub_index,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
         
-        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_index)
+        window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
     elif action=='next':
         from resources.modules import general
         general.with_dp=False
@@ -231,18 +231,18 @@ if len(sys.argv) >= 2:
     
         f_result=cache.get(get_subtitles,24,video_data,table='subs')
 
-        last_sub_index,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
         next_one=False
         selected_sub=None
         for items in f_result:
             if (next_one):
-                if (last_sub_index!=items[8]):
+                if (last_sub_name_in_cache!=items[8]) and (last_sub_language_in_cache!=items[0]):
                     selected_sub=items
                     
                     break
                 else:
                     next_one=False
-            if (last_sub_index==items[8]):
+            if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
                 next_one=True
             
         if selected_sub:
@@ -258,7 +258,7 @@ if len(sys.argv) >= 2:
             general.show_msg="מוכן"
             
             xbmc.Player().setSubtitles(sub_file)
-            save_file_name(params["filename"])
+            save_file_name(filename,language)
         else:
             general.show_msg="סוף הכתוביות"
             
@@ -277,18 +277,18 @@ if len(sys.argv) >= 2:
     
         f_result=cache.get(get_subtitles,24,video_data,table='subs')
 
-        last_sub_index,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
         pre_one=None
         found=None
         for items in f_result:
             if (found):
-                if ((pre_one) and (last_sub_index!=pre_one[8])):
+                if ((pre_one) and (last_sub_name_in_cache!=pre_one[8]) and (last_sub_language_in_cache!=pre_one[0])):
                     selected_sub=pre_one
                     
                     break
                 else:
                     found=None
-            if (last_sub_index==items[8]):
+            if (last_sub_name_in_cache==items[8] and (last_sub_language_in_cache==items[0])):
                 found=True
             else:
                 pre_one=items
@@ -305,7 +305,7 @@ if len(sys.argv) >= 2:
             general.show_msg=sub_file
             xbmc.sleep(100)
             xbmc.Player().setSubtitles(sub_file)
-            save_file_name(params["filename"])
+            save_file_name(filename,language)
         else:
             general.show_msg="זאת הכתובית הראשונה"
             xbmc.sleep(800)

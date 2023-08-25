@@ -280,7 +280,7 @@ def get_subs(item):
 
             json_data={'url':url,
                      'label':item_data["LanguageName"],
-                     'label2':site_id+item_data["SubFileName"],
+                     'label2':site_id+' '+item_data["SubFileName"],
                      'iconImage':str(int(round(float(item_data["SubRating"])/2))),
                      'thumbnailImage':item_data["ISO639"],
                      'hearing_imp':("false", "true")[int(item_data["SubHearingImpaired"]) != 0],

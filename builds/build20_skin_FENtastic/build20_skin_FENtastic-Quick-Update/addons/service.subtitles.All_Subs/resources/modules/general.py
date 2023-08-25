@@ -1,13 +1,9 @@
-
-
-
-
 import os,time
 import xbmc,xbmcaddon,xbmcvfs,xbmcgui
 import threading
+
 from urllib.parse import  unquote_plus, unquote,  quote
 from resources.modules import log
-
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 xbmc_tranlate_path=xbmcvfs.translatePath
 user_dataDir = xbmc_tranlate_path(xbmcaddon.Addon().getAddonInfo("profile"))
@@ -29,6 +25,7 @@ progress_msg=0
 global break_all
 break_all=False
 with_dp=True
+
 class OverlayText:
     def __init__(self):
         log.warning('(Overlay) Initialize overlay text')
@@ -116,7 +113,7 @@ def show_results(show_dp=True):
     from resources.modules.general import with_dp
     show_dp=with_dp
     break_all=False
-    log.warning('show_dp:'+str(show_dp))
+    
     time_out=0
     if (show_dp):
         dp = xbmcgui.DialogProgress()
@@ -152,7 +149,7 @@ def show_results(show_dp=True):
             cond=xbmc.Monitor().abortRequested()
         except:
             cond=xbmc.abortRequested
-        log.warning(cond)
+            
         close_overlay=False
         time_out=0
         with OverlayText() as _overlay:
@@ -179,7 +176,7 @@ def show_results(show_dp=True):
                 close_overlay=True
                 _overlay.close()
                 
-def notify(msg_id, times=500, icon=iconx,sound=False):
+def notify(msg_id, times=3000, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
         
 
@@ -216,7 +213,7 @@ def get_video_data():
         video_data['title']=xbmc.getInfoLabel("VideoPlayer.Title")
         video_data['OriginalTitle']=xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
         tag_fen=xbmcgui.Window(10000).getProperty("subs.player_filename")
-        log.warning('tag_fen:'+tag_fen)
+        
         video_data['Tagline']=xbmc.getInfoLabel("VideoPlayer.Tagline")
         if tag_fen!="":
             video_data['Tagline']=tag_fen
@@ -242,8 +239,8 @@ def get_video_data():
         video_data['file_original_path'] = video_data['file_original_path'].split("?")
         video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
         video_data['mpaa']=xbmc.getInfoLabel("VideoPlayer.mpaa")
+        
     else:
-        log.warning('Xbmc NOT Playing')
         video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
         video_data['year'] = xbmc.getInfoLabel("ListItem.Year")
         video_data['season'] = xbmc.getInfoLabel("ListItem.Season")
@@ -285,7 +282,8 @@ def get_video_data():
     video_data['OriginalTitle']=clean_name(video_data['OriginalTitle'])
     
     return video_data
-def save_file_name(filename):
+def save_file_name(filename,language="None"):
+    video_data=get_video_data()
     try:
         from sqlite3 import dbapi2 as database
     except:
@@ -293,12 +291,17 @@ def save_file_name(filename):
     cacheFile=os.path.join(user_dataDir,'database.db')
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT );" % ('list_sub'))
+    
+    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
+                  "language TEXT, "
+                  "filename TEXT, "
+                  "video_data TEXT);" % ('list_subs_cache'))
 
-    dbcur.execute("SELECT * FROM list_sub ")
+
+    dbcur.execute("SELECT * FROM list_subs_cache ")
     list_sub = dbcur.fetchall()
-    if filename not in list_sub :         
-         dbcur.execute("INSERT INTO list_sub Values ('%s')"%(filename))
+    dbcur.execute("INSERT INTO list_subs_cache Values ('{0}','{1}','{2}')".format(language,filename,quote(video_data['Tagline'])))
+
     dbcon.commit()
     dbcon.close()
 def get_db_data(f_result):
@@ -306,38 +309,35 @@ def get_db_data(f_result):
       from sqlite3 import dbapi2 as database
     except:
       from pysqlite2 import dbapi2 as database
+    video_data=get_video_data()
     cacheFile=os.path.join(user_dataDir,'database.db')
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT );" % ('list_sub'))
-    dbcur.execute("SELECT * FROM list_sub")
+    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
+                  "language TEXT, "
+                  "filename TEXT, "
+                  "video_data TEXT);" % ('list_subs_cache'))
+                  
+    dbcur.execute("SELECT * FROM list_subs_cache")
     list_sub = dbcur.fetchall()
     dbcur.close()
     dbcon.close()
+    
     all_subs={}
-    last_sub_index=''
-    x=0
-    for i in list_sub:
-        all_subs[i[0]]=x
-        x+=1
-   
-    max_index=-1
-    for items in f_result:
-       
-        c_sub_name=items[8]
-        
-        try:
-            val=all_subs[c_sub_name]
+    for sub_language, sub_name, video_tagline in list_sub:
+        if video_tagline == quote(video_data['Tagline']):
+            all_subs.setdefault(sub_name, []).append(sub_language)
             
-            a_index=val
-            
-            if a_index>max_index:
-                last_sub_index=c_sub_name
-                
-                max_index=a_index
-        except Exception as e:
-            
-            pass
-    return last_sub_index,all_subs
+    last_sub_name_in_cache=''
+    last_sub_language_in_cache = ''
+    
+    # Get the LATEST indexed cached subtitles+language for current video Tagline. (reversed list - first row is the last indexed)
+    for sub_language, sub_name, video_tagline in reversed(list_sub):
+        if video_tagline == quote(video_data['Tagline']):
+            last_sub_name_in_cache = sub_name
+            last_sub_language_in_cache = sub_language
+            break
+    
+    return last_sub_name_in_cache,last_sub_language_in_cache,all_subs
     
 
