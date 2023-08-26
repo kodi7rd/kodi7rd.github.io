@@ -67,7 +67,8 @@ def similar(w1, w2):
 def sort_subtitles(save_all_data,video_data):
     from resources.modules import general
     highest_rating=0
-    general.show_msg="מסדר כתוביות 0/"+str(len(save_all_data))
+    if Addon.getSetting("enable_autosub_notifications")=='true':
+        general.show_msg="מסדר כתוביות 0/"+str(len(save_all_data))
     release_names=['blueray','bluray','blu-ray','bdrip','brrip','brip',
                      'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
                      'web','web-dl','web dl','web-dlrip','webrip','web-rip',
@@ -83,7 +84,8 @@ def sort_subtitles(save_all_data,video_data):
     Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
     count=0
     for save_data_value in save_all_data:
-          general.show_msg="מסדר כתוביות %d/%d"%(count,(len(save_all_data)))
+          if Addon.getSetting("enable_autosub_notifications")=='true':
+            general.show_msg="מסדר כתוביות %d/%d"%(count,(len(save_all_data)))
           count+=1
           json_value=json.loads(json.dumps(save_data_value))
           
@@ -425,8 +427,8 @@ def c_get_subtitles(video_data):
             break
         xbmc.sleep(10)
     
-    
-    general.show_msg="מסדר כתוביות"
+    if Addon.getSetting("enable_autosub_notifications")=='true':
+        general.show_msg="מסדר כתוביות"
     
     
     return f_result

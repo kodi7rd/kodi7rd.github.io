@@ -11,7 +11,7 @@
 * Bug fixes.
 [COLOR yellow][B]v3.5.6[/B][/COLOR]
 * Add setting to enable/disable autosub notify messages:
-הגדרות - הגדרות כלליות - הצג התראות מידע אודות הכתובית שנבחרה
+הגדרות - הגדרות כלליות - הצג הודעות מידע אודות הכתובית שנבחרה
 * Refactor autosub notify messages.
 [COLOR yellow][B]v3.5.5[/B][/COLOR]
 * Change embedded subs color to orange.
