@@ -59,7 +59,7 @@
 		
 		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
 		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
-        <setting id="ExcludeAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
+        <setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
     </category>
 	
 	<category label="הגדרות קאש">
