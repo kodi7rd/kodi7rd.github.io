@@ -1,4 +1,3 @@
-
 import time,re,xbmcaddon
 import xbmc,xbmcgui,xbmcplugin,xbmcvfs
 import os,json,shutil
@@ -24,7 +23,6 @@ monit = xbmc.Monitor()
 ab_req=monit.abortRequested()
 log.warning('Starting %s Service!!!'%MyScriptName)
 
-
 global video_id,pre_video_id,trigger
 global current_list_item,break_wait
 break_wait=False
@@ -34,12 +32,14 @@ pre_video_id=""
 trigger=False
 que=urllib.parse.quote_plus
 
+def wait_for_video():
 
-def wait_for_video_to_start():
+    log.warning('Waiting for video')
     counter=0
     vidtime_pre=0
     once=True
-    while (not break_wait) and counter<70:
+    
+    while counter<70:
         try:
             vidtime = xbmc.Player().getTime()
             if vidtime>0:
@@ -55,7 +55,41 @@ def wait_for_video_to_start():
         except:
           break
           
-    log.warning(f"DEBUG | Time waited for video to start: {counter/10} seconds.")
+    log.warning(f"DEBUG | Time waited for video to start (wait_for_video): {counter/10} seconds.")
+
+
+def wait_for_video_and_return_subs_list():
+
+    log.warning('Waiting for video')
+    counter=0
+    vidtime=0
+    once=True
+    subs=[]
+    
+    while counter<70:
+        
+        try:
+          subs=xbmc.Player().getAvailableSubtitleStreams()
+          if len(subs)>0:
+            log.warning(f"DEBUG | Time waited for video to start (wait_for_video_and_return_subs_list): {counter/10} seconds.")
+            return subs
+          
+          vidtime = xbmc.Player().getTime()
+          if vidtime>0:
+                if once:
+                    vidtime_pre=vidtime
+                    once=False
+                if vidtime_pre!=vidtime:
+                    break
+                vidtime_pre=vidtime
+        except:
+          pass
+          
+        counter+=1
+        xbmc.sleep(100)
+    
+    log.warning(f"DEBUG | Time waited for video to start (wait_for_video_and_return_subs_list): {counter/10} seconds.")    
+    return subs
     
 def isPlayingAddonExcluded(movieFullPath,current_list_item):
     excluded_addons=['idanplus','sdarot.tv','youtube','kids_new']
@@ -100,35 +134,8 @@ def format_website_source_name(source):
         return source  # Return unchanged if no specific pattern matches
         
 def check_if_embedded_hebrew_sub_exists():
-    counter=0
-    vidtime=0
-    
-    log.warning('Waiting for video')
-    once=True
-    subs=[]
-    while counter<70:
-        
-        try:
-          subs=xbmc.Player().getAvailableSubtitleStreams()
-          if len(subs)>0:
-            break
-          
-          vidtime = xbmc.Player().getTime()
-          if vidtime>0:
-                if once:
-                    vidtime_pre=vidtime
-                    once=False
-                if vidtime_pre!=vidtime:
-                    break
-                vidtime_pre=vidtime
 
-        except:
-          pass
-        counter+=1
-        xbmc.sleep(100)
-        log.warning('Vid Time:'+str(vidtime))
-        
-    log.warning(f"DEBUG | Time waited for video to start (check_if_embedded_hebrew_sub_exists): {counter/10} seconds.")
+    subs = wait_for_video_and_return_subs_list()
     
     for items in subs:
         if items=='heb':
@@ -136,56 +143,24 @@ def check_if_embedded_hebrew_sub_exists():
     return False
     
 def set_embedded_hebrew_sub():
-    counter=0
-    vidtime=0
-        
-    
-    log.warning('Waiting for video')
-    once=True
-    while counter<70:
-        
-        try:
-          subs=xbmc.Player().getAvailableSubtitleStreams()
-          vidtime = xbmc.Player().getTime()
-          if vidtime>0:
-                if once:
-                    vidtime_pre=vidtime
-                    once=False
-                
-                if vidtime_pre!=vidtime:
-                    log.warning(vidtime)
-                    log.warning(vidtime_pre)
-                    break
-                vidtime_pre=vidtime
 
-        except:
-          pass
-        counter+=1
-        xbmc.sleep(100)
-        log.warning('Vid Time:'+str(vidtime))
-        
-    log.warning(f"DEBUG | Time waited for video to start (set_embedded_hebrew_sub): {counter/10} seconds.")
+    subs = wait_for_video_and_return_subs_list()
     
-
-    index_heb=0
+    index_sub=0
     for items in subs:
     
         if items=='heb':
                 
-            log.warning('Placing Hebrew embedded Stream Sub: '+str(index_heb))
-            xbmc.Player().setSubtitleStream(index_heb)
-            
-            notify( "Hebrew | כתובית מובנית | 101%" ) if Addon.getSetting("enable_autosub_notify")=='true' else None
+            log.warning('Placing Hebrew embedded Stream Sub: '+str(index_sub))
+            xbmc.Player().setSubtitleStream(index_sub)
             
             video_data=get_video_data()
             save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
-            if (video_data['Tagline']!=""):
-                save_file_name(que(save_data),"Hebrew")
+            save_file_name(que(save_data),"Hebrew")
             break
             
-        index_heb+=1
+        index_sub+=1
     xbmc.sleep(500)
-    general.show_msg="END"
     
 def add_demo_embbded(f_result_temp):
     index_sub=0
@@ -226,7 +201,7 @@ def add_embbded_if_exists(f_result):
                 return f_result
                 
         video_data=get_video_data()
-        subs=xbmc.Player().getAvailableSubtitleStreams()
+        subs=wait_for_video_and_return_subs_list()
         log.warning('add_embbded_if_exists | Embbeded subs list:')
         log.warning(subs)
         
@@ -258,6 +233,7 @@ def add_embbded_if_exists(f_result):
                                      
                                 
                 f_result_start.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
+                break
                 
             index_sub+=1
        
@@ -279,7 +255,6 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             break
     log.warning(f"selected_sub AFTER checking last sub in cache: {selected_sub}")
     c_sub_file=None
-    general.show_msg="מוריד כתובית נבחרת"
     params=get_params(selected_sub[4],"")
     download_data=unque(params["download_data"])
     download_data=json.loads(download_data)
@@ -336,7 +311,7 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             
     
             
-    return c_sub_file
+    return c_sub_file,filename
 def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,argv1):
     
     all_d=[]
@@ -930,24 +905,34 @@ class KodiMonitor(xbmc.Monitor):
                   
                         # If placeHebrewEmbeddedSub=True - Place the embedded Hebrew subtitles.
                         if placeHebrewEmbeddedSub:
+                            # I don't know why but only by wait_for_video before + after the hebrew subs set, the general.show_msg appears.
+                            wait_for_video()
                             log.warning('DEBUG | Placing embedded Hebrew sub.')
-                            thread=[]
-                            thread.append(Thread(set_embedded_hebrew_sub))
-                            thread[0].start()                            
+                            set_embedded_hebrew_sub()
+            
+                            if Addon.getSetting("enable_autosub_notify")=='true':
+                                wait_for_video()
+                                
+                                notify( "Hebrew | כתובית מובנית | 101%" )
+                                
+                                general.show_msg="[COLOR deepskyblue]הכתובית המובנית בעברית תופיע עוד 10 שניות[/COLOR]"
+                                # Show the message for 4 seconds before general.show_msg="END"
+                                xbmc.sleep(4000)
                         
                         # If placeHebrewEmbeddedSub=False and f_result list is not empty - place sub from external subtitles list.
                         else:
+                            wait_for_video()
                             if len(f_result)>0:
-                                wait_for_video_to_start()
-                                sub_name=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs)
+                                sub_name,sub_filename=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs)
                             
-                            general.show_msg="[COLOR lightblue]כתובית מוכנה[/COLOR]" if sub_name else "[COLOR red]אין כתוביות[/COLOR]"
-                            
-                        # wait 4 seconds for previous notification to finish to avoid notifications overlap
-                        if Addon.getSetting("enable_autosub_notify")=='true' and is_embedded_hebrew_sub_exists and not placeHebrewEmbeddedSub:
-                            xbmc.sleep(4000)
-                            notify("קיימת גם כתובית מובנית בעברית לבחירה")
-                        
+                            if Addon.getSetting("enable_autosub_notify")=='true':
+                                general.show_msg=f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}[/COLOR]" if sub_name else "[COLOR red]אין כתוביות[/COLOR]"
+                                # Show the message for 4 seconds before general.show_msg="END"
+                                xbmc.sleep(4000)
+                                
+                                notify( "קיימת גם כתובית מובנית בעברית לבחירה" ) if is_embedded_hebrew_sub_exists else None
+
+      
                     except Exception as e:
                         import linecache
               
@@ -958,6 +943,7 @@ class KodiMonitor(xbmc.Monitor):
                         linecache.checkcache(filename)
                         log.warning('Error in subs:'+str(e)+','+'line:'+str(lineno))
                         
+                        
                   else:
                     log.warning('Not Downloading:')
                     log.warning(totalTime)
@@ -966,12 +952,13 @@ class KodiMonitor(xbmc.Monitor):
                     log.warning(is_playing_addon_excluded)
                     log.warning(video_data['mpaa'])
                     
+                    
                   totalTime = xbmc.Player().getTotalTime()
                   if totalTime > 0 and totalTime < ExcludeTime and not is_playing_addon_excluded:
                     xbmc.Player().setSubtitles("")
                     log.warning(f"DEBUG totalTime: {totalTime} | Setting subtitles to empty.")
                     
-                  
+
                   general.show_msg="END"
                     
 monitor=KodiMonitor()
