@@ -118,7 +118,8 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
             log.warning("isPlayingAddonExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%items )
             return True
     return False
-    
+
+# Prettify website source name for autosub notification
 def format_website_source_name(source):
     if source == "ktuvit":
         return "Ktuvit"
@@ -131,7 +132,16 @@ def format_website_source_name(source):
     elif source == "opensubtitles":
         return "OpenSubtitles"
     else:
-        return source  # Return unchanged if no specific pattern matches
+        return source
+    
+# Currently only for Hebrew/English, the most common.
+def translate_sub_language_to_hebrew(language):
+    if language == "Hebrew":
+        return "עברית"
+    elif language == "English":
+        return "אנגלית"
+    else:
+        return language
         
 def check_if_embedded_hebrew_sub_exists():
 
@@ -278,7 +288,7 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             if Addon.getSetting("enable_autosub_notifications")=='true':
             
                 notify_website_name = format_website_source_name(source)
-                notify_language = f"{language} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else language
+                notify_language = f"{translate_sub_language_to_hebrew(language)} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else translate_sub_language_to_hebrew(language)
                 notify_sync_percent = str(selected_sub[5])
             
                 notify( f"{notify_language} | {notify_sync_percent}% | {notify_website_name}" )
@@ -920,7 +930,7 @@ class KodiMonitor(xbmc.Monitor):
                             if Addon.getSetting("enable_autosub_notifications")=='true':
                                 wait_for_video()
                                 
-                                notify( "Hebrew | כתובית מובנית | 101%" )
+                                notify( "עברית | 101% | כתובית מובנית" )
                                 
                                 general.show_msg="[COLOR deepskyblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR deepskyblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
                                 # Show the message for 4 seconds before general.show_msg="END"
