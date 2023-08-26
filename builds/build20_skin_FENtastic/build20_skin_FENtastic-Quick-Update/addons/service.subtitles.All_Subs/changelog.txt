@@ -1,8 +1,7 @@
 ﻿[COLOR yellow][B]v3.6.2[/B][/COLOR]
 * Improve autosub notifications messages.
-* Small bug fix.
-[COLOR yellow][B]v3.6.1[/B][/COLOR]
 * Improve subtitles cache accuracy per specific video source played.
+* Slightly improve subtitles sorting by sync percentage.
 [COLOR yellow][B]v3.6.0[/B][/COLOR]
 * Add setting to enable/disable automatic download of embedded Hebrew subtitles:
 הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)
