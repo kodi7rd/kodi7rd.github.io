@@ -68,7 +68,7 @@ class OverlayText:
         w = int(int(1920.0 * 0.7) * viewport_w / 1920.0)
         h = int(150 * viewport_h / 1088.0)
         x = int((viewport_w - w) / 2)
-        y = int(10)
+        y = int(35)
         
         # icon
         w2 = 95#int(int(20.0 * 0.7) * viewport_w / 20.0)
@@ -77,9 +77,9 @@ class OverlayText:
         y2 = int(30)
         
         # background
-        w3 = 1800#int(int(20.0 * 0.7) * viewport_w / 20.0)
+        w3 = 1330#int(int(20.0 * 0.7) * viewport_w / 20.0)
         h3 = 150
-        x3 = 50
+        x3 = 135
         y3 = 20
         
         

@@ -17,7 +17,7 @@
     <setting id="show_debug" default="true">false</setting>
     <setting id="autosub">true</setting>
     <setting id="force">true</setting>
-    <setting id="enable_autosub_notify">true</setting>
+    <setting id="enable_autosub_notifications">true</setting>
     <setting id="auto_place_hebrew_embedded_subs">true</setting>
     <setting id="time_s">10</setting>
     <setting id="pause" default="true">false</setting>

@@ -242,17 +242,18 @@ def add_embbded_if_exists(f_result):
             f_result.insert(0, items)
         return f_result
     
-def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs):
+def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty):
 
     general.show_msg="מוריד כתובית נבחרת"
     # Default placing sub to the first subtitle in subtitles list results.
     selected_sub=f_result[0]
     log.warning(f"selected_sub BEFORE checking last sub in cache: {selected_sub}")
     # Changing subtitle to place to subtitles from database.db cache db (if exists)
-    for items in f_result:
-        if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
-            selected_sub=items
-            break
+    if not last_sub_in_cache_is_empty:
+        for items in f_result:
+            if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
+                selected_sub=items
+                break
     log.warning(f"selected_sub AFTER checking last sub in cache: {selected_sub}")
     c_sub_file=None
     params=get_params(selected_sub[4],"")
@@ -269,7 +270,7 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             
             ###################################################################################################################################################
             # Reformatting variables for user notification of auto selected subtitle
-            if Addon.getSetting("enable_autosub_notify")=='true':
+            if Addon.getSetting("enable_autosub_notifications")=='true':
             
                 notify_website_name = format_website_source_name(source)
                 notify_language = f"{language} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else language
@@ -910,12 +911,12 @@ class KodiMonitor(xbmc.Monitor):
                             log.warning('DEBUG | Placing embedded Hebrew sub.')
                             set_embedded_hebrew_sub()
             
-                            if Addon.getSetting("enable_autosub_notify")=='true':
+                            if Addon.getSetting("enable_autosub_notifications")=='true':
                                 wait_for_video()
                                 
                                 notify( "Hebrew | כתובית מובנית | 101%" )
                                 
-                                general.show_msg="[COLOR deepskyblue]הכתובית המובנית בעברית תופיע עוד 10 שניות[/COLOR]"
+                                general.show_msg="[COLOR deepskyblue]הכתובית המובנית בעברית תופיע עוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR deepskyblue]הכתובית המובנית בעברית תופיע עוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
                                 # Show the message for 4 seconds before general.show_msg="END"
                                 xbmc.sleep(4000)
                         
@@ -923,10 +924,14 @@ class KodiMonitor(xbmc.Monitor):
                         else:
                             wait_for_video()
                             if len(f_result)>0:
-                                sub_name,sub_filename=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs)
+                                sub_name,sub_filename=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty)
                             
-                            if Addon.getSetting("enable_autosub_notify")=='true':
-                                general.show_msg=f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}[/COLOR]" if sub_name else "[COLOR red]אין כתוביות[/COLOR]"
+                            if Addon.getSetting("enable_autosub_notifications")=='true':
+                                if sub_name:
+                                    general.show_msg=f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}[/COLOR]" if last_sub_in_cache_is_empty else f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}\n(הכתובית נבחרה מהקאש)[/COLOR]"
+                                else:
+                                    general.show_msg="[COLOR red]אין כתוביות[/COLOR]"
+                                    
                                 # Show the message for 4 seconds before general.show_msg="END"
                                 xbmc.sleep(4000)
                                 
