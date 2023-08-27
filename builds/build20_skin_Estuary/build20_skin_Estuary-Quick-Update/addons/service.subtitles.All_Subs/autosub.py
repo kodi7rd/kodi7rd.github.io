@@ -258,6 +258,9 @@ def add_embbded_if_exists(f_result):
     
 def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty):
 
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     if Addon.getSetting("enable_autosub_notifications")=='true':
         general.show_msg="מוריד כתובית נבחרת"
     # Default placing sub to the first subtitle in subtitles list results.
@@ -415,6 +418,8 @@ def get_params(argv2,argv1):
         param['action']=argv1
     return param
 def sub_from_main(arg):
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
     argv2=arg.split('$$$$$$$$')[0]
     argv1=arg.split('$$$$$$$$')[1]
     params = get_params(argv2,argv1)
@@ -774,6 +779,7 @@ class KodiMonitor(xbmc.Monitor):
     def onNotification( self, sender, method, data):
         global video_id,pre_video_id,trigger
         global current_list_item,break_wait
+        # For settings changes to take effect.
         Addon=xbmcaddon.Addon()
         from resources.modules import general
         last_sub_name_in_cache=""
@@ -922,36 +928,40 @@ class KodiMonitor(xbmc.Monitor):
                   
                         # If placeHebrewEmbeddedSub=True - Place the embedded Hebrew subtitles.
                         if placeHebrewEmbeddedSub:
-                            # I don't know why but only by wait_for_video before + after the hebrew subs set, the general.show_msg appears.
+                            # I don't know why but only by wait_for_video() before + after the hebrew subs set, the general.show_msg appears. (anyway its waiting 0 seconds, since video already started)
                             wait_for_video()
                             log.warning('DEBUG | Placing embedded Hebrew sub.')
                             set_embedded_hebrew_sub()
             
                             if Addon.getSetting("enable_autosub_notifications")=='true':
+                            
                                 wait_for_video()
                                 
                                 notify( "עברית | 101% | כתובית מובנית" )
                                 
-                                general.show_msg="[COLOR deepskyblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR deepskyblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
-                                # Show the message for 4 seconds before general.show_msg="END"
-                                xbmc.sleep(4000)
+                                general.show_msg="[COLOR lightblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR lightblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
+                                # Show the message for 5 seconds before general.show_msg="END"
+                                xbmc.sleep(5000)
                         
                         # If placeHebrewEmbeddedSub=False and f_result list is not empty - place sub from external subtitles list.
                         else:
                             wait_for_video()
+                            
                             if len(f_result)>0:
                                 sub_name,sub_filename=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty)
                             
                             if Addon.getSetting("enable_autosub_notifications")=='true':
+                            
                                 if sub_name:
-                                    general.show_msg=f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}[/COLOR]" if last_sub_in_cache_is_empty else f"[COLOR deepskyblue]כתובית מוכנה\n{sub_filename}\n(הכתובית נבחרה מהקאש)[/COLOR]"
+                                    general.show_msg=f"[COLOR lightblue]כתובית מוכנה\n{sub_filename}[/COLOR]" if last_sub_in_cache_is_empty else f"[COLOR lightblue]כתובית מוכנה\n{sub_filename}\n(הכתובית נבחרה מהקאש)[/COLOR]"
+                                    
                                 else:
                                     general.show_msg="[COLOR red]אין כתוביות[/COLOR]"
                                     
-                                # Show the message for 4 seconds before general.show_msg="END"
-                                xbmc.sleep(4000)
+                                # Show the message for 5 seconds before general.show_msg="END"
+                                xbmc.sleep(5000)
                                 
-                                notify( "קיימת גם כתובית מובנית בעברית לבחירה" ) if is_embedded_hebrew_sub_exists else None
+                                notify( "קיימת גם כתובית מובנית בעברית" ) if is_embedded_hebrew_sub_exists else None
 
       
                     except Exception as e:
@@ -975,11 +985,14 @@ class KodiMonitor(xbmc.Monitor):
                     
                     
                   try:
-                    totalTime = xbmc.Player().getTotalTime()
-                  except: pass
-                  if totalTime > 0 and totalTime < ExcludeTime and not is_playing_addon_excluded:
-                    xbmc.Player().setSubtitles("")
-                    log.warning(f"DEBUG totalTime: {totalTime} | Setting subtitles to empty.")
+                      totalTime = xbmc.Player().getTotalTime()
+                      
+                      if totalTime > 0 and totalTime < ExcludeTime and not is_playing_addon_excluded:
+                        xbmc.Player().setSubtitles("")
+                        log.warning(f"DEBUG totalTime: {totalTime} | Setting subtitles to empty.")
+                        
+                  except:
+                    pass # Avoid RunTimeError: Kodi is not playing any file.
                     
 
                   general.show_msg="END"

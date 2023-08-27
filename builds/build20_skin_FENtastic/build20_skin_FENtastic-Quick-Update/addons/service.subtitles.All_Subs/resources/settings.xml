@@ -46,7 +46,7 @@
 		<setting label="הורדת כתוביות אוטומטית (יש להפעיל מחדש את קודי לאחר שינוי!)" type="lsep"/>
 		<setting id="autosub" label="אפשר הורדה אוטומטית של כתוביות מהרשת" type="bool" default="true" />
 		<setting id="force" label="הורד למרות שיש כתוביות" type="bool" default="true" />
-		<setting id="enable_autosub_notifications" label="הצג הודעות מידע אודות הכתובית שנבחרה" type="bool" default="true" />
+		<setting id="enable_autosub_notifications" label="הצג הודעות מידע בעת חיפוש כתוביות" type="bool" default="true" />
 		
 		<setting label="ניתן לכבות אם אתה נתקל הרבה בכתובית מובנית עם פיסוק הפוך:" type="lsep"/>
 		<setting id="auto_place_hebrew_embedded_subs" label="אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)" type="bool" default="true" />

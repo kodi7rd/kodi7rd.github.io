@@ -1,26 +1,12 @@
-﻿[COLOR yellow][B]v3.6.2[/B][/COLOR]
-* Improve autosub notifications messages.
+﻿[COLOR yellow][B]v3.7.0[/B][/COLOR]
+* Add setting to enable/disable autosub notification messages:
+[B]הגדרות - הגדרות כלליות - הצג הודעות מידע בעת חיפוש כתוביות[/B]
+* Add setting to enable/disable automatic download of embedded Hebrew subtitles:
+[B]הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)[/B]
+* When the setting is [B][COLOR limegreen]ON[/COLOR][/B] - Will always choose embedded Hebrew subtitles when exists (UNLESS you have different subtitles selected in cache).
+* When the setting is [B][COLOR red]OFF[/COLOR][/B] - Will prioritize external subtitles over embedded Hebrew subtitles (UNLESS no Hebrew subtitles found / you have different subtitles selected in cache).
 * Improve subtitles cache accuracy per specific video source played.
 * Slightly improve subtitles sorting by sync percentage.
-[COLOR yellow][B]v3.6.0[/B][/COLOR]
-* Add setting to enable/disable automatic download of embedded Hebrew subtitles:
-הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)
-* When the setting is ON - Will always choose embedded Hebrew subtitles when exists (UNLESS you have different subtitles selected in cache).
-* When the setting is OFF - Will prioritize external subtitles over embedded Hebrew subtitles (UNLESS no Hebrew subtitles found / you have different subtitles selected in cache).
-* DarkSubs subs window appearance improvements.
-* Bug fixes.
-[COLOR yellow][B]v3.5.6[/B][/COLOR]
-* Add setting to enable/disable autosub notify messages:
-הגדרות - הגדרות כלליות - הצג הודעות מידע אודות הכתובית שנבחרה
-* Refactor autosub notify messages.
-[COLOR yellow][B]v3.5.5[/B][/COLOR]
-* Change embedded subs color to orange.
-[COLOR yellow][B]v3.5.4[/B][/COLOR]
-* Change notify color to yellow.
-[COLOR yellow][B]v3.5.3[/B][/COLOR]
-* Change to one clean cache button for all cache (subtitles + machine translate folders).
-[COLOR yellow][B]v3.5.2[/B][/COLOR]
-* Fix small clean cache code bug.
 [COLOR yellow][B]v3.5.1[/B][/COLOR]
 * Add setting to auto clean cache on Kodi startup:
 הגדרות - הגדרות קאש - נקה קאש אוטומטית בעת הפעלת קודי

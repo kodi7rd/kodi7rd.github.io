@@ -176,7 +176,7 @@ def show_results(show_dp=True):
                 close_overlay=True
                 _overlay.close()
                 
-def notify(msg_id, times=3000, icon=iconx,sound=False):
+def notify(msg_id, times=3500, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
         
 
@@ -340,7 +340,7 @@ def get_db_data(f_result):
     last_sub_name_in_cache=''
     last_sub_language_in_cache = ''
     
-    # Get the LATEST indexed cached subtitles+language for current video Tagline. (reversed list - first row is the last indexed)
+    # Get the LATEST written cached subtitle+language combination for current video Tagline/file path. (reversed list - first row is the last written)
     for sub_language, sub_name, tagline, file_original_path in reversed(list_sub):
         if tagline == video_data_tagline or file_original_path == video_data_file_original_path:
             last_sub_name_in_cache = sub_name

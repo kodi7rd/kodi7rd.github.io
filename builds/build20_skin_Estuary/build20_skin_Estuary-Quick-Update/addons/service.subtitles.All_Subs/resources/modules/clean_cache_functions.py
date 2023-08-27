@@ -21,7 +21,7 @@ TransFolder = xbmc_tranlate_path(os.path.join(user_dataDir, 'trans_subs'))
 
 
 # Notify function from modules/general.py
-def notify(msg_id, times=2000, icon=iconx,sound=False):
+def notify(msg_id, times=2500, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
 
 # clear(table=None) function from modules/cache.py

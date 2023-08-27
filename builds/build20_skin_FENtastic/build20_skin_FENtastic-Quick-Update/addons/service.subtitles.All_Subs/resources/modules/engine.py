@@ -65,9 +65,12 @@ def similar(w1, w2):
     return int(round(s.ratio()*100))
 
 def sort_subtitles(save_all_data,video_data):
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
     from resources.modules import general
     highest_rating=0
-    if Addon.getSetting("enable_autosub_notifications")=='true':
+    if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+        # If searching subtitles from context menu - will show the message.
         general.show_msg="מסדר כתוביות 0/"+str(len(save_all_data))
     release_names=['blueray','bluray','blu-ray','bdrip','brrip','brip',
                      'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
@@ -84,7 +87,8 @@ def sort_subtitles(save_all_data,video_data):
     Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
     count=0
     for save_data_value in save_all_data:
-          if Addon.getSetting("enable_autosub_notifications")=='true':
+          if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+            # If searching subtitles from context menu - will show the message.
             general.show_msg="מסדר כתוביות %d/%d"%(count,(len(save_all_data)))
           count+=1
           json_value=json.loads(json.dumps(save_data_value))
@@ -320,8 +324,25 @@ def getIMDB(title):
     except Exception as err:
         log.warning('Caught Exception: error in manual search: %s' % format(err))
         pass
+
+# Prettify website source name for subs search dialog
+def format_website_source_name(source):
+    if source == "ktuvit":
+        return "Ktuvit"
+    elif source == "wizdom":
+        return "Wizdom"
+    elif source == "bsplayer":
+        return "BSPlayer"
+    elif source == "subscene":
+        return "Subscene"
+    elif source == "opensubtitles":
+        return "OpenSubtitles"
+    else:
+        return source
         
 def c_get_subtitles(video_data):
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
     from resources.modules import general
     log.warning('Searching for:')
     log.warning(video_data)
@@ -410,9 +431,11 @@ def c_get_subtitles(video_data):
               f_result=[]
               for scraper,items in all_sources:
                  f_result=f_result+items.global_var
-                 string_dp=string_dp+(' %s:[COLOR %s]%s[/COLOR] '%(scraper[:3].capitalize(),tt[zz],len( items.global_var)))
+                 string_dp=string_dp+(' %s:[COLOR %s]%s[/COLOR] '%(format_website_source_name(scraper),tt[zz],len( items.global_var)))
                  zz=zz+1
-              general.show_msg=' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+'\n'+ string_dp
+              if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+                # If searching subtitles from context menu - will show the message.
+                general.show_msg=' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time))+'\n'+ string_dp
               
         if still_alive==0:
             break
@@ -427,18 +450,22 @@ def c_get_subtitles(video_data):
             break
         xbmc.sleep(10)
     
-    if Addon.getSetting("enable_autosub_notifications")=='true':
+    if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+        # If searching subtitles from context menu - will show the message.
         general.show_msg="מסדר כתוביות"
     
     
     return f_result
 def get_subtitles(video_data):
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
     from resources.modules import general
    
     
     
-    
-    general.show_msg='מחפש כתוביות'
+    if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+        # If searching subtitles from context menu - will show the message.
+        general.show_msg='מחפש כתוביות'
     
     f_result=c_get_subtitles(video_data)
     
