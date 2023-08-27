@@ -34,6 +34,7 @@
     <setting id="tvshow_onclick_browse" type="bool">false</setting>
     <setting id="homemenunotvshowbutton" type="bool">true</setting>
     <setting id="no_fanart" type="bool">false</setting>
+    <setting id="openkeyboardonsearchdialog" type="bool">false</setting>
     <setting id="show_profilename" type="bool">false</setting>
     <setting id="no_slide_animations" type="bool">false</setting>
     <setting id="homemenunofavbutton" type="bool">false</setting>
