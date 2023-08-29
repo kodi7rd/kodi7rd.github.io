@@ -5,6 +5,7 @@ from resources.modules import cache
 from resources.modules import log
 from resources.modules.engine import download_sub,get_subtitles,sort_subtitles
 from urllib.parse import  unquote_plus, unquote,  quote
+from resources.modules import write_heb_embedded_taglines
 from resources.modules.general import TransFolder,clean_name,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
 from urllib.parse import parse_qsl
 from resources.modules.sub_window import MySubs
@@ -963,6 +964,7 @@ class KodiMonitor(xbmc.Monitor):
                                 
                                 notify( "קיימת גם כתובית מובנית בעברית" ) if is_embedded_hebrew_sub_exists else None
 
+                        write_heb_embedded_taglines.write(is_embedded_hebrew_sub_exists,video_data['Tagline'])
       
                     except Exception as e:
                         import linecache

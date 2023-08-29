@@ -3,8 +3,8 @@
 [B]הגדרות - הגדרות כלליות - הצג הודעות מידע בעת חיפוש כתוביות[/B]
 * Add setting to enable/disable automatic download of embedded Hebrew subtitles:
 [B]הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)[/B]
-* When the setting is [B][COLOR limegreen]ON[/COLOR][/B] - Will always choose embedded Hebrew subtitles when exists (UNLESS you have different subtitles selected in cache).
-* When the setting is [B][COLOR red]OFF[/COLOR][/B] - Will prioritize external subtitles over embedded Hebrew subtitles (UNLESS no Hebrew subtitles found / you have different subtitles selected in cache).
+* When the setting is [B][COLOR limegreen]ON[/COLOR][/B] - Will always choose embedded Hebrew subtitles when exists ([B][COLOR yellow]UNLESS[/COLOR][/B] you have different subtitles selected in cache).
+* When the setting is [B][COLOR red]OFF[/COLOR][/B] - Will prioritize external subtitles over embedded Hebrew subtitles ([B][COLOR yellow]UNLESS[/COLOR][/B] no Hebrew subtitles found / you have different subtitles selected in cache).
 * Improve subtitles cache accuracy per specific video source played.
 * Slightly improve subtitles sorting by sync percentage.
 [COLOR yellow][B]v3.5.1[/B][/COLOR]
