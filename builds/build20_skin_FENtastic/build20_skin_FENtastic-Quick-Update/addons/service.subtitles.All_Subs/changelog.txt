@@ -1,4 +1,9 @@
-﻿[COLOR yellow][B]v3.7.0[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.3[/B][/COLOR]
+* Changed [COLOR orange][LOC] כתובית מובנית 101%[/COLOR] subtitle color to [COLOR cyan]cyan[/COLOR].
+* Removed "ExcludeTime" setting (don't download for videos shorter than...)
+* Added setting to improve Twilight Hebrew embedded subtitles repo.
+* Added more Ktuvit debug logs to identify fault response bug.
+[COLOR yellow][B]v3.7.0[/B][/COLOR]
 * Add setting to enable/disable autosub notification messages:
 [B]הגדרות - הגדרות כלליות - הצג הודעות מידע בעת חיפוש כתוביות[/B]
 * Add setting to enable/disable automatic download of embedded Hebrew subtitles:

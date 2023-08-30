@@ -13,12 +13,6 @@
 		<setting id="bsplayer" label="BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
 	
-    <category label="חשבונות">		
-		<setting label="פרטי התחברות ל-OpenSubtitles (לא באמת נחוץ)" type="lsep"/>
-		<setting id="OSuser2" type="text" label="שם משתמש ב-OpenSubtitles" default=""/>
-		<setting id="OSpass2" type="text" option = "hidden" label="סיסמה ב-OpenSubtitles" default=""/>
-	</category>
-	
 	<category label="שפות">
 	
 		<setting label="שפות נפוצות" type="lsep"/>
@@ -41,7 +35,7 @@
     <category label="הגדרות כלליות">
 		
 		<setting label="Log DEBUG" type="lsep"/>
-		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="false" />
+		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
 		
 		<setting label="הורדת כתוביות אוטומטית (יש להפעיל מחדש את קודי לאחר שינוי!)" type="lsep"/>
 		<setting id="autosub" label="אפשר הורדה אוטומטית של כתוביות מהרשת" type="bool" default="true" />
@@ -55,11 +49,13 @@
 		<setting label="זמן חיפוש כתוביות" type="lsep"/>
 		<setting id="time_s"  type="number"  label="זמן חיפוש מקסימלי (בשניות)" visible="true" default="10"/>
 		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />
-		<setting id="ExcludeTime" type="number" label="אל תוריד לסרטון קצר מ- (דקות)" default="15"/>
 		
 		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
 		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
         <setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
+		
+		<setting label="הרחבת Twilight" type="lsep"/>
+		<setting id="write_heb_embedded_taglines_to_twilight_repo" label="שפר את מאגר הכתוביות המובנות של הרחבת Twilight" type="bool" default="true" />
     </category>
 	
 	<category label="הגדרות קאש">
@@ -79,5 +75,11 @@
 		<setting id="subs_px" label="מיקום X" type="number" default="1" />
 		<setting id="subs_py" label="מיקום Y" type="number" default="7" />
     </category>
+	
+    <category label="חשבונות">		
+		<setting label="פרטי התחברות ל-OpenSubtitles (לא באמת נחוץ)" type="lsep"/>
+		<setting id="OSuser2" type="text" label="שם משתמש ב-OpenSubtitles" default=""/>
+		<setting id="OSpass2" type="text" option = "hidden" label="סיסמה ב-OpenSubtitles" default=""/>
+	</category>
 	
 </settings>

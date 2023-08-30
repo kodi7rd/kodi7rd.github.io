@@ -4,8 +4,6 @@
     <setting id="opensubtitles">true</setting>
     <setting id="subscene">true</setting>
     <setting id="bsplayer">true</setting>
-    <setting id="OSuser2" default="true" />
-    <setting id="OSpass2" default="true" />
     <setting id="English">true</setting>
     <setting id="arab" default="true">false</setting>
     <setting id="spanish" default="true">false</setting>
@@ -18,17 +16,19 @@
     <setting id="autosub">true</setting>
     <setting id="force">true</setting>
     <setting id="enable_autosub_notifications">true</setting>
-    <setting id="auto_place_hebrew_embedded_subs">false</setting>
+    <setting id="auto_place_hebrew_embedded_subs">true</setting>
     <setting id="time_s">10</setting>
     <setting id="pause" default="true">false</setting>
-    <setting id="ExcludeTime">15</setting>
     <setting id="ExcludedAddons" default="true" />
+    <setting id="write_heb_embedded_taglines_to_twilight_repo">true</setting>
     <setting id="clean_cache_on_startup" default="true">false</setting>
     <setting id="subtitle_trans_cache">15</setting>
     <setting id="subs_width">1145</setting>
     <setting id="subs_height">360</setting>
     <setting id="subs_px">1</setting>
     <setting id="subs_py">7</setting>
+    <setting id="OSuser2" default="true" />
+    <setting id="OSpass2" default="true" />
     <setting id="fast_subs" default="true" />
     <setting id="man_search_subs" default="true" />
 </settings>

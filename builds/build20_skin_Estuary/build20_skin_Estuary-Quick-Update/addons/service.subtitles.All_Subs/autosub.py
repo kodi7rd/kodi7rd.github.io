@@ -5,7 +5,7 @@ from resources.modules import cache
 from resources.modules import log
 from resources.modules.engine import download_sub,get_subtitles,sort_subtitles
 from urllib.parse import  unquote_plus, unquote,  quote
-from resources.modules import write_heb_embedded_taglines
+from resources.modules.twilight import write_heb_embedded_taglines
 from resources.modules.general import TransFolder,clean_name,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
 from urllib.parse import parse_qsl
 from resources.modules.sub_window import MySubs
@@ -193,7 +193,7 @@ def add_demo_embbded(f_result_temp):
                          'thumbnailImage':"he",
                          'hearing_imp':'false',
                          'site_id':'[LOC]',
-                         'sub_color':'orange',
+                         'sub_color':'cyan',
                          'filename':que(save_data),
                          'sync': 'true'}
                          
@@ -242,7 +242,7 @@ def add_embbded_if_exists(f_result):
                                      'thumbnailImage':"he",
                                      'hearing_imp':'false',
                                      'site_id':'[LOC]',
-                                     'sub_color':'orange',
+                                     'sub_color':'cyan',
                                      'filename':que(save_data),
                                      'sync': 'true'}
                                      
@@ -796,7 +796,6 @@ class KodiMonitor(xbmc.Monitor):
             while  manual_search!='':
                 manual_search=xbmcaddon.Addon('service.subtitles.All_Subs').getSetting("fast_subs")
                 xbmc.sleep(100)
-            ExcludeTime = int((Addon.getSetting('ExcludeTime')))*60
             
             video_data=get_video_data()
             
@@ -815,7 +814,6 @@ class KodiMonitor(xbmc.Monitor):
             log.warning(current_list_item_temp)
             
             if  trigger:
-                totalTime=0
                 trigger=False
                 f_result=None
                 
@@ -964,7 +962,11 @@ class KodiMonitor(xbmc.Monitor):
                                 
                                 notify( "קיימת גם כתובית מובנית בעברית" ) if is_embedded_hebrew_sub_exists else None
 
-                        write_heb_embedded_taglines.write(is_embedded_hebrew_sub_exists,video_data['Tagline'])
+                        # Write video tagline in embedded Hebrew subs taglines list
+                        if Addon.getSetting("write_heb_embedded_taglines_to_twilight_repo")=='true':
+                            write_heb_embedded_taglines.write(video_data['Tagline']) if is_embedded_hebrew_sub_exists else None
+                        else:
+                            log.warning(f"WRITE | write_heb_embedded_taglines_to_twilight_repo: False | Skipping..")
       
                     except Exception as e:
                         import linecache
@@ -979,23 +981,9 @@ class KodiMonitor(xbmc.Monitor):
                         
                   else:
                     log.warning('Not Downloading:')
-                    log.warning(totalTime)
-                    log.warning(ExcludeTime)
                     log.warning(force_download)
                     log.warning(is_playing_addon_excluded)
-                    log.warning(video_data['mpaa'])
-                    
-                    
-                  try:
-                      totalTime = xbmc.Player().getTotalTime()
-                      
-                      if totalTime > 0 and totalTime < ExcludeTime and not is_playing_addon_excluded:
-                        xbmc.Player().setSubtitles("")
-                        log.warning(f"DEBUG totalTime: {totalTime} | Setting subtitles to empty.")
-                        
-                  except:
-                    pass # Avoid RunTimeError: Kodi is not playing any file.
-                    
+                    log.warning(video_data['mpaa'])                    
 
                   general.show_msg="END"
                     

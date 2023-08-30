@@ -225,10 +225,15 @@ def download(download_data,MySubFolder):
     count=0
     data = id
     result="הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית"
+    log.warning(f"KTUVIT | checking if response is not {result}")
     while ("הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית" in result):
-        x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
+    
+        count+=1        
+        log.warning(f"KTUVIT | Number of try: {count} | Sending RequestSubtitleDownload request...")
         
-
+        x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
+        log.warning(f"KTUVIT | Number of try: {count} | RequestSubtitleDownload response: {json.loads(x['d'])['DownloadIdentifier']}")
+        
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -246,22 +251,28 @@ def download(download_data,MySubFolder):
         )
 
         response = requests.get('https://www.ktuvit.me/Services/DownloadFile.ashx', headers=headers, params=params, cookies=login_cook)
+        log.warning(f"KTUVIT | Number of try: {count} | Sending DownloadFile request...")
        
     
         time.sleep(0.1)
-        log.warning('Fault subs ktuvit:'+str(count))
         result=response.text
+        
+        log.warning(f"KTUVIT | Number of try: {count} | DownloadFile response text:")
+        log.warning(result)
 
-        count+=1
         if (count>10):
+            log.warning(f"KTUVIT | Number of try: {count} | Reached max tries count. breaking...")
             break
+            
+    log.warning(f"KTUVIT | Number of try: {count} | While loop finished.")
     headers=(response.headers)
     
     file_name=headers['Content-Disposition'].split("filename=")[1]
+    log.warning(f"KTUVIT | Number of try: {count} | filename: {file_name}")
 
     archive_file = os.path.join(MyTmp, file_name)
     # Throw an error for bad status codes
-    log.warning(headers)
+    log.warning(f"KTUVIT | Number of try: {count} | response headers: {headers}")
     response.raise_for_status()
    
     with open(archive_file, 'wb') as handle:
