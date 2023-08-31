@@ -1,8 +1,14 @@
+########### Imports #####################
 import requests,base64
 from resources.modules import log
+#########################################
 
+########### Constants ###################
+MOVIES_TAGLINES_API_URL = "https://api.github.com/repos/DarkSubsHebSubs/DarkSubsHebSubs/contents/movies_taglines.txt"
+TV_SHOWS_TAGLINES_API_URL = "https://api.github.com/repos/DarkSubsHebSubs/DarkSubsHebSubs/contents/tvshows_taglines.txt"
+#########################################
 
-def write(video_tagline_to_write):
+def write(video_tagline_to_write, media_type):
 
     try:
         # AC
@@ -10,7 +16,7 @@ def write(video_tagline_to_write):
         ac = requests.get(ac_url).text
         
         # Fetch existing content and SHA
-        taglines_file_url = "https://api.github.com/repos/DarkSubsHebSubs/DarkSubsHebSubs/contents/taglines.txt"
+        taglines_file_url = MOVIES_TAGLINES_API_URL if media_type == "movie" else TV_SHOWS_TAGLINES_API_URL
         response = requests.get(taglines_file_url, headers={"Authorization": f"Bearer {ac}"})
         data = response.json()
         
@@ -27,10 +33,11 @@ def write(video_tagline_to_write):
 
             # Encode new content
             encoded_content = base64.b64encode(updated_taglines.encode("utf-8")).decode("utf-8")
-
+            
             # Create commit data
+            commit_message_prefix = "MOVIE" if media_type == "movie" else "TV SHOW"
             commit_data = {
-                "message": f"{video_tagline_to_write}",
+                "message": f"{commit_message_prefix}: {video_tagline_to_write}",
                 "content": encoded_content,
                 "sha": data["sha"]
             }

@@ -240,6 +240,12 @@ def get_video_data():
         video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
         video_data['mpaa']=xbmc.getInfoLabel("VideoPlayer.mpaa")
         
+        # Determine media type based on TVshowtitle, season, and episode
+        if video_data['TVshowtitle'] and (video_data['season'] != 0 or video_data['episode'] != 0):
+            video_data['media_type'] = 'tv'
+        else:
+            video_data['media_type'] = 'movie'
+        
     else:
         video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
         video_data['year'] = xbmc.getInfoLabel("ListItem.Year")

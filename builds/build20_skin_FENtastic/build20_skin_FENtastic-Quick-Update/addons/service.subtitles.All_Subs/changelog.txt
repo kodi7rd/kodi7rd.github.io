@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.7.3[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.4[/B][/COLOR]
+* Added media_type parameter (movie/tv) to video data array.
+[COLOR yellow][B]v3.7.3[/B][/COLOR]
 * Changed [COLOR orange][LOC] כתובית מובנית 101%[/COLOR] subtitle color to [COLOR cyan]cyan[/COLOR].
 * Removed "ExcludeTime" setting (don't download for videos shorter than...)
 * Added setting to improve Twilight Hebrew embedded subtitles repo.
