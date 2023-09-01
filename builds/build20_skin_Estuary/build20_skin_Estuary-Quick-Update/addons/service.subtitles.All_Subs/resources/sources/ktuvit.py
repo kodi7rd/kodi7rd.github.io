@@ -209,19 +209,6 @@ def download(download_data,MySubFolder):
     login_cook=cache.get(get_login_cook,1, table='subs')
 
     f_id=download_data['id']
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Origin': 'https://www.ktuvit.me',
-        'Connection': 'keep-alive',
-        'Referer': 'https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id,
-        'Pragma': 'no-cache',
-        'Cache-Control': 'no-cache',
-        'TE': 'Trailers',
-        }
     count=0
     data = id
     result="הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית"
@@ -230,6 +217,20 @@ def download(download_data,MySubFolder):
     
         count+=1        
         log.warning(f"KTUVIT | Number of try: {count} | Sending RequestSubtitleDownload request...")
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Origin': 'https://www.ktuvit.me',
+            'Connection': 'keep-alive',
+            'Referer': 'https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id,
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache',
+            'TE': 'Trailers',
+            }
         
         x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
         log.warning(f"KTUVIT | Number of try: {count} | RequestSubtitleDownload response: {json.loads(x['d'])['DownloadIdentifier']}")
@@ -260,7 +261,7 @@ def download(download_data,MySubFolder):
         log.warning(f"KTUVIT | Number of try: {count} | DownloadFile response text:")
         log.warning(result)
 
-        if (count>10):
+        if (count>20):
             log.warning(f"KTUVIT | Number of try: {count} | Reached max tries count. breaking...")
             break
             

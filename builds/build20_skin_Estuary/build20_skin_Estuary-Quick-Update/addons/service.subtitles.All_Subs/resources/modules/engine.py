@@ -875,6 +875,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         try:
             sub_file=impmodule.download(download_data,MySubFolder)
         except:
+            log.warning(f"Exception downloading sub, configuring general.break_all=True...")
             general.break_all=True
         
     if language!='Hebrew'  and Addon.getSetting("auto_translate")=='true':
