@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.7.5[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.6[/B][/COLOR]
+* Fix bug when local Hebrew embedded showing in subtitles list when it doesn't exist.
+[COLOR yellow][B]v3.7.5[/B][/COLOR]
 * Fix Ktuvit subtitle download bug.
 [COLOR yellow][B]v3.7.4[/B][/COLOR]
 * Added media_type parameter (movie/tv) to video data array.

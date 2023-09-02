@@ -205,12 +205,15 @@ def add_demo_embbded(f_result_temp):
     return f_result_start
     
 def add_embbded_if_exists(f_result):
+
+        global is_embedded_hebrew_sub_exists
         
-        # Avoid checking when using subtitles search from context menu (display_subtitle)
-        if not xbmc.Player().isPlaying():
+        # Avoid checking when using subtitles search from context menu (display_subtitle) or not is_embedded_hebrew_sub_exists
+        if not xbmc.Player().isPlaying() or not is_embedded_hebrew_sub_exists:
+            log.warning(f'DEBUG | add_embbded_if_exists STOP | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists} | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
             return f_result
             
-        # Exit if embedded Hebrew sub is already present in f_result. Else, continue.
+        # Exit if embedded Hebrew sub is already present in f_result. Else, continue. Safe checking again.
         for items in f_result:
             if 'HebrewSubEmbedded' in items[8]:
                 return f_result
@@ -810,6 +813,7 @@ class KodiMonitor(xbmc.Monitor):
             
 
             sub_name=None
+            global is_embedded_hebrew_sub_exists
             is_embedded_hebrew_sub_exists=False
             log.warning(current_list_item_temp)
             
