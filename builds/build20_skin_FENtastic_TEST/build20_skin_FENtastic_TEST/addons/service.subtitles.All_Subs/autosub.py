@@ -143,6 +143,30 @@ def translate_sub_language_to_hebrew(language):
         return "אנגלית"
     else:
         return language
+    
+def determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+
+    # Check if "auto_place_hebrew_embedded_subs" setting is 'true'
+    if Addon.getSetting("auto_place_hebrew_embedded_subs") == 'true':
+        # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
+        if not last_sub_in_cache_is_external:
+            return True
+            
+    else:
+        # Check if first external subtitle language is NOT "Hebrew"
+        if first_external_sub_language != "Hebrew":
+            # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
+            if not last_sub_in_cache_is_external:
+                return True
+                
+        # If first_external_sub_language=="Hebrew", Check if last sub cache is Hebrew embedded
+        elif last_sub_in_cache_is_heb_embedded:
+            return True 
+    
+    return False
         
 def check_if_embedded_hebrew_sub_exists():
 
@@ -870,9 +894,6 @@ class KodiMonitor(xbmc.Monitor):
                         # Avoid f_result=None error if no subs found.
                         f_result = [] if not f_result else f_result
                         
-                        if Addon.getSetting("enable_autosub_notifications")=='true':
-                            general.show_msg="מחפש כתובית קודמת"
-                        
                         # Set is_embedded_hebrew_sub_exists to True if embedded Hebrew subs exists in playing video.
                         is_embedded_hebrew_sub_exists = check_if_embedded_hebrew_sub_exists()
                         
@@ -902,30 +923,9 @@ class KodiMonitor(xbmc.Monitor):
                         log.warning(f"DEBUG | last_sub_in_cache_is_empty: {last_sub_in_cache_is_empty}")
                         log.warning(f"DEBUG | last_sub_in_cache_is_heb_embedded: {last_sub_in_cache_is_heb_embedded}")
                         log.warning(f"DEBUG | last_sub_in_cache_is_external: {last_sub_in_cache_is_external}")
-                                    
-                                    
-                        # Initialize placeHebrewEmbeddedSub to False
-                        placeHebrewEmbeddedSub = False
 
-                        # Check if embedded Hebrew subtitles exist
-                        if is_embedded_hebrew_sub_exists:
-                        
-                            # Check if "auto_place_hebrew_embedded_subs" setting is 'true'
-                            if Addon.getSetting("auto_place_hebrew_embedded_subs") == 'true':
-                                # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
-                                if not last_sub_in_cache_is_external:
-                                    placeHebrewEmbeddedSub = True
-                                    
-                            else:
-                                # Check if first external subtitle language is NOT "Hebrew"
-                                if first_external_sub_language != "Hebrew":
-                                    # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
-                                    if not last_sub_in_cache_is_external:
-                                        placeHebrewEmbeddedSub = True
-                                        
-                                # If first_external_sub_language=="Hebrew", Check if last sub cache is Hebrew embedded
-                                elif last_sub_in_cache_is_heb_embedded:
-                                    placeHebrewEmbeddedSub = True  
+                        # set placeHebrewEmbeddedSub value
+                        placeHebrewEmbeddedSub = determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language) if is_embedded_hebrew_sub_exists else False
                                     
                         log.warning(f"DEBUG | placeHebrewEmbeddedSub: {placeHebrewEmbeddedSub}")   
                   

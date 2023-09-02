@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.7.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.7[/B][/COLOR]
+* Small code refactor. (determine_placeHebrewEmbeddedSub function)
+[COLOR yellow][B]v3.7.6[/B][/COLOR]
 * Fix bug when local Hebrew embedded showing in subtitles list when it doesn't exist.
 [COLOR yellow][B]v3.7.5[/B][/COLOR]
 * Fix Ktuvit subtitle download bug.
