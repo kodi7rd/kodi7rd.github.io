@@ -238,7 +238,7 @@ class source:
                         i['hash'] = str(_hash)
         
                     ############KODI-RD-IL###################
-                    original_twilight_source_file_name = i['name']
+                    original_twilight_video_tagline = i['name']
                     #########################################
                     
                     display_name = clean_file_name(normalize(i['name'].replace('html', ' ').replace('+', ' ').replace('-', ' ')))
@@ -259,7 +259,7 @@ class source:
                             # 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
                     # CUSTOM NEW LINE:
                     #########################################
-                    i.update({'provider': provider, 'original_twilight_source_file_name': original_twilight_source_file_name, 'display_name': display_name, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
+                    i.update({'provider': provider, 'original_twilight_video_tagline': original_twilight_video_tagline, 'display_name': display_name, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
                             'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
                     #########################################
                 except: pass

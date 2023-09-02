@@ -8,6 +8,7 @@ from collections import OrderedDict
 from kodirdil import string_utils
 from kodirdil import db_utils
 # Import hebrew subtitle search functions
+from kodirdil.websites import hebrew_embedded
 from kodirdil.websites import ktuvit
 from kodirdil.websites import wizdom
 from kodirdil.websites import opensubtitles
@@ -16,7 +17,8 @@ from kodirdil.websites import subscene
 
 ########### Settings ####################
 minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
-search_for_english_subtitles_when_no_hebrew_subtitles_found = kodi_utils.get_setting('search_for_english_subtitles_when_no_hebrew_subtitles_found', 'false') == 'true'
+search_for_english_subtitles_when_no_hebrew_subtitles_found = kodi_utils.get_setting('search_for_english_subtitles_when_no_hebrew_subtitles_found', 'true') == 'true'
+search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subtitles_in_embedded', 'true') == 'true'
 #########################################
 
 ########### Constants ###################
@@ -68,6 +70,9 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     }
     
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+    
+    # Write the current media_type to the media_type_dbcache table
+    db_utils.write_current_media_type_to_media_type_db(media_metadata['media_type'])
     
     # Search for subtitles in all websites and combine them into a single list
     combined_subtitles_list = []
@@ -173,7 +178,7 @@ def get_imdb_id(media_type, tmdb_id):
         return ''
         
 
-def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitles_found_count, subtitles_matched_count, total_quality_counts):
+def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_external_subtitles_found_count, total_hebrew_embedded_subtitles_matches_count, total_subtitles_matches_count, total_quality_counts):
 
     """
     Generate a formatted string to display a notification on a Twilight results top panel.
@@ -183,8 +188,8 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
     with matched subtitles.
 
     Args:
-        total_subtitles_found_count (int): The total number of subtitles found.
-        subtitles_matched_count (int): The number of sources with a subtitle match percentage greater than or equal to the minimum_sync_percent.
+        total_external_subtitles_found_count (int): The total number of subtitles found.
+        total_subtitles_found_count (int): The number of sources with a subtitle match percentage greater than or equal to the minimum_sync_percent.
         total_quality_counts (Dict[str, int]): A dictionary containing the count of each subtitle quality.
         minimum_sync_percent (int): The minimum percentage of subtitle match to display in the formatted string.
 
@@ -197,7 +202,14 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] | [COLOR yellow]מחפש התאמה מעל 90%[/COLOR] | [COLOR FF0166FF]SD: 0[/COLOR] | [COLOR FF3C9900]720P: 0[/COLOR] | [COLOR FF3CFA38]1080P: 3[/COLOR] | [COLOR FFFF00FE]4K: 2[/COLOR] | סך הכל '
     """
     
+    
     global GLOBAL_HEBREW_SUBTITLES_FOUND
+    
+    total_subtitles_found_count = total_external_subtitles_found_count + total_hebrew_embedded_subtitles_matches_count
+    
+    hebrew_embedded_text_string = ""
+    if total_hebrew_embedded_subtitles_matches_count > 0:
+        hebrew_embedded_text_string = f" [COLOR cyan]({total_hebrew_embedded_subtitles_matches_count} מתרגום מובנה)[/COLOR]"
     
     results_language_text = "[COLOR deepskyblue]שפת חיפוש כתוביות:[/COLOR] "
 
@@ -207,22 +219,24 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         results_language_text += (
             "[COLOR deepskyblue]עברית[/COLOR]"
             if GLOBAL_HEBREW_SUBTITLES_FOUND
-            else "[COLOR deepskyblue]אנגלית + תרגום מכונה[/COLOR] [COLOR red](לא נמצאו כתוביות בעברית)[/COLOR]"
+            else "[COLOR deepskyblue]אנגלית + תרגום מכונה[/COLOR] [COLOR red](אין חיצוניות בעברית)[/COLOR]"
         )
 
     total_subtitles_found_text = (
-    "[COLOR FFFE9900]נמצאה כתובית אחת[/COLOR]"
+    f"[COLOR FFFE9900]נמצאה כתובית אחת{hebrew_embedded_text_string}[/COLOR]"
     if total_subtitles_found_count == 1
     else (
-        f"[COLOR FFFE9900]נמצאו {total_subtitles_found_count} כתוביות סך הכל[/COLOR]"
+        f"[COLOR FFFE9900]נמצאו {total_subtitles_found_count} כתוביות סך הכל{hebrew_embedded_text_string}[/COLOR]"
         if total_subtitles_found_count > 0
         else "[COLOR red]לא נמצאו כתוביות לתוכן זה[/COLOR]"
     )
 )
+    
     subtitles_matched_count_text = (f"[COLOR yellow]לא נמצאו מקורות מעל {minimum_sync_percent}% סיכוי התאמה לכתוביות[/COLOR]"
-                                   if total_subtitles_found_count > 0 and subtitles_matched_count == 0
+                                   if total_subtitles_found_count > 0 and total_subtitles_matches_count == 0
                                    else "")
-    if subtitles_matched_count > 0:
+                                   
+    if total_subtitles_matches_count > 0:
     
         # Get the counts for each quality from the total quality counts dictionary
         count_4k = total_quality_counts.get("4K", 0)
@@ -250,31 +264,31 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_subtitl
         
         subtitles_matched_count_text = f"{text_minimum_sync_percent} {subtitles_matched_count_text}"
         
-    kodi_utils.logger("KODI-RD-IL", f"TWILIGHT sources with matched subtitles: {subtitles_matched_count}")
+    kodi_utils.logger("KODI-RD-IL", f"TWILIGHT sources with matched subtitles: {total_subtitles_matches_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
     return results_language_text, total_subtitles_found_text, subtitles_matched_count_text
     
     
-def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_twilight_source_file_name, quality):
+def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_twilight_video_tagline, quality, hebrew_embedded_taglines):
 
     """
     Calculates the highest subtitle synchronization percentage between the subtitles found and the given TWILIGHT source, and returns
     the corresponding subtitle website name and sync percentage as a string. If the sync percentage is greater than or equal to 
-    the minimum_sync_percent, sets the subtitles_matched_count to 1 and returns the formatted subtitle_matches_text.
+    the minimum_sync_percent, sets the total_subtitles_found_count to 1 and returns the formatted subtitle_matches_text.
 
     Args:
         total_subtitles_found_list (List[str]): A list of all the subtitle sources found.
-        original_twilight_source_file_name (str): The name of the original TWILIGHT source file.
+        original_twilight_video_tagline (str): The name of the original TWILIGHT source file.
         quality (str): The quality of the video file.
 
     Returns:
-        Dict: A dictionary containing subtitles_matched_count (an integer indicating the number of sources with a subtitle match percentage greater than or equal to minimum_sync_percent), subtitle_matches_text (a formatted string indicating the name of the subtitle website and the sync percentage), and the count for each quality.
+        Dict: A dictionary containing total_subtitles_found_count (an integer indicating the number of sources with a subtitle match percentage greater than or equal to minimum_sync_percent), subtitle_matches_text (a formatted string indicating the name of the subtitle website and the sync percentage), and the count for each quality.
         
     Example:
         >>> calculate_highest_sync_percent_and_set_match_text(["sub1", "sub2"], "TWILIGHT source", "1080p", 90)
         {
-            "subtitles_matched_count": 1,
+            "total_subtitles_found_count": 1,
             "subtitle_matches_text": '[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% התאמה של[/COLOR][/B]',
             "4k_count": 5,
             "1080p_count": 1,
@@ -290,34 +304,60 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
         "SD": 0
     }
     
-    subtitles_matched_count = 0
+    external_subtitles_matched_count = 0
+    hebrew_embedded_subtitles_matched_count = 0
     subtitle_matches_text = ""
-
-    highest_sync_percent, matched_subtitle_name, matched_subtitle_website_name  = calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_subtitles_found_list, original_twilight_source_file_name, quality)
     
-    if highest_sync_percent >= minimum_sync_percent:
+    ############################################# HEBREW EMBEDDED TAGLINES #############################################
     
-        subtitles_matched_count = 1
-        subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% סיכוי התאמה של[/COLOR][/B]"
+    # Checking first if video tagline matches embedded Hebrew taglines list. (which have 101% LOC embedded)
+    if search_hebrew_subtitles_in_embedded and hebrew_embedded_taglines:
         
-        # Increment the quality count if a match is found
-        if quality in quality_counts_for_source:
-            quality_counts_for_source[quality] = 1
+        is_hebrew_embedded_tagline_match_found = hebrew_embedded.check_match(original_twilight_video_tagline,hebrew_embedded_taglines)
         
-        kodi_utils.logger("KODI-RD-IL", f"Match found! SYNC PERCENT: {highest_sync_percent} | Between TWILIGHT Original Source File Name: {original_twilight_source_file_name} To Subtitle Name: {matched_subtitle_name}")
-        kodi_utils.logger("KODI-RD-IL", f"To Subtitle Name: {matched_subtitle_name}")
-        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+        if is_hebrew_embedded_tagline_match_found:
+            matched_subtitle_website_name = "[HEB|LOC]"
+    
+            hebrew_embedded_subtitles_matched_count = 1
+            subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR cyan]{matched_subtitle_website_name} תרגום מובנה בעברית[/COLOR][/B]"
+            
+            # Increment the quality count if a match is found
+            if quality in quality_counts_for_source:
+                quality_counts_for_source[quality] = 1
         
-    return subtitles_matched_count, subtitle_matches_text, quality_counts_for_source
+            kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Match found! SYNC PERCENT: 101% | For TWILIGHT Original Video Tagline: {original_twilight_video_tagline} (In Hebrew Embedded taglines repo).")
+            kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+            
+            return external_subtitles_matched_count, hebrew_embedded_subtitles_matched_count, subtitle_matches_text, quality_counts_for_source
+            
+    ############################################# EXTERNAL SUBTITLES #############################################
+    
+    if total_subtitles_found_list:
+    
+        highest_sync_percent, matched_subtitle_name, matched_subtitle_website_name  = calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_subtitles_found_list, original_twilight_video_tagline, quality)
+        
+        if highest_sync_percent >= minimum_sync_percent:
+        
+            external_subtitles_matched_count = 1
+            subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR yellow]{matched_subtitle_website_name} {highest_sync_percent}% סיכוי התאמה של[/COLOR][/B]"
+            
+            # Increment the quality count if a match is found
+            if quality in quality_counts_for_source:
+                quality_counts_for_source[quality] = 1
+            
+            kodi_utils.logger("KODI-RD-IL", f"Match found! SYNC PERCENT: {highest_sync_percent}% | Between TWILIGHT Original Video Tagline: {original_twilight_video_tagline} To Subtitle Name: {matched_subtitle_name}")
+            kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+            
+    return external_subtitles_matched_count, hebrew_embedded_subtitles_matched_count, subtitle_matches_text, quality_counts_for_source
 
 
-def calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_subtitles_found_list, original_twilight_source_file_name, quality):
+def calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_subtitles_found_list, original_twilight_video_tagline, quality):
 
     """Calculates the highest synchronization percentage between the given subtitles and the given TWILIGHT source file.
 
     Args:
         total_subtitles_found_list (List[Tuple[str, str]]): A list of tuples, where each tuple contains the name of a subtitle and the name of the subtitle website.
-        original_twilight_source_file_name (str): The name of the original TWILIGHT source file.
+        original_twilight_video_tagline (str): The name of the original TWILIGHT source file.
         quality (str): The quality of the video file.
 
     Returns:
@@ -338,7 +378,7 @@ def calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_s
     
     quality = quality_mapping.get(quality, quality)
     
-    array_twilight_source_file_name = original_twilight_source_file_name.strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
+    array_twilight_source_file_name = original_twilight_video_tagline.strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
 
     highest_sync_percent = 0
     matched_subtitle_name = ""
@@ -359,7 +399,7 @@ def calculate_highest_sync_percent_between_subtitles_and_twilight_source(total_s
             matched_subtitle_name = subtitle_name
             matched_subtitle_website_name = subtitle_website_name
         
-    # kodi_utils.logger("KODI-RD-IL", f"HIGHEST SYNC PERCENT IS: {highest_sync_percent}% (BETWEEN TWILIGHT FILE NAME - {original_twilight_source_file_name} AND SUBTITLE NAME - {matched_subtitle_name})")
+    # kodi_utils.logger("KODI-RD-IL", f"HIGHEST SYNC PERCENT IS: {highest_sync_percent}% (BETWEEN TWILIGHT FILE NAME - {original_twilight_video_tagline} AND SUBTITLE NAME - {matched_subtitle_name})")
     
     return highest_sync_percent, matched_subtitle_name, matched_subtitle_website_name
 
@@ -384,7 +424,7 @@ def calculate_sync_percent_between_subtitles_and_twilight_source(subtitle_name, 
     # Reset array_twilight_source_file_name (remove quality / releases names)
     array_twilight_source_file_name = [element.strip().lower() for element in array_twilight_source_file_name if element != '']
     
-    array_subtitle_name = subtitle_name.strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").split(".")
+    array_subtitle_name = subtitle_name.strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").split(".")
     array_subtitle_name=[element.strip().lower() for element in array_subtitle_name if element != '']
 
     if quality not in array_twilight_source_file_name and quality in array_subtitle_name:
