@@ -57,7 +57,7 @@ def get_subs(item):
           
             json_data={'url':url,
                              'label':"Hebrew",
-                             'label2':site_id+item_data["versioname"],
+                             'label2':site_id+' '+item_data["versioname"],
                              'iconImage':"%s"%(item_data["score"]/2),
                              'thumbnailImage':"he",
                              'hearing_imp':'false',

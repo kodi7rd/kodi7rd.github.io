@@ -1178,4 +1178,22 @@ msgctxt "#700049"
 msgid "[B]Return to the home screen[/B]"
 msgstr ""
 
+# Twilight + DarkSubs Setting / CLear Cache In Power Menu - DialogButtonMenu.xml
+
+msgctxt "#700050"
+msgid "Open Twilight Settings"
+msgstr ""
+
+msgctxt "#700051"
+msgid "Open DarkSubs Settings"
+msgstr ""
+
+msgctxt "#700052"
+msgid "Clear Twilight Cache"
+msgstr ""
+
+msgctxt "#700053"
+msgid "Clear DarkSubs Cache"
+msgstr ""
+
 ################################################################

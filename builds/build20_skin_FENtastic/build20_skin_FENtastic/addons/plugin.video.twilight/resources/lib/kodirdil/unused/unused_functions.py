@@ -56,14 +56,14 @@ def generate_subtitles_match_top_panel_text_for_100_match(total_subtitles_found_
     return total_subtitles_found_text + subtitles_matched_count_text
     
     
-def subtitle_name_to_twilight_source_file_name_matching(total_subtitles_found_list, original_twilight_source_file_name):
+def subtitle_name_to_twilight_source_file_name_matching(total_subtitles_found_list, original_twilight_video_tagline):
 
     """
     Matches the subtitle name with the TWILIGHT source file name.
 
     Args:
     - total_subtitles_found_list (list): A list of tuples containing subtitle names and website names.
-    - original_twilight_source_file_name (str): The original name of the TWILIGHT source file.
+    - original_twilight_video_tagline (str): The original name of the TWILIGHT source file.
 
     Returns:
     - subtitles_matched_count (int): The count of matched subtitles. 
@@ -80,14 +80,14 @@ def subtitle_name_to_twilight_source_file_name_matching(total_subtitles_found_li
             
             # Clean up the subtitle name and the source file name using the clean_string function
             current_subtitle_name = string_utils.clean_string(subtitle_name)
-            twilight_source_file_name = string_utils.clean_string(original_twilight_source_file_name)
+            twilight_source_file_name = string_utils.clean_string(original_twilight_video_tagline)
             
             # Check if the cleaned up subtitle name is an exact match to the cleaned up source file name
             if current_subtitle_name == twilight_source_file_name:
                 
                 #kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - current_subtitle_name: {subtitle_name}")
-                kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - twilight_source_file_name: {original_twilight_source_file_name}")
+                kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - twilight_source_file_name: {original_twilight_video_tagline}")
             
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} AFTER STRIP - current_subtitle_name: {current_subtitle_name}")  
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} AFTER STRIP - twilight_source_file_name: {twilight_source_file_name}")
@@ -107,7 +107,7 @@ def subtitle_name_to_twilight_source_file_name_matching(total_subtitles_found_li
                 
                 #kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - current_subtitle_name: {subtitle_name}")
-                kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - twilight_source_file_name: {original_twilight_source_file_name}")
+                kodi_utils.logger("KODI-RD-IL", f"{website_name} BEFORE STRIP - twilight_source_file_name: {original_twilight_video_tagline}")
             
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} AFTER STRIP - current_subtitle_name: {current_subtitle_name}")  
                 kodi_utils.logger("KODI-RD-IL", f"{website_name} AFTER STRIP - twilight_source_file_name: {twilight_source_file_name}")

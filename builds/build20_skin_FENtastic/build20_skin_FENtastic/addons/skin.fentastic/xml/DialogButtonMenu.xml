@@ -19,7 +19,7 @@
 				<include>ButtonMenuList</include>
 				<content>
 					<item>
-						<label>$LOCALIZE[13012]</label>
+						<label>[B][COLOR blue]$LOCALIZE[13012][/COLOR][/B]</label>
 						<!-- Original - <onclick>Quit()</onclick> -->
 						<!-- Force Close Kodi Script:  -->
 						<onclick>RunScript(&quot;plugin.close.kodi&quot;)</onclick>
@@ -27,15 +27,39 @@
 					</item>
 					<item>
 						<!-- Skin settings in Hebrew  -->
-						<label>$LOCALIZE[700018]</label>
+						<label>[B][COLOR blue]$LOCALIZE[700018][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
 						<onclick>ActivateWindow(SkinSettings.xml)</onclick>
 					</item>
 					<item>
 						<!-- Reload skin in Hebrew  -->
-						<label>$LOCALIZE[700017]</label>
+						<label>[B][COLOR blue]$LOCALIZE[700017][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
 						<onclick>ReloadSkin()</onclick>
+					</item>
+					<item>
+						<!-- Open Twilight Settings  -->
+						<label>[B][COLOR blue]$LOCALIZE[700050][/COLOR][/B]</label>
+						<onclick>Addon.OpenSettings(plugin.video.twilight)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<!-- Open DarkSubs Settings  -->
+						<label>[B][COLOR blue]$LOCALIZE[700051][/COLOR][/B]</label>
+						<onclick>Addon.OpenSettings(service.subtitles.All_Subs)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<!-- Clear Twilight Cache  -->
+						<label>[B][COLOR blue]$LOCALIZE[700052][/COLOR][/B]</label>
+						<onclick>PlayMedia(&quot;plugin://plugin.video.twilight/?mode=clear_all_cache&amp;isFolder=false&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FRDNxy36.png&quot;)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<!-- Clear DarkSubs Cache  -->
+						<label>[B][COLOR blue]$LOCALIZE[700053][/COLOR][/B]</label>
+						<onclick>RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)</onclick>
+						<visible>System.ShowExitButton</visible>
 					</item>
 				</content>
 			</control>
