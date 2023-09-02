@@ -1,13 +1,9 @@
-
-
-
-
 import os,time
 import xbmc,xbmcaddon,xbmcvfs,xbmcgui
 import threading
+
 from urllib.parse import  unquote_plus, unquote,  quote
 from resources.modules import log
-
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 xbmc_tranlate_path=xbmcvfs.translatePath
 user_dataDir = xbmc_tranlate_path(xbmcaddon.Addon().getAddonInfo("profile"))
@@ -29,6 +25,7 @@ progress_msg=0
 global break_all
 break_all=False
 with_dp=True
+
 class OverlayText:
     def __init__(self):
         log.warning('(Overlay) Initialize overlay text')
@@ -71,19 +68,19 @@ class OverlayText:
         w = int(int(1920.0 * 0.7) * viewport_w / 1920.0)
         h = int(150 * viewport_h / 1088.0)
         x = int((viewport_w - w) / 2)
-        y = int(10)
+        y = int(35)
         
         # icon
         w2 = 95#int(int(20.0 * 0.7) * viewport_w / 20.0)
         h2 = int(95 * viewport_h / 1088.0)
-        x2 = 570
+        x2 = 170
         y2 = int(30)
         
         # background
-        w3 = 800#int(int(20.0 * 0.7) * viewport_w / 20.0)
-        h3 = int(100 * viewport_h / 1088.0)
-        x3 = 540
-        y3 = int(30)
+        w3 = 1330#int(int(20.0 * 0.7) * viewport_w / 20.0)
+        h3 = 150
+        x3 = 135
+        y3 = 20
         
         
         return x, y, w, h,x2, y2, w2, h2,x3, y3, w3, h3
@@ -116,7 +113,7 @@ def show_results(show_dp=True):
     from resources.modules.general import with_dp
     show_dp=with_dp
     break_all=False
-    log.warning('show_dp:'+str(show_dp))
+    
     time_out=0
     if (show_dp):
         dp = xbmcgui.DialogProgress()
@@ -132,11 +129,12 @@ def show_results(show_dp=True):
                 break
             if (show_msg=="END"):
                 break_all=True
+                
                 dp.close()
                 break
             time.sleep(0.1)
             time_out+=1
-            if (time_out>600):
+            if (time_out>1200):
                 break_all=True
                 dp.close()
                 break
@@ -151,8 +149,9 @@ def show_results(show_dp=True):
             cond=xbmc.Monitor().abortRequested()
         except:
             cond=xbmc.abortRequested
-        log.warning(cond)
+            
         close_overlay=False
+        time_out=0
         with OverlayText() as _overlay:
           
           while (not cond) and (xbmc.Player().isPlaying()):
@@ -166,15 +165,19 @@ def show_results(show_dp=True):
                 
             if _overlay.isShowing():
                 if (show_msg!="END"):
-                    _overlay.setText(show_msg)
+                    add_str=""
+                    for i in range(0,int(120-(time_out/10))):
+                        add_str+='_';
+                    _overlay.setText(show_msg+'\n'+add_str)
 
             time.sleep(0.1)
-            if (show_msg=="END"):
+            time_out+=1
+            if (show_msg=="END") or (time_out>1200):
                 close_overlay=True
                 _overlay.close()
                 
-def notify(msg_id, times=500, icon=iconx,sound=False):
-        xbmcgui.Dialog().notification(MyScriptName, msg_id, icon, int(times), sound)
+def notify(msg_id, times=3500, icon=iconx,sound=False):
+        xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
         
 
 def take_title_from_focused_item():
@@ -210,7 +213,7 @@ def get_video_data():
         video_data['title']=xbmc.getInfoLabel("VideoPlayer.Title")
         video_data['OriginalTitle']=xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
         tag_fen=xbmcgui.Window(10000).getProperty("subs.player_filename")
-        log.warning('tag_fen:'+tag_fen)
+        
         video_data['Tagline']=xbmc.getInfoLabel("VideoPlayer.Tagline")
         if tag_fen!="":
             video_data['Tagline']=tag_fen
@@ -236,8 +239,14 @@ def get_video_data():
         video_data['file_original_path'] = video_data['file_original_path'].split("?")
         video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
         video_data['mpaa']=xbmc.getInfoLabel("VideoPlayer.mpaa")
+        
+        # Determine media type based on TVshowtitle, season, and episode
+        if video_data['TVshowtitle'] and (video_data['season'] != 0 or video_data['episode'] != 0):
+            video_data['media_type'] = 'tv'
+        else:
+            video_data['media_type'] = 'movie'
+        
     else:
-        log.warning('Xbmc NOT Playing')
         video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
         video_data['year'] = xbmc.getInfoLabel("ListItem.Year")
         video_data['season'] = xbmc.getInfoLabel("ListItem.Season")
@@ -279,7 +288,11 @@ def get_video_data():
     video_data['OriginalTitle']=clean_name(video_data['OriginalTitle'])
     
     return video_data
-def save_file_name(filename):
+def save_file_name(filename,language):
+      
+    video_data_tagline = quote(get_video_data()['Tagline'])
+    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+    
     try:
         from sqlite3 import dbapi2 as database
     except:
@@ -287,46 +300,59 @@ def save_file_name(filename):
     cacheFile=os.path.join(user_dataDir,'database.db')
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT );" % ('list_sub'))
+    
+    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
+                  "language TEXT, "
+                  "filename TEXT, "
+                  "video_data_tagline TEXT, "
+                  "video_data_file_original_path TEXT);" % ('list_subs_cache'))
 
-    dbcur.execute("SELECT * FROM list_sub ")
+
+    dbcur.execute("SELECT * FROM list_subs_cache ")
     list_sub = dbcur.fetchall()
-    if filename not in list_sub :         
-         dbcur.execute("INSERT INTO list_sub Values ('%s')"%(filename))
+    dbcur.execute("INSERT INTO list_subs_cache Values ('{0}','{1}','{2}','{3}')".format(language,filename,video_data_tagline,video_data_file_original_path))
+
     dbcon.commit()
     dbcon.close()
 def get_db_data(f_result):
+      
+    video_data_tagline = quote(get_video_data()['Tagline'])
+    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+    
     try:
       from sqlite3 import dbapi2 as database
     except:
       from pysqlite2 import dbapi2 as database
+    
     cacheFile=os.path.join(user_dataDir,'database.db')
     dbcon = database.connect(cacheFile)
     dbcur = dbcon.cursor()
-    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ( ""name TEXT );" % ('list_sub'))
-    dbcur.execute("SELECT * FROM list_sub")
+    dbcur.execute("CREATE TABLE IF NOT EXISTS %s ("
+                  "language TEXT, "
+                  "filename TEXT, "
+                  "video_data_tagline TEXT, "
+                  "video_data_file_original_path TEXT);" % ('list_subs_cache'))
+                  
+    dbcur.execute("SELECT * FROM list_subs_cache")
     list_sub = dbcur.fetchall()
     dbcur.close()
     dbcon.close()
+    
     all_subs={}
-    last_sub_index=''
-    x=0
-    for i in list_sub:
-        all_subs[i[0]]=x
-        x+=1
-    max_index=0
-    for items in f_result:
-        
-        c_sub_name=items[8]
-        
-        try:
-            val=all_subs[c_sub_name]
-            a_index=val
-            if a_index>max_index:
-                last_sub_index=c_sub_name
-                max_index=a_index
-        except:
-            pass
-    return last_sub_index,all_subs
+    for sub_language, sub_name, tagline, file_original_path in list_sub:
+        if tagline == video_data_tagline or file_original_path == video_data_file_original_path:
+            all_subs.setdefault(sub_name, []).append(sub_language)
+            
+    last_sub_name_in_cache=''
+    last_sub_language_in_cache = ''
+    
+    # Get the LATEST written cached subtitle+language combination for current video Tagline/file path. (reversed list - first row is the last written)
+    for sub_language, sub_name, tagline, file_original_path in reversed(list_sub):
+        if tagline == video_data_tagline or file_original_path == video_data_file_original_path:
+            last_sub_name_in_cache = sub_name
+            last_sub_language_in_cache = sub_language
+            break
+    
+    return last_sub_name_in_cache,last_sub_language_in_cache,all_subs
     
 
