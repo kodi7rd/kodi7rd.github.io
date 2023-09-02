@@ -230,11 +230,17 @@ def add_demo_embbded(f_result_temp):
     
 def add_embbded_if_exists(f_result):
 
-        global is_embedded_hebrew_sub_exists
+        try:
+            global is_embedded_hebrew_sub_exists
+            if not is_embedded_hebrew_sub_exists:
+                log.warning(f'DEBUG | add_embbded_if_exists STOP | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}')
+                return f_result
+        except:
+            pass
         
-        # Avoid checking when using subtitles search from context menu (display_subtitle) or not is_embedded_hebrew_sub_exists
-        if not xbmc.Player().isPlaying() or not is_embedded_hebrew_sub_exists:
-            log.warning(f'DEBUG | add_embbded_if_exists STOP | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists} | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
+        # Avoid checking when using subtitles search from context menu (display_subtitle)
+        if not xbmc.Player().isPlaying():
+            log.warning(f'DEBUG | add_embbded_if_exists STOP | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
             return f_result
             
         # Exit if embedded Hebrew sub is already present in f_result. Else, continue. Safe checking again.

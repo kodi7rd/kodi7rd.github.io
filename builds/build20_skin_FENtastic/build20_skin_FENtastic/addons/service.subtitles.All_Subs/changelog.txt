@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.7.7[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.8[/B][/COLOR]
+* Fix small error when searching for subtitles from context menu.
+[COLOR yellow][B]v3.7.7[/B][/COLOR]
 * Small code refactor. (determine_placeHebrewEmbeddedSub function)
 [COLOR yellow][B]v3.7.6[/B][/COLOR]
 * Fix bug when local Hebrew embedded showing in subtitles list when it doesn't exist.
