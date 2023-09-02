@@ -35,7 +35,7 @@ database_path_raw = 'special://profile/addon_data/plugin.video.twilight/database
 # ORIGINAL TWILIGHT LINE:
 #current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
 # NEW CUSTOM LINE:
-current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'hebrew_subtitles.db')
+current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'twilight_hebrew_subtitles.db', 'twilight_media_type.db')
 #########################################
 
 single_ep_title_prop, single_ep_format_prop, include_year_prop, fanart_key_prop = 'twilight.single_ep_display', 'twilight.single_ep_format', 'twilight.include_year_in_title', 'twilight.fanart_client_key'
@@ -78,6 +78,7 @@ external_db = translatePath(database_path_raw % current_dbs[7])
 
 ############KODI-RD-IL###################
 hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[8])
+media_type_db = translatePath(database_path_raw % current_dbs[9])
 #########################################
 
 myvideos_db_paths = {19: '119', 20: '121', 21: '121'}

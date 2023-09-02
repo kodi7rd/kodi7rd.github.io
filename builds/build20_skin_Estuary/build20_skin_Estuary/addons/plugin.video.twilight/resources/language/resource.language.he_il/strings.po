@@ -20,6 +20,10 @@ msgstr "מחובר (לחץ לניתוק)"
 
 # Dialog Messages
 
+msgctxt "#32736"
+msgid "Cancelled"
+msgstr "בוטל"
+
 msgctxt "#32576"
 msgid "Success"
 msgstr "בוצע בהצלחה"
@@ -43,6 +47,10 @@ msgstr "אישור"
 msgctxt "#32840"
 msgid "Cancel"
 msgstr "ביטול"
+
+msgctxt "#33090"
+msgid "Now"
+msgstr "עכשיו"
 
 # Connect Debrid/Trakt Services
 
@@ -125,5 +133,11 @@ msgstr "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgctxt "#400011"
 msgid " Results"
 msgstr " מקורות"
+
+# Continue Subtitles Websites
+
+msgctxt "#400012"
+msgid "תרגום מובנה בעברית [COLOR blue](מאגר לומד)[/COLOR]"
+msgstr "תרגום מובנה בעברית [COLOR blue](מאגר לומד)[/COLOR]"
 
 ###################################################################################################################################

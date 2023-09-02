@@ -40,6 +40,16 @@
 				</setting>
 			</group>
 			<group id="3" label="40006">
+				<setting id="search_hebrew_subtitles_in_embedded" type="boolean" label="400012" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="enable_hebrew_subtitles_to_twilight_sources_matching">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 				<setting id="search_hebrew_subtitles_in_ktuvit" type="boolean" label="40007" help="">
 					<level>0</level>
 					<default>true</default>
@@ -1883,7 +1893,7 @@
 				</setting>
 				<setting id="results.list_format" type="string" label="32102" help="">
 					<level>0</level>
-					<default>List</default>
+					<default>MediaList</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=results_format_choice)</data>
 					</control>
@@ -3575,7 +3585,7 @@
 				</setting>
 				<setting id="view.movies" type="string" help="">
 					<level>0</level>
-					<default>500</default>
+					<default>51</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3587,7 +3597,7 @@
 				</setting>
 				<setting id="view.tvshows" type="string" help="">
 					<level>0</level>
-					<default>500</default>
+					<default>51</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3599,7 +3609,7 @@
 				</setting>
 				<setting id="view.seasons" type="string" help="">
 					<level>0</level>
-					<default>55</default>
+					<default>502</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>

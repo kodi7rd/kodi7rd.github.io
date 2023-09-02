@@ -1088,4 +1088,22 @@ msgctxt "#700030"
 msgid "Open Keyboard On Search Dialog"
 msgstr ""
 
+# Twilight + DarkSubs Setting / CLear Cache In Power Menu - DialogButtonMenu.xml
+
+msgctxt "#700031"
+msgid "Open Twilight Settings"
+msgstr ""
+
+msgctxt "#700032"
+msgid "Open DarkSubs Settings"
+msgstr ""
+
+msgctxt "#700033"
+msgid "Clear Twilight Cache"
+msgstr ""
+
+msgctxt "#700034"
+msgid "Clear DarkSubs Cache"
+msgstr ""
+
 ################################################################

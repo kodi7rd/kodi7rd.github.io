@@ -68,6 +68,7 @@ def check_databases():
     
     ############KODI-RD-IL###################
     db_utils.clear_hebrew_subtitles_db_cache()
+    db_utils.clear_media_type_db_cache()
     #########################################
 
 def remove_old_caches():

@@ -1,4 +1,49 @@
-﻿[COLOR yellow][B]v3.2.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.7.7[/B][/COLOR]
+* Small code refactor. (determine_placeHebrewEmbeddedSub function)
+[COLOR yellow][B]v3.7.6[/B][/COLOR]
+* Fix bug when local Hebrew embedded showing in subtitles list when it doesn't exist.
+[COLOR yellow][B]v3.7.5[/B][/COLOR]
+* Fix Ktuvit subtitle download bug.
+[COLOR yellow][B]v3.7.4[/B][/COLOR]
+* Added media_type parameter (movie/tv) to video data array.
+[COLOR yellow][B]v3.7.3[/B][/COLOR]
+* Changed [COLOR orange][LOC] כתובית מובנית 101%[/COLOR] subtitle color to [COLOR cyan]cyan[/COLOR].
+* Removed "ExcludeTime" setting (don't download for videos shorter than...)
+* Added setting to improve Twilight Hebrew embedded subtitles repo.
+* Added more Ktuvit debug logs to identify fault response bug.
+[COLOR yellow][B]v3.7.0[/B][/COLOR]
+* Add setting to enable/disable autosub notification messages:
+[B]הגדרות - הגדרות כלליות - הצג הודעות מידע בעת חיפוש כתוביות[/B]
+* Add setting to enable/disable automatic download of embedded Hebrew subtitles:
+[B]הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)[/B]
+* When the setting is [B][COLOR limegreen]ON[/COLOR][/B] - Will always choose embedded Hebrew subtitles when exists ([B][COLOR yellow]UNLESS[/COLOR][/B] you have different subtitles selected in cache).
+* When the setting is [B][COLOR red]OFF[/COLOR][/B] - Will prioritize external subtitles over embedded Hebrew subtitles ([B][COLOR yellow]UNLESS[/COLOR][/B] no Hebrew subtitles found / you have different subtitles selected in cache).
+* Improve subtitles cache accuracy per specific video source played.
+* Slightly improve subtitles sorting by sync percentage.
+[COLOR yellow][B]v3.5.1[/B][/COLOR]
+* Add setting to auto clean cache on Kodi startup:
+הגדרות - הגדרות קאש - נקה קאש אוטומטית בעת הפעלת קודי
+[COLOR yellow][B]v3.5.0[/B][/COLOR]
+* Add clean cache button in addon settings:
+הגדרות - הגדרות קאש - לחץ כדי לנקות קאש כתוביות
+[COLOR yellow][B]v3.4.9[/B][/COLOR]
+* Fix machine translate progress not showing in DarkSubs sub window.
+[COLOR yellow][B]v3.4.8[/B][/COLOR]
+* Rearrange settings window order + labels.
+[COLOR yellow][B]v3.4.6[/B][/COLOR]
+* Subtitles sorting now sorts by sync percentage then by site_id (website source name) by a specific order: [Kt], [Wiz], [Op], [SS], [Bs].
+[COLOR yellow][B]v3.4.5[/B][/COLOR]
+* Add setting to Bing machine translate - search available key by rising/random order.
+[COLOR yellow][B]v3.4.4[/B][/COLOR]
+* Improve Ktuvit website subtitle search code.
+* Adjust general.show_msg labels appearance.
+[COLOR yellow][B]v3.4.1[/B][/COLOR]
+* Improve embedded Hebrew subtitles code.
+* Add user notification for chosen subtitle. Example: Hebrew | ktuvit | 57% | John.Wick.1080p.RARBG.srt
+[COLOR yellow][B]v3.3.8[/B][/COLOR]
+* Auto select embedded Hebrew subtitles if exists.
+* Also supports choosing embedded subtitles from DarkSubs sub window.
+[COLOR yellow][B]v3.2.6[/B][/COLOR]
 * Adjust sub_window labels.
 * Small fixes.
 [COLOR yellow][B]v3.2.4[/B][/COLOR]
@@ -47,5 +92,3 @@
 * fix translated sub cache.
 [COLOR yellow][B]v3.0.3[/B][/COLOR]
 * Fix Subscene source for tv shows
-
-
