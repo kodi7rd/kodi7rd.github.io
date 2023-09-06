@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.7.8[/B][/COLOR]
+﻿[COLOR yellow][B]v3.8.0[/B][/COLOR]
+* Small autosub-place_sub function code fix (for loop).
+[COLOR yellow][B]v3.7.8[/B][/COLOR]
 * Fix small error when searching for subtitles from context menu.
 [COLOR yellow][B]v3.7.7[/B][/COLOR]
 * Small code refactor. (determine_placeHebrewEmbeddedSub function)

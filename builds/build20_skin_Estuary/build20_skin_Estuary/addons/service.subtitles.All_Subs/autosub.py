@@ -299,52 +299,43 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
         general.show_msg="מוריד כתובית נבחרת"
     # Default placing sub to the first subtitle in subtitles list results.
     selected_sub=f_result[0]
-    log.warning(f"selected_sub BEFORE checking last sub in cache: {selected_sub}")
+    log.warning(f"place_sub | selected_sub BEFORE checking last sub in cache: {selected_sub}")
     # Changing subtitle to place to subtitles from database.db cache db (if exists)
     if not last_sub_in_cache_is_empty:
-        for items in f_result:
-            if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
-                selected_sub=items
+        for f_sub in f_result:
+            if (last_sub_name_in_cache==f_sub[8]) and (last_sub_language_in_cache==f_sub[0]):
+                selected_sub=f_sub
                 break
-    log.warning(f"selected_sub AFTER checking last sub in cache: {selected_sub}")
+    log.warning(f"place_sub | selected_sub AFTER checking last sub in cache: {selected_sub}")
+    
     c_sub_file=None
-    params=get_params(selected_sub[4],"")
-    download_data=unque(params["download_data"])
-    download_data=json.loads(download_data)
-    source=(params["source"])
-    language=(params["language"])
-    filename=unque(params["filename"])
-    try:
-        sub_file=download_sub(source,download_data,MySubFolder,language,filename)
-        fault=False
-        log.warning('Auto Sub result:'+str(sub_file))
-        if (sub_file!='HebSubEmbeddedSelected'):
-            
-            ###################################################################################################################################################
-            # Reformatting variables for user notification of auto selected subtitle
-            if Addon.getSetting("enable_autosub_notifications")=='true':
-            
-                notify_website_name = format_website_source_name(source)
-                notify_language = f"{translate_sub_language_to_hebrew(language)} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else translate_sub_language_to_hebrew(language)
-                notify_sync_percent = str(selected_sub[5])
-            
-                notify( f"{notify_language} | {notify_sync_percent}% | {notify_website_name}" )
-            ###################################################################################################################################################
-            xbmc.sleep(100)
-            xbmc.Player().setSubtitles(sub_file)
+    place_sub_count = 0
+    for f_sub in f_result:
+        place_sub_count += 1
+    
+        params=get_params(selected_sub[4],"")
+        download_data=unque(params["download_data"])
+        download_data=json.loads(download_data)
+        source=(params["source"])
+        language=(params["language"])
+        filename=unque(params["filename"])
+        try:
+                
+            sub_file=download_sub(source,download_data,MySubFolder,language,filename)
+            log.warning('Auto Sub result:'+str(sub_file))
+            xbmc.sleep(200)
+            xbmc.Player().setSubtitles(sub_file)        
             save_file_name(params["filename"],language)
+            
             f_count=0
             max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
-            log.warning('2')
             for filename_o in os.listdir(CachedSubFolder):
-                
                 f_count+=1
             
             if (f_count>max_sub_cache):
                     for filename_o in os.listdir(CachedSubFolder):
                         f = os.path.join(CachedSubFolder, filename_o)
-                        os.remove(f) 
-            log.warning(sub_file)
+                        os.remove(f)
             try:
                 file_type=(os.path.splitext(sub_file)[1])
             except:
@@ -354,15 +345,28 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
                     if file_type=='.idx'  or file_type=='.sup':
                         shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
                     shutil.copy(sub_file,c_sub_file)
-        else:
             
-            c_sub_file='HebSubEmbeddedSelected'
-    except Exception as e:
-        log.warning('Error in Sub:'+str(e))
-        selected_sub=items
-        fault=True
+            ################################################################################################################################
+            # Reformatting variables for user notification of auto selected subtitle
+            if Addon.getSetting("enable_autosub_notifications")=='true':
             
-    
+                notify_website_name = format_website_source_name(source)
+                notify_language = f"{translate_sub_language_to_hebrew(language)} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else translate_sub_language_to_hebrew(language)
+                notify_sync_percent = str(selected_sub[5])
+            
+                notify( f"{notify_language} | {notify_sync_percent}% | {notify_website_name}" )
+            ################################################################################################################################
+            
+            # Break the loop since setting external subtitle was successful.
+            log.warning(f"DEBUG | place_sub | Number of try: {place_sub_count} | Successfuly set external sub: {sub_file}")
+            break
+                    
+        except Exception as e:
+            # Try the next subtitle in f_result.
+            log.warning(f"DEBUG | place_sub | Number of try: {place_sub_count} | Exception in Sub: {str(e)}")
+            log.warning(f"DEBUG | place_sub | Number of try: {place_sub_count} | Setting selected_sub to: {f_sub}")
+            selected_sub=f_sub
+            continue
             
     return c_sub_file,filename
 def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,argv1):
