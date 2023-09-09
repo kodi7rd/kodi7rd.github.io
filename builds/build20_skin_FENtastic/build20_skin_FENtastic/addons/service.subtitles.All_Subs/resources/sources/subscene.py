@@ -50,15 +50,16 @@ def get_subs(item):
     Addon=xbmcaddon.Addon()
     global global_var
     log.warning('Searching Subcene')
-       
     
-    selected_lang=['heb']
-    if Addon.getSetting("arab")== 'true':
-        selected_lang.append('ara')
-    if Addon.getSetting("spanish")== 'true':
-        selected_lang.append('spa')
-    if Addon.getSetting("English")== 'true':
+    selected_lang=[]
+    if Addon.getSetting("language_hebrew")=='true':
+        selected_lang.append('heb')
+    if Addon.getSetting("language_english")=='true':
         selected_lang.append('eng')
+    if Addon.getSetting("language_arab")=='true':
+        selected_lang.append('ara')
+    if Addon.getSetting("language_spanish")=='true':
+        selected_lang.append('spa')
     if len(Addon.getSetting("other_lang"))>0:
          all_lang=Addon.getSetting("other_lang").split(",")
          

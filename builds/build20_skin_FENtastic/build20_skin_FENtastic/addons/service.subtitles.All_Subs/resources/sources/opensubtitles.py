@@ -125,15 +125,16 @@ class OSDBServer:
      if ( self.osdb_token ) :
       searchlist  = []
       lang=[]
-      lang.append('heb')
       
-      if Addon.getSetting("English")== 'true':
+      if Addon.getSetting("language_hebrew")=='true':
+       lang.append('heb')
+      if Addon.getSetting("language_english")=='true':
        lang.append('eng')
-      if Addon.getSetting("arab")== 'true':
+      if Addon.getSetting("language_arab")=='true':
         lang.append('ara')
-      if Addon.getSetting("spanish")== 'true':
+      if Addon.getSetting("language_spanish")=='true':
         lang.append('spa')
-      if Addon.getSetting("all_lang")== 'true':
+      if Addon.getSetting("all_lang")=='true':
         lang.append('ALL')
       if len(Addon.getSetting("other_lang"))>0:
          all_lang=Addon.getSetting("other_lang").split(",")
@@ -153,8 +154,6 @@ class OSDBServer:
           OS_search_string = imdb_id
          
 
-      
-      lang.append('tr')
       if not False:
         
 

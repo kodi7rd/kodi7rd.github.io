@@ -150,8 +150,6 @@ def sort_subtitles(save_all_data,video_data):
 
            if precent2>precent:
               precent=precent2
-    
-           #if 'language=English' in json_value['url'] or 'language=Arabic' in json_value['url'] or 'language=Spanish' in json_value['url']:
            
            if 'language=Hebrew' not in json_value['url'] and 'language=he' not in json_value['url'] and ('language=' in  json_value['url'] or 'Hebrew' not in json_value['label']):
                
@@ -358,16 +356,16 @@ def c_get_subtitles(video_data):
     opensubtitles.global_var=[]
     subscene.global_var=[]
     wizdom.global_var=[]
-    
-    if Addon.getSetting('bsplayer')=='true':
         
-        thread.append(Thread(bsplayer.get_subs,video_data))
-        all_sources.append(('bsplayer',bsplayer))
-        
-    if Addon.getSetting('ktuvit')=='true':
+    if Addon.getSetting('ktuvit')=='true' and Addon.getSetting('language_hebrew')=='true':
         
         thread.append(Thread(ktuvit.get_subs,video_data))
         all_sources.append(('ktuvit',ktuvit))
+        
+    if Addon.getSetting('wizdom')=='true' and Addon.getSetting('language_hebrew')=='true':
+        
+        thread.append(Thread(wizdom.get_subs,video_data))
+        all_sources.append(('wizdom',wizdom))
         
     if Addon.getSetting('opensubtitles')=='true':
         
@@ -378,11 +376,11 @@ def c_get_subtitles(video_data):
         
         thread.append(Thread(subscene.get_subs,video_data))
         all_sources.append(('subscene',subscene))
+    
+    if Addon.getSetting('bsplayer')=='true' and Addon.getSetting('language_hebrew')=='true':
         
-    if Addon.getSetting('wizdom')=='true':
-        
-        thread.append(Thread(wizdom.get_subs,video_data))
-        all_sources.append(('wizdom',wizdom))
+        thread.append(Thread(bsplayer.get_subs,video_data))
+        all_sources.append(('bsplayer',bsplayer))
         
     
             
