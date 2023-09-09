@@ -130,10 +130,10 @@ class OSDBServer:
        lang.append('heb')
       if Addon.getSetting("language_english")=='true':
        lang.append('eng')
+      if Addon.getSetting("language_russian")=='true':
+        lang.append('rus')
       if Addon.getSetting("language_arab")=='true':
         lang.append('ara')
-      if Addon.getSetting("language_spanish")=='true':
-        lang.append('spa')
       if Addon.getSetting("all_lang")=='true':
         lang.append('ALL')
       if len(Addon.getSetting("other_lang"))>0:

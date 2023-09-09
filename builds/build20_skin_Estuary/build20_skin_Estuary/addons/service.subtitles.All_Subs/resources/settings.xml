@@ -18,8 +18,8 @@
 		<setting label="שפות נפוצות" type="lsep"/>
 		<setting id="language_hebrew" label="עברית" type="bool" default="true" />
 		<setting id="language_english" label="אנגלית" type="bool" default="true" />
+		<setting id="language_russian" label="רוסית" type="bool" default="false" />
 		<setting id="language_arab" label="ערבית" type="bool" default="false" />
-		<setting id="language_spanish" label="ספרדית" type="bool" default="false" />
 		
 		<setting label="תרגום מכונה" type="lsep"/>
 		<setting id="auto_translate" label="הפעל תרגום מכונה" type="bool" default="true" />

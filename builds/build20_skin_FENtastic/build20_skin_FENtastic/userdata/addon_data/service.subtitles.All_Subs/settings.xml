@@ -6,8 +6,8 @@
     <setting id="bsplayer">true</setting>
     <setting id="language_hebrew">true</setting>
     <setting id="language_english">true</setting>
+    <setting id="language_russian" default="true">false</setting>
     <setting id="language_arab" default="true">false</setting>
-    <setting id="language_spanish" default="true">false</setting>
     <setting id="auto_translate">true</setting>
     <setting id="translate_p">2</setting>
     <setting id="bing_translate_keys_method">1</setting>

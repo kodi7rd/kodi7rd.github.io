@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v3.8.1[/B][/COLOR]
+﻿[COLOR yellow][B]v3.8.2[/B][/COLOR]
+* Add setting to enable/disable Russian langauge in subtitle search:
+[B]הגדרות - שפות - רוסית[/B]
+[COLOR yellow][B]v3.8.1[/B][/COLOR]
 * Add setting to enable/disable Hebrew langauge in subtitle search:
 [B]הגדרות - שפות - עברית[/B]
 [COLOR yellow][B]v3.8.0[/B][/COLOR]
