@@ -41,6 +41,7 @@ filter_str, extra_info_str, down_file_str, browse_pack_str, down_pack_str, furk_
 filter_title, filter_extraInfo, cloud_str, filters_ignored, start_scrape = ls(32679), ls(32169), ls(32016), ls(32686), ls(33023)
 ############KODI-RD-IL###################
 filter_hebrewSubtitlesMatch = ls(400013)
+filter_hebrewSubtitlesMatchFullMatch = ls(400014)
 #########################################
 show_uncached_str, spoilers_str, run_plugin_str = ls(32088), ls(33105), 'RunPlugin(%s)'
 string = str
@@ -118,6 +119,7 @@ class SourcesResults(BaseDialog):
                 elif filter_value == 'showuncached': filtered_list = self.make_items(self.uncached_torrents)
                 ############KODI-RD-IL###################
                 elif filter_value == 'hebrewSubtitlesMatch': filtered_list = [i for i in self.item_list if "SUBTITLE" in i.getProperty('size_label')]
+                elif filter_value == 'hebrewSubtitlesMatchFullMatch': filtered_list = [i for i in self.item_list if "100%" in i.getProperty('size_label') or "תרגום מובנה בעברית" in i.getProperty('size_label')]
                 #########################################
             if not filtered_list: return ok_dialog(text=32760)
             self.set_filter(filtered_list)
@@ -315,10 +317,11 @@ class SourcesResults(BaseDialog):
         providers = [('Show [B]%s[/B] Only' % i, 'provider_%s' % i) for i in providers]
         ############KODI-RD-IL###################
         hebrew_subtitles_match = [(f"[B]{filter_hebrewSubtitlesMatch}[/B]", 'special_hebrewSubtitlesMatch')]
+        hebrew_subtitles_full_match = [(f"[B]{filter_hebrewSubtitlesMatchFullMatch}[/B]", 'special_hebrewSubtitlesMatchFullMatch')]
         # ORIGINAL TWILIGHT LINE:
         #data = qualities + providers
         # CUSTOM NEW LINE:
-        data = hebrew_subtitles_match + qualities + providers
+        data = hebrew_subtitles_full_match + hebrew_subtitles_match + qualities + providers
         #########################################
         if self.uncached_torrents: data.append(('Show [B]%s[/B] Only' % show_uncached_str, 'special_showuncached'))
         data.extend([(filter_title, 'special_title'), (filter_extraInfo, 'special_extraInfo')])
