@@ -978,7 +978,12 @@ class KodiMonitor(xbmc.Monitor):
 
                         # Write video tagline in embedded Hebrew subs taglines list
                         if Addon.getSetting("write_heb_embedded_taglines_to_twilight_repo")=='true':
-                            write_heb_embedded_taglines.write(video_data['Tagline'], video_data['media_type']) if is_embedded_hebrew_sub_exists else None
+                            log.warning(f"WRITE | write_heb_embedded_taglines_to_twilight_repo: True")
+                            if is_embedded_hebrew_sub_exists:
+                                log.warning(f"WRITE | is_embedded_hebrew_sub_exists: True")
+                                write_heb_embedded_taglines.write(video_data['Tagline'], video_data['media_type'])
+                            else:
+                                log.warning(f"WRITE | is_embedded_hebrew_sub_exists: False | Skipping..")  
                         else:
                             log.warning(f"WRITE | write_heb_embedded_taglines_to_twilight_repo: False | Skipping..")
       

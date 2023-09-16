@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.8.2[/B][/COLOR]
+﻿[COLOR yellow][B]v3.8.3[/B][/COLOR]
+* Small code refactor. (write_heb_embedded_taglines)
+[COLOR yellow][B]v3.8.2[/B][/COLOR]
 * Add setting to enable/disable Russian langauge in subtitle search:
 [B]הגדרות - שפות - רוסית[/B]
 [COLOR yellow][B]v3.8.1[/B][/COLOR]
