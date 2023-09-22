@@ -402,18 +402,18 @@
 		<textureradioondisabled colordiffuse="disabled">$PARAM[texture]</textureradioondisabled>
 		<textureradiooffdisabled colordiffuse="disabled">$PARAM[texture]</textureradiooffdisabled>
 		<texturefocus colordiffuse="button_focus">osd/fullscreen/buttons/button-fo.png</texturefocus>
-		<width>68</width>
+		<width>$PARAM[width]</width>
 		<animation center="38,38" effect="zoom" end="100" reversible="false" start="95" time="120" tween="back">Focus</animation>
-		<height>68</height>
+		<height>$PARAM[height]</height>
 		<radioposx>6</radioposx>
 		<radioposy>0</radioposy>
-		<radiowidth>55</radiowidth>
-		<radioheight>55</radioheight>
+		<radiowidth>$PARAM[radiowidth]</radiowidth>
+		<radioheight>$PARAM[radioheight]</radioheight>
 		<textcolor>white</textcolor>
-		<textwidth>80</textwidth>
+		<textwidth>140</textwidth>
 		<aligny>top</aligny>
 		<textoffsetx>$PARAM[textoffsetx]</textoffsetx>
-		<textoffsety>60</textoffsety>
+		<textoffsety>$PARAM[textoffsety]</textoffsety>
 		<label>$PARAM[label]</label>
 		<font>font_flag</font>
 		<texturenofocus />

@@ -216,7 +216,8 @@
 						<height>76</height>
 						<texturenofocus colordiffuse="grey_a">kodirdil/subtitles_window/choose_subs.png</texturenofocus>
 						<texturefocus colordiffuse="button_focus">kodirdil/subtitles_window/choose_subs.png</texturefocus>
-						<onclick>RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
+						<onclick condition="!Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)">RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
+						<onclick condition="Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)">ActivateWindow(SubtitleSearch)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
 					<!--
@@ -344,6 +345,7 @@
 						<onclick>ActivateWindow(pvrchannelguide)</onclick>
 						<visible>VideoPlayer.Content(livetv) + VideoPlayer.HasEPG</visible>
 					</control>
+					<!-- Commented due to Episodes Playlist Menu button (id 700454)
 					<control type="radiobutton" id="70042">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/playlist.png"/>
@@ -352,7 +354,41 @@
 						<onclick>ActivateWindow(videoplaylist)</onclick>
 						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
-					<control type="button" id="600450">
+					-->
+					<control type="radiobutton" id="700453">
+						<description>Twilight Switch Source Button</description>
+						<include content="OSDButtonAdvanced">
+							<param name="texture" value="kodirdil/twilight_icon/twilight.png"/>
+							<param name="label">$LOCALIZE[700055]</param>
+							<param name="width">68</param>
+							<param name="height">62</param>
+							<param name="radiowidth">57</param>
+							<param name="radioheight">57</param>
+							<param name="textoffsetx">-6</param>
+							<param name="textoffsety">55</param>
+						</include>
+						<visible>VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)</visible>
+						<!-- Pauses video if playing -->
+						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
+						<!-- Search sources for current playing movie -->
+						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&query=$INFO[VideoPlayer.Title]&tmdb_id=$INFO[VideoPlayer.IMDBNumber])</onclick>
+						<!-- Search sources for current playing episode -->
+						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight//?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick>
+					</control>
+					<control type="button" id="700454">
+						<description>Episodes Playlist Menu</description>
+						<width>auto</width>
+						<height>76</height>
+						<align>center</align>
+						<texturenofocus>-</texturenofocus>
+						<texturefocus colordiffuse="button_focus">colors/white.png</texturefocus>
+						<label>[B]$LOCALIZE[700054][/B]</label>
+						<visible>Integer.IsGreater(Playlist.Length(video),0) + !VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes)</visible>
+						<onclick>Dialog.Close(all,true)</onclick>
+						<onclick>ActivateWindow(videoplaylist)</onclick>
+						<onclick></onclick>
+					</control>
+					<control type="button" id="700455">
 						<description>Idan Plus Channels Menu</description>
 						<width>76</width>
 						<height>76</height>
@@ -374,17 +410,27 @@
 					<visible>$EXP[SkinZoomToggle]</visible>
 						<include content="OSDButtonAdvanced">
 							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
-							<param name="textoffsetx">13</param>
 							<param name="label">$LOCALIZE[700038]</param>
+							<param name="width">68</param>
+							<param name="height">62</param>
+							<param name="radiowidth">55</param>
+							<param name="radioheight">55</param>
+							<param name="textoffsetx">13</param>
+							<param name="textoffsety">60</param>
 						</include>
 						<include condition="$EXP[LiveTvCondition]">Out</include>
 					</control>
 					<control type="radiobutton" id="599">
 						<visible>$EXP[SkinZoomToggle]</visible>
 						<include content="OSDButtonAdvanced">
-							<param name="label">$LOCALIZE[700037]</param>
-							<param name="textoffsetx">22</param>
 							<param name="texture" value="kodirdil/zoom/zoom-in-hand.png"/>
+							<param name="label">$LOCALIZE[700037]</param>
+							<param name="width">68</param>
+							<param name="height">62</param>
+							<param name="radiowidth">55</param>
+							<param name="radioheight">55</param>
+							<param name="textoffsetx">22</param>
+							<param name="textoffsety">60</param>
 						</include>
 						<include condition="$EXP[LiveTvCondition]">In</include>
 					</control>
