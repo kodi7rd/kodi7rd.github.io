@@ -10,6 +10,8 @@ from kodirdil import db_utils
 enable_hebrew_subtitles_to_twilight_sources_matching = kodi_utils.get_setting('enable_hebrew_subtitles_to_twilight_sources_matching', 'true') == 'true'
 minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
 search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subtitles_in_embedded', 'true') == 'true'
+########### Global Strings ##############
+twilight_total_results_panel_text = ""
 #########################################
 
 from windows import BaseDialog
@@ -37,6 +39,10 @@ prerelease_values, prerelease_key = ('CAM', 'SCR', 'TELE'), 'CAM/SCR/TELE'
 poster_lists, pack_check = ('list', 'medialist'), ('true', 'show', 'season')
 filter_str, extra_info_str, down_file_str, browse_pack_str, down_pack_str, furk_addto_str = ls(32152), ls(32605), ls(32747), ls(33004), ls(32007), ls(32769)
 filter_title, filter_extraInfo, cloud_str, filters_ignored, start_scrape = ls(32679), ls(32169), ls(32016), ls(32686), ls(33023)
+############KODI-RD-IL###################
+filter_hebrewSubtitlesMatch = ls(400013)
+filter_hebrewSubtitlesMatchFullMatch = ls(400014)
+#########################################
 show_uncached_str, spoilers_str, run_plugin_str = ls(32088), ls(33105), 'RunPlugin(%s)'
 string = str
 upper, lower = string.upper, string.lower
@@ -111,6 +117,10 @@ class SourcesResults(BaseDialog):
                     choice = [i[1] for i in choice]
                     filtered_list = [i for i in self.item_list if all(x in i.getProperty('extraInfo') for x in choice)]
                 elif filter_value == 'showuncached': filtered_list = self.make_items(self.uncached_torrents)
+                ############KODI-RD-IL###################
+                elif filter_value == 'hebrewSubtitlesMatch': filtered_list = [i for i in self.item_list if "SUBTITLE" in i.getProperty('size_label')]
+                elif filter_value == 'hebrewSubtitlesMatchFullMatch': filtered_list = [i for i in self.item_list if "100%" in i.getProperty('size_label') or "תרגום מובנה בעברית" in i.getProperty('size_label')]
+                #########################################
             if not filtered_list: return ok_dialog(text=32760)
             self.set_filter(filtered_list)
 
@@ -305,7 +315,14 @@ class SourcesResults(BaseDialog):
         providers.sort(key=provider_choices.index)
         qualities = [('Show [B]%s[/B] Only' % i, 'quality_%s' % i) for i in qualities]
         providers = [('Show [B]%s[/B] Only' % i, 'provider_%s' % i) for i in providers]
-        data = qualities + providers
+        ############KODI-RD-IL###################
+        hebrew_subtitles_match = [(f"[B]{filter_hebrewSubtitlesMatch}[/B]", 'special_hebrewSubtitlesMatch')]
+        hebrew_subtitles_full_match = [(f"[B]{filter_hebrewSubtitlesMatchFullMatch}[/B]", 'special_hebrewSubtitlesMatchFullMatch')]
+        # ORIGINAL TWILIGHT LINE:
+        #data = qualities + providers
+        # CUSTOM NEW LINE:
+        data = hebrew_subtitles_full_match + hebrew_subtitles_match + qualities + providers
+        #########################################
         if self.uncached_torrents: data.append(('Show [B]%s[/B] Only' % show_uncached_str, 'special_showuncached'))
         data.extend([(filter_title, 'special_title'), (filter_extraInfo, 'special_extraInfo')])
         self.filter_list = list(builder(data))
@@ -328,13 +345,14 @@ class SourcesResults(BaseDialog):
         if self.meta_get('media_type') == 'episode' and avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or spoilers_str
         else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
         self.setProperty('plot', plot)
-        self.setProperty('total_results', self.total_results)
                     
         ############KODI-RD-IL###################
         # ORIGINAL TWILIGHT LINE:
         #self.setProperty('total_results', self.total_results)
         # CUSTOM NEW LINE:
-        self.setProperty('total_results', self.total_results + kodi_utils.local_string(400011) + " | " + results_language_text + " | " + total_subtitles_found_text + "\n" + subtitles_matched_count_text if enable_hebrew_subtitles_to_twilight_sources_matching else self.total_results + kodi_utils.local_string(400011))
+        global twilight_total_results_panel_text
+        twilight_total_results_panel_text = ls(400011) + " | " + results_language_text + " | " + total_subtitles_found_text + "\n" + subtitles_matched_count_text if enable_hebrew_subtitles_to_twilight_sources_matching else ls(400011)
+        self.setProperty('total_results', self.total_results + twilight_total_results_panel_text)
         #########################################
         
         self.setProperty('filters_ignored', self.filters_ignored)
@@ -414,7 +432,13 @@ class SourcesResults(BaseDialog):
         self.reset_window(self.window_id)
         self.add_items(self.window_id, filtered_list)
         self.setFocusId(self.window_id)
-        self.setProperty('total_results', string(len(filtered_list)))
+        ############KODI-RD-IL###################
+        # ORIGINAL TWILIGHT LINE:
+        # self.setProperty('total_results', string(len(filtered_list)))
+        # CUSTOM NEW LINE:
+        global twilight_total_results_panel_text
+        self.setProperty('total_results', string(len(filtered_list)) + twilight_total_results_panel_text)
+        #########################################
         self.setProperty('filter_applied', 'true')
 
     def clear_filter(self):
@@ -423,7 +447,13 @@ class SourcesResults(BaseDialog):
         self.add_items(self.window_id, self.item_list)
         self.setFocusId(self.window_id)
         self.select_item(self.filter_window_id, 0)
-        self.setProperty('total_results', self.total_results)
+        ############KODI-RD-IL###################
+        # ORIGINAL TWILIGHT LINE:
+        # self.setProperty('total_results', self.total_results)
+        # CUSTOM NEW LINE:
+        global twilight_total_results_panel_text
+        self.setProperty('total_results', self.total_results + twilight_total_results_panel_text)
+        #########################################
         self.setProperty('filter_applied', 'false')
 
 class SourcesPlayback(BaseDialog):
