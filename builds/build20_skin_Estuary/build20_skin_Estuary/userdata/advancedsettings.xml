@@ -1,6 +1,11 @@
 <advancedsettings>
 	<cache>
+		<buffermode>0</buffermode>         <!-- Buffer all internet filesystems (like "2" but additionally also ftp, webdav, etc.) (default) -->
 		<memorysize>139460608</memorysize> <!-- 133MB Cache (Uses 400MB RAM) -->
 		<readfactor>10</readfactor>
 	</cache>
+	<network>
+		<disablehttp2>true</disablehttp2> <!-- Allows disabling HTTP2 for broken Curl / HTTP2 servers -->
+		<disableipv6>true</disableipv6>   <!-- Certain hardware/OS combinations have trouble with ipv6. Set "true" to disable -->
+	</network>
 </advancedsettings>
