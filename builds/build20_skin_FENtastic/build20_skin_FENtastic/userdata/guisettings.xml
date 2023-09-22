@@ -116,7 +116,7 @@
     <setting id="scrapers.moviesdefault" default="true">metadata.themoviedb.org.python</setting>
     <setting id="scrapers.tvshowsdefault" default="true">metadata.tvshows.themoviedb.org.python</setting>
     <setting id="scrapers.musicvideosdefault" default="true">metadata.local</setting>
-    <setting id="videoplayer.autoplaynextitem" default="true" />
+    <setting id="videoplayer.autoplaynextitem">0,1,2,3,4</setting>
     <setting id="videoplayer.seeksteps">-30,-10,10,30</setting>
     <setting id="videoplayer.seekdelay">500</setting>
     <setting id="videoplayer.adjustrefreshrate" default="true">0</setting>

@@ -45,6 +45,7 @@
     <setting id="hidemovieresults" type="bool">false</setting>
     <setting id="peopleresults" type="bool">false</setting>
     <setting id="zoomtoggle" type="bool">true</setting>
+    <setting id="choosesubtitlesbuttonopenskodiwindow" type="bool">false</setting>
     <setting id="homemenunoradiobutton" type="bool">true</setting>
     <setting id="homemenunoprogramsbutton" type="bool">true</setting>
     <setting id="nosearchresultswindow" type="bool">false</setting>
