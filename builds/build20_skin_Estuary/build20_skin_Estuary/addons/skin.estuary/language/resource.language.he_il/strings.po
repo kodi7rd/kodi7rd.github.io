@@ -894,7 +894,7 @@ msgctxt "#700028"
 msgid "Idan Plus And Radio Channels"
 msgstr "ערוצי עידן פלוס / ערוצי רדיו"
 
-# ShowPlayerPauseWindow Seting- Custom_1101_SettingsList.xml
+# ShowPlayerPauseWindow Seting - Custom_1101_SettingsList.xml
 
 msgctxt "#700029"
 msgid "Show information window on playback pause"
@@ -923,5 +923,29 @@ msgstr "ניקוי קאש Twilight"
 msgctxt "#700034"
 msgid "Clear DarkSubs Cache"
 msgstr "ניקוי קאש DarkSubs"
+
+# Episodes Playlist Button - VideoOSD.xml
+
+msgctxt "#700035"
+msgid "Episodes List"
+msgstr "רשימת פרקים"
+
+# Twilight Switch Video Source Button - VideoOSD.xml
+
+msgctxt "#700036"
+msgid "Switch Source"
+msgstr "החלף מקור"
+
+# Switch to next Audio track Button - VideoOSD.xml
+
+msgctxt "#700037"
+msgid "Switch Audio track"
+msgstr "החלף ערוץ שמע"
+
+# ChooseSubtitlesButtonOpensKodiWindow Seting - Custom_1101_SettingsList.xml
+
+msgctxt "#700038"
+msgid "\"Choose subtitles\" button opens Kodi window"
+msgstr "\"בחירת כתוביות\" פותח את החלון של קודי"
 
 ################################################################

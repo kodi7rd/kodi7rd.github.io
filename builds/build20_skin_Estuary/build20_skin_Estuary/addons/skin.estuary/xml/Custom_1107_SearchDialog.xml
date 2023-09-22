@@ -20,26 +20,14 @@
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70001][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=movie&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fu8jgyN3.png",return)</onclick>
-						<visible>!Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
-					</item>
-					<item>
-						<label>[B][COLOR blue]$LOCALIZE[70001][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;media_type=movie&quot;)</onclick>
-						<visible>Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
+						<onclick condition="!Skin.HasSetting(OpenKeyboardOnSearchDialog)">ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=movie&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fu8jgyN3.png",return)</onclick>
+						<onclick condition="Skin.HasSetting(OpenKeyboardOnSearchDialog)">PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;media_type=movie&quot;)</onclick>
 					</item>
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70002][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=tvshow&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxYTdX3O.png",return)</onclick>
-						<visible>!Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
-					</item>
-					<item>
-						<label>[B][COLOR blue]$LOCALIZE[70002][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;media_type=tv_show&quot;)</onclick>
-						<visible>Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
+						<onclick condition="!Skin.HasSetting(OpenKeyboardOnSearchDialog)">ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=tvshow&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxYTdX3O.png",return)</onclick>
+						<onclick condition="Skin.HasSetting(OpenKeyboardOnSearchDialog)">PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;media_type=tv_show&quot;)</onclick>
 					</item>
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70003][/COLOR][/B]</label>
@@ -49,26 +37,14 @@
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70004][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=people&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FF1EZyWz.png",return)</onclick>
-						<visible>!Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
-					</item>
-					<item>
-						<label>[B][COLOR blue]$LOCALIZE[70004][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;search_type=people&quot;)</onclick>
-						<visible>Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
+						<onclick condition="!Skin.HasSetting(OpenKeyboardOnSearchDialog)">ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=people&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FF1EZyWz.png",return)</onclick>
+						<onclick condition="Skin.HasSetting(OpenKeyboardOnSearchDialog)">PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;search_type=people&quot;)</onclick>
 					</item>
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70005][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=tmdb_movie_sets&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fr0ITv0C.png",return)</onclick>
-						<visible>!Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
-					</item>
-					<item>
-						<label>[B][COLOR blue]$LOCALIZE[70005][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;search_type=tmdb_movie_sets&amp;media_type=movie&quot;)</onclick>
-						<visible>Skin.HasSetting(OpenKeyboardOnSearchDialog)</visible>
+						<onclick condition="!Skin.HasSetting(OpenKeyboardOnSearchDialog)">ActivateWindow(Videos,"plugin://plugin.video.twilight/?mode=history.search&amp;action=tmdb_movie_sets&amp;iconImage=https%3A%2F%2Fi.imgur.com%2Fr0ITv0C.png",return)</onclick>
+						<onclick condition="Skin.HasSetting(OpenKeyboardOnSearchDialog)">PlayMedia(&quot;plugin://plugin.video.twilight/?mode=get_search_term&amp;search_type=tmdb_movie_sets&amp;media_type=movie&quot;)</onclick>
 					</item>
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[70006][/COLOR][/B]</label>

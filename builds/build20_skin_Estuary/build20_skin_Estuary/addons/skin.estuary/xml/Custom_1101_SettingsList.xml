@@ -84,6 +84,13 @@
 						<onclick>Skin.ToggleSetting(ShowPlayerPauseWindow)</onclick>
 						<selected>Skin.HasSetting(ShowPlayerPauseWindow)</selected>	
 					</control>
+					<control type="radiobutton" id="31110">
+						<width>700</width>
+						<include>DialogSettingButton</include>
+						<label>$LOCALIZE[700038]</label>
+						<onclick>Skin.ToggleSetting(ChooseSubtitlesButtonOpensKodiWindow)</onclick>
+						<selected>Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)</selected>	
+					</control>
 					<control type="button" id="11105">
 						<width>700</width>
 						<include>DialogSettingButton</include>
