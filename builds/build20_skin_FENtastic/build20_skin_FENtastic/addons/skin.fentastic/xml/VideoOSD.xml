@@ -368,8 +368,8 @@
 							<param name="textoffsety">55</param>
 						</include>
 						<visible>VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)</visible>
-						<!-- Pauses video if playing -->
-						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
+						<!-- Stop video -->
+						<onclick>PlayerControl(Stop)</onclick>
 						<!-- Search sources for current playing movie -->
 						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&query=$INFO[VideoPlayer.Title]&tmdb_id=$INFO[VideoPlayer.IMDBNumber])</onclick>
 						<!-- Search sources for current playing episode -->
