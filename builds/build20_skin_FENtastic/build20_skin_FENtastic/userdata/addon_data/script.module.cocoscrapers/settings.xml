@@ -39,7 +39,7 @@
     <setting id="provider.torlock" default="true">false</setting>
     <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
-    <setting id="provider.torrentgalaxy">true</setting>
+    <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio">true</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
