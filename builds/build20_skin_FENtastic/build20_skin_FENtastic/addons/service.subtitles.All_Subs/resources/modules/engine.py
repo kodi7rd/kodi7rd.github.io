@@ -83,7 +83,9 @@ def sort_subtitles(save_all_data,video_data):
     #########################################
     
     all_data=[]
+    all_heb=[]
     all_eng=[]
+    all_other_lang=[]
     Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
     count=0
     for save_data_value in save_all_data:
@@ -151,19 +153,25 @@ def sort_subtitles(save_all_data,video_data):
            if precent2>precent:
               precent=precent2
            
-           if 'language=Hebrew' not in json_value['url'] and 'language=he' not in json_value['url'] and ('language=' in  json_value['url'] or 'Hebrew' not in json_value['label']):
-               
+           if 'language=Hebrew' in json_value['url'] or 'Hebrew' in json_value['label']:
+               all_heb.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
+           
+           elif 'language=English' in json_value['url'] or 'English' in json_value['label']:
                all_eng.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
+               
            else:
-
-             all_data.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
+               all_other_lang.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
       
     
     # Sort by precent (index 5) and then by site_id (index 9) using custom order specified in site_id_order.
-    all_data=sorted(all_data, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+    all_heb=sorted(all_heb, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+    
     all_eng=sorted(all_eng, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
     
-    all_data=all_data+all_eng
+    # For all other languages - Sort also by language, then by precent (index 5) and then by site_id (index 9) using custom order specified in site_id_order.
+    all_other_lang=sorted(all_other_lang, key=lambda x: (x[0], -x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+    
+    all_data=all_heb+all_eng+all_other_lang
  
     return all_data
 def lowercase_with_underscores(_str):   ####### burekas
@@ -357,12 +365,12 @@ def c_get_subtitles(video_data):
     subscene.global_var=[]
     wizdom.global_var=[]
         
-    if Addon.getSetting('ktuvit')=='true' and Addon.getSetting('language_hebrew')=='true':
+    if Addon.getSetting('ktuvit')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
         
         thread.append(Thread(ktuvit.get_subs,video_data))
         all_sources.append(('ktuvit',ktuvit))
         
-    if Addon.getSetting('wizdom')=='true' and Addon.getSetting('language_hebrew')=='true':
+    if Addon.getSetting('wizdom')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
         
         thread.append(Thread(wizdom.get_subs,video_data))
         all_sources.append(('wizdom',wizdom))
@@ -377,7 +385,7 @@ def c_get_subtitles(video_data):
         thread.append(Thread(subscene.get_subs,video_data))
         all_sources.append(('subscene',subscene))
     
-    if Addon.getSetting('bsplayer')=='true' and Addon.getSetting('language_hebrew')=='true':
+    if Addon.getSetting('bsplayer')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
         
         thread.append(Thread(bsplayer.get_subs,video_data))
         all_sources.append(('bsplayer',bsplayer))

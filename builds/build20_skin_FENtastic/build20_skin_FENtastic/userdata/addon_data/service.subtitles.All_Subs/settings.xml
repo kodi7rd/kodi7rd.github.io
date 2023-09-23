@@ -12,7 +12,7 @@
     <setting id="translate_p">2</setting>
     <setting id="bing_translate_keys_method">1</setting>
     <setting id="other_lang" default="true" />
-    <setting id="all_lang" default="true">false</setting>
+    <setting id="all_lang">true</setting>
     <setting id="show_debug">true</setting>
     <setting id="autosub">true</setting>
     <setting id="force">true</setting>
