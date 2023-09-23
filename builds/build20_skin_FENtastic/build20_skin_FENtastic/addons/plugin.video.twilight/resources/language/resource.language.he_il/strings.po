@@ -56,7 +56,7 @@ msgstr "עכשיו"
 
 msgctxt "#33023"
 msgid "[B]***START FULL SCRAPE***[/B]"
-msgstr "[B]***לחץ לחיפוש מקורות מלא***[/B]"
+msgstr "[B]*** לחץ לחיפוש מקורות מלא ***[/B]"
 
 # Connect Debrid/Trakt Services
 
