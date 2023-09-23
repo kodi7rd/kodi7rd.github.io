@@ -52,6 +52,12 @@ msgctxt "#33090"
 msgid "Now"
 msgstr "עכשיו"
 
+# RD Cloud "Check Before Full Search" sources window
+
+msgctxt "#33023"
+msgid "[B]***START FULL SCRAPE***[/B]"
+msgstr "[B]***לחץ לחיפוש מקורות מלא***[/B]"
+
 # Connect Debrid/Trakt Services
 
 msgctxt "#32517"

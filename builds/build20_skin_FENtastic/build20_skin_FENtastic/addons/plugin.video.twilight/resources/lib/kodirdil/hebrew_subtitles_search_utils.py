@@ -208,7 +208,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     
     global IS_SEARCHED_FROM_EXTERNAL
     if not IS_SEARCHED_FROM_EXTERNAL:
-        return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על START FULL SCRAPE (בסוף הרשימה)[COLOR yellow]"
+        return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על חיפוש מקורות מלא (בסוף הרשימה)[/COLOR]"
         
     global GLOBAL_HEBREW_SUBTITLES_FOUND
     
