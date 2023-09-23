@@ -39,7 +39,9 @@ release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
                  'web','web-dl','web dl','web-dlrip','webrip','web-rip',
                  'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
                  'telecine','hdts','telesync']
-                 
+
+# If "Check Before FulL Search" setting is enabled, first sources list is only CLOUD
+IS_SEARCHED_FROM_EXTERNAL = False
 #########################################
 
 def search_hebrew_subtitles_for_selected_media(media_type, title, season, episode, year, tmdb_id):
@@ -58,6 +60,8 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     Returns:
     None
     """
+    global IS_SEARCHED_FROM_EXTERNAL
+    IS_SEARCHED_FROM_EXTERNAL = True
     
     media_metadata = {
         "media_type": media_type,
@@ -202,7 +206,10 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
         '[COLOR deepskyblue]נמצאו 10 כתוביות סך הכל[/COLOR] | [COLOR yellow]5 מקורות מעל 90% התאמה לכתוביות[/COLOR] | [COLOR yellow]מחפש התאמה מעל 90%[/COLOR] | [COLOR FF0166FF]SD: 0[/COLOR] | [COLOR FF3C9900]720P: 0[/COLOR] | [COLOR FF3CFA38]1080P: 3[/COLOR] | [COLOR FFFF00FE]4K: 2[/COLOR] | סך הכל '
     """
     
-    
+    global IS_SEARCHED_FROM_EXTERNAL
+    if not IS_SEARCHED_FROM_EXTERNAL:
+        return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על START FULL SCRAPE (בסוף הרשימה)[COLOR yellow]"
+        
     global GLOBAL_HEBREW_SUBTITLES_FOUND
     
     total_subtitles_found_count = total_external_subtitles_found_count + total_hebrew_embedded_subtitles_matches_count
@@ -307,6 +314,10 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
     external_subtitles_matched_count = 0
     hebrew_embedded_subtitles_matched_count = 0
     subtitle_matches_text = ""
+    
+    global IS_SEARCHED_FROM_EXTERNAL
+    if not IS_SEARCHED_FROM_EXTERNAL:
+        return external_subtitles_matched_count, hebrew_embedded_subtitles_matched_count, subtitle_matches_text, quality_counts_for_source
     
     ############################################# HEBREW EMBEDDED TAGLINES #############################################
     

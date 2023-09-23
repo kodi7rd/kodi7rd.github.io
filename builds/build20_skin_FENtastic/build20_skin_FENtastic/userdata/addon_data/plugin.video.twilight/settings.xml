@@ -88,7 +88,7 @@
     <setting id="rd.torrent.enabled" default="true">true</setting>
     <setting id="rd.hoster.enabled" default="true">true</setting>
     <setting id="store_resolved_torrent.real-debrid" default="true">0</setting>
-    <setting id="provider.rd_cloud" default="true">false</setting>
+    <setting id="provider.rd_cloud">true</setting>
     <setting id="rd_cloud.title_filter" default="true">true</setting>
     <setting id="check.rd_cloud" default="true">false</setting>
     <setting id="results.sort_rdcloud_first" default="true">true</setting>
