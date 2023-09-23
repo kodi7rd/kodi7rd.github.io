@@ -367,8 +367,13 @@
 							<param name="textoffsetx">-6</param>
 							<param name="textoffsety">55</param>
 						</include>
+						<!-- If current playing media is movie or episode -->
 						<visible>VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)</visible>
-						<!-- Stop video -->
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
+						<!-- If not Live TV (pvr) -->
+						<visible>!VideoPlayer.Content(LiveTV)</visible>
+						<!-- Fully stop video to make subtitles autosub work on next playback -->
 						<onclick>PlayerControl(Stop)</onclick>
 						<!-- Search sources for current playing movie -->
 						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&query=$INFO[VideoPlayer.Title]&tmdb_id=$INFO[VideoPlayer.IMDBNumber])</onclick>
@@ -383,7 +388,10 @@
 						<texturenofocus>-</texturenofocus>
 						<texturefocus colordiffuse="button_focus">colors/white.png</texturefocus>
 						<label>[B]$LOCALIZE[700054][/B]</label>
-						<visible>Integer.IsGreater(Playlist.Length(video),0) + !VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes)</visible>
+						<!-- If current playing addon is Idan Plus -->
+						<visible>String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
+						<!-- If Kodi's video playlist has items -->
+						<visible>Integer.IsGreater(Playlist.Length(video),0)</visible>
 						<onclick>Dialog.Close(all,true)</onclick>
 						<onclick>ActivateWindow(videoplaylist)</onclick>
 						<onclick></onclick>
