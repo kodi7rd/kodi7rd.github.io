@@ -910,11 +910,11 @@ msgstr "פתח ישירות את המקלדת בחלון החיפוש"
 
 msgctxt "#700031"
 msgid "Open Twilight Settings"
-msgstr "פתח הגדרות Twilight"
+msgstr "הגדרות Twilight"
 
 msgctxt "#700032"
 msgid "Open DarkSubs Settings"
-msgstr "פתח הגדרות DarkSubs"
+msgstr "הגדרות DarkSubs"
 
 msgctxt "#700033"
 msgid "Clear Twilight Cache"

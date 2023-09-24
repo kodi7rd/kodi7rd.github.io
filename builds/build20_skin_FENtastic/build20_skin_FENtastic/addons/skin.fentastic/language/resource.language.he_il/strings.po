@@ -1000,11 +1000,11 @@ msgstr "[B]חזרה למסך הבית[/B]"
 
 msgctxt "#700050"
 msgid "Open Twilight Settings"
-msgstr "פתח הגדרות Twilight"
+msgstr "הגדרות Twilight"
 
 msgctxt "#700051"
 msgid "Open DarkSubs Settings"
-msgstr "פתח הגדרות DarkSubs"
+msgstr "הגדרות DarkSubs"
 
 msgctxt "#700052"
 msgid "Clear Twilight Cache"
