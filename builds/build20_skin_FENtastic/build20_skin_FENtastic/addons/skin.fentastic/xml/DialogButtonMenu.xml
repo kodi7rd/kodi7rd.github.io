@@ -26,18 +26,6 @@
 						<visible>System.ShowExitButton</visible>
 					</item>
 					<item>
-						<!-- Skin settings in Hebrew  -->
-						<label>[B][COLOR blue]$LOCALIZE[700018][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ActivateWindow(SkinSettings.xml)</onclick>
-					</item>
-					<item>
-						<!-- Reload skin in Hebrew  -->
-						<label>[B][COLOR blue]$LOCALIZE[700017][/COLOR][/B]</label>
-						<onclick>Dialog.Close(all)</onclick>
-						<onclick>ReloadSkin()</onclick>
-					</item>
-					<item>
 						<!-- Open Twilight Settings  -->
 						<label>[B][COLOR blue]$LOCALIZE[700050][/COLOR][/B]</label>
 						<onclick>Addon.OpenSettings(plugin.video.twilight)</onclick>
@@ -60,6 +48,18 @@
 						<label>[B][COLOR blue]$LOCALIZE[700053][/COLOR][/B]</label>
 						<onclick>RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)</onclick>
 						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<!-- Skin settings -->
+						<label>[B][COLOR blue]$LOCALIZE[700018][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ActivateWindow(SkinSettings.xml)</onclick>
+					</item>
+					<item>
+						<!-- Reload skin -->
+						<label>[B][COLOR blue]$LOCALIZE[700017][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>ReloadSkin()</onclick>
 					</item>
 				</content>
 			</control>
