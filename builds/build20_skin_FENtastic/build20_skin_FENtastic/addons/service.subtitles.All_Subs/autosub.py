@@ -839,10 +839,12 @@ class KodiMonitor(xbmc.Monitor):
             pre_video_id=video_id
             video_id=video_data['OriginalTitle']+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])
             
-            if (video_id!=pre_video_id):
+            # if (video_id!=pre_video_id):
                 
                 
-                trigger=True
+                # trigger=True
+            # Always trigger autosub, even when replaying the same content    
+            trigger=True
             pre_video_id=video_id
             
 
