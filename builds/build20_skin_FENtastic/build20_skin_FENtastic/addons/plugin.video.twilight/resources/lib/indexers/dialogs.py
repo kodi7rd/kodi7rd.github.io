@@ -341,6 +341,15 @@ def playback_choice(params):
 	kwargs = {'items': json.dumps(list_items), 'heading': ls(32174)}
 	choice = select_dialog([i['function'] for i in items], **kwargs)
 	if choice == None: return notification(32736, 2500)
+    
+	############KODI-RD-IL###################
+	import xbmc
+	# Check if video is currently playing
+	if xbmc.Player().isPlayingVideo():
+		# Stop video playback
+		xbmc.Player().stop()
+	#########################################
+    
 	def clear_caches():
 		from caches import clear_cache
 		from caches.providers_cache import ExternalProvidersCache
