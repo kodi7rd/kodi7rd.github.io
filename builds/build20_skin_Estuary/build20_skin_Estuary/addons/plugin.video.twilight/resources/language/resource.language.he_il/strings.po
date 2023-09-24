@@ -8,6 +8,32 @@ msgstr ""
 
 # KODI-RD-IL Custom Hebrew Strings
 
+# Playback Options Window
+
+msgctxt "#32014"
+msgid "Rescrape & Select Source"
+msgstr "[B]חפש מקורות מחדש[/B]"
+
+msgctxt "#32185"
+msgid "Scrape with DEFAULT External Scrapers"
+msgstr "[B]חפש מקורות באתרי הטורנטים המוגדרים כברירת מחדל[/B]"
+
+msgctxt "#32006"
+msgid "Scrape with ALL External Scrapers"
+msgstr "[B]חפש מקורות בכל אתרי הטורנטים[/B]"
+
+msgctxt "#32807"
+msgid "Scrape With All Filters Ignored"
+msgstr "[B]חפש מקורות ללא הגדרות סינון[/B]"
+
+msgctxt "#32212"
+msgid "Scrape with an Alias"
+msgstr "[B]חפש מקורות עם כינוי (Alias)[/B]"
+
+msgctxt "#32135"
+msgid "Scrape with Custom Values"
+msgstr "[B]חפש מקורות עם ערכים מותאמים אישית[/B]"
+
 # Account Manager (navigator.py)
 
 msgctxt "#32057"
