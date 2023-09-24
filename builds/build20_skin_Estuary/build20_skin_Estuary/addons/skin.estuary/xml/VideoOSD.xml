@@ -358,6 +358,8 @@
 						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 						<!-- If not Live TV (pvr) -->
 						<visible>!VideoPlayer.Content(LiveTV)</visible>
+						<!-- If video is unpaused - pause -->
+						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
 						<!-- Open Twilight "Playback Options" window for current playing movie -->
 						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback_choice&media_type=movie&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.IMDBNumber])</onclick>
 						<!-- Open Twilight "Playback Options" window for current playing episode -->
