@@ -63,6 +63,18 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     global IS_SEARCHED_FROM_EXTERNAL
     IS_SEARCHED_FROM_EXTERNAL = True
     
+    # Check if the current metadata in the cache is the same as the new metadata
+    current_media_metadata_in_cache = db_utils.get_current_media_metadata_from_media_metadata_db()
+    # Convert season and episode to strings to match the data types
+    input_params = (str(media_type), str(title), str(season), str(episode), str(year), str(tmdb_id))
+    if current_media_metadata_in_cache and current_media_metadata_in_cache == input_params:
+        # Metadata is the same, no need to write to the cache
+        kodi_utils.logger("KODI-RD-IL", f"current_media_metadata_in_cache is the same. Skipping subtitles search...")
+        return
+        
+    # Write the current media_type to the media_metadata_dbcache table
+    db_utils.write_current_media_metadata_to_media_metadata_db(media_type, title, season, episode, year, tmdb_id)
+    
     media_metadata = {
         "media_type": media_type,
         "title": title.replace("%20"," ").replace("%27","'"),
@@ -75,14 +87,10 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
-    # Write the current media_type to the media_type_dbcache table
-    db_utils.write_current_media_type_to_media_type_db(media_metadata['media_type'])
-    
     # Search for subtitles in all websites and combine them into a single list
     combined_subtitles_list = []
     website_subtitles_dict = {}
-    global GLOBAL_HEBREW_SUBTITLES_FOUND
-    GLOBAL_HEBREW_SUBTITLES_FOUND = False
+    HEBREW_SUBTITLES_FOUND = False
 
     for website_info in hebrew_subtitles_websites_info.values():
         try:
@@ -93,17 +101,17 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
             kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
 
             if combined_subtitles_list:  # If Hebrew subtitles are found
-                GLOBAL_HEBREW_SUBTITLES_FOUND = True
+                HEBREW_SUBTITLES_FOUND = True
             
         except Exception as e:
             kodi_utils.logger("KODI-RD-IL", f"Error in searching Hebrew subtitles from {website_info['website']}: {str(e)}")
             kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
 
     
-    kodi_utils.logger("KODI-RD-IL", f"GLOBAL_HEBREW_SUBTITLES_FOUND={GLOBAL_HEBREW_SUBTITLES_FOUND} | SETTING search_for_english_subtitles_when_no_hebrew_subtitles_found={search_for_english_subtitles_when_no_hebrew_subtitles_found}")
+    kodi_utils.logger("KODI-RD-IL", f"HEBREW_SUBTITLES_FOUND={HEBREW_SUBTITLES_FOUND} | SETTING search_for_english_subtitles_when_no_hebrew_subtitles_found={search_for_english_subtitles_when_no_hebrew_subtitles_found}")
     
     # If the combined list is empty, search for English subtitles on the supported websites
-    if not GLOBAL_HEBREW_SUBTITLES_FOUND and search_for_english_subtitles_when_no_hebrew_subtitles_found:
+    if not HEBREW_SUBTITLES_FOUND and search_for_english_subtitles_when_no_hebrew_subtitles_found:
     
         # Reset lists
         combined_subtitles_list = []
@@ -210,7 +218,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     if not IS_SEARCHED_FROM_EXTERNAL:
         return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על חיפוש מקורות מלא (בסוף הרשימה)[/COLOR]"
         
-    global GLOBAL_HEBREW_SUBTITLES_FOUND
+    HEBREW_SUBTITLES_FOUND = db_utils.hebrew_subtitles_db_has_hebrew_subtitles()
     
     total_subtitles_found_count = total_external_subtitles_found_count + total_hebrew_embedded_subtitles_matches_count
     
@@ -220,12 +228,12 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     
     results_language_text = "[COLOR deepskyblue]שפת חיפוש כתוביות:[/COLOR] "
 
-    if not GLOBAL_HEBREW_SUBTITLES_FOUND and not search_for_english_subtitles_when_no_hebrew_subtitles_found:
+    if not HEBREW_SUBTITLES_FOUND and not search_for_english_subtitles_when_no_hebrew_subtitles_found:
         results_language_text += "[COLOR deepskyblue]עברית[/COLOR]"
     else:
         results_language_text += (
             "[COLOR deepskyblue]עברית[/COLOR]"
-            if GLOBAL_HEBREW_SUBTITLES_FOUND
+            if HEBREW_SUBTITLES_FOUND
             else "[COLOR deepskyblue]אנגלית + תרגום מכונה[/COLOR] [COLOR red](אין חיצוניות בעברית)[/COLOR]"
         )
 

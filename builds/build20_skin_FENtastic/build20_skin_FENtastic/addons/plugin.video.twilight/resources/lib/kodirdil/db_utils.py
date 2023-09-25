@@ -1,6 +1,6 @@
 ########### Imports #####################
 from modules import kodi_utils
-from modules.kodi_utils import hebrew_subtitles_db, media_type_db, database
+from modules.kodi_utils import hebrew_subtitles_db, media_metadata_db, database
 
 
 def write_unique_subtitles_to_hebrew_subtitles_db(unique_subtitles_list, website_subtitles_dict):
@@ -104,43 +104,86 @@ def get_total_subtitles_found_list_from_hebrew_subtitles_db():
         # Log any errors that occur while reading the database
         kodi_utils.logger("KODI-RD-IL", f"Error while reading hebrew_subtitles_db and setting total_subtitles_found_count parameter: {str(e)}")
         return []
-        
-        
-def write_current_media_type_to_media_type_db(media_type):
 
+
+def hebrew_subtitles_db_has_hebrew_subtitles():
     """
-    Write current media_type to the 'current_media_type_cache' table in 'twilight_media_type.db'.
+    Check if there is at least one entry in the 'current_subtitles_cache' table of the hebrew_subtitles_db
+    that contains "HEB" in the website_name column.
 
     Args:
+    hebrew_subtitles_db (str): The path to the Hebrew subtitles database.
+
+    Returns:
+    bool: True if at least one entry contains "HEB" in the website_name column, False otherwise.
+    """
+    try:
+        # Connect to the database and create a cursor
+        dbcon = database.connect(hebrew_subtitles_db)
+        dbcur = dbcon.cursor()
+
+        # Execute a query to check if there is at least one entry with "HEB" in website_name
+        dbcur.execute("SELECT COUNT(*) FROM current_subtitles_cache WHERE website_name LIKE '%HEB%'")
+        count = dbcur.fetchone()[0]
+
+        # Close the database connection
+        dbcon.close()
+
+        # If count is greater than 0, there is at least one entry with "HEB" in website_name
+        return count > 0
+
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"Error in checking Hebrew subtitles in hebrew_subtitles_db: {str(e)}")
+        return False  # In case of an error, return False
+        
+        
+def write_current_media_metadata_to_media_metadata_db(media_type, title, season, episode, year, tmdb_id):
+
+    """
+    Write current media metadata to the 'current_media_metadata_cache' table in the database.
+    
+    Args:
     media_type (TEXT)
+    title (TEXT)
+    season (TEXT)
+    episode (TEXT)
+    year (TEXT)
+    tmdb_id (TEXT)
 
     Returns:
     None
     """
     
     # Clear the cache table in the database before writing
-    clear_media_type_db_cache()
+    clear_media_metadata_db_cache()
     
     try:
         # Connect to the database and create a cursor
-        dbcon = database.connect(media_type_db)
+        dbcon = database.connect(media_metadata_db)
         dbcur = dbcon.cursor()
         
-        dbcur.execute("INSERT INTO current_media_type_cache Values ('%s')"%(media_type))
+        # dbcur.execute("INSERT INTO current_media_metadata_cache Values ('%s')"%(media_type))
+        
+        # Insert the media metadata into the table
+        dbcur.execute(
+            "INSERT INTO current_media_metadata_cache VALUES (?, ?, ?, ?, ?, ?)",
+            (media_type, title, season, episode, year, tmdb_id)
+        )
+        
         dbcon.commit()
                     
         # Close the database connection
         dbcon.close()
             
     except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error in writing to media_type_db: {str(e)}")
+        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error in writing to media_metadata_db: {str(e)}")
     
  
-def clear_media_type_db_cache():
+def clear_media_metadata_db_cache():
 
     """
-    Creates the 'current_media_type_cache' table in 'media_type_db' if it doesn't exist and clears its contents.
-    This function first creates a table called 'current_media_type_cache' in the 'media_type_db' if it doesn't exist. Then it clears all the contents of the table, effectively clearing the cache.
+    Creates the 'current_media_metadata_cache' table in 'media_metadata_db' if it doesn't exist and clears its contents.
+    This function first creates a table called 'current_media_metadata_cache' in the 'media_metadata_db' if it doesn't exist. Then it clears all the contents of the table, effectively clearing the cache.
 
     Args:
     None
@@ -150,29 +193,35 @@ def clear_media_type_db_cache():
     """
     
     try:
-        dbcon = database.connect(media_type_db)
+        dbcon = database.connect(media_metadata_db)
         dbcur = dbcon.cursor()
         
-        # Create media_type_db if not exist
-        dbcur.execute("CREATE TABLE IF NOT EXISTS %s (""media_type TEXT);" % ('current_media_type_cache'))
+        # Create media_metadata_db if not exist
+        dbcur.execute("CREATE TABLE IF NOT EXISTS current_media_metadata_cache ("
+                      "media_type TEXT, "
+                      "title TEXT, "
+                      "season TEXT, "
+                      "episode TEXT, "
+                      "year TEXT, "
+                      "tmdb_id TEXT);")
         dbcon.commit()
         
-        # Clear media_type_db
-        dbcon.execute("DELETE FROM current_media_type_cache")
+        # Clear media_metadata_db
+        dbcon.execute("DELETE FROM current_media_metadata_cache")
         dbcon.commit()
         
         dbcon.close()
-        kodi_utils.logger("KODI-RD-IL", "EMBEDDED | Cleared media_type_db cache")
+        kodi_utils.logger("KODI-RD-IL", "EMBEDDED | Cleared media_metadata_db cache")
         
     except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error Clearing media_type_db cache: {str(e)}")
+        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error Clearing media_metadata_db cache: {str(e)}")
 
     
-def get_media_type_from_media_type_db():
+def get_media_type_from_media_metadata_db():
 
     """
-    This function connects to the 'media_type_db' database and retrieves the media_type found in the
-    'current_media_type_cache' table.
+    This function connects to the 'media_metadata_db' database and retrieves the media_type found in the
+    'current_media_metadata_cache' table.
 
     Returns:
     media_type
@@ -180,9 +229,9 @@ def get_media_type_from_media_type_db():
     """
     try:
         # Connect to the database
-        dbcon = database.connect(media_type_db)
+        dbcon = database.connect(media_metadata_db)
         dbcur = dbcon.cursor()
-        dbcur.execute("SELECT media_type FROM current_media_type_cache")
+        dbcur.execute("SELECT media_type FROM current_media_metadata_cache LIMIT 1")
         media_type = dbcur.fetchone()  # Fetch the single row as a tuple
         
         if media_type is not None:
@@ -190,6 +239,34 @@ def get_media_type_from_media_type_db():
         
     except Exception as e:
         # Log any errors that occur while reading the database
-        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error while reading media_type_db: {str(e)}")
+        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error while reading media_metadata_db: {str(e)}")
     
     return None # Return None if there's an error or no value
+    
+
+def get_current_media_metadata_from_media_metadata_db():
+    """
+    Retrieve the current media metadata from the 'current_media_metadata_cache' table.
+
+    Returns:
+    current_media_metadata (tuple): A tuple containing media metadata (media_type, title, season, episode, year, tmdb_id),
+    or None if no metadata is found.
+    """
+    try:
+        # Connect to the database
+        dbcon = database.connect(media_metadata_db)
+        dbcur = dbcon.cursor()
+
+        # Execute a query to retrieve the single row from the table
+        dbcur.execute("SELECT media_type, title, season, episode, year, tmdb_id FROM current_media_metadata_cache LIMIT 1")
+
+        current_media_metadata = dbcur.fetchone()
+
+        if current_media_metadata is not None:
+            return current_media_metadata
+
+    except Exception as e:
+        # Log any errors that occur while reading the database
+        kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | Error while reading media_metadata_db: {str(e)}")
+
+    return None

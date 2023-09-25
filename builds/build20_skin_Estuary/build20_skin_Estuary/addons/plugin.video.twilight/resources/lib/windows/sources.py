@@ -164,7 +164,7 @@ class SourcesResults(BaseDialog):
                 total_subtitles_found_list = db_utils.get_total_subtitles_found_list_from_hebrew_subtitles_db()
             
                 # Get the total subtitles found list
-                media_type_from_cache = db_utils.get_media_type_from_media_type_db() if search_hebrew_subtitles_in_embedded else None
+                media_type_from_cache = db_utils.get_media_type_from_media_metadata_db() if search_hebrew_subtitles_in_embedded else None
                 # Get the Hebrew embedded taglines list
                 hebrew_embedded_taglines = hebrew_embedded.get_hebrew_embedded_taglines(media_type_from_cache) if search_hebrew_subtitles_in_embedded else None
                 kodi_utils.logger("KODI-RD-IL", f"EMBEDDED | search_hebrew_subtitles_in_embedded is: {search_hebrew_subtitles_in_embedded}")
