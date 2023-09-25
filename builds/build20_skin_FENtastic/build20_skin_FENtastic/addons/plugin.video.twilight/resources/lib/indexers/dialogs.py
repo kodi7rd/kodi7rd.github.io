@@ -332,8 +332,8 @@ def playback_choice(params):
 	aliases = get_aliases_titles(make_alias_dict(meta, meta['title']))
 	items = []
 	items += [{'line': ls(32014), 'function': 'clear_and_rescrape'}]
-	items += [{'line': ls(32185), 'function': 'scrape_with_default'}]
 	items += [{'line': ls(32006), 'function': 'scrape_with_disabled'}]
+	items += [{'line': ls(32185), 'function': 'scrape_with_default'}]
 	items += [{'line': ls(32807), 'function': 'scrape_with_filters_ignored'}]
 	if aliases: items += [{'line': ls(32212), 'function': 'scrape_with_aliases'}]
 	items += [{'line': ls(32135), 'function': 'scrape_with_custom_values'}]
