@@ -176,14 +176,15 @@ def ktuvit_search_request(title, media_type):
 def extract_imdb_id_from_result(result):
 
     # Extract the IMDb ID from the IMDb link, Remove trailing slash if it exists
-    imdb_link_from_ktuvit = result['IMDB_Link'].rstrip("/")
+    imdb_link_from_ktuvit = str(result.get('IMDB_Link', '')).rstrip("/")
     # Split the URL by "/", Get the last part of the URL, which should be the IMDb ID (tt123456)
-    imdb_id_from_ktuvit = imdb_link_from_ktuvit.split("/")[-1]
+    imdb_parts = imdb_link_from_ktuvit.split("/")
+    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else None
             
     # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
     if not imdb_id_from_ktuvit or not imdb_id_from_ktuvit.startswith("tt"):
-        imdb_id_from_ktuvit = result['ImdbID']
-        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | FALLBACK | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID (fallback): {imdb_id_from_ktuvit}")
+        imdb_id_from_ktuvit = result.get('ImdbID', None)
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | FALLBACK | KTUVIT IMDB ID (fallback): {imdb_id_from_ktuvit}")
         
     return imdb_id_from_ktuvit
 
