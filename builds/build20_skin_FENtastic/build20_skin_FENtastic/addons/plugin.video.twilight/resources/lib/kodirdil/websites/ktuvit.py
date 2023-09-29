@@ -1,4 +1,4 @@
-########### Imports ##################### 
+########### Imports #####################
 from modules import kodi_utils
 import json
 import re,requests
@@ -10,9 +10,9 @@ search_hebrew_subtitles_in_ktuvit = kodi_utils.get_setting('search_hebrew_subtit
 
 ########### Constants ###################
 KTUVIT_URL = "https://www.ktuvit.me"
+DEFAULT_TITLE = ""
 DEFAULT_SEASON = 0
 DEFAULT_EPISODE = 0
-DEFAULT_TITLE = 0
 #########################################
 
 
@@ -44,23 +44,22 @@ def search_for_subtitles(media_metadata):
     season = media_metadata.get("season", DEFAULT_SEASON)
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     imdb_id = media_metadata.get("imdb_id", "")
-    kodi_utils.logger("KODI-RD-IL", f"Searching in [KTUVIT]: media_type: {media_type} Title: {title}: Season: {season} Episode: {episode} imdb_id: {imdb_id}")
+    kodi_utils.logger("KODI-RD-IL", f"Searching in [KTUVIT]: media_type: {media_type} Title: {title} Season: {season} Episode: {episode} imdb_id: {imdb_id}")
     
     try:
         # Search for movie/show in Ktuvit search page
         ktuvit_search_response = ktuvit_search_request(title, media_type)
         
         # Get IMDb ID from Ktuvit
-        imdb_id_from_ktuvit = get_imdb_id_from_ktuvit(ktuvit_search_response, imdb_id, title)
+        ID_from_ktuvit = get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title)
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ID_from_ktuvit: {ID_from_ktuvit}")
         
         # Return empty subtitles list if no IMDb ID from Ktuvit found.    
-        if imdb_id_from_ktuvit == '':
+        if ID_from_ktuvit == '':
             return []
-        
-        ktuvit_referer_url = f"{KTUVIT_URL}/MovieInfo.aspx?ID={imdb_id_from_ktuvit}"
 
         # Set different API parameters based on media_type (movie / tv)
-        ktuvit_search_subtitles_api_url, headers, params = create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, season, episode)
+        ktuvit_search_subtitles_api_url, headers, params = create_headers_params(media_type, ID_from_ktuvit, season, episode)
             
         # Get login cookie from Ktuvit
         ktuvit_login_cookie = login_to_ktuvit()
@@ -146,6 +145,9 @@ def ktuvit_search_request(title, media_type):
         'accept-language': 'en-US,en;q=0.9',
         
     }
+    
+    SearchTypeParam = '0' if media_type == 'movie' else '1'
+    WithSubsOnlyParam = True if media_type == 'movie' else False
 
     data = {
         "request": {
@@ -159,15 +161,34 @@ def ktuvit_search_request(title, media_type):
             "Year": "",
             "Rating": [],
             "Page": 1,
-            "SearchType": '0' if media_type == 'movie' else '1',
-            "WithSubsOnly": False
+            "SearchType": SearchTypeParam,
+            "WithSubsOnly": WithSubsOnlyParam
         }
     }
+    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | data: {data}")
     
-    return requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
+    ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
+    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_response: {json.loads(ktuvit_search_response['d'])['Films']}")
+    
+    return ktuvit_search_response
+    
+
+def extract_imdb_id_from_result(result):
+
+    # Extract the IMDb ID from the IMDb link, Remove trailing slash if it exists
+    imdb_link_from_ktuvit = result['IMDB_Link'].rstrip("/")
+    # Split the URL by "/", Get the last part of the URL, which should be the IMDb ID (tt123456)
+    imdb_id_from_ktuvit = imdb_link_from_ktuvit.split("/")[-1]
+            
+    # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
+    if not imdb_id_from_ktuvit or not imdb_id_from_ktuvit.startswith("tt"):
+        imdb_id_from_ktuvit = result['ImdbID']
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | FALLBACK | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID (fallback): {imdb_id_from_ktuvit}")
+        
+    return imdb_id_from_ktuvit
 
 
-def get_imdb_id_from_ktuvit(ktuvit_search_response, imdb_id, title):
+def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
 
     """
     Parses the Ktuvit search results and returns the IMDb ID of the media file.
@@ -178,19 +199,22 @@ def get_imdb_id_from_ktuvit(ktuvit_search_response, imdb_id, title):
     - title (str): A string representing the title of the media file.
 
     Returns:
-    - imdb_id_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
+    - ID_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
     """
 
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
-    imdb_id_from_ktuvit = ''
+    ID_from_ktuvit = ''
 
     if imdb_id:
         for result in ktuvit_search_page_results:
-            if imdb_id == result['ImdbID']:
-                imdb_id_from_ktuvit = result['ID']
+            imdb_id_from_ktuvit = extract_imdb_id_from_result(result)
+            
+            if imdb_id == imdb_id_from_ktuvit:
+                kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | MATCH | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID: {imdb_id_from_ktuvit}")
+                ID_from_ktuvit = result['ID']
                 break
 
-    if imdb_id_from_ktuvit == '':
+    if ID_from_ktuvit == '':
         regex_helper = re.compile('\W+', re.UNICODE)
         title = regex_helper.sub('', title).lower()
         for result in ktuvit_search_page_results:
@@ -200,12 +224,14 @@ def get_imdb_id_from_ktuvit(ktuvit_search_response, imdb_id, title):
             
             if (title.startswith(eng_name) or eng_name.startswith(title) or
                     title.startswith(heb_name) or heb_name.startswith(title)):
-                imdb_id_from_ktuvit = result["ID"]
+                kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
+                ID_from_ktuvit = result["ID"]
+                break
     
-    return imdb_id_from_ktuvit
+    return ID_from_ktuvit
 
 
-def create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, season, episode):
+def create_headers_params(media_type, ID_from_ktuvit, season, episode):
 
     """
     Creates the headers and parameters for the API request to search for subtitles.
@@ -213,7 +239,7 @@ def create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, s
     Args:
     - media_type (str): A string indicating the type of the media file ('movie' or 'tv').
     - ktuvit_referer_url (str): A string representing the referer URL for the API request.
-    - imdb_id_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
+    - ID_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
     - season (int): An integer representing the season number of the media file.
     - episode (int): An integer representing the episode number of the media file.
 
@@ -222,6 +248,8 @@ def create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, s
     - headers (dict): A dictionary containing the headers for the API request.
     - params (tuple): A tuple containing the parameters for the API request.
     """
+        
+    ktuvit_referer_url = f"{KTUVIT_URL}/MovieInfo.aspx?ID={ID_from_ktuvit}"
 
     if media_type == 'movie':
     
@@ -242,7 +270,7 @@ def create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, s
         }
 
         params = (
-            ('ID', imdb_id_from_ktuvit),
+            ('ID', ID_from_ktuvit),
         )
         
     else:
@@ -263,7 +291,7 @@ def create_headers_params(media_type, ktuvit_referer_url, imdb_id_from_ktuvit, s
 
         params = (
             ('moduleName', 'SubtitlesList'),
-            ('SeriesID', imdb_id_from_ktuvit),
+            ('SeriesID', ID_from_ktuvit),
             ('Season', season),
             ('Episode', episode),
         )

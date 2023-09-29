@@ -95,6 +95,7 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     for website_info in hebrew_subtitles_websites_info.values():
         try:
             hebrew_subtitles_list = website_info['website'].search_for_subtitles(media_metadata)
+            hebrew_subtitles_list = strip_problematic_chars_from_subtitle_names_list(hebrew_subtitles_list)
             website_subtitles_dict[website_info['short_name']] = hebrew_subtitles_list
             combined_subtitles_list.extend(hebrew_subtitles_list)
             kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(hebrew_subtitles_list)}")   
@@ -122,6 +123,7 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
             try:
 
                 english_subtitles_list = website_info['website'].search_for_subtitles(media_metadata, language='English')
+                english_subtitles_list = strip_problematic_chars_from_subtitle_names_list(english_subtitles_list)
                 website_subtitles_dict[website_info['short_name']] = english_subtitles_list
                 combined_subtitles_list.extend(english_subtitles_list)
                 kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(english_subtitles_list)}")
@@ -139,8 +141,6 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     # Convert the set back to a list
     unique_subtitles_list = list(unique_subtitles_dict.keys())
     
-    unique_subtitles_list = strip_problematic_chars_from_subtitle_names_list(unique_subtitles_list)
-    
     kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list: {str(unique_subtitles_list)}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
 
@@ -148,19 +148,19 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     db_utils.write_unique_subtitles_to_hebrew_subtitles_db(unique_subtitles_list, website_subtitles_dict)
   
   
-def strip_problematic_chars_from_subtitle_names_list(unique_subtitles_list):
+def strip_problematic_chars_from_subtitle_names_list(subtitles_list):
 
     """
     Removes problematic characters (e.g. apostrophes) from each string in a list of subtitle names.
 
     Args:
-        unique_subtitles_list (list): A list of subtitle names.
+        subtitles_list (list): A list of subtitle names.
 
     Returns:
-        list: A new list where each string in unique_subtitles_list has been stripped of problematic characters.
+        list: A new list where each string in subtitles_list has been stripped of problematic characters.
     """
 
-    return [subtitle_name.replace("'", "") for subtitle_name in unique_subtitles_list]
+    return [subtitle_name.replace("'", "") for subtitle_name in subtitles_list]
     
     
 def get_imdb_id(media_type, tmdb_id):
