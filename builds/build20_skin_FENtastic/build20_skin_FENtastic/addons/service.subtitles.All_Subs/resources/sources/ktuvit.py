@@ -17,6 +17,21 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_ktuvit'))
 
 site_id='[Kt]'
 sub_color='limegreen'
+
+def extract_imdb_id_from_itt(itt):
+
+    # Extract the IMDb ID from the IMDb link, Remove trailing slash if it exists
+    imdb_link_from_ktuvit = str(itt.get('IMDB_Link', '')).rstrip("/")
+    # Split the URL by "/", Get the last part of the URL, which should be the IMDb ID (tt123456)
+    imdb_parts = imdb_link_from_ktuvit.split("/")
+    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else None
+            
+    # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
+    if not imdb_id_from_ktuvit or not imdb_id_from_ktuvit.startswith("tt"):
+        imdb_id_from_ktuvit = itt.get('ImdbID', None)
+        
+    return imdb_id_from_ktuvit
+
 def get_login_cook():
   
     headers = {
@@ -54,13 +69,23 @@ def get_subs(item):
     login_cook=cache.get(get_login_cook,1, table='subs')
   
    
+    # if item["TVshowtitle"]:
+        # s_type='1'
+        # s_title=item["TVshowtitle"]
+    # else:
+        # s_type='0'
+        # s_title=item["OriginalTitle"]
+        
+    media_type = item["media_type"]
     
-    if item["TVshowtitle"]:
-        s_type='1'
-        s_title=item["TVshowtitle"]
-    else:
+    if media_type == 'movie':
         s_type='0'
         s_title=item["OriginalTitle"]
+        s_WithSubsOnly = "true"
+    else:
+        s_type='1'
+        s_title=item["TVshowtitle"]
+        s_WithSubsOnly = "false"
         
     if 1:
         headers = {
@@ -78,7 +103,7 @@ def get_subs(item):
             
         }
         
-        data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":false}}'%(str(s_title),s_type)
+        data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":%s}}'%(str(s_title),s_type,s_WithSubsOnly)
         
         response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=5).json()
      
@@ -87,9 +112,10 @@ def get_subs(item):
         
         for itt in j_data:
             
-            if item['imdb']==itt['ImdbID']:
-              
+            imdb_id_from_ktuvit = extract_imdb_id_from_itt(itt)
+            if item['imdb']==str(imdb_id_from_ktuvit):
                 f_id=itt['ID']
+                break
 
         #if ids still empty (wrong imdb on ktuvit page) filtered by text                
         if f_id == '':
@@ -101,6 +127,7 @@ def get_subs(item):
                 if (s_title.startswith(eng_name) or eng_name.startswith(s_title) or
                         s_title.startswith(heb_name) or heb_name.startswith(s_title)):
                     f_id=itt["ID"]
+                    break
                 
         if f_id!='':
             url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
