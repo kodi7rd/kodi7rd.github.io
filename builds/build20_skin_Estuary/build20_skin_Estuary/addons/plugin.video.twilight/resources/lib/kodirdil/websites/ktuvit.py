@@ -179,11 +179,11 @@ def extract_imdb_id_from_result(result):
     imdb_link_from_ktuvit = str(result.get('IMDB_Link', '')).rstrip("/")
     # Split the URL by "/", Get the last part of the URL, which should be the IMDb ID (tt123456)
     imdb_parts = imdb_link_from_ktuvit.split("/")
-    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else None
+    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else ''
             
     # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
-    if not imdb_id_from_ktuvit or not imdb_id_from_ktuvit.startswith("tt"):
-        imdb_id_from_ktuvit = result.get('ImdbID', None)
+    if not imdb_id_from_ktuvit.startswith("tt"):
+        imdb_id_from_ktuvit = str(result.get('ImdbID', ''))
         kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | FALLBACK | KTUVIT IMDB ID (fallback): {imdb_id_from_ktuvit}")
         
     return imdb_id_from_ktuvit
@@ -209,7 +209,6 @@ def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
     if imdb_id:
         for result in ktuvit_search_page_results:
             imdb_id_from_ktuvit = extract_imdb_id_from_result(result)
-            
             if imdb_id == imdb_id_from_ktuvit:
                 kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | MATCH | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID: {imdb_id_from_ktuvit}")
                 ID_from_ktuvit = result['ID']
