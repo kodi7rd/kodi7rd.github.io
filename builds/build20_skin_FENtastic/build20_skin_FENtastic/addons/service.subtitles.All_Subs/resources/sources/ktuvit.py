@@ -24,11 +24,11 @@ def extract_imdb_id_from_itt(itt):
     imdb_link_from_ktuvit = str(itt.get('IMDB_Link', '')).rstrip("/")
     # Split the URL by "/", Get the last part of the URL, which should be the IMDb ID (tt123456)
     imdb_parts = imdb_link_from_ktuvit.split("/")
-    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else None
+    imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else ''
             
     # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
-    if not imdb_id_from_ktuvit or not imdb_id_from_ktuvit.startswith("tt"):
-        imdb_id_from_ktuvit = itt.get('ImdbID', None)
+    if not imdb_id_from_ktuvit.startswith("tt"):
+        imdb_id_from_ktuvit = str(itt.get('ImdbID', ''))
         
     return imdb_id_from_ktuvit
 
@@ -113,7 +113,7 @@ def get_subs(item):
         for itt in j_data:
             
             imdb_id_from_ktuvit = extract_imdb_id_from_itt(itt)
-            if item['imdb']==str(imdb_id_from_ktuvit):
+            if item['imdb']==imdb_id_from_ktuvit:
                 f_id=itt['ID']
                 break
 
@@ -284,11 +284,8 @@ def download(download_data,MySubFolder):
     
         time.sleep(0.1)
         result=response.text
-        
-        log.warning(f"KTUVIT | Number of try: {count} | DownloadFile response text:")
-        log.warning(result)
 
-        if (count>20):
+        if (count>10):
             log.warning(f"KTUVIT | Number of try: {count} | Reached max tries count. breaking...")
             break
             
@@ -300,7 +297,6 @@ def download(download_data,MySubFolder):
 
     archive_file = os.path.join(MyTmp, file_name)
     # Throw an error for bad status codes
-    log.warning(f"KTUVIT | Number of try: {count} | response headers: {headers}")
     response.raise_for_status()
    
     with open(archive_file, 'wb') as handle:

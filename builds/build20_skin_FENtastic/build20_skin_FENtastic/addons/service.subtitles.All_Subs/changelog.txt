@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.8.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.8.7[/B][/COLOR]
+* Small [COLOR limegreen][KTUVIT][/COLOR] website code refactor
+[COLOR yellow][B]v3.8.6[/B][/COLOR]
 * BUG FIX - Ktuvit website subtitles search
 [COLOR yellow][B]v3.8.5[/B][/COLOR]
 * Always trigger autosub, even when replaying the same content.
