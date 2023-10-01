@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from windows import BaseDialog, window_manager, window_player
+from windows.base_window import BaseDialog, window_manager, window_player
 from apis.tmdb_api import tmdb_people_info, tmdb_people_full_info
 from apis.imdb_api import imdb_videos, imdb_people_trivia
 from indexers import dialogs

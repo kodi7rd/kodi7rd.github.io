@@ -18,15 +18,15 @@
                 <effect type="fade" end="100" time="200" />
             </animation>
             <control type="image">
-                <left>-1</left>
-                <top>-1</top>
+                <left>-2</left>
+                <top>-2</top>
                 <width>1252</width>
                 <height>462</height>
-                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.main_highlight)">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
-                <width>1250</width>
-                <height>460</height>
+                <width>1248</width>
+                <height>458</height>
                 <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
@@ -55,7 +55,7 @@
                 <left>60</left>
                 <height>20</height>
                 <font>font12</font> <!-- TWILIGHT_26 -->
-                <textcolor>$INFO[Window(10000).Property(twilight.highlight)]</textcolor>
+                <textcolor>$INFO[Window(10000).Property(twilight.main_highlight)]</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
                 <label>[UPPERCASE][B]$ADDON[plugin.video.twilight 32102][/B][/UPPERCASE]</label>
@@ -95,7 +95,7 @@
                         </control>
                         <control type="image">
                             <width>60</width>
-                            <texture colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]" border="30">twilight_common/left-circle.png</texture>
+                            <texture colordiffuse="$INFO[Window(10000).Property(twilight.main_highlight)]" border="30">twilight_common/left-circle.png</texture>
                         </control>
                     </control>
                     <control type="label">
@@ -119,7 +119,7 @@
                 <onright>5001</onright>
                 <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
-                <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]">twilight_common/white.png</texturesliderbarfocus>
+                <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.main_highlight)]">twilight_common/white.png</texturesliderbarfocus>
                 <showonepage>false</showonepage>
                 <orientation>vertical</orientation>
                 <visible>Control.IsVisible(5001)</visible>

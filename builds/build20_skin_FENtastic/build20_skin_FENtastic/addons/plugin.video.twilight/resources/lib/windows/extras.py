@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from datetime import datetime, timedelta
-from windows import BaseDialog, window_manager, window_player
+from windows.base_window import BaseDialog, window_manager, window_player
 from apis import tmdb_api, imdb_api, omdb_api, trakt_api
 from indexers import dialogs, people
 from indexers.images import Images
@@ -18,7 +18,7 @@ json, Thread, get_icon, close_all_dialog, ok_dialog = kodi_utils.json, kodi_util
 addon_icon, ls, get_icon, backup_cast_thumbnail = kodi_utils.addon_icon, kodi_utils.local_string, kodi_utils.get_icon, get_icon('genre_family')
 fetch_kodi_imagecache, addon_fanart, empty_poster = kodi_utils.fetch_kodi_imagecache, kodi_utils.addon_fanart, kodi_utils.empty_poster
 extras_button_label_values, show_busy_dialog, hide_busy_dialog = kodi_utils.extras_button_label_values, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
-container_update, activate_window = kodi_utils.container_update, kodi_utils.activate_window
+container_update, activate_window, clear_property = kodi_utils.container_update, kodi_utils.activate_window, kodi_utils.clear_property
 extras_enable_scrollbars, get_resolution, omdb_api_key, date_offset = settings.extras_enable_scrollbars, settings.get_resolution, settings.omdb_api_key, settings.date_offset
 default_all_episodes, metadata_user_info, extras_enabled_menus = settings.default_all_episodes, settings.metadata_user_info, settings.extras_enabled_menus
 enable_extra_ratings, extras_enabled_ratings, windowed_playback = settings.extras_enable_extra_ratings, settings.extras_enabled_ratings, settings.extras_windowed_playback
@@ -27,7 +27,7 @@ options_menu_choice, extras_menu_choice, imdb_videos_choice = dialogs.options_me
 get_progress_percent, get_bookmarks, get_watched_info_movie = watched_status.get_progress_percent, watched_status.get_bookmarks, watched_status.get_watched_info_movie
 trakt_manager_choice, random_choice, playback_choice, favorites_choice = dialogs.trakt_manager_choice, dialogs.random_choice, dialogs.playback_choice, dialogs.favorites_choice
 get_watched_status_movie, get_watched_info_tv, get_next_episodes = watched_status.get_watched_status_movie, watched_status.get_watched_info_tv, watched_status.get_next_episodes
-trailer_choice, media_extra_info, genres_choice = dialogs.trailer_choice, dialogs.media_extra_info_choice, dialogs.genres_choice
+trailer_choice, media_extra_info, genres_choice, random_choice = dialogs.trailer_choice, dialogs.media_extra_info_choice, dialogs.genres_choice, dialogs.random_choice
 person_search, person_data_dialog = people.person_search, people.person_data_dialog
 tmdb_movies_year, tmdb_tv_year, tmdb_movies_genres, tmdb_tv_genres = tmdb_api.tmdb_movies_year, tmdb_api.tmdb_tv_year, tmdb_api.tmdb_movies_genres, tmdb_api.tmdb_tv_genres
 tmdb_movies_recommendations, tmdb_tv_recommendations, tmdb_company_id = tmdb_api.tmdb_movies_recommendations, tmdb_api.tmdb_tv_recommendations, tmdb_api.tmdb_company_id
@@ -37,7 +37,7 @@ imdb_parentsguide, imdb_videos = imdb_api.imdb_parentsguide, imdb_api.imdb_video
 fetch_ratings_info, trakt_comments = omdb_api.fetch_ratings_info, trakt_api.trakt_comments
 tmdb_image_base, count_insert = 'https://image.tmdb.org/t/p/%s%s', 'x%s'
 youtube_check = 'plugin.video.youtube'
-setting_base, label_base, ratings_icon_base = 'extras.%s.button', 'button%s.label', 'twilight_flags/ratings/%s'
+setting_base, label_base, ratings_icon_base = 'twilight.extras.%s.button', 'button%s.label', 'twilight_flags/ratings/%s'
 separator = '[COLOR %s][B]  •  [/B][/COLOR]'
 custom_highlight_var_dict = {'skin.arctic.horizon.2': '$VAR[ColorHighlight]]'}
 button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
@@ -162,11 +162,11 @@ class Extras(BaseDialog):
 		if win_prop == 4000 and self.getProperty('tmdb_rating') == 'true': self.set_infoline1(remove_rating=True)
 
 	def make_plot_and_tagline(self):
-		if not plot_id in self.enabled_lists: return
 		self.plot = self.meta_get('tvshow_plot', '') or self.meta_get('plot', '') or ''
 		if not self.plot: return
 		self.tagline = self.meta_get('tagline') or ''
 		if self.tagline: self.plot = '[I]%s[/I][CR][CR]%s' % (self.tagline, self.plot)
+		if plot_id in self.enabled_lists: self.setProperty('plot_enabled', 'true')
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -238,7 +238,6 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_trivia(self):
-		return
 		if not trivia_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_trivia:
@@ -257,7 +256,6 @@ class Extras(BaseDialog):
 		except: pass
 
 	def make_blunders(self):
-		return
 		if not blunders_id in self.enabled_lists: return
 		def builder():
 			for item in self.all_blunders:
@@ -572,6 +570,7 @@ class Extras(BaseDialog):
 
 	def tvshow_browse(self):
 		close_all_dialog()
+		clear_property('twilight.window_stack')
 		url_params = self.make_tvshow_browse_params()
 		self.selected = self.folder_runner(url_params)
 		self.close()
@@ -614,6 +613,12 @@ class Extras(BaseDialog):
 		url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': self.tmdb_id, 'season': self.nextep_season, 'episode': self.nextep_episode}
 		Sources().playback_prep(url_params)
 
+	def play_random_episode(self):
+		function = random_choice({'meta': self.meta, 'poster': self.poster, 'return_choice': 'true'})
+		if not function: return
+		exec('EpisodeTools(self.meta).%s()' % function)
+		self.close()
+
 	def show_director(self):
 		director = self.meta_get('director', None)
 		if not director: return
@@ -636,12 +641,6 @@ class Extras(BaseDialog):
 
 	def show_favorites_manager(self):
 		return favorites_choice({'media_type': self.media_type, 'tmdb_id': str(self.tmdb_id), 'title': self.title, 'refresh': 'false'})
-
-	def play_random_episode(self):
-		function = random_choice({'meta': self.meta, 'poster': self.poster, 'return_choice': 'true'})
-		if not function: return
-		exec('EpisodeTools(self.meta).%s()' % function)
-		self.close()
 
 	def playback_choice(self):
 		params = {'media_type': self.media_type, 'poster': self.poster, 'meta': self.meta, 'season': None, 'episode': None}

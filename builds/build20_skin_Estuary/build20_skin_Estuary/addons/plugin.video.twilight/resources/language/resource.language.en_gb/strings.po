@@ -107,7 +107,7 @@ msgid "Ignore Articles When Sorting Lists"
 msgstr ""
 
 msgctxt "#32026"
-msgid "Open Twilight Extras When Selecting..."
+msgid "Open Extras When Selecting..."
 msgstr ""
 
 msgctxt "#32027"
@@ -188,6 +188,10 @@ msgstr ""
 
 msgctxt "#32046"
 msgid "Enable Content for Extras Lists"
+msgstr ""
+
+msgctxt "#32047"
+msgid "Enter Color Value"
 msgstr ""
 
 msgctxt "#32048"
@@ -315,7 +319,7 @@ msgid "Show Packs Only"
 msgstr ""
 
 msgctxt "#32079"
-msgid "External Scrapers (Powered by Coco Scrapers)"
+msgid "External Scrapers"
 msgstr ""
 
 msgctxt "#32080"
@@ -371,7 +375,7 @@ msgid "Keywords"
 msgstr ""
 
 msgctxt "#32093"
-msgid "[I]Open Coco Scraper Settings[/I]"
+msgid "Sorting - Generic Movie Lists"
 msgstr ""
 
 msgctxt "#32094"
@@ -547,7 +551,7 @@ msgid "Press Context Menu for Playback Options..."
 msgstr ""
 
 msgctxt "#32137"
-msgid "CocoScrapers Default Providers"
+msgid "Rename"
 msgstr ""
 
 msgctxt "#32138"
@@ -608,6 +612,10 @@ msgstr ""
 
 msgctxt "#32152"
 msgid "Filter Results"
+msgstr ""
+
+msgctxt "#32153"
+msgid "Value must begin with [B]FF[/B], be [B]8[/B] characters in length and be [B]Alphanumeric[/B].[CR][CR]Please try again.."
 msgstr ""
 
 msgctxt "#32154"
@@ -671,7 +679,7 @@ msgid "Widgets Only"
 msgstr ""
 
 msgctxt "#32169"
-msgid "Filter by [B]Extra Info[/B]..."
+msgid "Filter by [B]Info[/B]..."
 msgstr ""
 
 msgctxt "#32170"
@@ -1239,7 +1247,7 @@ msgid "Clear Databases"
 msgstr ""
 
 msgctxt "#32513"
-msgid "Manager"
+msgid "Misc"
 msgstr ""
 
 msgctxt "#32514"
@@ -1275,7 +1283,7 @@ msgid "Prompt"
 msgstr ""
 
 msgctxt "#32522"
-msgid "CocoScrapers"
+msgid "Twilight First Use"
 msgstr ""
 
 msgctxt "#32523"
@@ -1327,11 +1335,11 @@ msgid "Debrid"
 msgstr ""
 
 msgctxt "#32535"
-msgid "Torrent"
+msgid "Success.[CR][B]%s[/B] set as External Scraper"
 msgstr ""
 
 msgctxt "#32536"
-msgid "Specific"
+msgid "The [B]%s[/B] Module is not compatible.[CR]Please choose a different Module..."
 msgstr ""
 
 msgctxt "#32537"
@@ -1907,7 +1915,7 @@ msgid "Filter by [B]Title[/B]..."
 msgstr ""
 
 msgctxt "#32680"
-msgid "[I]Please visit CocoScrapers to change settings[/I]"
+msgid "Restart Twilight Services"
 msgstr ""
 
 msgctxt "#32681"
@@ -1963,7 +1971,7 @@ msgid "Content"
 msgstr ""
 
 msgctxt "#32694"
-msgid "Sorting"
+msgid "Sorting - Personal Lists"
 msgstr ""
 
 msgctxt "#32695"
@@ -2338,11 +2346,7 @@ msgid "Kodi Library Sync Complete"
 msgstr ""
 
 msgctxt "#32788"
-msgid "Open Twilight Options Instead of Kodi Context Menu (for Media)"
-msgstr ""
-
-msgctxt "#32789"
-msgid "Multiselect..."
+msgid "Open Options for Context Menu (Media)"
 msgstr ""
 
 msgctxt "#32790"
@@ -3106,7 +3110,7 @@ msgid "Alphanum"
 msgstr ""
 
 msgctxt "#32980"
-msgid "Open Twilight Extras Instead of Kodi Info Dialog (for Media)"
+msgid "Open Extras for Info Dialog (Media)"
 msgstr ""
 
 msgctxt "#32981"
@@ -3214,27 +3218,27 @@ msgid "Check Year Before Search"
 msgstr ""
 
 msgctxt "#33007"
-msgid "API Version"
+msgid "No External Scrapers Module Enabled"
 msgstr ""
 
 msgctxt "#33008"
-msgid "Version 2"
+msgid "No External Providers Enabled"
 msgstr ""
 
 msgctxt "#33009"
-msgid "Version 3"
+msgid "Error Importing External Module."
 msgstr ""
 
 msgctxt "#33010"
-msgid "Github Token not found for Repo access"
+msgid "Popular Today"
 msgstr ""
 
 msgctxt "#33011"
-msgid "No Update Needed"
+msgid "Featured"
 msgstr ""
 
 msgctxt "#33012"
-msgid "Some files could not be cleaned"
+msgid "Most Voted"
 msgstr ""
 
 msgctxt "#33013"
@@ -3575,7 +3579,7 @@ msgid "Choose Media Types for Twilight Extras Window..."
 msgstr ""
 
 msgctxt "#33097"
-msgid "Open Twilight Menu Editor Instead of Kodi Context Menu (for Menus)"
+msgid "Open Menu Editor for Context Menu (Menus)"
 msgstr ""
 
 msgctxt "#33098"
@@ -3719,7 +3723,7 @@ msgid "MPAA Region"
 msgstr ""
 
 msgctxt "#33133"
-msgid "MPAA Prefix"
+msgid "Choose External Scrapers Module"
 msgstr ""
 
 msgctxt "#33134"
@@ -3743,7 +3747,7 @@ msgid "[B]Browse...[/B]"
 msgstr ""
 
 msgctxt "#33138"
-msgid "Press [B][COLOR $INFO[Window().Property(highlight_var)]]BACK[/COLOR][/B] to Exit"
+msgid "Press [B][COLOR $INFO[Window().Property(highlight_var)]]BACK[/COLOR][/B] to Cancel"
 msgstr ""
 
 msgctxt "#33139"
@@ -3755,7 +3759,7 @@ msgid "Add Content"
 msgstr ""
 
 msgctxt "#33141"
-msgid "Open Tools Menu"
+msgid "Single Color"
 msgstr ""
 
 msgctxt "#33142"
@@ -3827,7 +3831,7 @@ msgid "Comments"
 msgstr ""
 
 msgctxt "#33159"
-msgid "None (Monochrome)"
+msgid "Single Color For All"
 msgstr ""
 
 msgctxt "#33160"
@@ -3838,13 +3842,118 @@ msgctxt "#33161"
 msgid "Restore Default Background Image"
 msgstr ""
 
+msgctxt "#33162"
+msgid "Attempt to use Skin Fonts in Twilight Windows"
+msgstr ""
+
+msgctxt "#33163"
+msgid "Waiting for Input"
+msgstr ""
+
+msgctxt "#33164"
+msgid "Success.[CR][B]%s[/B] set as External Scraper"
+msgstr ""
+
+msgctxt "#33165"
+msgid "Retry With All Scrapers When No Results Available"
+msgstr ""
+
+msgctxt "#33166"
+msgid "Popularity (asc)"
+msgstr ""
+
+msgctxt "#33167"
+msgid "Popularity (desc)"
+msgstr ""
+
+msgctxt "#33168"
+msgid "Release Date (asc)"
+msgstr ""
+
+msgctxt "#33169"
+msgid "Release Date (desc)"
+msgstr ""
+
+msgctxt "#33170"
+msgid "Total Revenue (asc)"
+msgstr ""
+
+msgctxt "#33171"
+msgid "Total Revenue (desc)"
+msgstr ""
+
+msgctxt "#33172"
+msgid "Title (asc)"
+msgstr ""
+
+msgctxt "#33173"
+msgid "Title (desc)"
+msgstr ""
+
+msgctxt "#33174"
+msgid "Rating (asc)"
+msgstr ""
+
+msgctxt "#33175"
+msgid "Rating (desc)"
+msgstr ""
+
+msgctxt "#33180"
+msgid "Sorting - Generic TV Show Lists"
+msgstr ""
+
+msgctxt "#33186"
+msgid "First Aired (asc)"
+msgstr ""
+
+msgctxt "#33187"
+msgid "First Aired (desc)"
+msgstr ""
+
+
 ###################################################################################################################################
 
-msgctxt "#32047"
+msgctxt "#32789"
 msgid ""
 msgstr ""
 
-msgctxt "#32153"
+msgctxt "#33176"
+msgid ""
+msgstr ""
+
+msgctxt "#33177"
+msgid ""
+msgstr ""
+
+msgctxt "#33178"
+msgid ""
+msgstr ""
+
+msgctxt "#33179"
+msgid ""
+msgstr ""
+
+msgctxt "#33181"
+msgid ""
+msgstr ""
+
+msgctxt "#33182"
+msgid ""
+msgstr ""
+
+msgctxt "#33183"
+msgid ""
+msgstr ""
+
+msgctxt "#33184"
+msgid ""
+msgstr ""
+
+msgctxt "#33185"
+msgid ""
+msgstr ""
+
+msgctxt "#33188"
 msgid ""
 msgstr ""
 

@@ -13,7 +13,7 @@ add_items, show_text, container_refresh, focus_index, add_item = kodi_utils.add_
 ls, build_url, make_listitem, set_property, set_content = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_property, kodi_utils.set_content
 end_directory, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.maincache_db
 clear_property, confirm_dialog, numeric_input = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input
-default_icon, fanart, default_poster, default_cast, twilight_clearlogo = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family', kodi_utils.addon_clearlogo
+default_icon, fanart, default_poster, default_cast = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family'
 set_category = kodi_utils.set_category
 years_movies, years_tvshows, movie_genres, tvshow_genres = meta_lists.years_movies, meta_lists.years_tvshows, meta_lists.movie_genres, meta_lists.tvshow_genres
 languages, regions, movie_certifications, networks = meta_lists.languages, meta_lists.regions, meta_lists.movie_certifications, meta_lists.networks
@@ -339,7 +339,7 @@ class Discover:
 					remove_all_params = {'mode': 'discover.remove_all_history', 'media_type': media_type, 'silent': 'true'}
 					listitem = make_listitem()
 					listitem.setLabel(display)
-					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon, 'clearlogo': twilight_clearlogo})
+					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
@@ -438,7 +438,7 @@ class Discover:
 		url = build_url(params)
 		listitem = make_listitem()
 		listitem.setLabel(list_name)
-		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
+		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 		info_tag = listitem.getVideoInfoTag()
 		info_tag.setMediaType('video')
 		info_tag.setPlot(' ')
@@ -509,21 +509,19 @@ class Discover:
 		except: return None
 
 	def _movies_sort(self):
-		pop_str, rel_str, rev_str, tit_str, rat_str, asc_str, desc_str = ls(32218), ls(32221), ls(32626), ls(32228), ls(32621), ls(32224), ls(32225)
 		return [
-			('%s (%s)' % (pop_str, asc_str), '&sort_by=popularity.asc'),            ('%s (%s)' % (pop_str, desc_str), '&sort_by=popularity.desc'),
-			('%s (%s)' % (rel_str, asc_str), '&sort_by=primary_release_date.asc'),  ('%s (%s)' % (rel_str, desc_str), '&sort_by=primary_release_date.desc'),
-			('%s (%s)' % (rev_str, asc_str), '&sort_by=revenue.asc'),               ('%s (%s)' % (rev_str, desc_str), '&sort_by=revenue.desc'),
-			('%s (%s)' % (tit_str, asc_str), '&sort_by=original_title.asc'),        ('%s (%s)' % (tit_str, desc_str), '&sort_by=original_title.desc'),
-			('%s (%s)' % (rat_str, asc_str), '&sort_by=vote_average.asc'),          ('%s (%s)' % (rat_str, desc_str), '&sort_by=vote_average.desc')
+			(ls(33166), '&sort_by=popularity.asc'),            (ls(33167), '&sort_by=popularity.desc'),
+			(ls(33168), '&sort_by=primary_release_date.asc'),  (ls(33169), '&sort_by=primary_release_date.desc'),
+			(ls(33170), '&sort_by=revenue.asc'),               (ls(33171), '&sort_by=revenue.desc'),
+			(ls(33172), '&sort_by=original_title.asc'),        (ls(33173), '&sort_by=original_title.desc'),
+			(ls(33174), '&sort_by=vote_average.asc'),          (ls(33175), '&sort_by=vote_average.desc')
 			]
 
 	def _tvshows_sort(self):
-		pop_str, prem_str, rat_str, asc_str, desc_str = ls(32218), ls(32620), ls(32621), ls(32224), ls(32225)
 		return [
-			('%s (%s)' % (pop_str, asc_str), '&sort_by=popularity.asc'),       ('%s (%s)' % (pop_str, desc_str), '&sort_by=popularity.desc'),
-			('%s (%s)' % (prem_str, asc_str), '&sort_by=first_air_date.asc'),  ('%s (%s)' % (prem_str, desc_str), '&sort_by=first_air_date.desc'),
-			('%s (%s)' % (rat_str, asc_str), '&sort_by=vote_average.asc'),     ('%s (%s)' % (rat_str, desc_str), '&sort_by=vote_average.desc')
+			(ls(33166), '&sort_by=popularity.asc'),       (ls(33167), '&sort_by=popularity.desc'),
+			(ls(33186), '&sort_by=first_air_date.asc'),  (ls(33187), '&sort_by=first_air_date.desc'),
+			(ls(33174), '&sort_by=vote_average.asc'),     (ls(33175), '&sort_by=vote_average.desc')
 			]
 
 	def remove_from_history(self, params=None):

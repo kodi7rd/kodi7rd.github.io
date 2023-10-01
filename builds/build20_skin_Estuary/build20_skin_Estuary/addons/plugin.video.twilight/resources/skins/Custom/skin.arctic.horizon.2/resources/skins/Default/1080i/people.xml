@@ -63,7 +63,7 @@
                         <width>35</width>
                         <height>35</height>
                         <aspectratio>keep</aspectratio>
-                        <texture>twilight_common/info.png</texture>
+                        <texture>dialog/info.png</texture>
                     </control>
                     <control type="label">
                         <width max="500">auto</width>

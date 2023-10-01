@@ -107,8 +107,8 @@ class TwilightPlayer(xbmc_player):
 				except: pass
 			hide_busy_dialog()
 			if not self.media_marked: self.media_watched_marker()
-			clear_local_bookmarks()
 			self.clear_playback_properties()
+			clear_local_bookmarks()
 		except:
 			hide_busy_dialog()
 			self.sources_object.playback_successful = False
@@ -288,6 +288,7 @@ class TwilightPlayer(xbmc_player):
 		except: pass
 
 	def clear_playback_properties(self):
+		clear_property('twilight.window_stack')
 		clear_property('script.trakt.ids')
 		clear_property('subs.player_filename')
 
@@ -302,9 +303,9 @@ class Subtitles(xbmc_player):
 	def __init__(self):
 		xbmc_player.__init__(self)
 		self.os = OpenSubtitlesAPI()
-		self.auto_enable = get_setting('subtitles.auto_enable')
-		self.subs_action = get_setting('subtitles.subs_action')
-		self.language = get_setting('subtitles.language_primary')
+		self.auto_enable = get_setting('twilight.subtitles.auto_enable')
+		self.subs_action = get_setting('twilight.subtitles.subs_action')
+		self.language = get_setting('twilight.subtitles.language_primary')
 		self.quality = ['bluray', 'hdrip', 'brrip', 'bdrip', 'dvdrip', 'webdl', 'webrip', 'webcap', 'web', 'hdtv', 'hdrip']
 
 	def get(self, query, imdb_id, season, episode, secondary_search=False):
@@ -389,7 +390,7 @@ class Subtitles(xbmc_player):
 		subtitle = _searched_subs()
 		if subtitle: return self.setSubtitles(subtitle)
 		if secondary_search: return _notification(32793)
-		secondary_language = get_setting('subtitles.language_secondary')
+		secondary_language = get_setting('twilight.subtitles.language_secondary')
 		if secondary_language in (self.language, None, 'None', ''): return _notification(32793)
 		self.language = secondary_language
 		self.get(query, imdb_id, season, episode, secondary_search=True)

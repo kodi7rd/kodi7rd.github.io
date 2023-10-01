@@ -24,7 +24,7 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 		else: id_type, media_id = None, None
 	if media_id == None: return None
 	extra_fanart_enabled, fanart_client_key = user_info['extra_fanart_enabled'], user_info['fanart_client_key']
-	language, mpaa_prefix = user_info['language'], user_info['mpaa_prefix']
+	language = user_info['language']
 	meta, custom_artwork = metacache_get('movie', id_type, media_id, current_time)
 	if meta:
 		if not meta.get('fanart_added', False) and extra_fanart_enabled:
@@ -126,7 +126,6 @@ def movie_meta(id_type, media_id, user_info, current_date, current_time=None):
 			try: mpaa = [x['certification'] for i in release_dates['results'] for x in i['release_dates'] \
 						if i['iso_3166_1'] == user_info['mpaa_region'] and x['certification'] != '' and x['note'] == ''][0]
 			except: pass
-			if mpaa and mpaa_prefix: mpaa = '%s %s' % (mpaa_prefix, mpaa)
 		credits = data_get('credits')
 		if credits:
 			all_cast = credits.get('cast', None)
@@ -182,7 +181,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		else: id_type, media_id = None, None
 	if media_id == None: return None
 	extra_fanart_enabled, fanart_client_key = user_info['extra_fanart_enabled'], user_info['fanart_client_key']
-	language, mpaa_prefix = user_info['language'], user_info['mpaa_prefix']
+	language = user_info['language']
 	meta, custom_artwork = metacache_get('tvshow', id_type, media_id, current_time)
 	if meta:
 		if not meta.get('fanart_added', False) and extra_fanart_enabled:
@@ -289,7 +288,6 @@ def tvshow_meta(id_type, media_id, user_info, current_date, current_time=None):
 		elif release_dates:
 			try: mpaa = [i['release_dates'][0]['certification'] for i in release_dates['results'] if i['iso_3166_1'] == user_info['mpaa_region']][0]
 			except: pass
-		if mpaa and mpaa_prefix: mpaa = '%s %s' % (mpaa_prefix, mpaa)
 		credits = data_get('credits')
 		if credits:
 			all_cast = credits.get('cast', None)
@@ -457,7 +455,7 @@ def movie_expiry(current_date, meta):
 
 def tvshow_expiry(current_date, meta):
 	try:
-		if meta['status'] in finished_show_check: expiration = EXPIRES_30_DAYS
+		if meta['status'] in finished_show_check: expiration = EXPIRES_182_DAYS
 		else:
 			data = subtract_dates(jsondate_to_datetime(meta['extra_info']['next_episode_to_air']['air_date'], date_format, remove_time=True), current_date) - EXPIRES_1_DAYS
 			if data <= 1: expiration = EXPIRES_1_DAYS

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from apis.trakt_api import trakt_watchlist, trakt_get_my_calendar
-from caches.favorites import favorites
+from caches.favorites_cache import favorites
 from modules import kodi_utils, settings, watched_status as ws
 from modules.watched_status import get_hidden_progress_items
 from modules.metadata import tvshow_meta, episodes_meta, all_episodes_meta
@@ -324,7 +324,7 @@ def build_single_episode(list_type, params={}):
 		except: pass
 	handle, is_external, category_name = int(sys.argv[1]), external(), episodes_str
 	item_list, unwatched = [], []
-	resinsert, twilight_highlight = '', get_property('twilight.highlight')
+	resinsert, twilight_highlight = '', get_property('twilight.main_highlight')
 	item_list_append = item_list.append
 	display_title, date_format, art_keys, all_episodes = single_ep_display_title(), single_ep_format(), get_art_provider(), default_all_episodes()
 	meta_user_info, watched_indicators, show_unaired = metadata_user_info(), watched_indicators_info(), show_unaired_info()
@@ -366,7 +366,7 @@ def build_single_episode(list_type, params={}):
 		recently_aired = params.get('recently_aired', None)
 		data = trakt_get_my_calendar(recently_aired, get_datetime_function())
 		list_type = 'episode.trakt_recently_aired' if recently_aired else 'episode.trakt_calendar'
-		data = sorted(data, key=lambda k: (k['sort_title'], k['first_aired']), reverse=True)
+		data = sorted(data, key=lambda i: (i['sort_title'], i.get('first_aired', '2100-12-31')), reverse=True)
 	list_type_compare = list_type.split('episode.')[1]
 	list_type_starts_with = list_type_compare.startswith
 	threads = list(make_thread_list_enumerate(_process, data))
@@ -380,8 +380,8 @@ def build_single_episode(list_type, params={}):
 		sort_direction = nextep_settings['sort_direction']
 		if nextep_settings['sort_airing_today_to_top']:
 			airing_today = [i for i in item_list
-							if date_difference_function(current_date, jsondate_to_datetime_function(i['first_aired'], '%Y-%m-%d').date(), 0)]
-			airing_today = sorted(airing_today, key=lambda i: i['first_aired'])
+							if date_difference_function(current_date, jsondate_to_datetime_function(i.get('first_aired', '2100-12-31'), '%Y-%m-%d').date(), 0)]
+			airing_today = sorted(airing_today, key=lambda i: i.get('first_aired', '2100-12-31'))
 			remainder = [i for i in item_list if not i in airing_today]
 			remainder = sorted(remainder, key=lambda i: func(i[sort_key]), reverse=sort_direction)
 			unaired = [i for i in remainder if i['unaired']]
@@ -398,7 +398,7 @@ def build_single_episode(list_type, params={}):
 		if list_type_compare in ('trakt_calendar', 'trakt_recently_aired'):
 			if list_type_compare == 'trakt_calendar': reverse = calendar_sort_order() == 0
 			else: reverse = True
-			item_list = sorted(item_list, key=lambda i: i['first_aired'], reverse=reverse)
+			item_list = sorted(item_list, key=lambda i: i.get('first_aired', '2100-12-31'), reverse=reverse)
 	add_items(handle, [i['list_items'] for i in item_list])
 	set_content(handle, content_type)
 	set_category(handle, category_name)

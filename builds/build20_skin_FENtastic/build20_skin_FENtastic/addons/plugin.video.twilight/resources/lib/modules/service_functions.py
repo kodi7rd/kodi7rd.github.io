@@ -3,35 +3,30 @@ import xbmc, xbmcgui, xbmcplugin, xbmcvfs
 import xbmcaddon
 import time
 import datetime
-from xml.dom.minidom import parse as mdParse
-from windows import FontUtils
-from caches import check_databases, clean_databases
+from windows.base_window import FontUtils
+from caches.base_cache import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
 from indexers import real_debrid, premiumize, alldebrid, furk, easynews
 from modules import kodi_utils, settings
-from modules.debrid import debrid_enabled
 from modules.utils import jsondate_to_datetime, datetime_workaround
 
 disable_enable_addon, update_local_addons, get_infolabel, run_plugin = kodi_utils.disable_enable_addon, kodi_utils.update_local_addons, kodi_utils.get_infolabel, kodi_utils.run_plugin
-ls, path_exists, translate_path, custom_context_main_menu_prop = kodi_utils.local_string, kodi_utils.path_exists, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop
-custom_context_prop, custom_info_prop, addon = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.addon
+ls, translate_path, custom_context_main_menu_prop, mdParse = kodi_utils.local_string, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop, kodi_utils.mdParse
+custom_context_prop, custom_info_prop, addon_object, user_settings = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.addon_object, kodi_utils.user_settings
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
 get_window_id, Thread, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, settings.check_premium_account_status
-get_setting, set_setting, external, make_window_properties = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.external, kodi_utils.make_window_properties
+make_directories, path_exists,  = kodi_utils.make_directories, kodi_utils.path_exists, 
+get_setting, set_setting, external, make_settings_props = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.external, kodi_utils.make_settings_props
 logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_twilight = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_twilight
-make_directories, kodi_refresh, list_dirs, delete_file = kodi_utils.make_directories, kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
-current_skin_prop = kodi_utils.current_skin_prop
-notification, ok_dialog, trigger_settings_refresh = kodi_utils.notification, kodi_utils.ok_dialog, kodi_utils.trigger_settings_refresh
-refr_settings_prop, rem_props_prop, pause_settings_prop = kodi_utils.refr_settings_prop, kodi_utils.rem_props_prop, kodi_utils.pause_settings_prop
+kodi_refresh, list_dirs, delete_file = kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
+current_skin_prop, use_skin_fonts_prop = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop
+notification, ok_dialog = kodi_utils.notification, kodi_utils.ok_dialog
+pause_settings_prop, enabled_debrids_check = kodi_utils.pause_settings_prop, settings.enabled_debrids_check
 twilight_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025, 11121)
-premium_check_function_dict = {'Real-Debrid': real_debrid.active_days, 'Premiumize.me': premiumize.active_days, 'AllDebrid': alldebrid.active_days,
-								'Furk': furk.active_days, 'Easynews': easynews.active_days}
-premium_check_setting_dict = {'Real-Debrid': 'rd.enabled', 'Premiumize.me': 'pm.enabled', 'AllDebrid': 'ad.enabled',
-								'Furk': 'provider.furk', 'Easynews': 'provider.easynews'}
 
 class InitializeDatabases:
 	def run(self):
@@ -39,12 +34,19 @@ class InitializeDatabases:
 		check_databases()
 		return logger(twilight_str, 'InitializeDatabases Service Finished')
 
+class CheckSettings:
+	def run(self):
+		logger(twilight_str, 'CheckSettingsFile Service Starting')
+		if not path_exists(userdata_path): make_directories(userdata_path)
+		addon_object.setSetting('dummy_setting', 'foo')
+		return logger(twilight_str, 'CheckSettingsFile Service Finished')
+
 class DatabaseMaintenance:
 	def run(self):
 		logger(twilight_str, 'Database Maintenance Service Starting')
 		time = datetime.datetime.now()
 		current_time = self._get_timestamp(time)
-		due_clean = int(get_setting('database.maintenance.due', '0'))
+		due_clean = int(get_setting('twilight.database.maintenance.due', '0'))
 		if due_clean == 0:
 			next_clean = str(int(self._get_timestamp(time + datetime.timedelta(days=3))))
 			set_setting('database.maintenance.due', next_clean)
@@ -59,37 +61,30 @@ class DatabaseMaintenance:
 	def _get_timestamp(self, date_time):
 		return int(time.mktime(date_time.timetuple()))
 
-class CheckSettings:
-	def run(self):
-		logger(twilight_str, 'CheckSettingsFile Service Starting')
-		if not path_exists(userdata_path): make_directories(userdata_path)
-		addon().setSetting('dummy_setting', 'foo')
-		make_window_properties()
-		return logger(twilight_str, 'CheckSettingsFile Service Finished')
-
 class FirstRunActions:
 	def run(self):
 		logger(twilight_str, 'CheckUpdateActions Service Starting')
-		addon_version, settings_version =  self.remove_alpha(addon().getAddonInfo('version')), self.remove_alpha(addon().getSetting('version_number'))
-		addon().setSetting('version_number', addon_version)
+		addon_version, settings_version =  self.remove_alpha(addon_object.getAddonInfo('version')), self.remove_alpha(addon_object.getSetting('version_number'))
 		if addon_version != settings_version:
 			logger(twilight_str, 'CheckUpdateActions Running Update Actions....')
+			addon_object.setSetting('version_number', addon_version)
 			self.update_action(addon_version)
+		if get_setting('first_use', 'false') == 'true':
+			lines = ('By default, Twilight has [B]Local Folders[/B], [B]Debrid Cloud[/B], [B]Furk[/B] and [B]Easynews[/B] scrapers.',
+			'These scrapers are designed for use on media you have purchased and organized through these services.',
+			'Twilight is [B]unable[/B] to search online for sources outside of these services.',
+			'If you wish to use an external scraper package within Twilight, you must select a module at[CR][B]Twilight Settings->Providers->Choose External Scrapers Module.[/B]',
+			'The use of external scrapers is outside of the intended use of Twilight, and will not be supported by Twilight.')
+			for count, line in enumerate(lines, 1):
+				button_label = 'Finish' if count == 5 else 'Continue'
+				heading = '%s - %s/5.' % (ls(32522), count)
+				ok_dialog(heading, line, button_label)
+			set_setting('first_use', 'false')
 		return logger(twilight_str, 'CheckUpdateActions Service Finished')
 
 	def update_action(self, addon_version):
 		''' Put code that needs to run once on update here'''
-		kodi_utils.manage_settings_reset()
-		setting_base = 'extras.%s.button'
-		button_ids = (10, 11, 12, 13, 14, 15, 16, 17)
-		for media_type in ('movie', 'tvshow'):
-			setting_id_base = setting_base % media_type
-			for button in button_ids:
-				button_action = get_setting(setting_id_base + str(button))
-				if button_action == 'show_keywords':
-					logger(setting_id_base + str(button), button_action)
-					set_setting(setting_id_base + str(button), 'show_trakt_manager')
-		kodi_utils.manage_settings_reset(True)
+		return
 
 	def remove_alpha(self, string):
 		try: result = ''.join(c for c in string if (c.isdigit() or c =='.'))
@@ -100,7 +95,7 @@ class ReuseLanguageInvokerCheck:
 	def run(self):
 		logger(twilight_str, 'ReuseLanguageInvokerCheck Service Starting')
 		addon_xml = translate_path('special://home/addons/plugin.video.twilight/addon.xml')
-		current_addon_setting = get_setting('reuse_language_invoker', None)
+		current_addon_setting = get_setting('twilight.reuse_language_invoker', None)
 		if current_addon_setting is None: return logger(twilight_str, 'ReuseLanguageInvokerCheck Service Error. No current setting detected. Finished')
 		root = mdParse(addon_xml)
 		invoker_instance = root.getElementsByTagName('reuselanguageinvoker')[0].firstChild
@@ -108,7 +103,7 @@ class ReuseLanguageInvokerCheck:
 			invoker_instance.data = current_addon_setting
 			new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 			with open(addon_xml, 'w') as f: f.write(new_xml)
-			if not get_setting('auto_invoker_fix') == 'true' and not confirm_dialog(text='%s\n%s' % (ls(33021), ls(33020))):
+			if not get_setting('twilight.auto_invoker_fix') == 'true' and not confirm_dialog(text='%s\n%s' % (ls(33021), ls(33020))):
 				return logger(twilight_str, 'ReuseLanguageInvokerCheck Service Finished')
 			execute_builtin('ActivateWindow(Home)', True)
 			update_local_addons()
@@ -194,7 +189,7 @@ class CustomFonts:
 		logger(twilight_str, 'CustomFonts Service Starting')
 		monitor, player = xbmc_monitor(), xbmc_player()
 		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
-		clear_property(current_skin_prop)
+		for item in (current_skin_prop, use_skin_fonts_prop): clear_property(item)
 		font_utils = FontUtils()
 		while not monitor.abortRequested():
 			font_utils.execute_custom_fonts()
@@ -237,12 +232,14 @@ class PremiumExpiryCheck:
 		logger(twilight_str, 'Premium Expiry Check Service Finished')
 
 	def run_check(self):
+		premium_check_function_dict = {'Real-Debrid': real_debrid.active_days, 'Premiumize.me': premiumize.active_days, 'AllDebrid': alldebrid.active_days,
+										'Furk': furk.active_days, 'Easynews': easynews.active_days}
 		active_functions = [Thread(target=self.process, args=(premium_check_function_dict[i], i)) for i in self.active_accounts()]
 		[i.start() for i in active_functions]
 		[i.join() for i in active_functions]
 
 	def active_accounts(self):
-		active_accounts = debrid_enabled()
+		active_accounts = [i[0] for i in [('Real-Debrid', 'rd'), ('Premiumize.me', 'pm'), ('AllDebrid', 'ad')] if enabled_debrids_check(i[1])]
 		if settings.furk_active(): active_accounts.append('Furk')
 		if settings.easynews_active(): active_accounts.append('Easynews')
 		return active_accounts
@@ -257,11 +254,13 @@ class PremiumExpiryCheck:
 		if expiry <= 7: self.days_remaining.append((name, expiry))
 
 	def revoke(self):
+		premium_check_setting_dict = {'Real-Debrid': 'rd.enabled', 'Premiumize.me': 'pm.enabled', 'AllDebrid': 'ad.enabled',
+										'Furk': 'provider.furk', 'Easynews': 'provider.easynews'}
 		for item in self.expired_premium: set_setting(premium_check_setting_dict[item[0]], 'false')
 
 class OnSettingsChangedActions:
 	def run(self):
-		if get_property(pause_settings_prop) != 'true': trigger_settings_refresh()
+		if get_property(pause_settings_prop) != 'true': make_settings_props()
 
 class OnNotificationActions:
 	def run(self, sender, method, data):

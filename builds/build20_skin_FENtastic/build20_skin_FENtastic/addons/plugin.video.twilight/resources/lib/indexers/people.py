@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from apis.tmdb_api import tmdb_people_info
-from windows import open_window
+from windows.base_window import open_window
 from indexers.images import Images
 from modules import kodi_utils
 # logger = kodi_utils.logger
@@ -10,7 +10,7 @@ json, select_dialog, dialog, show_busy_dialog, hide_busy_dialog = kodi_utils.jso
 notification, get_icon, unquote, kodi_refresh, ls = kodi_utils.notification, kodi_utils.get_icon, kodi_utils.unquote, kodi_utils.kodi_refresh, kodi_utils.local_string
 add_items, set_content, set_category, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.end_directory
 build_url, make_listitem, sys = kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.sys
-addon_fanart, addon_clearlogo = kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
+addon_fanart = kodi_utils.addon_fanart
 tmdb_image_url = 'https://image.tmdb.org/t/p/h632/%s'
 default_image = get_icon('genre_family')
 
@@ -37,7 +37,7 @@ def person_direct_search(query):
 			url = build_url(url_params)
 			listitem = make_listitem()
 			listitem.setLabel(actor_name)
-			listitem.setArt({'icon': actor_image, 'poster': actor_image, 'thumb': actor_image, 'fanart': addon_fanart, 'banner': actor_image, 'clearlogo': ''})
+			listitem.setArt({'icon': actor_image, 'poster': actor_image, 'thumb': actor_image, 'fanart': addon_fanart, 'banner': actor_image})
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('movie')
 			info_tag.setPlot(known_for)

@@ -11,12 +11,11 @@ from modules.utils import clean_file_name, clean_title, safe_string, remove_acce
 
 json, Thread, ls, urlparse, parse_qsl, notification = kodi_utils.json, kodi_utils.Thread, kodi_utils.local_string, kodi_utils.urlparse, kodi_utils.parse_qsl, kodi_utils.notification
 video_extensions, image_extensions, get_icon, dialog, unquote = kodi_utils.video_extensions, kodi_utils.image_extensions, kodi_utils.get_icon, kodi_utils.dialog, kodi_utils.unquote
+sleep, set_category, poster_empty, get_setting, select_dialog = kodi_utils.sleep, kodi_utils.set_category, kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 add_items, set_sort_method, set_content, end_directory, sys = kodi_utils.add_items, kodi_utils.set_sort_method, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.sys
 player, confirm_dialog, ok_dialog, addon_fanart, build_url = kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.addon_fanart, kodi_utils.build_url
 show_busy_dialog, hide_busy_dialog, make_directory, open_file = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.make_directory, kodi_utils.open_file
 set_view_mode, make_listitem, list_dirs = kodi_utils.set_view_mode, kodi_utils.make_listitem, kodi_utils.list_dirs
-twilight_clearlogo, sleep, set_category = kodi_utils.addon_clearlogo, kodi_utils.sleep, kodi_utils.set_category
-poster_empty, get_setting, select_dialog = kodi_utils.empty_poster, kodi_utils.get_setting, kodi_utils.select_dialog
 sources = Sources()
 ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 levels =['../../../..', '../../..', '../..', '..']
@@ -85,7 +84,7 @@ def get_title(meta):
 	custom_title = meta.get('custom_title', None)
 	if custom_title: title = custom_title
 	else:
-		if get_setting('meta_language') == 'en': title = meta['title']
+		if get_setting('twilight.meta_language') == 'en': title = meta['title']
 		else:
 			english_title = meta.get('english_title')
 			if english_title: title = english_title
@@ -367,7 +366,7 @@ def download_manager(params):
 				url = os.path.join(folder_path, path)
 				listitem = make_listitem()
 				listitem.setLabel(clean_file_name(normalize(path)))
-				listitem.setArt({'fanart': addon_fanart, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'fanart': addon_fanart})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('files')
 				info_tag.setPlot(' ')

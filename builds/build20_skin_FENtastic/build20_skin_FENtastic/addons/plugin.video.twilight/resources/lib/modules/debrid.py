@@ -20,7 +20,7 @@ def debrid_authed():
 	return [i[0] for i in debrid_list if authorized_debrid_check(i[1])]
 
 def debrid_type_enabled(debrid_type, enabled_debrids):
-	return [i[0] for i in debrid_list if i[0] in enabled_debrids and get_setting('%s.%s.enabled' % (i[1], debrid_type)) == 'true']
+	return [i[0] for i in debrid_list if i[0] in enabled_debrids and get_setting('twilight.%s.%s.enabled' % (i[1], debrid_type)) == 'true']
 
 def debrid_valid_hosts(enabled_debrids):
 	def _get_hosts(function):

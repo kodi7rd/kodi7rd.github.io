@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from apis.tmdb_api import tmdb_popular_people
-from windows import BaseDialog, window_manager
+from windows.base_window import BaseDialog, window_manager
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
 from modules.kodi_utils import json, select_dialog, addon_fanart, item_next, local_string as ls

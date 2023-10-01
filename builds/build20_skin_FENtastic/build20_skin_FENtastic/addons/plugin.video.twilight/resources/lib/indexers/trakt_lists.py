@@ -9,7 +9,7 @@ from modules.settings import paginate, page_limit, jump_to_enabled, ignore_artic
 
 ls, sys, make_listitem, build_url, Thread, add_items = kodi_utils.local_string, kodi_utils.sys, kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.Thread, kodi_utils.add_items
 add_dir, external, dialog, sleep, json, get_icon = kodi_utils.add_dir, kodi_utils.external, kodi_utils.dialog, kodi_utils.sleep, kodi_utils.json, kodi_utils.get_icon
-trakt_icon, fanart, twilight_clearlogo, add_item, set_property = get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.add_item, kodi_utils.set_property
+trakt_icon, fanart, add_item, set_property = get_icon('trakt'), kodi_utils.addon_fanart, kodi_utils.add_item, kodi_utils.set_property
 set_content, set_sort_method, set_view_mode, end_directory = kodi_utils.set_content, kodi_utils.set_sort_method, kodi_utils.set_view_mode, kodi_utils.end_directory
 set_category, home, folder_path = kodi_utils.set_category, kodi_utils.home, kodi_utils.folder_path
 trakt_fetch_collection_watchlist, get_trakt_list_contents = trakt_api.trakt_fetch_collection_watchlist, trakt_api.get_trakt_list_contents
@@ -41,7 +41,7 @@ def search_trakt_lists(params):
 				cm_append((unlikelist_str,'RunPlugin(%s)' % build_url({'mode': 'trakt.trakt_unlike_a_list', 'user': user, 'list_slug': slug})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
-				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
@@ -88,7 +88,7 @@ def get_trakt_lists(params):
 				cm_append((add2folder_str,'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': editor_display, 'iconImage': 'trakt'})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
-				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
@@ -133,7 +133,7 @@ def get_trakt_trending_popular_lists(params):
 					cm_append((unlikelist_str,'RunPlugin(%s)' % build_url({'mode': 'trakt.trakt_unlike_a_list', 'user': user, 'list_slug': slug})))
 				listitem.addContextMenuItems(cm)
 				listitem.setLabel(display)
-				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': trakt_icon, 'poster': trakt_icon, 'thumb': trakt_icon, 'fanart': fanart, 'banner': trakt_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')

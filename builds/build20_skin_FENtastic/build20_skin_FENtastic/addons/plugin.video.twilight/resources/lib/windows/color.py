@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from windows import BaseDialog
+from windows.base_window import BaseDialog
 from modules.kodi_utils import colorpalette_path
-from modules import colors
-from modules.kodi_utils import dialog
-# from modules.kodi_utils import logger
+from modules.meta_lists import palette_basic, palette_material_design, palette_web, palette_rainbow
+from modules.kodi_utils import dialog, ok_dialog, path_join, local_string as ls
+from modules.kodi_utils import logger
 
 button_ids = (10, 11)
-palettes = {'basic': colors.basic, 'material_design': colors.material_design, 'webcolors': colors.web, 'rainbow': colors.rainbow}
+palettes = {'basic': palette_basic, 'material_design': palette_material_design, 'webcolors': palette_web, 'rainbow': palette_rainbow}
 palette_list = ['basic', 'material_design', 'webcolors', 'rainbow']
+logger('colorpalette_path', colorpalette_path)
 
 class SelectColor(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -16,7 +17,7 @@ class SelectColor(BaseDialog):
 		self.current_setting = self.kwargs.get('current_setting')
 		self.window_id = 2000
 		self.selected = None
-		self.texture_location = colorpalette_path + '%s.png'
+		self.texture_location = path_join(colorpalette_path, '%s.png')
 		self.current_palette = palette_list[3]
 		self.make_menu()
 		self.set_properties()
@@ -48,7 +49,7 @@ class SelectColor(BaseDialog):
 				self.selected = None
 				self.close()
 			elif focus_id == 12:
-				color_value = dialog.input('Enter Color Value', defaultt=self.current_setting)
+				color_value = self.color_input()
 				if not color_value: return
 				self.current_setting = color_value
 				self.selected = self.current_setting
@@ -93,6 +94,15 @@ class SelectColor(BaseDialog):
 			except: status = False
 			self.busy_dialog('false')
 		return status
+
+	def color_input(self):
+		color_value = dialog.input(ls(32047), defaultt=self.current_setting)
+		if not color_value: return None
+		color_value = color_value.upper()
+		if not color_value.isalnum() or not color_value.startswith('FF') or not len(color_value) == 8:
+			ok_dialog(text=32153)
+			return self.color_input()
+		return color_value
 
 	def busy_dialog(self, state='true'):
 		self.setProperty('show_busy_dialog', state)

@@ -19,15 +19,15 @@
             </animation>
             <control type="group">
                 <control type="image">
-                    <left>-1</left>
-                    <top>-1</top>
+                    <left>-2</left>
+                    <top>-2</top>
                     <width>1337</width>
                     <height>947</height>
                     <texture border="16" colordiffuse="$INFO[Window.Property(highlight)]">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
-                    <width>1335</width>
-                    <height>945</height>
+                    <width>1333</width>
+                    <height>943</height>
                     <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
@@ -131,7 +131,7 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>
-                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.twilight 32605]: [/B][/COLOR]$INFO[Window.Property(extraInfo)][/UPPERCASE]</label>
+                    <label>[UPPERCASE][COLOR $INFO[Window.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[Window.Property(extraInfo)][/UPPERCASE]</label>
                 </control>
                 <control type="textbox">
                     <top>340</top>

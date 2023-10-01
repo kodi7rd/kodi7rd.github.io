@@ -1,26 +1,10 @@
 # -*- coding: utf-8 -*-
-from modules import kodi_utils
-# logger = kodi_utils.logger
-
-rem_props_prop, run_plugin, current_langinvoker_prop = kodi_utils.rem_props_prop, kodi_utils.run_plugin, kodi_utils.current_langinvoker_prop
-external, parse_qsl, get_property, set_property = kodi_utils.external, kodi_utils.parse_qsl, kodi_utils.get_property, kodi_utils.set_property
-make_window_properties, refr_settings_prop  = kodi_utils.make_window_properties, kodi_utils.refr_settings_prop
+from modules.kodi_utils import external, parse_qsl, get_setting
+# from modules.kodi_utils import logger
 
 def sys_exit_check():
-	if get_property(current_langinvoker_prop) == 'true' and external(): return True
-	return restart_for_settings()
-
-def restart_for_settings():
-	if get_property(refr_settings_prop) == 'true':
-		set_property(refr_settings_prop, 'false')
-		run_plugin({'mode': 'dummy_run'}, block=True)
-		return True
+	if get_setting('twilight.reuse_language_invoker') == 'true' and external(): return True
 	return False
-
-def remake_properties_check():
-	if get_property(rem_props_prop) != 'false':
-		set_property(rem_props_prop, 'false')
-		make_window_properties()
 
 def routing(sys):
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
@@ -193,15 +177,15 @@ def routing(sys):
 			from apis.alldebrid_api import AllDebridAPI
 			return AllDebridAPI().revoke()
 	if '_cache' in mode:
-		import caches
+		from caches import base_cache
 		if mode == 'clear_cache':
-			return caches.clear_cache(_get('cache'))
+			return base_cache.clear_cache(_get('cache'))
 		if mode == 'clear_all_cache':
-			return caches.clear_all_cache()
+			return base_cache.clear_all_cache()
 		if mode == 'clean_databases_cache':
-			return caches.clean_databases()
+			return base_cache.clean_databases()
 		if mode == 'check_corrupt_databases_cache':
-			return caches.check_corrupt_databases()
+			return base_cache.check_corrupt_databases()
 	if '_image' in mode:
 		from indexers.images import Images
 		return Images().run(params)
@@ -218,10 +202,16 @@ def routing(sys):
 			return kodi_utils.choose_view(_get('view_type'), _get('content', ''))
 		if mode == 'set_view':
 			return kodi_utils.set_view(_get('view_type'))
+	if 'settings_manager.' in mode:
+		from modules import settings_manager
+		return exec('settings_manager.%s(params)' % mode.split('.')[1])
 	##EXTRA modes##
 	if mode == 'person_direct.search':
 		from indexers.people import person_direct_search
 		return person_direct_search(_get('query'))
+	if mode == 'restart_services':
+		from modules.kodi_utils import restart_services
+		return restart_services()
 	if mode == 'kodi_refresh':
 		from modules.kodi_utils import kodi_refresh
 		return kodi_refresh()

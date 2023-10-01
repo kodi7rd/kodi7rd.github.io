@@ -18,15 +18,15 @@
             <left>500</left>
             <top>325</top>
             <control type="image">
-                <left>-1</left>
-                <top>-1</top>
+                <left>-2</left>
+                <top>-2</top>
                 <width>922</width>
                 <height>432</height>
-                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.main_highlight)">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
-                <width>920</width>
-                <height>430</height>
+                <width>918</width>
+                <height>428</height>
                 <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
             </control>
             <control type="image">

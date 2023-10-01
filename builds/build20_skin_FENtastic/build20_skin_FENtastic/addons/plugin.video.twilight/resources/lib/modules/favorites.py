@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from caches.favorites import favorites
+from caches.favorites_cache import favorites
 from modules.settings import ignore_articles
 from modules.utils import sort_for_article
 # from modules.kodi_utils import logger

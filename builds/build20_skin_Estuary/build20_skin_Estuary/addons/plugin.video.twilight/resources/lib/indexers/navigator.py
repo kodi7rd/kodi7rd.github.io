@@ -7,21 +7,21 @@ from modules.watched_status import get_recently_watched
 
 tp, ls, sys, build_url, notification, addon, make_listitem, list_dirs = k.translate_path, k.local_string, k.sys, k.build_url, k.notification, k.addon, k.make_listitem, k.list_dirs
 add_item, set_content, end_directory, set_view_mode, add_items, get_setting = k.add_item, k.set_content, k.end_directory, k.set_view_mode, k.add_items, k.get_setting
-json, close_all_dialog, sleep, execute_builtin, select_dialog, home, external = k.json, k.close_all_dialog, k.sleep, k.execute_builtin, k.select_dialog, k.home, k.external
+json, close_all_dialog, sleep, home, external = k.json, k.close_all_dialog, k.sleep, k.home, k.external
 download_directory, furk_active, easynews_active, source_folders_directory, get_icon = s.download_directory, s.furk_active, s.easynews_active, s.source_folders_directory, k.get_icon
 get_shortcut_folders, currently_used_list, get_shortcut_folder_contents, fanart = nc.get_shortcut_folders, nc.currently_used_list, nc.get_shortcut_folder_contents, k.addon_fanart
 set_sort_method, set_category, container_refresh_input, get_property = k.set_sort_method, k.set_category, k.container_refresh_input, k.get_property
 vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str, add_cont_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092), ls(33140)
-tools_str, changelog_str, ext_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str = ls(32456), ls(32508), ls(32118), ls(32515), ls(32512), ls(33017), ls(32514)
+tools_str, changelog_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str, ext_str = ls(32456), ls(32508), ls(32515), ls(32512), ls(33017), ls(32514), ls(32118)
 user_str, ml_str, ll_str, rec_str, cal_str, lv_str, lu_str, k_str, genre_select_str = ls(32065), ls(32454), ls(32502), ls(32503), ls(32081), ls(32509), ls(32853), ls(32538), ls(32847)
-recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, multi_str, coco_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32789), ls(32522)
+recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, res_serv_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32680)
 log_utils_str, tips_use_str, views_str, updates_str, twilight_str, all_str, cache_str, clean_str = ls(32777), ls(32518), ls(32510), ls(32196), ls(32036), ls(32129), ls(32524), ls(32526)
 discover_str, history_str, help_str, furk_str, easy_str, rd_str, pm_str, ad_str = ls(32451), ls(32486), ls(32487), ls(32069), ls(32070), ls(32054), ls(32061), ls(32063)
 cloud_str, clca_str, trakt_str, imdb_str, coll_str, wlist_str, ls_str, fav_str = ls(32496), ls(32497), ls(32037), ls(32064), ls(32499), ls(32500), ls(32501), ls(32453)
 root_str, season_str, images_str, make_short_str, delete_str, mcol_str, res_hc, progman_str = ls(32457), ls(32537), ls(32798), ls(32702), ls(32703), ls(33080), ls(33107), ls(32599)
 _in_str, mov_str, tv_str, edit_str, add_menu_str, s_folder_str, mset_str, local_str = ls(32484), ls(32028), ls(32029), ls(32705), ls(32730), ls(32731), ls(33080), ls(33104)
-new_str, spot_str, tips_str, man_acc_str = ls(32857).upper(), ls(32858).upper(), ls(32546).upper(), ls(32805)
-change_log_utils_str, search_str = '%s & %s' % (changelog_str, log_utils_str), '%s %s' % (se_str, history_str)
+new_str, spot_str, tips_str, man_acc_str, rename_str = ls(32857).upper(), ls(32858).upper(), ls(32546).upper(), ls(32805), '[B]%s[/B]' % ls(32137)
+changelog_utils_str, search_str = '%s & %s' % (changelog_str, log_utils_str), '%s %s' % (se_str, history_str)
 clear_all_str, clear_meta_str, clear_list_str, clear_trakt_str = clca_str % all_str, clca_str % ls(32527), clca_str % ls_str, clca_str % trakt_str
 sources_folders_str, downloads_ins, because_str = '[B]%s (%s): %s[/B]\n     [COLOR=%s][I]%s[/I][/COLOR]', _in_str % (dl_str.upper(), '%s'), '[I]%s[/I]  [B]%s[/B]' % (ls(32474), '%s')
 premium_files_str, ep_lists_str, clear_all_amble = ls(32485), '%s %s' % (episodes_str, ls_str), '[B][I][COLOR=grey] (%s %s & %s)[/COLOR][/I][/B]' % (ls(32189), fav_str, search_str)
@@ -37,7 +37,12 @@ klv_h_str, klu_h_str = '[B]%s[/B]: %s %s' % (log_utils_str.upper(), k_str, lv_st
 klvo_h_str = '[B]%s[/B]: %s %s (%s)' % (log_utils_str.upper(), k_str, lv_str, ls(32214))
 trakt_watchlist_str, imdb_watchlist_str, imdb_lists_str = '%s %s' % (trakt_str, wlist_str), '%s %s' % (imdb_str, wlist_str), '%s %s' % (imdb_str, ls_str)
 clear_info_ins, set_view_modes_ins = _in_str % (cache_str.upper(), '%s'), _in_str % (views_str.upper(), '%s')
+############KODI-RD-IL###################
+# ORIGINAL TWILIGHT LINE:
+# auth_ins, revoke_ins = '[B]%s: %s[/B]' % (ls(32057).upper(), '%s'), '[B]%s: %s[/B]' % (ls(32059).upper(), '%s')
+# NEW CUSTOM LINE:
 auth_ins, revoke_ins = '[B]%s - %s[/B]' % (ls(32057).upper(), '%s'), '[B][COLOR limegreen]%s[/COLOR] - %s[/B]' % (ls(32059).upper(), '%s')
+#########################################
 alldebrid_ins, my_content_trakt_ins, my_content_imdb_ins = _in_str % (ad_str.upper(), '%s'), _in_str % (trakt_str.upper(), '%s'), _in_str % (imdb_str.upper(), '%s')
 imdb_lists_ins, tools_ins, settings_ins = _in_str % (imdb_lists_str.upper(), '%s'), _in_str % (tools_str.upper(), '%s'), _in_str % (settings_str.upper(), '%s')
 trakt_collections_ins, trakt_watchlists_ins = _in_str % ('%s %s' % (trakt_str.upper(), coll_str.upper()), '%s'), _in_str % (trakt_watchlist_str.upper(), '%s')
@@ -47,11 +52,8 @@ trakt_lists_ins, tr_rec_ins, local_source_str = _in_str % (trakt_str.upper(), '%
 favorites_ins, imdb_watchlists_ins = _in_str % (fav_str.upper(), '%s'), _in_str % (imdb_watchlist_str.upper(), '%s')
 run_plugin, container_update, log_path = 'RunPlugin(%s)', 'Container.Update(%s)', 'special://home/addons/%s/changelog.txt'
 folder_info = (('folder1', ls(32110)), ('folder2', ls(32111)), ('folder3', ls(32112)), ('folder4', ls(32113)), ('folder5', ls(32114)))
-twilight_clogpath = tp(log_path % 'plugin.video.twilight/resources/text')
-coco_clogpath = tp(log_path % 'script.module.cocoscrapers')
 kl_loc, klo_loc = tp('special://logpath/kodi.log'), tp('special://logpath/kodi.old.log')
 tmdb_img = 'https://image.tmdb.org/t/p/original/%s'
-twilight_clearlogo = k.addon_clearlogo
 folder_icon, new_icon = get_icon('folder'), get_icon('new')
 
 class Navigator:
@@ -121,7 +123,7 @@ class Navigator:
 		self.favorites()
 
 	def my_content(self):
-		if get_setting('trakt.user', ''):
+		if get_setting('twilight.trakt.user', ''):
 			self.add({'mode': 'navigator.trakt_collections'}, my_content_trakt_ins % coll_str, 'trakt')
 			self.add({'mode': 'navigator.trakt_watchlists'}, my_content_trakt_ins % wlist_str, 'trakt')
 			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'build_list': 'true', 'category_name': ml_str}, trakt_lists_ins % ml_str, 'trakt')
@@ -131,7 +133,7 @@ class Navigator:
 		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'category_name': tu_str}, trakt_lists_ins % tu_str, 'trakt')
 		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'popular', 'category_name': pu_str}, trakt_lists_ins % pu_str, 'trakt')
 		self.add({'mode': 'get_search_term', 'search_type': 'trakt_lists', 'isFolder': 'false'}, trakt_lists_ins % sea_str, 'trakt')
-		if get_setting('imdb_user', ''):
+		if get_setting('twilight.imdb_user', ''):
 			self.add({'mode': 'navigator.imdb_watchlists'}, my_content_imdb_ins % wlist_str, 'imdb')
 			self.add({'mode': 'navigator.imdb_lists'}, my_content_imdb_ins % ls_str, 'imdb')
 		self.end_directory()
@@ -194,20 +196,20 @@ class Navigator:
 
 	def tools(self):
 		self.add({'mode': 'open_settings', 'isFolder': 'false'}, settings_ins % twilight_str, 'settings')
-		self.add({'mode': 'open_settings', 'addon': 'script.module.cocoscrapers', 'isFolder': 'false'}, settings_ins % coco_str, 'settings')
+		self.add({'mode': 'navigator.tips'}, tools_ins % tips_use_str, 'settings2')
 		self.add({'mode': 'navigator.accounts_manager'}, tools_ins % man_acc_str, 'settings2')
 		self.add({'mode': 'build_next_episode_manager'}, tools_ins % progman_str, 'settings2')
 		self.add({'mode': 'navigator.shortcut_folders'}, tools_ins % shortcut_manager_str, 'settings2')
-		self.add({'mode': 'navigator.change_log_utils'}, tools_ins % change_log_utils_str, 'settings2')
-		self.add({'mode': 'navigator.tips'}, tools_ins % tips_use_str, 'settings2')
+		self.add({'mode': 'navigator.changelog_utils'}, tools_ins % changelog_utils_str, 'settings2')
 		self.add({'mode': 'navigator.set_view_modes'}, tools_ins % views_str, 'settings2')
 		self.add({'mode': 'navigator.maintenance'}, tools_ins % cl_dbs_str, 'settings2')
 		self.add({'mode': 'default_highlight_colors_choice', 'isFolder': 'false'}, tools_ins % res_hc, 'settings2')
+		self.add({'mode': 'restart_services', 'isFolder': 'false'}, tools_ins % res_serv_str, 'settings')
 		self.add({'mode': 'toggle_language_invoker', 'isFolder': 'false'}, tools_ins % langinv_str, 'settings2')
 		self.end_directory()
 
 	def accounts_manager(self):
-		trakt_active = get_setting('trakt.user') != ''
+		trakt_active = get_setting('twilight.trakt.user') != ''
 		debrids = debrid_authed()
 		rd_active, pm_active, ad_active = 'Real-Debrid' in debrids, 'Premiumize.me' in debrids, 'AllDebrid' in debrids
 		folder_active = len([i for i in folder_info for media_type in ('movie', 'tvshow') if (source_folders_directory(media_type, i[0]) or '')]) > 0
@@ -250,11 +252,10 @@ class Navigator:
 		self.add({'mode': 'choose_view', 'view_type': 'view.premium', 'content': 'files'},set_view_modes_ins % premium_files_str, 'settings', False)
 		self.end_directory()
 
-	def change_log_utils(self):
+	def changelog_utils(self):
+		twilight_clogpath = tp(log_path % 'plugin.video.twilight/resources/text')
 		mh_str = '[B]%s[/B]: %s  [I](v.%s)[/I]' % (changelog_str.upper(), twilight_str, addon().getAddonInfo('version'))
-		co_str = '[B]%s[/B]: %s  [I](v.%s)[/I]' % (changelog_str.upper(), coco_str, addon('script.module.cocoscrapers').getAddonInfo('version'))
 		self.add({'mode': 'show_text', 'heading': mh_str, 'file': twilight_clogpath, 'font_size': 'large', 'isFolder': 'false'}, mh_str, 'lists', False)
-		self.add({'mode': 'show_text', 'heading': co_str, 'file': coco_clogpath, 'font_size': 'large', 'isFolder': 'false'}, co_str, 'lists', False)
 		self.add({'mode': 'show_text', 'heading': klv_h_str, 'file': kl_loc, 'kodi_log': 'true', 'isFolder': 'false'}, klv_h_str, 'lists', False)
 		self.add({'mode': 'show_text', 'heading': klvo_h_str, 'file': klo_loc, 'kodi_log': 'true', 'isFolder': 'false'}, klvo_h_str, 'lists', False)
 		self.add({'mode': 'upload_logfile', 'isFolder': 'false'}, klu_h_str, 'lists', False)
@@ -298,28 +299,8 @@ class Navigator:
 		menu_type = self.params_get('menu_type')
 		if menu_type == 'movie': genre_list, mode, action = ml.movie_genres, 'build_movie_list', 'tmdb_movies_genres'
 		else: genre_list, mode, action = ml.tvshow_genres, 'build_tvshow_list', 'tmdb_tv_genres'
-		if not self.is_home:
-			self.add({'mode': 'navigator.multiselect_genres', 'genre_list': json.dumps(genre_list), 'menu_type': menu_type, 'isFolder': 'false'}, multi_str, 'genres', False)
 		for i, v in sorted(genre_list.items()): self.add({'mode': mode, 'action': action, 'genre_id': v[0], 'name': i}, i, v[1])
 		self.end_directory()
-
-	def multiselect_genres(self):
-		def _builder():
-			for i, v in sorted(genre_list.items()):
-				function_list_append(v[0])
-				yield {'line1': i, 'icon': get_icon(v[1])}
-		menu_type, genre_list = self.params['menu_type'], self.params['genre_list']
-		function_list = []
-		function_list_append = function_list.append
-		genre_list = json.loads(genre_list)
-		list_items = list(_builder())
-		kwargs = {'items': json.dumps(list_items), 'heading': genre_select_str, 'multi_choice': 'true'}
-		genre_ids = select_dialog(function_list, **kwargs)
-		if genre_ids == None: return
-		genre_id = ','.join(genre_ids)
-		if menu_type == 'movie': url = {'mode': 'build_movie_list', 'action': 'tmdb_movies_genres', 'genre_id': genre_id}
-		else: url = {'mode': 'build_tvshow_list', 'action': 'tmdb_tv_genres', 'genre_id': genre_id}
-		return execute_builtin(container_update % build_url(url))
 
 	def folder_navigator(self):
 		from os.path import join as pjoin
@@ -344,7 +325,7 @@ class Navigator:
 					listitem = make_listitem()
 					listitem.addContextMenuItems(cm)
 					listitem.setLabel(display)
-					listitem.setArt({'fanart': fanart, 'clearlogo': twilight_clearlogo})
+					listitem.setArt({'fanart': fanart})
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
@@ -370,7 +351,7 @@ class Navigator:
 					listitem = make_listitem()
 					setting_id, default_name = item[0], item[1]
 					folder_path = source_folders_directory(media_type, setting_id) or ''
-					display_name = get_setting('%s.display_name' % setting_id)
+					display_name = get_setting('twilight.%s.display_name' % setting_id)
 					if action == 'browse':
 						if not folder_path or not display_name: continue
 						display = '%s (%s)' % (display_name.upper(), media_type.upper())
@@ -382,8 +363,7 @@ class Navigator:
 					url = build_url({'mode': mode, 'setting_id': setting_id, 'media_type': media_type, 'folder_path': folder_path,
 									'display_name': display_name, 'default_name': default_name})
 					listitem.setLabel(display)
-					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart,
-									'banner': folder_icon, 'landscape': folder_icon, 'clearlogo': twilight_clearlogo})
+					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart, 'banner': folder_icon, 'landscape': folder_icon})
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
@@ -399,7 +379,7 @@ class Navigator:
 			url = build_url({'mode': 'menu_editor.shortcut_folder_make'})
 			listitem = make_listitem()
 			listitem.setLabel('[I]%s...[/I]' % make_short_str)
-			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon, 'clearlogo': twilight_clearlogo})
+			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon})
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('video')
 			info_tag.setPlot(' ')
@@ -410,12 +390,12 @@ class Navigator:
 					cm = []
 					name = i[0]
 					listitem = make_listitem()
-					url = build_url({'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': 'folder', 'shortcut_folder': 'True',
-									'external_list_item': 'True', 'show_new': show_new})
+					url = build_url({'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': 'folder', 'shortcut_folder': 'True', 'external_list_item': 'True'})
+					cm.append((rename_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_rename'})))
 					cm.append((delete_str, run_plugin % build_url({'mode': 'menu_editor.shortcut_folder_delete'})))
 					listitem.addContextMenuItems(cm)
 					listitem.setLabel(name)
-					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart, 'banner': folder_icon, 'clearlogo': twilight_clearlogo})
+					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart, 'banner': folder_icon})
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
@@ -425,7 +405,6 @@ class Navigator:
 				except: pass
 		_make_new_item()
 		folders = get_shortcut_folders()
-		show_new = 'False' if external() else 'True'
 		if folders: add_items(int(sys.argv[1]), list(_builder()))
 		self.end_directory()
 
@@ -434,7 +413,7 @@ class Navigator:
 			url = build_url({'mode': 'menu_editor.shortcut_folder_browse_for_content', 'list_name': list_name})
 			listitem = make_listitem()
 			listitem.setLabel('[I]%s...[/I]' % add_cont_str)
-			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon, 'clearlogo': twilight_clearlogo})
+			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon})
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('video')
 			info_tag.setPlot(' ')
@@ -448,11 +427,11 @@ class Navigator:
 					iconImage = item_get('iconImage', None)
 					if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
 					else: icon = folder_icon
-					menu_editor_url = build_url({'mode': 'menu_editor.edit_menu_shortcut_folder', 'active_list': list_name, 'position': item_position})
+					menu_editor_url = build_url({'mode': 'menu_editor.edit_menu_shortcut_folder', 'list_name': list_name, 'active_list': list_name, 'position': item_position})
 					cm.append((edit_str, run_plugin % menu_editor_url))
 					listitem = make_listitem()
 					listitem.setLabel(name)
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					info_tag = listitem.getVideoInfoTag()
 					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
@@ -464,7 +443,7 @@ class Navigator:
 				except: pass
 		list_name = self.params_get('name')
 		contents = get_shortcut_folder_contents(list_name)
-		if self.params_get('show_new') == 'True' and not self.is_home: _make_new_item()
+		if len(contents) == 0: _make_new_item()
 		add_items(int(sys.argv[1]), list(_process()))
 		self.end_directory()
 
@@ -514,7 +493,7 @@ class Navigator:
 				cm.append((edit_str, run_plugin % menu_editor_url))
 				listitem = make_listitem()
 				listitem.setLabel(ls(item_get('name', '')))
-				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
@@ -532,7 +511,7 @@ class Navigator:
 		url = build_url(url_params)
 		listitem = make_listitem()
 		listitem.setLabel(list_name)
-		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon, 'clearlogo': twilight_clearlogo})
+		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
 		info_tag = listitem.getVideoInfoTag()
 		info_tag.setMediaType('video')
 		info_tag.setPlot(' ')

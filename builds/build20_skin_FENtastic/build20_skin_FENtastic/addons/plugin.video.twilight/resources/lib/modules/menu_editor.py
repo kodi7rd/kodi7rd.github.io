@@ -11,7 +11,7 @@ json, tp, ls, parse_qsl, get_icon = kodi_utils.json, kodi_utils.translate_path, 
 show_busy_dialog, hide_busy_dialog, unquote, get_directory = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.unquote, kodi_utils.jsonrpc_get_directory
 get_setting, get_all_icon_vars = kodi_utils.get_setting, kodi_utils.get_all_icon_vars
 main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029)}
-pos_str, top_pos_str, top_str, exists_str, addq_str = ls(32707), ls(32708), ls(32709), ls(32727), ls(32728)
+pos_str, top_pos_str, top_str, exists_str, addq_str, eadd_str, erename_str = ls(32707), ls(32708), ls(32709), ls(32727), ls(32728), ls(33140), ls(32137)
 move_str, remove_str, add_org_str, fol_add_str, orig_add_str, fol_menu_str, trak_add_str = ls(32716), ls(32717), ls(32718), ls(32719), ls(32721), ls(32725), ls(32720)
 res_str, brws_str, upd_str, reload_str, emove_str, eremove_str, eclear_str = ls(32722), ls(32706), ls(32723), ls(32724), ls(32712), ls(32713), '%s %s' % (ls(32671), ls(32129))
 eedelete_str, eeremove_str, eeclear_str, eefadd_str, eefadde_str, eesets_str, trlike_str = ls(32703), ls(32786), ls(32699), ls(32731), ls(32730), ls(33081), ls(32776)
@@ -45,7 +45,7 @@ class MenuEditor:
 		append((fol_add_str % menu_name_translated_display, self.shortcut_folder_add_item))
 		append((orig_add_str % list_name, self.add_original))
 		append((fol_menu_str % list_name, self.shortcut_folder_add_to_main_menu))
-		if get_setting('trakt.user', ''): append((trak_add_str % list_name, self.add_trakt))
+		if get_setting('twilight.trakt.user', ''): append((trak_add_str % list_name, self.add_trakt))
 		append((res_str % list_name, self.restore))
 		append((upd_str % list_name, self.check_update_list))
 		if not external_list_item: append((reload_str % menu_name_translated_display, self.reload_menu_item))
@@ -61,7 +61,7 @@ class MenuEditor:
 		return function()
 
 	def edit_menu_shortcut_folder(self):
-		listing = [(emove_str, 'move'), (eremove_str, 'remove'), (eclear_str, 'clear_all')]
+		listing = [(eadd_str, 'add'), ('Rename', 'rename'), (emove_str, 'move'), (eremove_str, 'remove'), (eclear_str, 'clear_all')]
 		list_items = [{'line1': i[0]} for i in listing]
 		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		self.action = select_dialog([i[1] for i in listing], **kwargs)
@@ -73,6 +73,7 @@ class MenuEditor:
 		listing = []
 		append = listing.append
 		if mode == 'navigator.build_shortcut_folder_list':
+			append((self._remove_bold(erename_str), self.shortcut_folder_rename))
 			append((self._remove_bold(eedelete_str), self.shortcut_folder_delete))
 		elif mode == 'get_search_term':
 			append((self._remove_bold(eeremove_str), self.remove_search_history), (self._remove_bold(eeclear_str), self.clear_search_history))
@@ -239,7 +240,18 @@ class MenuEditor:
 		else:
 			list_name = self.menu_item_get('name')
 			list_items = navigator_cache.get_shortcut_folder_contents(active_list)
-			if self.action == 'remove':
+			if self.action == 'add': return self.shortcut_folder_browse_for_content()
+			if self.action == 'rename':
+				try:
+					position = int(self.params_get('position'))
+					current_item = list_items[position]
+					item_name = current_item['name']
+					new_item_name = self._get_external_name_input(item_name)
+					if not new_item_name or new_item_name == item_name: return
+					current_item['name'] = new_item_name
+					list_items[position] == current_item
+				except: return
+			elif self.action == 'remove':
 				if not confirm_dialog(): return notification(32736, 1500)
 				list_items = [i for i in list_items if str(i['name']) != str(list_name)]
 			elif self.action == 'move':
@@ -308,9 +320,18 @@ class MenuEditor:
 		self._db_execute('delete', folder_name, list_type='shortcut_folder')
 		self._remove_active_shortcut_folder(main_menu_items_list, folder_name)
 
+	def shortcut_folder_rename(self):
+		folder_name = self.menu_item_get('name')
+		new_folder_name = self._get_external_name_input(folder_name)
+		if not new_folder_name: return
+		if new_folder_name == folder_name: return
+		list_items = navigator_cache.get_shortcut_folder_contents(folder_name)
+		self._db_execute('delete', folder_name, list_type='shortcut_folder')
+		self._db_execute('make_new_folder', new_folder_name, list_items)
+
 	def shortcut_folder_browse_for_content(self):
 		list_name = self.params_get('list_name')
-		choice_name, list_items = list_name, navigator_cache.get_shortcut_folder_contents(list_name)		
+		choice_name, list_items = list_name, navigator_cache.get_shortcut_folder_contents(list_name)
 		browsed_result = self._path_browser()
 		if browsed_result == None: return
 		self.menu_item = dict(parse_qsl(browsed_result['file'].replace('plugin://plugin.video.twilight/?','')))

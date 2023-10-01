@@ -10,15 +10,15 @@ class TwilightMonitor(xbmc_monitor):
 	def __init__ (self):
 		xbmc_monitor.__init__(self)
 		self.startUpServices()
-	
+
 	def startUpServices(self):
 		try: service_functions.InitializeDatabases().run()
 		except: pass
-		Thread(target=service_functions.DatabaseMaintenance().run).start()
 		try: service_functions.CheckSettings().run()
 		except: pass
 		try: service_functions.FirstRunActions().run()
 		except: pass
+		service_functions.FirstRunActions().run()
 		try: service_functions.ReuseLanguageInvokerCheck().run()
 		except: pass
 		Thread(target=service_functions.TraktMonitor().run).start()
@@ -29,7 +29,7 @@ class TwilightMonitor(xbmc_monitor):
 		except: pass
 		try: service_functions.AutoRun().run()
 		except: pass
-			
+		Thread(target=service_functions.DatabaseMaintenance().run).start()
 
 	def onSettingsChanged(self):
 		on_settings_changed_actions.run()

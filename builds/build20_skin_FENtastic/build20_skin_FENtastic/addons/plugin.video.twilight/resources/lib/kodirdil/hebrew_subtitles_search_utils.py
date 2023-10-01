@@ -1,9 +1,6 @@
 ########### Imports #####################
 from modules import kodi_utils
-import requests
-import json
-from collections import OrderedDict
-
+import threading
 ########### KODI-RD-IL Imports ##########
 from kodirdil import string_utils
 from kodirdil import db_utils
@@ -42,9 +39,47 @@ release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
 
 # If "Check Before FulL Search" setting is enabled, first sources list is only CLOUD
 IS_SEARCHED_FROM_EXTERNAL = False
+# Initialize HEBREW_SUBTITLES_FOUND
+HEBREW_SUBTITLES_FOUND = False
 #########################################
 
-def search_hebrew_subtitles_for_selected_media(media_type, title, season, episode, year, tmdb_id):
+def search_hebrew_subtitles_on_website(website_info, media_metadata, website_subtitles_dict, lock):
+    global HEBREW_SUBTITLES_FOUND  # Declare HEBREW_SUBTITLES_FOUND as a global variable
+    try:
+        hebrew_subtitles_list = website_info['website'].search_for_subtitles(media_metadata)
+        hebrew_subtitles_list = strip_problematic_chars_from_subtitle_names_list(hebrew_subtitles_list)
+
+        with lock:
+            website_subtitles_dict[website_info['short_name']] = hebrew_subtitles_list
+            
+        if hebrew_subtitles_list:  # If Hebrew subtitles are found
+            HEBREW_SUBTITLES_FOUND = True  # Set HEBREW_SUBTITLES_FOUND to True
+
+        kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(hebrew_subtitles_list)}")
+        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"Error in searching Hebrew subtitles from {website_info['website']}: {str(e)}")
+        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+
+def search_english_subtitles_on_website(website_info, media_metadata, website_subtitles_dict, lock):
+    try:
+        english_subtitles_list = website_info['website'].search_for_subtitles(media_metadata, language='English')
+        english_subtitles_list = strip_problematic_chars_from_subtitle_names_list(english_subtitles_list)
+
+        with lock:
+            website_subtitles_dict[website_info['short_name']] = english_subtitles_list
+
+        kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(english_subtitles_list)}")
+        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"Error in searching English subtitles from {website_info['website']}: {str(e)}")
+        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+
+
+def search_hebrew_subtitles_for_selected_media(media_type, title, season, episode, year, tmdb_id, imdb_id):
 
     """
     Search for Hebrew subtitles for a selected media and write the filtered subtitles to a cache table.
@@ -82,64 +117,51 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
         "episode": episode,
         "year": year,
         "tmdb_id": tmdb_id,
-        "imdb_id": get_imdb_id(media_type, tmdb_id)
+        "imdb_id": imdb_id
     }
     
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
     # Search for subtitles in all websites and combine them into a single list
-    combined_subtitles_list = []
+    lock = threading.Lock()  # Create a lock for thread safety
+    hebrew_subtitles_search_threads = []
     website_subtitles_dict = {}
-    HEBREW_SUBTITLES_FOUND = False
+    global HEBREW_SUBTITLES_FOUND
 
+    # Hebrew subtitle search threads
     for website_info in hebrew_subtitles_websites_info.values():
-        try:
-            hebrew_subtitles_list = website_info['website'].search_for_subtitles(media_metadata)
-            hebrew_subtitles_list = strip_problematic_chars_from_subtitle_names_list(hebrew_subtitles_list)
-            website_subtitles_dict[website_info['short_name']] = hebrew_subtitles_list
-            combined_subtitles_list.extend(hebrew_subtitles_list)
-            kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(hebrew_subtitles_list)}")   
-            kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+        thread = threading.Thread(target=search_hebrew_subtitles_on_website, args=(website_info, media_metadata, website_subtitles_dict, lock))
+        hebrew_subtitles_search_threads.append(thread)
+        thread.start()
 
-            if combined_subtitles_list:  # If Hebrew subtitles are found
-                HEBREW_SUBTITLES_FOUND = True
-            
-        except Exception as e:
-            kodi_utils.logger("KODI-RD-IL", f"Error in searching Hebrew subtitles from {website_info['website']}: {str(e)}")
-            kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-
+    for thread in hebrew_subtitles_search_threads:
+        thread.join()
     
     kodi_utils.logger("KODI-RD-IL", f"HEBREW_SUBTITLES_FOUND={HEBREW_SUBTITLES_FOUND} | SETTING search_for_english_subtitles_when_no_hebrew_subtitles_found={search_for_english_subtitles_when_no_hebrew_subtitles_found}")
-    
-    # If the combined list is empty, search for English subtitles on the supported websites
+
+    # English subtitle search threads
     if not HEBREW_SUBTITLES_FOUND and search_for_english_subtitles_when_no_hebrew_subtitles_found:
-    
-        # Reset lists
-        combined_subtitles_list = []
+        # Reset website_subtitles_dict
         website_subtitles_dict = {}
+        english_subtitles_search_threads = []
         
-        kodi_utils.logger("KODI-RD-IL", f"No Hebrew subtitles found. Searching for English subtitles...")
         for website_info in english_subtitles_websites_info.values():
-            try:
+            thread = threading.Thread(target=search_english_subtitles_on_website, args=(website_info, media_metadata, website_subtitles_dict, lock))
+            english_subtitles_search_threads.append(thread)
+            thread.start()
 
-                english_subtitles_list = website_info['website'].search_for_subtitles(media_metadata, language='English')
-                english_subtitles_list = strip_problematic_chars_from_subtitle_names_list(english_subtitles_list)
-                website_subtitles_dict[website_info['short_name']] = english_subtitles_list
-                combined_subtitles_list.extend(english_subtitles_list)
-                kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(english_subtitles_list)}")
-                kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-
-            except Exception as e:
-                kodi_utils.logger("KODI-RD-IL", f"Error in searching English subtitles from {website_info['website']}: {str(e)}")
-                kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
+        for thread in english_subtitles_search_threads:
+            thread.join()
     else:
         kodi_utils.logger("KODI-RD-IL", f"Skipping Searching for English subtitles...")
-        
-    # Convert the combined list to an OrderedDict to remove duplicates while preserving order
-    unique_subtitles_dict = OrderedDict.fromkeys(combined_subtitles_list)
     
-    # Convert the set back to a list
-    unique_subtitles_list = list(unique_subtitles_dict.keys())
+    # Extract subtitles in the desired order
+    subtitles_websites_info = hebrew_subtitles_websites_info if HEBREW_SUBTITLES_FOUND else english_subtitles_websites_info
+    unique_subtitles_list = []
+    
+    for website_info in subtitles_websites_info.values():
+        subtitles = website_subtitles_dict.get(website_info['short_name'], [])
+        unique_subtitles_list.extend(subtitle for subtitle in subtitles if subtitle not in unique_subtitles_list)
     
     kodi_utils.logger("KODI-RD-IL", f"unique_subtitles_list: {str(unique_subtitles_list)}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
@@ -161,33 +183,6 @@ def strip_problematic_chars_from_subtitle_names_list(subtitles_list):
     """
 
     return [subtitle_name.replace("'", "") for subtitle_name in subtitles_list]
-    
-    
-def get_imdb_id(media_type, tmdb_id):
-
-    """Retrieves the IMDb ID for a media item from its TMDb ID.
-
-    Args:
-    media_type (str): The type of media item, either 'movie' or 'tv'.
-    tmdb_id (int): The TMDb ID of the media item.
-
-    Returns:
-    str: The IMDb ID of the media item, if available. Otherwise, an empty string is returned.
-
-    Example:
-    >>> get_imdb_id('movie', 12345)
-    'tt1234567'
-    """
-
-    imdb_api_url = f'https://api.themoviedb.org/3/{media_type}/{tmdb_id}?api_key=34142515d9d23817496eeb4ff1d223d0&append_to_response=external_ids'
-    try:
-        imdb_api_reponse = requests.get(imdb_api_url).json()
-        imdb_id = imdb_api_reponse['external_ids'].get('imdb_id', '')
-        kodi_utils.logger("KODI-RD-IL", f"get_imdb_id function: TMDb ID: {tmdb_id} | IMDb ID: {imdb_id}")
-        return imdb_id
-    except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"Error in getting imdb_id from TMDb API: {str(e)}")
-        return ''
         
 
 def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_external_subtitles_found_count, total_hebrew_embedded_subtitles_matches_count, total_subtitles_matches_count, total_quality_counts):

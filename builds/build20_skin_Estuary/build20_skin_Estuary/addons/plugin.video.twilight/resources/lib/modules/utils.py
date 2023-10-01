@@ -6,10 +6,10 @@ import _strptime
 import unicodedata
 from random import random
 from html import unescape
-from importlib import import_module, reload as reload_module
+from importlib import import_module, reload as rel_module
 from datetime import datetime, timedelta, date
 from modules.settings import max_threads
-from modules.kodi_utils import sleep, Thread, activeCount, json, get_setting, local_string as ls
+from modules.kodi_utils import sys, translate_path, sleep, Thread, activeCount, json, get_setting, local_string as ls
 # from modules.kodi_utils import logger
 
 days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursday': 32974, 'Friday': 32975, 'Saturday': 32976, 'Sunday': 32977}
@@ -17,11 +17,14 @@ days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursd
 def change_image_resolution(image, replace_res):
 	return re.sub(r'(w185|w300|w342|w780|w1280|h632|original|/fanart/|/preview/)', replace_res, image)
 
+def append_module_to_syspath(location):
+	sys.path.append(translate_path(location))
+
 def manual_function_import(location, function_name):
 	return getattr(import_module(location), function_name)
 
 def reload_module(location):
-	return reload_module(manual_module_import(location))
+	return rel_module(manual_module_import(location))
 
 def manual_module_import(location):
 	return import_module(location)
@@ -278,7 +281,7 @@ def sort_list(sort_key, sort_direction, list_data, ignore_articles):
 
 def imdb_sort_list():
 	# From Exodus code
-	sort, sort_order = int(get_setting('imdb_lists.sort_type', '0')), int(get_setting('imdb_lists.sort_direction', '0'))
+	sort, sort_order = int(get_setting('twilight.imdb_lists.sort_type', '0')), int(get_setting('twilight.imdb_lists.sort_direction', '0'))
 	if sort == 0: imdb_sort = 'list_order' # Default
 	elif sort == 1: imdb_sort = 'alpha' # Alphabetical
 	elif sort == 2: imdb_sort = 'user_rating' # IMDb Rating

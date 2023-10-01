@@ -6,7 +6,7 @@ from modules.utils import manual_function_import, get_datetime, make_thread_list
 from modules.watched_status import get_watched_info_movie, get_watched_status_movie, get_bookmarks, get_progress_percent
 # logger = kodi_utils.logger
 
-meta_function, get_datetime_function, add_item, twilight_clearlogo, home = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.addon_clearlogo, kodi_utils.home
+meta_function, get_datetime_function, add_item, home = movie_meta, get_datetime, kodi_utils.add_item, kodi_utils.home
 progress_percent_function, get_watched_function, get_watched_info_function = get_progress_percent, get_watched_status_movie, get_watched_info_movie
 set_content, end_directory, set_view_mode, folder_path = kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.folder_path
 sleep, xbmc_actor, set_category, json = kodi_utils.sleep, kodi_utils.xbmc_actor, kodi_utils.set_category, kodi_utils.json
@@ -20,7 +20,8 @@ twilight_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = l
 hide_str, exit_str, clearprog_str, nextpage_str, jump2_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 run_plugin = 'RunPlugin(%s)'
-tmdb_main = ('tmdb_movies_popular','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
+tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_popular_today','tmdb_movies_blockbusters','tmdb_movies_in_theaters',
+				'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
 tmdb_special = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'network_id', 'tmdb_movies_year': 'year', 'tmdb_movies_decade': 'decade',
 				'tmdb_movies_certifications': 'certification', 'tmdb_movies_recommendations': 'tmdb_id', 'tmdb_movies_genres': 'genre_id', 'tmdb_movies_search': 'query',
 				'tmdb_movies_search_sets': 'query'}
@@ -28,7 +29,7 @@ personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_prog
 				'watched_movies': ('modules.watched_status', 'get_watched_items'), 'recent_watched_movies': ('modules.watched_status', 'get_recently_watched')}
 trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_top10_boxoffice', 'trakt_recommendations')
 trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
-imdb_personal  = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
+imdb_all  = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_featured', 'imdb_most_voted', 'imdb_movies_oscar_winners')
 view_mode, content_type = 'view.movies', 'movies'
 
 class Movies:
@@ -89,12 +90,17 @@ class Movies:
 				try:
 					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 				except: pass
-			elif self.action in imdb_personal:
-				self.id_type = 'imdb_id'
-				list_id = self.params_get('list_id', None)
-				data, next_page = function('movie', list_id, page_no)
-				self.list = [i['imdb_id'] for i in data]
-				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
+			elif self.action in imdb_all:
+				if self.action == 'imdb_movies_oscar_winners':
+					data = oscar_winners
+					self.list = data[page_no-1]
+					if len(data) > page_no: self.new_page = {'new_page': string(page_no + 1)}
+				else:
+					self.id_type = 'imdb_id'
+					list_id = self.params_get('list_id', None)
+					data, next_page = function('movie', list_id, page_no)
+					self.list = [i['imdb_id'] for i in data]
+					if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1)}
 			elif self.action == 'tmdb_movies_discover':
 				name, query = self.params_get('name'), self.params_get('query')
 				if page_no == 1:
@@ -106,16 +112,13 @@ class Movies:
 			elif self.action  == 'tmdb_movies_sets':
 				data = sorted(movieset_meta(self.params_get('tmdb_id'), metadata_user_info())['parts'], key=lambda k: k['release_date'] or '2050')
 				self.list = [i['id'] for i in data]
-			elif self.action == 'imdb_movies_oscar_winners':
-				data = oscar_winners
-				self.list = data[page_no-1]
-				if len(data) > page_no: self.new_page = {'new_page': string(page_no + 1)}
 			if self.total_pages and not self.is_external:
 				jump_to = jump_to_enabled()
 				if jump_to != 3:
 					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name, 'refreshed': 'true'}})
 					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': self.total_pages, 'all_pages': all_pages,
-							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump', isFolder=False)
+							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump',
+							isFolder=False)
 			add_items(handle, builder())
 			if self.new_page and not self.widget_hide_next_page:
 				self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
@@ -241,7 +244,7 @@ class Movies:
 			title, plot, tmdb_id = meta_get('title'), meta_get('plot'), meta_get('tmdb_id')
 			poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
 			fanart = meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
-			clearlogo = meta_get('clearlogo2') or twilight_clearlogo
+			clearlogo = meta_get('clearlogo2') or ''
 			if self.fanart_enabled:
 				banner, clearart = meta_get('custom_banner') or meta_get('banner') or '', meta_get('custom_clearart') or meta_get('clearart') or ''
 				landscape, discart = meta_get('custom_landscape') or meta_get('landscape') or '', meta_get('custom_discart') or meta_get('discart') or ''

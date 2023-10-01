@@ -10,7 +10,7 @@ from modules.utils import adjust_premiered_date, get_datetime, make_thread_list,
 
 Thread, get_property, set_property, add_dir, add_items = kodi_utils.Thread, kodi_utils.get_property, kodi_utils.set_property, kodi_utils.add_dir, kodi_utils.add_items
 make_listitem, set_content, end_directory, set_view_mode = kodi_utils.make_listitem, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode
-get_icon, addon_fanart, twilight_clearlogo = kodi_utils.get_icon, kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
+get_icon, addon_fanart = kodi_utils.get_icon, kodi_utils.addon_fanart
 ls, sys, build_url, json, notification = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.json, kodi_utils.notification 
 watched_indicators, ignore_articles = settings.watched_indicators, settings.ignore_articles
 hidden_ind_str, hidden_str, heading, window_prop = ' [COLOR=red][B][%s][/B][/COLOR]', ls(32804).upper(), ls(32806), 'twilight.random_episode_history'
@@ -119,7 +119,7 @@ def build_next_episode_manager():
 			url_params = {'mode': mode, 'action': action, 'media_type': 'shows', 'media_id': tmdb_id, 'section': 'progress_watched'}
 			url = build_url(url_params)
 			listitem.setLabel(display)
-			listitem.setArt({'poster': icon, 'fanart': addon_fanart, 'icon': icon, 'clearlogo': twilight_clearlogo})
+			listitem.setArt({'poster': icon, 'fanart': addon_fanart, 'icon': icon})
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('video')
 			info_tag.setPlot(' ')

@@ -5,8 +5,7 @@ from modules import kodi_utils
 
 add_dir, add_items, set_content, end_directory = kodi_utils.add_dir, kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 ls, sys, build_url, make_listitem, get_icon = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.get_icon
-set_view_mode, unquote, set_category = kodi_utils.set_view_mode, kodi_utils.unquote, kodi_utils.set_category
-icon, fanart, twilight_clearlogo = get_icon('search_history'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
+set_view_mode, unquote, set_category, icon, fanart = kodi_utils.set_view_mode, kodi_utils.unquote, kodi_utils.set_category, get_icon('search_history'), kodi_utils.addon_fanart
 history_str, remove_str, remove_all_str = '[B]%s:[/B] [I]%s[/I]' % (ls(32486).upper(), '%s'), ls(32786), '[B]%s[/B]' % ls(32699)
 new_search_str = '[B]%s %s...[/B]' % (ls(32857).upper(), ls(32450).upper())
 mode_dict = {'movie': ('movie_queries', {'mode': 'get_search_term', 'media_type': 'movie'}),
@@ -34,7 +33,7 @@ def search_history(params):
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
-				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')

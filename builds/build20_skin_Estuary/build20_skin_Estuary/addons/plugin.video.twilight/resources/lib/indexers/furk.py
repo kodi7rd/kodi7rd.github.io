@@ -8,7 +8,7 @@ add_items, set_content, show_text, unquote = kodi_utils.add_items, kodi_utils.se
 show_busy_dialog, hide_busy_dialog, set_view_mode, end_directory = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.set_view_mode, kodi_utils.end_directory
 confirm_dialog, notification, kodi_refresh = kodi_utils.confirm_dialog, kodi_utils.notification, kodi_utils.kodi_refresh
 ls, sys, build_url, make_listitem = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.make_listitem
-furk_icon, fanart, twilight_clearlogo = kodi_utils.get_icon('furk'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo
+furk_icon, fanart = kodi_utils.get_icon('furk'), kodi_utils.addon_fanart
 remove_str, prot_str, unprot_str, speed_str, files_str = ls(32766), ls(32767), ls(32768), ls(32775), ls(32493).upper()
 down_str, add_str = '[B]%s[/B]' % ls(32747), '[B]%s[/B]' % ls(32769)
 Furk = FurkAPI()
@@ -65,7 +65,7 @@ def furk_folder_browser(files, display_mode, handle):
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
-				listitem.setArt({'icon': thumb, 'poster': thumb, 'thumb': thumb, 'fanart': fanart, 'banner': furk_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': thumb, 'poster': thumb, 'thumb': thumb, 'fanart': fanart, 'banner': furk_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
@@ -94,7 +94,7 @@ def furk_t_file_browser(params):
 				down_file_params = {'mode': 'downloader', 'name': item['name'], 'url': item['url_dl'], 'action': 'cloud.furk_direct', 'image': furk_icon}
 				cm.append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				listitem.addContextMenuItems(cm)
-				listitem.setArt({'icon': furk_icon, 'poster': furk_icon, 'thumb': furk_icon, 'fanart': fanart, 'banner': furk_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': furk_icon, 'poster': furk_icon, 'thumb': furk_icon, 'fanart': fanart, 'banner': furk_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')

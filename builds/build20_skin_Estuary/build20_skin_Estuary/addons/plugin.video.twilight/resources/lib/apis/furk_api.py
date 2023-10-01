@@ -28,10 +28,10 @@ class FurkAPI:
 		return result.get('status', 'not_ok') == 'ok'
 
 	def get_api(self):
-		api_key = get_setting('furk_api_key', '')
+		api_key = get_setting('twilight.furk_api_key', '')
 		if not api_key:
 			try:
-				user_name, user_pass = get_setting('furk_login'), get_setting('furk_password')
+				user_name, user_pass = get_setting('twilight.furk_login'), get_setting('twilight.furk_password')
 				if not user_name or not user_pass: return
 				url = base_url + login_url % (user_name, user_pass)
 				result = session.post(url, timeout=timeout)

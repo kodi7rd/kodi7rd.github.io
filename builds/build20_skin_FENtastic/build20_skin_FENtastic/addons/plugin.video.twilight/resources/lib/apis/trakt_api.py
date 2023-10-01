@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import time
 import random
-from caches import check_databases, trakt_cache
+from caches import trakt_cache
+from caches.base_cache import check_databases
 from caches.main_cache import cache_object
 from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movie_meta_external_id, tvshow_meta_external_id
@@ -32,11 +33,11 @@ def call_trakt(path, params={}, data=None, is_delete=False, with_auth=True, meth
 		resp = None
 		if with_auth:
 			try:
-				try: expires_at = float(get_setting('trakt.expires'))
+				try: expires_at = float(get_setting('twilight.trakt.expires'))
 				except: expires_at = 0.0
 				if time.time() > expires_at: trakt_refresh_token()
 			except: pass
-			token = get_setting('trakt.token')
+			token = get_setting('twilight.trakt.token')
 			if token: headers['Authorization'] = 'Bearer ' + token
 		try:
 			if method:
@@ -123,7 +124,7 @@ def trakt_get_device_token(device_codes):
 def trakt_refresh_token():
 	data = {        
 		'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET, 'redirect_uri': 'urn:ietf:wg:oauth:2.0:oob',
-		'grant_type': 'refresh_token', 'refresh_token': get_setting('trakt.refresh')}
+		'grant_type': 'refresh_token', 'refresh_token': get_setting('twilight.trakt.refresh')}
 	response = call_trakt("oauth/token", data=data, with_auth=False)
 	if response:
 		manage_settings_reset()
@@ -155,7 +156,7 @@ def trakt_authenticate(dummy=''):
 	return False
 
 def trakt_revoke_authentication(dummy=''):
-	data = {'token': get_setting('trakt.token'), 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
+	data = {'token': get_setting('twilight.trakt.token'), 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET}
 	response = call_trakt("oauth/revoke", data=data, with_auth=False)
 	manage_settings_reset()
 	set_setting('trakt.user', '')
@@ -664,8 +665,8 @@ def trakt_get_my_calendar(recently_aired, current_date):
 def trakt_calendar_days(recently_aired, current_date):
 	if recently_aired: start, finish = (current_date - timedelta(days=14)).strftime('%Y-%m-%d'), '14'
 	else:
-		previous_days = int(get_setting('trakt.calendar_previous_days', '3'))
-		future_days = int(get_setting('trakt.calendar_future_days', '7'))
+		previous_days = int(get_setting('twilight.trakt.calendar_previous_days', '3'))
+		future_days = int(get_setting('twilight.trakt.calendar_future_days', '7'))
 		start = (current_date - timedelta(days=previous_days)).strftime('%Y-%m-%d')
 		finish = str(previous_days + future_days)
 	return start, finish
@@ -701,7 +702,7 @@ def trakt_sync_activities(force_update=False):
 	clear_trakt_list_contents_data('user_lists')
 	clear_trakt_list_contents_data('liked_lists')
 	clear_trakt_list_contents_data('my_lists')
-	if not get_setting('trakt.user', '') and not force_update: return 'no account'
+	if not get_setting('twilight.trakt.user', '') and not force_update: return 'no account'
 	try: latest = trakt_get_activity()
 	except: return 'failed'
 	cached = reset_activity(latest)

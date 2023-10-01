@@ -26,6 +26,10 @@ people_trivia_url = 'name/%s/trivia'
 people_search_url_backup = 'search/name/?name=%s'
 people_search_url = 'https://sg.media-imdb.com/suggests/%s/%s.json'
 year_check_url = 'https://v2.sg.media-imdb.com/suggestion/t/%s.json'
+featured_movies_url = 'search/title/?title_type=feature,tv_movie&num_votes=1000,&production_status=released&sort=moviemeter,asc&count=20&start=%s'
+most_voted_movies_url = 'search/title/?title_type=feature,tv_movie&num_votes=1000,&production_status=released&sort=num_votes,desc&count=20&start=%s'
+featured_tvshows_url = 'search/title/?title_type=tv_series,tv_miniseries&num_votes=1000,&production_status=released&sort=moviemeter,asc&count=20&start=%s'
+most_voted_tvshows_url = 'search/title/?title_type=tv_series,tv_miniseries&num_votes=1000,&production_status=released&sort=num_votes,desc&count=20&start=%s'
 timeout = 20.0
 
 def imdb_people_id(actor_name):
@@ -37,7 +41,7 @@ def imdb_people_id(actor_name):
 	return cache_object(get_imdb, string, params, False, 8736)[0]
 
 def imdb_watchlist(media_type, foo_var, page_no):
-	imdb_user = string_alphanum_to_num(get_setting('imdb_user'))
+	imdb_user = string_alphanum_to_num(get_setting('twilight.imdb_user'))
 	sort = imdb_sort_list()
 	string = 'imdb_watchlist_%s_%s_%s_%s' % (media_type, imdb_user, sort, page_no)
 	url = base_url % watchlist_url % imdb_user
@@ -45,14 +49,14 @@ def imdb_watchlist(media_type, foo_var, page_no):
 	return cache_object(get_imdb, string, params, False, 2)
 
 def imdb_user_lists(media_type):
-	imdb_user = string_alphanum_to_num(get_setting('imdb_user'))
+	imdb_user = string_alphanum_to_num(get_setting('twilight.imdb_user'))
 	string = 'imdb_user_lists_%s_%s' % (media_type, imdb_user)
 	url = base_url % lists_link % imdb_user
 	params = {'url': url, 'action': 'imdb_user_lists'}
 	return cache_object(get_imdb, string, params, False, 2)[0]
 
 def imdb_user_list_contents(media_type, list_id, page_no):
-	imdb_user = string_alphanum_to_num(get_setting('imdb_user'))
+	imdb_user = string_alphanum_to_num(get_setting('twilight.imdb_user'))
 	sort = imdb_sort_list()
 	string = 'imdb_user_list_contents_%s_%s_%s_%s_%s' % (media_type, imdb_user, list_id, sort, page_no)
 	params = {'url': list_id, 'action': 'imdb_user_list_contents', 'media_type': media_type, 'sort': sort, 'page_no': page_no}
@@ -126,6 +130,20 @@ def imdb_keyword_search(keyword):
 	params = {'url': url, 'action': 'imdb_keyword_search'}
 	return cache_object(get_imdb, string, params, False, 168)[0]
 
+def imdb_featured(media_type, foo_var, page_no):
+	string = 'imdb_featured_%s_%s' % (media_type, page_no)
+	featured_url = featured_movies_url if media_type == 'movie' else featured_tvshows_url
+	url = base_url % featured_url % get_start_no(page_no)
+	params = {'url': url, 'action': 'imdb_main'}
+	return cache_object(get_imdb, string, params, False, 48)
+
+def imdb_most_voted(media_type, foo_var, page_no):
+	string = 'imdb_most_voted_%s_%s' % (media_type, page_no)
+	most_voted_url = most_voted_movies_url if media_type == 'movie' else most_voted_tvshows_url
+	url = base_url % most_voted_url % get_start_no(page_no)
+	params = {'url': url, 'action': 'imdb_main'}
+	return cache_object(get_imdb, string, params, False, 48)
+
 def get_imdb(params):
 	imdb_list = []
 	action = params.get('action')
@@ -136,7 +154,7 @@ def get_imdb(params):
 		date_time = (datetime.utcnow() - timedelta(hours=5))
 		for i in re.findall(r'date\[(\d+)\]', url):
 			url = url.replace('date[%s]' % i, (date_time - timedelta(days = int(i))).strftime('%Y-%m-%d'))
-	if action in ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents'):
+	if action in ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_main'):
 		def _process():
 			for item in items:
 				try:
@@ -169,6 +187,7 @@ def get_imdb(params):
 				next_page = parseDOM(result, 'div', attrs = {'class': 'pagination'})[0]
 				next_page = zip(parseDOM(next_page, 'a', ret='href'), parseDOM(next_page, 'a'))
 				next_page = [i[0] for i in next_page if 'Next' in i[1]]
+			next_page = len(next_page) > 0
 		except: pass
 	elif action == 'imdb_user_lists':
 		def _process():
@@ -188,7 +207,7 @@ def get_imdb(params):
 		def _process():
 			for count, item in enumerate(items, 1):
 				try:
-					content = re.sub(r'<a href="\S+">', '', item).replace('</a>', '')
+					content = re.sub(r'<a class="ipc-md-link ipc-md-link--entity" href="\S+">', '', item).replace('</a>', '')
 					content = replace_html_codes(content)
 					content = content.replace('<br/><br/>', '\n')
 					content = '[B]%s %02d.[/B][CR][CR]%s' % (_str, count, content)
@@ -196,8 +215,10 @@ def get_imdb(params):
 				except: pass
 		if action == 'imdb_trivia': _str = ls(32984).upper()
 		else: _str =  ls(32986).upper()
-		result = get_correct_imdb_data(url)
-		items = parseDOM(result, 'div', attrs={'class': 'sodatext'})
+		result = requests.get(url, timeout=timeout, headers=headers)
+		result = remove_accents(result.text)
+		result = result.replace('\n', ' ')
+		items = parseDOM(result, 'div', attrs={'class': 'ipc-html-content-inner-div'})
 		imdb_list = list(_process())
 	elif action == 'imdb_people_trivia':
 		def _process():
@@ -416,19 +437,8 @@ def get_imdb(params):
 		imdb_list = list(_process())
 	return (imdb_list, next_page)
 
-def get_correct_imdb_data(url):
-	result, retries = '', 0
-	while not retries > 0:
-		result = requests.get(url, timeout=timeout, headers=headers)
-		if result.status_code == 200:
-			result = result.text
-			if 'http://ogp.me/ns#' in result:
-				result = remove_accents(result)
-				result = result.replace('\n', ' ')
-				break
-		sleep(2000)
-		retries += 1
-	return result
+def get_start_no(page_no):
+	return ((page_no - 1) * 20) + 1
 
 def clear_imdb_cache(silent=False):
 	from modules.kodi_utils import path_exists, clear_property, database, maincache_db

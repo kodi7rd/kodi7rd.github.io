@@ -13,15 +13,16 @@ make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem,
 metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.paginate
 extras_open_action, get_art_provider, default_all_episodes, page_limit = settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes, settings.page_limit
 poster_empty, fanart_empty, include_year_in_title, set_property = kodi_utils.empty_poster, kodi_utils.addon_fanart, settings.include_year_in_title, kodi_utils.set_property
-max_threads, widget_hide_next_page, twilight_clearlogo = settings.max_threads, settings.widget_hide_next_page, kodi_utils.addon_clearlogo
+max_threads, widget_hide_next_page = settings.max_threads, settings.widget_hide_next_page
 twilight_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jump2_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
 extras_str, options_str, refr_widg_str = ls(32645), ls(32646), '[B]%s[/B]' % ls(32611)
 run_plugin, container_update = 'RunPlugin(%s)', 'Container.Update(%s)'
-tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air','tmdb_tv_upcoming')
+tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_popular_today', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air','tmdb_tv_upcoming')
 tmdb_special = {'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year', 'tmdb_tv_decade': 'decade', 'tmdb_tv_recommendations': 'tmdb_id',
 					'tmdb_tv_genres': 'genre_id', 'tmdb_tv_search': 'query'}
 trakt_main = ('trakt_tv_trending', 'trakt_tv_trending_recent', 'trakt_recommendations', 'trakt_tv_most_watched')
-trakt_personal, imdb_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists'), ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
+trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
+imdb_all = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_featured', 'imdb_most_voted')
 personal = {'in_progress_tvshows': ('modules.watched_status', 'get_in_progress_tvshows'), 'favorites_tvshows': ('modules.favorites', 'get_favorites'),
 				'watched_tvshows': ('modules.watched_status', 'get_watched_items')}
 view_mode, content_type = 'view.tvshows', 'tvshows'
@@ -86,7 +87,7 @@ class TVShows:
 				try:
 					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'paginate_start': self.paginate_start}
 				except: pass
-			elif self.action in imdb_personal:
+			elif self.action in imdb_all:
 				self.id_type = 'imdb_id'
 				list_id = self.params_get('list_id', None)
 				data, next_page = function('tvshow', list_id, page_no)

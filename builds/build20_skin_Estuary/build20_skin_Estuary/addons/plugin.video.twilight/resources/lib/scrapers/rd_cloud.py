@@ -95,7 +95,7 @@ class source:
 			for item in contents:
 				normalized = normalize(item['path'])
 				if self.media_type == 'episode' and not seas_ep_filter(self.season, self.episode, normalized): continue
-				if item['path'] not in [d['path'] for d in self.scrape_results]:
+				if item['path'].replace('/', '').lower() not in [d['path'].replace('/', '').lower() for d in self.scrape_results]:
 					item['assigned_content'] = assigned_content
 					scrape_results_append(item)
 		except: pass
@@ -114,7 +114,7 @@ class source:
 					if not any(x in normalized for x in year_query_list): continue
 				elif not seas_ep_filter(self.season, self.episode, normalized): continue
 				item = self.make_downloads_item(item)
-				if item['path'] not in [d['path'] for d in self.scrape_results]: scrape_results_append(item)
+				if item['path'].replace('/', '').lower() not in [d['path'].replace('/', '').lower() for d in self.scrape_results]: scrape_results_append(item)
 		except: pass
 
 	def make_downloads_item(self, item):

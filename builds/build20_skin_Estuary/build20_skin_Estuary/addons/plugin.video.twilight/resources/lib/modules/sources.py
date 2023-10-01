@@ -1,28 +1,30 @@
 # -*- coding: utf-8 -*-
 import time
-from windows import open_window, create_window
+from windows.base_window import open_window, create_window
 from scrapers import external, folders
 from modules import debrid, kodi_utils, settings, metadata, watched_status
 from modules.player import TwilightPlayer
-from modules.source_utils import internal_sources, external_sources, internal_folders_import, scraper_names, get_cache_expiry, make_alias_dict
-from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, manual_function_import
+from modules.source_utils import get_cache_expiry, make_alias_dict
+from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, append_module_to_syspath, manual_function_import, manual_module_import
 # logger = kodi_utils.logger
 
+ls, get_icon, notification, sleep, int_window_prop = kodi_utils.local_string, kodi_utils.get_icon, kodi_utils.notification, kodi_utils.sleep, kodi_utils.int_window_prop
 select_dialog, confirm_dialog, get_setting, close_all_dialog = kodi_utils.select_dialog, kodi_utils.confirm_dialog, kodi_utils.get_setting, kodi_utils.close_all_dialog
 json, show_busy_dialog, hide_busy_dialog, xbmc_player = kodi_utils.json, kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.xbmc_player
 Thread, get_property, set_property, clear_property = kodi_utils.Thread, kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
-ls, get_icon, notification, sleep = kodi_utils.local_string, kodi_utils.get_icon, kodi_utils.notification, kodi_utils.sleep
 display_uncached_torrents, check_prescrape_sources, source_folders_directory = settings.display_uncached_torrents, settings.check_prescrape_sources, settings.source_folders_directory
 auto_play, active_internal_scrapers, provider_sort_ranks, audio_filters = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks, settings.audio_filters
 results_format, results_style, results_xml_window_number, filter_status = settings.results_format, settings.results_style, settings.results_xml_window_number, settings.filter_status
 metadata_user_info, quality_filter, sort_to_top, monitor_playback = settings.metadata_user_info, settings.quality_filter, settings.sort_to_top, settings.monitor_playback
-display_sleep_time, scraping_settings, include_prerelease_results = settings.display_sleep_time, settings.scraping_settings, settings.include_prerelease_results
+scraping_settings, include_prerelease_results, auto_rescrape_with_all = settings.scraping_settings, settings.include_prerelease_results, settings.auto_rescrape_with_all
+playback_attempt_pause, get_art_provider, external_scraper_info = settings.playback_attempt_pause, settings.get_art_provider, settings.external_scraper_info
 ignore_results_filter, results_sort_order, easynews_max_retries = settings.ignore_results_filter, settings.results_sort_order, settings.easynews_max_retries
 autoplay_next_episode, autoscrape_next_episode, limit_resolve = settings.autoplay_next_episode, settings.autoscrape_next_episode, settings.limit_resolve
-get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watched_status.get_bookmarks
-erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
-playback_attempt_pause, get_art_provider = settings.playback_attempt_pause, settings.get_art_provider
+erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
+get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watched_status.get_bookmarks
+internal_include_list = ['easynews', 'furk', 'pm_cloud', 'rd_cloud', 'ad_cloud']
+external_exclude_list = ['furk', 'easynews', 'gdrive', 'library', 'filepursuit', 'plexshare']
 sd_check = ('SD', 'CAM', 'TELE', 'SYNC')
 rd_info, pm_info, ad_info = ('apis.real_debrid_api', 'RealDebridAPI'), ('apis.premiumize_api', 'PremiumizeAPI'), ('apis.alldebrid_api', 'AllDebridAPI')
 debrids = {'Real-Debrid': rd_info, 'rd_cloud': rd_info, 'rd_browse': rd_info, 'Premiumize.me': pm_info, 'pm_cloud': pm_info, 'pm_browse': pm_info,
@@ -31,7 +33,7 @@ debrid_providers = ('Real-Debrid', 'Premiumize.me', 'AllDebrid')
 quality_ranks = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}
 cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
 default_internal_scrapers = ('furk', 'easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'folders')
-main_line, int_window_prop = '%s[CR]%s[CR]%s', kodi_utils.int_window_prop
+main_line = '%s[CR]%s[CR]%s'
 scraper_timeout = 25
 
 class Sources():
@@ -39,9 +41,10 @@ class Sources():
 		self.params = {}
 		self.prescrape_scrapers, self.prescrape_threads, self.prescrape_sources, self.uncached_torrents = [], [], [], []
 		self.threads, self.providers, self.sources, self.internal_scraper_names, self.remove_scrapers = [], [], [], [], ['external']
-		self.clear_properties, self.filters_ignored, self.active_folders, self.resolve_dialog_made = True, False, False, False
+		self.post_results_processed, self.clear_properties, self.filters_ignored, self.active_folders, self.resolve_dialog_made = False, True, False, False, False
 		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.prescrape, self.disabled_ext_ignored, self.default_ext_only = 'true', 'false', 'false'
+		self.ext_name, self.ext_folder, self.ext_default_providers, self.ext_sources = '', '', None, None
 		self.progress_dialog = None
 		self.playing_filename = ''
 		self.monitor_playback = monitor_playback()
@@ -62,11 +65,12 @@ class Sources():
 			else: self.autoplay_nextep, self.autoscrape_nextep = False, True
 		else: self.autoplay_nextep, self.autoscrape_nextep = autoplay_next_episode(), autoscrape_next_episode()
 		self.autoscrape = self.autoscrape_nextep and self.background
+		self.auto_rescrape_with_all = auto_rescrape_with_all()
 		self.nextep_settings, self.disable_autoplay_next_episode = params_get('nextep_settings', {}), params_get('disable_autoplay_next_episode', 'false') == 'true'
 		self.ignore_scrape_filters = params_get('ignore_scrape_filters', 'false') == 'true'
 		self.disabled_ext_ignored = params_get('disabled_ext_ignored', self.disabled_ext_ignored) == 'true'
 		self.default_ext_only = params_get('default_ext_only', self.default_ext_only) == 'true'
-		self.folders_ignore_filters = get_setting('results.folders_ignore_filters', 'false') == 'true'
+		self.folders_ignore_filters = get_setting('twilight.results.folders_ignore_filters', 'false') == 'true'
 		self.media_type, self.tmdb_id, self.ep_name, self.plot = params_get('media_type'), params_get('tmdb_id'), params_get('ep_name'), params_get('plot')
 		self.custom_title, self.custom_year = params_get('custom_title', None), params_get('custom_year', None)
 		self.custom_season, self.custom_episode = params_get('custom_season', None), params_get('custom_episode', None)
@@ -81,15 +85,16 @@ class Sources():
 		self.active_internal_scrapers = active_internal_scrapers()
 		if not 'external' in self.active_internal_scrapers and (self.disabled_ext_ignored or self.default_ext_only): self.active_internal_scrapers.append('external')
 		self.active_external = 'external' in self.active_internal_scrapers
-		self.provider_sort_ranks, self.sleep_time, self.scraper_settings = provider_sort_ranks(), display_sleep_time(), scraping_settings()
+		self.sleep_time, self.provider_sort_ranks, self.scraper_settings = 100, provider_sort_ranks(), scraping_settings()
 		self.include_prerelease_results, self.ignore_results_filter, self.limit_resolve = include_prerelease_results(), ignore_results_filter(), limit_resolve()
 		self.filter_hevc, self.filter_hdr = filter_status('hevc'), filter_status('hdr')
 		self.filter_dv, self.filter_av1, self.filter_audio = filter_status('dv'), filter_status('av1'), 3
 		self.hevc_filter_key, self.hdr_filter_key, self.dolby_vision_filter_key, self.av1_filter_key = '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]', '[B]AV1[/B]'
 		self.audio_filter_key = audio_filters()
 		self.sort_function, self.display_uncached_torrents, self.quality_filter = results_sort_order(), display_uncached_torrents(), self._quality_filter()
-		self.hybrid_allowed, self.filter_size_method = self.filter_hdr in (0, 2), int(get_setting('results.filter_size_method', '0'))
-		self.include_unknown_size, self.include_3D_results = get_setting('results.include.unknown.size', 'false') == 'true', get_setting('include_3d_results', 'true') == 'true'
+		self.hybrid_allowed, self.filter_size_method = self.filter_hdr in (0, 2), int(get_setting('twilight.results.filter_size_method', '0'))
+		self.include_unknown_size = get_setting('twilight.results.include.unknown.size', 'false') == 'true'
+		self.include_3D_results = get_setting('twilight.include_3d_results', 'true') == 'true'
 		self._update_meta()
 		self._search_info()
 		if self.autoscrape: self.autoscrape_nextep_handler()
@@ -120,7 +125,7 @@ class Sources():
 		self.sources.extend(self.prescrape_sources)
 		threads_append = self.threads.append
 		if self.active_folders: self.append_folder_scrapers(self.providers)
-		self.providers.extend(internal_sources(self.active_internal_scrapers))
+		self.providers.extend(self.internal_sources())
 		if self.providers:
 			for i in self.providers: threads_append(Thread(target=self.activate_providers, args=(i[0], i[1], False), name=i[2]))
 			[i.start() for i in self.threads]
@@ -136,10 +141,10 @@ class Sources():
 	def collect_prescrape_results(self):
 		threads_append = self.prescrape_threads.append
 		if self.active_folders:
-			if self.autoplay or check_prescrape_sources('folders'):
+			if self.autoplay or check_prescrape_sources('folders', self.media_type):
 				self.append_folder_scrapers(self.prescrape_scrapers)
 				self.remove_scrapers.append('folders')
-		self.prescrape_scrapers.extend(internal_sources(self.active_internal_scrapers, True))
+		self.prescrape_scrapers.extend(self.internal_sources(True))
 		if not self.prescrape_scrapers: return []
 		for i in self.prescrape_scrapers: threads_append(Thread(target=self.activate_providers, args=(i[0], i[1], True), name=i[2]))
 		[i.start() for i in self.prescrape_threads]
@@ -178,13 +183,13 @@ class Sources():
 		results = [i for i in results if i['quality'] in self.quality_filter]
 		if not self.include_3D_results: results = [i for i in results if not '3D' in i['extraInfo']]
 		if self.filter_size_method:
-			min_size = string_to_float(get_setting('results.size.min_manual', '0'), '0') / 1000
+			min_size = string_to_float(get_setting('twilight.results.size.min_manual', '0'), '0') / 1000
 			if min_size == 0.0 and not self.include_unknown_size: min_size = 0.02
 			if self.filter_size_method == 1:
 				duration = self.meta['duration'] or (5400 if self.media_type == 'movie' else 2400)
-				max_size = ((0.125 * (0.90 * string_to_float(get_setting('results.size.auto', '20'), '20'))) * duration)/1000
+				max_size = ((0.125 * (0.90 * string_to_float(get_setting('twilight.results.size.auto', '20'), '20'))) * duration)/1000
 			elif self.filter_size_method == 2:
-				max_size = string_to_float(get_setting('results.size.manual', '10000'), '10000') / 1000
+				max_size = string_to_float(get_setting('twilight.results.size.manual', '10000'), '10000') / 1000
 			results = [i for i in results if i['scrape_provider'] == 'folders' or min_size <= i['size'] <= max_size]
 		results += folder_results
 		return results
@@ -204,7 +209,7 @@ class Sources():
 	def prepare_internal_scrapers(self):
 		if self.active_external and len(self.active_internal_scrapers) == 1: return
 		active_internal_scrapers = [i for i in self.active_internal_scrapers if not i in self.remove_scrapers]
-		if self.prescrape and not self.active_external and all([check_prescrape_sources(i) for i in active_internal_scrapers]): return False
+		if self.prescrape and not self.active_external and all([check_prescrape_sources(i, self.media_type) for i in active_internal_scrapers]): return False
 		if 'folders' in active_internal_scrapers:
 			self.folder_info = [i for i in self.get_folderscraper_info() if settings.source_folders_directory(self.media_type, i[1])]
 			if self.folder_info:
@@ -231,32 +236,79 @@ class Sources():
 
 	def activate_external_providers(self):
 		if not self.debrid_torrent_enabled and not self.debrid_hoster_enabled:
-			if len(self.active_internal_scrapers) == 1 and 'external' in self.active_internal_scrapers: notification(32854, 2000)
-			self.disable_external()
+			if len(self.active_internal_scrapers) == 1 and 'external' in self.active_internal_scrapers: self.disable_external(32854)
 		else:
+			self.ext_folder, self.ext_name = external_scraper_info()
+			if not self.ext_folder or not self.ext_name: return self.disable_external(33007)
+			if not self.import_external_scrapers(): return self.disable_external(33009)
 			exclude_list = []
-			if not self.debrid_torrent_enabled: exclude_list.extend(scraper_names('torrents'))
-			elif not self.debrid_hoster_enabled: exclude_list.extend(scraper_names('hosters'))
-			self.external_providers = external_sources(ret_all=self.disabled_ext_ignored, ret_default_only=self.default_ext_only)
-			if not self.external_providers:
-				notification('No External Providers Enabled', 2000)
-				self.disable_external()
+			if not self.debrid_torrent_enabled: exclude_list.extend(self.external_scraper_names('torrents'))
+			elif not self.debrid_hoster_enabled: exclude_list.extend(self.external_scraper_names('hosters'))
+			self.external_providers = self.external_sources()
+			if not self.external_providers: self.disable_external(33008)
 			if exclude_list: self.external_providers = [i for i in self.external_providers if not i[0] in exclude_list]
+	
+	def import_external_scrapers(self):
+		try:
+			append_module_to_syspath('special://home/addons/%s/lib' % self.ext_folder)
+			self.ext_sources = manual_module_import('%s.sources_%s' % (self.ext_name, self.ext_name))
+			self.ext_default_providers = manual_function_import('%s.modules.control' % self.ext_name, 'getProviderDefaults')
+		except: return False
+		return True
 
-	def disable_external(self):
+	def disable_external(self, line1):
+		notification(line1, 2000)
 		try: self.active_internal_scrapers.remove('external')
 		except: pass
 		self.active_external = False
+
+	def external_scraper_names(self, folder):
+		if folder == 'torrents': return [i for i in self.ext_sources.torrent_providers if not i in external_exclude_list]
+		elif folder == 'hosters': return [i for i in self.ext_sources.hoster_providers if not i in external_exclude_list]
+		else: return [i for i in self.ext_sources.all_providers if not i in external_exclude_list]
+
+	def internal_sources(self, prescrape=False):
+		active_sources = [i for i in self.active_internal_scrapers if i in internal_include_list]
+		try: sourceDict = [('internal', manual_function_import('scrapers.%s' % i, 'source'), i) for i in active_sources \
+												if not (prescrape and not check_prescrape_sources(i, self.media_type))]
+		except: sourceDict = []
+		return sourceDict
+
+	def external_sources(self):
+		try:
+			if self.disabled_ext_ignored: active_sources = self.ext_sources.total_providers['torrents']
+			elif self.default_ext_only: active_sources = [k.split('.')[1] for k, v in self.ext_default_providers().items() if v == 'true']
+			else: active_sources = [i for i in self.ext_sources.total_providers['torrents'] if \
+									json.loads(get_property('%s_settings' % self.ext_name)).get('provider.%s' % i, 'false') == 'true']
+			sourceDict = [(i, manual_function_import('%s.sources_%s.%s.%s' % (self.ext_name, self.ext_name, 'torrents', i), 'source')) for i in active_sources]
+		except: sourceDict = self.legacy_external_sources()
+		return sourceDict
+
+	def legacy_external_sources(self):
+		try: sourceDict = manual_function_import(self.ext_name, 'sources')(specified_folders=['torrents'], ret_all=self.disabled_ext_ignored)
+		except: sourceDict = []
+		return sourceDict
+
+	def folder_sources(self):
+		def import_info():
+			for item in self.folder_info:
+				scraper_name = item[0]
+				module = manual_function_import('scrapers.folders', 'source')
+				yield ('folders', (module, (item[1], scraper_name, item[2])), scraper_name)
+		sourceDict = list(import_info())
+		try: sourceDict = list(import_info())
+		except: sourceDict = []
+		return sourceDict
 
 	def play_source(self, results):
 		if self.background or self.autoplay: return self.play_file(results)
 		return self.display_results(results)
 
 	def append_folder_scrapers(self, current_list):
-		current_list.extend(internal_folders_import(self.folder_info))
+		current_list.extend(self.folder_sources())
 
 	def get_folderscraper_info(self):
-		folder_info = [(get_setting('%s.display_name' % i), i, source_folders_directory(self.media_type, i)) for i in folder_scrapers]
+		folder_info = [(get_setting('twilight.%s.display_name' % i), i, source_folders_directory(self.media_type, i)) for i in folder_scrapers]
 		return [i for i in folder_info if not i[0] in (None, 'None', '') and i[2]]
 
 	def scrapers_dialog(self):
@@ -298,6 +350,9 @@ class Sources():
 		return [i[2] for i in scraper_list]
 
 	def _process_post_results(self):
+		if self.auto_rescrape_with_all and not self.post_results_processed:
+			self.threads, self.post_results_processed, self.disabled_ext_ignored, self.prescrape = [], True, True, False
+			return self.get_sources()
 		if self.orig_results and not self.background:
 			if self.display_uncached_torrents and not self.autoplay: return self.play_source(self.uncached_torrents)
 			if self.ignore_results_filter == 0: return self._no_results()
@@ -322,11 +377,7 @@ class Sources():
 						'custom_year': self.custom_year, 'custom_season': self.custom_season, 'custom_episode': self.custom_episode})
 
 	def _search_info(self):
-		title = self.get_search_title()
-		year = self.get_search_year()
-		season = self.get_season()
-		episode = self.get_episode()
-		ep_name = self.get_ep_name()
+		title, year, season, episode, ep_name = self.get_search_title(), self.get_search_year(), self.get_season(), self.get_episode(), self.get_ep_name()
 		aliases = make_alias_dict(self.meta, title)
 		expiry_times = get_cache_expiry(self.media_type, self.meta, self.season)
 		self.search_info = {'media_type': self.media_type, 'title': title, 'year': year, 'tmdb_id': self.tmdb_id, 'imdb_id': self.meta.get('imdb_id'), 'aliases': aliases,
@@ -338,7 +389,7 @@ class Sources():
 		custom_title = self.meta.get('custom_title', None)
 		if custom_title: search_title = custom_title
 		else:
-			if get_setting('meta_language') == 'en': search_title = self.meta['title']
+			if get_setting('twilight.meta_language') == 'en': search_title = self.meta['title']
 			else:
 				english_title = self.meta.get('english_title')
 				if english_title: search_title = english_title
@@ -360,7 +411,7 @@ class Sources():
 		if custom_year: year = custom_year
 		else:
 			year = self.meta.get('year')
-			if self.active_external and get_setting('search.enable.yearcheck', 'false') == 'true':
+			if self.active_external and get_setting('twilight.search.enable.yearcheck', 'false') == 'true':
 				from apis.imdb_api import imdb_year_check
 				try:
 					imdb_year = str(imdb_year_check(self.meta.get('imdb_id')))
@@ -436,7 +487,7 @@ class Sources():
 
 	def _special_filter(self, results, key, enable_setting):
 		if key == self.hevc_filter_key and enable_setting in (0,2):
-			hevc_max_quality = self._get_quality_rank(get_setting('filter_hevc.%s' % ('max_autoplay_quality' if self.autoplay else 'max_quality'), '4K'))
+			hevc_max_quality = self._get_quality_rank(get_setting('twilight.filter_hevc.%s' % ('max_autoplay_quality' if self.autoplay else 'max_quality'), '4K'))
 			results = [i for i in results if not key in i['extraInfo'] or i['quality_rank'] >= hevc_max_quality]
 		if enable_setting == 1:
 			if key == self.dolby_vision_filter_key and self.hybrid_allowed:

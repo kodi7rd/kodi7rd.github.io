@@ -19,7 +19,7 @@
                 <top>-1</top>
                 <width>286</width>
                 <height>162</height>
-                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.main_highlight)">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
                 <width>284</width>
@@ -52,24 +52,42 @@
             </control>
             <control type="group">
                 <left>275</left>
-                <control type="label">
-                    <visible>String.IsEqual(Window.Property(play_type),autoplay_nextep)</visible>
-                    <left>35</left>
-                    <aligny>center</aligny>
-                    <height>40</height>
-                    <label>[B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]$ADDON[plugin.video.twilight 32811][/COLOR] $INFO[Player.TimeRemaining()][/B]</label>
-                    <font>font14</font> <!-- TWILIGHT_33 -->
-                    <textcolor>FFB7B4BB</textcolor>
+                <!-- Main Heading & Timer -->
+                <control type="group">
+                    <!-- Autoplay & Autoscrape -->
+                    <control type="group">
+                        <visible>String.IsEmpty(Window.Property(pause_timer))</visible>
+                        <control type="label">
+                            <visible>String.IsEqual(Window.Property(play_type),autoplay_nextep)</visible>
+                            <left>35</left>
+                            <aligny>center</aligny>
+                            <height>40</height>
+                            <label>[B][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]]$ADDON[plugin.video.twilight 32811][/COLOR] $INFO[Player.TimeRemaining()][/B]</label>
+                            <font>font14</font> <!-- TWILIGHT_33 -->
+                            <textcolor>FFB7B4BB</textcolor>
+                        </control>
+                        <control type="label">
+                            <visible>String.IsEqual(Window.Property(play_type),autoscrape_nextep)</visible>
+                            <left>35</left>
+                            <aligny>center</aligny>
+                            <height>40</height>
+                            <label>[B][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]]$ADDON[plugin.video.twilight 33086]?[/COLOR][/B]</label>
+                            <font>font14</font> <!-- TWILIGHT_33 -->
+                            <textcolor>FFB7B4BB</textcolor>
+                        </control>
+                    </control>
+                    <!-- Waiting For Input -->
+                    <control type="label">
+                        <visible>String.IsEqual(Window.Property(play_type),autoplay_nextep) + !String.IsEmpty(Window.Property(pause_timer))</visible>
+                        <left>35</left>
+                        <aligny>center</aligny>
+                        <height>40</height>
+                        <label>[B][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]]$ADDON[plugin.video.twilight 33163][/COLOR] $INFO[Window.Property(pause_timer)][/B]</label>
+                        <font>font14</font> <!-- TWILIGHT_33 -->
+                        <textcolor>FFB7B4BB</textcolor>
+                    </control>
                 </control>
-                <control type="label">
-                    <visible>String.IsEqual(Window.Property(play_type),autoscrape_nextep)</visible>
-                    <left>35</left>
-                    <aligny>center</aligny>
-                    <height>40</height>
-                    <label>[B][COLOR $INFO[Window(10000).Property(twilight.highlight)]]$ADDON[plugin.video.twilight 33086]?[/COLOR][/B]</label>
-                    <font>font14</font> <!-- TWILIGHT_33 -->
-                    <textcolor>FFB7B4BB</textcolor>
-                </control>
+                <!-- Text Body -->
                 <control type="label">
                     <top>45</top>
                     <left>35</left>
@@ -77,10 +95,11 @@
                     <width>auto</width>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <label>$INFO[Window.Property(next_ep_title)][B][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_season)]x$INFO[Window.Property(next_ep_episode)][B][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_ep_name)]</label>
+                    <label>$INFO[Window.Property(next_ep_title)][B][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_season)]x$INFO[Window.Property(next_ep_episode)][B][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Window.Property(next_ep_ep_name)]</label>
                     <font>font10</font> <!-- TWILIGHT_21 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
+                <!-- Buttons Autoplay -->
                 <control type="grouplist">
                     <visible>String.IsEqual(Window.Property(play_type),autoplay_nextep)</visible>
                     <left>30</left>
@@ -132,6 +151,7 @@
                         <align>center</align>
                     </control>
                 </control>
+                <!-- Buttons Autoscrape -->
                 <control type="grouplist">
                     <visible>String.IsEqual(Window.Property(play_type),autoscrape_nextep)</visible>
                     <left>30</left>

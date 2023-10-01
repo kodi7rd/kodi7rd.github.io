@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from windows import BaseDialog
+from windows.base_window import BaseDialog
 from modules.utils import change_image_resolution
 from modules.kodi_utils import json, empty_poster, addon_fanart, notification
 from modules.settings import get_art_provider

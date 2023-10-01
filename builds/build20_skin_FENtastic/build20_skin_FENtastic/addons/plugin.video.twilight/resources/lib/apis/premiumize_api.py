@@ -18,7 +18,7 @@ class PremiumizeAPI:
 	def __init__(self):
 		self.client_id = '663882072'
 		self.user_agent = 'Twilight for Kodi'
-		self.token = get_setting('pm.token')
+		self.token = get_setting('twilight.pm.token')
 
 	def auth(self):
 		self.token = ''

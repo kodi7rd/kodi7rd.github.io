@@ -19,15 +19,15 @@
             </animation>
             <control type="group">
                 <control type="image">
-                    <left>-1</left>
-                    <top>-1</top>
+                    <left>-2</left>
+                    <top>-2</top>
                     <width>1362</width>
                     <height>982</height>
-                    <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                    <texture border="16" colordiffuse="Window(10000).Property(twilight.main_highlight)">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
-                    <width>1360</width>
-                    <height>980</height>
+                    <width>1358</width>
+                    <height>978</height>
                     <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
@@ -46,7 +46,7 @@
                     <width max="1115">auto</width>
                     <height>20</height>
                     <font>font14</font> <!-- TWILIGHT_33 -->
-                    <textcolor>$INFO[Window(10000).Property(twilight.highlight)]</textcolor>
+                    <textcolor>$INFO[Window(10000).Property(twilight.main_highlight)]</textcolor>
                     <shadowcolor>FF000000</shadowcolor>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -82,7 +82,7 @@
                     <height>860</height>
                     <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]">twilight_common/white.png</texturesliderbarfocus>
+                    <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.main_highlight)]">twilight_common/white.png</texturesliderbarfocus>
                     <onleft>2060</onleft>
                     <onright>2060</onright>
                     <showonepage>false</showonepage>
@@ -96,7 +96,7 @@
                     <height>860</height>
                     <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
-                    <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]">twilight_common/white.png</texturesliderbarfocus>
+                    <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.main_highlight)]">twilight_common/white.png</texturesliderbarfocus>
                     <onleft>2061</onleft>
                     <onright>2061</onright>
                     <showonepage>false</showonepage>

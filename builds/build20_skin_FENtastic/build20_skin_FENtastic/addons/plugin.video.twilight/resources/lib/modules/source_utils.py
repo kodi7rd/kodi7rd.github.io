@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
-import sys
-from cocoscrapers import sources_cocoscrapers
-from cocoscrapers.modules.control import getProviderDefaults as coco_default_providers, setProviderDefaults as coco_set_defaults, \
-										setting as coco_getSetting, setSetting as coco_setSetting
 from modules import kodi_utils
 from modules.metadata import episodes_meta
-from modules.settings import check_prescrape_sources, date_offset, metadata_user_info
-from modules.utils import manual_function_import, adjust_premiered_date, get_datetime, jsondate_to_datetime, subtract_dates
+from modules.settings import date_offset, metadata_user_info
+from modules.utils import adjust_premiered_date, get_datetime, jsondate_to_datetime, subtract_dates
 # logger = kodi_utils.logger
 
-ls, unquote, unquote_plus, supported_media = kodi_utils.local_string, kodi_utils.unquote, kodi_utils.unquote_plus, kodi_utils.supported_media
-json, set_property, notification, select_dialog, list_dirs = kodi_utils.json, kodi_utils.set_property, kodi_utils.notification, kodi_utils.select_dialog, kodi_utils.list_dirs
-string, translate_path, empty_poster, int_window_prop = str, kodi_utils.translate_path, kodi_utils.empty_poster, kodi_utils.int_window_prop
+unquote, unquote_plus, supported_media, string, int_window_prop = kodi_utils.unquote, kodi_utils.unquote_plus, kodi_utils.supported_media, str, kodi_utils.int_window_prop
+json, set_property, notification = kodi_utils.json, kodi_utils.set_property, kodi_utils.notification
 expiry_3hrs, expiry_1day, expiry_2days, expiry_3days, expiry_4days, expiry_7days, expiry_10days, expiry_14days, expiry_30days = 3, 24, 48, 72, 96, 168, 240, 336, 720
-exclude_list = ['furk', 'easynews', 'gdrive', 'library', 'filepursuit', 'plexshare']
-
 RES_4K = ('.4k', 'hd4k', '4khd', '.uhd', 'ultrahd', 'ultra.hd', 'hd2160', '2160hd', '2160', '2160p', '216o', '216op')
 RES_1080 = ('1080', '1080p', '1080i', 'hd1080', '1080hd', 'hd1080p', 'm1080p', 'fullhd', 'full.hd', '1o8o', '1o8op', '108o', '108op', '1o80', '1o80p')
 RES_720 = ('720', '720p', '720i', 'hd720', '720hd', 'hd720p', '72o', '72op')
@@ -98,55 +91,6 @@ audio_filter_choices = (('DOLBY DIGITAL', 'DD'), ('DOLBY DIGITAL PLUS', 'DD+'), 
 					('DTS', 'DTS'), ('DTS-HD MASTER AUDIO', 'DTS-HD MA'), ('DTS-X', 'DTS-X'), ('DTS-HD', 'DTS-HD'), ('AAC', 'AAC'), ('OPUS', 'OPUS'), ('MP3', 'MP3'),
 					('8CH AUDIO', '8CH'), ('7CH AUDIO', '7CH'), ('6CH AUDIO', '6CH'), ('2CH AUDIO', '2CH'))
 
-def internal_sources(active_sources, prescrape=False):
-	def import_info():
-		for item in files:
-			try:
-				module_name = item.split('.')[0]
-				if module_name in ('__init__', 'external', 'folders'): continue
-				if module_name not in active_sources: continue
-				if prescrape and not check_prescrape_sources(module_name): continue
-				module = manual_function_import('scrapers.%s' % module_name, 'source')
-				yield ('internal', module, module_name)
-			except: pass
-	files = list_dirs(translate_path('special://home/addons/plugin.video.twilight/resources/lib/scrapers'))[1]
-	try: sourceDict = list(import_info())
-	except: sourceDict = []
-	return sourceDict
-
-def external_sources(ret_all=False, ret_default_only=False):
-	def import_info():
-		for source_folder, files in all_sources:
-			for item in files:
-				module_name = item.split('.')[0]
-				if module_name == '__init__': continue
-				if module_name in exclude_list: continue
-				if not ret_all:
-					if default_providers:
-						if not module_name in default_providers: continue
-					elif not coco_getSetting('provider.' + module_name) == 'true': continue
-				module = manual_function_import('cocoscrapers.sources_cocoscrapers.%s.%s' % (source_folder, module_name), 'source')
-				yield (module_name, module)
-	default_providers = get_external_default_providers() if (ret_default_only and not ret_all) else None
-	all_sources = sources_cocoscrapers.total_providers.items()
-	try: sourceDict = list(import_info())
-	except: sourceDict = []
-	return sourceDict
-
-def get_external_default_providers():
-	return [k.split('.')[1] for k, v in coco_default_providers().items() if v == 'true']
-
-def internal_folders_import(folders):
-	def import_info():
-		for item in folders:
-			scraper_name = item[0]
-			module = manual_function_import('scrapers.folders', 'source')
-			yield ('folders', (module, (item[1], scraper_name, item[2])), scraper_name)
-	sourceDict = list(import_info())
-	try: sourceDict = list(import_info())
-	except: sourceDict = []
-	return sourceDict
-
 def get_aliases_titles(aliases):
 	try: result = [i['title'] for i in aliases]
 	except: result = []
@@ -172,48 +116,6 @@ def normalize(title):
 		return string(title)
 	except: return title
 
-def _ext_scrapers_notice(status):
-	notification(status, 2500)
-
-def toggle_all(folder, setting, silent=False):
-	try:
-		sourcelist = scraper_names(folder)
-		for i in sourcelist: coco_setSetting('provider.%s' % i, setting)
-		if silent: return
-		return _ext_scrapers_notice(32576)
-	except:
-		if silent: return
-		return _ext_scrapers_notice(32574)
-
-def enable_disable(folder):
-	try:
-		enabled, disabled = scrapers_status(folder)
-		all_sources = sorted(enabled + disabled)
-		preselect = [all_sources.index(i) for i in enabled]
-		list_items = [{'line1': i.upper()} for i in all_sources]
-		kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
-		chosen = select_dialog(all_sources, **kwargs)
-		if chosen == None: return
-		for i in all_sources:
-			if i in chosen: coco_setSetting('provider.%s' % i, 'true')
-			else: coco_setSetting('provider.' + i, 'false')
-		return _ext_scrapers_notice(32576)
-	except: return _ext_scrapers_notice(32574)
-
-def set_default_scrapers():
-	coco_set_defaults()
-
-def scrapers_status(folder='all'):
-	providers = scraper_names(folder)
-	enabled = [i for i in providers if coco_getSetting('provider.%s' % i) == 'true']
-	disabled = [i for i in providers if i not in enabled]
-	return enabled, disabled
-
-def scraper_names(folder):
-	if folder == 'torrents': return [i for i in sources_cocoscrapers.torrent_providers if not i in exclude_list]
-	elif folder == 'hosters': return [i for i in sources_cocoscrapers.hoster_providers if not i in exclude_list]
-	else: return [i for i in sources_cocoscrapers.all_providers if not i in exclude_list]
-
 def pack_enable_check(meta, season, episode):
 	try:
 		status = meta['extra_info']['status']
@@ -227,7 +129,7 @@ def pack_enable_check(meta, season, episode):
 	return False, False
 
 def clear_scrapers_cache(silent=False):
-	from caches import clear_cache
+	from caches.base_cache import clear_cache
 	for item in ('internal_scrapers', 'external_scrapers'): clear_cache(item, silent=True)
 	if not silent: notification(32576)
 

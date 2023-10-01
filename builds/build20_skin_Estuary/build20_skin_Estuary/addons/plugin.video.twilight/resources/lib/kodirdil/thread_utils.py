@@ -8,7 +8,7 @@ from modules import settings
 from kodirdil import hebrew_subtitles_search_utils
 #########################################
 
-def create_search_hebrew_subtitles_thread(media_type, title, season, episode, year, tmdb_id):
+def create_search_hebrew_subtitles_thread(media_type, title, season, episode, year, tmdb_id, imdb_id):
 
     """Creates a thread to search for Hebrew subtitles for a media item.
 
@@ -18,7 +18,8 @@ def create_search_hebrew_subtitles_thread(media_type, title, season, episode, ye
     season (int): The season number for a TV show, or 0 for a movie.
     episode (int): The episode number for a TV show, or 0 for a movie.
     year (int): The year the media item was released.
-    tmdb_id (int): The TMDb ID of the media item.
+    tmdb_id (str): The TMDb ID of the media item.
+    imdb_id (str): The TMDb ID of the media item.
 
     Returns:
     threading.Thread: The created thread for searching Hebrew subtitles.
@@ -28,11 +29,11 @@ def create_search_hebrew_subtitles_thread(media_type, title, season, episode, ye
     """
     
     if media_type == 'movie':
-        hebrew_subtitles_search_arguments = ('movie', title, '0', '0', year, tmdb_id)
-        kodi_utils.logger("KODI-RD-IL", f"START search_hebrew_subtitles_thread - Calling search_hebrew_subtitles_for_selected_media() for Movie: {title} | Year: {year} | TMDb ID: {tmdb_id})")
+        hebrew_subtitles_search_arguments = ('movie', title, '0', '0', year, tmdb_id, imdb_id)
+        kodi_utils.logger("KODI-RD-IL", f"START search_hebrew_subtitles_thread - Calling search_hebrew_subtitles_for_selected_media() for Movie: {title} | Year: {year} | TMDb ID: {tmdb_id} | IMDb ID: {imdb_id}")
     else:
-        hebrew_subtitles_search_arguments = ('tv', title, season, episode, year, tmdb_id)
-        kodi_utils.logger("KODI-RD-IL", f"START search_hebrew_subtitles_thread - Calling search_hebrew_subtitles_for_selected_media() for TV Show: {title} Season {season} Episode {episode} | Year: {year} | TMDb ID: {tmdb_id})")
+        hebrew_subtitles_search_arguments = ('tv', title, season, episode, year, tmdb_id, imdb_id)
+        kodi_utils.logger("KODI-RD-IL", f"START search_hebrew_subtitles_thread - Calling search_hebrew_subtitles_for_selected_media() for TV Show: {title} Season {season} Episode {episode} | Year: {year} | TMDb ID: {tmdb_id} | IMDb ID: {imdb_id}")
     
     try:
         search_hebrew_subtitles_thread = kodi_utils.Thread(target=hebrew_subtitles_search_utils.search_hebrew_subtitles_for_selected_media, args=hebrew_subtitles_search_arguments)

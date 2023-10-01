@@ -1,5 +1,35 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+
+
+[COLOR dodgerblue][B]Version 3.2.07[/B][/COLOR]
+- Added "Retry With All Scrapers When No Results Available" to Settings->Results->General. Enable this and Twilight will automatically scrape with all external scrapers if no results are found with currently enabled external scrapers.
+- Added Sorting of Generic Lists for Movies and TV Shows. Settings->Navigation. Here you can set the sort order and direction of the Genres, Languages, Certifications, Years, Decades and Networks lists in Movies and TV Shows. Options include sort by Popularity, Rating, Release Date etc.
+- Couple of fixes.
+- Other changes/fixes.
+- There will be no more public releases of Twilight for a while.
+
+[COLOR dodgerblue][B]Version 3.2.06[/B][/COLOR]
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.2.05[/B][/COLOR]
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.2.04[/B][/COLOR]
+[B]IMPORTANT: External Scraper support has been removed from Twilight for this update and moving forward. Twilight will only support it's internal scrapers from this point.[/B][/COLOR]
+- Full re-factoring of settings' handling.
+- Added "Popular Today", "Featured" & "Top Voted" to Movies and TV Shows menus. Either reset the menus or select "Check if Menu has new Menu Items" to add these to Twilight.
+- Added ability to Rename Shortcut Folders.
+- Re-added "Restart Twilight Services" to Tools menu. Leave this alone unless instructed to use it.
+- Fixed Extras window stacks not clearing on certain actions.
+- Fixed duplicate results with RD Cloud search.
+- Partially fixed "Trivia" and "Blunders" in Extras window.
+- Changed the "Monochrome" setting in "Results Color Highlights" to "Single Color". When selected there will be only one color for all results, but you can choose what that one color will be.
+- Other changes/fixes.
+
+[COLOR dodgerblue][B]Version 3.2.03[/B][/COLOR]
+- Couple of quick fixes.
+
 [COLOR dodgerblue][B]Version 3.2.02[/B][/COLOR]
 - Moved authorizing of accounts to Tools->Accounts Manager. Accounts included here are RD, PM, AD, Trakt & Sources Folders.
 - Moved "Filter Results" in the source results window from the context menu to a left hand sideblade. Press LEFT when source results are showing to expose a menu that you can use to filter the results. Includes by Quality, Provider, Keywords etc.
@@ -14,7 +44,7 @@
 - Other changes/fixes.
 
 [COLOR dodgerblue][B]Version 3.2.01[/B][/COLOR]
-[COLOR red][B]IMPORTANT: Make sure the Tikipeter Repo has updated to version 1.0.1. If not, manually force an update, otherwise this is the last update of Twilight you will receive.[/B][/COLOR]
+[COLOR red][B]IMPORTANT: Make sure the Twilight Repo has updated to version 1.0.1. If not, manually force an update, otherwise this is the last update of Twilight you will receive.[/B][/COLOR]
 - Fixed(?) Next Episodes code to speed up the showing of that menu. Still a good idea to HIDE the progress of any shows you aren't interested in continuing to watch. But either way, a couple of bugs were found that were slowing that menu down.
 - Added "TV Shows Progress Manager" to the Tools menu. This allows you to "hide" TV Shows from progress lists. Works with Trakt or Twilight as the Watched Status Provider.
 - Added returning date to infoline of TV Show status in Twilight Extras. i.e. instead of "Returning", Extras will now display "Returning 29 July 2023" if that info is available.

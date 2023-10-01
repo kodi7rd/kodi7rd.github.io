@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
-from windows import open_window, create_window
-from caches import refresh_cached_data
+from windows.base_window import open_window, create_window
+from caches.base_cache import refresh_cached_data
 from indexers.people import person_data_dialog
 from modules import kodi_utils, source_utils, settings, metadata
-from modules.utils import get_datetime, title_key, adjust_premiered_date
+from modules.source_utils import clear_scrapers_cache, get_aliases_titles, make_alias_dict, audio_filter_choices
+from modules.utils import get_datetime, title_key, adjust_premiered_date, append_module_to_syspath, manual_module_import
 # logger = kodi_utils.logger
 
 ok_dialog, container_content, close_all_dialog, external = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external
@@ -12,29 +13,53 @@ get_property, open_settings, set_property, get_icon, dialog = kodi_utils.get_pro
 show_busy_dialog, hide_busy_dialog, notification, confirm_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification, kodi_utils.confirm_dialog
 img_url, sleep, manage_settings_reset, default_highlights = kodi_utils.img_url, kodi_utils.sleep, kodi_utils.manage_settings_reset, kodi_utils.default_highlights
 get_setting, set_setting, kodi_refresh, container_refresh_input = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.kodi_refresh, kodi_utils.container_refresh_input
-json, ls, build_url, translate_path, select_dialog = kodi_utils.json, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.translate_path, kodi_utils.select_dialog
+json, ls, build_url, select_dialog = kodi_utils.json, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.select_dialog
 run_plugin, metadata_user_info, autoplay_next_episode, quality_filter = kodi_utils.run_plugin, settings.metadata_user_info, settings.autoplay_next_episode, settings.quality_filter
 numeric_input, container_update, activate_window = kodi_utils.numeric_input, kodi_utils.container_update, kodi_utils.activate_window
 poster_empty, fanart_empty, clear_property, highlight_prop = kodi_utils.empty_poster, kodi_utils.addon_fanart, kodi_utils.clear_property, kodi_utils.highlight_prop
 addon_icon, database, maincache_db, custom_context_prop = kodi_utils.addon_icon, kodi_utils.database, kodi_utils.maincache_db, kodi_utils.custom_context_prop
 movie_extras_buttons_defaults, tvshow_extras_buttons_defaults = kodi_utils.movie_extras_buttons_defaults, kodi_utils.tvshow_extras_buttons_defaults
-extras_button_label_values = kodi_utils.extras_button_label_values
+extras_button_label_values, jsonrpc_get_addons = kodi_utils.extras_button_label_values, kodi_utils.jsonrpc_get_addons
 get_language, extras_enabled_menus, active_internal_scrapers, auto_play = settings.get_language, settings.extras_enabled_menus, settings.active_internal_scrapers, settings.auto_play
 extras_open_action, get_art_provider, fanarttv_default, ignore_articles = settings.extras_open_action, settings.get_art_provider, settings.fanarttv_default, settings.ignore_articles
-clear_scrapers_cache, get_aliases_titles, make_alias_dict = source_utils.clear_scrapers_cache, source_utils.get_aliases_titles, source_utils.make_alias_dict
-toggle_all, enable_disable, set_default_scrapers = source_utils.toggle_all, source_utils.enable_disable, source_utils.set_default_scrapers
 autoscrape_next_episode, audio_filters, extras_enabled_ratings = settings.autoscrape_next_episode, settings.audio_filters, settings.extras_enabled_ratings
 quality_filter, watched_indicators, date_offset = settings.quality_filter, settings.watched_indicators, settings.date_offset
 single_ep_list = ('episode.progress', 'episode.recently_watched', 'episode.next_trakt', 'episode.next_twilight', 'episode.trakt_recently_aired', 'episode.trakt_calendar')
 scraper_names = [ls(32118).upper(), ls(32069).upper(), ls(32070).upper(), ls(32098).upper(), ls(32097).upper(), ls(32099).upper(), ls(32108).upper()]
 network_str, created_by_str, last_aired_str, next_aired_str, seasons_str, episodes_str, favorites_str = ls(32480), ls(32633), ls(32634), ls(32635), ls(32636), ls(32506), ls(32453)
 studio_str, collection_str, homepage_str, status_str, type_str, classification_str, include_str = ls(32615), ls(32499), ls(32629), ls(32630), ls(32631), ls(32632), ls(32188)
-allscrapers_str, def_scrapers_str, disbale_filters_str, torrent_string, fs_default_string = '%s?' % ls(32006), '%s?' % ls(32185), ls(32808), ls(32535), ls(32137)
-enable_string, disable_string, specific_string, all_string, scrapers_string, hosters_string = ls(32055), ls(32024), ls(32536), ls(32129), ls(32533), ls(33031)
+allscrapers_str, def_scrapers_str, disable_filters_str = '%s?' % ls(32006), '%s?' % ls(32185), ls(32808)
 page_str, current_page_str, from_widget_str, quality_str, provider_str, size_str, aliases_str = ls(32022), ls(32995), ls(32020), ls(32241), ls(32583), ls(32584), ls(33044)
 tagline_str, premiered_str, rating_str, votes_str, runtime_str, easy_serv_str = ls(32619), ls(32620), ls(32621), ls(32623), ls(32622), ls(32696)
 genres_str, budget_str, revenue_str, director_str, writer_str = ls(32624), ls(32625), ls(32626), ls(32627), ls(32628)
 title_str, year_str, season_str, episode_str = ls(32228), ls(32543), ls(32537), ls(32203).lower().capitalize()
+
+def external_scraper_choice(params):
+	try: results = jsonrpc_get_addons('xbmc.python.module')
+	except: return
+	list_items = [{'line1': i['name'], 'icon': i['thumbnail']} for i in results]
+	kwargs = {'items': json.dumps(list_items)}
+	choice = select_dialog(results, **kwargs)
+	if choice == None: return
+	module_id, module_name = choice['addonid'], choice['name']
+	try:
+		append_module_to_syspath('special://home/addons/%s/lib' % module_id)
+		main_folder_name = module_id.split('.')[-1]
+		manual_module_import('%s.sources_%s' % (main_folder_name, main_folder_name))
+		success = True
+	except: success = False
+	if success:
+		manage_settings_reset()
+		try:
+			set_setting('external_scraper.module', module_id)
+			set_setting('external_scraper.name', module_name)
+			set_setting('provider.external', 'true')
+			ok_dialog(text=ls(33164) % module_name)
+		except: ok_dialog(text=32574)
+		manage_settings_reset(True)
+	else:
+		ok_dialog(text=ls(32536) % module_name.upper())
+		return external_scraper_choice(params)
 
 def restore_addon_fanart_choice(params):
 	if not confirm_dialog(): return
@@ -77,7 +102,6 @@ def default_highlight_colors_choice(params):
 	manage_settings_reset(True)
 
 def audio_filters_choice(params={}):
-	from modules.source_utils import audio_filter_choices
 	icon = get_icon('audio')
 	list_items = [{'line1': item[0], 'line2': item[1], 'icon': icon} for item in audio_filter_choices]
 	try: preselect = [audio_filter_choices.index(item) for item in audio_filter_choices if item[1] in audio_filters()]
@@ -309,7 +333,7 @@ def random_choice(params):
 	exec('EpisodeTools(meta).%s()' % choice)
 
 def trakt_manager_choice(params):
-	if not get_setting('trakt.user', ''): return notification(32760, 3500)
+	if not get_setting('twilight.trakt.user', ''): return notification(32760, 3500)
 	icon = params.get('icon', None) or get_icon('trakt')
 	choices = [('%s %s...' % (ls(32602), ls(32199)), 'Add'), ('%s %s...' % (ls(32603), ls(32199)), 'Remove')]
 	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
@@ -349,7 +373,7 @@ def playback_choice(params):
 		#########################################
 		return notification(32736, 2500)
 	def clear_caches():
-		from caches import clear_cache
+		from caches.base_cache import clear_cache
 		from caches.providers_cache import ExternalProvidersCache
 		show_busy_dialog()
 		clear_cache('internal_scrapers', silent=True)
@@ -425,7 +449,7 @@ def playback_choice(params):
 			if default_choice == None: return notification(32736, 2500)
 			if default_choice: _process_params('', 'true', 'default_ext_only')
 		else:  _process_params('', 'true', 'disabled_ext_ignored')
-		disable_filters_choice = confirm_dialog(heading=meta.get('rootname', ''), text=disbale_filters_str, ok_label=32824, cancel_label=32828)
+		disable_filters_choice = confirm_dialog(heading=meta.get('rootname', ''), text=disable_filters_str, ok_label=32824, cancel_label=32828)
 		if disable_filters_choice == None: return notification(32736, 2500)
 		if disable_filters_choice:
 			_process_params('', 'true', 'ignore_scrape_filters')
@@ -438,7 +462,7 @@ def set_quality_choice(params):
 	icon = params.get('icon', None) or ''
 	dl = ['%s SD' % include_str, '%s 720p' % include_str, '%s 1080p' % include_str, '%s 4K' % include_str]
 	fl = ['SD', '720p', '1080p', '4K']
-	try: preselect = [fl.index(i) for i in get_setting(quality_setting).split(', ')]
+	try: preselect = [fl.index(i) for i in get_setting('twilight.%s' % quality_setting).split(', ')]
 	except: preselect = []
 	list_items = [{'line1': item, 'icon': icon} for item in dl]
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': 'true', 'preselect': preselect}
@@ -456,7 +480,7 @@ def extras_buttons_choice(params):
 			setting_id_base = 'extras.%s.button' % _type
 			for item in range(10, 18):
 				setting_id = setting_id_base + str(item)
-				button_action = get_setting(setting_id)
+				button_action = get_setting('twilight.%s' % setting_id)
 				button_label = extras_button_label_values[_type][button_action]
 				button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
 				orig_button_dict[setting_id] = {'button_action': button_action, 'button_label': button_label, 'button_name': 'Button %s' % str(item - 9)}
@@ -467,7 +491,8 @@ def extras_buttons_choice(params):
 		choice = select_dialog(choices, **kwargs)
 		if choice == None:
 			if button_dict != orig_button_dict:
-				for k, v in button_dict.items(): set_setting(k, v['button_action'])
+				for k, v in button_dict.items():
+					set_setting(k, v['button_action'])
 				return ok_dialog(text=32576)
 			return
 		media_type = choice[1]
@@ -496,9 +521,11 @@ def default_extras_buttons_choice(params):
 	media_type = choice[1]
 	manage_settings_reset()
 	if media_type in ('movie', 'both'):
-		for item in movie_extras_buttons_defaults: set_setting(item[0], item[1])
+		for item in movie_extras_buttons_defaults:
+			set_setting(item[0], item[1])
 	if media_type in ('tvshow', 'both'):
-		for item in tvshow_extras_buttons_defaults: set_setting(item[0], item[1])
+		for item in tvshow_extras_buttons_defaults:
+			set_setting(item[0], item[1])
 	manage_settings_reset(True)
 	ok_dialog(text=32576)
 
@@ -541,7 +568,7 @@ def set_language_filter_choice(params):
 	if include_none == 'false': lang_choices.pop('None')
 	dl = list(lang_choices.keys())
 	fl = list(lang_choices.values())
-	try: preselect = [fl.index(i) for i in get_setting(filter_setting).split(', ')]
+	try: preselect = [fl.index(i) for i in get_setting('twilight.%s' % filter_setting).split(', ')]
 	except: preselect = []
 	list_items = [{'line1': item} for item in dl]
 	kwargs = {'items': json.dumps(list_items), 'multi_choice': multi_choice, 'preselect': preselect}
@@ -554,7 +581,7 @@ def set_language_filter_choice(params):
 
 def easynews_use_custom_farm_choice(params={}):
 	from apis.easynews_api import clear_media_results_database
-	new_setting = 'True' if get_setting('easynews.use_custom_farm', 'False') == 'False' else 'False'
+	new_setting = 'True' if get_setting('twilight.easynews.use_custom_farm', 'False') == 'False' else 'False'
 	set_setting('easynews.use_custom_farm', new_setting)
 	clear_media_results_database()
 
@@ -567,7 +594,7 @@ def easynews_server_choice(params={}):
 	if not farm_choice: return notification(32736)
 	list_items = [{'line1': str(item)} for item in ports]
 	kwargs = {'items': json.dumps(list_items), 'heading': easy_serv_str, 'narrow_window': 'true'}
-	port_choice = select_dialog(ports, **kwargs) or get_setting('easynews.port', '443')
+	port_choice = select_dialog(ports, **kwargs) or get_setting('twilight.easynews.port', '443')
 	server_name = '%s:%s' % (farm_choice['name'], port_choice)
 	manage_settings_reset()
 	set_setting('easynews.server_name', server_name)
@@ -648,7 +675,8 @@ def results_format_choice(params={}):
 					('WideList',                 img_url % '9oIDKtL')
 					]
 	choice = open_window(('windows.sources', 'SourcesChoice'), 'sources_choice.xml', xml_choices=xml_choices)
-	if choice: set_setting('results.list_format', choice)
+	if choice:
+		set_setting('results.list_format', choice)
 
 def set_subtitle_choice():
 	choices = ((ls(32192), '0'), (ls(32193), '1'), (ls(32027), '2'))
@@ -664,13 +692,13 @@ def clear_favorites_choice(params={}):
 	media_type = select_dialog([item[1] for item in fl], **kwargs)
 	if media_type == None: return
 	if not confirm_dialog(): return
-	from caches.favorites import favorites
+	from caches.favorites_cache import favorites
 	favorites.clear_favorites(media_type)
 	notification(32576, 3000)
 
 def favorites_choice(params):
 	media_type, tmdb_id, title = params.get('media_type'), params.get('tmdb_id'), params.get('title')
-	from caches.favorites import favorites
+	from caches.favorites_cache import favorites
 	current_favorites = favorites.get_favorites(media_type)
 	if any(i['tmdb_id'] == tmdb_id for i in current_favorites): function, text, refresh = favorites.delete_favourite, '%s %s?' % (ls(32603), ls(32453)), 'true'
 	else: function, text, refresh = favorites.set_favourite, '%s %s?' % (ls(32602), ls(32453)), 'false'
@@ -684,7 +712,7 @@ def favorites_choice(params):
 
 def scraper_quality_color_choice(params):
 	setting = params.get('setting')
-	current_setting = get_setting(setting)
+	current_setting = get_setting('twilight.%s' % setting)
 	chosen_color = color_choice({'current_setting': current_setting})
 	if chosen_color:
 		manage_settings_reset()
@@ -706,7 +734,7 @@ def scraper_color_choice(params):
 				('scraper_flag', 'scraper_flag_identify_colour'),
 				('scraper_result', 'scraper_result_identify_colour')]
 	setting = [i[1] for i in choices if i[0] == setting][0]
-	current_setting = get_setting(setting)
+	current_setting = get_setting('twilight.%s' % setting)
 	chosen_color = color_choice({'current_setting': current_setting})
 	if chosen_color:
 		manage_settings_reset()
@@ -715,13 +743,12 @@ def scraper_color_choice(params):
 		manage_settings_reset(True)
 
 def highlight_color_choice(params={}):
-	current_setting = get_setting('highlight')
+	current_setting = get_setting('twilight.main_highlight')
 	chosen_color = color_choice({'current_setting': current_setting})
 	if chosen_color:
 		manage_settings_reset()
-		set_setting('highlight', chosen_color)
-		set_setting('highlight_name', '[COLOR=%s]%s[/COLOR]' % (chosen_color, chosen_color))
-		set_property(highlight_prop, chosen_color)
+		set_setting('main_highlight', chosen_color)
+		set_setting('main_highlight_name', '[COLOR=%s]%s[/COLOR]' % (chosen_color, chosen_color))
 		manage_settings_reset(True)
 
 def color_choice(params):
@@ -756,47 +783,6 @@ def mpaa_region_choice(params={}):
 	manage_settings_reset(True)
 	delete_meta_cache(silent=True)
 
-def mpaa_prefix_choice(params={}):
-	prefix = dialog.input(ls(33133))
-	from caches.meta_cache import delete_meta_cache
-	set_setting('meta_mpaa_prefix', prefix)
-	delete_meta_cache(silent=True)
-
-def external_scrapers_choice(params={}):
-	all_color, hosters_color, torrent_color = 'mediumvioletred', get_setting('hoster.identify'), get_setting('torrent.identify')
-	all_scrapers_string = '%s %s' % (all_string, scrapers_string)
-	hosters_scrapers_string = '%s %s' % (hosters_string, scrapers_string)
-	torrent_scrapers_string = '%s %s' % (torrent_string, scrapers_string)
-	enable_string_base = '%s %s %s %s' % (enable_string, all_string, '%s', scrapers_string)
-	disable_string_base = '%s %s %s %s' % (disable_string, all_string, '%s', scrapers_string)
-	enable_disable_string_base = '%s/%s %s %s %s' % (enable_string, disable_string, specific_string, '%s', scrapers_string)
-	all_scrapers_base = '[COLOR %s]%s [/COLOR]' % (all_color, all_scrapers_string.upper())
-	debrid_scrapers_base = '[COLOR %s]%s [/COLOR]' % (hosters_color, hosters_scrapers_string.upper())
-	torrent_scrapers_base = '[COLOR %s]%s [/COLOR]' % (torrent_color, torrent_scrapers_string.upper())
-	tools_menu = [
-					(all_scrapers_base, fs_default_string, {'mode': 'set_default_scrapers'}),
-					(all_scrapers_base, enable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'true'}),
-					(all_scrapers_base, disable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'false'}),
-					(all_scrapers_base, enable_disable_string_base % '', {'mode': 'enable_disable', 'folder': 'all'}),
-					(debrid_scrapers_base, enable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'true'}),
-					(debrid_scrapers_base, disable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'false'}),
-					(debrid_scrapers_base, enable_disable_string_base % hosters_string, {'mode': 'enable_disable', 'folder': 'hosters'}),
-					(torrent_scrapers_base, enable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'true'}),
-					(torrent_scrapers_base, disable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'false'}),
-					(torrent_scrapers_base, enable_disable_string_base % torrent_string, {'mode': 'enable_disable', 'folder': 'torrents'})
-				]
-	list_items = [{'line1': item[0], 'line2': item[1]} for item in tools_menu]
-	kwargs = {'items': json.dumps(list_items), 'multi_line': 'true', 'narrow_window': 'true'}
-	chosen_tool = select_dialog(tools_menu, **kwargs)
-	if chosen_tool == None: return
-	params = chosen_tool[2]
-	mode = params['mode']
-	if mode == 'toggle_all': toggle_all(params['folder'], params['setting'])
-	elif mode == 'enable_disable': enable_disable(params['folder'])
-	elif mode == 'set_default_scrapers': set_default_scrapers()
-	sleep(500)
-	return external_scrapers_choice()
-
 def options_menu_choice(params, meta=None):
 	def strip_bold(_str):
 		return _str.replace('[B]', '').replace('[/B]', '')
@@ -817,7 +803,7 @@ def options_menu_choice(params, meta=None):
 	window_function = activate_window if is_external else container_update
 	listing = []
 	listing_append = listing.append
-	custom_context_menu = get_property(custom_context_prop) == 'true'
+	custom_context_menu = get_setting(custom_context_prop) == 'true'
 	if custom_context_menu and not from_extras:
 		try: playcount = int(params_get('playcount', '0'))
 		except: playcount = 0
@@ -856,7 +842,7 @@ def options_menu_choice(params, meta=None):
 			listing_append((ls(32838), '%s %s' % (ls(32838), title), 'browse'))
 			listing_append((ls(32544).replace(' %s', ''), ls(32544) % (title, season), 'browse_season'))
 	if menu_type in ('movie', 'tvshow'):
-		if get_setting('trakt.user', ''): listing_append((ls(32198), '', 'trakt_manager'))
+		if get_setting('twilight.trakt.user', ''): listing_append((ls(32198), '', 'trakt_manager'))
 		listing_append((ls(32197), '', 'favorites_choice'))
 		listing_append((ls(32503), ls(32004) % rootname, 'recommended'))
 		if menu_type == 'tvshow': listing_append((ls(32613), ls(32004) % rootname, 'random'))
@@ -882,7 +868,6 @@ def options_menu_choice(params, meta=None):
 		listing_append((ls(33043), ls(33066) % rootname, 'set_media_artwork'))
 	if menu_type in ('movie', 'episode') or menu_type in single_ep_list: listing_append((ls(32637), '', 'clear_scrapers_cache'))
 	if in_progress_menu: listing_append((ls(32599), '', 'nextep_manager'))
-	listing_append(('%s %s' % (ls(32118), ls(32513)), '', 'open_external_scrapers_choice'))
 	if not from_extras: listing_append(('%s %s' % (ls(32641), ls(32456)), '', 'open_tools'))
 	listing_append(('%s %s' % (ls(32641), ls(32247)), '', 'open_settings'))
 	list_items = list(_builder())
@@ -919,8 +904,6 @@ def options_menu_choice(params, meta=None):
 		return media_artwork_choice(meta)
 	elif choice == 'clear_scrapers_cache':
 		return clear_scrapers_cache()
-	elif choice == 'open_external_scrapers_choice':
-		return external_scrapers_choice()
 	elif choice == 'open_settings':
 		return open_settings('0.0')
 	elif choice == 'open_tools':
@@ -957,6 +940,7 @@ def options_menu_choice(params, meta=None):
 		set_quality_choice({'quality_setting': 'autoplay_quality_%s' % content if autoplay_status == on_str else 'results_quality_%s' % content, 'icon': poster})
 	elif choice == 'enable_scrapers':
 		enable_scrapers_choice({'icon': poster})
+	sleep(250)
 	options_menu_choice(params, meta=meta)
 
 def person_search_choice(params):

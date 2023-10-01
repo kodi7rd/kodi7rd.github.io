@@ -147,19 +147,28 @@ def clear_twilight_providers_db():
         kodi_utils.logger("KODI-RD-IL", f"Error clearing providers.db cache: {str(e)}")
 
 
-from xbmcvfs import translatePath
-import os
-last_searched_media_path = translatePath(kodi_utils.database_path_raw % 'last_searched_media.txt') 
+def get_imdb_id(media_type, tmdb_id):
 
-def _get_last_searched_media():
-    # Load the last searched media identifier from the text file if it exists
-    if os.path.exists(last_searched_media_path):
-        with open(last_searched_media_path, "r") as file:
-            return eval(file.read())  # Convert the string representation back to a tuple
-    return None
-    
+    """Retrieves the IMDb ID for a media item from its TMDb ID.
 
-def _set_last_searched_media(media_identifier):
-    # Write the media identifier to the text file
-    with open(last_searched_media_path, "w") as file:
-        file.write(repr(media_identifier))  # Convert the tuple to a string representation
+    Args:
+    media_type (str): The type of media item, either 'movie' or 'tv'.
+    tmdb_id (int): The TMDb ID of the media item.
+
+    Returns:
+    str: The IMDb ID of the media item, if available. Otherwise, an empty string is returned.
+
+    Example:
+    >>> get_imdb_id('movie', 12345)
+    'tt1234567'
+    """
+
+    imdb_api_url = f'https://api.themoviedb.org/3/{media_type}/{tmdb_id}?api_key=34142515d9d23817496eeb4ff1d223d0&append_to_response=external_ids'
+    try:
+        imdb_api_reponse = requests.get(imdb_api_url).json()
+        imdb_id = imdb_api_reponse['external_ids'].get('imdb_id', '')
+        kodi_utils.logger("KODI-RD-IL", f"get_imdb_id function: TMDb ID: {tmdb_id} | IMDb ID: {imdb_id}")
+        return imdb_id
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"Error in getting imdb_id from TMDb API: {str(e)}")
+        return ''

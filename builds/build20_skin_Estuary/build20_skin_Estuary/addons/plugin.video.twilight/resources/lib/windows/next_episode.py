@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from windows import BaseDialog
+import time
+from windows.base_window import BaseDialog
 from modules.settings import get_art_provider, avoid_episode_spoilers
 # from modules.kodi_utils import logger
 
-pause_time_before_end, hold_pause_time = 3, 1800
+pause_time_before_end, hold_pause_time = 10, 900
 button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'autoscrape_nextep': {10: 'play', 11: 'close', 12: 'cancel'}}
 
 class NextEpisode(BaseDialog):
@@ -66,12 +67,19 @@ class NextEpisode(BaseDialog):
 			if self.closed: break
 			elif self.play_type == 'autoplay_nextep' and self.selected == 'pause' and remaining_time <= pause_time_before_end:
 				self.player.pause()
+				self.sleep(500)
 				break
 			self.sleep(1000)
 		if self.selected == 'pause':
-			end_pause = 0
-			while hold_pause_time >= end_pause and self.selected == 'pause':
-				self.sleep(1000)
-				end_pause += 1
+			start_time = time.time()
+			end_time = start_time + hold_pause_time
+			current_time = start_time
+			while current_time <= end_time and self.selected == 'pause':
+				try:
+					current_time = time.time()
+					pause_timer = time.strftime('%M:%S', time.gmtime(max(end_time - current_time, 0)))
+					self.setProperty('pause_timer', pause_timer)
+					self.sleep(1000)
+				except: break
 			if self.selected != 'cancel': self.player.pause()
 		self.close()

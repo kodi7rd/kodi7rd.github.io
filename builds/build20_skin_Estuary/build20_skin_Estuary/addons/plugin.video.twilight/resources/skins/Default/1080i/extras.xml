@@ -62,7 +62,7 @@
                         <width>35</width>
                         <height>35</height>
                         <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="$INFO[Window(10000).Property(twilight.highlight)]">twilight_common/info.png</texture>
+                        <texture>twilight_common/info.png</texture>
                         <visible>Control.HasFocus(2050) | Control.HasFocus(2051) | Control.HasFocus(2058) | Control.HasFocus(2059) | Control.HasFocus(2060) | Control.HasFocus(2061) | Control.HasFocus(2062) | Control.HasFocus(2063)</visible>
                     </control>
                     <control type="label">
@@ -432,7 +432,7 @@
                 </control>
                 <!-- Plot 2000 -->
                 <control type="group">
-                    <visible>!String.IsEqual(Window.Property(plot),)</visible>
+                    <visible>String.IsEqual(Window.Property(plot_enabled),true)</visible>
                     <height>760</height>
                     <control type="group">
                         <control type="label">
@@ -491,7 +491,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32664][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(cast.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32664][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(cast.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2050)</visible>
                         </control>
                         <control type="label">
@@ -499,7 +499,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32664][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2050).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2050).ListItem.Property(role)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32664][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2050).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2050).ListItem.Property(role)]</label>
                             <visible>Control.HasFocus(2050)</visible>
                         </control>
                         <control type="fixedlist" id="2050">
@@ -570,7 +570,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2050) | Control.HasFocus(4050)] + Container(2050).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -578,7 +578,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2050) | Control.HasFocus(4050)] + Container(2050).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -592,7 +592,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32503][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(recommended.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32503][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(recommended.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2051)</visible>
                         </control>
                         <control type="label">
@@ -600,7 +600,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32503][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2051).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2051).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2051).ListItem.Property(vote_average)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32503][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2051).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2051).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2051).ListItem.Property(vote_average)]</label>
                             <visible>Control.HasFocus(2051)</visible>
                         </control>
                         <control type="fixedlist" id="2051">
@@ -671,7 +671,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2051) | Control.HasFocus(4051)] + Container(2051).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -679,7 +679,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2051) | Control.HasFocus(4051)] + Container(2051).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -695,7 +695,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32607][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(imdb_reviews.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32607][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(imdb_reviews.number)][/COLOR][/B]</label>
                         </control>
                         <control type="panel" id="2052">
                             <pagecontrol>4052</pagecontrol>
@@ -763,7 +763,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2052) | Control.HasFocus(4052)] + Container(2052).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>225</top>
@@ -771,7 +771,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2052) | Control.HasFocus(4052)] + Container(2052).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -787,7 +787,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 33158][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(trakt_comments.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 33158][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(trakt_comments.number)][/COLOR][/B]</label>
                         </control>
                         <control type="panel" id="2053">
                             <pagecontrol>4053</pagecontrol>
@@ -855,7 +855,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2053) | Control.HasFocus(4053)] + Container(2053).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>225</top>
@@ -863,7 +863,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2053) | Control.HasFocus(4063)] + Container(2053).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -879,7 +879,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32984][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(imdb_trivia.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32984][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(imdb_trivia.number)][/COLOR][/B]</label>
                         </control>
                         <control type="panel" id="2054">
                             <pagecontrol>4054</pagecontrol>
@@ -947,7 +947,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2054) | Control.HasFocus(4054)] + Container(2054).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>225</top>
@@ -955,7 +955,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2054) | Control.HasFocus(4054)] + Container(2054).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -971,7 +971,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32986][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(imdb_blunders.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32986][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(imdb_blunders.number)][/COLOR][/B]</label>
                         </control>
                         <control type="panel" id="2055">
                             <pagecontrol>40055</pagecontrol>
@@ -1039,7 +1039,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2055) | Control.HasFocus(40055)] + Container(2055).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>225</top>
@@ -1047,7 +1047,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2055) | Control.HasFocus(40055)] + Container(2055).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1063,7 +1063,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32989][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(imdb_parentsguide.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32989][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(imdb_parentsguide.number)][/COLOR][/B]</label>
                         </control>
                         <control type="panel" id="2056">
                             <top>60</top>
@@ -1164,7 +1164,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 33032][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(imdb_videos.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 33032][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(imdb_videos.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2057)</visible>
                         </control>
                         <control type="label">
@@ -1172,7 +1172,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 33032][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2057).ListItem.Property(name)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 33032][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2057).ListItem.Property(name)]</label>
                             <visible>Control.HasFocus(2057)</visible>
                         </control>
                         <control type="fixedlist" id="2057">
@@ -1242,7 +1242,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>230</top>
@@ -1250,7 +1250,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2057) | Control.HasFocus(4057)] + Container(2057).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1266,7 +1266,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32616][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(tmdb_artwork.poster.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32616][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(tmdb_artwork.poster.number)][/COLOR][/B]</label>
                         </control>
                         <control type="fixedlist" id="2058">
                             <animation effect="slide" end="-472,0" time="0" condition="Integer.IsEqual(Container(2058).NumItems,1) | Integer.IsEqual(Container(2058).NumItems,2)">Conditional</animation>
@@ -1336,7 +1336,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2058) | Control.HasFocus(4058)] + Container(2058).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -1344,7 +1344,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2058) | Control.HasFocus(4058)] + Container(2058).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1360,7 +1360,7 @@
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
-                            <label>[B]$ADDON[plugin.video.twilight 32617][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(tmdb_artwork.fanart.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32617][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(tmdb_artwork.fanart.number)][/COLOR][/B]</label>
                         </control>
                         <control type="fixedlist" id="2059">
                             <pagecontrol>4059</pagecontrol>
@@ -1428,7 +1428,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2059) | Control.HasFocus(4059)] + Container(2059).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>230</top>
@@ -1436,7 +1436,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2059) | Control.HasFocus(4059)] + Container(2059).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1450,7 +1450,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32543][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(more_from_year.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32543][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(more_from_year.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2060)</visible>
                         </control>
                         <control type="label">
@@ -1458,7 +1458,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32543][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2060).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2060).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2060).ListItem.Property(vote_average)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32543][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2060).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2060).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2060).ListItem.Property(vote_average)]</label>
                             <visible>Control.HasFocus(2060)</visible>
                         </control>
                         <control type="fixedlist" id="2060">
@@ -1529,7 +1529,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2060) | Control.HasFocus(4060)] + Container(2060).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -1537,7 +1537,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2060) | Control.HasFocus(4060)] + Container(2060).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1551,7 +1551,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32470][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(more_from_genres.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32470][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(more_from_genres.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2061)</visible>
                         </control>
                         <control type="label">
@@ -1559,7 +1559,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32470][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2061).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2061).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2061).ListItem.Property(vote_average)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32470][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2061).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2061).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2061).ListItem.Property(vote_average)]</label>
                             <visible>Control.HasFocus(2061)</visible>
                         </control>
                         <control type="fixedlist" id="2061">
@@ -1630,7 +1630,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2061) | Control.HasFocus(4061)] + Container(2061).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -1638,7 +1638,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2061) | Control.HasFocus(4061)] + Container(2061).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1652,7 +1652,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32480][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(more_from_networks.number)][/COLOR][/B]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32480][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(more_from_networks.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2062)</visible>
                         </control>
                         <control type="label">
@@ -1660,7 +1660,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32480][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2062).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2062).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2062).ListItem.Property(vote_average)]</label>
+                            <label>[B]$ADDON[plugin.video.twilight 32612] $ADDON[plugin.video.twilight 32480][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2062).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2062).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2062).ListItem.Property(vote_average)]</label>
                             <visible>Control.HasFocus(2062)</visible>
                         </control>
                         <control type="fixedlist" id="2062">
@@ -1731,7 +1731,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2062) | Control.HasFocus(4062)] + Container(2062).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -1739,7 +1739,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2062) | Control.HasFocus(4062)] + Container(2062).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>
@@ -1753,7 +1753,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$INFO[Window.Property(more_from_collection.name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] $INFO[Window.Property(more_from_collection.number)][/COLOR][/B]</label>
+                            <label>[B]$INFO[Window.Property(more_from_collection.name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] $INFO[Window.Property(more_from_collection.number)][/COLOR][/B]</label>
                             <visible>!Control.HasFocus(2063)</visible>
                         </control>
                         <control type="label">
@@ -1761,7 +1761,7 @@
                             <height>20</height>
                             <font>font14</font> <!-- TWILIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]$INFO[Window.Property(more_from_collection.name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] | [/COLOR][/B]$INFO[Container(2063).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2063).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.highlight)]] • [/COLOR]$INFO[Container(2063).ListItem.Property(vote_average)]</label>
+                            <label>[B]$INFO[Window.Property(more_from_collection.name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] | [/COLOR][/B]$INFO[Container(2063).ListItem.Property(name)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2063).ListItem.Property(release_date)][COLOR $INFO[Window(10000).Property(twilight.main_highlight)]] • [/COLOR]$INFO[Container(2063).ListItem.Property(vote_average)]</label>
                             <visible>Control.HasFocus(2063)</visible>
                         </control>
                         <control type="group">
@@ -1866,7 +1866,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2063) | Control.HasFocus(4063)] + Container(2063).HasPrevious</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true">twilight_common/arrow_left.png</texture>
                         </control>
                         <control type="image">
                             <top>215</top>
@@ -1874,7 +1874,7 @@
                             <width>25</width>
                             <height>25</height>
                             <visible>[Control.HasFocus(2063) | Control.HasFocus(4063)] + Container(2063).HasNext</visible>
-                            <texture colordiffuse="Window(10000).Property(twilight.highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
+                            <texture colordiffuse="Window(10000).Property(twilight.main_highlight)" background="true" flipx="true">twilight_common/arrow_left.png</texture>
                         </control>
                     </control>
                 </control>

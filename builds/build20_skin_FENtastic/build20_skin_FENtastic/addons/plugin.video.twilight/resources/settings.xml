@@ -159,12 +159,17 @@
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=restore_addon_fanart_choice)</data>
 					</control>
 				</setting>
-				<setting id="highlight_name" type="string" label="32124" help="">
+				<setting id="main_highlight_name" type="string" label="32124" help="">
 					<level>0</level>
-					<default>[COLOR=FF008EB2]FF008EB2[/COLOR]</default>
+					<default>[COLOR=FFC0C0C0]FFC0C0C0[/COLOR]</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=highlight_color_choice)</data>
 					</control>
+				</setting>
+				<setting id="use_skin_fonts" type="boolean" label="33162" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
 				</setting>
 				<setting id="use_custom_skins" type="boolean" label="33124" help="">
 					<level>0</level>
@@ -425,7 +430,7 @@
 		</category>
 		<!-- Navigation -->
 		<category id="navigation" label="32492" help="">
-			<!-- Sorting -->
+			<!-- Sorting - Personal Lists-->
 			<group id="1" label="32694">
 				<setting id="sort.progress" type="integer" label="32476" help="">
 					<level>0</level>
@@ -474,8 +479,191 @@
 					<control type="spinner" format="string"/>
 				</setting>
 			</group>
+			<!-- Sorting - Generic Movie Lists-->
+			<group id="2" label="32093">
+				<setting id="sort.movies.genres" type="string" label="32470" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.movies.languages" type="string" label="32471" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.movies.certifications" type="string" label="32473" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.movies.years" type="string" label="32472" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.movies.decades" type="string" label="33085" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.movies.networks" type="string" label="32480" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33168">primary_release_date.asc</option>
+							<option label="33169">primary_release_date.desc</option>
+							<option label="33170">revenue.asc</option>
+							<option label="33171">revenue.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
+			<!-- Sorting - Generic TV Show Lists-->
+			<group id="3" label="33180">
+				<setting id="sort.tvshows.genres" type="string" label="32470" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33186">first_air_date.asc</option>
+							<option label="33187">first_air_date.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.tvshows.languages" type="string" label="32471" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33186">first_air_date.asc</option>
+							<option label="33187">first_air_date.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.tvshows.years" type="string" label="32472" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33186">first_air_date.asc</option>
+							<option label="33187">first_air_date.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.tvshows.decades" type="string" label="33085" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33186">first_air_date.asc</option>
+							<option label="33187">first_air_date.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+				<setting id="sort.tvshows.networks" type="string" label="32480" help="">
+					<level>0</level>
+					<default>popularity.desc</default>
+					<constraints>
+						<options>
+							<option label="33166">popularity.asc</option>
+							<option label="33167">popularity.desc</option>
+							<option label="33186">first_air_date.asc</option>
+							<option label="33187">first_air_date.desc</option>
+							<option label="33174">vote_average.asc&amp;vote_count.gte=250</option>
+							<option label="33175">vote_average.desc&amp;vote_count.gte=250</option>
+						</options>
+					</constraints>
+					<control type="spinner" format="string"/>
+				</setting>
+			</group>
 			<!-- Content -->
-			<group id="2" label="32693">
+			<group id="4" label="32693">
 				<setting id="paginate.lists" type="integer" label="32019" help="">
 					<level>0</level>
 					<default>0</default>
@@ -633,7 +821,7 @@
 				</setting>
 			</group>
 			<!-- Trakt Calendar -->
-			<group id="3" label="32081">
+			<group id="5" label="32081">
 				<setting id="trakt.calendar_sort_order" type="integer" label="32067" help="">
 					<level>0</level>
 					<default>0</default>
@@ -671,7 +859,7 @@
 				</setting>
 			</group>
 			<!-- Next Episodes -->
-			<group id="4" label="32483">
+			<group id="6" label="32483">
 				<setting id="nextep.sort_type" type="integer" label="32066" help="">
 					<level>0</level>
 					<default>0</default>
@@ -725,7 +913,7 @@
 				</setting>
 			</group>
 			<!-- Widgets -->
-			<group id="5" label="32085">
+			<group id="7" label="32085">
 				<setting id="widget_hide_watched" type="boolean" label="32465" help="">
 					<level>0</level>
 					<default>false</default>
@@ -803,16 +991,6 @@
 					<default>United States</default>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=mpaa_region_choice)</data>
-					</control>
-				</setting>
-				<setting id="meta_mpaa_prefix" type="string" label="33133" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<data>RunPlugin(plugin://plugin.video.twilight/?mode=mpaa_prefix_choice)</data>
 					</control>
 				</setting>
 			</group>
@@ -986,9 +1164,9 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="open_cocoscrapers" type="action" label="32093" help="">
+				<setting id="external_scraper.name" type="string" label="33133" help="" parent="provider.external">
 					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=open_settings&amp;addon=script.module.cocoscrapers)</data>
+					<default>CocoScrapers Module</default>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>
@@ -998,7 +1176,7 @@
 						</dependency>
 					</dependencies>
 					<control type="button" format="action">
-						<close>true</close>
+						<data>RunPlugin(plugin://plugin.video.twilight/?mode=external_scraper_choice)</data>
 					</control>
 				</setting>
 			</group>
@@ -1921,6 +2099,11 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="results.autorescrape_with_all" type="boolean" label="33165" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="results.ignore_filter" type="integer" label="32050" help="">
 					<level>0</level>
 					<default>0</default>
@@ -2146,7 +2329,7 @@
 							<option label="32240">0</option>
 							<option label="32583">1</option>
 							<option label="32241">2</option>
-							<option label="33159">3</option>
+							<option label="33141">3</option>
 						</options>
 					</constraints>
 					<control type="spinner" format="string"/>
@@ -2317,6 +2500,18 @@
 					</dependencies>
 					<control type="button" format="action">
 						<data>RunPlugin(plugin://plugin.video.twilight/?mode=scraper_quality_color_choice&amp;setting=scraper_SD_highlight)</data>
+					</control>
+				</setting>
+				<setting id="scraper_single_highlight_name" type="string" label="33159" help="" parent="highlight.type">
+					<level>0</level>
+					<default>[COLOR=FF008EB2]FF008EB2[/COLOR]</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="highlight.type">3</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<data>RunPlugin(plugin://plugin.video.twilight/?mode=scraper_quality_color_choice&amp;setting=scraper_single_highlight)</data>
 					</control>
 				</setting>
 			</group>
@@ -2706,46 +2901,31 @@
 				</setting>
 			</group>
 		</category>
-		<!-- Tools & Hidden -->
-		<category id="hidden" label="32456" help="">
-			<!-- Tools -->
-			<group id="1" label="32456">
-				<setting id="tools.open" type="action" label="33141" help="">
-					<level>0</level>
-					<data>ReplaceWindow(Videos,plugin://plugin.video.twilight/?mode=navigator.tools)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="tools.maintenance" type="action" label="32003" help="">
-					<level>0</level>
-					<data>ReplaceWindow(Videos,plugin://plugin.video.twilight/?mode=navigator.maintenance)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
-				<setting id="tools.toggle_language_invoker" type="action" label="33017" help="">
-					<level>0</level>
-					<data>RunPlugin(plugin://plugin.video.twilight/?mode=toggle_language_invoker)</data>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="button" format="action">
-						<close>true</close>
-					</control>
-				</setting>
+		<!-- Misc & Hidden -->
+		<category id="hidden" label="32513" help="">
+			<!-- Misc -->
+			<group id="1" label="32513">
 				<setting id="tools.make_twilight_work" type="boolean" label="33144" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 			<!-- Hidden -->
+				<setting id="external_scraper.module" type="string" help="">
+					<level>0</level>
+					<default>script.module.cocoscrapers</default>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
 				<setting id="trakt.expires" type="string" help="">
 					<level>0</level>
 					<default>0</default>
@@ -3127,9 +3307,9 @@
 						<heading/>
 					</control>
 				</setting>
-				<setting id="highlight" type="string" help="">
+				<setting id="main_highlight" type="string" help="">
 					<level>0</level>
-					<default>FF12A0C7</default>
+					<default>FFC0C0C0</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3286,6 +3466,18 @@
 				<setting id="scraper_SD_highlight" type="string" help="">
 					<level>0</level>
 					<default>FF0166FF</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition on="property" name="InfoBool">false</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading/>
+					</control>
+				</setting>
+				<setting id="scraper_single_highlight" type="string" help="">
+					<level>0</level>
+					<default>FF008EB2</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>
@@ -3559,9 +3751,9 @@
 						<heading>movie.button17</heading>
 					</control>
 				</setting>
-				<setting id="custom_skins.version" type="string" help="">
+				<setting id="first_use" type="string" help="">
 					<level>0</level>
-					<default>0.0.0</default>
+					<default>true</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition on="property" name="InfoBool">false</condition>

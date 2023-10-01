@@ -20,11 +20,11 @@ icon = get_icon('realdebrid')
 
 class RealDebridAPI:
 	def __init__(self):
-		self.client_ID = get_setting('rd.client_id')
+		self.client_ID = get_setting('twilight.rd.client_id')
 		if self.client_ID == '': self.client_ID = 'X245A4XAIBGVM'
-		self.token = get_setting('rd.token')
-		self.secret = get_setting('rd.secret')
-		self.refresh = get_setting('rd.refresh')
+		self.token = get_setting('twilight.rd.token')
+		self.secret = get_setting('twilight.rd.secret')
+		self.refresh = get_setting('twilight.rd.refresh')
 		self.device_code = ''
 		self.refresh_retries = 0
 		self.break_auth_loop = False

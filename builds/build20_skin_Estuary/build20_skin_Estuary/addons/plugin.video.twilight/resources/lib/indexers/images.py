@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from windows import open_window
+from windows.base_window import open_window
 from apis.tmdb_api import tmdb_people_full_info, tmdb_popular_people
 from apis.imdb_api import imdb_images, imdb_people_id, imdb_people_images
 from modules import kodi_utils

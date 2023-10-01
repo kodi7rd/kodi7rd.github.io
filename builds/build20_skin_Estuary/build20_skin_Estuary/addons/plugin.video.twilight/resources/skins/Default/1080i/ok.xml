@@ -19,15 +19,15 @@
                 <effect type="fade" end="100" time="200" />
             </animation>
             <control type="image">
-                <left>-1</left>
-                <top>-1</top>
+                <left>-2</left>
+                <top>-2</top>
                 <height>482</height>
                 <width>782</width>
-                <texture border="16" colordiffuse="Window(10000).Property(twilight.highlight)">twilight_common/dialog.png</texture>
+                <texture border="16" colordiffuse="Window(10000).Property(twilight.main_highlight)">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
-                <height>480</height>
-                <width>780</width>
+                <height>478</height>
+                <width>778</width>
                 <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
@@ -46,7 +46,7 @@
                 <left>110</left>
                 <height>20</height>
                 <font>font12</font> <!-- TWILIGHT_26 -->
-                <textcolor>$INFO[Window(10000).Property(twilight.highlight)]</textcolor>
+                <textcolor>$INFO[Window(10000).Property(twilight.main_highlight)]</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
                 <label>[UPPERCASE][B]$INFO[Window.Property(heading)][/B][/UPPERCASE]</label>

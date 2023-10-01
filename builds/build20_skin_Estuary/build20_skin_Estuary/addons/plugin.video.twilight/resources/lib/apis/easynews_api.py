@@ -18,7 +18,7 @@ ports = ('443', '444', '445', '446', '447', '448')
 
 def import_easynews():
 	''' API version setting currently disabled '''
-	# if get_setting('easynews.api_version') == '0': return EasyNewsAPI()
+	# if get_setting('twilight.easynews.api_version') == '0': return EasyNewsAPI()
 	# else: return EasyNewsAPIv3()
 	return EasyNewsAPI()
 
@@ -28,8 +28,8 @@ class EasyNewsAPI:
 		self.search_link = '/2.0/search/solr-search/advanced'
 		self.account_link = 'https://account.easynews.com/editinfo.php'
 		self.usage_link = 'https://account.easynews.com/usageview.php'
-		self.username = get_setting('easynews_user')
-		self.password = get_setting('easynews_password')
+		self.username = get_setting('twilight.easynews_user')
+		self.password = get_setting('twilight.easynews_password')
 		self.auth = self._get_auth()
 		self.auth_quoted = quote(self.auth)
 		self.base_get = self._get
@@ -109,7 +109,7 @@ class EasyNewsAPI:
 
 	def get_farm_and_port(self, files):
 		dl_farm, dl_port = files.get('dlFarm'), files.get('dlPort')
-		if get_setting('easynews.use_custom_farm', 'False') == 'True': dl_farm, dl_port = get_setting('easynews.farm', dl_farm), get_setting('easynews.port', dl_port)
+		if get_setting('twilight.easynews.use_custom_farm', 'False') == 'True': dl_farm, dl_port = get_setting('twilight.easynews.farm', dl_farm), get_setting('twilight.easynews.port', dl_port)
 		return dl_farm, dl_port
 
 	def _process_files_v3(self, results):

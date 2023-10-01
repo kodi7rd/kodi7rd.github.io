@@ -18,7 +18,7 @@ icon = get_icon('alldebrid')
 
 class AllDebridAPI:
 	def __init__(self):
-		self.token = get_setting('ad.token')
+		self.token = get_setting('twilight.ad.token')
 		self.break_auth_loop = False
 
 	def auth(self):

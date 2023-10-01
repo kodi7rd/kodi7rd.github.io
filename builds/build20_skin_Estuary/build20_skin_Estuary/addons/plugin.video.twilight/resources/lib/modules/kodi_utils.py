@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
+# TRUMP WON
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 import sys
 import json
 import requests
 import _strptime
 import sqlite3 as database
+from os import path as osPath
+from xml.dom.minidom import parse as mdParse
 from threading import Thread, activeCount
 from urllib.parse import unquote, unquote_plus, urlencode, quote, parse_qsl, urlparse
 from modules import icons
 
-try: xbmc_actor = xbmc.Actor
-except: xbmc_actor = None
-twilight_addon_object = xbmcaddon.Addon()
-getLocalizedString = twilight_addon_object.getLocalizedString
-player, xbmc_player, numeric_input, xbmc_monitor, translatePath = xbmc.Player(), xbmc.Player, 1, xbmc.Monitor, xbmcvfs.translatePath
+addon_object = xbmcaddon.Addon('plugin.video.twilight')
+getLocalizedString = addon_object.getLocalizedString
+player, xbmc_player, numeric_input, xbmc_monitor, translatePath, xbmc_actor = xbmc.Player(), xbmc.Player, 1, xbmc.Monitor, xbmcvfs.translatePath, xbmc.Actor
 ListItem, getSkinDir, log, getCurrentWindowId, Window = xbmcgui.ListItem, xbmc.getSkinDir, xbmc.log, xbmcgui.getCurrentWindowId, xbmcgui.Window
 File, exists, copy, delete, rmdir, rename = xbmcvfs.File, xbmcvfs.exists, xbmcvfs.copy, xbmcvfs.delete, xbmcvfs.rmdir, xbmcvfs.rename
 get_infolabel, get_visibility, execute_JSON, window_xml_dialog = xbmc.getInfoLabel, xbmc.getCondVisibility, xbmc.executeJSONRPC, xbmcgui.WindowXMLDialog
@@ -23,64 +24,48 @@ endOfDirectory, addSortMethod, listdir, mkdir, mkdirs = xbmcplugin.endOfDirector
 addDirectoryItem, addDirectoryItems, setContent, setCategory = xbmcplugin.addDirectoryItem, xbmcplugin.addDirectoryItems, xbmcplugin.setContent, xbmcplugin.setPluginCategory
 window_xml_left_action, window_xml_right_action, window_xml_up_action, window_xml_down_action, window_xml_info_action = 1, 2, 3, 4, 11
 window_xml_selection_actions, window_xml_closing_actions, window_xml_context_actions = (7, 100), (9, 10, 13, 92), (101, 108, 117)
+path_join = osPath.join
+addon_info = addon_object.getAddonInfo
+addon_path = addon_info('path')
+userdata_path = translatePath(addon_info('profile'))
+addon_settings = path_join(addon_path, 'resources', 'settings.xml')
+user_settings = path_join(userdata_path, 'settings.xml')
+addon_icon = path_join(addon_path, 'resources', 'media', 'twilight_icon.png')
+addon_fanart = addon_object.getSetting('addon_fanart') or path_join(addon_path, 'resources', 'media', 'twilight_fanart.png')
+databases_path = path_join(userdata_path, 'databases/')
+colorpalette_path = path_join(userdata_path, 'color_palette2/')
+colorpalette_zip_path = path_join(addon_path,'resources', 'media', 'color_palette2.zip')
+custom_xml_path = path_join(addon_path, 'resources', 'skins', 'Custom','%s', 'resources', 'skins', 'Default', '1080i', '%s')
+custom_skin_path = path_join(addon_path, 'resources', 'skins', 'Custom/')
+database_path_raw = path_join(userdata_path, 'databases')
+navigator_db = translatePath(path_join(database_path_raw, 'navigator.db'))
+watched_db = translatePath(path_join(database_path_raw, 'watched.db'))
+favorites_db = translatePath(path_join(database_path_raw, 'favourites.db'))
+trakt_db = translatePath(path_join(database_path_raw, 'traktcache4.db'))
+maincache_db = translatePath(path_join(database_path_raw, 'maincache.db'))
+metacache_db = translatePath(path_join(database_path_raw, 'metacache2.db'))
+debridcache_db = translatePath(path_join(database_path_raw, 'debridcache.db'))
+external_db = translatePath(path_join(database_path_raw, 'providerscache2.db'))
+
+############KODI-RD-IL###################
+hebrew_subtitles_db = translatePath(path_join(database_path_raw, 'twilight_hebrew_subtitles.db'))
+media_metadata_db = translatePath(path_join(database_path_raw, 'twilight_media_metadata.db'))
+#########################################
+
 img_url = 'https://i.imgur.com/%s.png'
 empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.item_next
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
-custom_xml_path = 'special://home/addons/plugin.video.twilight/resources/skins/Custom/%s/resources/skins/Default/1080i/%s'
-custom_skin_path = 'special://home/addons/plugin.video.twilight/resources/skins/Custom/'
-default_skin_path = 'special://home/addons/plugin.video.twilight'
-database_path_raw = 'special://profile/addon_data/plugin.video.twilight/databases/%s'
 
 ############KODI-RD-IL###################
 # ORIGINAL TWILIGHT LINE:
-#current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db')
+# current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'settings.db')
 # NEW CUSTOM LINE:
-current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'twilight_hebrew_subtitles.db', 'twilight_media_metadata.db')
+current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 'maincache.db', 'metacache2.db', 'debridcache.db', 'providerscache2.db', 'settings.db', 'twilight_hebrew_subtitles.db', 'twilight_media_metadata.db')
 #########################################
 
-single_ep_title_prop, single_ep_format_prop, include_year_prop, fanart_key_prop = 'twilight.single_ep_display', 'twilight.single_ep_format', 'twilight.include_year_in_title', 'twilight.fanart_client_key'
-datetime_offset_prop, limit_concurrent_prop, max_threads_prop, ignore_articles_prop = 'twilight.datetime.offset', 'twilight.limit_concurrent_threads', 'twilight.max_threads', 'twilight.ignore_articles'
-view_type_prop, current_langinvoker_prop, refr_settings_prop, rem_props_prop = 'twilight.%s', 'twilight.reuse_language_invoker', 'twilight.refresh_settings', 'twilight.remake_properties'
-season_title_prop, show_specials_prop, calendar_sort_prop, trakt_user_prop = 'twilight.use_season_title', 'twilight.show_specials', 'twilight.trakt.calendar_sort_order', 'twilight.trakt.user'
-extras_open_prop, image_resos_prop, fanart_data_prop, meta_language_prop = 'twilight.extras.open_action', 'twilight.image_resolutions', 'twilight.get_fanart_data', 'twilight.meta_language'
-wid_hidenext_prop, all_episodes_prop, show_unaired_prop, tmdb_api_prop = 'twilight.widget_hide_next_page', 'twilight.default_all_episodes', 'twilight.show_unaired', 'twilight.tmdb_api'
-custom_context_main_menu_prop, custom_context_prop, custom_info_prop = 'twilight.custom_context_main_menu', 'twilight.custom_context_menu', 'twilight.custom_info_dialog'
-meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop = 'twilight.meta_mpaa_region', 'twilight.meta_mpaa_prefix', 'twilight.widget_hide_watched'
-int_window_prop, pause_services_prop, suppress_sett_dict_prop = 'twilight.internal_results.%s', 'twilight.pause_services', 'twilight.suppress_settings_dict'
-nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop = 'twilight.nextep.sort_type', 'twilight.nextep.sort_order', 'twilight.nextep.include_unaired'
-watched_indic_prop, fanarttv_def_prop, nextep_inc_date_prop = 'twilight.watched_indicators', 'twilight.fanarttv.default', 'twilight.nextep.include_airdate'
-nextep_inc_unwatched_prop, nextep_airing_top_prop = 'twilight.nextep.include_unwatched', 'twilight.nextep.sort_airing_today_to_top'
-menu_cache_prop, highlight_prop, meta_filter_prop, pause_settings_prop = 'twilight.kodi_menu_cache', 'twilight.highlight', 'twilight.meta_filter', 'twilight.pause_settings_prop'
-current_skin_prop = 'twilight.current_skin'
-settings_props = (current_langinvoker_prop, custom_context_main_menu_prop, custom_context_prop, custom_info_prop, menu_cache_prop, menu_cache_prop, limit_concurrent_prop,
-				max_threads_prop, wid_hidenext_prop, all_episodes_prop, show_unaired_prop, season_title_prop, show_specials_prop, calendar_sort_prop, ignore_articles_prop,
-				datetime_offset_prop, single_ep_title_prop, single_ep_format_prop, include_year_prop, extras_open_prop, tmdb_api_prop, image_resos_prop, fanart_data_prop,
-				meta_language_prop, meta_mpaa_region_prop, meta_mpaa_prefix_prop, wid_hide_watched_prop, fanart_key_prop, trakt_user_prop, watched_indic_prop, fanarttv_def_prop,
-				nextep_inc_date_prop, nextep_sort_prop, nextep_order_prop, nextep_inc_unaired_prop, nextep_inc_unwatched_prop, nextep_airing_top_prop, highlight_prop,
-				meta_filter_prop)
-userdata_path = translatePath('special://profile/addon_data/plugin.video.twilight/')
-addon_settings = translatePath('special://home/addons/plugin.video.twilight/resources/settings.xml')
-user_settings = translatePath('special://profile/addon_data/plugin.video.twilight/settings.xml')
-addon_icon = translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_icon.png')
-addon_fanart = twilight_addon_object.getSetting('addon_fanart') or translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_fanart.png')
-addon_clearlogo = translatePath('special://home/addons/plugin.video.twilight/resources/media/twilight_clearlogo.png')
-databases_path = translatePath('special://profile/addon_data/plugin.video.twilight/databases/')
-colorpalette_path = translatePath('special://profile/addon_data/plugin.video.twilight/color_palette2/')
-colorpalette_zip_path = translatePath('special://home/addons/plugin.video.twilight/resources/media/color_palette2.zip')
-navigator_db = translatePath(database_path_raw % current_dbs[0])
-watched_db = translatePath(database_path_raw % current_dbs[1])
-favorites_db = translatePath(database_path_raw % current_dbs[2])
-trakt_db = translatePath(database_path_raw % current_dbs[3])
-maincache_db = translatePath(database_path_raw % current_dbs[4])
-metacache_db = translatePath(database_path_raw % current_dbs[5])
-debridcache_db = translatePath(database_path_raw % current_dbs[6])
-external_db = translatePath(database_path_raw % current_dbs[7])
-
-############KODI-RD-IL###################
-hebrew_subtitles_db = translatePath(database_path_raw % current_dbs[8])
-media_metadata_db = translatePath(database_path_raw % current_dbs[9])
-#########################################
-
+int_window_prop, pause_services_prop, suppress_sett_dict_prop, highlight_prop = 'twilight.internal_results.%s', 'twilight.pause_services', 'twilight.suppress_settings_dict', 'twilight.main_highlight'
+pause_settings_prop, current_skin_prop, use_skin_fonts_prop, custom_info_prop = 'twilight.pause_settings', 'twilight.current_skin', 'twilight.use_skin_fonts', 'twilight.custom_info_dialog'
+custom_context_main_menu_prop, custom_context_prop, sett_addoninfo_active_prop = 'twilight.custom_context_main_menu', 'twilight.custom_context_menu', 'twilight.setting_addoninfo_active'
 myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
@@ -117,8 +102,8 @@ image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'p
 default_highlights = (('hoster.identify', 'FF0166FF'), ('torrent.identify', 'FFFF00FE'), ('provider.rd_colour', 'FF3C9900'), ('provider.pm_colour', 'FFFF3300'),
 					('provider.ad_colour', 'FFE6B800'), ('provider.furk_colour', 'FFE6002E'), ('provider.easynews_colour', 'FF00B3B2'),
 					('provider.debrid_cloud_colour', 'FF7A01CC'), ('provider.folders_colour', 'FFB36B00'), ('scraper_4k_highlight', 'FFFF00FE'),
-					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('highlight', 'FF12A0C7'),
-					('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
+					('scraper_1080p_highlight', 'FFE6B800'), ('scraper_720p_highlight', 'FF3C9900'), ('scraper_SD_highlight', 'FF0166FF'), ('scraper_single_highlight', 'FF008EB2'),
+					('highlight', 'FFC0C0C0'), ('scraper_flag_identify_colour', 'FF7C7C7C'), ('scraper_result_identify_colour', 'FFFFFFFF'))
 
 def get_icon(image_name):
 	return img_url % getattr(icons, image_name, 'I1JJhji')
@@ -142,7 +127,7 @@ def add_dir(url_params, list_name, handle, iconImage='folder', fanartImage=None,
 	url = build_url(url_params)
 	listitem = make_listitem()
 	listitem.setLabel(list_name)
-	listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'clearlogo': addon_clearlogo})
+	listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 	info_tag = listitem.getVideoInfoTag()
 	info_tag.setPlot(' ')
 	add_item(handle, url, listitem, isFolder)
@@ -163,14 +148,14 @@ def set_category(handle, label):
 	setCategory(handle, label)
 
 def end_directory(handle, cacheToDisc=None):
-	if cacheToDisc == None: cacheToDisc = get_property(menu_cache_prop) == 'true'
+	if cacheToDisc == None: cacheToDisc = get_setting('twilight.kodi_menu_cache') == 'true'
 	endOfDirectory(handle, cacheToDisc=cacheToDisc)
 
 def set_view_mode(view_type, content='files', is_external=None):
 	if is_external == None: is_external = external()
 	if is_external: return
-	view_id = get_property(view_type_prop % view_type)
-	if not view_id: view_id = get_setting(view_type) or None
+	setting_query = 'twilight.%s' % view_type
+	view_id = get_setting(setting_query) or None
 	try:
 		hold = 0
 		sleep(100)
@@ -339,6 +324,11 @@ def disable_enable_addon(addon_name='plugin.video.twilight'):
 		execute_JSON(json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled', 'params': {'addonid': addon_name, 'enabled': True}}))
 	except: pass
 
+def restart_services():
+	execute_builtin('ActivateWindow(Home)', True)
+	sleep(1000)
+	Thread(target=disable_enable_addon).start()
+
 def update_local_addons():
 	execute_builtin('UpdateLocalAddons', True)
 	sleep(2500)
@@ -354,26 +344,31 @@ def jsonrpc_get_directory(directory, properties=['title', 'file', 'thumbnail']):
 	except: results = None
 	return results
 
+def jsonrpc_get_addons(_type, properties=['thumbnail', 'name']):
+	command = {'jsonrpc': '2.0', 'method': 'Addons.GetAddons','params':{'type':_type, 'properties': properties}, 'id': '1'}
+	results = get_jsonrpc(command).get('addons')
+	return results
+
 def make_global_list():
 	global global_list
 	global_list = []
 
 def progress_dialog(heading='', icon=addon_icon):
-	from windows import create_window
+	from windows.base_window import create_window
 	if isinstance(heading, int): heading = local_string(heading)
 	progress_dialog = create_window(('windows.progress', 'Progress'), 'progress.xml', heading=heading, icon=icon)
 	Thread(target=progress_dialog.run).start()
 	return progress_dialog
 
 def select_dialog(function_list, **kwargs):
-	from windows import open_window
+	from windows.base_window import open_window
 	selection = open_window(('windows.default_dialogs', 'Select'), 'select.xml', **kwargs)
 	if selection in (None, []): return selection
 	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
 	return function_list[selection]
 
 def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, default_control=11):
-	from windows import open_window
+	from windows.base_window import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
 	if isinstance(ok_label, int): ok_label = local_string(ok_label)
@@ -382,7 +377,7 @@ def confirm_dialog(heading='', text=32580, ok_label=32839, cancel_label=32840, d
 	return open_window(('windows.default_dialogs', 'Confirm'), 'confirm.xml', **kwargs)
 
 def ok_dialog(heading='', text=32760, ok_label=32839):
-	from windows import open_window
+	from windows.base_window import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
 	if isinstance(ok_label, int): ok_label = local_string(ok_label)
@@ -390,7 +385,7 @@ def ok_dialog(heading='', text=32760, ok_label=32839):
 	return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
-	from windows import open_window
+	from windows.base_window import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
 	heading = heading.replace('[B]', '').replace('[/B]', '')
@@ -415,7 +410,7 @@ def choose_view(view_type, content):
 	listitem = make_listitem()
 	listitem.setLabel(set_view_str)
 	params_url = build_url({'mode': 'set_view', 'view_type': view_type})
-	listitem.setArt({'icon': settings_icon, 'poster': settings_icon, 'thumb': settings_icon, 'fanart': addon_fanart, 'banner': settings_icon, 'clearlogo': addon_clearlogo})
+	listitem.setArt({'icon': settings_icon, 'poster': settings_icon, 'thumb': settings_icon, 'fanart': addon_fanart, 'banner': settings_icon})
 	info_tag = listitem.getVideoInfoTag()
 	info_tag.setPlot(' ')
 	add_item(handle, params_url, listitem, False)
@@ -426,7 +421,7 @@ def choose_view(view_type, content):
 def set_view(view_type):
 	view_id = str(current_window_object().getFocusId())
 	set_setting(view_type, view_id)
-	set_property(view_type_prop % view_type, view_id)
+	set_property('twilight.%s' % view_type, view_id)
 	notification(get_infolabel('Container.Viewmode').upper(), time=500)
 
 def set_temp_highlight(temp_highlight):
@@ -451,9 +446,9 @@ def timeIt(func):
 def volume_checker():
 	# 0% == -60db, 100% == 0db
 	try:
-		if get_setting('playback.volumecheck_enabled', 'false') == 'false' or get_visibility('Player.Muted'): return
+		if get_setting('twilight.playback.volumecheck_enabled', 'false') == 'false' or get_visibility('Player.Muted'): return
 		from modules.utils import string_alphanum_to_num
-		max_volume = min(int(get_setting('playback.volumecheck_percent', '50')), 100)
+		max_volume = min(int(get_setting('twilight.playback.volumecheck_percent', '50')), 100)
 		if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
 	except: pass
 
@@ -481,11 +476,10 @@ def get_all_icon_vars(include_values=False):
 	else: return [k for k, v in vars(icons).items() if not k.startswith('__')]
 
 def toggle_language_invoker():
-	from xml.dom.minidom import parse as mdParse
 	close_all_dialog()
 	sleep(100)
 	addon_xml = translate_path('special://home/addons/plugin.video.twilight/addon.xml')
-	current_addon_setting = get_setting('reuse_language_invoker', 'true')
+	current_addon_setting = get_setting('twilight.reuse_language_invoker', 'true')
 	new_value = 'false' if current_addon_setting == 'true' else 'true'
 	if not confirm_dialog(text=local_string(33018) % (current_addon_setting.upper(), new_value.upper())): return
 	if new_value == 'true' and not confirm_dialog(text=33019): return
@@ -494,7 +488,6 @@ def toggle_language_invoker():
 	new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 	with open(addon_xml, 'w') as f: f.write(new_xml)
 	set_setting('reuse_language_invoker', new_value)
-	set_property(current_langinvoker_prop, new_value)
 	ok_dialog(text=32576)
 	execute_builtin('ActivateWindow(Home)', True)
 	update_local_addons()
@@ -514,7 +507,7 @@ def upload_logfile(params):
 	if not path_exists(log_file): return ok_dialog(text=33039)
 	try:
 		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'Twilight %s' % twilight_addon_object.getAddonInfo('version')
+		UserAgent = 'Twilight %s' % addon_object.getAddonInfo('version')
 		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
 		user_code = response['key']
 		if 'key' in response:
@@ -540,21 +533,30 @@ def open_settings(query, addon='plugin.video.twilight'):
 	else: execute_builtin('Addon.OpenSettings(%s)' % addon)
 
 def set_setting(setting_id, value):
-	twilight_addon_object.setSetting(setting_id, value)
+	addon_object.setSetting(setting_id, value)
 
 def get_setting(setting_id, fallback=''):
-	return twilight_addon_object.getSetting(setting_id) or fallback
-
-def make_window_properties():
-	for item in view_ids: set_property(view_type_prop % item, twilight_addon_object.getSetting(item))
-	for item in settings_props: set_property(item, twilight_addon_object.getSetting(item.replace('twilight.', '')))
+	return get_property(setting_id) or addon_object.getSetting(setting_id.replace('twilight.', '')) or fallback
 
 def manage_settings_reset(cancel=False):
-	if cancel: trigger_settings_refresh()
-	else: set_property(pause_settings_prop, 'true'); sleep(500)
+	if cancel: clear_property(pause_settings_prop); make_settings_props()
+	else: set_property(pause_settings_prop, 'true')
+	return
 
-def trigger_settings_refresh():
-	set_property(refr_settings_prop, 'true')
-	set_property(rem_props_prop, 'true')
-	set_property(pause_settings_prop, 'false')
-	run_plugin({'mode': 'dummy_run'}, block=True)
+def make_settings_props():
+	if get_property(sett_addoninfo_active_prop) == 'true': return
+	set_property(sett_addoninfo_active_prop, 'true')
+	while get_visibility('Window.IsActive(addoninformation)') or get_visibility('Window.IsActive(addonsettings)'):
+		if monitor.abortRequested(): break
+		sleep(1000)
+	try:
+		if not path_exists(userdata_path): make_directories(userdata_path)
+		for item in all_settings(): set_property('twilight.%s' % item[0], item[1])
+	except Exception as e: logger('error in make_settings_props', str(e))
+	clear_property(sett_addoninfo_active_prop)
+
+def all_settings():
+	try: settings = [(item.getAttribute('id'), item.firstChild.data if item.firstChild and item.firstChild.data is not None else '') \
+						for item in mdParse(user_settings).getElementsByTagName('setting')]
+	except: settings = []
+	return settings

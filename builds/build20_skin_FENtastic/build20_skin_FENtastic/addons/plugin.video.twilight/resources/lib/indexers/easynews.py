@@ -8,7 +8,7 @@ from modules.utils import clean_file_name
 
 ls, sys, build_url, unquote, urlencode, quote = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.unquote, kodi_utils.urlencode, kodi_utils.quote
 show_busy_dialog, hide_busy_dialog, show_text, set_view_mode = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.show_text, kodi_utils.set_view_mode
-default_easynews_icon, fanart, twilight_clearlogo, sleep = kodi_utils.get_icon('easynews'), kodi_utils.addon_fanart, kodi_utils.addon_clearlogo, kodi_utils.sleep
+default_easynews_icon, fanart, sleep = kodi_utils.get_icon('easynews'), kodi_utils.addon_fanart, kodi_utils.sleep
 add_items, set_content, end_directory = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.end_directory
 make_listitem, ok_dialog = kodi_utils.make_listitem, kodi_utils.ok_dialog
 down_str = '[B]%s[/B]' % ls(32747)
@@ -51,7 +51,7 @@ def easynews_file_browser(files, handle):
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
 				thumbnail = item_get('thumbnail', default_easynews_icon)
-				listitem.setArt({'icon': thumbnail, 'poster': thumbnail, 'thumb': thumbnail, 'fanart': fanart, 'banner': default_easynews_icon, 'clearlogo': twilight_clearlogo})
+				listitem.setArt({'icon': thumbnail, 'poster': thumbnail, 'thumb': thumbnail, 'fanart': fanart, 'banner': default_easynews_icon})
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('video')
 				info_tag.setPlot(' ')

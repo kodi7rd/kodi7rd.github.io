@@ -423,7 +423,7 @@
                 </control>
                 <!-- Plot 2000 -->
                 <control type="group">
-                    <visible>!String.IsEqual(Window.Property(plot),)</visible>
+                    <visible>String.IsEqual(Window.Property(plot_enabled),true)</visible>
                     <height>760</height>
                     <control type="group">
                         <control type="label">
