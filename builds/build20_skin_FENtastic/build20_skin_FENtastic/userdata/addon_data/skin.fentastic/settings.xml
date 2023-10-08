@@ -17,7 +17,7 @@
     <setting id="circle_rating" type="bool">true</setting>
     <setting id="nofocusanimations" type="bool">true</setting>
     <setting id="show_musicvideoposter" type="bool">false</setting>
-    <setting id="no_slide_animations" type="bool">false</setting>
+    <setting id="no_slide_animations" type="bool">true</setting>
     <setting id="firsttimerun" type="bool">true</setting>
     <setting id="homemenunotvbutton" type="bool">true</setting>
     <setting id="show_profileavatar" type="bool">false</setting>
