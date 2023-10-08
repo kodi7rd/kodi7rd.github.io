@@ -53,6 +53,7 @@ media_metadata_db = translatePath(path_join(database_path_raw, 'twilight_media_m
 #########################################
 
 img_url = 'https://i.imgur.com/%s.png'
+invoker_switch_dict = {'true': 'false', 'false': 'true'}
 empty_poster, item_jump, item_next = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.item_next
 tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
 
@@ -480,7 +481,7 @@ def toggle_language_invoker():
 	sleep(100)
 	addon_xml = translate_path('special://home/addons/plugin.video.twilight/addon.xml')
 	current_addon_setting = get_setting('twilight.reuse_language_invoker', 'true')
-	new_value = 'false' if current_addon_setting == 'true' else 'true'
+	new_value = invoker_switch_dict[current_addon_setting]
 	if not confirm_dialog(text=local_string(33018) % (current_addon_setting.upper(), new_value.upper())): return
 	if new_value == 'true' and not confirm_dialog(text=33019): return
 	root = mdParse(addon_xml)

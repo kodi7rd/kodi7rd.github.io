@@ -155,7 +155,8 @@ def get_trakt_trending_popular_lists(params):
 	set_view_mode('view.main')
 
 def build_trakt_list(params):
-	def _process(function, _list): item_list_extend(function(_list).worker())
+	def _process(function, _list):
+		item_list_extend(function(_list).worker())
 	def _paginate_list(data, page_no, paginate_start):
 		if paginate(is_home):
 			limit = page_limit(is_home)
@@ -172,17 +173,9 @@ def build_trakt_list(params):
 		if page_no == 1 and not is_external: set_property('twilight.exit_params', folder_path())
 		with_auth = list_type == 'my_lists'
 		result = get_trakt_list_contents(list_type, user, slug, with_auth)
-		trakt_list = [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(result)]
-		process_list, all_pages, total_pages, paginate_start = _paginate_list(trakt_list, page_no, paginate_start)
+		process_list, all_pages, total_pages, paginate_start = _paginate_list(result, page_no, paginate_start)
 		new_params = {'mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'list_name': list_name,
 						'user': user, 'slug': slug, 'paginate_start': paginate_start}
-		if total_pages > 2 and not is_external:
-				jump_to = jump_to_enabled()
-				if jump_to != 3:
-					new_params['refreshed'] = 'true'
-					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': total_pages, 'all_pages': all_pages,
-							'jump_to_enabled': jump_to, 'paginate_start': paginate_start, 'url_params': json.dumps(new_params)},
-							jump2_str, handle, 'item_jump', isFolder=False)
 		movie_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'movie'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
 		tvshow_list = {'list': [(i['order'], i['media_ids']) for i in process_list if i['type'] == 'show'], 'id_type': 'trakt_dict', 'custom_order': 'true'}
 		content = 'movies' if len(movie_list['list']) > len(tvshow_list['list']) else 'tvshows'
@@ -194,6 +187,12 @@ def build_trakt_list(params):
 		[i.join() for i in threads]
 		item_list.sort(key=lambda k: k[1])
 		add_items(handle, [i[0] for i in item_list])
+		if total_pages > 2 and not is_external:
+				jump_to = jump_to_enabled()
+				if jump_to != 3:
+					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': total_pages, 'all_pages': all_pages,
+							'jump_to_enabled': jump_to, 'paginate_start': paginate_start, 'url_params': json.dumps(new_params)},
+							jump2_str, handle, 'item_jump', isFolder=False)
 		if total_pages > page_no:
 			new_page = str(page_no + 1)
 			new_params['new_page'] = new_page

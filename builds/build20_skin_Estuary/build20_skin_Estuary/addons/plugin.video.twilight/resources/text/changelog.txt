@@ -1,13 +1,17 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.10[/B][/COLOR]
+- Fixed "TV Shows --> Years" Menu bug.
 
+[COLOR dodgerblue][B]Version 3.2.08[/B][/COLOR]
+- Improved load times on Trakt Personal/Liked lists when paginated. There should be a noticeable difference when navigating these lists.
+- Other changes/fixes.
 
 [COLOR dodgerblue][B]Version 3.2.07[/B][/COLOR]
 - Added "Retry With All Scrapers When No Results Available" to Settings->Results->General. Enable this and Twilight will automatically scrape with all external scrapers if no results are found with currently enabled external scrapers.
 - Added Sorting of Generic Lists for Movies and TV Shows. Settings->Navigation. Here you can set the sort order and direction of the Genres, Languages, Certifications, Years, Decades and Networks lists in Movies and TV Shows. Options include sort by Popularity, Rating, Release Date etc.
 - Couple of fixes.
 - Other changes/fixes.
-- There will be no more public releases of Twilight for a while.
 
 [COLOR dodgerblue][B]Version 3.2.06[/B][/COLOR]
 - Couple of quick fixes.

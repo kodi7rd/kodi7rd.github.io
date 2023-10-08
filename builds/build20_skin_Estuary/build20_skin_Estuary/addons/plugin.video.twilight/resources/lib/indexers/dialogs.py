@@ -247,6 +247,7 @@ def navigate_to_page_choice(params):
 		else: function, paginate_start = container_update, params.get('paginate_start', '0')
 		url_params = json.loads(params['url_params'])
 		url_params['new_page'] = new_page
+		url_params['refreshed'] = 'true'
 		function(url_params)
 	except: return
 

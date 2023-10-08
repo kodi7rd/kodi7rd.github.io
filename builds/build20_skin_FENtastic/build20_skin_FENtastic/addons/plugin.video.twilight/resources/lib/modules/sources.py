@@ -235,18 +235,16 @@ class Sources():
 		self.debrid_hoster_enabled = debrid_valid_hosts(debrid_type_enabled('hoster', self.debrid_enabled))
 
 	def activate_external_providers(self):
-		if not self.debrid_torrent_enabled and not self.debrid_hoster_enabled:
-			if len(self.active_internal_scrapers) == 1 and 'external' in self.active_internal_scrapers: self.disable_external(32854)
-		else:
-			self.ext_folder, self.ext_name = external_scraper_info()
-			if not self.ext_folder or not self.ext_name: return self.disable_external(33007)
-			if not self.import_external_scrapers(): return self.disable_external(33009)
-			exclude_list = []
-			if not self.debrid_torrent_enabled: exclude_list.extend(self.external_scraper_names('torrents'))
-			elif not self.debrid_hoster_enabled: exclude_list.extend(self.external_scraper_names('hosters'))
-			self.external_providers = self.external_sources()
-			if not self.external_providers: self.disable_external(33008)
-			if exclude_list: self.external_providers = [i for i in self.external_providers if not i[0] in exclude_list]
+		if not self.debrid_torrent_enabled and not self.debrid_hoster_enabled: return self.disable_external(32854)
+		self.ext_folder, self.ext_name = external_scraper_info()
+		if not self.ext_folder or not self.ext_name: return self.disable_external(33007)
+		if not self.import_external_scrapers(): return self.disable_external(33009)
+		exclude_list = []
+		if not self.debrid_torrent_enabled: exclude_list.extend(self.external_scraper_names('torrents'))
+		elif not self.debrid_hoster_enabled: exclude_list.extend(self.external_scraper_names('hosters'))
+		self.external_providers = self.external_sources()
+		if not self.external_providers: self.disable_external(33008)
+		if exclude_list: self.external_providers = [i for i in self.external_providers if not i[0] in exclude_list]
 	
 	def import_external_scrapers(self):
 		try:
@@ -261,6 +259,7 @@ class Sources():
 		try: self.active_internal_scrapers.remove('external')
 		except: pass
 		self.active_external = False
+		self.external_providers = []
 
 	def external_scraper_names(self, folder):
 		if folder == 'torrents': return [i for i in self.ext_sources.torrent_providers if not i in external_exclude_list]

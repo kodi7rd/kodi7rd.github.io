@@ -1,4 +1,4 @@
-<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.2.07">
+<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.2.10">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.19.1"/>
@@ -11,7 +11,7 @@
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <summary lang="en">Kodi + Real Debrid Israel Build Add-on for Real Debrid sources.</summary>
-        <description lang="en">This add-on is intended for advanced Kodi users only. Mainly used for Real Debrid account access. An External Scraper package may be used. You must own the content of any media you play through this addon.</description>
+        <description lang="en">This add-on is intended for advanced Kodi users only. You must own the content of any media you play through this addon.</description>
         <platform>all</platform>
 		<disclaimer lang="en">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers.</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

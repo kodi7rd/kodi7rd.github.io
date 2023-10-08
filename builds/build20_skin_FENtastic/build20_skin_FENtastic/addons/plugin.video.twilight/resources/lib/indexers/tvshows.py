@@ -105,13 +105,13 @@ class TVShows:
 				data = function(self.params['certification'], page_no)
 				self.list = [i['show']['ids'] for i in data]
 				self.new_page = {'new_page': string(page_no + 1), 'certification': self.params['certification']}
+			add_items(handle, self.worker())
 			if self.total_pages and not self.is_external:
 				jump_to = jump_to_enabled()
 				if jump_to != 3:
-					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name, 'refreshed': 'true'}})
+					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name}})
 					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': self.total_pages, 'all_pages': all_pages,
 							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump', isFolder=False)
-			add_items(handle, self.worker())
 			if self.new_page and not self.widget_hide_next_page:
 						self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
 						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')

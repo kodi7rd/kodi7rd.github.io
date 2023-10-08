@@ -241,7 +241,7 @@ def tmdb_tv_networks(network_id, page_no):
 
 def tmdb_tv_year(year, page_no):
 	sort_type = generic_list_sorting('tvshows.years')
-	string = 'tmdb_tv_year_%s_%s' % (year, sort_type, page_no)
+	string = 'tmdb_tv_year_%s_%s_%s' % (year, sort_type, page_no)
 	url = '%s/discover/tv?api_key=%s&language=en-US&region=US&with_original_language=en&include_null_first_air_dates=false&first_air_date_year=%s&sort_by=%s&page=%s' \
 							% (base_url, tmdb_api_key(), year, sort_type, page_no)
 	return cache_object(get_data, string, url, json=False, expiration=EXPIRY_2_DAYS)

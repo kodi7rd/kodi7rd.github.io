@@ -388,10 +388,12 @@ def trakt_search_lists(search_title, page_no):
 	return cache_object(_process, string, 'dummy_arg', False, 4)
 
 def get_trakt_list_contents(list_type, user, slug, with_auth):
-	string = 'trakt_list_contents_%s_%s_%s' % (list_type, user, slug)
+	def _process(params):
+		return [{'media_ids': i[i['type']]['ids'], 'title': i[i['type']]['title'], 'type': i['type'], 'order': c} for c, i in enumerate(get_trakt(params))]	
+	string = 'trakt_list_contents_%s_%s_%s_TEST' % (list_type, user, slug)
 	if user == 'Trakt Official': params = {'path': 'lists/%s/items', 'path_insert': slug, 'params': {'extended':'full'}, 'method': 'sort_by_headers'}
 	else: params = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': with_auth, 'method': 'sort_by_headers'}
-	return cache_trakt_object(get_trakt, string, params)
+	return cache_trakt_object(_process, string, params)
 
 def trakt_trending_popular_lists(list_type, page_no):
 	string = 'trakt_%s_user_lists_%s' % (list_type, page_no)

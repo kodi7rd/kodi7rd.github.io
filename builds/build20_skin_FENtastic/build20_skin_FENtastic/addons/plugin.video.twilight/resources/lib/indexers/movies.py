@@ -112,14 +112,14 @@ class Movies:
 			elif self.action  == 'tmdb_movies_sets':
 				data = sorted(movieset_meta(self.params_get('tmdb_id'), metadata_user_info())['parts'], key=lambda k: k['release_date'] or '2050')
 				self.list = [i['id'] for i in data]
+			add_items(handle, builder())
 			if self.total_pages and not self.is_external:
 				jump_to = jump_to_enabled()
 				if jump_to != 3:
-					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name, 'refreshed': 'true'}})
+					url_params = json.dumps({**self.new_page, **{'mode': mode, 'action': self.action, 'category_name': self.category_name}})
 					add_dir({'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': self.total_pages, 'all_pages': all_pages,
 							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump',
 							isFolder=False)
-			add_items(handle, builder())
 			if self.new_page and not self.widget_hide_next_page:
 				self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
 				add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
