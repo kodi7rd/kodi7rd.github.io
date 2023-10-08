@@ -28,8 +28,6 @@
     <setting id="subs_height">360</setting>
     <setting id="subs_px">1</setting>
     <setting id="subs_py">7</setting>
-    <setting id="OSuser2" default="true" />
-    <setting id="OSpass2" default="true" />
     <setting id="fast_subs" default="true" />
     <setting id="man_search_subs" default="true" />
 </settings>
