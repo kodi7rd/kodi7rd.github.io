@@ -362,6 +362,11 @@ class SourcesResults(BaseDialog):
 		self.setProperty('title', self.meta_get('title'))
 
 		############KODI-RD-IL###################
+		self.setProperty('season_label', ls(400015))
+		self.setProperty('episode_label', ls(400016))
+		self.setProperty('season_number', str(self.meta_get('season')))
+		self.setProperty('episode_number', str(self.meta_get('episode')))
+
 		if enable_hebrew_subtitles_to_twilight_sources_matching:
 			kodi_utils.logger("KODI-RD-IL", f"total_quality_counts: {str(total_quality_counts)}")
 

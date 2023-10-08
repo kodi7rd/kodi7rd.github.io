@@ -4031,4 +4031,14 @@ msgctxt "#400014"
 msgid "הצג מקורות עם התאמה מלאה לכתוביות"
 msgstr ""
 
+# Twilight sources_results.xml - Season/Episode
+
+msgctxt "#400015"
+msgid "Season"
+msgstr ""
+
+msgctxt "#400016"
+msgid "Episode"
+msgstr ""
+
 ###################################################################################################################################

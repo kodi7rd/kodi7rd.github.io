@@ -967,11 +967,23 @@
                     <width max="1130">auto</width>
                     <height>30</height>
                     <font>font60</font> <!-- TWILIGHT_60_BOLD -->
-                    <textcolor>FFCCCCCC</textcolor>
+                    <textcolor>yellow</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>
                     <label>[B]$INFO[Window.Property(title)][/B]</label>
                     <visible>String.IsEmpty(Window.Property(clearlogo))</visible>
+                </control>
+                <control type="label">
+                    <top>275</top>
+                    <left>113</left>
+                    <width max="1130">auto</width>
+                    <height>30</height>
+                    <font>font14</font> <!-- TWILIGHT_33 -->
+                    <textcolor>yellow</textcolor>
+                    <align>right</align>
+                    <aligny>bottom</aligny>
+                    <label>[B]$INFO[Window.Property(season_label)] $INFO[Window.Property(season_number)][/B], [B]$INFO[Window.Property(episode_label)] $INFO[Window.Property(episode_number)][/B]</label>
+                    <visible>!String.IsEmpty(Window.Property(season_number)) + !String.IsEmpty(Window.Property(episode_number))</visible>
                 </control>
                 <control type="image" id="201">
                     <top>40</top>
