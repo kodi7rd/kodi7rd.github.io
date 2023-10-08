@@ -6,6 +6,7 @@ from resources.modules import log
 from resources.modules.engine import download_sub,get_subtitles,sort_subtitles
 from urllib.parse import  unquote_plus, unquote,  quote
 from resources.modules.twilight import write_heb_embedded_taglines
+from resources.modules.twilight.write_heb_embedded_taglines_check import write_heb_embedded_taglines_check_func
 from resources.modules.general import TransFolder,clean_name,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
 from urllib.parse import parse_qsl
 from resources.modules.sub_window import MySubs
@@ -212,7 +213,7 @@ def add_demo_embbded(f_result_temp):
                                                         "Hebrew")
     json_value={'url':url,
                          'label':"Hebrew",
-                         'label2':'[LOC] '+' כתובית מובנית',
+                         'label2':'[LOC] '+' תרגום מובנה',
                          'iconImage':"0",
                          'thumbnailImage':"he",
                          'hearing_imp':'false',
@@ -270,7 +271,7 @@ def add_embbded_if_exists(f_result):
                                                                     "Hebrew")
                 json_value={'url':url,
                                      'label':"Hebrew",
-                                     'label2':'[LOC] '+' כתובית מובנית',
+                                     'label2':'[LOC] '+' תרגום מובנה',
                                      'iconImage':"0",
                                      'thumbnailImage':"he",
                                      'hearing_imp':'false',
@@ -569,7 +570,7 @@ def sub_from_main(arg):
                     shutil.copy(sub_file,c_sub_file)
                     
         else:
-            notify( 'הכתובית המובנית תופיע בעוד 10 שניות' )
+            notify( 'התרגום המובנה יופיע בעוד 10 שניות' )
             log.warning(filename)
             save_file_name(filename,language)
         return_result=json.dumps(sub_file)
@@ -952,9 +953,9 @@ class KodiMonitor(xbmc.Monitor):
                             
                                 wait_for_video()
                                 
-                                notify( "עברית | 101% | כתובית מובנית" )
+                                notify( "עברית | 101% | תרגום מובנה" )
                                 
-                                general.show_msg="[COLOR lightblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR lightblue]הכתובית המובנית בעברית תופיע בעוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
+                                general.show_msg="[COLOR lightblue]התרגום המובנה בעברית יופיע בעוד 10 שניות[/COLOR]" if last_sub_in_cache_is_empty else "[COLOR lightblue]התרגום המובנה בעברית יופיע בעוד 10 שניות\n(הכתובית נבחרה מהקאש)[/COLOR]"
                                 # Show the message for 5 seconds before general.show_msg="END"
                                 xbmc.sleep(5000)
                         
@@ -976,18 +977,11 @@ class KodiMonitor(xbmc.Monitor):
                                 # Show the message for 5 seconds before general.show_msg="END"
                                 xbmc.sleep(5000)
                                 
-                                notify( "קיימת גם כתובית מובנית בעברית" ) if is_embedded_hebrew_sub_exists else None
+                                notify( "קיים גם תרגום מובנה בעברית" ) if is_embedded_hebrew_sub_exists else None
 
                         # Write video tagline in embedded Hebrew subs taglines list
-                        if Addon.getSetting("write_heb_embedded_taglines_to_twilight_repo")=='true':
-                            log.warning(f"WRITE | write_heb_embedded_taglines_to_twilight_repo: True")
-                            if is_embedded_hebrew_sub_exists:
-                                log.warning(f"WRITE | is_embedded_hebrew_sub_exists: True")
-                                write_heb_embedded_taglines.write(video_data['Tagline'], video_data['media_type'])
-                            else:
-                                log.warning(f"WRITE | is_embedded_hebrew_sub_exists: False | Skipping..")  
-                        else:
-                            log.warning(f"WRITE | write_heb_embedded_taglines_to_twilight_repo: False | Skipping..")
+                        __ = write_heb_embedded_taglines_check_func(bytes,compile)
+                        __[0](__[1])
       
                     except Exception as e:
                         import linecache

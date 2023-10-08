@@ -1,4 +1,10 @@
-﻿[COLOR yellow][B]v3.8.8[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.2[/B][/COLOR]
+* Add obf "write_heb_embedded_taglines_check" function.
+[COLOR yellow][B]v3.9.0[/B][/COLOR]
+* Remove OpenSubtitles account settings.
+[COLOR yellow][B]v3.8.9[/B][/COLOR]
+* Rename "כתובית מובנית" to "תרגום מובנה"
+[COLOR yellow][B]v3.8.8[/B][/COLOR]
 * Smaller [COLOR limegreen][KTUVIT][/COLOR] website code refactor =)
 [COLOR yellow][B]v3.8.7[/B][/COLOR]
 * Small [COLOR limegreen][KTUVIT][/COLOR] website code refactor

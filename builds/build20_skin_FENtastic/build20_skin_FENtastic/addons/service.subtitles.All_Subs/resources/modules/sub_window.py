@@ -113,7 +113,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)
                     save_file_name(filename,language)
                 else:
-                   self.label_info.setLabel('[B]נבחרה כתובית מובנית, תופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
+                   self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
                    save_file_name(unque(filename),language)
                 self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data(self.full_list)
                 self.set_active_controls()

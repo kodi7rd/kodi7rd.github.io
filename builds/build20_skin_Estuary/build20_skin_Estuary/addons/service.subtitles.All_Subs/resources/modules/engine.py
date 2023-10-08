@@ -122,7 +122,7 @@ def sort_subtitles(save_all_data,video_data):
               array_subs.append(item_2)
               array_subs.append(item_2)
            
-           if ('כתובית מובנית' in json_value['label2']):
+           if ('תרגום מובנה' in json_value['label2']):
                precent=101
            else:
                 precent=similar(array_original,array_subs)
