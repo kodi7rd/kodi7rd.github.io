@@ -21,17 +21,6 @@
             <animation type="WindowOpen" reversible="false">
                 <effect type="fade" end="100" time="500" delay="200" />
             </animation>
-            <control type="image">
-                <left>880</left>
-                <top>450</top>
-                <width max="140">auto</width>
-                <height max="140">auto</height>
-                <texture flipx="true" colordiffuse="FFFAFAFA">twilight_common/spinner.png</texture>
-                <visible>!Container(5000).OnScrollPrevious + !Container(5000).OnScrollNext</visible>
-                <animation effect="fade" time="320" delay="400">Visible</animation>
-                <animation effect="rotate" end="360" center="auto" time="1200" loop="true" reversible="false" condition="true">Conditional</animation>
-                <animation effect="fade" start="70" time="1200" condition="true" pulse="true">Conditional</animation>
-            </control>
             <control type="list" id="5000">
                 <left>-90</left>
                 <top>0</top>

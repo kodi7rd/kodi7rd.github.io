@@ -4,7 +4,6 @@ import ssl
 from urllib.request import Request, urlopen
 from modules import kodi_utils
 from modules.sources import Sources
-from modules.metadata import english_translation
 from modules.settings import download_directory, get_art_provider, metadata_user_info
 from modules.utils import clean_file_name, clean_title, safe_string, remove_accents, normalize
 # logger = kodi_utils.logger
@@ -80,24 +79,7 @@ def select_pack_item(pack_choices, icon):
 	return select_dialog(pack_choices, **kwargs)
 
 def get_title(meta):
-	title = None
-	custom_title = meta.get('custom_title', None)
-	if custom_title: title = custom_title
-	else:
-		if get_setting('twilight.meta_language') == 'en': title = meta['title']
-		else:
-			english_title = meta.get('english_title')
-			if english_title: title = english_title
-			else:
-				try:
-					media_type = 'movie' if meta['media_type'] == 'movie' else 'tv'
-					english_title = english_translation(media_type, meta['tmdb_id'], metadata_user_info())
-					if english_title: title = english_title
-					else: title = meta['original_title']
-				except: pass
-			if not title: title = meta['original_title']
-		if '(' in title: title = title.split('(')[0]
-		title.replace('/', ' ')
+	title = meta.get('custom_title', None) or meta.get('english_title') or meta.get('title')	
 	return title
 
 def get_year(meta):

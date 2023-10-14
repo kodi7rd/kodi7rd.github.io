@@ -349,7 +349,7 @@ class Sources():
 		return [i[2] for i in scraper_list]
 
 	def _process_post_results(self):
-		if self.auto_rescrape_with_all and not self.post_results_processed:
+		if self.auto_rescrape_with_all and self.active_external and not self.post_results_processed:
 			self.threads, self.post_results_processed, self.disabled_ext_ignored, self.prescrape = [], True, True, False
 			return self.get_sources()
 		if self.orig_results and not self.background:
@@ -384,25 +384,12 @@ class Sources():
 							'total_seasons': self.meta.get('total_seasons', 1)}
 
 	def get_search_title(self):
-		search_title = None
-		custom_title = self.meta.get('custom_title', None)
-		if custom_title: search_title = custom_title
-		else:
-			if get_setting('twilight.meta_language') == 'en': search_title = self.meta['title']
-			else:
-				english_title = self.meta.get('english_title')
-				if english_title: search_title = english_title
-				else:
-					try:
-						media_type = 'movie' if self.media_type == 'movie' else 'tv'
-						meta_user_info = metadata_user_info()
-						english_title = metadata.english_translation(media_type, self.meta['tmdb_id'], meta_user_info)
-						if english_title: search_title = english_title
-						else: search_title = self.meta['original_title']
-					except: pass
-				if not search_title: search_title = self.meta['original_title']
-			if '(' in search_title: search_title = search_title.split('(')[0]
-			search_title.replace('/', ' ')
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINE:
+		# search_title = self.meta.get('custom_title', None) or self.meta.get('english_title') or self.meta.get('title')
+		# CUSTOM NEW LINE - Preserve original_title for English title and not Hebrew title (for Hebrew subtitle match):
+		search_title = self.meta.get('original_title', None) or self.meta.get('custom_title', None) or self.meta.get('english_title') or self.meta.get('title')
+		#########################################
 		return search_title
 
 	def get_search_year(self):
