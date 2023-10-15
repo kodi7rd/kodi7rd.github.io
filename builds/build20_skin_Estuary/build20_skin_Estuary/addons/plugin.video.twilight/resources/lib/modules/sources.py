@@ -388,7 +388,7 @@ class Sources():
 		# ORIGINAL TWILIGHT LINE:
 		# search_title = self.meta.get('custom_title', None) or self.meta.get('english_title') or self.meta.get('title')
 		# CUSTOM NEW LINE - Preserve original_title for English title and not Hebrew title (for Hebrew subtitle match):
-		search_title = self.meta.get('original_title', None) or self.meta.get('custom_title', None) or self.meta.get('english_title') or self.meta.get('title')
+		search_title = self.meta.get('custom_title', None) or self.meta.get('english_title') or self.meta.get('original_title', None) or self.meta.get('title') 
 		#########################################
 		return search_title
 
