@@ -44,13 +44,35 @@ def reformat_message_content(message_content):
     message_content = re.sub(f'🎬\s*(.*)\s*🎬', r'[B][COLOR yellow]\1[/COLOR][/B]', message_content)
     
     # Bold headers
-    bold_headers = ["ז'אנר", "בימוי:", "שחקנים:", "תקציר:", "תאריך יציאה לקולנוע", "תאריך יציאה לרשת"]
+    bold_headers = ["ז'אנר:", "בימוי:", "שחקנים:", "תקציר:", "תאריך יציאה לקולנוע:", "תאריך יציאה לרשת:"]
     for bold_header in bold_headers:
         # Use regular expression to capture the pattern and replace it with [B][I]pattern[/I][/B]
         message_content = re.sub(f'({bold_header})', r'[B]\1[/B]', message_content)
     
     # Make "עדכון 1 לגבי הסרט..." bold
     message_content = re.sub(r'עדכון (\d+) לגבי הסרט "(.*?)"', r'[B]עדכון \1 לגבי הסרט "\2"[/B]', message_content)
+    
+    # Check if both "תאריך יציאה לקולנוע:" and "תאריך יציאה לרשת:" are in the text
+    if "[B]תאריך יציאה לקולנוע:[/B]" in message_content and "[B]תאריך יציאה לרשת:[/B]" in message_content:
+    
+        try:
+            # Split the text into lines
+            lines = message_content.split('\n')
+
+            # Find the index of "[B]תאריך יציאה לקולנוע:[/B]"
+            start_index = lines.index("[B]תאריך יציאה לקולנוע:[/B]")
+
+            # Move the content from "תאריך יציאה לקולנוע:" to the end of the text to the second line
+            moved_content = lines[start_index:]
+            lines[start_index:] = []  # Remove the moved lines
+            lines.insert(1, '\n'.join(moved_content))  # Insert the moved content at the second line
+
+            # Reconstruct the text
+            message_content = '\n'.join(lines)
+        except:
+            pass
+            
+    message_content = message_content.rstrip()
     
     return message_content
 

@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.16[/B][/COLOR]
+- Improve (more) "?מתי יגיע לרשת" text appearance.
+
 [COLOR dodgerblue][B]Version 3.2.15[/B][/COLOR]
 - Improve "?מתי יגיע לרשת" text appearance.
 
