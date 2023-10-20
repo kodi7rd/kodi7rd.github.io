@@ -19,6 +19,11 @@ max_threads, widget_hide_next_page, include_year_in_title, paginate = settings.m
 twilight_str, trakt_str, watched_str, unwatched_str, extras_str, options_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32645), ls(32646)
 hide_str, exit_str, clearprog_str, nextpage_str, jump2_str, play_str = ls(32648), ls(32649), ls(32651), ls(32799), ls(32964), '[B]%s...[/B]' % ls(32174)
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
+
+############KODI-RD-IL###################
+MoviesOnlineDates_str = ls(400017)
+#########################################
+
 run_plugin = 'RunPlugin(%s)'
 tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_popular_today','tmdb_movies_blockbusters','tmdb_movies_in_theaters',
 				'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
@@ -163,6 +168,12 @@ class Movies:
 			play_options_params = build_url({'mode': 'playback_choice', 'media_type': 'movie', 'poster': poster, 'meta': tmdb_id})
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id, 'poster': poster, 'playcount': playcount,
 										'progress': progress, 'is_external': self.is_external})
+
+			############KODI-RD-IL###################
+			original_title = meta.get('english_title') or meta.get('original_title')
+			MoviesOnlineDates_params = build_url({'mode': 'MoviesOnlineDates_search', 'title': title, 'original_title': original_title})
+			#########################################
+
 			if self.open_extras:
 				url_params = extras_params
 				cm_append((play_str, run_plugin % play_params))
@@ -170,6 +181,11 @@ class Movies:
 				url_params = play_params
 				cm_append((extras_str, run_plugin % extras_params))
 			cm_append((options_str, run_plugin % options_params))
+
+			############KODI-RD-IL###################
+			cm_append((f"[B][COLOR FF5CFF34]{MoviesOnlineDates_str}[/COLOR][/B]", run_plugin % MoviesOnlineDates_params))
+			#########################################
+
 			cm_append((play_options_str, run_plugin % play_options_params))
 			if progress:
 				clearprog_params = build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'})

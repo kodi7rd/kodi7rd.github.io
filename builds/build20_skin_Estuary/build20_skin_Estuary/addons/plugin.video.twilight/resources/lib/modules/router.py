@@ -10,6 +10,14 @@ def routing(sys):
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	_get = params.get
 	mode = _get('mode', 'navigator.main')
+
+	############KODI-RD-IL###################
+	if 'MoviesOnlineDates_search' in mode:
+		title, original_title = _get('title'), _get('original_title')
+		from kodirdil.MoviesOnlineDates import MoviesOnlineDates
+		return MoviesOnlineDates.search_MoviesOnlineDates(title, original_title)
+	#########################################
+
 	if 'navigator.' in mode:
 		from indexers.navigator import Navigator
 		return exec('Navigator(params).%s()' % mode.split('.')[1])
