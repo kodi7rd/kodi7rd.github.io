@@ -12,22 +12,26 @@ timestamp_format = '%d.%m.%Y %H:%M'
 
 def reformat_message_content(message_content):
     
-    # Remove Telegram link refernce for movie name
-    message_content = re.sub(r'\[([^]]+)\]\(https://t\.me/MoviesOnlineDates/\d+\)', r'\1', message_content)
-    
-    # Unwanted strings to remove
+    # Remove Telegram link reference for movie name twice
+    for _ in range(2):
+        message_content = re.sub(r'\[([^]]+)\]\(https://t\.me/MoviesOnlineDates/\d+\)', r'\1', message_content)
+        
+    # Unwanted strings to remove️
     unwanted_strings = [
         ('**', ''),
         ('ערוץ: @MoviesOnlineDates', ''),
         ('קבוצה: @MoviesOnlineDatesChat', ''),
         ('⭐', ''),
+        ('🚨', ''),
+        ('❗', '!'),
         ('הצטרפו אלינו:', ''),
         ('קבוצת הדיונים ובקשת תאריכים: @MoviesOnlineDatesChat', ''),
         ('🇮🇱', '[B][COLOR cyan]ישראל[/COLOR][/B]'),
         ('🇺🇸', 'ארה"ב'),
-        ('✅', ''),
-        ('🎬', ''),
-        ('תקציר:\n', 'תקציר: ')
+        ('🇯🇵', 'יפן'),
+        ('✅', '[B][COLOR FF5CFF34](יצא)[/COLOR][/B]'),
+        ('תקציר:\n', 'תקציר: '),
+        ('️️', '')
     ]
     
     for unwanted_string, replacement_char in unwanted_strings:
@@ -35,6 +39,9 @@ def reformat_message_content(message_content):
     
     # Use regular expression to replace multiple consecutive newline characters with a single newline
     message_content = re.sub(r'\n+', '\n', message_content)
+    
+    # Movie label
+    message_content = re.sub(f'🎬\s*(.*)\s*🎬', r'[B][COLOR yellow]\1[/COLOR][/B]', message_content)
     
     # Bold headers
     bold_headers = ["ז'אנר", "בימוי:", "שחקנים:", "תקציר:", "תאריך יציאה לקולנוע", "תאריך יציאה לרשת"]
@@ -65,7 +72,7 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
     messages = []
 
     # Iterate through the JSON data and search for messages containing movie title / original_title
-    for message in reversed(json_data):
+    for message in json_data:
     
         message_content = message["message_content"]
         
@@ -78,7 +85,7 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
     if not messages:
         return "לא נמצא מידע!"
     
-    movie_information_results = ""
+    movie_information_results = f'[B]המידע לקוח מערוץ הטלגרם "מתי מגיע לרשת?" (MoviesOnlineDates@)[/B]\n{"-"*125}\n'
     message_number = 1
 
     for message in messages:
@@ -86,9 +93,9 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
         message_content = reformat_message_content(message['message_content'])
         
         message_timestamp_ltr_format = "\u202A" + message['message_timestamp'] + "\u202C"
-        message_timestamp_str = f"[B][COLOR yellow]{message_number}) פורסם בתאריך {message_timestamp_ltr_format}[/COLOR][/B]"
+        message_timestamp_str = f"[B][COLOR FF5CFF34]{message_number}) פורסם בתאריך {message_timestamp_ltr_format}[/COLOR][/B]"
         
-        movie_information_results += f"{message_timestamp_str}\n{message_content}\n{'-'*130}\n"
+        movie_information_results += f"{message_timestamp_str}\n{message_content}\n{'-'*125}\n"
         message_number += 1
         
     return movie_information_results

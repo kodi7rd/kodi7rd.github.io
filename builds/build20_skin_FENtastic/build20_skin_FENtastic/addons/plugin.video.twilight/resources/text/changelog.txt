@@ -1,7 +1,10 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.15[/B][/COLOR]
+- Improve "?מתי יגיע לרשת" text appearance.
+
 [COLOR dodgerblue][B]Version 3.2.14[/B][/COLOR]
-- Added access to Telegram channel "מתי יגיע לרשת?" for Movies online releases information. Can be accessed by opening a Movie's context menu (Long press/Right click) --> מתי יגיע לרשת?
+- Added access to Telegram channel "?מתי יגיע לרשת" for Movies online releases information. Can be accessed by opening a Movie's context menu (Long press/Right click) --> ?מתי יגיע לרשת
 
 [COLOR dodgerblue][B]Version 3.2.13[/B][/COLOR]
 - Added "Season X, Episode Y" / "Y פרק ,X עונה" label for episode MediaList view.
