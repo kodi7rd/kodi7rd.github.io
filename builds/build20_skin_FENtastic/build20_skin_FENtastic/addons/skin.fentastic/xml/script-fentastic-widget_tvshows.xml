@@ -13,17 +13,11 @@
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="220111"/>
         </include>
-        <include content="WidgetListCategoryStacked">
-            <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=FENtastic+-+%D7%A1%D7%93%D7%A8%D7%95%D7%AA+-+%D7%A8%D7%A9%D7%99%D7%9E%D7%95%D7%AA&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
-            <param name="widget_header" value="[B][COLOR yellow]צפייה מהנה[/COLOR][/B]"/>
+        <include content="WidgetListBigPoster">
+            <param name="content_path" value="plugin://plugin.video.twilight/?name=32459&amp;action=tmdb_tv_popular&amp;iconImage=popular&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="[B][COLOR yellow]פופולריות[/COLOR][/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="22012"/>
-        </include>
-        <include content="WidgetListBigPosterStacked">
-            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.22012.path)]"/>
-            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.22012.label)]"/>
-            <param name="widget_target" value="videos"/>
-            <param name="list_id" value="220121"/>
         </include>
         <include content="WidgetListBigEpisodes">
             <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=%D7%A1%D7%93%D7%A8%D7%95%D7%AA+-+%D7%9C%D7%A4%D7%99+%D7%A8%D7%A9%D7%AA%D7%95%D7%AA&amp;iconImage=networks&amp;shortcut_folder=True&amp;external_list_item=True"/>
