@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v3.9.3[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.4[/B][/COLOR]
+* OpenSubtitles XMLRPC download bug fix.
+Might break at end of 2023, migration to new REST API needed:
+https://opensubtitles.stoplight.io/docs/opensubtitles-api/e3750fd63a100-getting-started
+[COLOR yellow][B]v3.9.3[/B][/COLOR]
 * Small [COLOR limegreen][KTUVIT][/COLOR] website code fix.
 [COLOR yellow][B]v3.9.2[/B][/COLOR]
 * Add obf "write_heb_embedded_taglines_check" function.

@@ -220,10 +220,10 @@ class OSDBServer:
          data = d.decompress(base64.b64decode(result["data"][0]["data"]))
          local_file.write(data)
          local_file.close()
-         log( __name__,"Download Using XMLRPC")
          return True
        return False
-     except:
+     except Exception as e:
+       log.warning(f'DEBUG | OPS | XMLRPC | Exception: {e}')
        return False
        
 def get_subs(item):
@@ -269,6 +269,7 @@ def get_subs(item):
             download_data['link']=item_data["ZipDownloadLink"]
             download_data['id']=item_data["IDSubtitleFile"]
             download_data['format']=item_data["SubFormat"]
+            download_data['filename']=item_data["SubFileName"]
             
             url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=opensubtitles" % (MyScriptID,
                                                                               
@@ -306,21 +307,25 @@ def download(download_data,MySubFolder):
     id=download_data['id']
     format=download_data['format']
     url=download_data['link']
+    filename=download_data['filename']
  
 
     exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass" ]
     
-    subFile = os.path.join(MyTmp, "%s.%s" %(str(uuid.uuid4()), format))
+    # subFile = os.path.join(MyTmp, "%s.%s" %(str(uuid.uuid4()), format))
+    subFile = os.path.join(MyTmp, "%s.%s" %(str(filename), format))
     try:
       result =OSDBServer().download(id, subFile)
+      log.warning(f"DEBUG | OPS | XMLRPC | id: {id} | subFile: {subFile} | result: {result}")
     except Exception as e:
-      log.warning( __name__, "failed to connect to service for subtitle download")
+      log.warning("failed to connect to service for subtitle download")
       log.warning(str(e))
       
     log.warning(result)
     if not result:
 
         subFile = os.path.join( MyTmp, "OpenSubtitles.zip")
+        log.warning(f"DEBUG | OPS | HTTP | url: {url}")
         f = urlopen(url)
         log.warning(url)
         with open(subFile, "wb") as zip_subFile:
