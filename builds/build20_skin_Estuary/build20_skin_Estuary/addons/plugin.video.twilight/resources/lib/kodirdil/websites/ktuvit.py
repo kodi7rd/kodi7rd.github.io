@@ -209,7 +209,7 @@ def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
     if imdb_id:
         for result in ktuvit_search_page_results:
             imdb_id_from_ktuvit = extract_imdb_id_from_result(result)
-            if imdb_id == imdb_id_from_ktuvit:
+            if imdb_id_from_ktuvit in imdb_id:
                 kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | MATCH | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID: {imdb_id_from_ktuvit}")
                 ID_from_ktuvit = result['ID']
                 break
