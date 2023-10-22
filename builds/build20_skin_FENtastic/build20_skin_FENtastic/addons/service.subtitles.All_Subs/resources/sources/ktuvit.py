@@ -113,7 +113,7 @@ def get_subs(item):
         for itt in j_data:
             
             imdb_id_from_ktuvit = extract_imdb_id_from_itt(itt)
-            if item['imdb']==imdb_id_from_ktuvit:
+            if imdb_id_from_ktuvit in item['imdb']:
                 f_id=itt['ID']
                 break
 

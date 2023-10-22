@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.9.2[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.3[/B][/COLOR]
+* Small [COLOR limegreen][KTUVIT][/COLOR] website code fix.
+[COLOR yellow][B]v3.9.2[/B][/COLOR]
 * Add obf "write_heb_embedded_taglines_check" function.
 [COLOR yellow][B]v3.9.0[/B][/COLOR]
 * Remove OpenSubtitles account settings.
