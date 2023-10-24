@@ -308,9 +308,9 @@
                             <label>$INFO[Window.Property(button10.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="11">
@@ -324,9 +324,9 @@
                             <label>$INFO[Window.Property(button11.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="12">
@@ -340,9 +340,9 @@
                             <label>$INFO[Window.Property(button12.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="13">
@@ -356,9 +356,9 @@
                             <label>$INFO[Window.Property(button13.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                     </control>
@@ -375,9 +375,9 @@
                             <label>$INFO[Window.Property(button14.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="15">
@@ -391,9 +391,9 @@
                             <label>$INFO[Window.Property(button15.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="16">
@@ -407,9 +407,9 @@
                             <label>$INFO[Window.Property(button16.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="17">
@@ -423,9 +423,9 @@
                             <label>$INFO[Window.Property(button17.label)]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                     </control>
@@ -451,7 +451,7 @@
                             <onup>14</onup>
                             <ondown>2050</ondown>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                         </control>
                         <control type="textbox">
                             <top>65</top>
@@ -474,7 +474,7 @@
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
-                            <textcolor>FF302F2F</textcolor>
+                            <textcolor>FF202020</textcolor>
                             <label>$INFO[Window.Property(plot)]</label>
                             <autoscroll>false</autoscroll>
                             <visible>Control.HasFocus(50)</visible>
@@ -557,7 +557,7 @@
                             <height>15</height>
                             <onup>2050</onup>
                             <ondown>2051</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -658,7 +658,7 @@
                             <height>15</height>
                             <onup>2051</onup>
                             <ondown>2052</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -710,7 +710,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>570</width>
-                                    <texture colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="textbox">
                                     <top>15</top>
@@ -739,7 +739,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(text)]</label>
                                 </control>
                             </focusedlayout>
@@ -750,7 +750,7 @@
                             <height>15</height>
                             <onup>2052</onup>
                             <ondown>2053</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -802,7 +802,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>570</width>
-                                    <texture colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="textbox">
                                     <top>15</top>
@@ -831,7 +831,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(text)]</label>
                                 </control>
                             </focusedlayout>
@@ -842,7 +842,7 @@
                             <height>15</height>
                             <onup>2053</onup>
                             <ondown>2054</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -894,7 +894,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>570</width>
-                                    <texture colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="textbox">
                                     <top>15</top>
@@ -923,7 +923,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(text)]</label>
                                 </control>
                             </focusedlayout>
@@ -934,7 +934,7 @@
                             <height>15</height>
                             <onup>2054</onup>
                             <ondown>2055</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -986,7 +986,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>570</width>
-                                    <texture colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="textbox">
                                     <top>15</top>
@@ -1015,7 +1015,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(text)]</label>
                                 </control>
                             </focusedlayout>
@@ -1026,7 +1026,7 @@
                             <height>15</height>
                             <onup>2055</onup>
                             <ondown>2056</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1077,7 +1077,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>230</width>
-                                    <texture colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="image">
                                     <left>6</left>
@@ -1124,7 +1124,7 @@
                                     <width>224</width>
                                     <height>320</height>
                                     <aspectratio>scale</aspectratio>
-                                    <texture colordiffuse="FF302F2F">$INFO[ListItem.Property(thumbnail)]</texture>
+                                    <texture colordiffuse="FF202020">$INFO[ListItem.Property(thumbnail)]</texture>
                                 </control>
                                 <control type="textbox">
                                     <left>6</left>
@@ -1134,7 +1134,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(name)]</label>
                                     <autoscroll>false</autoscroll>
                                 </control>
@@ -1146,7 +1146,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(ranking)]</label>
                                     <autoscroll>false</autoscroll>
                                 </control>
@@ -1229,7 +1229,7 @@
                             <height>15</height>
                             <onup>2057</onup>
                             <ondown>2058</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1323,7 +1323,7 @@
                             <height>15</height>
                             <onup>2058</onup>
                             <ondown>2059</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1415,7 +1415,7 @@
                             <height>15</height>
                             <onup>2059</onup>
                             <ondown>2060</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1516,7 +1516,7 @@
                             <height>15</height>
                             <onup>2060</onup>
                             <ondown>2061</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1617,7 +1617,7 @@
                             <height>15</height>
                             <onup>2061</onup>
                             <ondown>2062</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1718,7 +1718,7 @@
                             <height>15</height>
                             <onup>2062</onup>
                             <ondown>2063</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -1769,13 +1769,13 @@
                             <control type="image">
                                 <height>360</height>
                                 <width>933</width>
-                                <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                                <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                                 <visible>Integer.IsGreater(Container(2063).NumItems,1)</visible>
                             </control>
                             <control type="image">
                                 <height>360</height>
                                 <width>1169</width>
-                                <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                                <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                                 <visible>Integer.IsGreater(Container(2063).NumItems,2)</visible>
                             </control>
                             <control type="image">
@@ -1853,7 +1853,7 @@
                             <height>15</height>
                             <onup>2063</onup>
                             <ondown>10</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>

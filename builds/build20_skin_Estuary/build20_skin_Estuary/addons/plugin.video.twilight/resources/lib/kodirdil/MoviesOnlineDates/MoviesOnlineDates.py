@@ -107,7 +107,7 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
     if not messages:
         return "לא נמצא מידע!"
     
-    movie_information_results = f'[B]המידע לקוח מערוץ הטלגרם "מתי מגיע לרשת?" (MoviesOnlineDates@)[/B]\n{"-"*125}\n'
+    movie_information_results = f'[B]המידע לקוח מערוץ הטלגרם "מתי יגיע לרשת?" (MoviesOnlineDates@)[/B]\n{"-"*125}\n'
     message_number = 1
 
     for message in messages:

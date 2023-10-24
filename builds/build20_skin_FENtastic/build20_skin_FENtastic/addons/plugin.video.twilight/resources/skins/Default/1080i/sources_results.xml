@@ -111,7 +111,7 @@
                             <top>15</top>
                             <width>1180</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <height max="100">auto</height>
@@ -224,7 +224,7 @@
                                     <left>20</left>
                                     <control type="label">
                                         <font>font14</font> <!-- TWILIGHT_33 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
                                         <label>[B]$INFO[ListItem.Property(quality)][/B]</label>
@@ -232,7 +232,7 @@
                                     <control type="label">
                                         <top>35</top>
                                         <font>font10</font> <!-- TWILIGHT_21 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>top</aligny>
                                         <label>[B]$INFO[ListItem.Property(provider)][/B]</label>
@@ -244,7 +244,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
@@ -256,7 +256,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[ListItem.Property(extraInfo)][/UPPERCASE]</label>
@@ -268,7 +268,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
@@ -284,7 +284,7 @@
                                     <left>60</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">twilight_common/info.png</texture>
+                                    <texture colordiffuse="FF202020">twilight_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -292,7 +292,7 @@
                                     <width max="860">auto</width>
                                     <height>40</height>
                                     <font>font14</font> <!-- TWILIGHT_33 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <label>$ADDON[plugin.video.twilight 33023]</label>
@@ -433,7 +433,7 @@
                     <height>945</height>
                     <onleft>2000</onleft>
                     <onright>2000</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                    <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
@@ -474,7 +474,7 @@
                         <control type="image">
                             <width>770</width>
                             <height>825</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="image">
                             <left>-40</left>
@@ -620,7 +620,7 @@
                             <top>15</top>
                             <width>1030</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -730,7 +730,7 @@
                                     <left>20</left>
                                     <control type="label">
                                         <font>font14</font> <!-- TWILIGHT_33 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
                                         <label>[B]$INFO[ListItem.Property(quality)][/B]</label>
@@ -738,7 +738,7 @@
                                     <control type="label">
                                         <top>35</top>
                                         <font>font10</font> <!-- TWILIGHT_21 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>top</aligny>
                                         <label>[B]$INFO[ListItem.Property(provider)][/B]</label>
@@ -750,7 +750,7 @@
                                     <width max="835">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
@@ -762,7 +762,7 @@
                                     <width max="835">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[ListItem.Property(extraInfo)][/UPPERCASE]</label>
@@ -774,7 +774,7 @@
                                     <width max="835">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
@@ -790,7 +790,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">twilight_common/info.png</texture>
+                                    <texture colordiffuse="FF202020">twilight_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -798,7 +798,7 @@
                                     <width max="860">auto</width>
                                     <height>40</height>
                                     <font>font14</font> <!-- TWILIGHT_33 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <label>$ADDON[plugin.video.twilight 33023]</label>
@@ -938,7 +938,7 @@
                     <height>825</height>
                     <onleft>2001</onleft>
                     <onright>2001</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                    <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
@@ -1013,7 +1013,7 @@
                             <top>15</top>
                             <width>1180</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <height max="100">auto</height>
@@ -1126,7 +1126,7 @@
                                     <left>20</left>
                                     <control type="label">
                                         <font>font14</font> <!-- TWILIGHT_33 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
                                         <label>[B]$INFO[ListItem.Property(quality)][/B]</label>
@@ -1134,7 +1134,7 @@
                                     <control type="label">
                                         <top>35</top>
                                         <font>font10</font> <!-- TWILIGHT_21 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>top</aligny>
                                         <label>[B]$INFO[ListItem.Property(provider)][/B]</label>
@@ -1146,7 +1146,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
@@ -1158,7 +1158,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[ListItem.Property(extraInfo)][/UPPERCASE]</label>
@@ -1170,7 +1170,7 @@
                                     <width max="950">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
@@ -1186,7 +1186,7 @@
                                     <left>60</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">twilight_common/info.png</texture>
+                                    <texture colordiffuse="FF202020">twilight_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1194,7 +1194,7 @@
                                     <width max="860">auto</width>
                                     <height>40</height>
                                     <font>font14</font> <!-- TWILIGHT_33 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <label>$ADDON[plugin.video.twilight 33023]</label>
@@ -1335,7 +1335,7 @@
                     <height>705</height>
                     <onleft>2002</onleft>
                     <onright>2002</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                    <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
@@ -1387,7 +1387,7 @@
                             <top>15</top>
                             <width>925</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -1499,7 +1499,7 @@
                                     <left>20</left>
                                     <control type="label">
                                         <font>font14</font> <!-- TWILIGHT_33 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
                                         <label>[B]$INFO[ListItem.Property(quality)][/B]</label>
@@ -1507,7 +1507,7 @@
                                     <control type="label">
                                         <top>35</top>
                                         <font>font10</font> <!-- TWILIGHT_21 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>top</aligny>
                                         <label>[B]$INFO[ListItem.Property(provider)][/B]</label>
@@ -1519,7 +1519,7 @@
                                     <width max="725">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)][/UPPERCASE]</label>
@@ -1531,7 +1531,7 @@
                                     <width max="725">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[ListItem.Property(extraInfo)][/UPPERCASE]</label>
@@ -1543,7 +1543,7 @@
                                     <width max="725">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32228]: [/B][/COLOR]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/UPPERCASE]</label>
@@ -1559,7 +1559,7 @@
                                     <left>45</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">twilight_common/info.png</texture>
+                                    <texture colordiffuse="FF202020">twilight_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1567,7 +1567,7 @@
                                     <width max="860">auto</width>
                                     <height>40</height>
                                     <font>font14</font> <!-- TWILIGHT_33 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <label>$ADDON[plugin.video.twilight 33023]</label>
@@ -1710,7 +1710,7 @@
                     <height>825</height>
                     <onleft>2003</onleft>
                     <onright>2003</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                    <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
@@ -1764,7 +1764,7 @@
                             <top>15</top>
                             <width>1700</width>
                             <height>110</height>
-                            <texture colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texture>
+                            <texture colordiffuse="FF202020" border="30">twilight_common/circle.png</texture>
                         </control>
                         <control type="group">
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
@@ -1863,7 +1863,7 @@
                                     <left>20</left>
                                     <control type="label">
                                         <font>font14</font> <!-- TWILIGHT_33 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
                                         <label>[B]$INFO[ListItem.Property(quality)][/B]</label>
@@ -1871,7 +1871,7 @@
                                     <control type="label">
                                         <top>35</top>
                                         <font>font10</font> <!-- TWILIGHT_21 -->
-                                        <textcolor>FF4a4347</textcolor>
+                                        <textcolor>FF202020</textcolor>
                                         <align>left</align>
                                         <aligny>top</aligny>
                                         <label>[B]$INFO[ListItem.Property(provider)][/B]</label>
@@ -1883,7 +1883,7 @@
                                     <width max="1460">auto</width>
                                     <height>12</height>
                                     <font>font10</font> <!-- TWILIGHT_21 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32584]: [/B][/COLOR]$INFO[ListItem.Property(size_label)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 33031]: [/B][/COLOR]$INFO[ListItem.Property(source_type)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32100]: [/B][/COLOR]$INFO[ListItem.Property(source_site)]     [COLOR $INFO[ListItem.Property(highlight)]][B]$ADDON[plugin.video.twilight 32987]: [/B][/COLOR]$INFO[ListItem.Property(extraInfo)][/UPPERCASE]</label>
@@ -1895,7 +1895,7 @@
                                     <width max="1460">auto</width>
                                     <height>12</height>
                                     <font>font12</font> <!-- TWILIGHT_26 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>[UPPERCASE][B]$INFO[ListItem.Property(count)] $INFO[ListItem.Property(name)][/B][/UPPERCASE]</label>
@@ -1911,7 +1911,7 @@
                                     <left>55</left>
                                     <align>left</align>
                                     <aligny>top</aligny>
-                                    <texture colordiffuse="FF4a4347">twilight_common/info.png</texture>
+                                    <texture colordiffuse="FF202020">twilight_common/info.png</texture>
                                 </control>
                                 <control type="label">
                                     <top>50</top>
@@ -1919,7 +1919,7 @@
                                     <width max="1460">auto</width>
                                     <height>40</height>
                                     <font>font14</font> <!-- TWILIGHT_33 -->
-                                    <textcolor>FF4a4347</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
                                     <label>$ADDON[plugin.video.twilight 33023]</label>
@@ -2047,7 +2047,7 @@
                     <height>945</height>
                     <onleft>2004</onleft>
                     <onright>2004</onright>
-                    <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                    <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                     <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                     <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                     <showonepage>false</showonepage>
@@ -2088,7 +2088,7 @@
             <control type="image">
                 <width>778</width>
                 <height>803</height>
-                <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
+                <texture border="16" colordiffuse="FF202020">twilight_common/dialog.png</texture>
             </control>
             <control type="image">
                 <left>10</left>
@@ -2116,7 +2116,7 @@
                 <left>760</left>
                 <width>54</width>
                 <height>158</height>
-                <texture colordiffuse="FF302F2F" border="30" flipx="true">twilight_common/left-circle.png</texture>
+                <texture colordiffuse="FF202020" border="30" flipx="true">twilight_common/left-circle.png</texture>
             </control>
             <control type="image">
                 <visible>!Control.HasFocus(2100)</visible>

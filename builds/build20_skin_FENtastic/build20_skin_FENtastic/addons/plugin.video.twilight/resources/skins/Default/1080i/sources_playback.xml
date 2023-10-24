@@ -580,7 +580,7 @@
                     <label>$ADDON[plugin.video.twilight 32832] $INFO[Window.Property(resume_percent)]%</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>
@@ -594,7 +594,7 @@
                     <label>$ADDON[plugin.video.twilight 32833]</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>
@@ -608,7 +608,7 @@
                     <label>$ADDON[plugin.video.twilight 32840]</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>

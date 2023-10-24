@@ -1,5 +1,11 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.19[/B][/COLOR]
+- Changed all custom windows to use a darker theme (Thank you Tikipeter).
+
+[COLOR dodgerblue][B]Version 3.2.18[/B][/COLOR]
+- Small "?מתי יגיע לרשת" text typo fix.
+
 [COLOR dodgerblue][B]Version 3.2.17[/B][/COLOR]
 - Small HSM [KTUVIT] fix.
 

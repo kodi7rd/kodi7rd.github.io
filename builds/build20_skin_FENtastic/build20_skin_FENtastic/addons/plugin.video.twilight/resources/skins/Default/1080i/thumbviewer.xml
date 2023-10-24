@@ -116,7 +116,7 @@
                 <height>940</height>
                 <onleft>2000</onleft>
                 <onright>2000</onright>
-                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                 <texturesliderbarfocus colordiffuse="$INFO[Window(10000).Property(twilight.main_highlight)]">twilight_common/white.png</texturesliderbarfocus>
                 <showonepage>false</showonepage>

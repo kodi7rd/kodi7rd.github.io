@@ -30,7 +30,7 @@
                 <control type="image">
                     <width>1718</width>
                     <height>908</height>
-                    <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
+                    <texture border="16" colordiffuse="FF202020">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
                     <left>12</left>
@@ -166,7 +166,7 @@
                                 <height>15</height>
                                 <onup>2020</onup>
                                 <ondown>2021</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -272,7 +272,7 @@
                                 <height>15</height>
                                 <onup>2021</onup>
                                 <ondown>2022</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -354,7 +354,7 @@
                                             <top>6</top>
                                             <width>548</width>
                                             <height>318</height>
-                                            <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                                            <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                                             <visible>Control.HasFocus(2022) | Control.HasFocus(4022)</visible>
                                         </control>
                                         <control type="image">
@@ -384,7 +384,7 @@
                                 <height>15</height>
                                 <onup>2022</onup>
                                 <ondown>2023</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -490,7 +490,7 @@
                                 <height>15</height>
                                 <onup>2023</onup>
                                 <ondown>2024</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -573,7 +573,7 @@
                                             <top>6</top>
                                             <width>548</width>
                                             <height>318</height>
-                                            <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                                            <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                                             <visible>Control.HasFocus(2024) | Control.HasFocus(4024)</visible>
                                         </control>
                                         <control type="image">
@@ -604,7 +604,7 @@
                                 <height>15</height>
                                 <onup>2024</onup>
                                 <ondown>2025</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -710,7 +710,7 @@
                                 <height>15</height>
                                 <onup>2025</onup>
                                 <ondown>2026</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -820,7 +820,7 @@
                                 <height>15</height>
                                 <onup>2026</onup>
                                 <ondown>2027</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>
@@ -930,7 +930,7 @@
                                 <height>15</height>
                                 <onup>2027</onup>
                                 <ondown>2020</ondown>
-                                <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                                <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                                 <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                                 <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                                 <showonepage>false</showonepage>

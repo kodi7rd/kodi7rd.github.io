@@ -152,9 +152,9 @@
                             <label>$ADDON[plugin.video.twilight 32798]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                         <control type="button" id="11">
@@ -169,9 +169,9 @@
                             <label>$ADDON[plugin.video.twilight 33045] $ADDON[plugin.video.twilight 32798]</label>
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <textcolor>FFB7B4BB</textcolor>
-                            <focusedcolor>FF302F2F</focusedcolor>
+                            <focusedcolor>FF202020</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                             <align>center</align>
                         </control>
                     </control>
@@ -197,7 +197,7 @@
                             <onup>10</onup>
                             <ondown>2050</ondown>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
-                            <texturenofocus colordiffuse="FF302F2F" border="30">twilight_common/circle.png</texturenofocus>
+                            <texturenofocus colordiffuse="FF202020" border="30">twilight_common/circle.png</texturenofocus>
                         </control>
                         <control type="textbox">
                             <top>65</top>
@@ -220,7 +220,7 @@
                             <font>font13</font> <!-- TWILIGHT_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
-                            <textcolor>FF302F2F</textcolor>
+                            <textcolor>FF202020</textcolor>
                             <label>$INFO[Window.Property(biography)]</label>
                             <autoscroll time="2000" delay="12000" repeat="5000">true</autoscroll>
                             <visible>Control.HasFocus(50)</visible>
@@ -303,7 +303,7 @@
                             <height>15</height>
                             <onup>2050</onup>
                             <ondown>2051</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -404,7 +404,7 @@
                             <height>15</height>
                             <onup>2051</onup>
                             <ondown>2052</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -456,7 +456,7 @@
                                 <control type="image">
                                     <height>360</height>
                                     <width>570</width>
-                                    <texture colordiffuse="FF302F2F" border="30" background="true">twilight_common/circle.png</texture>
+                                    <texture colordiffuse="FF202020" border="30" background="true">twilight_common/circle.png</texture>
                                 </control>
                                 <control type="textbox">
                                     <top>15</top>
@@ -485,7 +485,7 @@
                                     <font>font12</font> <!-- TWILIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
-                                    <textcolor>FF302F2F</textcolor>
+                                    <textcolor>FF202020</textcolor>
                                     <label>$INFO[ListItem.Property(text)]</label>
                                 </control>
                             </focusedlayout>
@@ -496,7 +496,7 @@
                             <height>15</height>
                             <onup>2052</onup>
                             <ondown>2053</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -594,7 +594,7 @@
                             <height>15</height>
                             <onup>2053</onup>
                             <ondown>2054</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>
@@ -695,7 +695,7 @@
                             <height>15</height>
                             <onup>2054</onup>
                             <ondown>10</ondown>
-                            <texturesliderbackground colordiffuse="FF302F2F">twilight_common/white.png</texturesliderbackground>
+                            <texturesliderbackground colordiffuse="FF202020">twilight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">twilight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFB7B4BB">twilight_common/white.png</texturesliderbarfocus>
                             <showonepage>false</showonepage>

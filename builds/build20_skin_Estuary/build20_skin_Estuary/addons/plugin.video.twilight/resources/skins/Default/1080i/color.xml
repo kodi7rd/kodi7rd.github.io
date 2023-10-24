@@ -30,7 +30,7 @@
                 <control type="image">
                     <width>1658</width>
                     <height>938</height>
-                    <texture border="16" colordiffuse="FF302F2F">twilight_common/dialog.png</texture>
+                    <texture border="16" colordiffuse="FF202020">twilight_common/dialog.png</texture>
                 </control>
                 <control type="image">
                     <left>10</left>
@@ -80,7 +80,7 @@
                             <top>0</top>
                             <width>97</width>
                             <height>75</height>
-                            <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                            <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                         </control>
                         <control type="image">
                             <left>2</left>
@@ -108,7 +108,7 @@
                             <top>0</top>
                             <width>97</width>
                             <height>44</height>
-                            <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                            <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                         </control>
                         <control type="image">
                             <left>2</left>
@@ -136,7 +136,7 @@
                             <top>0</top>
                             <width>44</width>
                             <height>44</height>
-                            <texture colordiffuse="FF302F2F">twilight_common/white.png</texture>
+                            <texture colordiffuse="FF202020">twilight_common/white.png</texture>
                         </control>
                         <control type="image">
                             <left>2</left>
@@ -163,7 +163,7 @@
                     <label>$ADDON[plugin.video.twilight 32839]</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>
@@ -180,7 +180,7 @@
                     <label>$ADDON[plugin.video.twilight 32840]</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>
@@ -242,7 +242,7 @@
                     <label>$INFO[Window.Property(current_palette_name)]</label>
                     <font>font12</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFB7B4BB</textcolor>
-                    <focusedcolor>FF302F2F</focusedcolor>
+                    <focusedcolor>FF202020</focusedcolor>
                     <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>
                     <texturenofocus colordiffuse="FF4a4347" border="30">twilight_common/circle.png</texturenofocus>
                     <align>center</align>
