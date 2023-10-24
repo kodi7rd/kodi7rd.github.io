@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.9.4[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.5[/B][/COLOR]
+* Added notification for fault sub event.
+[COLOR yellow][B]v3.9.4[/B][/COLOR]
 * OpenSubtitles XMLRPC download bug fix.
 Might break at end of 2023, migration to new REST API needed:
 https://opensubtitles.stoplight.io/docs/opensubtitles-api/e3750fd63a100-getting-started

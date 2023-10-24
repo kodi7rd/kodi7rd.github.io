@@ -95,10 +95,12 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             try:
                 sub_file=download_sub(source,download_data,MySubFolder,language,filename)
                 xbmc.sleep(100)
-                if sub_file!='HebSubEmbeddedSelected':
-                    xbmc.Player().setSubtitles(sub_file)
-                else:
+                if sub_file=='HebSubEmbeddedSelected': # Hebrew embedded subtitle
                     hebrewEmbedded=True
+                elif sub_file=='FaultSubException':
+                    fault_sub=True
+                else: # External subtitle
+                    xbmc.Player().setSubtitles(sub_file)
                 log.warning('My Window Sub result:'+str(sub_file))
                 
             except:
@@ -107,7 +109,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             
             
             if fault_sub:
-                self.label_info.setLabel('[B]תקלה בהורדה בחר אחרת[/B]' + ' | ' + self.video_file_name_label)
+                self.label_info.setLabel('[B]תקלה בהורדה בחר כתובית אחרת[/B]' + ' | ' + self.video_file_name_label)
             else:
                 if not hebrewEmbedded:
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)

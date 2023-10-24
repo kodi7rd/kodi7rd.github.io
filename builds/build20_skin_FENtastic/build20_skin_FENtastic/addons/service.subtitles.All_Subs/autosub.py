@@ -539,7 +539,13 @@ def sub_from_main(arg):
         log.warning(params["filename"])
         sub_file=download_sub(source,download_data,MySubFolder,language,filename)
         fault=False
-        if (sub_file!='HebSubEmbeddedSelected'):
+        if sub_file=='HebSubEmbeddedSelected': # Hebrew embedded subtitle
+            notify( 'התרגום המובנה יופיע בעוד 10 שניות' )
+            log.warning(filename)
+            save_file_name(filename,language)
+        elif sub_file=='FaultSubException':
+            notify( 'תקלה בהורדה בחר כתובית אחרת' )
+        else: # External subtitle
         
             log.warning('Auto Sub result:'+str(sub_file))
             xbmc.sleep(100)
@@ -569,10 +575,6 @@ def sub_from_main(arg):
                     
                     shutil.copy(sub_file,c_sub_file)
                     
-        else:
-            notify( 'התרגום המובנה יופיע בעוד 10 שניות' )
-            log.warning(filename)
-            save_file_name(filename,language)
         return_result=json.dumps(sub_file)
         
     elif action=='open_settings':
@@ -677,7 +679,7 @@ def sub_from_main(arg):
             sub_file=download_sub(source,download_data,MySubFolder,language,filename)
             log.warning('Next Sub result:'+str(sub_file))
             general.show_msg="מוכן"
-            if (sub_file!='HebSubEmbeddedSelected'):
+            if (sub_file!='HebSubEmbeddedSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
             save_file_name(filename,language)
             
@@ -739,7 +741,7 @@ def sub_from_main(arg):
             log.warning('previous Sub result:'+str(sub_file))
             general.show_msg=sub_file
             xbmc.sleep(100)
-            if (sub_file!='HebSubEmbeddedSelected'):
+            if (sub_file!='HebSubEmbeddedSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
                 save_file_name(filename,language)
             else:

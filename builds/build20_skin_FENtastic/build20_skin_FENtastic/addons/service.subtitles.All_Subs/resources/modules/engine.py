@@ -883,6 +883,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         except Exception as e:
             log.warning(f"Exception downloading sub, configuring general.break_all=True... | Exception: {e}")
             general.break_all=True
+            return 'FaultSubException'
         
     if language!='Hebrew'  and Addon.getSetting("auto_translate")=='true':
         
@@ -900,6 +901,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             translate_subs(sub_file,trans_file)
         sub_file=trans_file
     log.warning(f"general.break_all: {general.break_all}")
-    if general.break_all:
-        return 'HebSubEmbeddedSelected'
+    # if general.break_all:
+        # return 'HebSubEmbeddedSelected'
+        # return 'FaultSubException'
     return sub_file
