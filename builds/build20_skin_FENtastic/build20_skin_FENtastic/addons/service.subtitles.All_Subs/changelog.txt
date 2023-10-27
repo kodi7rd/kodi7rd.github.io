@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.9.5[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.6[/B][/COLOR]
+* Change settings default value.
+[COLOR yellow][B]v3.9.5[/B][/COLOR]
 * Added notification for fault sub event.
 [COLOR yellow][B]v3.9.4[/B][/COLOR]
 * OpenSubtitles XMLRPC download bug fix.

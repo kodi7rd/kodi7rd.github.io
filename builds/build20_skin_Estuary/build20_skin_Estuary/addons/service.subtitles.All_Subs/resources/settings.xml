@@ -56,7 +56,7 @@
 		<setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
 		
 		<setting label="הרחבת Twilight" type="lsep"/>
-		<setting id="write_heb_embedded_taglines_to_twilight_repo" label="שפר את מאגר התרגום המובנה של הרחבת Twilight" type="bool" default="true" />
+		<setting id="write_heb_embedded_taglines_to_twilight_repo" label="שפר את מאגר התרגום המובנה של הרחבת Twilight" type="bool" default="false" />
 	</category>
 	
 	<category label="הגדרות קאש">
