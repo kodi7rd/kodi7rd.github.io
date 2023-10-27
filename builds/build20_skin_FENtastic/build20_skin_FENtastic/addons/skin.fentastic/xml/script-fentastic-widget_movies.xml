@@ -15,7 +15,7 @@
         </include>
         <include content="WidgetListBigPoster">
             <param name="content_path" value="plugin://plugin.video.twilight/?name=32461&amp;iconImage=dvd&amp;mode=build_movie_list&amp;action=tmdb_movies_latest_releases"/>
-            <param name="widget_header" value="[B][COLOR yellow]שוחררו לאחרונה[/COLOR][/B]"/>
+            <param name="widget_header" value="[B][COLOR yellow]חדשים[/COLOR][/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="19012"/>
         </include>
