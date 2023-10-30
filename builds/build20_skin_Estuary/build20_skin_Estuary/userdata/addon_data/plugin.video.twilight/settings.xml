@@ -34,8 +34,8 @@
     <setting id="custom_info_dialog" default="true">false</setting>
     <setting id="sort.progress">1</setting>
     <setting id="sort.watched">1</setting>
-    <setting id="sort.collection" default="true">0</setting>
-    <setting id="sort.watchlist" default="true">0</setting>
+    <setting id="sort.collection">1</setting>
+    <setting id="sort.watchlist">1</setting>
     <setting id="sort.movies.genres" default="true">popularity.desc</setting>
     <setting id="sort.movies.languages" default="true">popularity.desc</setting>
     <setting id="sort.movies.certifications" default="true">popularity.desc</setting>
