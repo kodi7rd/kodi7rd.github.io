@@ -1,7 +1,7 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
 [COLOR dodgerblue][B]Version 3.2.22[/B][/COLOR]
-- Added from Telegram channel [B]"?מתי יגיע לרשת"[/B] - information about movies that are execpted to be released this month. [B]("?מה מגיע לרשת החודש")[/B]
+- Added from Telegram channel [B]"?מתי יגיע לרשת"[/B] - information about movies that are execpted to be released online this month. [B]("?מה מגיע לרשת החודש")[/B]
 - Added settings to hide/show [B]"?מה מגיע לרשת החודש?" / "מתי יגיע לרשת"[/B] movie options.
 - Added setting to show results for current month only or all months history.
 [B]("הצג מידע עבור החודש הנוכחי בלבד")[/B]
