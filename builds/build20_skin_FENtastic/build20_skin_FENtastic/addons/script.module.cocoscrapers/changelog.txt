@@ -1,3 +1,7 @@
+[COLOR red][B]Version 1.0.13[/B][/COLOR]
+- Removed Hosters
+- Changed default scrapers enabled.
+
 [COLOR red][B]Version 1.0.12[/B][/COLOR]
 - Removed TorrentAPI
 - Corrected RSLBB address
