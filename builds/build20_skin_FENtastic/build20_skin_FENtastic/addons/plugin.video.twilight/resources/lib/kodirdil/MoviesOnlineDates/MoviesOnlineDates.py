@@ -3,6 +3,10 @@ import requests
 import re
 from datetime import datetime
 from modules.kodi_utils import local_string as ls
+from modules.kodi_utils import get_setting
+
+# Settings
+show_MoviesOnlineDates_upcoming_this_month_only_current_month = get_setting('show_MoviesOnlineDates_upcoming_this_month_only_current_month', 'true') == 'true'
 
 # URL of the JSON file
 MoviesOnlineDates_JSON_URL = "https://kodi7rd.github.io/MoviesOnlineDates_JSON/MoviesOnlineDates.json"
@@ -18,6 +22,7 @@ def reformat_message_content(message_content):
         
     # Unwanted strings to remove️
     unwanted_strings = [
+        # Replace to none
         ('**', ''),
         ('ערוץ: @MoviesOnlineDates', ''),
         ('קבוצה: @MoviesOnlineDatesChat', ''),
@@ -25,12 +30,18 @@ def reformat_message_content(message_content):
         ('🚨', ''),
         ('❗', '!'),
         ('הצטרפו אלינו:', ''),
+        ('הערה - אפשר ללחוץ על התאריך/האיכות וזה יוביל לעמוד הסרט!', ''),
         ('קבוצת הדיונים ובקשת תאריכים: @MoviesOnlineDatesChat', ''),
+        ('שתפו והצטרפו אלינו לעוד עדכונים:', ''),
+        # Replace to custom string
         ('🇮🇱', '[B][COLOR cyan]ישראל[/COLOR][/B]'),
         ('🇺🇸', 'ארה"ב'),
         ('🇯🇵', 'יפן'),
         ('✅', '[B][COLOR FF5CFF34](יצא)[/COLOR][/B]'),
         ('תקציר:\n', 'תקציר: '),
+        ('*יכולים להתווסף עוד סרטים במהלך החודש', '[B][COLOR red]* יכולים להתווסף עוד סרטים במהלך החודש[/COLOR][/B]'),
+        ('*צפויים להתווסף עוד סרטים במהלך החודש', '[B][COLOR red]* צפויים להתווסף עוד סרטים במהלך החודש[/COLOR][/B]'),
+        # Replace to none
         ('️️', '')
     ]
     
@@ -83,7 +94,7 @@ def load_json_data(url):
         return json.loads(response.text)
     return None
     
-def search_MoviesOnlineDates_titles(title=None, original_title=None):
+def MoviesOnlineDates_results_reader(search_movie_bool, title=None, original_title=None):
 
     # Load JSON data from the URL
     json_data = load_json_data(MoviesOnlineDates_JSON_URL)
@@ -92,17 +103,26 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
         return "התרחשה שגיאה בטעינת הנתונים!"
     
     messages = []
-
-    # Iterate through the JSON data and search for messages containing movie title / original_title
-    for message in json_data:
+    iteration_order = json_data if search_movie_bool else reversed(json_data)
+    
+    for message in iteration_order:
     
         message_content = message["message_content"]
-        
-        if 'סרטים שצפויים להגיע החודש' in message_content:
-            continue
-            
-        if (title and title in message_content) or (original_title and original_title in message_content):
-            messages.append(message)
+
+        # If search_movie_bool=True
+        if search_movie_bool:
+            if 'סרטים שצפויים להגיע החודש לרשת' in message_content:
+                continue
+                
+            if (title and title in message_content) or (original_title and original_title in message_content):
+                messages.append(message)
+
+        # If search_movie_bool=False (Show upcoming movies this month)
+        else:
+            if 'סרטים שצפויים להגיע החודש לרשת' in message_content:
+                messages.append(message)
+                if show_MoviesOnlineDates_upcoming_this_month_only_current_month:
+                    break
 
     if not messages:
         return "לא נמצא מידע!"
@@ -123,11 +143,11 @@ def search_MoviesOnlineDates_titles(title=None, original_title=None):
     return movie_information_results
 
 
-def search_MoviesOnlineDates(title=None, original_title=None):
+def MoviesOnlineDates_parser(search_movie_bool, title=None, original_title=None):
     
-    window_header = f"{ls(400017)} ({title})"
+    window_header = f"[COLOR FF5CFF34]{ls(400017)} ({title})[/COLOR]" if search_movie_bool else f"[COLOR FF5CFF34]{ls(400018)}[/COLOR]"
 
-    movie_information_results = search_MoviesOnlineDates_titles(title, original_title)
+    movie_information_results = MoviesOnlineDates_results_reader(search_movie_bool, title, original_title)
         
     show_MoviesOnlineDates(window_header, movie_information_results)
 

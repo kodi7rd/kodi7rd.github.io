@@ -21,7 +21,10 @@ hide_str, exit_str, clearprog_str, nextpage_str, jump2_str, play_str = ls(32648)
 addmenu_str, addshortcut_str, add_coll_str, refr_widg_str, play_options_str = ls(32730), ls(32731), ls(33081), '[B]%s[/B]' % ls(32611), '[B]%s...[/B]' % ls(32187)
 
 ############KODI-RD-IL###################
-MoviesOnlineDates_str = ls(400017)
+show_MoviesOnlineDates_movie_search = kodi_utils.get_setting('show_MoviesOnlineDates_movie_search', 'true') == 'true'
+show_MoviesOnlineDates_upcoming_this_month = kodi_utils.get_setting('show_MoviesOnlineDates_upcoming_this_month', 'true') == 'true'
+MoviesOnlineDates_movie_search_str = ls(400017)
+MoviesOnlineDates_upcoming_this_month_str = ls(400018)
 #########################################
 
 run_plugin = 'RunPlugin(%s)'
@@ -171,7 +174,8 @@ class Movies:
 
 			############KODI-RD-IL###################
 			original_title = meta.get('english_title') or meta.get('original_title')
-			MoviesOnlineDates_params = build_url({'mode': 'MoviesOnlineDates_search', 'title': title, 'original_title': original_title})
+			MoviesOnlineDates_movie_search_params = build_url({'mode': 'MoviesOnlineDates_movie_search', 'title': title, 'original_title': original_title})
+			MoviesOnlineDates_upcoming_this_month_params = build_url({'mode': 'MoviesOnlineDates_upcoming_this_month'})
 			#########################################
 
 			if self.open_extras:
@@ -183,7 +187,8 @@ class Movies:
 			cm_append((options_str, run_plugin % options_params))
 
 			############KODI-RD-IL###################
-			cm_append((f"[B][COLOR FF5CFF34]{MoviesOnlineDates_str}[/COLOR][/B]", run_plugin % MoviesOnlineDates_params))
+			if show_MoviesOnlineDates_movie_search: cm_append((f"[B][COLOR FF5CFF34]{MoviesOnlineDates_movie_search_str}[/COLOR][/B]", run_plugin % MoviesOnlineDates_movie_search_params))
+			if show_MoviesOnlineDates_upcoming_this_month: cm_append((f"[B][COLOR FF5CFF34]{MoviesOnlineDates_upcoming_this_month_str}[/COLOR][/B]", run_plugin % MoviesOnlineDates_upcoming_this_month_params))
 			#########################################
 
 			cm_append((play_options_str, run_plugin % play_options_params))

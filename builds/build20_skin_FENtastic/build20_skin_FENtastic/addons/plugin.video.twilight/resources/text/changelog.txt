@@ -1,7 +1,19 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.22[/B][/COLOR]
+- Added from Telegram channel [B]"?מתי יגיע לרשת"[/B] - information about movies that are execpted to be released this month. [B]("?מה מגיע לרשת החודש")[/B]
+- Added settings to hide/show [B]"?מה מגיע לרשת החודש?" / "מתי יגיע לרשת"[/B] movie options.
+- Added setting to show results for current month only or all months history.
+[B]("הצג מידע עבור החודש הנוכחי בלבד")[/B]
+
+[COLOR dodgerblue][B]Version 3.2.21[/B][/COLOR]
+- Tikipeter's bug fix version 3.2.13: Trakt calendar bug fix.
+
+[COLOR dodgerblue][B]Version 3.2.20[/B][/COLOR]
+- Tikipeter's version 3.2.12: Remove hoster support. (due to Cocoscrapers 1.0.13 hoster support removed)
+
 [COLOR dodgerblue][B]Version 3.2.19[/B][/COLOR]
-- Changed all custom windows to use a darker theme (Thank you Tikipeter).
+- Changed all custom windows to use a darker theme. (Thank you Tikipeter)
 
 [COLOR dodgerblue][B]Version 3.2.18[/B][/COLOR]
 - Small "?מתי יגיע לרשת" text typo fix.

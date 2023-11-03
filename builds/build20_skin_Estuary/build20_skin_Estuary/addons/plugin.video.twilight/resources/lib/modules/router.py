@@ -12,10 +12,14 @@ def routing(sys):
 	mode = _get('mode', 'navigator.main')
 
 	############KODI-RD-IL###################
-	if 'MoviesOnlineDates_search' in mode:
+	if 'MoviesOnlineDates_movie_search' in mode:
 		title, original_title = _get('title'), _get('original_title')
 		from kodirdil.MoviesOnlineDates import MoviesOnlineDates
-		return MoviesOnlineDates.search_MoviesOnlineDates(title, original_title)
+		return MoviesOnlineDates.MoviesOnlineDates_parser(search_movie_bool=True, title=title, original_title=original_title)
+
+	if 'MoviesOnlineDates_upcoming_this_month' in mode:
+		from kodirdil.MoviesOnlineDates import MoviesOnlineDates
+		return MoviesOnlineDates.MoviesOnlineDates_parser(search_movie_bool=False)
 	#########################################
 
 	if 'navigator.' in mode:

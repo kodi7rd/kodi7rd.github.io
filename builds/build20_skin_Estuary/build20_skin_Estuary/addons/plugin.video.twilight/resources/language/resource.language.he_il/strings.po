@@ -113,8 +113,8 @@ msgstr "יש לחבר מנוי ריל דבריד ב\"חיבור שירותים\"
 # Hebrew setting menu label
 
 msgctxt "#40000"
-msgid "התאמת כתוביות"
-msgstr "התאמת כתוביות"
+msgid "[COLOR yellow]התאמת כתוביות[/COLOR]"
+msgstr "[COLOR yellow]התאמת כתוביות[/COLOR]"
 
 # Hebrew Subtitles Matching Settings
 
@@ -192,10 +192,27 @@ msgctxt "#400016"
 msgid "Episode"
 msgstr "פרק"
 
-# Twilight movies.py - MoviesOnlineDates_str
+# Twilight - MoviesOnlineDates
 
 msgctxt "#400017"
 msgid "מתי יגיע לרשת?"
 msgstr "מתי יגיע לרשת?"
+
+msgctxt "#400018"
+msgid "מה מגיע לרשת החודש?"
+msgstr "מה מגיע לרשת החודש?"
+
+# For settings menu
+msgctxt "#400019"
+msgid "[COLOR FF5CFF34]מתי יגיע לרשת?[/COLOR]"
+msgstr "[COLOR FF5CFF34]מתי יגיע לרשת?[/COLOR]"
+
+msgctxt "#400020"
+msgid "הצג בתפריט האפשרויות של סרט:"
+msgstr "הצג בתפריט האפשרויות של סרט:"
+
+msgctxt "#400021"
+msgid "הצג מידע עבור החודש הנוכחי בלבד"
+msgstr "הצג מידע עבור החודש הנוכחי בלבד"
 
 ###################################################################################################################################

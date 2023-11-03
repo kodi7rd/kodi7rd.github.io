@@ -24,13 +24,13 @@ debrid_runners = {'Real-Debrid': ('Real-Debrid', RD_check), 'Premiumize.me': ('P
 sd_check = ('SD', 'CAM', 'TELE', 'SYNC')
 
 class source:
-	def __init__(self, meta, source_dict, debrid_torrents, debrid_hosters, internal_scrapers, prescrape_sources, progress_dialog, disabled_ext_ignored=False):
+	def __init__(self, meta, source_dict, debrid_torrents, internal_scrapers, prescrape_sources, progress_dialog, disabled_ext_ignored=False):
 		self.scrape_provider = 'external'
 		self.progress_dialog = progress_dialog
 		self.meta = meta
 		self.background = self.meta.get('background', False)
-		self.debrid_torrents, self.debrid_hosters = debrid_torrents, debrid_hosters
-		self.source_dict, self.host_dict = source_dict, self.make_host_dict()
+		self.debrid_torrents, self.debrid_hosters = debrid_torrents, False
+		self.source_dict, self.host_dict = source_dict, []
 		self.internal_scrapers, self.prescrape_sources = internal_scrapers, prescrape_sources
 		self.internal_activated, self.internal_prescraped = len(self.internal_scrapers) > 0, len(self.prescrape_sources) > 0
 		self.processed_prescrape, self.threads_completed = False, False
@@ -325,15 +325,6 @@ class source:
 			self.processed_internal_scrapers_append(i)
 			self.process_quality_count(internal_sources)
 		return [i for i in self.internal_scrapers if not i in self.processed_internal_scrapers]
-
-	def make_host_dict(self):
-		try:
-			pr_list = []
-			pr_list_extend = pr_list.extend
-			for item in self.debrid_hosters:
-				for k, v in item.items(): pr_list_extend(v)
-			return list(set(pr_list))
-		except: return def_host_dict
 
 	def _kill_progress_dialog(self):
 		try: self.progress_dialog.close()

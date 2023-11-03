@@ -366,7 +366,8 @@ def build_single_episode(list_type, params={}):
 		recently_aired = params.get('recently_aired', None)
 		data = trakt_get_my_calendar(recently_aired, get_datetime_function())
 		list_type = 'episode.trakt_recently_aired' if recently_aired else 'episode.trakt_calendar'
-		data = sorted(data, key=lambda i: (i['sort_title'], i.get('first_aired', '2100-12-31')), reverse=True)
+		try: data = sorted(data, key=lambda i: (i['sort_title'], i.get('first_aired', '2100-12-31')), reverse=True)
+		except: data = sorted(data, key=lambda i: (i['sort_title']), reverse=True)
 	list_type_compare = list_type.split('episode.')[1]
 	list_type_starts_with = list_type_compare.startswith
 	threads = list(make_thread_list_enumerate(_process, data))
@@ -379,9 +380,11 @@ def build_single_episode(list_type, params={}):
 		sort_key = nextep_settings['sort_key']
 		sort_direction = nextep_settings['sort_direction']
 		if nextep_settings['sort_airing_today_to_top']:
-			airing_today = [i for i in item_list
-							if date_difference_function(current_date, jsondate_to_datetime_function(i.get('first_aired', '2100-12-31'), '%Y-%m-%d').date(), 0)]
-			airing_today = sorted(airing_today, key=lambda i: i.get('first_aired', '2100-12-31'))
+			try:
+				airing_today = [i for i in item_list
+								if date_difference_function(current_date, jsondate_to_datetime_function(i.get('first_aired', '2100-12-31'), '%Y-%m-%d').date(), 0)]
+				airing_today = sorted(airing_today, key=lambda i: i.get('first_aired', '2100-12-31'))
+			except: pass
 			remainder = [i for i in item_list if not i in airing_today]
 			remainder = sorted(remainder, key=lambda i: func(i[sort_key]), reverse=sort_direction)
 			unaired = [i for i in remainder if i['unaired']]
@@ -398,7 +401,10 @@ def build_single_episode(list_type, params={}):
 		if list_type_compare in ('trakt_calendar', 'trakt_recently_aired'):
 			if list_type_compare == 'trakt_calendar': reverse = calendar_sort_order() == 0
 			else: reverse = True
-			item_list = sorted(item_list, key=lambda i: i.get('first_aired', '2100-12-31'), reverse=reverse)
+			try: item_list = sorted(item_list, key=lambda i: i.get('first_aired', '2100-12-31'), reverse=reverse)
+			except:
+				item_list = [i for i in item_list if i.get('first_aired') not in (None, 'None', '')]
+				item_list = sorted(item_list, key=lambda i: i.get('first_aired'), reverse=reverse)
 	add_items(handle, [i['list_items'] for i in item_list])
 	set_content(handle, content_type)
 	set_category(handle, category_name)

@@ -92,6 +92,33 @@
 				</setting>
 			</group>
 		</category>
+		<!-- MoviesOnlineDates -->
+		<category id="MoviesOnlineDates" label="400019" help="">
+			<group id="1" label="400020">
+				<setting id="show_MoviesOnlineDates_movie_search" type="boolean" label="400017" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="2" label="400020">
+				<setting id="show_MoviesOnlineDates_upcoming_this_month" type="boolean" label="400018" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="show_MoviesOnlineDates_upcoming_this_month_only_current_month" type="boolean" label="400021" help="">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="show_MoviesOnlineDates_upcoming_this_month">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+			</group>
+		</category>
 		<!-- General -->
 		<category id="general" label="32001" help="">
 			<!-- General -->

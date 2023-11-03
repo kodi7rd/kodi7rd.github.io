@@ -3962,7 +3962,7 @@ msgstr ""
 # Hebrew setting menu label
 
 msgctxt "#40000"
-msgid "התאמת כתוביות"
+msgid "[COLOR yellow]התאמת כתוביות[/COLOR]"
 msgstr ""
 
 # Hebrew Subtitles Matching Settings
@@ -4041,10 +4041,28 @@ msgctxt "#400016"
 msgid "Episode"
 msgstr ""
 
-# Twilight movies.py - MoviesOnlineDates_str
+# Twilight - MoviesOnlineDates
 
 msgctxt "#400017"
 msgid "מתי יגיע לרשת?"
+msgstr ""
+
+msgctxt "#400018"
+msgid "מה מגיע לרשת החודש?"
+msgstr ""
+
+# For settings menu
+
+msgctxt "#400019"
+msgid "[COLOR FF5CFF34]מתי יגיע לרשת?[/COLOR]"
+msgstr ""
+
+msgctxt "#400020"
+msgid "הצג בתפריט האפשרויות של סרט:"
+msgstr ""
+
+msgctxt "#400021"
+msgid "הצג מידע עבור החודש הנוכחי בלבד"
 msgstr ""
 
 ###################################################################################################################################
