@@ -152,7 +152,14 @@ class TwilightPlayer(xbmc_player):
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('movie')
 				info_tag.setTitle(self.title)
-				info_tag.setOriginalTitle(self.meta_get('original_title'))
+
+				############KODI-RD-IL###################
+				# ORIGINAL TWILIGHT LINE:
+				# info_tag.setOriginalTitle(self.meta_get('original_title'))
+				# CUSTOM NEW LINE:
+				info_tag.setOriginalTitle(self.meta_get('english_title') or self.meta_get('original_title'))
+				#########################################
+
 				info_tag.setPlot(plot)
 				info_tag.setYear(int(self.year))
 				info_tag.setRating(rating)
@@ -176,7 +183,14 @@ class TwilightPlayer(xbmc_player):
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('episode')
 				info_tag.setTitle(self.meta_get('ep_name'))
-				info_tag.setOriginalTitle(self.meta_get('original_title'))
+
+				############KODI-RD-IL###################
+				# ORIGINAL TWILIGHT LINE:
+				# info_tag.setOriginalTitle(self.meta_get('original_title'))
+				# CUSTOM NEW LINE:
+				info_tag.setOriginalTitle(self.meta_get('english_title') or self.meta_get('original_title'))
+				#########################################
+
 				info_tag.setTvShowTitle(self.title)
 				info_tag.setTvShowStatus(self.meta_get('status'))
 				info_tag.setSeason(self.season)

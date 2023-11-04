@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.23[/B][/COLOR]
+- Foreign languages titles subtitles search bug fix. (player.py --> english_title or original_title)
+
 [COLOR dodgerblue][B]Version 3.2.22[/B][/COLOR]
 - Added from Telegram channel [B]"?מתי יגיע לרשת"[/B] - information about movies that are execpted to be released online this month. [B]("?מה מגיע לרשת החודש")[/B]
 - Added settings to hide/show [B]"?מה מגיע לרשת החודש?" / "מתי יגיע לרשת"[/B] movie options.
