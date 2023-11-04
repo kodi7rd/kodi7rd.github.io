@@ -48,6 +48,11 @@
             <path pathversion="1">https://peno64.github.io/repository.peno64/</path>
             <allowsharing>true</allowsharing>
         </source>
+        <source>
+            <name>repository.Otaku</name>
+            <path pathversion="1">https://goldenfreddy0703.github.io/repository.otaku/</path>
+            <allowsharing>true</allowsharing>
+        </source>
     </files>
     <games>
         <default pathversion="1"></default>
