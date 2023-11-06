@@ -29,7 +29,7 @@ msgstr "אפס את נתוני המטמון של התוסף"
 
 msgctxt "#32004"
 msgid "Addon`s local cache was cleared successfully"
-msgstr "נתוני המטמוןשל התוסף אופסו בהצלחה"
+msgstr "נתוני המטמון של התוסף אופסו בהצלחה"
 
 msgctxt "#32005"
 msgid "Email"
@@ -65,7 +65,7 @@ msgstr "סיסמה"
 
 msgctxt "#32013"
 msgid "Opensubtitle login (Optional)"
-msgstr "פרטי התחברות ל-Opensubtitle (רשות)."
+msgstr "פרטי התחברות ל-Opensubtitle (רשות)"
 
 msgctxt "#32014"
 msgid "Subscenter Login"
@@ -100,7 +100,7 @@ msgid "Pause video while searching"
 msgstr "השהה וידאו בזמן חיפוש כתוביות"
 
 msgctxt "#32022"
-msgid "Custom Subltitle look"
+msgid "Custom Subtitles style"
 msgstr "אפשרויות מראה כתוביות מתקדמות"
 
 msgctxt "#32023"
@@ -124,8 +124,8 @@ msgid "Size"
 msgstr "גודל הגופן"
 
 msgctxt "#32028"
-msgid "Enabel custom look"
-msgstr "אפשר הגדרות מראה מתקדמות"
+msgid "Enable custom font"
+msgstr "אפשר הגדרות פונט"
 
 msgctxt "#32029"
 msgid "Open addon`s settings"
@@ -216,3 +216,169 @@ msgstr "מינימלי"
 msgctxt "#32050"
 msgid "Avoid when video already contains built-in subs"
 msgstr "הימנע משימוש כאשר קיימות כתוביות מובנות"
+
+msgctxt "#32051"
+msgid "Allow subtitles using predefined format"
+msgstr "מאפשר משיכת כתוביות בעיצוב מוגדר מראש"
+
+msgctxt "#32052"
+msgid "Pairing code (Personal area)"
+msgstr "קוד צימוד (באיזור האישי)"
+
+msgctxt "#32053"
+msgid "Ktuvit website"
+msgstr "אתר Ktuvit"
+
+msgctxt "#32054"
+msgid "Local folder"
+msgstr "תיקייה מקומית"
+
+msgctxt "#32055"
+msgid "Select local subtitles folder"
+msgstr "בחר תיקיית כתוביות מקומית"
+
+msgctxt "#32056"
+msgid "Hebrew"
+msgstr "עברית"
+
+msgctxt "#32057"
+msgid "English"
+msgstr "אנגלית"
+
+msgctxt "#32058"
+msgid "Russian"
+msgstr "רוסית"
+
+msgctxt "#32059"
+msgid "Arabic"
+msgstr "ערבית"
+
+msgctxt "#32060"
+msgid "French"
+msgstr "צרפתית"
+
+msgctxt "#32061"
+msgid "Spanish"
+msgstr "ספרדית"
+
+msgctxt "#32062"
+msgid "Add comma separated language-codes according to ISO-639-2"
+msgstr "הוסף שפות עם פסיק בניהם לפי תקן"
+
+msgctxt "#32063"
+msgid "Additional languages"
+msgstr "שפות נוספות"
+
+msgctxt "#32064"
+msgid "Search in all languages"
+msgstr "חפש בכל השפות"
+
+msgctxt "#32065"
+msgid "Preferred language"
+msgstr "שפה מועדפת"
+
+msgctxt "#32066"
+msgid "According to Kodi preferred language definition"
+msgstr "לפי הגדרות שפה מועדפת של קודי"
+
+msgctxt "#32067"
+msgid "Auto translate"
+msgstr "תירגום מכונה אוטומטי"
+
+msgctxt "#32068"
+msgid "Save json cache"
+msgstr "שמירת json cache"
+
+msgctxt "#32069"
+msgid "Save subtitles log"
+msgstr "שמירת לוג כתוביות"
+
+msgctxt "#32070"
+msgid "Sort subtitles by percentage"
+msgstr "סדר כתוביות לפי אחוזים"
+
+msgctxt "#32071"
+msgid "Define as synched over %"
+msgstr "הגדר סנכרון מעל %"
+
+msgctxt "#32072"
+msgid "Do not seach for subtitles in local SMB content"
+msgstr "אל תחפש כתוביות לתוכן מקומי SMB"
+
+# autosubs, service
+
+msgctxt "#32100"
+msgid "Starting to search for subtitles..."
+msgstr "מתחיל לחפש כתוביות..."
+
+msgctxt "#32101"
+msgid "Subtitles are ready"
+msgstr "הכתוביות מוכנות"
+
+msgctxt "#32102"
+msgid "Subtitles already embedded - using them"
+msgstr "משתמש בכתוביות המוטמעות"
+
+msgctxt "#32103"
+msgid "Autosub failed"
+msgstr "Autosub נכשל"
+
+msgctxt "#32104"
+msgid "Please wait - translating to "
+msgstr "אנא המתן - מתרגם ל"
+
+msgctxt "#32105"
+msgid "Translation failed! Try again later"
+msgstr "התרגום נכשל - נסה שנית מאוחר יותר"
+
+msgctxt "#32106"
+msgid "Subtitles not found"
+msgstr "לא נמצאו כתוביות"
+
+msgctxt "#32107"
+msgid "Please wait"
+msgstr "אנא המתן"
+
+msgctxt "#32108"
+msgid "Searching for subtitles..."
+msgstr "מחפש כתוביות..."
+
+msgctxt "#32109"
+msgid "Translating to "
+msgstr "מתרגם ל"
+
+msgctxt "#32110"
+msgid "Trying to locate IMDB ID "
+msgstr " מחפש מספר IMDB "
+
+msgctxt "#32111"
+msgid "Still trying to locate IMDB ID"
+msgstr "עדיין מחפש IMDB"
+
+msgctxt "#32112"
+msgid "IMDB ID search failed"
+msgstr "imdb_id כשל "
+
+msgctxt "#32113"
+msgid "IMDB ID found"
+msgstr "IMDB נמצא"
+
+msgctxt "#32114"
+msgid "Cleaning folders"
+msgstr "מנקה תיקיות"
+
+msgctxt "#32115"
+msgid "Getting item info..."
+msgstr "מקבל מידע..."
+
+msgctxt "#32116"
+msgid "In progess..."
+msgstr "בתהליך..."
+
+msgctxt "#32117"
+msgid "Custom results settings"
+msgstr "אפשרויות מראה תוצאות מתקדמות"
+
+msgctxt "#32118"
+msgid "Enable custom results colors"
+msgstr "אפשר הגדרות צבע לתוצאות"

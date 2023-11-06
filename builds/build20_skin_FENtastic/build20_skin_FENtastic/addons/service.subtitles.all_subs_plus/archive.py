@@ -1,3 +1,17 @@
+#///////////////////////////////////////local archive////////////////////////////////////////////////
+'''
+    info2=(PTN.parse(item['file_original_path'])) #video filename without the extension
+    myLogger("LOCAL: item['file_original_path'] - " + repr(item['file_original_path']))
+    myLogger("LOCAL: info2 - " + repr(info2))
+    title_compare_file = title_ready(info2['title'])
+
+    info3=(PTN.parse(xbmc.getInfoLabel("VideoPlayer.title"))) #video filename with the extension
+    myLogger("LOCAL: VideoPlayer.title - " + repr(xbmc.getInfoLabel("VideoPlayer.title")))
+    myLogger("LOCAL: info3 - " + repr(info3))
+    title_compare_player = title_ready(info3['title'])
+    season_compare_player = info3['season'] if 'season' in info3 else -1
+    episode_compare_player = info3['episode'] if 'episode' in info3 else -1
+'''
 #///////////////////////////////////////yifi archive////////////////////////////////////////////////
 #from yify_api.yify import search_yify
 
@@ -71,7 +85,7 @@ if all_setting["aa_subs"]== 'true':# Subcenter Search
     #     subs = Download_aa(params["link"],mode_subtitle)
 
 '''
-elif action=='clear_aa':
+elif action =='clear_aa':
      cache.clear(['subs_aa','subs'])
      executebuiltin((u'Notification(%s,%s)' % (__scriptname__, __language__(32004))))
 '''
@@ -144,7 +158,7 @@ def login( notify_success=True):
         return None
 '''
 
-elif action=='login':
+elif action =='login':
     login(True)
 
 def wizdom_search(item,mode_subtitle,imdb_id):

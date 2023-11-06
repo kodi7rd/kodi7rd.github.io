@@ -11,7 +11,7 @@ def getDomainWizdom():
         myDomain = str(get(url).text)
         return myDomain
     except Exception as err:
-        myLogger('Caught Exception: error in finding getDomain: %s' % format(err))
+        myLogger('Caught Exception: error in finding getDomainWizdom: %s' % format(err))
         return "wizdom.xyz" # "lolfw.com"
 
 def get_wizdom_url():
@@ -89,7 +89,7 @@ def wizdom_download_sub(id,archive_file,delay = 2):
 
     myLogger("Wizdom wizdom_download_sub")
     method = 'GET'
-    url = "http://%s/"%format(get_wizdom_url())+"/files/sub/"+id
+    url = "http://%s/"%format(get_wizdom_url())+"files/sub/"+id
 
     try:
         for i in range(5):

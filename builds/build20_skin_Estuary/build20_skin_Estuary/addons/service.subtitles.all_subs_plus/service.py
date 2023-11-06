@@ -142,6 +142,8 @@ prefix_local='Loc'
 # prefix_acat='[AC]' #AA_CAT
 # prefix_local='[Loc]'
 
+main_languages = ["Kodi", "Spanish", "French", "Arabic", "Russian", "English", "Hebrew"]
+
 #base_aa='aHR0cHM6Ly9yb2NrLnNlZWRob3N0LmV1L2tjYXQxMjMvSHViLw=='
 
 MyAddon = xbmcaddon.Addon()
@@ -150,13 +152,40 @@ __settings__ = xbmcaddon.Addon(id=MyScriptID)
 MyVersion = MyAddon.getAddonInfo('version')
 __profile__ = xbmc_translate_path(MyAddon.getAddonInfo('profile'))
 
+__cwd__ = xbmc_translate_path(MyAddon.getAddonInfo('path'))
+__resource__ = xbmc_translate_path(os.path.join( __cwd__, 'resources'))
+__languageDirMain__ = xbmc_translate_path(os.path.join( __resource__, 'language'))
+__languageDirSources__ = xbmc_translate_path(os.path.join( __resource__, 'language_sources'))
+__languageDirEn__ = xbmc_translate_path(os.path.join( __languageDirMain__, 'resource.language.en_gb', 'strings.po'))
+__languageDirHe__ = xbmc_translate_path(os.path.join( __languageDirMain__, 'resource.language.he_il', 'strings.po'))
+__language__ = MyAddon.getLocalizedString
+
+def setLanguageSettings(type, fromSettings = False):
+    if type == "en":
+        source_file = xbmc_translate_path(os.path.join( __languageDirSources__, 'original_en_gb_strings.po'))
+        shutil.copy(source_file, __languageDirEn__)
+        shutil.copy(source_file, __languageDirHe__)
+    elif type == "he":
+        source_file = xbmc_translate_path(os.path.join( __languageDirSources__, 'force_he_il_strings.po'))
+        shutil.copy(source_file, __languageDirEn__)
+        shutil.copy(source_file, __languageDirHe__)
+    else:
+        source_file_en = xbmc_translate_path(os.path.join( __languageDirSources__, 'original_en_gb_strings.po'))
+        source_file_he = xbmc_translate_path(os.path.join( __languageDirSources__, 'original_he_il_strings.po'))
+        shutil.copy(source_file_en, __languageDirEn__)
+        shutil.copy(source_file_he, __languageDirHe__)
+
+    if (fromSettings):
+        xbmcgui.Dialog().ok("Settings", "Please restart Kodi.")
+
+setLanguageSettings('kodi', False)
+
 MyTmp = xbmc_translate_path(os.path.join(__profile__, 'temp_download'))
 MyZipFolder = xbmc_translate_path(path.join(MyTmp, 'zips'))
 MySubFolder = xbmc_translate_path(path.join(MyTmp, 'subs'))
 MyZipFolder2 = xbmc_translate_path(os.path.join(MyTmp, 'zips2'))
 MySubFolder2 = xbmc_translate_path(os.path.join(MyTmp, 'subs2'))
 
-__language__ = MyAddon.getLocalizedString
 __temp__ = xbmc_translate_path(os.path.join(__profile__, 'temp_jsons'))
 __last__ = xbmc_translate_path(os.path.join(__profile__, 'last'))
 __history__ = xbmc_translate_path(os.path.join(__profile__, '__history__'))
@@ -334,15 +363,8 @@ def getKodiPreferredPlayerLanugageCode(all_setting):
             preferredLangResultValue = 'Hebrew'
 
     else:
-        pref_langs = {
-            '1': "Spanish",
-            '2': "French",
-            '3': "Arabic",
-            '4': "Russian",
-            '5': "English",
-            '6': "Hebrew"
-        }
-        preferredLangResultValue = pref_langs.get(all_setting["preferred_lang"], "Hebrew")
+        preferredLangResultValue = main_languages[int(all_setting["preferred_lang"])]
+
         # preferredLangResultQuery = {"jsonrpc": "2.0", "id": 1 , "method": "Settings.SetSettingValue", "params": {'setting': 'locale.subtitlelanguage', 'value': preferredLangResultValue}}
         # xbmc.executeJSONRPC(json.dumps(preferredLangResultQuery))
 
@@ -401,7 +423,7 @@ def getTVShowOriginalTitle(source="notPlaying"): ###### burekas
     return labelTVShowTitle
 
 def takeTitleFromFocusedItem(type="movie"): ###### burekas
-    labelMovieTitle = xbmc.getInfoLabel("ListItem.OriginalTitle")
+    labelMovieTitle = take_listitem_movie_title()
     labelYear = xbmc.getInfoLabel("ListItem.Year")
     labelTVShowTitle = xbmc.getInfoLabel("ListItem.TVShowTitle") #xbmc.getInfoLabel("ListItem.OriginalTitle")
     labelSeason = xbmc.getInfoLabel("ListItem.Season")
@@ -417,7 +439,8 @@ def takeTitleFromFocusedItem(type="movie"): ###### burekas
 
     title = 'SearchFor...'
     if isItMovie and labelMovieTitle and labelYear:
-        title = ("%s %s" % (labelMovieTitle, labelYear)) if type == 'movie' else '' ###### burekas
+        title = ("%s" % (labelMovieTitle)) if type == 'movie' else '' ###### burekas
+        # title = ("%s %s" % (labelMovieTitle, labelYear)) if type == 'movie' else '' ###### burekas
     elif isItEpisode and labelTVShowTitle and labelSeason and labelEpisode:
         title = ("%s S%.2dE%.2d" % (labelTVShowTitle, int(labelSeason), int(labelEpisode))) if type == 'tvshow' else '' ###### burekas
 
@@ -555,6 +578,7 @@ def download_manager(mode_subtitle,id):
     myLogger("download_manager - id: %s" %(id))
     myLogger("download_manager - mode: %s" %(mode_subtitle))
     myLogger("download_manager - filename: %s" %(filename))
+    myLogger("download_manager - language: %s" %(language))
 
     subs = []
     temp = ' '
@@ -653,8 +677,8 @@ def download(id,language,thumbLang,sub_link,filename,mode_subtitle):
 
     import requests
 
-    myLogger("download() : language=%s | thumbLang=%s | sub_link=%s | filename=%s | mode_subtitle=%s | id=%s"
-             %(language,thumbLang,sub_link,filename,mode_subtitle,id))
+    myLogger("download() : language=%s | mode_subtitle=%s | id=%s | thumbLang=%s | sub_link=%s | filename=%s"
+             %(language,mode_subtitle,id,thumbLang,sub_link,filename))
 
     try:
         temp=[]
@@ -800,20 +824,20 @@ def rename_sub_filename_with_language_prefix(sub, dir, lang):
 
 
 def getParams(arg):
-    param=[]
-    paramstring=arg
-    if len(paramstring)>=2:
-        params=arg
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
+    param = []
+    paramstring = arg
+    if len(paramstring) >= 2:
+        params = arg
+        cleanedparams = params.replace('?','')
+        if (params[len(params)-1] == '/'):
+            params = params[0:len(params)-2]
         pairsofparams=cleanedparams.split('&')
-        param={}
+        param = {}
         for i in range(len(pairsofparams)):
-            splitparams={}
+            splitparams = {}
             splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
+            if (len(splitparams)) == 2:
+                param[splitparams[0]] = splitparams[1]
 
     return param
 
@@ -1099,13 +1123,13 @@ def download_next(location,all_setting,last_sub_download,save_all_data,max_sub):
         total_count += 1
     return location
 
-color_wizdom=''
-color_ktuvit='limegreen'
-color_open='yellow'
-color_subscene='lightskyblue'
-color_local='thistle'
-color_result_percent='cyan'
-color_result_counter='white'
+color_wizdom = ''
+color_ktuvit = 'limegreen'
+color_open = 'yellow'
+color_subscene = 'lightskyblue'
+color_local = 'thistle'
+color_result_percent = 'cyan'
+color_result_counter = 'white'
 # color_acat='bisque' #AA_CAT
 
 def set_providers_colors():
@@ -1183,7 +1207,7 @@ settings_list = {
                     "force":MyAddon.getSetting("force"),
                     "avoid_on_built_in":MyAddon.getSetting("avoid_on_built_in"),
                     "popup":MyAddon.getSetting("popup"),
-                    "storage":MyAddon.getSetting("storage"),
+                    "local_path":MyAddon.getSetting("local_path"),
                     "ktuvitset":MyAddon.getSetting("ktuvitset"),
                     "ktcode":MyAddon.getSetting("ktcode"),
                     "sort_subs":MyAddon.getSetting("sort_subs"),
@@ -1196,7 +1220,7 @@ settings_list = {
                     "spanish":MyAddon.getSetting("spanish"),
                     "history_log":MyAddon.getSetting("history_log"),
                     "other_lang":MyAddon.getSetting("other_lang"),
-                    "storage_en":MyAddon.getSetting("storage_en"),
+                    "local_dir":MyAddon.getSetting("local_dir"),
                     "all_lang":MyAddon.getSetting("all_lang"),
                     "preferred_lang":MyAddon.getSetting("preferred_lang"),
                     "exlude_local_files_smb":MyAddon.getSetting("exlude_local_files_smb"),
@@ -1217,7 +1241,7 @@ settings_list = {
 def refresh_setting():
     global all_setting,settings_list
 
-    all_setting={}
+    all_setting = {}
     all_setting=settings_list
 
     '''
@@ -1229,7 +1253,7 @@ def refresh_setting():
 
     set_providers_colors()
 
-    temp=json.dumps(all_setting)
+    temp = json.dumps(all_setting)
     return json.loads(temp)
 
 if not exists(MyTmp):
@@ -1251,53 +1275,46 @@ else:
 
 MyLog("Version:%s"%MyVersion)
 MyLog("Action:%s"%action)
+
 try:
-    language=params["language"]
+    language = params["language"]
 except:
-    language=''
+    language = ''
 try:
-    thumbLang=params["thumbLang"]
+    thumbLang = params["thumbLang"]
 except:
-    thumbLang=''
+    thumbLang = ''
 try:
-    sub_link=params["link"]
+    sub_link = params["link"]
 except:
-    sub_link=''
+    sub_link = ''
 try:
-    filename=params["filename"]
+    filename = params["filename"]
 except:
-    filename=''
+    filename = ''
 try:
-    subformat=params["subformat"]
+    subformat = params["subformat"]
 except:
-    subformat=''
+    subformat = ''
 try:
-    source=params["source"]
+    source = params["source"]
 except:
-    source=''
-all_setting=refresh_setting()
+    source = ''
+all_setting = refresh_setting()
 
 #subscene init
 #subscene = SubtitleAPI('English','Hebrew') # pass languages you want to have in results
 #subscene = SubtitleAPI('Hebrew') # pass languages you want to have in results
 selected_langs=[]
-# selected_langs.append('Hebrew')
-if all_setting["hebrew"] == 'true':
-    selected_langs.append('Hebrew')
-if all_setting["english"] == 'true':
-    selected_langs.append('English')
-if all_setting["russian"] == 'true':
-    selected_langs.append('Russian')
-if all_setting["arabic"] == 'true':
-    selected_langs.append('Arabic')
-if all_setting["french"] == 'true':
-    selected_langs.append('French')
-if all_setting["spanish"] == 'true':
-    selected_langs.append('Spanish')
+
+for _lang in main_languages:
+    if (_lang.lower() in all_setting
+        and all_setting[_lang.lower()] == 'true'):
+        selected_langs.append(_lang)
 if len(all_setting["other_lang"]) > 0:
     all_lang=all_setting["other_lang"].split(",")
     for item in all_lang:
-        selected_langs.append(str(xbmc.convertLanguage(item, xbmc.ENGLISH_NAME)))
+        selected_langs.append(str(convertLanguage(item, xbmc.ENGLISH_NAME)))
 if all_setting["all_lang"] == 'true':
     selected_langs=[]
 myLogger('Allsubs Langs: ' + repr(selected_langs))
@@ -1315,29 +1332,29 @@ def download_subs(link):
     params = getParams(link)
     id = getParam("id", params)
     try:
-        language=params["language"]
+        language = params["language"]
     except:
-        language=''
+        language = ''
     try:
-        thumbLang=params["thumbLang"]
+        thumbLang = params["thumbLang"]
     except:
-        thumbLang=''
+        thumbLang = ''
     try:
-        sub_link=params["link"]
+        sub_link = params["link"]
     except:
-        sub_link=''
+        sub_link = ''
     try:
-        filename=params["filename"]
+        filename = params["filename"]
     except:
-        filename=''
+        filename = ''
     try:
-        subformat=params["subformat"]
+        subformat = params["subformat"]
     except:
-        subformat=''
+        subformat = ''
     try:
-        source=params["source"]
+        source = params["source"]
     except:
-        source=''
+        source = ''
     myLogger('source=='+source)
 
     subs,temp = download_manager(2,id)
@@ -1377,16 +1394,19 @@ def translate_subs(input_file,output_file,mode_subtitle,targetlang='he'):
         import chardet
 
         myLogger('translate_subs - starting | targetlang: %s' %targetlang)
-        sourcelang='eng'
+        translate_dp_message = __language__(32109) + str(xbmc.convertLanguage(targetlang,xbmc.ENGLISH_NAME))+"..."
+        translate_notify_message = __language__(32109) + str(xbmc.convertLanguage(targetlang,xbmc.ENGLISH_NAME))+ "..."
+        # sourcelang='eng'
+
         if mode_subtitle == 3:
             dp = dialogprogress()
-            dp.create('אנא המתן','מתרגם')
-            dp.update(0, 'אנא המתן','מתרגם')
+            dp.create(__language__(32107),translate_dp_message)
+            dp.update(0, translate_dp_message)
         elif mode_subtitle == 2 and all_setting["popup"]!="0":
-            notify3(colorize_text('מתרגם - אנא המתן...','aqua'),2)
+            notify3(colorize_text(translate_notify_message,'aqua'),2)
 
-        url = 'https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}'
-        api_key='AIzaSyCk5TfD_K1tU1AB2salwn2Lb_yZbesSmY8'
+        # url = 'https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}'
+        # api_key='AIzaSyCk5TfD_K1tU1AB2salwn2Lb_yZbesSmY8'
 
         # Open the file as binary data
         with open(input_file, 'rb') as f:
@@ -1406,26 +1426,24 @@ def translate_subs(input_file,output_file,mode_subtitle,targetlang='he'):
             text=text.decode(encoding,'ignore')
 
         from gtn.google_trans_new import google_translator
-
         translator = google_translator()
 
-        all_text_p1=[]
-        all_data=''
-
-        counter=0
+        # all_text_p1=[]
+        # all_data=''
+        # counter=0
 
         split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
-        ax2=split_string(text,4000)
+        ax2 = split_string(text,4000)
         f_sub_pre = ''
 
         xx = 0
         for items in ax2:
             percent_translate_progress = int(((xx * 100.0) / (len(ax2)-1)) )
             if mode_subtitle == 3:
-                dp.update(percent_translate_progress, 'מתרגם...', str(percent_translate_progress)+'%')
+                dp.update(percent_translate_progress, translate_dp_message, str(percent_translate_progress)+'%')
                 # dp.update(percent_translate_progress, ' מתרגם ' + encoding, str(percent_translate_progress)+'%')
             elif mode_subtitle == 2 and all_setting["popup"]!="0":
-                notify3(colorize_text(' מתרגם - אנא המתן... ' + str(percent_translate_progress)+'%','aqua'),5)
+                notify3(colorize_text(translate_notify_message + " " + str(percent_translate_progress)+'%','aqua'),3)
 
             if (items != None):
                 translation = translator.translate(items, lang_tgt=targetlang)
@@ -1550,7 +1568,7 @@ def get_TMDB_data_filtered(url,filename,query,type,year=0):    ##### burekas
         json_results.sort(key = lambda x:x["name"]==query, reverse=True)
     else:
         if int(year) > 0:
-            json_results.sort(key = lambda x:(x["title"]==query,year in x["release_date"]), reverse=True)
+            json_results.sort(key = lambda x:(x["title"]==query,str(year) in str(x["release_date"])), reverse=True)
             #json_results.sort(key = lambda x:(x["title"]==query), reverse=True)
         else:
             json_results.sort(key = lambda x:x["title"]==query, reverse=True)
@@ -1684,8 +1702,8 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
 
     if mode_subtitle==3:
         dp = dialogprogress()
-        dp.create('אנא המתן', 'מחפש כתוביות', '','')
-        dp.update(0, 'אנא המתן','מחפש כתוביות',  imdb_id)
+        dp.create(__language__(32107), __language__(32108))
+        dp.update(0, __language__(32108), imdb_id)
 
     #imdb_id=''
     try:
@@ -1703,9 +1721,9 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         imdb_id='0'
 
     if mode_subtitle==3:
-        dp.update(0, 'אנא המתן', 'עדיין מחפש IMDB',  imdb_id)
+        dp.update(0, __language__(32110),  imdb_id)
     else:
-        notify2(' מחפש מספר IMDB '+imdb_id,all_setting)
+        notify2(__language__(32110)+imdb_id, all_setting)
 
     myLogger('get_subtitles: initial imdb_id is ' + imdb_id)
 
@@ -1739,9 +1757,9 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         imdb_id = '0'
         myLogger('get_subtitles: exception searching imdb_id: ' + imdb_id)
         if mode_subtitle==3:
-            dp.update(0, 'אנא המתן','imdb_id כשל ',  str(e))
+            dp.update(0, __language__(32112), str(e))
         else:
-           notify2(' imdb_id כשל  '+e,all_setting)
+           notify2(__language__(32112)+ " " + e,all_setting)
         pass
 
     #if 'tt' not in str(imdb_id)
@@ -1750,14 +1768,15 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         myLogger('get_subtitles: imdb_id has not been founded - ' + imdb_id)
     else:
         if mode_subtitle==3:
-            dp.update(0, 'אנא המתן', 'נמצא', imdb_id)
+            dp.update(0, __language__(32113), imdb_id)
         else:
-            notify2(' נמצא '+imdb_id, all_setting)
+            notify2(__language__(32113) + ": " +imdb_id, all_setting)
 
 
     save_all_data=[]
     threads=[]
     myLogger('get_subtitles: using imdb_id ' +imdb_id+ ' for subtitles searching ')
+
 
     if all_setting["wizset"]== 'true':
         threads.append(Thread(Wizdom_Search,imdb_id,all_setting,item["season"],item["episode"],item['file_original_path']))
@@ -1772,10 +1791,9 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         #threads.append(Thread(Subscene_Search,item,mode_subtitle))
         #num_of_subs,subtitle,saved_data=search_subscene(item,mode_subtitle)
 
-    if all_setting["storage_en"]=='true' and len(all_setting["storage"])>0:# Local
+    if all_setting["local_dir"]=='true' and len(all_setting["local_path"])>0:# Local
         threads.append(Thread(Local_Search,item,all_setting))
         #num_of_subs,subtitle,saved_data=Local_Search,item,all_setting)
-
 
     for td in threads:
         td.start()
@@ -1818,13 +1836,18 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         if all_setting["subscene"]== 'true':
             string_dp += prefix_subscene.upper() + ':' + colorize_text(len(links_subscene),tt[zz]) + " "
             zz += 1
-        if all_setting["storage_en"]=='true' and len(all_setting["storage"])>0:
+        if all_setting["local_dir"]=='true' and len(all_setting["local_path"])>0:
             string_dp += prefix_local.upper() + ':' + colorize_text(len(links_local),tt[zz]) + " "
             zz += 1
 
+        percent_search_progress = int(((num_live* 100.0)/(len(threads))))
         if mode_subtitle==3:
-            percent_search_progress = int(((num_live* 100.0)/(len(threads))))
-            dp.update(percent_search_progress, ' אנא המתן '+ time.strftime("%H:%M:%S", time.gmtime(elapsed_time)), string_dp, string_dp)
+            dp.update(percent_search_progress,"("+ time.strftime("%M:%S", time.gmtime(elapsed_time))+")" + " " + __language__(32108) + " " + colorize_text(str(percent_search_progress) + "%","lightgreen"), string_dp)
+            xbmc.sleep(500)
+        elif mode_subtitle == 2 and all_setting["popup"]!="0":
+            msg_percent = str(percent_search_progress) + "%"
+            notify3(__language__(32108) + " " + colorize_text(msg_percent,"lightgreen"), 0.5)
+            xbmc.sleep(200)
 
         #old end for
 
@@ -1837,7 +1860,8 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
                     if td.is_alive():
                         stop_all=1
                         td._stop()
-        xbmc.sleep(200)
+
+        # xbmc.sleep(1000)
 
     if mode_subtitle==3:
         dp.close()
@@ -1845,11 +1869,11 @@ def get_subtitles(item,mode_subtitle,imdb_id,all_setting):
         notify2(str(string_dp),all_setting)
 
 
+    save_all_data.append(links_local)
     save_all_data.append(links_wizdom)
     save_all_data.append(links_ktuvit)
     save_all_data.append(links_open)
     save_all_data.append(links_subscene)
-    save_all_data.append(links_local)
 
     if mode_subtitle==3:
         dp.close()
@@ -1897,9 +1921,8 @@ def calc_sub_percent_sync(sub_filename,array_original):
 
     # remove '[...]' from text
     text = sub_filename
-    text = remove_brackets_content_from_text(text)
 
-    array_subs=(text.replace(prefix_wizdom,'').replace(prefix_ktuvit,'')
+    text = (text.replace(prefix_wizdom,'').replace(prefix_ktuvit,'')
                 .replace(prefix_open,'').replace(prefix_subscene,'').replace(prefix_acat,'')
                 .replace(prefix_local,'').replace("[SCe]",'').replace("[SC]",'').replace("[SZ]",'')
                 .replace("[sz]",'').replace("[COLOR "+color_wizdom+"]",'')
@@ -1910,15 +1933,22 @@ def calc_sub_percent_sync(sub_filename,array_original):
                 .replace(".srt",'')
                 .strip()
                 .replace("-",".").replace("_",".").replace(" ",".").replace("+",".").replace("/",".")
-                .replace("[",".").replace("]",".")
-                .split("."))
+                .replace("[",".").replace("]",".").replace("(",".").replace(")","."))
+
+    # text = remove_brackets_content_from_text(text)
+
+    array_subs=(text.split("."))
     ##array_subs.pop(0)
 
     #remove empty items from sub array
     array_subs=[element.strip().lower() for element in array_subs if element != '']
     #array_subs=[str(x).lower() for x in array_subs if x != '']
 
-    #fix for 'Opensubtitles" subs - remo
+    # remove language code if exist
+    if array_subs[-1].lower()!='hi' and len(array_subs[-1]) == 2:
+        array_subs.pop(-1)
+
+    # fix for 'Opensubtitles" subs - remove 'cc' addition ('hi', 'no hi') if exist
     if array_subs[-1].lower()=='hi' and array_subs[-2].lower()=='no':
         array_subs.pop(-1)
         array_subs.pop(-1)
@@ -1968,8 +1998,8 @@ def calc_sub_percent_sync(sub_filename,array_original):
                     #myLogger("Video source quality: %s" %repr(video_quality[0]))
                     #myLogger("Subtitle quality: %s" %repr(sub_quality[0]))
 
-    #myLogger("Video source array for compare: %s" %array_original)
-    #myLogger("Subtitle array for compare: %s" %array_subs)
+    # myLogger("Video source array for compare: %s" %array_original)
+    # myLogger("Subtitle array for compare: %s" %array_subs)
     precent = similar(array_original,array_subs)
     return precent
 
@@ -1989,7 +2019,7 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
         notify2('%s | %s | %s | %s' %(colorize_text(str(highest_rating)+'%',"yellow"),source_prefix,label2,label) ,all_setting,3)
 
         if len(best_sub)>0:
-            sub=download_subs(best_sub)
+            sub = download_subs(best_sub)
 
             try:
                 shutil.rmtree(__last__)
@@ -2019,12 +2049,12 @@ def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data
 
             subtitle_cache_next().set('last_sub', last_sub_download)
             # if all_setting["popup"]!="0" and isSuccess:
-            #     notify3(colorize_text('הכתוביות מוכנות','aqua'),2)
+            #     notify3(colorize_text(__language__(32101),'aqua'),2)
             if isSuccess:
                 if all_setting["popup"] == "1":
-                    notify3(colorize_text('הכתוביות מוכנות','aqua'),2)
+                    notify3(colorize_text(__language__(32101),'aqua'),2)
                 if all_setting["popup"] == "2":
-                    notify3(colorize_text('הכתוביות מוכנות | %s Synced' %(colorize_text(str(highest_rating)+'%',"yellow")),'aqua'),2)
+                    notify3(colorize_text(__language__(32101) + ' | %s Synced' %(colorize_text(str(highest_rating)+'%',"yellow")),'aqua'),2)
 
             myLogger("AutoSub sub ready: " + repr(sub))
 
@@ -2057,17 +2087,16 @@ def translate_subs_and_renaming(subs_to_translate_path,best_sub_url,label,mode_s
             if (mode_subtitle == 2 and (best_sub_url!='' and label!=''
                                     and sub_language_code!=pref_langauge_code)
                 or mode_subtitle == 3 and sub_language_code!=pref_langauge_code):
-
                     (sub,isSuccess) = start_tranlate_sub(subs_to_translate_path,mode_subtitle,pref_langauge_code)
                     if isSuccess:
                         target_lang = pref_langauge_code
                     else:
                         target_lang = thumbLang
-                        notify3(colorize_text('התרגום נכשל - נסה שנית מאוחר יותר','red'),3)
+                        notify3(colorize_text(__language__(32105), 'red'),3)
             else:
                 target_lang = thumbLang
 
-        elif mode_subtitle == 2:
+        else:
             target_lang = thumbLang
 
         myLogger("translate_subs_and_renaming - target lang: " + repr(target_lang))
@@ -2172,9 +2201,9 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
     if mode_subtitle==3:
         dp = dialogprogress()
-        dp.create('מקבל מידע...','Getting item info...','','')
+        dp.create(__language__(32107), __language__(32115))
     else:
-        notify2('Getting item info',all_setting)
+        notify2(__language__(32115),all_setting)
 
     #This case never happens?
     '''
@@ -2209,17 +2238,17 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
     #item['full_path']=getInfoLabel("Player.Filenameandpath")
 
     if mode_subtitle==3:
-        dp.update(0, 'אנא המתן','מחפש מספר IMDB', imdb_id)
+        dp.update(0, __language__(32110), imdb_id)
     else:
-        notify2(' מחפש מספר IMDB '+imdb_id,all_setting)
+        notify2(__language__(32110)+imdb_id, all_setting)
 
     clean_titles(item)
     #parse_rls_title(item)
 
     if mode_subtitle==3:
-        dp.update(0, 'מנקה תיקיות', item['title'])
+        dp.update(0, __language__(32114), item['title'])
     else:
-        notify2('מנקה תיקיות',all_setting)
+        notify2(__language__(32110), all_setting)
 
     #num_of_subs=0
 
@@ -2235,9 +2264,9 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
 
     if mode_subtitle==3:
-        dp.update(0, 'מתחיל לחפש כתוביות', imdb_id)
+        dp.update(0,  __language__(32100), imdb_id)
     elif all_setting["popup"]!="0":
-        notify3(colorize_text('מתחיל לחפש כתוביות','aqua'),2)
+        notify3(colorize_text(__language__(32100),'aqua'),2)
 
 
     dd=[]
@@ -2247,12 +2276,11 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
     try:
         #save_all_data,imdb_id,dont_save=get_subtitles(item,mode_subtitle,imdb_id,all_setting)
         save_all_data,imdb_id,dont_save=cache.get(get_subtitles,24,item,mode_subtitle,imdb_id,all_setting, table='subs')
-    except:
-        myLogger('Error')
+    except Exception as e:
+        myLogger('Error in cache.get get_subtitles: ' + repr(e))
         save_all_data = []
         imdb_id = 't00'
         dont_save = 0
-
 
     if dont_save==1:
         cache.clear(['subs'])
@@ -2280,7 +2308,7 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
         if mode_subtitle==2:
             if len(all_data)==0:
                 if all_setting["popup"]!="0":
-                    notify3(colorize_text('לא נמצאו כתוביות','aqua'),2)
+                    notify3(colorize_text(__language__(32106),'aqua'),2)
             else:
                 autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data)
         else:
@@ -2352,6 +2380,20 @@ def get_manual_search_item_data(item,manual_title):
 
     return item,d_value_s,d_value_e
 
+def take_video_movie_title():
+    # labelMovie = xbmc.getInfoLabel("VideoPlayer.Title")
+    # labelMovieOriginal = xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
+    # labelMovieTitle = labelMovieOriginal if labelMovieOriginal.isascii() else labelMovie
+    labelMovieTitle = xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
+    return labelMovieTitle
+
+def take_listitem_movie_title():
+    # labelMovie = xbmc.getInfoLabel("ListItem.Title")
+    # labelMovieOriginal = xbmc.getInfoLabel("ListItem.OriginalTitle")
+    # labelMovieTitle = labelMovieOriginal if labelMovieOriginal.isascii() else labelMovie #xbmc.getInfoLabel("ListItem.OriginalTitle")
+    labelMovieTitle = xbmc.getInfoLabel("ListItem.OriginalTitle")
+    return labelMovieTitle
+
 def get_player_item_data(item):
     myLogger("get_player_item_data")
     try:
@@ -2379,7 +2421,8 @@ def get_player_item_data(item):
     item['tvshow'] = ''
 
     if item['episode']==0:
-        item['title'] = normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).replace("%20"," ")  # no original title, get just Title
+        labelMovieTitle = take_video_movie_title()
+        item['title'] = normalizeString(labelMovieTitle).replace("%20"," ")  # no original title, get just Title
         # if (item['title'].isascii() == False):
         #     item['title'] = getTVShowOriginalTitle().replace("%20"," ")
     else:
@@ -2390,7 +2433,8 @@ def get_player_item_data(item):
             item['tvshow'] = ("%s S%.2dE%.2d" % (item['tvshow'], int(item["season"]), int(item["episode"])))
 
     if item['title'] == "":
-        item['title'] = normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).replace("%20"," ")  # try to get original title
+        labelMovieTitle = take_video_movie_title()
+        item['title'] = normalizeString(labelMovieTitle).replace("%20"," ")
 
     imdb_id = normalizeString(xbmc.getInfoLabel("VideoPlayer.IMDBNumber"))  # try to get original title
     if 'tt' not in imdb_id:
@@ -2406,7 +2450,7 @@ def get_player_item_data(item):
     item['full_path']=getInfoLabel("Player.Filenameandpath")
     item['file_name']=''
 
-    if not item['tvshow'] and not (item['title'] and item['year']) :
+    if not item['tvshow'] and not (item['title'] and item['year']) and "pvr://" not in item['full_path'] :
         now_play_data = get_now_played()
         item['title'],item['year'],item['season'],item['episode']=get_more_data(now_play_data, item['title'])
 
@@ -2433,28 +2477,31 @@ def get_non_player_item_data(item):
 
     if str(item['season']) == '0' or str(item['episode']) == '0':
         item['tvshow'] =''
+        item['title'] = takeTitleFromFocusedItem("movie")
     else:
         #item['tvshow'] = take_title_from_focused_item()
         item['tvshow'] = takeTitleFromFocusedItem("tvshow") ###### burekas - fix check Hebrew titles in Kodi Library (Offlin subtitles check)
+        item['title'] = getInfoLabel("ListItem.TVShowTitle").replace("%20"," ")
 
     #item['title'] = take_title_from_focused_item().replace("%20"," ")
-    item['title'] = takeTitleFromFocusedItem("movie") ###### burekas - fix check Hebrew titles in Kodi Library (Offlin subtitles check)
+    #item['title'] = takeTitleFromFocusedItem("movie") ###### burekas - fix check Hebrew titles in Kodi Library (Offlin subtitles check)
 
     item['3let_language'] = []
     #item['preferredlanguage'] = unicode(urllib.unquote(params.get('preferredlanguage', '')), 'utf-8')
     #item['preferredlanguage'] = xbmc.convertLanguage(item['preferredlanguage'], xbmc.ISO_639_2)
     item['preferredlanguage'] = getKodiPreferredPlayerLanugageCode(all_setting)
-    labelType = getInfoLabel("ListItem.DBTYPE")  #movie/tvshow/season/episode
-    isItMovie = labelType == 'movie' or getCondVisibility("Container.Content(movies)")
-    isItEpisode = labelType == 'episode' or getCondVisibility("Container.Content(episodes)")
 
-    if isItMovie:
-        item['title'] = getInfoLabel("ListItem.OriginalTitle").replace("%20"," ")
-        #item['tvshow'] =''   # burekas Fix for offline subtitles checking for Movies for KT
-    elif isItEpisode:
-        item['title'] = getInfoLabel("ListItem.TVShowTitle").replace("%20"," ")
-    else:
-        item['title'] = "SearchFor..." # In order to show "No Subtitles Found" result.
+    # labelType = getInfoLabel("ListItem.DBTYPE")  #movie/tvshow/season/episode
+    # isItMovie = labelType == 'movie' or getCondVisibility("Container.Content(movies)")
+    # isItEpisode = labelType == 'episode' or getCondVisibility("Container.Content(episodes)")
+
+    # if isItMovie:
+    #     item['title'] = getInfoLabel("ListItem.OriginalTitle").replace("%20"," ")
+    #     #item['tvshow'] =''   # burekas Fix for offline subtitles checking for Movies for KT
+    # elif isItEpisode:
+    #     item['title'] = getInfoLabel("ListItem.TVShowTitle").replace("%20"," ")
+    # else:
+    #     item['title'] = "SearchFor..." # In order to show "No Subtitles Found" result.
 
     return item,imdb_id
 
@@ -2468,31 +2515,36 @@ def is_to_check_percent(item):
     # Check % only when player is playing
     # or not playing and library based on local file:
     # Without 'strm' which is video addon file or 'plugin://' which is video addon menu
-    return Player().isPlaying() or not Player().isPlaying() and not any(s in item['full_path'] for s in ['strm','plugin://'])
+    return (Player().isPlaying() or
+            not Player().isPlaying() and not (len(item['full_path'])<=1
+                                              or any(s in item['full_path'] for s in ['strm','plugin://'])))
 
 def remove_brackets_content_from_text(text):
-    new_text = text
-    # remove '[...]' from text
-    start_index = text.find("[")
-    end_index = text.find("]")
-    if start_index != -1 and end_index != -1:
-        # '[' and ']' are both present in the string
-        new_text = text[:start_index] + text[end_index + 1:]
 
-    start_index = new_text.find("(")
-    end_index = new_text.find(")")
-    if start_index != -1 and end_index != -1:
-        # '[' and ']' are both present in the string
-        new_text = new_text[:start_index] + new_text[end_index + 1:]
+    # # Count the number of bracket pairs in the text
+    # bracket_count = text.count('[')
+    # # If there are more than one pair of brackets, remove the last pair and their content
+    # if bracket_count > 1:
 
-    return new_text
+    # Find the last occurrence of '[' and ']'
+    last_open_bracket = text.rfind('[')
+    last_close_bracket = text.rfind(']')
+
+    if last_open_bracket != -1 and last_close_bracket != -1 and last_open_bracket < last_close_bracket:
+        # Remove the last set of brackets and their content
+        text = text[:last_open_bracket] + text[last_close_bracket + 1:]
+
+    return text
 
 def orginaize_video_filename_for_compare(text):
     text = remove_brackets_content_from_text(text)
 
-    return (text.strip().replace("-",".").replace("_",".").replace(" ",".")
+    text = (text.strip().replace("-",".").replace("_",".").replace(" ",".")
                 .replace("+",".").replace("/",".").replace("[",".").replace("]",".")
-                .replace(".avi","").replace(".mp4","").replace(".mkv","").split("."))
+                .replace("(",".").replace(")",".")
+                .replace(".avi","").replace(".mp4","").replace(".mkv",""))
+
+    return text.split(".")
 
 def results_subs_processing(save_all_data,item,last_sub):
     ########## Calc Percent and Langauge Sorting ##########
@@ -2502,6 +2554,7 @@ def results_subs_processing(save_all_data,item,last_sub):
     all_arb=[]
     all_fre=[]
     all_spn=[]
+    all_unknown=[]
     all_other=[]
 
     ############## Subs Proccessing ###############
@@ -2550,18 +2603,21 @@ def results_subs_processing(save_all_data,item,last_sub):
                 elif ('Spanish' in json_value['label'] or 'spanish' in json_value['label']
                         or 'Es' in json_value['thumbnailImage'] or 'es' in json_value['thumbnailImage']):
                     all_spn.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
+                elif (len(json_value['label']) == 0 and len(json_value['thumbnailImage']) == 0):
+                    all_unknown.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
                 else:
                     all_other.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
 
     ############## Sort by Sync Percentages ###############
     if all_setting["sort_subs"]=='true':
-        all_heb     = sorted(all_heb, key=lambda x: x[5], reverse=True)
-        all_eng     = sorted(all_eng,  key=lambda x: x[5], reverse=True)
-        all_rus     = sorted(all_rus,  key=lambda x: x[5], reverse=True)
-        all_arb     = sorted(all_arb,  key=lambda x: x[5], reverse=True)
-        all_fre     = sorted(all_fre,  key=lambda x: x[5], reverse=True)
-        all_spn     = sorted(all_spn,  key=lambda x: x[5], reverse=True)
-        all_other   = sorted(all_other,  key=lambda x: x[5], reverse=True)
+        all_heb     = sorted(all_heb,     key=lambda x: x[5], reverse=True)
+        all_eng     = sorted(all_eng,     key=lambda x: x[5], reverse=True)
+        all_rus     = sorted(all_rus,     key=lambda x: x[5], reverse=True)
+        all_arb     = sorted(all_arb,     key=lambda x: x[5], reverse=True)
+        all_fre     = sorted(all_fre,     key=lambda x: x[5], reverse=True)
+        all_spn     = sorted(all_spn,     key=lambda x: x[5], reverse=True)
+        all_unknown = sorted(all_unknown, key=lambda x: x[5], reverse=True)
+        all_other   = sorted(all_other,   key=lambda x: x[5], reverse=True)
 
     if item['preferredlanguage'] == xbmc.convertLanguage("Hebrew", xbmc.ISO_639_2):
         all_data = all_heb + all_eng + all_rus + all_arb + all_fre + all_spn + all_other
@@ -2578,6 +2634,12 @@ def results_subs_processing(save_all_data,item,last_sub):
     else:
         all_data = all_other + all_heb + all_eng + all_rus + all_arb + all_fre + all_spn
 
+    all_data = all_data + all_unknown
+    # if all_setting["local_dir"]=='true':
+    #     all_data[:0] = all_unknown
+    # else:
+    #     all_data = all_data + all_unknown
+
     with open(last_sub+'_sort', 'w') as f:
         f.write(json.dumps(all_data))
 
@@ -2589,7 +2651,7 @@ def results_styling_subs(counter,items,item,manual_title):
     #items[4] = 'url : download', items[5] = 'percent', items[6] = 'hearing_imp'
 
     #sub_name=colorize_text(str(items[5])+ "% ","cyan")+items[1]
-    language=items[0] #or second string for menu item
+    sub_lang=items[0] #or second string for menu item
     sub_name=items[1]
     source_prefix=items[2]
     lang_prefix=items[3]
@@ -2674,13 +2736,13 @@ def results_styling_subs(counter,items,item,manual_title):
         iconData = colorize_text(iconData,color_result)
 
     try:
-        listitem = xbmcgui.ListItem(label          = language,
+        listitem = xbmcgui.ListItem(label          = sub_lang,
                                     label2         = sub_name
                                     )
         listitem.setArt({'thumb' : lang_prefix, 'icon': iconData})
 
     except:
-        listitem = xbmcgui.ListItem(label          = language,
+        listitem = xbmcgui.ListItem(label          = sub_lang,
                                     label2         = sub_name,
                                     thumbnailImage = lang_prefix,
                                     iconImage      = iconData
@@ -2786,7 +2848,9 @@ def end_sub_progress(sub,all_setting):
 
     addDirectoryItem(handle=int(sys.argv[1]), url=sub, listitem=listitem,isFolder=False)
 
-if action=='search1':
+
+
+if action =='search1':
     search_all(3,(all_setting))
 
 elif action == 'manualsearch1':
@@ -2816,7 +2880,7 @@ elif action == 'download':
             elif os.path.exists(pathToAddonKeymap):
                 xbmc.executebuiltin('RunScript(%s)' %(keymap_addon))
         '''
-        elif action=='disable_subs':
+        elif action =='disable_subs':
             myLogger("DISABLE")
             xbmc.Player().showSubtitles(False)
             #xbmc.Player().setSubtitles("")
@@ -2825,12 +2889,10 @@ elif action == 'download':
 
         try:
             #sublist=os.listdir(__last__)
-            if not os.path.exists(last_sub_path):
-                with open(last_sub_path, 'w') as file:
-                    file.write("dummy")
+            with open(last_sub_path, 'w') as file:
+                file.write("dummy")
 
-            sub=last_sub_path
-            MyLog("Download ID: %s" %sub)
+            sub = last_sub_path
             end_sub_progress(sub,all_setting)
         except:
             pass
@@ -2867,11 +2929,20 @@ elif action == 'download':
     #xbmc.Player().setSubtitles(sub)
     endOfDirectory(int(sys.argv[1]))
 
-elif action=='clean':
+elif action =='clean':
     clear_data()
 
+elif action =='settingsHe':
+    setLanguageSettings('he', True)
+
+elif action =='settingsEn':
+    setLanguageSettings('en', True)
+
+elif action =='settingsKodi':
+    setLanguageSettings('kodi', True)
+
 '''
-elif action=='disable_subs':
+elif action =='disable_subs':
     myLogger("DISABLE")
     xbmc.Player().showSubtitles(False)
     #xbmc.Player().setSubtitles("")
@@ -2880,7 +2951,7 @@ elif action=='disable_subs':
 
     endOfDirectory(int(sys.argv[1]))
 
-elif action=='export':
+elif action =='export':
     myLogger("export")
     addonInfo = MyAddon.getAddonInfo
     dataPath = xbmc_translate_path(addonInfo('profile')).decode('utf-8')

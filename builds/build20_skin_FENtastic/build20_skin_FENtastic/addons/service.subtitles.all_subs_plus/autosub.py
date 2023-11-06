@@ -134,7 +134,7 @@ def isExcluded(videoFullPath):
             DebugExclude("Video is Local from SMB. Do not exclude.")
             return False
 
-    if (videoFullPath.find("pvr://") > -1 or "pvr://" in current_list_item.lower()) :
+    if ("pvr://" in videoFullPath or "pvr://" in current_list_item.lower()) :
         DebugExclude("Video is playing via Live TV, which is currently set as excluded location.")
         return True
 
@@ -348,7 +348,7 @@ class AutoSubsPlayer(xbmc.Player):
 
                     #--------------------------------------------------------------------------
 
-                    avoid_autosubs_on_built_in_subs = all_setting["avoid_on_built_in"]
+                    avoid_autosubs_on_built_in_subs = all_setting["avoid_on_built_in"] == 'true'
                     Debug("Avoid when there is built-in subs: '%s'" % (avoid_autosubs_on_built_in_subs))
                     useBuiltInSub = False
                     if avoid_autosubs_on_built_in_subs:
@@ -409,14 +409,14 @@ class AutoSubsPlayer(xbmc.Player):
                                 Debug("Preferred active built-in sub is already set")
 
                             if all_setting["popup"]!="0":
-                                notify3(colorize_text('הכתוביות כבר כלולות','aqua'),2)
+                                notify3(colorize_text(__language__(32102),'aqua'),2)
 
                         else:
                             Debug('Subs found or excluded')
                         self.run = False
             except Exception as e:
                 Debug("AutoSub failed: %s" %e)
-                notify3(colorize_text('AutoSub נכשל','aqua'),2)
+                notify3(colorize_text(__language__(32103),'aqua'),2)
                 # if all_setting["pause"]=='1': #resume
                 #     xbmc.Player().pause()
                 pass
@@ -455,7 +455,7 @@ def get_aa_server_ch():
 
 xbmc.sleep(100)
 Debug('Action Autosubs:'+str(action))
-if action=='search':
+if action =='search':
     search_all(3,(all_setting))
 
 # helper function to get string type from settings

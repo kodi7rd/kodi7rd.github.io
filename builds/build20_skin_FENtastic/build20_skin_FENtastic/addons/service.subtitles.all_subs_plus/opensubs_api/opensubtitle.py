@@ -53,7 +53,7 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
         #myLogger("Search_opensubtitle search_data: " + repr(search_data))
         search_data.sort(key=lambda x: [not x['MatchedBy'] == 'moviehash',
                          not os.path.splitext(x['SubFileName'])[0] == os.path.splitext(os.path.basename(unquote(item['file_original_path'])))[0],
-                         not normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).lower() in x['SubFileName'].replace('.',' ').lower(),
+                        #  not normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).lower() in x['SubFileName'].replace('.',' ').lower(),
                          not x['LanguageName'] == 'Undetermined'])
 
         myLogger("Search_opensubtitle search_data sorted: " + repr(search_data))

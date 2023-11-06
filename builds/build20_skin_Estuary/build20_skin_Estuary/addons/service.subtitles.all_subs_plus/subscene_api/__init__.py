@@ -48,7 +48,8 @@ class SubtitleAPI:
 
     # Method Bellow returns a BeautifulSoup object of our html response
     def parse(self, html):
-        myLogger("Subscene parse data" + repr(html))
+        # myLogger("Subscene parse data" + repr(html))
+        myLogger("Subscene parsing data")
         return BeautifulSoup(html, 'html.parser')
 
     # this method simply call and endpoint and return it as plantext
@@ -231,8 +232,9 @@ class SubtitleAPI:
                     'name': name,
                     'link': link
                 })
-        # return list like: [...,{'lang':'english', 'name':'Movie Name', 'link':'/slug'},...]
-        myLogger("Subscene scrape_list result: " + repr(items))
+        # # return list like: [...,{'lang':'english', 'name':'Movie Name', 'link':'/slug'},...]
+        # myLogger("Subscene scrape_list result: " + repr(items))
+        myLogger("Subscene scrape_list result length: " + repr(len(items)))
         return self.filter_langs(items)
 
     # scrape_download_page(url) method scrape subtitle author, download link and release information

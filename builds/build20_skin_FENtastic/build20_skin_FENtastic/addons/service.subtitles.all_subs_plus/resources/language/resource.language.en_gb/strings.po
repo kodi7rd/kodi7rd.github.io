@@ -100,7 +100,7 @@ msgid "Pause video while searching"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Custom Subltitle look"
+msgid "Custom Subtitles style"
 msgstr ""
 
 msgctxt "#32023"
@@ -124,7 +124,7 @@ msgid "Size"
 msgstr ""
 
 msgctxt "#32028"
-msgid "Enabel custom look"
+msgid "Enable custom font"
 msgstr ""
 
 msgctxt "#32029"
@@ -215,4 +215,170 @@ msgstr ""
 
 msgctxt "#32050"
 msgid "Avoid when video already contains built-in subs"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Allow subtitles using predefined format"
+msgstr ""
+
+msgctxt "#32052"
+msgid "Pairing code (Personal area)"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Ktuvit website"
+msgstr ""
+
+msgctxt "#32054"
+msgid "Local folder"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Select local subtitles folder"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Hebrew"
+msgstr ""
+
+msgctxt "#32057"
+msgid "English"
+msgstr ""
+
+msgctxt "#32058"
+msgid "Russian"
+msgstr ""
+
+msgctxt "#32059"
+msgid "Arabic"
+msgstr ""
+
+msgctxt "#32060"
+msgid "French"
+msgstr ""
+
+msgctxt "#32061"
+msgid "Spanish"
+msgstr ""
+
+msgctxt "#32062"
+msgid "Add comma separated language-codes according to ISO-639-2"
+msgstr ""
+
+msgctxt "#32063"
+msgid "Additional languages"
+msgstr ""
+
+msgctxt "#32064"
+msgid "Search in all languages"
+msgstr ""
+
+msgctxt "#32065"
+msgid "Preferred language"
+msgstr ""
+
+msgctxt "#32066"
+msgid "According to Kodi preferred language definition"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Auto translate"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Save json cache"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Save subtitles log"
+msgstr ""
+
+msgctxt "#32070"
+msgid "Sort subtitles by percentage"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Define as synched over %"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Do not search for subtitles in local SMB content"
+msgstr ""
+
+# autosubs, service
+
+msgctxt "#32100"
+msgid "Starting to search for subtitles..."
+msgstr ""
+
+msgctxt "#32101"
+msgid "Subtitles are ready"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Subtitles already embedded - using them"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Autosub failed"
+msgstr ""
+
+msgctxt "#32104"
+msgid "Please wait - translating to "
+msgstr ""
+
+msgctxt "#32105"
+msgid "Translation failed! Try again later"
+msgstr ""
+
+msgctxt "#32106"
+msgid "Subtitles not found"
+msgstr ""
+
+msgctxt "#32107"
+msgid "Please wait"
+msgstr ""
+
+msgctxt "#32108"
+msgid "Searching for subtitles..."
+msgstr ""
+
+msgctxt "#32109"
+msgid "Translating to "
+msgstr ""
+
+msgctxt "#32110"
+msgid "Trying to locate IMDB ID "
+msgstr ""
+
+msgctxt "#32111"
+msgid "Still trying to locate IMDB ID"
+msgstr ""
+
+msgctxt "#32112"
+msgid "IMDB ID search failed"
+msgstr ""
+
+msgctxt "#32113"
+msgid "IMDB ID found"
+msgstr ""
+
+msgctxt "#32114"
+msgid "Cleaning folders"
+msgstr ""
+
+msgctxt "#32115"
+msgid "Getting item info..."
+msgstr ""
+
+msgctxt "#32116"
+msgid "In progress..."
+msgstr ""
+
+msgctxt "#32117"
+msgid "Custom results settings"
+msgstr ""
+
+msgctxt "#32118"
+msgid "Enable custom results colors"
 msgstr ""

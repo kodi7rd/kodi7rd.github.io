@@ -1,3 +1,10 @@
+2.2.0
+** All Subs Plus by Burekas **
+- Bug fixs and improvements: Ktuvit
+- Bug fixs and improvements: Local storage
+- Updated: Addon language files + New option for forcing the addon's language
+- General code fixes, code cleanup, refactoring and imporvements
+
 2.1.0
 ** All Subs Plus by Burekas **
 - Languages: Added 'French' and 'Russian'

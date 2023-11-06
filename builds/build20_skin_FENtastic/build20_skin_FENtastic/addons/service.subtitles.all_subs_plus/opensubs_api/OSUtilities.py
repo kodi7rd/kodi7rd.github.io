@@ -31,6 +31,7 @@ class OSDBServer:
         self.osdb_token  = login[ "token" ]
 
     def searchsubtitles( self, item, imdb_id, all_setting ):
+        from service import main_languages
         tvshow=item['tvshow']
         season=item['season']
         episode=item['episode']
@@ -41,19 +42,10 @@ class OSDBServer:
             searchlist  = []
             lang=[]
 
-            # lang.append('heb')
-            if all_setting["hebrew"] == 'true':
-                lang.append(xbmc.convertLanguage("Hebrew", xbmc.ISO_639_2))
-            if all_setting["english"] == 'true':
-                lang.append(xbmc.convertLanguage("English", xbmc.ISO_639_2))
-            if all_setting["russian"] == 'true':
-                lang.append(xbmc.convertLanguage("Russian", xbmc.ISO_639_2))
-            if all_setting["arabic"] == 'true':
-                lang.append(xbmc.convertLanguage("Arabic", xbmc.ISO_639_2))
-            if all_setting["french"] == 'true':
-                lang.append(xbmc.convertLanguage("French", xbmc.ISO_639_2))
-            if all_setting["spanish"] == 'true':
-                lang.append(xbmc.convertLanguage("Spanish", xbmc.ISO_639_2))
+            for _lang in main_languages:
+                if (_lang.lower() in all_setting
+                    and all_setting[_lang.lower()] == 'true'):
+                    lang.append(xbmc.convertLanguage(_lang, xbmc.ISO_639_2))
             if all_setting["all_lang"] == 'true':
                 lang.append('ALL')
             if len(all_setting["other_lang"]) > 0:

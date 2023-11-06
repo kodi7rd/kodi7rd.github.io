@@ -8,15 +8,15 @@
 		<setting type="action" label="32003" action="RunScript(service.subtitles.all_subs_plus, 1,action=clean)" visible="false"/>
 
 		<setting label="32013" type="lsep"/>
-		<setting id="OSuser2" type="text" label="32011" default=""/>
-		<setting id="OSpass2" type="text" label="32012" option = "hidden" default=""/>
+		<setting id="OSuser2" label="32011" type="text" default=""/>
+		<setting id="OSpass2" label="32012" type="text" option = "hidden" default=""/>
 
-		<setting label="אתר Ktuvit" type="lsep"/>
-		<setting id="KT_email" type="text" label="32005" default=""/>
-		<setting id="KT_enc_pass" type="text" label="32006" option = "hidden" default=""/>
+		<setting label="32053" type="lsep"/>
+		<setting id="KT_email" label="32005" type="text" default=""/>
+		<setting id="KT_enc_pass" label="32006" type="text" option = "hidden" default=""/>
 		<setting id="dummy_setting" label="" type="action" action="" visible="false"/>
-		<setting label="מאפשר משיכת כתוביות בעיצוב מוגדר מראש" type="lsep"/>
-		<setting id="ktcode" label="קוד צימוד (באיזור האישי)" type="text" default="" />
+		<setting label="32051" type="lsep"/>
+		<setting id="ktcode" label="32052" type="text" default="" />
 	</category>
 	<category label="32039">
 		<setting label="32015" type="lsep"/>
@@ -25,32 +25,33 @@
 		<setting id="opensubtitle" label="Opensubtitle [COLOR blue](http://www.opensubtitles.org/he)[/COLOR]" type="bool" default="true" />
 		<setting id="subscene" label="subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="true" />
 		<!-- <setting id="yify" label="Yify subtitles [COLOR blue](http://www.yifysubtitles.com/)[/COLOR]" type="bool" default="true" /> -->
-		<setting id="storage_en" label="תיקייה מקומית" type="bool" default="false" />
-		<setting id="storage"  type="folder"   label="בחר תיקיית כתוביות מקומית" default="" visible= "eq(-1,true)"/>
+		<setting id="local_dir" label="32054" type="bool" default="false" />
+		<setting id="local_path" label="32055" type="folder" default="" visible= "eq(-1,true)"/>
 	</category>
 	<category label="32040">
-		<setting id="hebrew" label="עברית" type="bool" default="true" />
-		<setting id="english" label="אנגלית" type="bool" default="false" />
-		<setting id="russian" label="רוסית" type="bool" default="false" />
-		<setting id="arabic" label="ערבית" type="bool" default="false" />
-		<setting id="french" label="צרפתית" type="bool" default="false" />
-		<setting id="spanish" label="ספרדית" type="bool" default="false" />
-		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
+		<setting id="hebrew" label="32056" type="bool" default="true" />
+		<setting id="english" label="32057" type="bool" default="false" />
+		<setting id="russian" label="32058" type="bool" default="false" />
+		<setting id="arabic" label="32059" type="bool" default="false" />
+		<setting id="french" label="32060" type="bool" default="false" />
+		<setting id="spanish" label="32061" type="bool" default="false" />
+		<setting label="32062" type="lsep"/>
 		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/>
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
-		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
-		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
+		<setting id="other_lang" label="32063" type="text" default="" />
+		<setting id="all_lang" label="32064" type="bool" default="false" />
 		<setting label=" " type="lsep"/>
-		<setting id="preferred_lang" label="שפה מועדפת" type="enum" values="לפי הגדרות קודי|ספרדית|צרפתית|ערבית|רוסית|אנגלית|עברית" default="5"/>
+		<setting id="preferred_lang" label="32065" type="enum" lvalues="32066|32061|32060|32059|32058|32057|32056" default="5"/>
+		<!-- <setting id="preferred_lang" label="32065" type="enum" values="לפי הגדרות קודי|ספרדית|צרפתית|ערבית|רוסית|אנגלית|עברית" default="5"/> -->
 		<setting label=" " type="lsep"/>
-		<setting id="auto_translate" label="תירגום מכונה אוטומטי" type="bool" default="false" />
+		<setting id="auto_translate" label="32067" type="bool" default="false" />
 	</category>
     <category label="32041">
-		<setting id="nextsub" type="text" option = "hidden" visible= 'false' label="32012" default="no"/>
-		<setting id="json_cache" label="שמירת json cache" type="bool" default="false" />
-		<setting id="history_log" label="שמירת לוג כתוביות" type="bool" default="false" />
-		<setting id="sort_subs" label="סדר כתוביות לפי אחוזים" type="bool" default="true" />
-		<setting id="sync_percent" type="number" label="הגדר סנכרון מעל" default="85"/>
+		<setting id="nextsub" label="32012" type="text" option = "hidden" visible= 'false' default="no"/>
+		<setting id="json_cache" label="32068" type="bool" default="false" />
+		<setting id="history_log" label="32069" type="bool" default="false" />
+		<setting id="sort_subs" label="32070" type="bool" default="true" />
+		<setting id="sync_percent" label="32071" type="number" default="85"/>
 		<setting id="Debug" label="Debug" type="bool" default="false" />
 
 		<!-- <setting label=" " type="lsep"/>
@@ -63,7 +64,7 @@
 		<!-- <setting id="popup" label="32037" type="bool" default="true" visible="eq(-2,true)" enable="eq(-2,true)" /> -->
 		<setting id="pause" label="32021" type="enum" lvalues="32044|32045|32046" default="1" visible="eq(-4,true)" enable="eq(-4,true)"/>
 		<!-- <setting id="pause" label="32021" type="bool" default="false" visible="eq(-3,true)" enable="eq(-3,true)"/> -->
-		<setting id="exlude_local_files_smb" label="אל תחפש כתוביות לתוכן מקומי SMB" type="bool" default="false" visible="eq(-5,true)" enable="eq(-5,true)"/>
+		<setting id="exlude_local_files_smb" label="32072" type="bool" default="false" visible="eq(-5,true)" enable="eq(-5,true)"/>
 		<setting id="ExcludeTime" type="number" label="32018" default="15" visible= "eq(-6,true)" enable="eq(-6,true)"/>
 
 		<setting id="ExcludeAddosOption" type="bool" label="32019" default="false" visible= "eq(-7,true)" enable="eq(-7,true)" />
@@ -82,10 +83,10 @@
 
     </category>
 	<category label="32042">
-		<setting label="32022" type="lsep"/>
+		<setting label="32117" type="lsep"/>
         <setting id="result_style" label="32043" type="enum" values="4: rating=% + sub=[i,source,sub]|3: rating=source + sub=[i,%,sub]|2: rating=index + sub=[source,%,sub]|1: rating=index + sub=[%,source,sub]|0: rating=rating + sub=[i,%,source,sub]" default="4" />
 
-        <setting id="enable_custom_colors" label="Enable custom result colors" type="bool" default="false" />
+        <setting id="enable_custom_colors" label="32118" type="bool" default="false" />
 
         <setting id="color_result_wizdom" label="Wizdom" type="labelenum" values="custom|thistle|cyan|bisque|lightskyblue|yellow|limegreen|white" default="white" visible= "eq(-1,true)" enable="eq(-1,true)"/>
         <setting id="color_result_wizdom_custom" type="text" default="" visible= "eq(-2,true)+ eq(-1,0)" enable="eq(-2,true) + eq(-1,0)" />
@@ -110,12 +111,17 @@
         <setting id="color_result_counter_custom" type="text" default="" visible= "eq(-16,true) + eq(-1,0)" enable="eq(-16,true) + eq(-1,0)" />
         -->
 
-        <setting label="Enabel custom font" type="lsep"/>
+        <setting label="32022" type="lsep"/>
         <setting id="enable_font" label="32028" type="bool" default="false" />
         <setting id="background" label="32023" type="bool" default="false" visible= "eq(-1,true)" enable="eq(-1,true)"/>
 		<setting id="bold" label="32024" type="bool" default="true" visible= "eq(-2,true)" enable="eq(-2,true)" />
-        <setting id="size" type="number" label="32027" default="27" visible= "eq(-3,true)" enable="eq(-3,true)"/>
-		<setting id="color" type="enum" label="32025" values="White|Blue|Red|Gray|Yellow" default="0" visible= "eq(-4,true)" enable="eq(-4,true)"/>
-		<setting id="background_level" type="enum" label="32026" values="Bright|Gray|Dark" default="0" visible= "eq(-5,true)" enable="eq(-5,true)"/>
+        <setting id="size" label="32027" type="number" default="27" visible= "eq(-3,true)" enable="eq(-3,true)"/>
+		<setting id="color" label="32025" type="enum" values="White|Blue|Red|Gray|Yellow" default="0" visible= "eq(-4,true)" enable="eq(-4,true)"/>
+		<setting id="background_level" label="32026" type="enum" values="Bright|Gray|Dark" default="0" visible= "eq(-5,true)" enable="eq(-5,true)"/>
+	</category>
+	<category label="Addon Language">
+		<setting type="action" label="Set to Hebrew" action="RunScript(service.subtitles.all_subs_plus, 1,action=settingsHe)" visible="true"/>
+		<setting type="action" label="Set to English" action="RunScript(service.subtitles.all_subs_plus, 1,action=settingsEn)" visible="true"/>
+		<setting type="action" label="Set according to Kodi Skin language (En/He)" action="RunScript(service.subtitles.all_subs_plus, 1,action=settingsKodi)" visible="true"/>
 	</category>
 </settings>

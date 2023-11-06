@@ -304,7 +304,6 @@ def search_tvshow(tvshow, season, episode, languages, filename,mode_subtitle):
 
     if content is not None:
         log(__name__, "Multiple tv show seasons found, searching for the right one ...")
-        myLogger('AAAAAAAAAAAA1 %s | %s | %s' %(content, tvshow, seasons[int(season)]))
         tv_show_seasonurl = find_tv_show_season(content, tvshow, seasons[int(season)])
         if tv_show_seasonurl is not None:
             log(__name__, "Tv show season found in list, getting subs ...")
