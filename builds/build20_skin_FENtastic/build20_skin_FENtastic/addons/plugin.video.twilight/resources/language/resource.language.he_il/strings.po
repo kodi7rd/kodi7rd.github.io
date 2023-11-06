@@ -215,4 +215,30 @@ msgctxt "#400021"
 msgid "הצג מידע עבור החודש הנוכחי בלבד"
 msgstr "הצג מידע עבור החודש הנוכחי בלבד"
 
+# real_debrid.py - Real Debrid Account Info
+
+msgctxt "#32758"
+msgid "[B]Account:[/B] %s"
+msgstr "[B][COLOR lightblue]כתובת מייל:[/COLOR][/B] %s"
+
+msgctxt "#32755"
+msgid "[B]Username:[/B] %s"
+msgstr "[B][COLOR lightblue]שם משתמש:[/COLOR][/B] %s"
+
+msgctxt "#32757"
+msgid "[B]Status:[/B] %s"
+msgstr "[B][COLOR lightblue]סטטוס:[/COLOR][/B] %s"
+
+msgctxt "#32750"
+msgid "[B]Expires:[/B] %s"
+msgstr "[B][COLOR lightblue]תוקף:[/COLOR][/B] %s"
+
+msgctxt "#32751"
+msgid "[B]Days Remaining:[/B] %s"
+msgstr "[B][COLOR lightblue]כמות ימים לסיום תוקף המנוי:[/COLOR][/B] %s"
+
+msgctxt "#32759"
+msgid "[B]Fidelity Points:[/B] %s"
+msgstr "[B][COLOR lightblue]נקודות נאמנות:[/COLOR][/B] %s"
+
 ###################################################################################################################################

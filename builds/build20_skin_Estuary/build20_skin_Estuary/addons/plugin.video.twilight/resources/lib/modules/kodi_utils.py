@@ -399,6 +399,12 @@ def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	text = ''.join(text)
 	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
 
+############KODI-RD-IL###################
+def show_text_RTL(window_header, body):
+	from windows.base_window import open_window
+	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer_RTL.xml', heading=window_header, text=body)
+#########################################
+
 def notification(line1, time=5000, icon=None, sound=False):
 	if isinstance(line1, int): line1 = local_string(line1)
 	icon = icon or addon_icon

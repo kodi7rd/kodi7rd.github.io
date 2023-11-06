@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 from modules.kodi_utils import local_string as ls
 from modules.kodi_utils import get_setting
+from modules.kodi_utils import show_text_RTL
 
 # Settings
 show_MoviesOnlineDates_upcoming_this_month_only_current_month = get_setting('show_MoviesOnlineDates_upcoming_this_month_only_current_month', 'true') == 'true'
@@ -149,9 +150,4 @@ def MoviesOnlineDates_parser(search_movie_bool, title=None, original_title=None)
 
     movie_information_results = MoviesOnlineDates_results_reader(search_movie_bool, title, original_title)
         
-    show_MoviesOnlineDates(window_header, movie_information_results)
-
-
-def show_MoviesOnlineDates(window_header, movie_information_results):
-    from windows.base_window import open_window
-    return open_window(('windows.textviewer', 'TextViewer'), 'MoviesOnlineDates.xml', heading=window_header, text=movie_information_results)
+    show_text_RTL(window_header, movie_information_results)

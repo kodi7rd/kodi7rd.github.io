@@ -139,12 +139,32 @@ def rd_account_info():
 		append = body.append
 		append(ls(32758) % account_info['email'])
 		append(ls(32755) % account_info['username'])
-		append(ls(32757) % account_info['type'].capitalize())
-		append(ls(32750) % expires)
+
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINES:
+		# append(ls(32757) % account_info['type'].capitalize())
+		# append(ls(32750) % expires)
+		# CUSTOM NEW LINES:
+		account_status_translation_dict = {
+			'free': '[COLOR red][B]לא בתוקף[/B][/COLOR]',
+			'premium': '[COLOR limegreen][B]פרימיום[/B][/COLOR]'
+		}
+		append(ls(32757) % account_status_translation_dict.get(account_info['type'], account_info['type'].capitalize()))
+		expires_LTR = "\u202A" + datetime.strptime(account_info['expiration'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%d.%m.%Y') + "\u202C"
+		append(ls(32750) % expires_LTR)
+		#########################################
+
 		append(ls(32751) % days_remaining)
 		append(ls(32759) % account_info['points'])
 		hide_busy_dialog()
-		return show_text(ls(32054).upper(), '\n\n'.join(body), font_size='large')
+
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINE:
+		# return show_text(ls(32054).upper(), '\n\n'.join(body), font_size='large')
+		# CUSTOM NEW LINE:
+		return kodi_utils.show_text_RTL(ls(32054).upper(), '\n\n'.join(body))
+		#########################################
+
 	except: hide_busy_dialog()
 
 def active_days():
