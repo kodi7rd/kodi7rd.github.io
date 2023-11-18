@@ -19,7 +19,7 @@ MyScriptID=Addon.getAddonInfo('id')
 BASE_URL_XMLRPC = u"https://api.opensubtitles.org/xml-rpc"
 __version__    = Addon.getAddonInfo('version') # Module version
 __scriptname__ = "XBMC Subtitles Unofficial"
-site_id='[Op]'
+site_id='[Ops]'
 sub_color='bisque'
 try:
     import xmlrpclib

@@ -79,7 +79,7 @@ def sort_subtitles(save_all_data,video_data):
                      'telecine','hdts','telesync']
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
-    site_id_order=['[Kt]', '[Wiz]', '[Op]', '[SS]', '[Bs]']
+    site_id_order=['[Kt]', '[Wiz]', '[Ops]', '[SS]', '[Bs]']
     #########################################
     
     all_data=[]

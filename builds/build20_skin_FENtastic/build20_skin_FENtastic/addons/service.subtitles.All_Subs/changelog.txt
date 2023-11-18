@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v3.9.6[/B][/COLOR]
+﻿[COLOR yellow][B]v3.9.7[/B][/COLOR]
+* Change OpenSubtitles label from [Op] to [Ops].
+[COLOR yellow][B]v3.9.6[/B][/COLOR]
 * Change settings default value.
 [COLOR yellow][B]v3.9.5[/B][/COLOR]
 * Added notification for fault sub event.
