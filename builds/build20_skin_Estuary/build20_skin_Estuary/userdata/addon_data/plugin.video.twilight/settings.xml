@@ -6,7 +6,7 @@
     <setting id="max_threads" default="true">60</setting>
     <setting id="addon_fanart" default="true" />
     <setting id="addon_fanart.restore" default="true">$ADDON[plugin.video.twilight 32652]</setting>
-    <setting id="main_highlight_name" default="true">[COLOR=FFC0C0C0]FFC0C0C0[/COLOR]</setting>
+    <setting id="main_highlight_name">[COLOR=FF3285FF]FF3285FF[/COLOR]</setting>
     <setting id="use_skin_fonts" default="true">true</setting>
     <setting id="use_custom_skins" default="true">true</setting>
     <setting id="trakt.indicators_active" default="true">false</setting>
@@ -23,7 +23,7 @@
     <setting id="extras.manage" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="extras.button_choice" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="extras.restore_default" default="true">$ADDON[plugin.video.twilight 32652]</setting>
-    <setting id="extras.enable_extra_ratings" default="true">true</setting>
+    <setting id="extras.enable_extra_ratings">false</setting>
     <setting id="extras.enabled_ratings" default="true">Meta, Tom/Critic, Tom/User, IMDb, TMDb</setting>
     <setting id="extras.ratings_amble" default="true" />
     <setting id="extras.enable_scrollbars" default="true">false</setting>
@@ -52,8 +52,8 @@
     <setting id="paginate.limit_widgets">7</setting>
     <setting id="paginate.jump_to" default="true">0</setting>
     <setting id="ignore_articles" default="true">true</setting>
-    <setting id="show_specials" default="true">false</setting>
-    <setting id="use_season_title" default="true">false</setting>
+    <setting id="show_specials">true</setting>
+    <setting id="use_season_title">true</setting>
     <setting id="show_unaired" default="true">true</setting>
     <setting id="show_unaired_watchlist" default="true">true</setting>
     <setting id="include_year_in_title" default="true">0</setting>
@@ -68,8 +68,8 @@
     <setting id="nextep.sort_type" default="true">0</setting>
     <setting id="nextep.sort_order" default="true">0</setting>
     <setting id="nextep.sort_airing_today_to_top" default="true">false</setting>
-    <setting id="nextep.include_airdate" default="true">false</setting>
-    <setting id="nextep.include_unaired" default="true">false</setting>
+    <setting id="nextep.include_airdate">true</setting>
+    <setting id="nextep.include_unaired">true</setting>
     <setting id="nextep.include_unwatched" default="true">0</setting>
     <setting id="widget_hide_watched" default="true">false</setting>
     <setting id="widget_hide_next_page" default="true">false</setting>
@@ -233,7 +233,7 @@
     <setting id="meta_language">he</setting>
     <setting id="meta_mpaa_region" default="true">US</setting>
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1696378255</setting>
+    <setting id="database.maintenance.due">1700613188</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -252,10 +252,10 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.2.07</setting>
+    <setting id="version_number">3.2.24</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</setting>
-    <setting id="main_highlight" default="true">FFC0C0C0</setting>
+    <setting id="main_highlight">FF3285FF</setting>
     <setting id="provider.furk_colour" default="true">FFE6002E</setting>
     <setting id="provider.easynews_colour" default="true">FF00B3B2</setting>
     <setting id="provider.debrid_cloud_colour" default="true">FF7A01CC</setting>
