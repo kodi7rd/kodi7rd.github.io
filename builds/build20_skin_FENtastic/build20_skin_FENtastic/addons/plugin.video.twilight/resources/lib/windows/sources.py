@@ -123,7 +123,7 @@ class SourcesResults(BaseDialog):
 
 				############KODI-RD-IL###################
 				elif filter_value == 'hebrewSubtitlesMatch': filtered_list = [i for i in self.item_list if "SUBTITLE" in i.getProperty('size_label')]
-				elif filter_value == 'hebrewSubtitlesMatchFullMatch': filtered_list = [i for i in self.item_list if "100%" in i.getProperty('size_label') or "תרגום מובנה בעברית" in i.getProperty('size_label')]
+				elif filter_value == 'hebrewSubtitlesMatchFullMatch': filtered_list = [i for i in self.item_list if "100%" in i.getProperty('size_label') or "תרגום מובנה" in i.getProperty('size_label')]
 				#########################################
 
 			if not filtered_list: return ok_dialog(text=32760)

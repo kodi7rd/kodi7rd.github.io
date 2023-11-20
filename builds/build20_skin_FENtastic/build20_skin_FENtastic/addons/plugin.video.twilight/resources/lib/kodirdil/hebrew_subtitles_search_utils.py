@@ -333,7 +333,7 @@ def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list
             matched_subtitle_website_name = "[HEB|LOC]"
     
             hebrew_embedded_subtitles_matched_count = 1
-            subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR cyan]{matched_subtitle_website_name} תרגום מובנה בעברית[/COLOR][/B]"
+            subtitle_matches_text = f"[B][COLOR deepskyblue]  SUBTITLE: [/COLOR][COLOR cyan]{matched_subtitle_website_name} תרגום מובנה[/COLOR][/B]"
             
             # Increment the quality count if a match is found
             if quality in quality_counts_for_source:

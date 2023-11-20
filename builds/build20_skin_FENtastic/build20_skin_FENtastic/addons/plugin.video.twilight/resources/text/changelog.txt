@@ -1,5 +1,11 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.25[/B][/COLOR]
+- Add setting to auto show results from [B]"?מתי יגיע לרשת"[/B] of selected movie when no sources are found. [B]("הצג מידע זמין כאשר אין מקורות לסרט שנבחר")[/B]
+
+- Change HSM label:
+  From [B][COLOR deepskyblue][HEB|LOC] תרגום מובנה בעברית[/B][/COLOR] to [B][COLOR deepskyblue][HEB|LOC] תרגום מובנה[/B][/COLOR]
+
 [COLOR dodgerblue][B]Version 3.2.24[/B][/COLOR]
 - Translate Real Debrid account info window to Hebrew.
 

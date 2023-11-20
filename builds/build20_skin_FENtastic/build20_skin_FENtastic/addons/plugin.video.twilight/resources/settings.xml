@@ -3,7 +3,7 @@
 	<section id="plugin.video.twilight">
 		<!-- Hebrew Subtitle Matching -->
 		<category id="hebrew_subtitle_matching" label="40000" help="">
-			<group id="1" label="40001">
+			<group id="1" label="40000">
 				<setting id="enable_hebrew_subtitles_to_twilight_sources_matching" type="boolean" label="40002" help="">
 					<level>0</level>
 					<default>true</default>
@@ -94,14 +94,21 @@
 		</category>
 		<!-- MoviesOnlineDates -->
 		<category id="MoviesOnlineDates" label="400019" help="">
-			<group id="1" label="400020">
-				<setting id="show_MoviesOnlineDates_movie_search" type="boolean" label="400017" help="">
+			<group id="1" label="400019">
+				<setting id="search_MoviesOnlineDates_when_no_results" type="boolean" label="400022" help="">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
 			</group>
 			<group id="2" label="400020">
+				<setting id="show_MoviesOnlineDates_movie_search" type="boolean" label="400017" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
+			<group id="3" label="400020">
 				<setting id="show_MoviesOnlineDates_upcoming_this_month" type="boolean" label="400018" help="">
 					<level>0</level>
 					<default>true</default>
