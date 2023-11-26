@@ -9,7 +9,7 @@
     <setting id="language_russian" default="true">false</setting>
     <setting id="language_arab" default="true">false</setting>
     <setting id="auto_translate">true</setting>
-    <setting id="translate_p">2</setting>
+    <setting id="translate_p" default="true">0</setting>
     <setting id="bing_translate_keys_method">1</setting>
     <setting id="other_lang" default="true" />
     <setting id="all_lang">true</setting>
