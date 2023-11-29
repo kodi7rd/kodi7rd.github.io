@@ -37,7 +37,7 @@ personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_prog
 				'watched_movies': ('modules.watched_status', 'get_watched_items'), 'recent_watched_movies': ('modules.watched_status', 'get_recently_watched')}
 trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_top10_boxoffice', 'trakt_recommendations')
 trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
-imdb_all  = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_featured', 'imdb_most_voted', 'imdb_movies_oscar_winners')
+imdb_all  = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_movies_oscar_winners')
 view_mode, content_type = 'view.movies', 'movies'
 
 class Movies:

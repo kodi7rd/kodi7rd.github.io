@@ -26,10 +26,6 @@ people_trivia_url = 'name/%s/trivia'
 people_search_url_backup = 'search/name/?name=%s'
 people_search_url = 'https://sg.media-imdb.com/suggests/%s/%s.json'
 year_check_url = 'https://v2.sg.media-imdb.com/suggestion/t/%s.json'
-featured_movies_url = 'search/title/?title_type=feature,tv_movie&num_votes=1000,&production_status=released&sort=moviemeter,asc&count=20&start=%s'
-most_voted_movies_url = 'search/title/?title_type=feature,tv_movie&num_votes=1000,&production_status=released&sort=num_votes,desc&count=20&start=%s'
-featured_tvshows_url = 'search/title/?title_type=tv_series,tv_miniseries&num_votes=1000,&production_status=released&sort=moviemeter,asc&count=20&start=%s'
-most_voted_tvshows_url = 'search/title/?title_type=tv_series,tv_miniseries&num_votes=1000,&production_status=released&sort=num_votes,desc&count=20&start=%s'
 timeout = 20.0
 
 def imdb_people_id(actor_name):
@@ -129,20 +125,6 @@ def imdb_keyword_search(keyword):
 	string = 'imdb_keyword_search_%s' % keyword
 	params = {'url': url, 'action': 'imdb_keyword_search'}
 	return cache_object(get_imdb, string, params, False, 168)[0]
-
-def imdb_featured(media_type, foo_var, page_no):
-	string = 'imdb_featured_%s_%s' % (media_type, page_no)
-	featured_url = featured_movies_url if media_type == 'movie' else featured_tvshows_url
-	url = base_url % featured_url % get_start_no(page_no)
-	params = {'url': url, 'action': 'imdb_main'}
-	return cache_object(get_imdb, string, params, False, 48)
-
-def imdb_most_voted(media_type, foo_var, page_no):
-	string = 'imdb_most_voted_%s_%s' % (media_type, page_no)
-	most_voted_url = most_voted_movies_url if media_type == 'movie' else most_voted_tvshows_url
-	url = base_url % most_voted_url % get_start_no(page_no)
-	params = {'url': url, 'action': 'imdb_main'}
-	return cache_object(get_imdb, string, params, False, 48)
 
 def get_imdb(params):
 	imdb_list = []
