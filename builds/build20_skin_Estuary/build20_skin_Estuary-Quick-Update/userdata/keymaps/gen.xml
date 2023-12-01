@@ -1,10 +1,10 @@
 <keymap>
         <fullscreenvideo> <!-- Only on fullscreen video playback -->
-                <remote> <!-- for Android TV devices -->
-                        <back>stop</back> <!-- remote "back" button - short press - Stop video -->
-                </remote>
                 <keyboard> <!-- for PC devices -->
                         <escape>stop</escape> <!-- keyboard "escape" button - short press - Stop video -->
                 </keyboard>
+                <remote> <!-- for Android TV devices -->
+                        <back>stop</back> <!-- remote "back" button - short press - Stop video -->
+                </remote>
         </fullscreenvideo>
 </keymap>
