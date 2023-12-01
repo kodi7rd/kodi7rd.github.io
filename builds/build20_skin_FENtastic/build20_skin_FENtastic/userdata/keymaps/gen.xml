@@ -1,0 +1,11 @@
+<keymap>
+        <fullscreenvideo> <!-- Only on fullscreen video playback - stop video on short "back" press -->
+                <remote>
+                        <back>stop</back>
+                </remote>
+                <keyboard>
+                        <escape>stop</escape>
+                        <key id="61448">stop</key>
+                </keyboard>
+        </fullscreenvideo>
+</keymap>
