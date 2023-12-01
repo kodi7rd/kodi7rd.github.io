@@ -2,6 +2,7 @@
         <fullscreenvideo> <!-- Only on fullscreen video playback -->
                 <keyboard> <!-- for PC devices -->
                         <escape>stop</escape> <!-- keyboard "escape" button - short press - Stop video -->
+                        <key id="61448">stop</key> <!-- keyboard "escape" button - short press - Stop video -->
                 </keyboard>
                 <remote> <!-- for Android TV devices -->
                         <back>stop</back> <!-- remote "back" button - short press - Stop video -->
