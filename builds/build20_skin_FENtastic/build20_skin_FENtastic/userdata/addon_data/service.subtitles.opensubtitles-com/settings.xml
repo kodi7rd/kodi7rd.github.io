@@ -1,0 +1,8 @@
+<settings version="2">
+    <setting id="OSuser">kodi7rdisrael</setting>
+    <setting id="OSpass">kodi7rdisrael</setting>
+    <setting id="APIKey">07rrbSu0RWivTV9sCtNvbGFLTHcM5QO1</setting>
+    <setting id="hearing_impaired" default="true">exclude</setting>
+    <setting id="foreign_parts_only" default="true">include</setting>
+    <setting id="machine_translated" default="true">exclude</setting>
+</settings>
