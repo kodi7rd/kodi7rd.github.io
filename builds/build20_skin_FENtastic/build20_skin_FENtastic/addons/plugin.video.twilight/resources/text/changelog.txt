@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.27[/B][/COLOR]
+- BUG FIX: Update "requests_toolbelt" dependency version (urllib3 2.1.0 compatibility).
+
 [COLOR dodgerblue][B]Version 3.2.26[/B][/COLOR]
 - Tikipeter's bug fix version 3.2.14:
 - "Featured" and "Most Voted" menus removed from Movies & TV Shows menus. They no longer work. Either select Edit Menu->Restore [Movie/TV Show] Menu to Default from the context menu on both the Movue & TV Show menu to remove these 2 menu items, or select Edit Menu->Remove [Feautred/Most Voted] from both the Movie & TV Show menu.
