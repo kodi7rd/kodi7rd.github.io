@@ -14,7 +14,7 @@
             <param name="list_id" value="220111"/>
         </include>
         <include content="WidgetListBigPoster">
-            <param name="content_path" value="plugin://plugin.video.twilight/?name=32459&amp;action=tmdb_tv_popular&amp;iconImage=popular&amp;mode=build_tvshow_list"/>
+            <param name="content_path" value="plugin://plugin.video.twilight/?name=32458&amp;action=trakt_tv_trending&amp;iconImage=trending&amp;mode=build_tvshow_list"/>
             <param name="widget_header" value="[B][COLOR yellow]פופולריות[/COLOR][/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="22012"/>
