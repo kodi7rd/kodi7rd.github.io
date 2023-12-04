@@ -454,3 +454,5 @@ if CONFIG.get_setting('autoclean') == 'true':
 else:
     logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
 
+# KODI-RD-IL - Auto force addon updates on Kodi startup
+if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()

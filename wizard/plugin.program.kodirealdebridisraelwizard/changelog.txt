@@ -1,0 +1,2 @@
+[COLOR yellow][B]v1.1.0[/B][/COLOR]
+* Add setting to auto Force Addon Updates on Kodi startup. (תחזוקה - חפש עדכוני הרחבות בהפעלה)

@@ -231,6 +231,9 @@ class Config:
         self.AUTOFREQ = int(float(self.AUTOFREQ)) if self.AUTOFREQ.isdigit() else 0
         self.AUTONEXTRUN = self.get_setting('nextautocleanup')
         
+        # KODI-RD-IL - Auto force addon updates on Kodi startup
+        self.FORCEUPDATEFAST_ONSTARTUP = self.get_setting('forceupdateFAST_on_startup')
+        
         # Video Cache variables
         self.INCLUDEVIDEO = self.get_setting('includevideo')
         self.INCLUDEALL = self.get_setting('includeall')

@@ -37,6 +37,8 @@
     </category>
 
     <category label="תחזוקה">
+        <setting type="lsep" label="הרחבות"/>
+        <setting id="forceupdateFAST_on_startup" type="bool" label="חפש עדכוני הרחבות בהפעלה" default="true"/>
         <setting type="lsep" label="העלאת לוג"/>
         <setting id="oldlog" type="bool" label="כלול Kodi.Old.Log" default="false"/>
         <setting id="wizlog" type="bool" label="כלול לוג Wizard" default="false"/>

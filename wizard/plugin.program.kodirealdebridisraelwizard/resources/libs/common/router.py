@@ -121,6 +121,11 @@ class Router:
         elif mode == 'forceupdate':
             from resources.libs import db
             db.force_check_updates(auto=action)
+        ############KODI-RD-IL##############
+        elif mode == 'forceupdateFAST':
+            from resources.libs import db
+            db.forceUpdate()
+        ####################################
         elif mode == 'togglecache':
             from resources.libs import clear
             clear.toggle_cache(name)
