@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.28[/B][/COLOR]
+- Tikipeter's bug fix version 3.2.15:
+- BUG FIX: Sort in TV Shows seasons list - seasons then specials.
+
 [COLOR dodgerblue][B]Version 3.2.27[/B][/COLOR]
 - BUG FIX: Update "requests_toolbelt" dependency version (urllib3 2.1.0 compatibility).
 

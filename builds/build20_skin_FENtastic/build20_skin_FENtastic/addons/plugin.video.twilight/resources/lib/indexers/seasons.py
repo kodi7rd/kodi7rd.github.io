@@ -68,7 +68,7 @@ def build_season_list(params):
 					if hide_watched: continue
 					cm_append((unwatched_str % watched_title, run_plugin % build_url({'mode': 'watched_status.mark_season', 'action': 'mark_as_unwatched', 'title': show_title,
 																				'year': show_year, 'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number, 'icon': poster})))
-					set_properties({'watchedepisodes': string(watched), 'unwatchedepisodes': string(unwatched)})
+				set_properties({'watchedepisodes': string(watched), 'unwatchedepisodes': string(unwatched)})
 				set_properties({'totalepisodes': string(episode_count), 'watchedprogress': string(progress), 'twilight.extras_params': extras_params, 'twilight.options_params': options_params})
 				if is_external:
 					cm_append((refr_widg_str, run_plugin % build_url({'mode': 'kodi_refresh'})))
@@ -124,8 +124,9 @@ def build_season_list(params):
 		show_landscape = meta_get('custom_landscape') or meta_get('landscape') or ''
 		season_art = meta_get('season_art', {})
 	else: show_banner, show_clearart, show_landscape, season_art = '', '', '', {}
+
 	if not show_specials(): season_data = [i for i in season_data if not i['season_number'] == 0]
-	season_data.sort(key=lambda k: k['season_number'])
+	season_data.sort(key=lambda k: (k['season_number'] == 0, k['season_number']))
 	watched_title = trakt_str if watched_indicators == 1 else twilight_str
 	add_items(handle, list(_process()))
 	category_name = show_title
