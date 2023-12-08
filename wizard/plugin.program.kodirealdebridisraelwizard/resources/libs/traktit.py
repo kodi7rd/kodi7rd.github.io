@@ -29,7 +29,7 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import tools
 
-ORDER = ['exodusredux', 'fen', 'twilight', 'gaia', 'numbers', 'openmeta', 'premiumizer',
+ORDER = ['exodusredux', 'twilight', 'fen', 'gaia', 'numbers', 'openmeta', 'premiumizer',
          'realizer', 'scrubs', 'seren', 'shadow', 'thecrew', 'trakt', 'venom']
 
 TRAKTID = {

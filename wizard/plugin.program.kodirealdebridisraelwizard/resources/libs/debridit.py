@@ -29,8 +29,8 @@ from resources.libs.common.config import CONFIG
 from resources.libs.common import logging
 from resources.libs.common import tools
 
-ORDER = ['twilightrd', 'twilightad',
-         'fenad', 'fenpm', 'fenrd',
+ORDER = ['twilightrd', 'twilightad', 'twilightpm',
+         'fenrd', 'fenad', 'fenpm',
          'gaiaad', 'gaiard', 'gaiapm',
          'pmzer',
          'serenad', 'serenpm', 'serenpm-oauth', 'serenrd', 
@@ -234,6 +234,18 @@ DEBRIDID = {
         'default'  : 'ad.account_id',
         'data'     : ['ad.account_id', 'ad.token'],
         'activate' : 'RunPlugin(plugin://plugin.video.twilight/?mode=alldebrid.authenticate)'},
+    'twilightpm': {
+        'name'     : 'Twilight PM',
+        'plugin'   : 'plugin.video.twilight',
+        'saved'    : 'twilightpm',
+        'path'     : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight'),
+        'icon'     : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight', 'icon.png'),
+        'fanart'   : os.path.join(CONFIG.ADDONS, 'plugin.video.twilight', 'fanart.png'),
+        'file'     : os.path.join(CONFIG.DEBRIDFOLD, 'twilight_pm'),
+        'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.twilight', 'settings.xml'),
+        'default'  : 'pm.account_id',
+        'data'     : ['pm.account_id', 'pm.token'],
+        'activate' : 'RunPlugin(plugin://plugin.video.twilight/?mode=premiumize.authenticate)'},
     'fenrd': {
         'name'     : 'Fen RD',
         'plugin'   : 'plugin.video.fen',
