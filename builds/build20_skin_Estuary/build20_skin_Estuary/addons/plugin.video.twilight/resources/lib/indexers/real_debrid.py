@@ -186,7 +186,7 @@ def active_days_notify_only():
 		days_remaining = (expires - datetime.today()).days
 
 		account_status_text = '[COLOR limegreen]פרימיום[/COLOR]' if days_remaining > 0 else '[COLOR red]לא בתוקף[/COLOR]'
-		days_remaining_text = f' ({str(days_remaining)} ימים נותרו)' if days_remaining > 0 else ''
+		days_remaining_text = f' (נותרו {str(days_remaining)} ימים)' if days_remaining > 0 else ''
 
 		notification_text = f"[B]סטטוס מנוי: {account_status_text}{days_remaining_text}[/B]"
 		kodi_utils.notification(notification_text, 4000)
