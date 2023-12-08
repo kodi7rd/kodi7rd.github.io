@@ -1,5 +1,10 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.29[/B][/COLOR]
+- Add setting to notify for Real Debrid account status on Kodi's startup.
+[B](Provider Accounts - General - Notify Real Debrid Account Status on Startup)[/B]
+- Translate Kodi's Log upload window to Hebrew.
+
 [COLOR dodgerblue][B]Version 3.2.28[/B][/COLOR]
 - Tikipeter's bug fix version 3.2.15:
 - BUG FIX: Sort in TV Shows seasons list - seasons then specials.

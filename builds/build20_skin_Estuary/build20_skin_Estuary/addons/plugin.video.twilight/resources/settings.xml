@@ -1190,6 +1190,11 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="real_debrid_active_days_notify_only" type="boolean" label="400023" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
 			</group>
 			<!-- External Scrapers -->
 			<group id="2" label="32079">

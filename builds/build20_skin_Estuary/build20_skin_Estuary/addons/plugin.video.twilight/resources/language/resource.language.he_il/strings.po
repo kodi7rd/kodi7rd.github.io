@@ -219,6 +219,12 @@ msgctxt "#400022"
 msgid "הצג מידע זמין כאשר אין מקורות לסרט שנבחר"
 msgstr "הצג מידע זמין כאשר אין מקורות לסרט שנבחר"
 
+# For settings menu - Provider Accounts
+
+msgctxt "#400023"
+msgid "Notify Real Debrid Account Status on Startup"
+msgstr "Notify Real Debrid Account Status on Startup"
+
 # real_debrid.py - Real Debrid Account Info
 
 msgctxt "#32758"
@@ -244,5 +250,19 @@ msgstr "[B][COLOR lightblue]כמות ימים לסיום תוקף המנוי:[/C
 msgctxt "#32759"
 msgid "[B]Fidelity Points:[/B] %s"
 msgstr "[B][COLOR lightblue]נקודות נאמנות:[/COLOR][/B] %s"
+
+# kodi_utils.py - Log Uploader window
+
+msgctxt "#33145"
+msgid "Current Kodi Log"
+msgstr "לוג נוכחי"
+
+msgctxt "#33146"
+msgid "Previous Kodi Log"
+msgstr "לוג קודם"
+
+msgctxt "#33147"
+msgid "Choose Which Log File to Upload"
+msgstr "בחר קובץ לוג להעלאה"
 
 ###################################################################################################################################

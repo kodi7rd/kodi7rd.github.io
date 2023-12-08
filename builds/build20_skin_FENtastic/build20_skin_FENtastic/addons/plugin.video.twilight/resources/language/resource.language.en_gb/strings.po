@@ -4069,4 +4069,10 @@ msgctxt "#400022"
 msgid "הצג מידע זמין כאשר אין מקורות לסרט שנבחר"
 msgstr ""
 
+# For settings menu - Provider Accounts
+
+msgctxt "#400023"
+msgid "Notify Real Debrid Account Status on Startup"
+msgstr ""
+
 ###################################################################################################################################
