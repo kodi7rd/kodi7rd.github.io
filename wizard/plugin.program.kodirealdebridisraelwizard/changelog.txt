@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.1.2[/B][/COLOR]
+* Delay the "מחפש עדכוני הרחבות..." message for 4 seconds on Kodi startup.
 [COLOR yellow][B]v1.1.1[/B][/COLOR]
 * Add save Debrid data support to Twilight - Premiumize.
 [COLOR yellow][B]v1.1.0[/B][/COLOR]
