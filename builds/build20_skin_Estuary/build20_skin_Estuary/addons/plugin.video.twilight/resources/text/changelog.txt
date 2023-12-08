@@ -1,7 +1,7 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
 [COLOR dodgerblue][B]Version 3.2.30[/B][/COLOR]
-- Small typo fix for to notify for "Notify Real Debrid Account Status on Startup" function.
+- Small typo fix for "Notify Real Debrid Account Status on Startup" function.
 
 [COLOR dodgerblue][B]Version 3.2.29[/B][/COLOR]
 - Add setting to notify for Real Debrid account status on Kodi's startup.
