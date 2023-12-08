@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v3.9.9[/B][/COLOR]
+﻿[COLOR yellow][B]v4.0.0[/B][/COLOR]
+* BUG FIX: Limit "write_heb_embedded_taglines_check" function to Twilight addon.
+* Remove empty log line (autosub.py)
+[COLOR yellow][B]v3.9.9[/B][/COLOR]
 * BUG FIX: Update "requests_toolbelt" dependency version (urllib3 2.1.0 compatibility).
 [COLOR yellow][B]v3.9.8[/B][/COLOR]
 * Add DarkSubs icon in Kodi subtitle window (logo.png)

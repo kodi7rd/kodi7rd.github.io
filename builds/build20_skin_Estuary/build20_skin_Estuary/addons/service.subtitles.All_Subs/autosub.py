@@ -854,7 +854,6 @@ class KodiMonitor(xbmc.Monitor):
             sub_name=None
             global is_embedded_hebrew_sub_exists
             is_embedded_hebrew_sub_exists=False
-            log.warning(current_list_item_temp)
             
             if  trigger:
                 trigger=False
