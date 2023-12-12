@@ -233,6 +233,7 @@ class Config:
         
         # KODI-RD-IL - Auto force addon updates on Kodi startup
         self.FORCEUPDATEFAST_ONSTARTUP = self.get_setting('forceupdateFAST_on_startup')
+        self.FORCEUPDATEFAST_ONSTARTUP_NOTIFY = self.get_setting('forceupdateFAST_on_startup_notify')
         
         # Video Cache variables
         self.INCLUDEVIDEO = self.get_setting('includevideo')

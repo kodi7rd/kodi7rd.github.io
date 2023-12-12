@@ -95,9 +95,10 @@ def latest_db(db):
         
 # KODI-RD-IL - Force addon updates FAST method
 def forceUpdate():
-    xbmc.sleep(4000)
-    logging.log_notify(CONFIG.ADDONTITLE,
-                       '[COLOR {0}]מחפש עדכוני הרחבות...[/COLOR]'.format(CONFIG.COLOR2))
+    if CONFIG.FORCEUPDATEFAST_ONSTARTUP_NOTIFY == "true":
+        xbmc.sleep(4000)
+        logging.log_notify(CONFIG.ADDONTITLE,
+                           '[COLOR {0}]מחפש עדכוני הרחבות...[/COLOR]'.format(CONFIG.COLOR2))
     xbmc.executebuiltin('UpdateAddonRepos()')
     xbmc.executebuiltin('UpdateLocalAddons()')
 ############################################################################

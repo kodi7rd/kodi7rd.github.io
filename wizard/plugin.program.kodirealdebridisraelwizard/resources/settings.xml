@@ -39,6 +39,7 @@
     <category label="תחזוקה">
         <setting type="lsep" label="הרחבות"/>
         <setting id="forceupdateFAST_on_startup" type="bool" label="חפש עדכוני הרחבות בהפעלה" default="true"/>
+        <setting id="forceupdateFAST_on_startup_notify" type="bool" label="הצג הודעה של חיפוש העדכונים" default="false" visible="eq(-1,true)"/>
         <setting type="lsep" label="העלאת לוג"/>
         <setting id="oldlog" type="bool" label="כלול Kodi.Old.Log" default="false"/>
         <setting id="wizlog" type="bool" label="כלול לוג Wizard" default="false"/>
