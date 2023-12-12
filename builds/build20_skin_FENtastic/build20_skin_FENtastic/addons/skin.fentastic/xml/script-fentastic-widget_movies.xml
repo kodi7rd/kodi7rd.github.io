@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
     <include name="MovieWidgets">
-        <include content="WidgetListCategoryStacked">
+        <include content="WidgetListCategory">
             <param name="content_path" value="plugin://plugin.video.twilight/?mode=navigator.build_shortcut_folder_list&amp;name=FENtastic+-+%D7%A1%D7%A8%D7%98%D7%99%D7%9D+-+%D7%90%D7%99%D7%96%D7%95%D7%A8+%D7%90%D7%99%D7%A9%D7%99&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
             <param name="widget_header" value="[B][COLOR yellow]איזור אישי (חובה להתחבר לTrakt)[/COLOR][/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="19011"/>
         </include>
-        <include content="WidgetListBigEpisodesStacked">
-            <param name="content_path" value="$INFO[Window(Home).Property(fentastic.19011.path)]"/>
-            <param name="widget_header" value="$INFO[Window(Home).Property(fentastic.19011.label)]"/>
-            <param name="widget_target" value="videos"/>
-            <param name="list_id" value="190111"/>
-        </include>
         <include content="WidgetListBigPoster">
             <param name="content_path" value="plugin://plugin.video.twilight/?name=32461&amp;iconImage=dvd&amp;mode=build_movie_list&amp;action=tmdb_movies_latest_releases"/>
-            <param name="widget_header" value="[B][COLOR yellow]חדשים[/COLOR][/B]"/>
+            <param name="widget_header" value="[B][COLOR yellow]סרטים חדשים[/COLOR][/B]"/>
             <param name="widget_target" value="videos"/>
             <param name="list_id" value="19012"/>
         </include>
