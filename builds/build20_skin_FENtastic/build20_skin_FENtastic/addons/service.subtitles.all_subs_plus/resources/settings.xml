@@ -8,15 +8,17 @@
 		<setting type="action" label="32003" action="RunScript(service.subtitles.all_subs_plus, 1,action=clean)" visible="false"/>
 
 		<setting label="32013" type="lsep"/>
-		<setting id="OSuser2" label="32011" type="text" default=""/>
-		<setting id="OSpass2" label="32012" type="text" option = "hidden" default=""/>
+		<setting id="dummy_setting" label="" type="action" action="" visible="false" />
+		<setting id="OSuser" subsetting="true" label="32011" type="text" default=""/>
+		<setting id="OSpass" subsetting="true" label="32012" type="text" option = "hidden" default=""/>
+		<setting id="OS_API_KEY" subsetting="true" label="API Key" type="text" default=""/>
 
 		<setting label="32053" type="lsep"/>
-		<setting id="KT_email" label="32005" type="text" default=""/>
-		<setting id="KT_enc_pass" label="32006" type="text" option = "hidden" default=""/>
-		<setting id="dummy_setting" label="" type="action" action="" visible="false"/>
-		<setting label="32051" type="lsep"/>
-		<setting id="ktcode" label="32052" type="text" default="" />
+		<setting id="dummy_setting2" label="" type="action" action="" visible="false" />
+		<setting id="KT_email" subsetting="true" label="32005" type="text" default=""/>
+		<setting id="KT_enc_pass" subsetting="true" label="32006" type="text" option = "hidden" default=""/>
+		<!-- <setting id="ktcode_enable" subsetting="true" label="32051" type="bool" default="false" />
+		<setting id="ktcode" subsetting="true" label="32052" type="text" visible="eq(-1,true)" enable="eq(-1,true)" default="" /> -->
 	</category>
 	<category label="32039">
 		<setting label="32015" type="lsep"/>
@@ -41,7 +43,7 @@
 		<setting id="other_lang" label="32063" type="text" default="" />
 		<setting id="all_lang" label="32064" type="bool" default="false" />
 		<setting label=" " type="lsep"/>
-		<setting id="preferred_lang" label="32065" type="enum" lvalues="32066|32061|32060|32059|32058|32057|32056" default="5"/>
+		<setting id="preferred_lang" label="32065" type="enum" lvalues="32066|32061|32060|32059|32058|32057|32056" default="6"/>
 		<!-- <setting id="preferred_lang" label="32065" type="enum" values="לפי הגדרות קודי|ספרדית|צרפתית|ערבית|רוסית|אנגלית|עברית" default="5"/> -->
 		<setting label=" " type="lsep"/>
 		<setting id="auto_translate" label="32067" type="bool" default="false" />
@@ -52,7 +54,7 @@
 		<setting id="history_log" label="32069" type="bool" default="false" />
 		<setting id="sort_subs" label="32070" type="bool" default="true" />
 		<setting id="sync_percent" label="32071" type="number" default="85"/>
-		<setting id="Debug" label="Debug" type="bool" default="false" />
+		<setting id="Debug" label="Debug"  visible="false" type="bool" default="false" />
 
 		<!-- <setting label=" " type="lsep"/>
 		<setting id="dummy_setting2" label="" type="action" action="" visible="false"/> -->
@@ -98,7 +100,7 @@
         <setting id="color_result_opensubs_custom" type="text" default="" visible= "eq(-6,true) + eq(-1,0)" enable="eq(-6,true) + eq(-1,0)" />
 
         <setting id="color_result_subscene" label="Subscene" type="labelenum" values="custom|yellow|limegreen|white|thistle|cyan|bisque|lightskyblue" default="lightskyblue" visible= "eq(-7,true)" enable="eq(-7,true)"/>
-        <setting id="color_result_opensubs_custom" type="text" default="" visible= "eq(-8,true) + eq(-1,0)" enable="eq(-8,true) + eq(-1,0)" />
+        <setting id="color_result_subscene_custom" type="text" default="" visible= "eq(-8,true) + eq(-1,0)" enable="eq(-8,true) + eq(-1,0)" />
 
         <setting id="color_result_local" label="local" type="labelenum" values="custom|lightskyblue|yellow|limegreen|white|thistle|cyan|bisque" default="bisque" visible= "eq(-9,true)" enable="eq(-9,true)"/>
         <setting id="color_result_local_custom" type="text" default="" visible= "eq(-10,true) + eq(-1,0)" enable="eq(-10,true) + eq(-1,0)" />

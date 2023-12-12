@@ -1,3 +1,10 @@
+2.3.0
+** All Subs Plus by Burekas **
+- Update: Using the new OpenSubtitles API
+- Update: New API Key setting for OpenSubtitles
+(A guide to creating an API key is in the Readme file)
+- Bug fixes, code cleaning and refactoring
+
 2.2.0
 ** All Subs Plus by Burekas **
 - Bug fixs and improvements: Ktuvit
@@ -78,7 +85,7 @@
 - Kodi Matrix (python 3) support
 - A New way of finding imdbID based on tmdb
 - New Wizdom API fix
-- New logger system 'MyLogger" (Will show only when 'Debug' setting is enabled Or Kodi in Debug mode) 
+- New logger system 'MyLogger" (Will show only when 'Debug' setting is enabled Or Kodi in Debug mode)
 - Fix for local data playback
 - Fix for non-englise titles for "playing" [Playback is on]
 - Fix for non-englise titles in Kodi Library ("notPlaying" subtitles checking [Playback is off])

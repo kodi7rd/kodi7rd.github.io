@@ -29,7 +29,7 @@ sys.path.append (__resource__)
 
 from myLogger import myLogger
 
-from .OSUtilities import OSDBServer, log, hashFile, normalizeString
+from .OSUtilities import OSDBServer, log, normalizeString
 
 try:
     # import HTMLParser
@@ -41,7 +41,7 @@ except:
     from urllib.request import urlretrieve
     from urllib.parse import  unquote_plus, unquote,  quote
 
-def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, color_open):
+def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle, all_setting ,prefix_open, color_open):
     from service import colorize_text
     myLogger("Search_opensubtitle imdb: " + imdb_id)
     search_data = []
@@ -50,114 +50,76 @@ def GetOpenSubtitlesJson( item,imdb_id ,mode_subtitle,all_setting,prefix_open, c
     subtitle_list=[]
 
     if search_data != None:
-        #myLogger("Search_opensubtitle search_data: " + repr(search_data))
-        search_data.sort(key=lambda x: [not x['MatchedBy'] == 'moviehash',
-                         not os.path.splitext(x['SubFileName'])[0] == os.path.splitext(os.path.basename(unquote(item['file_original_path'])))[0],
-                        #  not normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).lower() in x['SubFileName'].replace('.',' ').lower(),
-                         not x['LanguageName'] == 'Undetermined'])
+        # #myLogger("Search_opensubtitle search_data: " + repr(search_data))
+        # search_data.sort(key=lambda x: [not x['MatchedBy'] == 'moviehash',
+        #             not os.path.splitext(x['SubFileName'])[0] == os.path.splitext(os.path.basename(unquote(item['file_original_path'])))[0],
+        #         #  not normalizeString(xbmc.getInfoLabel("VideoPlayer.OriginalTitle")).lower() in x['SubFileName'].replace('.',' ').lower(),
+        #             not x['LanguageName'] == 'Undetermined'])
+        # myLogger("Search_opensubtitle search_data sorted: " + repr(search_data))
 
-        myLogger("Search_opensubtitle search_data sorted: " + repr(search_data))
         #x=1
         url_list=[]
-        for item_data in search_data:
-            nlabel = item_data["LanguageName"]
-            nlabel2 = colorize_text(item_data["SubFileName"],color_open)
+        for search_item in search_data:
+            item_data = search_item['attributes']
+            nlabel = xbmc.convertLanguage(item_data['language'], xbmc.ENGLISH_NAME)
+            nlabel2 = colorize_text(item_data['files'][0]['file_name'],color_open)
             #nlabel2 = colorize_text(prefix_open+' '+item_data["SubFileName"],color_open)
             #nlabel2 = colorize_text(str(x)+ '. '+prefix_open+' '+item_data["SubFileName"],color_open)
             nicon = colorize_text(prefix_open,color_open)
             #nicon = str(int(round(float(item_data["SubRating"])/2)))
-            nthumb = item_data["ISO639"]
+            nthumb = item_data["language"]
+            # n_hearing_impaired = item_data["hearing_impaired"]
+            n_hearing_impaired = "true" if item_data["hearing_impaired"] == True else "false"
 
-            ## hack to work around issue where Brazilian is not found as language in XBMC
+            file_id = str(item_data['files'][0]['file_id'])
 
-            try:
-                item['season']=int(item['season'])
-                item['episode']=int(item['episode'])
-                item_data['SeriesSeason']=int(item_data['SeriesSeason'])
-                item_data['SeriesEpisode']=int(item_data['SeriesEpisode'])
-            except:
-                pass
+            # try:
+            #     item['season'] = int(item['season'])
+            #     item['episode'] = int(item['episode'])
+            #     os_season_number = int(item_data['feature_details']['season_number'])
+            #     os_episode_number = int(item_data['feature_details']['episode_number'])
+            # except:
+            #     pass
 
-            if ((item['season'] == item_data['SeriesSeason'] and
-                item['episode'] == item_data['SeriesEpisode']) or
-                (item['season'] == 0 and item['episode'] == 0) ## for file search, season and episode == ""
-               ):
+            # if ((item['season'] == os_season_number and
+            #     item['episode'] == os_episode_number) or
+            #     (item['season'] == 0 and item['episode'] == 0) ## for file search, season and episode == ""
+            #    ):
 
-
-                url = "plugin://%s/?action=download&link=%s&id=%s&filename=%s&subformat=%s&source=%s&language=%s&thumbLang=%s" % (__scriptid__,
-                                                                                  item_data["ZipDownloadLink"],
-                                                                                  'opensubs$$$' + item_data["IDSubtitleFile"],
-                                                                                  item_data["SubFileName"],
-                                                                                  item_data["SubFormat"],
-                                                                                  'opensubtitle',
-                                                                                  item_data["LanguageName"],
-                                                                                  nthumb
-                                                                                  )
+            url = "plugin://%s/?action=download&id=%s&filename=%s&source=%s&language=%s&thumbLang=%s" % (
+                                                                                __scriptid__,
+                                                                                'opensubs$$$' + file_id,
+                                                                                nlabel2,
+                                                                                'opensubtitle',
+                                                                                nlabel,
+                                                                                nthumb
+                                                                                )
 
 
-                json_data={'url':url,
+            json_data = {'url':url,
                          'label':nlabel,
                          'label2':nlabel2,
                          'iconImage':nicon,
                          'thumbnailImage':nthumb,
-                         'hearing_imp':("false", "true")[int(item_data["SubHearingImpaired"]) != 0],
-                         #'hearing_imp': "true" if int(item_data["SubHearingImpaired"]) != 0 else "false",
-                         'sync': ("false", "true")[str(item_data["MatchedBy"]) == "moviehash"]}
+                         'hearing_imp': n_hearing_impaired,
+                         'sync': "false"}
 
-                if mode_subtitle>1  :
-                    if url not in url_list:
-
-                      url_list.append(url)
-                      subtitle_list.append(json_data)
-                    #xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=False)
-                    #x=x+1
-                else:
+            if mode_subtitle>1:
+                if url not in url_list:
+                    url_list.append(url)
                     subtitle_list.append(json_data)
-                    return  Download_opensubtitle( item_data["IDSubtitleFile"],item_data["ZipDownloadLink"],item_data["SubFormat"],mode_subtitle),subtitle_list
+                #xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=False)
+                #x=x+1
+            else:
+                subtitle_list.append(json_data)
+                return  Download_opensubtitle(file_id, mode_subtitle), subtitle_list
 
-                    break
-        return subtitle_list,search_data
+                #break
+        return subtitle_list, search_data
 
-def Download_opensubtitle(id,url,filename,subformat,mode_subtitle,stack=False):
-    from service import MyZipFolder2,MySubFolder2
-    MyZipFolder = MyZipFolder2
-    MySubFolder = MySubFolder2
-
-    subtitle_list = []
-    exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass" ]
-
-    if stack:         ## we only want XMLRPC download if movie is not in stack,
-                      ## you can only retreive multiple subs in zip
-        isSucceeded = False
-    else:
-        #subtitle = os.path.join(MySubFolder, "%s.%s" %(str(uuid.uuid4()), subformat))
-        ## filename = unquote(filename)
-        ## filename = path.basename(filename)[:-4]
-        ## subtitle = os.path.join(MySubFolder, "%s.%s" %(filename, subformat))
-        subtitle = os.path.join(MySubFolder, filename)
-        try:
-            isSucceeded = OSDBServer().download(id, subtitle)
-        except:
-            log( __name__, "failed to connect to service for subtitle download")
-            return subtitle_list
-
-    if isSucceeded:
-        subtitle_list.append(subtitle)
-    else:
-        log( __name__,"Download Using HTTP")
-        zip = os.path.join( MyZipFolder, "OpenSubtitles.zip")
-        f = urllib.request.urlopen(url)
-        myLogger(url)
-        with open(zip, "wb") as subFile:
-            subFile.write(f.read())
-
-        xbmc.sleep(500)
-        xbmc.executebuiltin('Extract("%s","%s")' % (zip,MySubFolder,))
-
-        for file in xbmcvfs.listdir(zip)[1]:
-            file = os.path.join(MySubFolder, file)
-            if (os.path.splitext( file )[1] in exts):
-                subtitle_list.append(file)
+def Download_opensubtitle(file_id ,mode_subtitle):
+    from service import MySubFolder2
+    subtitle_list = OSDBServer().download(file_id, MySubFolder2)
 
     if mode_subtitle>1:
         return subtitle_list
@@ -166,4 +128,4 @@ def Download_opensubtitle(id,url,filename,subformat,mode_subtitle,stack=False):
         if os.path.exists(subtitle_list[0]):
             return subtitle_list[0]
 
-    #xbmc.Player().setSubtitles(subtitle_list[0])
+

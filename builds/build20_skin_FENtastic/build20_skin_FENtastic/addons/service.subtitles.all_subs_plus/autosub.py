@@ -408,7 +408,7 @@ class AutoSubsPlayer(xbmc.Player):
                             else:
                                 Debug("Preferred active built-in sub is already set")
 
-                            if all_setting["popup"]!="0":
+                            if all_setting["popup"] != "0":
                                 notify3(colorize_text(__language__(32102),'aqua'),2)
 
                         else:

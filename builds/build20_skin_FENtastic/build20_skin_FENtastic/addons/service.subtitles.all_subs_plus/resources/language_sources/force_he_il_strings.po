@@ -64,8 +64,8 @@ msgid "סיסמה"
 msgstr "סיסמה"
 
 msgctxt "#32013"
-msgid "פרטי התחברות ל-Opensubtitle (רשות)"
-msgstr "פרטי התחברות ל-Opensubtitle (רשות)"
+msgid "פרטי התחברות ל-Opensubtitle (חובה)"
+msgstr "פרטי התחברות ל-Opensubtitle (חובה)"
 
 msgctxt "#32014"
 msgid "פרטי התחברות לסאבסנטר"
@@ -382,3 +382,11 @@ msgstr "אפשרויות מראה תוצאות מתקדמות"
 msgctxt "#32118"
 msgid "אפשר הגדרות צבע לתוצאות"
 msgstr "אפשר הגדרות צבע לתוצאות"
+
+msgctxt "#32119"
+msgid "Opensubtitles נכשל בהורדה: "
+msgstr "Opensubtitles נכשל בהורדה: "
+
+msgctxt "#32120"
+msgid "Opensubtitles נכשל בהתחברות: "
+msgstr "Opensubtitles נכשל בהתחברות: "

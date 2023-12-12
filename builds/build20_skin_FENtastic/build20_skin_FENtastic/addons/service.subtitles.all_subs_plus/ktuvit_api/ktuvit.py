@@ -196,12 +196,13 @@ def parse_ktuvit_response(response,f_id,prefix_ktuvit,color_ktuvit):
         # nlabel2 = colorize_text(str(z)+'. '+prefix_ktuvit+' '+nm,color_ktuvit)
         nicon = colorize_text(prefix_ktuvit,color_ktuvit)
         nthumb = "he"
-        url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
-                                                                              nm,
-                                                                              "ktuvit$$$"+data+'$$$'+f_id,
-                                                                              'ktuvit',
-                                                                              nlabel,
-                                                                              nthumb)
+        url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (
+                                                                                MyScriptID,
+                                                                                nm,
+                                                                                "ktuvit$$$"+data+'$$$'+f_id,
+                                                                                'ktuvit',
+                                                                                nlabel,
+                                                                                nthumb)
 
         json_data={'url':url,
                             'label':nlabel,
@@ -216,8 +217,9 @@ def parse_ktuvit_response(response,f_id,prefix_ktuvit,color_ktuvit):
 
     return subtitle_list,m_pre
 
-def ktuvit_download_sub(id,MySubFolder,mode_subtitle):
+def ktuvit_download_sub(id,mode_subtitle):
     from os import path
+    from service import MySubFolder2
 
     #font_c="0"
     #size=0
@@ -264,7 +266,7 @@ def ktuvit_download_sub(id,MySubFolder,mode_subtitle):
     headers=(response.headers)
 
     file_name=headers['Content-Disposition'].split("filename=")[1]
-    archive_file = path.join(MySubFolder, file_name)
+    archive_file = path.join(MySubFolder2, file_name)
 
     # Throw an error for bad status codes
     response.raise_for_status()

@@ -1,23 +1,23 @@
 <settings version="2">
-    <setting id="OSuser2" default="true" />
-    <setting id="OSpass2" default="true" />
+    <setting id="dummy_setting" default="true" />
+    <setting id="OSuser" default="true" />
+    <setting id="OSpass" default="true" />
+    <setting id="OS_API_KEY" default="true" />
+    <setting id="dummy_setting2" default="true" />
     <setting id="KT_email" default="true" />
     <setting id="KT_enc_pass" default="true" />
-    <setting id="dummy_setting" default="true" />
-    <setting id="ktcode" default="true" />
     <setting id="wizset">true</setting>
     <setting id="ktuvitset">true</setting>
     <setting id="opensubtitle">true</setting>
     <setting id="subscene">true</setting>
-    <setting id="storage_en" default="true">false</setting>
-    <setting id="storage" default="true" />
+    <setting id="local_dir" default="true">false</setting>
+    <setting id="local_path" default="true" />
     <setting id="hebrew">true</setting>
     <setting id="english">true</setting>
     <setting id="russian" default="true">false</setting>
     <setting id="arabic" default="true">false</setting>
     <setting id="french" default="true">false</setting>
     <setting id="spanish" default="true">false</setting>
-    <setting id="dummy_setting2" default="true" />
     <setting id="other_lang" default="true" />
     <setting id="all_lang" default="true">false</setting>
     <setting id="preferred_lang">6</setting>
@@ -56,6 +56,7 @@
     <setting id="color_result_opensubs" default="true">yellow</setting>
     <setting id="color_result_opensubs_custom" default="true" />
     <setting id="color_result_subscene" default="true">lightskyblue</setting>
+    <setting id="color_result_subscene_custom" default="true" />
     <setting id="color_result_local" default="true">bisque</setting>
     <setting id="color_result_local_custom" default="true" />
     <setting id="enable_font" default="true">false</setting>
@@ -64,6 +65,11 @@
     <setting id="size">27</setting>
     <setting id="color" default="true">0</setting>
     <setting id="background_level" default="true">0</setting>
+    <setting id="OSpass2" default="true" />
+    <setting id="OSuser2" default="true" />
     <setting id="arab" default="true">false</setting>
+    <setting id="ktcode" default="true" />
     <setting id="local_files" default="true">false</setting>
+    <setting id="storage" default="true" />
+    <setting id="storage_en" default="true">false</setting>
 </settings>

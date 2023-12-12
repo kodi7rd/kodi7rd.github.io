@@ -56,7 +56,7 @@ msgid "Logged in successfully"
 msgstr ""
 
 msgctxt "#32011"
-msgid "User"
+msgid "Username"
 msgstr ""
 
 msgctxt "#32012"
@@ -64,7 +64,7 @@ msgid "Password"
 msgstr ""
 
 msgctxt "#32013"
-msgid "Opensubtitle login (Optional)"
+msgid "Opensubtitle login (Required)"
 msgstr ""
 
 msgctxt "#32014"
@@ -381,4 +381,12 @@ msgstr ""
 
 msgctxt "#32118"
 msgid "Enable custom results colors"
+msgstr ""
+
+msgctxt "#32119"
+msgid "Opensubtitles failed to download: "
+msgstr ""
+
+msgctxt "#32120"
+msgid "Opensubtitles failed to login: "
 msgstr ""

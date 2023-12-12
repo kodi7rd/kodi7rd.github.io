@@ -56,7 +56,7 @@ msgid "Logged in successfully"
 msgstr "התחברת בהצלחה"
 
 msgctxt "#32011"
-msgid "User"
+msgid "Username"
 msgstr "שם משתמש"
 
 msgctxt "#32012"
@@ -64,8 +64,8 @@ msgid "Password"
 msgstr "סיסמה"
 
 msgctxt "#32013"
-msgid "Opensubtitle login (Optional)"
-msgstr "פרטי התחברות ל-Opensubtitle (רשות)"
+msgid "Opensubtitle login (Required)"
+msgstr "פרטי התחברות ל-Opensubtitle (חובה)"
 
 msgctxt "#32014"
 msgid "Subscenter Login"
@@ -382,3 +382,11 @@ msgstr "אפשרויות מראה תוצאות מתקדמות"
 msgctxt "#32118"
 msgid "Enable custom results colors"
 msgstr "אפשר הגדרות צבע לתוצאות"
+
+msgctxt "#32119"
+msgid "Opensubtitles failed to download: "
+msgstr "Opensubtitles נכשל בהורדה: "
+
+msgctxt "#32120"
+msgid "Opensubtitles failed to login: "
+msgstr "Opensubtitles נכשל בהתחברות: "

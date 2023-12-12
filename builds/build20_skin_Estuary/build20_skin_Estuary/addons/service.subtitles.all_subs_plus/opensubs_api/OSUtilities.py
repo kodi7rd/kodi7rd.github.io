@@ -1,51 +1,106 @@
 # -*- coding: utf-8 -*-
 
-import xbmc,socket
-import struct
-import xbmcvfs
-try:
-    import xmlrpclib
-except:
-    import xmlrpc.client as xmlrpclib
-import xbmcaddon
-import unicodedata
-from xbmcaddon import Addon
+import xbmc, xbmcaddon
+import requests
+import os
 
 from myLogger import myLogger
 
-__addon__      = xbmcaddon.Addon()
-__version__    = __addon__.getAddonInfo('version') # Module version
-__scriptname__ = "XBMC Subtitles Unofficial"
+__addon__ = xbmcaddon.Addon()
+__language__ = __addon__.getLocalizedString
+MyAddonName = __addon__.getAddonInfo('name').replace(" ","_")
+MyAddonVersion = __addon__.getAddonInfo('version')
 
-BASE_URL_XMLRPC = u"https://api.opensubtitles.org/xml-rpc"
-MyAddon = Addon()
+BASE_URL_OS_API = u"https://api.opensubtitles.com/api/v1"
+USER_AGENT = '%s v%s' %(MyAddonName, MyAddonVersion)
+
+DEFAULT_USERNAME = 'allsubsplusos'
+DEFAULT_PASS = 'allsubsplusos'
+
+# DEFAULT_API_KEY = '9bOXkEUkqg5fHTWCrOQ6pYLBlHtRd9fM'
+# OS_API_KEY = apiSettings if len(apiSettings) > 0 else DEFAULT_API_KEY
+DEFAULT_API_KEYS = ['9bOXkEUkqg5fHTWCrOQ6pYLBlHtRd9fM', '3MeVyIKDINfXJPKMTAWtuGzJDYcAYTnb', 'yh4v2XkLaz4k341i5KW3a3yma46DafjE']
+api_keys = DEFAULT_API_KEYS
+apiSettings = __addon__.getSetting("OS_API_KEY")
+
+if len(apiSettings) > 0:
+    api_keys.insert(0, apiSettings)
+OS_API_KEY = api_keys[0]
+
 KODI_VERSION = int(xbmc.getInfoLabel("System.BuildVersion").split('.', 1)[0])
 
 class OSDBServer:
     def __init__( self, *args, **kwargs ):
-        self.server = xmlrpclib.Server( BASE_URL_XMLRPC, verbose=0 )
-        socket.setdefaulttimeout(10)
-        login = self.server.LogIn(__addon__.getSetting( "OSuser2" ), __addon__.getSetting( "OSpass2" ), "en", "%s_v%s" %(__scriptname__.replace(" ","_"),__version__))
-        myLogger('OpenSubtitles')
-        myLogger('OpenSubtitles Login: ' + repr(login))
-        self.osdb_token  = login[ "token" ]
+        try:
+            usernameSettings = __addon__.getSetting("OSuser")
+            passSettings = __addon__.getSetting("OSpass")
+            username = usernameSettings if len(usernameSettings) > 0 else DEFAULT_USERNAME
+            password = passSettings if len(passSettings) > 0 else DEFAULT_PASS
+
+            payload = {
+                "username": username,
+                "password": password
+            }
+
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": USER_AGENT,
+                "Api-Key": OS_API_KEY
+            }
+
+            url = BASE_URL_OS_API + '/login';
+            myLogger('OpenSubtitles Login: url - ' + repr(url))
+            #myLogger('OpenSubtitles Login: details - ' + repr(payload))
+            #myLogger('OpenSubtitles Login: api - ' + repr(OS_API_KEY))
+
+            response = requests.post(url, json=payload, headers=headers)
+            response_json = response.json()
+
+            if response.status_code == 200:
+                myLogger('OpenSubtitles Login: Succeeded')
+                # response_json = response.json()
+                myLogger('OpenSubtitles Login: response json - ' + repr(response_json))
+
+                self.osdb_token  = response_json['token']
+                myLogger('OpenSubtitles token: ' + repr(self.osdb_token))
+            else:
+                myLogger('OpenSubtitles Login: Failed - status code: ' + repr (response.status_code))
+                self.failedToLoginError(response_json)
+
+        except Exception as e:
+            myLogger('OpenSubtitles Login error: ' + repr(e))
+            self.failedToLoginError(response_json)
+            pass
+
+
+    def failedToLoginError(self, response_json):
+        from service import notify3
+        msg = (__language__(32120) + repr(response_json['message'])).replace(","," - ").replace("'","")
+        myLogger(msg)
+        notify3(msg, 5)
 
     def searchsubtitles( self, item, imdb_id, all_setting ):
         from service import main_languages
-        tvshow=item['tvshow']
-        season=item['season']
-        episode=item['episode']
-        year=item['year']
-        title=item['title']
+        tvshow = item['tvshow']
+        season = item['season']
+        episode = item['episode']
+        year = item['year']
+        title = item['title']
 
-        if ( self.osdb_token ) :
-            searchlist  = []
+        if (hasattr(self,'osdb_token')):
+            url = BASE_URL_OS_API + '/subtitles';
+
+            headers = {
+                "User-Agent": USER_AGENT,
+                "Api-Key": OS_API_KEY
+            }
+
             lang=[]
-
             for _lang in main_languages:
                 if (_lang.lower() in all_setting
                     and all_setting[_lang.lower()] == 'true'):
-                    lang.append(xbmc.convertLanguage(_lang, xbmc.ISO_639_2))
+                    lang.append(xbmc.convertLanguage(_lang, xbmc.ISO_639_1))
             if all_setting["all_lang"] == 'true':
                 lang.append('ALL')
             if len(all_setting["other_lang"]) > 0:
@@ -55,62 +110,62 @@ class OSDBServer:
                     # short_lang = xbmc.convertLanguage(full_lang, xbmc.ISO_639_1)
                     # lang.append(str(short_lang))
                     lang.append(str(item))
-            myLogger('OS Langs: ' + repr(lang))
-            if len(tvshow) > 0:
-                a=1
-                OS_search_string = ("%s S%.2dE%.2d" % (tvshow,int(season),int(episode),)).replace(" ","+")
 
-            else:
-                if str(year) == "" and xbmc.Player().isPlaying():
-                    title, year = xbmc.getCleanMovieTitle( title )
-                if 'tt' not in imdb_id:
-                    OS_search_string = title.replace(" ","+")
+            lang_string = ','.join(lang)
+            myLogger('OS Langs: ' + repr(lang_string))
+
+            querystring = {}
+            querystring['languages'] = lang_string
+
+            if imdb_id.startswith('tt'):
+                # With imdb (Can be with ot without the 'tt' prefix)
+                # querystring['imdb_id'] = imdb_id
+                if len(tvshow) > 0:
+                    #################################################
+                    # option 1 - TV Shows - by imdb/season/episode
+                    #################################################
+                    querystring['parent_imdb_id'] = imdb_id
+                    querystring['season_number'] = season
+                    querystring['episode_number'] = episode
                 else:
-                    OS_search_string = imdb_id
+                    #################################################
+                    # option 2 - Movies - by imdb
+                    #################################################
+                    querystring['imdb_id'] = imdb_id
 
-
-            #if not False:
-
-            #if xbmc.Player().isPlaying():
-            #    imdb_id = str(xbmc.Player().getVideoInfoTag().getIMDBNumber().replace('tt',''))
-            #else:
-            #    imdb_id = str(xbmc.getInfoLabel("ListItem.IMDBNumber").replace('tt',''))
-
-            if 'tt' in imdb_id:
-                imdb_id=imdb_id.replace('tt','')
-            # if imdb_id=='':
-            #    imdb_id=str((str(imdb_id)).replace('tt',''))
-
-            if (len(tvshow)==0 and imdb_id != ""):
-                searchlist.append({'sublanguageid' :",".join(lang),
-                                 'imdbid'        :imdb_id
-                                })
-            if len(tvshow)>0:
-                searchlist.append({'season' :season,
-                                 'sublanguageid' :",".join(lang),
-                                 'imdbid'        :imdb_id,
-                                 'query'        :OS_search_string,
-                                 'episode':episode
-                                })
             else:
-                searchlist.append({'sublanguageid':",".join(lang),
-                              'query'        :OS_search_string,
-                              'year'         :year
-                             })
+                # Without imdb
+                querystring['query'] = title
+                if len(tvshow) > 0:
+                    #################################################
+                    # option 3 - TV Shows - by tvshow/season/episode
+                    #################################################
+                    querystring['season_number'] = season
+                    querystring['episode_number'] = episode
+                else:
+                    #################################################
+                    # option 4 - Movies - by title/year
+                    #################################################
+                    querystring['year'] = year
 
-            #else:
-            #  searchlist = [{'sublanguageid':",".join(lang),
-            #                 'query'        :OS_search_string,
-            #                 'year'         :year
-            #                }]
+            response_json_data = []
 
-            myLogger("Opensubtitles SearchSubtitles searchlist: " + repr(searchlist))
-            search = self.server.SearchSubtitles( self.osdb_token, searchlist )
-            myLogger("Opensubtitles SearchSubtitles search result: " + repr(search))
+            myLogger("Opensubtitles SearchSubtitles querystring: " + repr(querystring))
+            response = requests.get(url, headers=headers, params=querystring)
+            response_json = response.json()
+
+            myLogger("Opensubtitles SearchSubtitles search result: Number of pages - " + repr(response_json['total_pages']))
+            for _page in range(response_json['total_pages']):
+                querystring['page'] = _page + 1
+                myLogger("Opensubtitles SearchSubtitles querystring: " + repr(querystring))
+                response = requests.get(url, headers=headers, params=querystring)
+                response_json = response.json()
+                response_json_data.extend(response_json['data'])
+
+            myLogger("Opensubtitles SearchSubtitles search result: " + repr(response_json_data))
 
             try:
-                data = search["data"]
-                return data
+                return response_json_data
             except:
                 return []
 
@@ -118,103 +173,65 @@ class OSDBServer:
             return []
 
 
-    def download(self, ID, dest):
-        #from service import convert_to_utf
-        try:
-            import zlib, base64
-            down_id=[ID,]
-            result = self.server.DownloadSubtitles(self.osdb_token, down_id)
-            if result["data"]:
-                local_file = open(dest, "w" + "b")
-                d = zlib.decompressobj(16+zlib.MAX_WBITS)
-                data = d.decompress(base64.b64decode(result["data"][0]["data"]))
-                local_file.write(data)
-                local_file.close()
-                # convert_to_utf(local_file)
-                log( __name__,"Download Using XMLRPC")
-                return True
-            return False
-        except:
-           return False
+    def download(self, file_id, MySubFolder2):
+        from service import notify3
+
+        if (hasattr(self,'osdb_token')):
+            url = BASE_URL_OS_API + '/download';
+            payload = {"file_id": int(file_id)}
+
+            apikey_index = 1
+            for _apikey in api_keys:
+                myLogger("Opensubtitles download API Key (%s)" %(apikey_index))
+                apikey_index += 1
+
+                headers = {
+                    "User-Agent": USER_AGENT,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Api-Key": _apikey,
+                    "Authorization": "Bearer %s" %(self.osdb_token)
+                }
+
+                #try catch
+
+                myLogger("Opensubtitles download payload: " + repr(payload))
+                response = requests.post(url, json=payload, headers=headers)
+                response_json = response.json()
+                myLogger("Opensubtitles download result: " + repr(response_json))
+
+                if (response.status_code == 200):
+
+                    _filename = response_json['file_name']
+                    archive_file = os.path.join(MySubFolder2, _filename)
+
+                    _url = response_json['link']
+                    response = requests.get(_url)
+
+                    subtitle_list = []
+                    with open(archive_file, 'wb') as handle:
+                        for block in response.iter_content(1024):
+                            handle.write(block)
+
+                    subtitle_list.append(archive_file)
+
+                    return subtitle_list
+
+            #If failed after all api_keys attemps
+            myLogger('OpenSubtitles download: Failed - status code: ' + repr (response.status_code))
+            msg = __language__(32119) + repr(response_json['message'])
+            myLogger(msg)
+            notify3(msg, 5)
+            # return []
+
+
 
 def log(module, msg):
   xbmc.log((u"### [%s] - %s" % (module,msg,)),level=xbmc.LOGDEBUG )
 
-def hashFile(file_path, rar):
-    if rar:
-      return OpensubtitlesHashRar(file_path)
-
-    log( __name__,"Hash Standard file")
-    longlongformat = 'q'  # long long
-    bytesize = struct.calcsize(longlongformat)
-    f = xbmcvfs.File(file_path)
-
-    filesize = f.size()
-    hash = filesize
-
-    if filesize < 65536 * 2:
-        return "SizeError"
-
-    buffer = f.read(65536)
-    f.seek(max(0,filesize-65536),0)
-    buffer += f.read(65536)
-    f.close()
-    for x in range((65536/bytesize)*2):
-        size = x*bytesize
-        (l_value,)= struct.unpack(longlongformat, buffer[size:size+bytesize])
-        hash += l_value
-        hash = hash & 0xFFFFFFFFFFFFFFFF
-
-    returnHash = "%016x" % hash
-    return filesize,returnHash
-
-
-def OpensubtitlesHashRar(firsrarfile):
-    log( __name__,"Hash Rar file")
-    f = xbmcvfs.File(firsrarfile)
-    a=f.read(4)
-    if a!='Rar!':
-        raise Exception('ERROR: This is not rar file.')
-    seek=0
-    for i in range(4):
-        f.seek(max(0,seek),0)
-        a=f.read(100)
-        type,flag,size=struct.unpack( '<BHH', a[2:2+5])
-        if 0x74==type:
-            if 0x30!=struct.unpack( '<B', a[25:25+1])[0]:
-                raise Exception('Bad compression method! Work only for "store".')
-            s_partiizebodystart=seek+size
-            s_partiizebody,s_unpacksize=struct.unpack( '<II', a[7:7+2*4])
-            if (flag & 0x0100):
-                s_unpacksize=(struct.unpack( '<I', a[36:36+4])[0] <<32 )+s_unpacksize
-                log( __name__ , 'Hash untested for files biger that 2gb. May work or may generate bad hash.')
-            lastrarfile=getlastsplit(firsrarfile,(s_unpacksize-1)/s_partiizebody)
-            hash=addfilehash(firsrarfile,s_unpacksize,s_partiizebodystart)
-            hash=addfilehash(lastrarfile,hash,(s_unpacksize%s_partiizebody)+s_partiizebodystart-65536)
-            f.close()
-            return (s_unpacksize,"%016x" % hash )
-        seek+=size
-    raise Exception('ERROR: Not Body part in rar file.')
-
-def getlastsplit(firsrarfile,x):
-    if firsrarfile[-3:]=='001':
-        return firsrarfile[:-3]+('%03d' %(x+1))
-    if firsrarfile[-11:-6]=='.part':
-        return firsrarfile[0:-6]+('%02d' % (x+1))+firsrarfile[-4:]
-    if firsrarfile[-10:-5]=='.part':
-        return firsrarfile[0:-5]+('%1d' % (x+1))+firsrarfile[-4:]
-    return firsrarfile[0:-2]+('%02d' %(x-1) )
-
-def addfilehash(name,hash,seek):
-    f = xbmcvfs.File(name)
-    f.seek(max(0,seek),0)
-    for i in range(8192):
-        hash+=struct.unpack('<q', f.read(8))[0]
-        hash =hash & 0xffffffffffffffff
-    f.close()
-    return hash
-
 def normalizeString(str):
+  import unicodedata
+
   if KODI_VERSION<=18:
       return unicodedata.normalize(
              u'NFKD', unicode(str)

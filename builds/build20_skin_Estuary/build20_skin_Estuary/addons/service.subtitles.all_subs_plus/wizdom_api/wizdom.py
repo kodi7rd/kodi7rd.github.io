@@ -54,7 +54,8 @@ def GetWizJson(imdb,prefix_wizdom,color_wizdom,season=0,episode=0,version=0):
 
             _id = 'wizdom$$$' + str(item_data["id"])
 
-            url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (MyScriptID,
+            url = "plugin://%s/?action=download&versioname=%s&id=%s&source=%s&language=%s&thumbLang=%s" % (
+                                                                        MyScriptID,
                                                                         item_data["versioname"],
                                                                         _id,
                                                                         'wizdom',
