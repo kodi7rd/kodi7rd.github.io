@@ -425,7 +425,14 @@ class Navigator:
 					item_get = item.get
 					name = item_get('name', 'Error: No Name')
 					iconImage = item_get('iconImage', None)
-					if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
+
+					############KODI-RD-IL###################
+					# ORIGINAL TWILIGHT LINE:
+					# if iconImage: icon = iconImage if iconImage.startswith('http') else get_icon(item_get('iconImage'))
+					# CUSTOM NEW LINE - Make navigator.db work with local images for thumbnails (special://)
+					if iconImage: icon = iconImage if iconImage.startswith('http') or iconImage.startswith('special') else get_icon(item_get('iconImage'))
+					#########################################
+
 					else: icon = folder_icon
 					menu_editor_url = build_url({'mode': 'menu_editor.edit_menu_shortcut_folder', 'list_name': list_name, 'active_list': list_name, 'position': item_position})
 					cm.append((edit_str, run_plugin % menu_editor_url))
