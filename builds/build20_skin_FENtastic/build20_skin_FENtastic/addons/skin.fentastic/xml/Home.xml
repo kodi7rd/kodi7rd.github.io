@@ -1166,13 +1166,13 @@
 					<bottom>0</bottom>
 					<height>39</height>
 					<width>100%</width>
-					<font>font12</font>
+					<font>font30_title</font>
 					<urlset>1</urlset>
 					<hitrect x="-100" y="0" w="1" h="1" />
-					<titlecolor>button_focus</titlecolor>
-					<textcolor>button_focus</textcolor>
-					<shadowcolor>text_shadow</shadowcolor>
-					<headlinecolor>FFC0C0C0</headlinecolor>
+					<titlecolor>yellow</titlecolor>
+					<textcolor>yellow</textcolor>
+					<shadowcolor>yellow</shadowcolor>
+					<headlinecolor>yellow</headlinecolor>
 					<visible>Skin.HasSetting(hide_mediaflags) | !ControlGroup(2000).HasFocus</visible>
 					<animation effect="fade" time="300">VisibleChange</animation>
 				</control>
