@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.32[/B][/COLOR]
+- Add setting to set minimum days until account expiration for Real Debrid account status notification.
+[B]Provider Accounts - General - Notify Only Under (Days Until Account Expiration)[/B]
+
 [COLOR dodgerblue][B]Version 3.2.31[/B][/COLOR]
 - Make menus configured in navigator.db work with local images for thumbnails (special://)
 

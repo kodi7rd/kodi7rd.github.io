@@ -1195,6 +1195,23 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="real_debrid_active_days_notify_minimum_days" type="integer" label="400024" help="">
+					<level>0</level>
+					<default>365</default>
+					<constraints>
+						<minimum>1</minimum>
+						<step>1</step>
+						<maximum>365</maximum>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="real_debrid_active_days_notify_only">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="slider" format="integer">
+						<popup>false</popup>
+					</control>
+				</setting>
 			</group>
 			<!-- External Scrapers -->
 			<group id="2" label="32079">

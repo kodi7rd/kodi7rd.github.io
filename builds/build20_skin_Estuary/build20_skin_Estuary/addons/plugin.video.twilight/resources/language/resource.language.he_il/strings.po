@@ -225,6 +225,10 @@ msgctxt "#400023"
 msgid "Notify Real Debrid Account Status on Startup"
 msgstr "Notify Real Debrid Account Status on Startup"
 
+msgctxt "#400024"
+msgid "Notify Only Under (Days Until Account Expiration)"
+msgstr "Notify Only Under (Days Until Account Expiration)"
+
 # real_debrid.py - Real Debrid Account Info
 
 msgctxt "#32758"
