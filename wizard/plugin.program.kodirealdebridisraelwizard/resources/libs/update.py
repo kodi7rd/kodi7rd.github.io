@@ -43,19 +43,21 @@ def wizard_update():
         except:
             return
         if ver > CONFIG.ADDON_VERSION:
-            yes = dialog.yesno(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]קיימת גרסה עדכנית יותר ל{1}!'.format(CONFIG.COLOR2, CONFIG.ADDONTITLE)
-                                   +'\n'+'האם ברצונך לעדכן לגרסה [COLOR {0}]v{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, ver),
-                                   nolabel='[B][COLOR red]הזכר לי מאוחר יותר[/COLOR][/B]',
-                                   yeslabel="[B][COLOR springgreen]עדכן את הWizard[/COLOR][/B]")
-            if yes:
+            # yes = dialog.yesno(CONFIG.ADDONTITLE,
+                                   # '[COLOR {0}]קיימת גרסה עדכנית יותר ל{1}!'.format(CONFIG.COLOR2, CONFIG.ADDONTITLE)
+                                   # +'\n'+'האם ברצונך לעדכן לגרסה [COLOR {0}]v{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, ver),
+                                   # nolabel='[B][COLOR red]הזכר לי מאוחר יותר[/COLOR][/B]',
+                                   # yeslabel="[B][COLOR springgreen]עדכן את הWizard[/COLOR][/B]")
+            if True:
                 from resources.libs import db
                 from resources.libs.common import tools
 
                 logging.log("[Auto Update Wizard] Installing wizard v{0}".format(ver))
-                progress_dialog.create(CONFIG.ADDONTITLE, '[COLOR {0}]Downloading Update...'.format(CONFIG.COLOR2)
-                                        +'\n'+''
-                                        +'\n'+'Please Wait[/COLOR]')
+                # progress_dialog.create(CONFIG.ADDONTITLE, '[COLOR {0}]מוריד עדכון Wizard...'.format(CONFIG.COLOR2)
+                                        # +'\n'+''
+                                        # +'\n'+'אנא המתן[/COLOR]')
+                logging.log_notify(CONFIG.ADDONTITLE,
+                                   '[COLOR {0}]מוריד עדכון Wizard...[/COLOR]'.format(CONFIG.COLOR2))
                 lib = os.path.join(CONFIG.PACKAGES, '{0}-{1}.zip'.format(CONFIG.ADDON_ID, ver))
                 try:
                     os.remove(lib)
@@ -65,16 +67,16 @@ def wizard_update():
                 from resources.libs import extract
                 Downloader().download(zip, lib)
                 xbmc.sleep(2000)
-                progress_dialog.update(0, '\n'+"Installing {0} update".format(CONFIG.ADDONTITLE))
+                # progress_dialog.update(0, '\n'+"Installing {0} update".format(CONFIG.ADDONTITLE))
                 percent, errors, error = extract.all(lib, CONFIG.ADDONS, True)
-                progress_dialog.close()
+                # progress_dialog.close()
                 xbmc.sleep(1000)
-                db.force_check_updates(auto=True, over=True)
+                # db.force_check_updates(auto=True, over=True)
                 xbmc.sleep(1000)
                 logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]Add-on updated[/COLOR]'.format(CONFIG.COLOR2))
+                                   '[COLOR {0}]עודכן בהצלחה![/COLOR]'.format(CONFIG.COLOR2))
                 logging.log("[Auto Update Wizard] Wizard updated to v{0}".format(ver))
-                tools.remove_file(os.path.join(CONFIG.ADDON_DATA, 'settings.xml'))
+                # tools.remove_file(os.path.join(CONFIG.ADDON_DATA, 'settings.xml'))
                 #window.show_save_data_settings()
             else:
                 logging.log("[Auto Update Wizard] Install New Wizard Ignored: {0}".format(ver))

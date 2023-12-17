@@ -38,8 +38,8 @@ from resources.libs import install
 
 # KODI RD ISRAEL - Custom Save Data Config
 try:
-    logging.log_notify(CONFIG.ADDONTITLE,
-                       '[COLOR {0}]המתן רגע..[/COLOR]'.format(CONFIG.COLOR2))
+    # logging.log_notify(CONFIG.ADDONTITLE,
+                       # '[COLOR {0}]המתן רגע..[/COLOR]'.format(CONFIG.COLOR2))
 
     is_first_install = 'true' if CONFIG.get_setting('installed') in ('false', 'ignored') else 'false'
 

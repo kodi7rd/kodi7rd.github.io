@@ -36,7 +36,7 @@ class Downloader:
         self.progress_dialog = xbmcgui.DialogProgress()
 
     def download(self, url, dest):
-        self.progress_dialog.create(CONFIG.ADDONTITLE, "מוריד בילד...")
+        self.progress_dialog.create(CONFIG.ADDONTITLE, "מוריד...")
         self.progress_dialog.update(0)
         
         path = os.path.split(dest)[0]

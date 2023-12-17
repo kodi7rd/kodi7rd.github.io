@@ -1,4 +1,7 @@
 [COLOR yellow][B]v1.1.3[/B][/COLOR]
+* Make wizard auto update on Kodi startup without user confirmation.
+* Removed force refresh repositories on Build install/update.
+[COLOR yellow][B]v1.1.3[/B][/COLOR]
 * Add setting to enable/disable notification for Force Addon Updates on Kodi startup. (תחזוקה - הצג הודעה של חיפוש העדכונים)
 [COLOR yellow][B]v1.1.2[/B][/COLOR]
 * Delay the "מחפש עדכוני הרחבות..." message for 4 seconds on Kodi startup.

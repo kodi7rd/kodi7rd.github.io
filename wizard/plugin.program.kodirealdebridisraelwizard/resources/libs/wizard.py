@@ -148,7 +148,7 @@ class Wizard:
                     self.theme(name)
 
                 db.addon_database(CONFIG.ADDON_ID, 1)
-                db.force_check_updates(over=True)
+                # db.force_check_updates(over=True)
                 if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
                 	CONFIG.set_setting('enable_all', 'true')
 
