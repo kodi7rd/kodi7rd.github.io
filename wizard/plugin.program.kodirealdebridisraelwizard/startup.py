@@ -350,6 +350,14 @@ check.check_paths()
 # else:
     # logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
 ######################################
+    
+# AUTO UPDATE WIZARD
+if CONFIG.AUTOUPDATE == 'Yes':
+    logging.log("[Auto Update Wizard] Started", level=xbmc.LOGINFO)
+    update.wizard_update()
+    xbmc.sleep(1500)
+else:
+    logging.log("[Auto Update Wizard] Not Enabled", level=xbmc.LOGINFO)
 
 # KODI-RD-IL - BUILD INSTALL WINDOW ON STARTUP
 if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
@@ -405,13 +413,6 @@ if os.path.exists(binarytxt):
     restore.restore('binaries')
 else:
     logging.log("[Binary Detection] Eligible Binary Addons to Reinstall", level=xbmc.LOGINFO)
-    
-# AUTO UPDATE WIZARD
-if CONFIG.AUTOUPDATE == 'Yes':
-    logging.log("[Auto Update Wizard] Started", level=xbmc.LOGINFO)
-    update.wizard_update()
-else:
-    logging.log("[Auto Update Wizard] Not Enabled", level=xbmc.LOGINFO)
 
 # SHOW NOTIFICATIONS
 if CONFIG.ENABLE_NOTIFICATION == 'Yes':

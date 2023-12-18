@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.1.5[/B][/COLOR]
+* Reorder wizard startup functions order.
 [COLOR yellow][B]v1.1.4[/B][/COLOR]
 * Make wizard auto update on Kodi startup without user confirmation.
 * Removed force refresh repositories on Build install/update.
