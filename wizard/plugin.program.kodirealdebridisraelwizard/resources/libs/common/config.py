@@ -215,7 +215,6 @@ class Config:
         self.EXTERROR = self.get_setting('errors')
         
         # KODI-RD-IL - Auto quick update on startup
-        self.DISABLEAUTOQUICKUPDATE_ONSTARTUP = self.get_setting('disable_auto_quick_update_on_startup')
         if "Estuary" in self.BUILDNAME:
             # Estuary build
             self.QUICK_UPDATE_NOTIFICATION_FILE = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'

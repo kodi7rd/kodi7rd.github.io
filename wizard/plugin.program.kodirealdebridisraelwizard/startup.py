@@ -152,7 +152,7 @@ def auto_quick_update():
                 CONFIG.set_setting('notedismiss', 'true')
                 return
             window.show_notification(msg)
-            Wizard().force_close_kodi_in_5_seconds()
+            Wizard().force_close_kodi_in_5_seconds(source="quick_update")
 
 
 def installed_build_check():
@@ -404,7 +404,7 @@ if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
 ######################################
 # KODI-RD-IL - AUTO QUICK UPDATE
-if CONFIG.get_setting('buildname') and CONFIG.DISABLEAUTOQUICKUPDATE_ONSTARTUP == "false":
+if CONFIG.get_setting('buildname'):
     auto_quick_update()
 ######################################
 

@@ -57,7 +57,7 @@ def wizard_update():
                                         # +'\n'+''
                                         # +'\n'+'אנא המתן[/COLOR]')
                 logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]מוריד עדכון Wizard...[/COLOR]'.format(CONFIG.COLOR2))
+                                   '[COLOR {0}]מוריד עדכון גרסה לWizard...[/COLOR]'.format(CONFIG.COLOR2))
                 lib = os.path.join(CONFIG.PACKAGES, '{0}-{1}.zip'.format(CONFIG.ADDON_ID, ver))
                 try:
                     os.remove(lib)
@@ -74,7 +74,7 @@ def wizard_update():
                 # db.force_check_updates(auto=True, over=True)
                 xbmc.sleep(1000)
                 logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]עודכן בהצלחה![/COLOR]'.format(CONFIG.COLOR2))
+                                   '[COLOR {0}]הWizard עודכן בהצלחה![/COLOR]'.format(CONFIG.COLOR2))
                 logging.log("[Auto Update Wizard] Wizard updated to v{0}".format(ver))
                 # tools.remove_file(os.path.join(CONFIG.ADDON_DATA, 'settings.xml'))
                 #window.show_save_data_settings()

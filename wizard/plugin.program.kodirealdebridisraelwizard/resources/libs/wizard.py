@@ -152,8 +152,9 @@ class Wizard:
                 if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
                     CONFIG.set_setting('enable_all', 'true')
 
-                self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
-                tools.kill_kodi(over=True)
+                # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
+                # tools.kill_kodi(over=True)
+                self.force_close_kodi_in_5_seconds(source="build_install")
             else:
                 from resources.libs.gui import window
                 window.show_text_box("Viewing Build Install Errors", error)
@@ -287,7 +288,7 @@ class Wizard:
                 from resources.libs.gui import window
                 note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE)
                 window.show_notification(msg)
-                self.force_close_kodi_in_5_seconds()
+                self.force_close_kodi_in_5_seconds(source="quick_update")
                 
             return True
 
@@ -300,13 +301,12 @@ class Wizard:
 
     #####################################################
     # KODI-RD-IL
-    def force_close_kodi_in_5_seconds(self):
-        self.dialogProgress.create("עדכון מהיר הסתיים", "אנא המתן 5 שניות"+'\n'+ ''+'\n'+
-        "[COLOR yellow][B]עדכון מהיר הסתיים[/B][/COLOR]")
-        self.dialogProgress.update(0)
+    def force_close_kodi_in_5_seconds(self, source):
+        dialog_header = "התקנת הבילד הסתיימה בהצלחה" if source == "build_install" else "עדכון מהיר הסתיים בהצלחה"
+        self.dialogProgress.create(f"[COLOR yellow][B]{dialog_header}[/B][/COLOR]", "[B]קודי ייסגר בעוד 5 שניות[/B]")
         for s in range(5, -1, -1):
+            self.dialogProgress.update(int((5 - s) / 5.0 * 100), f"[B]קודי ייסגר בעוד {s} שניות[/B]")
             xbmc.sleep(1000)
-            self.dialogProgress.update(int((5 - s) / 5.0 * 100), "קודי הולך להיסגר"+ ' בעוד {0} שניות'.format(s)+'\n'+ '[COLOR yellow][B]עדכון מהיר הסתיים[/B][/COLOR]')
         tools.kill_kodi(over=True)
     #####################################################
 

@@ -1,15 +1,19 @@
+[COLOR yellow][B]v1.1.7[/B][/COLOR]
+* Removed "כבה עדכון מהיר אוטומטי בעליית הקודי" setting.
+* Refactored "force_close_kodi_in_5_seconds" window dialog appearance.
+* Added "force_close_kodi_in_5_seconds" to build install. (instead of confirm dialog)
 [COLOR yellow][B]v1.1.6[/B][/COLOR]
-* Add automatic Quick Updates for builds on Kodi startup.
+* Added automatic Quick Updates for builds on Kodi startup.
 [COLOR yellow][B]v1.1.5[/B][/COLOR]
-* Reorder wizard startup functions order.
+* Reordered wizard startup functions order.
 [COLOR yellow][B]v1.1.4[/B][/COLOR]
-* Make wizard auto update on Kodi startup without user confirmation.
+* Made wizard auto update on Kodi startup without user confirmation.
 * Removed force refresh repositories on Build install/update.
 [COLOR yellow][B]v1.1.3[/B][/COLOR]
-* Add setting to enable/disable notification for Force Addon Updates on Kodi startup. (תחזוקה - הצג הודעה של חיפוש העדכונים)
+* Added setting to enable/disable notification for Force Addon Updates on Kodi startup. (תחזוקה - הצג הודעה של חיפוש העדכונים)
 [COLOR yellow][B]v1.1.2[/B][/COLOR]
 * Delay the "מחפש עדכוני הרחבות..." message for 4 seconds on Kodi startup.
 [COLOR yellow][B]v1.1.1[/B][/COLOR]
-* Add save Debrid data support to Twilight - Premiumize.
+* Added save Debrid data support to Twilight - Premiumize.
 [COLOR yellow][B]v1.1.0[/B][/COLOR]
-* Add setting to auto Force Addon Updates on Kodi startup. (תחזוקה - חפש עדכוני הרחבות בהפעלה)
+* Added setting to auto Force Addon Updates on Kodi startup. (תחזוקה - חפש עדכוני הרחבות בהפעלה)

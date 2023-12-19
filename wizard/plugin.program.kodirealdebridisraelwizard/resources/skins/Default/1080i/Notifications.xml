@@ -43,7 +43,7 @@
                 <top>90</top>
                 <width>1640</width>
                 <height>790</height>
-                <font>font14</font>
+                <font>font32_title</font>
                 <align>right</align>
                 <aligny>top</aligny>
                 <colordiffuse>FFFF00FF</colordiffuse>
@@ -69,8 +69,8 @@
         </control>
         <control type="group">
             <control type="button" id="201">
-                <left>520</left>
-                <top>850</top>
+                <left>1310</left>
+                <top>860</top>
                 <width>320</width>
                 <height>80</height>
                 <font>font14</font>
