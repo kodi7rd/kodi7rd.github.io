@@ -151,6 +151,24 @@ class Wizard:
                 # db.force_check_updates(over=True)
                 if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
                     CONFIG.set_setting('enable_all', 'true')
+                
+                #########################################################################################################
+                # KODI-RD-IL
+                # Sync to latest quick update notification version - to avoid running quick update after build install.
+                if "Estuary" in name:
+                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
+                elif "FENtastic" in name:
+                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
+                else:
+                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = None
+                if QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD:
+                    from resources.libs.gui import window
+                    note_id, msg = window.split_notify(QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD)
+                    if note_id:
+                        # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
+                        CONFIG.set_setting('notedismiss', 'false')
+                        CONFIG.set_setting('noteid', note_id)
+                #########################################################################################################
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
                 # tools.kill_kodi(over=True)
@@ -284,9 +302,9 @@ class Wizard:
                                '[COLOR {0}]עדכון מהיר הסתיים![/COLOR]'.format(CONFIG.COLOR2))
                                
             if not auto_quick_update:
-                if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE: return True
+                if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return True
                 from resources.libs.gui import window
-                note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE)
+                note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD)
                 window.show_notification(msg)
                 self.force_close_kodi_in_5_seconds(source="quick_update")
                 
@@ -307,8 +325,31 @@ class Wizard:
         for s in range(5, -1, -1):
             self.dialogProgress.update(int((5 - s) / 5.0 * 100), f"[B]קודי ייסגר בעוד {s} שניות[/B]")
             xbmc.sleep(1000)
-        tools.kill_kodi(over=True)
+        self.restart_kodi()
     #####################################################
+
+    #####################################################
+    # KODI-RD-IL
+    def restart_kodi(self):
+        if xbmc.getCondVisibility('System.Platform.Windows'):
+            import subprocess, xbmcvfs
+            try:
+                kodi_path = [os.path.join(xbmcvfs.translatePath('special://xbmc/'), 'kodi.exe')]
+                subprocess.Popen(kodi_path, shell=True)
+            except:
+                pass
+            tools.kill_kodi(over=True)
+        elif xbmc.getCondVisibility('System.Platform.Android'):
+            try:
+                xbmc.executebuiltin('StartAndroidActivity(kodirdil20.xbmc.kodi)')
+            except:
+                pass
+            tools.kill_kodi(over=True)
+        else:
+            tools.kill_kodi(over=True)
+    #####################################################
+
+
 
     def theme(self, name, theme='', over=False):
         installtheme = False

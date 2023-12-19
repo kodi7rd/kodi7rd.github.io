@@ -118,7 +118,7 @@ REPOZIPURL = 'https://'
 # Enable Notification screen Yes or No
 ENABLE = 'No'
 # Url to notification file
-# AUTO QUICK UPDATE - resources\libs\common\config.py - CONFIG.QUICK_UPDATE_NOTIFICATION_FILE
+# AUTO QUICK UPDATE - resources\libs\common\config.py - CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD
 NOTIFICATION = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/test.txt'
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Text'

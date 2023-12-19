@@ -214,15 +214,20 @@ class Config:
         self.EXTRACT = self.get_setting('extract')
         self.EXTERROR = self.get_setting('errors')
         
+        #########################################################################################################
         # KODI-RD-IL - Auto quick update on startup
+        self.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'
+        self.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/FENtastic.txt'
+        
         if "Estuary" in self.BUILDNAME:
             # Estuary build
-            self.QUICK_UPDATE_NOTIFICATION_FILE = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'
+            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = self.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
         elif "FENtastic" in self.BUILDNAME:
             # FENtastic build
-            self.QUICK_UPDATE_NOTIFICATION_FILE = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/FENtastic.txt'
+            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = self.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
         else:
-            self.QUICK_UPDATE_NOTIFICATION_FILE = None
+            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = None
+        #########################################################################################################
         
         # View variables
         self.SHOW19 = self.get_setting('show19')

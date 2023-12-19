@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.1.8[/B][/COLOR]
+* After build install - sync to latest quick update notification version - to avoid running quick update.
+* Added restart kodi function after build install / quick update.
 [COLOR yellow][B]v1.1.7[/B][/COLOR]
 * Removed "כבה עדכון מהיר אוטומטי בעליית הקודי" setting.
 * Refactored "force_close_kodi_in_5_seconds" window dialog appearance.

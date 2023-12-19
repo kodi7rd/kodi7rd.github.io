@@ -133,9 +133,9 @@ def show_notification():
 
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=quick_update&name={quote_plus(CONFIG.BUILDNAME)}&auto_quick_update=true)")
 def auto_quick_update():
-    if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE: return
+    if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return
         
-    note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE)
+    note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD)
     
     if note_id:
         if note_id == CONFIG.NOTEID:
@@ -399,9 +399,6 @@ if CONFIG.get_setting('enable_all') == 'true':
     xbmc.executebuiltin("ReloadSkin()")
     tools.reload_profile(xbmc.getInfoLabel('System.ProfileName'))
 
-# KODI-RD-IL - Auto force addon updates on Kodi startup
-if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
-
 ######################################
 # KODI-RD-IL - AUTO QUICK UPDATE
 if CONFIG.get_setting('buildname'):
@@ -457,6 +454,8 @@ if CONFIG.get_setting('keepdebrid') == 'true':
 else:
     logging.log("[Debrid Data] Not Enabled", level=xbmc.LOGINFO)
 
+# KODI-RD-IL - Auto force addon updates on Kodi startup
+if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
 
 
