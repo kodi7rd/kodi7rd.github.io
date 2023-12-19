@@ -131,6 +131,30 @@ def show_notification():
                     level=xbmc.LOGINFO)
 
 
+# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=quick_update&name={quote_plus(CONFIG.BUILDNAME)}&auto_quick_update=true)")
+def auto_quick_update():
+    if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE: return
+        
+    note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE)
+    
+    if note_id:
+        if note_id == CONFIG.NOTEID:
+            if CONFIG.NOTEDISMISS == 'false':
+                window.show_notification(msg)
+        elif note_id > CONFIG.NOTEID:
+            logging.log('[QUICK-UPDATE] Starting quick update number {0}'
+                        .format(note_id))
+            CONFIG.set_setting('noteid', note_id)
+            CONFIG.set_setting('notedismiss', 'false')
+            from resources.libs.wizard import Wizard
+            quick_update_status = Wizard().quick_update(name=CONFIG.BUILDNAME, auto_quick_update="true")
+            if not quick_update_status:
+                CONFIG.set_setting('notedismiss', 'true')
+                return
+            window.show_notification(msg)
+            Wizard().force_close_kodi_in_5_seconds()
+
+
 def installed_build_check():
     dialog = xbmcgui.Dialog()
 
@@ -355,19 +379,8 @@ check.check_paths()
 if CONFIG.AUTOUPDATE == 'Yes':
     logging.log("[Auto Update Wizard] Started", level=xbmc.LOGINFO)
     update.wizard_update()
-    xbmc.sleep(1500)
 else:
     logging.log("[Auto Update Wizard] Not Enabled", level=xbmc.LOGINFO)
-
-# KODI-RD-IL - BUILD INSTALL WINDOW ON STARTUP
-if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
-    logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
-    CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
-    CONFIG.set_setting('installed', 'ignored')
-    url = 'plugin://{0}/?mode=builds'.format(CONFIG.ADDON_ID)
-    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
-else:
-    logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
 
 
 # ENABLE ALL ADDONS AFTER INSTALL
@@ -376,15 +389,24 @@ if CONFIG.get_setting('enable_all') == 'true':
     from resources.libs.gui import menu
     menu.enable_addons(all=True)
     if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
-    	logging.log("[Post Install] .enableall file found in userdata. Deleting..", level=xbmc.LOGINFO)
-    	import xbmcvfs
-    	xbmcvfs.delete(os.path.join(CONFIG.USERDATA, '.enableall'))
+        logging.log("[Post Install] .enableall file found in userdata. Deleting..", level=xbmc.LOGINFO)
+        import xbmcvfs
+        xbmcvfs.delete(os.path.join(CONFIG.USERDATA, '.enableall'))
     xbmc.executebuiltin('UpdateLocalAddons')
     xbmc.executebuiltin('UpdateAddonRepos')
     db.force_check_updates(auto=True)
     CONFIG.set_setting('enable_all', 'false')
     xbmc.executebuiltin("ReloadSkin()")
     tools.reload_profile(xbmc.getInfoLabel('System.ProfileName'))
+
+# KODI-RD-IL - Auto force addon updates on Kodi startup
+if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
+
+######################################
+# KODI-RD-IL - AUTO QUICK UPDATE
+if CONFIG.get_setting('buildname') and CONFIG.DISABLEAUTOQUICKUPDATE_ONSTARTUP == "false":
+    auto_quick_update()
+######################################
 
 # BUILD UPDATE CHECK
 buildcheck = CONFIG.get_setting('nextbuildcheck')
@@ -398,21 +420,15 @@ if CONFIG.get_setting('buildname'):
 else:
     logging.log("[Build Update Check] Next Check: {0}".format(buildcheck), level=xbmc.LOGINFO)
 
-# AUTO INSTALL REPO
-if CONFIG.AUTOINSTALL == 'Yes':
-    logging.log("[Auto Install Repo] Started", level=xbmc.LOGINFO)
-    auto_install_repo()
+# KODI-RD-IL - BUILD INSTALL WINDOW ON STARTUP
+if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
+    logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
+    CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
+    CONFIG.set_setting('installed', 'ignored')
+    url = 'plugin://{0}/?mode=builds'.format(CONFIG.ADDON_ID)
+    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
 else:
-    logging.log("[Auto Install Repo] Not Enabled", level=xbmc.LOGINFO)
-
-# REINSTALL ELIGIBLE BINARIES
-binarytxt = os.path.join(CONFIG.USERDATA, 'build_binaries.txt')
-if os.path.exists(binarytxt):
-    logging.log("[Binary Detection] Reinstalling Eligible Binary Addons", level=xbmc.LOGINFO)
-    from resources.libs import restore
-    restore.restore('binaries')
-else:
-    logging.log("[Binary Detection] Eligible Binary Addons to Reinstall", level=xbmc.LOGINFO)
+    logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
 
 # SHOW NOTIFICATIONS
 if CONFIG.ENABLE_NOTIFICATION == 'Yes':
@@ -441,19 +457,38 @@ if CONFIG.get_setting('keepdebrid') == 'true':
 else:
     logging.log("[Debrid Data] Not Enabled", level=xbmc.LOGINFO)
 
+
+
+
+
+###################UNUSED####################
 # SAVE LOGIN
-if CONFIG.get_setting('keeplogin') == 'true':
-    logging.log("[Login Info] Started", level=xbmc.LOGINFO)
-    save_login()
-else:
-    logging.log("[Login Info] Not Enabled", level=xbmc.LOGINFO)
+# if CONFIG.get_setting('keeplogin') == 'true':
+    # logging.log("[Login Info] Started", level=xbmc.LOGINFO)
+    # save_login()
+# else:
+    # logging.log("[Login Info] Not Enabled", level=xbmc.LOGINFO)
 
 # AUTO CLEAN
-if CONFIG.get_setting('autoclean') == 'true':
-    logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
-    auto_clean()
-else:
-    logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
+# if CONFIG.get_setting('autoclean') == 'true':
+    # logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
+    # auto_clean()
+# else:
+    # logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
 
-# KODI-RD-IL - Auto force addon updates on Kodi startup
-if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
+# AUTO INSTALL REPO
+# if CONFIG.AUTOINSTALL == 'Yes':
+    # logging.log("[Auto Install Repo] Started", level=xbmc.LOGINFO)
+    # auto_install_repo()
+# else:
+    # logging.log("[Auto Install Repo] Not Enabled", level=xbmc.LOGINFO)
+
+# REINSTALL ELIGIBLE BINARIES
+# binarytxt = os.path.join(CONFIG.USERDATA, 'build_binaries.txt')
+# if os.path.exists(binarytxt):
+    # logging.log("[Binary Detection] Reinstalling Eligible Binary Addons", level=xbmc.LOGINFO)
+    # from resources.libs import restore
+    # restore.restore('binaries')
+# else:
+    # logging.log("[Binary Detection] Eligible Binary Addons to Reinstall", level=xbmc.LOGINFO)
+    

@@ -150,7 +150,7 @@ class Wizard:
                 db.addon_database(CONFIG.ADDON_ID, 1)
                 # db.force_check_updates(over=True)
                 if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
-                	CONFIG.set_setting('enable_all', 'true')
+                    CONFIG.set_setting('enable_all', 'true')
 
                 self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
                 tools.kill_kodi(over=True)
@@ -219,6 +219,96 @@ class Wizard:
         else:
             logging.log_notify(CONFIG.ADDONTITLE,
                                '[COLOR {0}]עדכון מהיר: בוטל![/COLOR]'.format(CONFIG.COLOR2))
+                               
+    #####################################################
+    # KODI-RD-IL
+    def quick_update(self, name, auto_quick_update="false"):
+
+        auto_quick_update = True if auto_quick_update=="true" else False
+        
+        if name == CONFIG.get_setting('buildname'):
+            if auto_quick_update:
+                yes_pressed = 1
+            else:
+                yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE,
+                                   '[COLOR {0}]האם ברצונך לבצע עדכון מהיר עבור:'.format(CONFIG.COLOR2) + '\n' + '[COLOR {0}]{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, name),
+                                   nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
+                                   yeslabel='[B][COLOR springgreen]עדכון מהיר[/COLOR][/B]')
+        else:
+            yes_pressed = self.dialog.yesno("{0} - [COLOR red]!שים לב[/COLOR]".format(CONFIG.ADDONTITLE),
+                               "[COLOR {0}][COLOR {1}]{2}[/COLOR] - הבילד עדיין לא מותקן".format(CONFIG.COLOR2, CONFIG.COLOR1, name) + '\n' + "יש קודם כל לבצע התקנה מלאה של הבילד![/COLOR]",
+                               nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
+                               yeslabel='[B][COLOR springgreen]המשך בכל זאת[/COLOR][/B]')
+        if yes_pressed:
+            guizip = check.check_build(name, 'gui')
+            zipname = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+
+            response = tools.open_url(guizip, check=True)
+            if not response:
+                logging.log_notify(CONFIG.ADDONTITLE,
+                                   '[COLOR {0}]לא קיים עדכון מהיר![/COLOR]'.format(CONFIG.COLOR2))
+                return False
+
+            self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]מוריד עדכון מהיר עבור:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name))
+            logging.log_notify(CONFIG.ADDONTITLE,
+                               '[COLOR {0}]מוריד עדכון מהיר...[/COLOR]'.format(CONFIG.COLOR2))
+
+            lib = os.path.join(CONFIG.PACKAGES, '{0}_guisettings.zip'.format(zipname))
+            
+            try:
+                os.remove(lib)
+            except:
+                pass
+
+            Downloader().download(guizip, lib)
+            xbmc.sleep(500)
+            
+            if os.path.getsize(lib) == 0:
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                    
+                return False
+            
+            title = '[COLOR {0}][B]Installing:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name)
+            self.dialogProgress.update(0, title + '\n' + 'Please Wait')
+            extract.all(lib, CONFIG.HOME, title=title)
+            self.dialogProgress.close()
+            # skin.skin_to_default('Build Install')
+            # skin.look_and_feel_data('save')
+            installed = db.grab_addons(lib)
+            db.addon_database(installed, 1, True)
+            logging.log_notify(CONFIG.ADDONTITLE,
+                               '[COLOR {0}]עדכון מהיר הסתיים![/COLOR]'.format(CONFIG.COLOR2))
+                               
+            if not auto_quick_update:
+                if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE: return True
+                from resources.libs.gui import window
+                note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE)
+                window.show_notification(msg)
+                self.force_close_kodi_in_5_seconds()
+                
+            return True
+
+            # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]עדכון מהיר הסתיים. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
+        else:
+            logging.log_notify(CONFIG.ADDONTITLE,
+                               '[COLOR {0}]עדכון מהיר: בוטל![/COLOR]'.format(CONFIG.COLOR2))
+            return False
+    #####################################################
+
+    #####################################################
+    # KODI-RD-IL
+    def force_close_kodi_in_5_seconds(self):
+        self.dialogProgress.create("עדכון מהיר הסתיים", "אנא המתן 5 שניות"+'\n'+ ''+'\n'+
+        "[COLOR yellow][B]עדכון מהיר הסתיים[/B][/COLOR]")
+        self.dialogProgress.update(0)
+        for s in range(5, -1, -1):
+            xbmc.sleep(1000)
+            self.dialogProgress.update(int((5 - s) / 5.0 * 100), "קודי הולך להיסגר"+ ' בעוד {0} שניות'.format(s)+'\n'+ '[COLOR yellow][B]עדכון מהיר הסתיים[/B][/COLOR]')
+        tools.kill_kodi(over=True)
+    #####################################################
 
     def theme(self, name, theme='', over=False):
         installtheme = False

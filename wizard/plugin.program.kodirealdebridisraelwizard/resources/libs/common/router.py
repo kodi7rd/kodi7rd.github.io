@@ -45,6 +45,10 @@ class Router:
         url = self.params['url'] if 'url' in self.params else None
         name = self.params['name'] if 'name' in self.params else None
         action = self.params['action'] if 'action' in self.params else None
+        #####################################################
+        # KODI-RD-IL
+        auto_quick_update = self.params['auto_quick_update'] if 'auto_quick_update' in self.params else None
+        #####################################################
 
         # MAIN MENU
         if mode is None:
@@ -86,6 +90,11 @@ class Router:
                 Wizard().build(name)
             elif action == 'gui':
                 Wizard().gui(name)
+            #####################################################
+            # KODI-RD-IL
+            elif action == 'quick_update':
+                Wizard().quick_update(name, auto_quick_update)
+            #####################################################
             elif action == 'theme':  # Builds -> "Your Build" -> "Your Theme"
                 Wizard().theme(name, url)
 

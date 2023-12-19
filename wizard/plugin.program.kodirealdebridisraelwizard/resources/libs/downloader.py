@@ -65,7 +65,14 @@ class Downloader:
                     f.write(chunk)
                     
                     done = int(100 * downloaded / total)
-                    kbps_speed = downloaded / (time.time() - start_time)
+                    #####################################################
+                    # KODI-RD-IL
+                    try:
+                        kbps_speed = downloaded / (time.time() - start_time)
+                    except:
+                        kbps_speed = 0
+                        pass
+                    #####################################################
                     
                     if kbps_speed > 0 and not done >= 100:
                         eta = (total - downloaded) / kbps_speed

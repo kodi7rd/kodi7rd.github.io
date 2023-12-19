@@ -214,6 +214,17 @@ class Config:
         self.EXTRACT = self.get_setting('extract')
         self.EXTERROR = self.get_setting('errors')
         
+        # KODI-RD-IL - Auto quick update on startup
+        self.DISABLEAUTOQUICKUPDATE_ONSTARTUP = self.get_setting('disable_auto_quick_update_on_startup')
+        if "Estuary" in self.BUILDNAME:
+            # Estuary build
+            self.QUICK_UPDATE_NOTIFICATION_FILE = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'
+        elif "FENtastic" in self.BUILDNAME:
+            # FENtastic build
+            self.QUICK_UPDATE_NOTIFICATION_FILE = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/FENtastic.txt'
+        else:
+            self.QUICK_UPDATE_NOTIFICATION_FILE = None
+        
         # View variables
         self.SHOW19 = self.get_setting('show19')
         self.SHOW20 = self.get_setting('show20')

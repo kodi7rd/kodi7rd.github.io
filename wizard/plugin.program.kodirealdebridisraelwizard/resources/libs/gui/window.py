@@ -491,7 +491,7 @@ def show_notification(msg, test=False):
             self.textbox = 104
             self.scroller = 105
             self.dismiss = 201
-            self.remindme = 202
+            # self.remindme = 202
             self.show_dialog()
 
         def show_dialog(self):
@@ -500,17 +500,17 @@ def show_notification(msg, test=False):
             self.getControl(self.image).setColorDiffuse('9FFFFFFF')
             msg_text = CONFIG.THEME6.format(self.msg)
             self.getControl(self.textbox).setText(msg_text)
-            self.setFocusId(self.remindme)
+            self.setFocusId(self.dismiss)
             if CONFIG.HEADERTYPE == 'Text':
                 self.getControl(self.titlebox).setLabel(CONFIG.THEME3.format(CONFIG.HEADERMESSAGE))
             else:
                 self.getControl(self.titleimage).setImage(CONFIG.HEADERIMAGE)
 
-        def do_remind(self):
-            if not test:
-                CONFIG.set_setting('notedismiss', 'false')
-            logging.log('[Notifications] Notification {0} Remind Me Later'.format(CONFIG.get_setting('noteid')))
-            self.close()
+        # def do_remind(self):
+            # if not test:
+                # CONFIG.set_setting('notedismiss', 'false')
+            # logging.log('[Notifications] Notification {0} Remind Me Later'.format(CONFIG.get_setting('noteid')))
+            # self.close()
 
         def do_dismiss(self):
             if not test:
@@ -520,13 +520,13 @@ def show_notification(msg, test=False):
 
         def onAction(self, action):
             if action.getId() in BACK_ACTIONS:
-                self.do_remind()
+                self.do_dismiss()
 
         def onClick(self, controlid):
             if controlid == self.dismiss:
                 self.do_dismiss()
-            elif controlid == self.remindme:
-                self.do_remind()
+            # elif controlid == self.remindme:
+                # self.do_remind()
 
     xbmc.executebuiltin('Skin.SetString(headertexttype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Text' else 'false'))
     xbmc.executebuiltin('Skin.SetString(headerimagetype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Image' else 'false'))

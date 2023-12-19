@@ -118,7 +118,7 @@ REPOZIPURL = 'https://'
 # Enable Notification screen Yes or No
 ENABLE = 'No'
 # Url to notification file
-NOTIFICATION = 'https://kodi7rd.github.io/wizard/assets/notify.txt'
+NOTIFICATION = 'http://'
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Text'
 # Font size of header

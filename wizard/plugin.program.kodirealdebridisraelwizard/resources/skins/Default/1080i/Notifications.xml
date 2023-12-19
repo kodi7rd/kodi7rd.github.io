@@ -69,13 +69,13 @@
         </control>
         <control type="group">
             <control type="button" id="201">
-                <left>1070</left>
-                <top>890</top>
-                <width>300</width>
-                <height>60</height>
-                <font>font13</font>
+                <left>520</left>
+                <top>850</top>
+                <width>320</width>
+                <height>80</height>
+                <font>font14</font>
                 <textcolor>FFF0F0F0</textcolor>
-                <label>אישור</label>
+                <label>סגור</label>
                 <align>center</align>
                 <aligny>center</aligny>
                 <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
@@ -85,23 +85,23 @@
                 <onup>105</onup>
                 <ondown>105</ondown>
             </control>
-            <control type="button" id="202">
-                <left>1380</left>
-                <top>890</top>
-                <width>300</width>
-                <height>60</height>
-                <font>font13</font>
-                <textoffsetx>20</textoffsetx>
-                <label>הזכר לי מאוחר יותר</label>
-                <align>center</align>
-                <aligny>center</aligny>
-                <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
-                <texturenofocus>Button/testbuttonnf.png</texturenofocus>
-                <onleft>201</onleft>
-                <onright>201</onright>
-                <onup>105</onup>
-                <ondown>105</ondown>
-            </control>
+            <!-- <control type="button" id="202"> -->
+                <!-- <left>1380</left> -->
+                <!-- <top>890</top> -->
+                <!-- <width>300</width> -->
+                <!-- <height>60</height> -->
+                <!-- <font>font13</font> -->
+                <!-- <textoffsetx>20</textoffsetx> -->
+                <!-- <label>הזכר לי מאוחר יותר</label> -->
+                <!-- <align>center</align> -->
+                <!-- <aligny>center</aligny> -->
+                <!-- <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus> -->
+                <!-- <texturenofocus>Button/testbuttonnf.png</texturenofocus> -->
+                <!-- <onleft>201</onleft> -->
+                <!-- <onright>201</onright> -->
+                <!-- <onup>105</onup> -->
+                <!-- <ondown>105</ondown> -->
+            <!-- </control> -->
         </control>
     </controls>
 </window>

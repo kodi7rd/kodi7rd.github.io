@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.1.6[/B][/COLOR]
+* Add automatic Quick Updates for builds on Kodi startup.
 [COLOR yellow][B]v1.1.5[/B][/COLOR]
 * Reorder wizard startup functions order.
 [COLOR yellow][B]v1.1.4[/B][/COLOR]

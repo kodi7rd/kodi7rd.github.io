@@ -7,7 +7,8 @@
         <setting id="buildtheme" type="text" label="ערכה נוכחית:" enable="false" default=""/>
         <setting id="latestversion" type="text" label="גרסת בילד אחרונה:" enable="false" default=""/>
         <setting id="nextbuildcheck" type="text" label="בדיקת עדכון גרסה מתוזמנת ל:" enable="false" default="2019-01-01 00:00:00" />
-        <setting id="disableupdate" type="bool" label="כבה הודעות עדכון בילד" default="false"/>
+        <setting id="disableupdate" type="bool" label="כבה הודעות עדכון גרסה לבילד" default="false"/>
+        <setting id="disable_auto_quick_update_on_startup" type="bool" label="כבה עדכון מהיר אוטומטי בעליית הקודי" default="false"/>
         <setting type="lsep" label="הצג בילדים:"/>
         <setting id="show19" type="bool" label="הצג בילדים לקודי 19 (Matrix)" default="true"/>
         <setting id="show20" type="bool" label="הצג בילדים לקודי 20 (Nexus)" default="true"/>
