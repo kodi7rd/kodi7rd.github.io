@@ -338,15 +338,7 @@ class Wizard:
                 subprocess.Popen(kodi_path, shell=True)
             except:
                 pass
-            tools.kill_kodi(over=True)
-        elif xbmc.getCondVisibility('System.Platform.Android'):
-            try:
-                xbmc.executebuiltin('StartAndroidActivity(kodirdil20.xbmc.kodi)')
-            except:
-                pass
-            tools.kill_kodi(over=True)
-        else:
-            tools.kill_kodi(over=True)
+        tools.kill_kodi(over=True)
     #####################################################
 
 
