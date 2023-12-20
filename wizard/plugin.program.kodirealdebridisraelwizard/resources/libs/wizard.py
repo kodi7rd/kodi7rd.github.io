@@ -155,12 +155,10 @@ class Wizard:
                 #########################################################################################################
                 # KODI-RD-IL
                 # Sync to latest quick update notification version - to avoid running quick update after build install.
-                if "Estuary" in name:
-                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
-                elif "FENtastic" in name:
-                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
-                else:
-                    QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = None
+                from resources.libs.common.config import set_quick_updates_notification_files
+                QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = set_quick_updates_notification_files(name)
+                # To set for static build (uservar.py - NOTIFICATION) - comment the previous 2 lines and uncomment this line:
+                # QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.NOTIFICATION
                 if QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD:
                     from resources.libs.gui import window
                     note_id, msg = window.split_notify(QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD)

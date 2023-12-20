@@ -30,60 +30,62 @@
                 <aligny>center</aligny>
                 <visible>Skin.String(headertexttype)</visible>
             </control>
+            <!-- KODI-RD-IL Icon - resources\kodi_rd_israel_art\kodi_rd_il_icon.png -->
             <control type="image" id="103">
-                <posx>20</posx>
-                <posy>20</posy>
-                <width>1660</width>
-                <height>60</height>
+                <centerleft>44%</centerleft>
+                <top>74%</top>
+                <width>170</width>
+                <height>170</height>
                 <aspectratio aligny="center" align="center">keep</aspectratio>
                 <visible>Skin.String(headerimagetype)</visible>
             </control>
+            <!-- -------------------------------------------------------------- -->
             <control type="textbox" id="104">
-                <left>20</left>
-                <top>90</top>
-                <width>1640</width>
-                <height>790</height>
-                <font>font32_title</font>
+                <left>27</left>
+                <top>85</top>
+                <width>1600</width>
+                <height>740</height>
+                <font>font36_title</font>
                 <align>right</align>
                 <aligny>top</aligny>
                 <colordiffuse>FFFF00FF</colordiffuse>
-                <pagecontrol>105</pagecontrol>
+                <!-- <pagecontrol>105</pagecontrol> -->
             </control>
-            <control type="scrollbar" id="105">
-                <left>1660</left>
-                <top>90</top>
-                <width>30</width>
-                <height>790</height>
-                <subtype>text</subtype>
-                <visible>true</visible>
-                <texturesliderbackground>Button/scrollbar-V-background.png</texturesliderbackground>
-                <texturesliderbar>Button/scrollbar-V.png</texturesliderbar>
-                <texturesliderbarfocus colordiffuse="FF12B2E7">Button/scrollbar-V-focus.png</texturesliderbarfocus>
-                <orientation>vertical</orientation>
-                <showonepage>true</showonepage>
-                <onup>201</onup>
-                <ondown>201</ondown>
-                <onleft>201</onleft>
-                <onright>201</onright>
-            </control>
+            <!-- <control type="scrollbar" id="105"> -->
+                <!-- <left>1660</left> -->
+                <!-- <top>90</top> -->
+                <!-- <width>30</width> -->
+                <!-- <height>790</height> -->
+                <!-- <subtype>text</subtype> -->
+                <!-- <visible>true</visible> -->
+                <!-- <texturesliderbackground>Button/scrollbar-V-background.png</texturesliderbackground> -->
+                <!-- <texturesliderbar>Button/scrollbar-V.png</texturesliderbar> -->
+                <!-- <texturesliderbarfocus colordiffuse="FF12B2E7">Button/scrollbar-V-focus.png</texturesliderbarfocus> -->
+                <!-- <orientation>vertical</orientation> -->
+                <!-- <showonepage>true</showonepage> -->
+                <!-- <onup>201</onup> -->
+                <!-- <ondown>201</ondown> -->
+                <!-- <onleft>201</onleft> -->
+                <!-- <onright>201</onright> -->
+            <!-- </control> -->
         </control>
         <control type="group">
             <control type="button" id="201">
-                <left>1310</left>
+                <left>1280</left>
                 <top>860</top>
                 <width>320</width>
                 <height>80</height>
                 <font>font14</font>
                 <textcolor>FFF0F0F0</textcolor>
-                <label>סגור</label>
+                <label>[B]סגור[/B]</label>
                 <align>center</align>
                 <aligny>center</aligny>
                 <texturefocus colordiffuse="FF12B2E7">Button/testbuttonfo.png</texturefocus>
                 <texturenofocus>Button/testbuttonnf.png</texturenofocus>
-                <onleft>202</onleft>
-                <onright>202</onright>
-                <onup>105</onup>
-                <ondown>105</ondown>
+                <!-- <onleft>202</onleft> -->
+                <!-- <onright>202</onright> -->
+                <!-- <onup>105</onup> -->
+                <!-- <ondown>105</ondown> -->
             </control>
             <!-- <control type="button" id="202"> -->
                 <!-- <left>1380</left> -->

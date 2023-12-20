@@ -1,3 +1,7 @@
+[COLOR yellow][B]v1.1.9[/B][/COLOR]
+* Redesigned quick update notification window.
+* Removed build "disableupdate" setting.
+* Refactored quick update notification files switching.
 [COLOR yellow][B]v1.1.8[/B][/COLOR]
 * After build install - sync to latest quick update notification version - to avoid running quick update.
 * Added restart kodi function after build install / quick update. (Windows PC only)

@@ -24,6 +24,19 @@ import xbmcvfs
 import os
 
 import uservar
+        
+#########################################################################################################
+# KODI-RD-IL - Auto quick update on startup
+def set_quick_updates_notification_files(BUILDNAME):
+    if "Estuary" in BUILDNAME:
+        # Estuary build
+        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
+    elif "FENtastic" in BUILDNAME:
+        # FENtastic build
+        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
+    else:
+        return None
+#########################################################################################################
 
 
 class Config:
@@ -209,24 +222,16 @@ class Config:
         self.BUILDVERSION = self.get_setting('buildversion')
         self.BUILDTHEME = self.get_setting('buildtheme')
         self.BUILDLATEST = self.get_setting('latestversion')
-        self.DISABLEUPDATE = self.get_setting('disableupdate')
+        # self.DISABLEUPDATE = self.get_setting('disableupdate')
         self.INSTALLED = self.get_setting('installed')
         self.EXTRACT = self.get_setting('extract')
         self.EXTERROR = self.get_setting('errors')
         
         #########################################################################################################
         # KODI-RD-IL - Auto quick update on startup
-        self.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'
-        self.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/FENtastic.txt'
-        
-        if "Estuary" in self.BUILDNAME:
-            # Estuary build
-            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = self.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
-        elif "FENtastic" in self.BUILDNAME:
-            # FENtastic build
-            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = self.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
-        else:
-            self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = None
+        self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = set_quick_updates_notification_files(self.BUILDNAME)
+        # To set for static build (uservar.py - NOTIFICATION) - comment the previous line and uncomment this line:
+        # self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = uservar.NOTIFICATION
         #########################################################################################################
         
         # View variables

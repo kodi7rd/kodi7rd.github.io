@@ -174,7 +174,7 @@ def check_build_update():
         fanart = match[0][2]
         CONFIG.set_setting('latestversion', version)
         if version > CONFIG.BUILDVERSION:
-            if CONFIG.DISABLEUPDATE == 'false':
+            if True:#CONFIG.DISABLEUPDATE == 'false': # KODI-RD-IL
                 logging.log("[Check Updates] [Installed Version: {0}] [Current Version: {1}] Opening Update Window".format(CONFIG.BUILDVERSION, version))
                 window.show_update_window(CONFIG.BUILDNAME, CONFIG.BUILDVERSION, version, icon, fanart)
             else:
