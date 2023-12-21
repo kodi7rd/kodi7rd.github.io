@@ -151,7 +151,6 @@ def auto_quick_update():
             if not quick_update_status:
                 CONFIG.set_setting('notedismiss', 'true')
                 return
-            window.show_notification(msg)
             Wizard().force_close_kodi_in_5_seconds(source="quick_update")
 
 

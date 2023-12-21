@@ -198,8 +198,9 @@ class BuildMenu:
                                
             if guicheck:
                 directory.add_separator('עדכון מהיר')
-                directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
-                                   icon=icon, themeit=CONFIG.THEME1)
+                directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'quick_update', 'name': name, 'auto_quick_update': 'false'}, description=description, fanart=fanart,icon=icon, themeit=CONFIG.THEME1)
+                # directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
+                                   # icon=icon, themeit=CONFIG.THEME1)
                                    
             directory.add_separator()
             

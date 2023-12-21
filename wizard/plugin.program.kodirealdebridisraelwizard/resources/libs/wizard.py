@@ -296,14 +296,9 @@ class Wizard:
             # skin.look_and_feel_data('save')
             installed = db.grab_addons(lib)
             db.addon_database(installed, 1, True)
-            logging.log_notify(CONFIG.ADDONTITLE,
-                               '[COLOR {0}]עדכון מהיר הסתיים![/COLOR]'.format(CONFIG.COLOR2))
                                
             if not auto_quick_update:
-                if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return True
-                from resources.libs.gui import window
-                note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD)
-                window.show_notification(msg)
+                CONFIG.set_setting('notedismiss', 'false')
                 self.force_close_kodi_in_5_seconds(source="quick_update")
                 
             return True
