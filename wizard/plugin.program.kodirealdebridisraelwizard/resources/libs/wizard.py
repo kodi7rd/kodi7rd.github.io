@@ -267,8 +267,8 @@ class Wizard:
                 return False
 
             self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]מוריד עדכון מהיר עבור:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name))
-            logging.log_notify(CONFIG.ADDONTITLE,
-                               '[COLOR {0}]מוריד עדכון מהיר...[/COLOR]'.format(CONFIG.COLOR2))
+            xbmc.sleep(2500)
+            self.dialogProgress.close()
 
             lib = os.path.join(CONFIG.PACKAGES, '{0}_guisettings.zip'.format(zipname))
             
@@ -289,9 +289,7 @@ class Wizard:
                 return False
             
             title = '[COLOR {0}][B]Installing:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name)
-            self.dialogProgress.update(0, title + '\n' + 'Please Wait')
             extract.all(lib, CONFIG.HOME, title=title)
-            self.dialogProgress.close()
             # skin.skin_to_default('Build Install')
             # skin.look_and_feel_data('save')
             installed = db.grab_addons(lib)
