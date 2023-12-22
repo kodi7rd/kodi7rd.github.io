@@ -8,6 +8,10 @@
         <setting id="latestversion" type="text" label="גרסת בילד אחרונה:" enable="false" default=""/>
         <setting id="nextbuildcheck" type="text" label="בדיקת עדכון גרסה מתוזמנת ל:" enable="false" default="2019-01-01 00:00:00" />
         <!-- <setting id="disableupdate" type="bool" label="כבה הודעות עדכון גרסה לבילד" default="false"/> -->
+        <setting type="lsep" label="חלון התראות בהפעלה:"/>
+        <setting id="notify" type="bool" label="כבה התראות בהפעלה" default="false" visible="false"/>
+        <setting id="noteid" type="number" label="התראה אחרונה" visible="true" default="0" enable="false"/>
+        <setting id="notedismiss" type="bool" label="הזכר מאוחר יותר" visible="false" />
         <setting type="lsep" label="הצג בילדים:"/>
         <setting id="show19" type="bool" label="הצג בילדים לקודי 19 (Matrix)" default="true"/>
         <setting id="show20" type="bool" label="הצג בילדים לקודי 20 (Nexus)" default="true"/>
@@ -195,10 +199,6 @@
         <setting id="adult" type="bool" label="הצג הרחבות למבוגרים" enable="true" default="false"/>
         <setting id="auto-view" type="bool" label="הפעל Auto View" default="false"/>
         <setting id="viewType" type="number" label="סוג View" default="50" visible="!eq(-1, false)" enable="!eq(-1,false)"/>
-        <setting type="lsep" label="חלון התראות בהפעלה:"/>
-        <setting id="notify" type="bool" label="כבה התראות בהפעלה" default="false" />
-        <setting id="noteid" type="number" label="התראה אחרונה" visible="false" default="0" />
-        <setting id="notedismiss" type="bool" label="הזכר מאוחר יותר" visible="false" />
     </category>
 
     <category label="הגדרות לוג">
