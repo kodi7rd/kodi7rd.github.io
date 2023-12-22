@@ -1,6 +1,6 @@
 id="plugin.program.kodirealdebridisraelwizard"
-version="1.2.1"
-zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-1.2.1.zip"
+version="1.2.2"
+zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-1.2.2.zip"
 
 name="בילד סקין Estuary - מראה פשוט ומהיר"
 version="3.1.7"
