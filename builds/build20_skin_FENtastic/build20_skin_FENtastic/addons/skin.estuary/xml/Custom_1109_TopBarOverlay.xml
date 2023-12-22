@@ -176,6 +176,15 @@
 				<height>170</height>
 				<texture>frame/osdfade.png</texture>
 			</control>
+			<control type="image">
+			<!-- Studio Logo in player -->
+			<top>5</top>
+				<right>800</right>
+				<width>240</width>
+				<height>120</height>
+				<texture>special://skin/media/kodirdil/studiologos/$INFO[VideoPlayer.Studio].png</texture>
+				<aspectratio aligny="center" align="left">keep</aspectratio>
+			</control>
 			<control type="group">
 				<animation effect="slide" end="90,0" time="0" condition="Skin.HasSetting(touchmode)">conditional</animation>
 				<control type="grouplist">

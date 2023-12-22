@@ -26,6 +26,9 @@
 		<value condition="String.IsEqual(ListItem.DbType,album)">$INFO[ListItem.Property(Album_Description),[COLOR=white],[/COLOR]]</value>
 		<value condition="String.IsEqual(ListItem.DbType,artist)">$INFO[ListItem.Property(Artist_Description),[COLOR=white],[/COLOR]]</value>
 	</variable>
+	<variable name="BoxFrame">
+	<value>kodirdil/overlays/</value>
+	</variable>
 	<variable name="NowPlayingSublabelVar">
 		<value condition="VideoPlayer.Content(musicvideos)">$INFO[VideoPlayer.Artist]$INFO[VideoPlayer.Album, - ]</value>
 		<value condition="VideoPlayer.Content(episodes)">$INFO[VideoPlayer.TvShowTitle]</value>
@@ -40,8 +43,20 @@
 	<variable name="NowPlayingPosterVar">
 		<value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
 		<value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
-		<value condition="String.IsEmpty(Player.Icon) + VideoPlayer.Content(livetv)">DefaultTVShows.png</value>
-		<value>$INFO[Player.Icon]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value>DefaultTVShows.png</value>
+	</variable>
+		<variable name="NowPlayingLabelVar">
+		<value condition="!String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.TvShowTitle]</value>
+		<value>$INFO[VideoPlayer.Title]</value>
+	</variable>
+	<variable name="NowPlayingFanartVar">
+		<value condition="!String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Art(tvshow.fanart))">$INFO[Player.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+	<value>DefaultNoPreview.png</value>
 	</variable>
 	<variable name="ShiftThumbVar">
 		<value condition="!String.IsEmpty(Listitem.Art(poster))">$INFO[Listitem.Art(poster)]</value>
@@ -78,6 +93,11 @@
 	<value>$INFO[Player.Process(VideoFPS)]</value>
 	</variable>
 	
+	<!-- video osd seeksteps focus-->
+	<variable name="SeekStepFocuedTexture">
+	<value>flags/flag.png</value>
+	</variable>
+	
 	<variable name="SetLabelflag">
 	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
@@ -105,7 +125,7 @@
 	<!-- KODI-RD-IL ADDITION -->
 	<variable name="PlotTextBoxVar">
 		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline][CR]]$INFO[ListItem.Genre]</value>
-		<value condition="!String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Plot)">[B][COLOR button_focus]$LOCALIZE[700061] [/COLOR][/B] [I][LOWERCASE]$INFO[ListItem.Genre][/I][/LOWERCASE][CR]$INFO[ListItem.Plot]</value>
+		<value condition="!String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Plot)">[B][COLOR button_focus]$LOCALIZE[70007]: [/COLOR][/B] [I][LOWERCASE]$INFO[ListItem.Genre][/I][/LOWERCASE][CR]$INFO[ListItem.Plot]</value>
 	</variable>
 	<!-- ##################### -->
 	<variable name="ShiftLeftTextBoxVar">
@@ -340,9 +360,9 @@
 		<value condition="Control.HasFocus(70043)">$LOCALIZE[19033]</value>
 		<value condition="Control.HasFocus(70044)">$LOCALIZE[298]</value>
 		<value condition="Control.HasFocus(70045)">$LOCALIZE[31106]</value>
-		<value condition="Control.HasFocus(70046)">$LOCALIZE[24012]</value>
+		<value condition="Control.HasFocus(70046)">[B]$LOCALIZE[24012][/B]</value>
 		<value condition="Control.HasFocus(70047)">$LOCALIZE[36501]</value>
-		<value condition="Control.HasFocus(70048)">$LOCALIZE[5]</value>
+		<value condition="Control.HasFocus(70048)">[B]$LOCALIZE[5][/B]</value>
 		<value condition="Control.HasFocus(70050)">$LOCALIZE[29900]</value>
 		<value condition="Control.HasFocus(70051)">$LOCALIZE[31066]</value>
 		<value condition="Control.HasFocus(70052)">$LOCALIZE[31033]$INFO[MusicPlayer.UserRating, : ]</value>
@@ -350,6 +370,11 @@
 		<value condition="Control.HasFocus(70054) + Playlist.IsRandom">$LOCALIZE[590]: $LOCALIZE[16041]</value>
 		<value condition="Control.HasFocus(70054)">$LOCALIZE[590]: $LOCALIZE[16039]</value>
 		<value condition="Control.HasFocus(70055)">$LOCALIZE[24013]</value>
+		<value condition="Control.HasFocus(599)">[B]ZOOM IN[/B]</value>
+		<value condition="Control.HasFocus(598)">[B]ZOOM OUT[/B]</value>
+		<value condition="Control.HasFocus(700452)">[B]$LOCALIZE[700037][/B]</value>
+		<value condition="Control.HasFocus(700453)">[B]$LOCALIZE[700036][/B]</value>
+		<value condition="Control.HasFocus(700455)">[B]$LOCALIZE[700028][/B]</value>
 	</variable>
 	<variable name="SkinSettingsHelpTextVar">
 		<value condition="Container(9000).HasFocus(1)">$LOCALIZE[31129]</value>
@@ -681,14 +706,34 @@
 	</variable>
 	
 	<!-- KODI-RD-IL VARIABLES -->
+
+	<!-- EPISODES -->	
+	<variable name="NextPreviousIndicator">
+	<value>kodirdil/arrows/circle-down.png</value>
+	</variable>
+	
 	<variable name="clearartlogo">
 	<value condition="!String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearlogo)]</value>
 	<value condition="String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearart)]</value>
 	</variable>
 	
 	<variable name="SeasonCorrectLabel">
-	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונה</value>
-	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">עונות</value>
+	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70008]</value>
+	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[70009]</value>
 	</variable>
+	
+	<!-- TV Show InfoPanel Status Hebrew Translation -->
+	<variable name="SetHebStatus">
+	<value condition="String.IsEqual(ListItem.Status,returning series)">$LOCALIZE[700018]</value>
+	<value condition="String.IsEqual(ListItem.Status,in production)">$LOCALIZE[700019]</value>
+	<value condition="String.IsEqual(ListItem.Status,planned)">$LOCALIZE[700020]</value>
+	<value condition="String.IsEqual(ListItem.Status,canceled)">$LOCALIZE[700021]</value>
+	<value condition="String.IsEqual(ListItem.Status,ended)">$LOCALIZE[700022]</value>
+	</variable>
+	
+	<variable name="Episode_prefix">
+	<value condition="VideoPlayer.Content(episodes)">[B][COLOR white]$LOCALIZE[70008][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Season][/COLOR][/B] / [B][COLOR white]$LOCALIZE[700091][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Episode][/COLOR][/B]</value>
+	</variable>
+	
 	<!-- ##################### -->
 </includes>

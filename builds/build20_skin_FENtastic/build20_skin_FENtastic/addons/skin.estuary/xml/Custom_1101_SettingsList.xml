@@ -70,6 +70,27 @@
 						<onclick>NextSubtitle</onclick>
 						<visible>VideoPlayer.HasSubtitles</visible>
 					</control>
+					<control type="radiobutton" id="11110">
+						<width>700</width>
+						<include>DialogSettingButton</include>
+						<label>$LOCALIZE[700015]</label>
+						<onclick>Skin.ToggleSetting(ZoomToggle)</onclick>
+						<selected>Skin.HasSetting(ZoomToggle)</selected>	
+					</control>
+					<control type="radiobutton" id="21110">
+						<width>700</width>
+						<include>DialogSettingButton</include>
+						<label>$LOCALIZE[700029]</label>
+						<onclick>Skin.ToggleSetting(ShowPlayerPauseWindow)</onclick>
+						<selected>Skin.HasSetting(ShowPlayerPauseWindow)</selected>	
+					</control>
+					<control type="radiobutton" id="31110">
+						<width>700</width>
+						<include>DialogSettingButton</include>
+						<label>$LOCALIZE[700038]</label>
+						<onclick>Skin.ToggleSetting(ChooseSubtitlesButtonOpensKodiWindow)</onclick>
+						<selected>Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)</selected>	
+					</control>
 					<control type="button" id="11105">
 						<width>700</width>
 						<include>DialogSettingButton</include>
