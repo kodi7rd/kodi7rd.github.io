@@ -75,7 +75,7 @@
     <setting id="videolibrary.tvshowsincludeallseasonsandspecials" default="true">0</setting>
     <setting id="videolibrary.moviesetsfolder" default="true" />
     <setting id="videolibrary.musicvideosallperformers" default="true">true</setting>
-    <setting id="videolibrary.artsettingsupdated" default="true">false</setting>
+    <setting id="videolibrary.artsettingsupdated">true</setting>
     <setting id="videolibrary.artworklevel" default="true">0</setting>
     <setting id="videolibrary.movieartwhitelist" default="true" />
     <setting id="videolibrary.tvshowartwhitelist" default="true" />
@@ -93,7 +93,7 @@
     <setting id="musiclibrary.albumsscraper" default="true">metadata.generic.albums</setting>
     <setting id="musiclibrary.artistsscraper" default="true">metadata.generic.artists</setting>
     <setting id="musiclibrary.overridetags" default="true">false</setting>
-    <setting id="musiclibrary.artsettings" default="true">false</setting>
+    <setting id="musiclibrary.artsettings">true</setting>
     <setting id="musiclibrary.artworklevel" default="true">0</setting>
     <setting id="musiclibrary.usealllocalart" default="true">false</setting>
     <setting id="musiclibrary.useallremoteart" default="true">false</setting>
@@ -277,7 +277,7 @@
     <setting id="weather.addon" default="true" />
     <setting id="videoscreen.monitor" default="true">Default</setting>
     <setting id="videoscreen.screen" default="true">0</setting>
-    <setting id="videoscreen.resolution">120</setting>
+    <setting id="videoscreen.resolution">126</setting>
     <setting id="videoscreen.screenmode" default="true">DESKTOP</setting>
     <setting id="videoscreen.fakefullscreen" default="true">true</setting>
     <setting id="videoscreen.blankdisplays" default="true">false</setting>
@@ -371,7 +371,7 @@
     </audio>
     <resolutions />
     <general>
-        <systemtotaluptime>44</systemtotaluptime>
+        <systemtotaluptime>216</systemtotaluptime>
         <settinglevel>3</settinglevel>
         <eventlog>
             <level>0</level>

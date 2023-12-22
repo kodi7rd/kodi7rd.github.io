@@ -10,7 +10,7 @@
     <setting id="gamesachievements.loggedin" default="true">false</setting>
     <setting id="lookandfeel.skin">skin.fentastic</setting>
     <setting id="lookandfeel.skintheme" default="true">SKINDEFAULT</setting>
-    <setting id="lookandfeel.skincolors" default="true">SKINDEFAULT</setting>
+    <setting id="lookandfeel.skincolors">midnight_blue</setting>
     <setting id="lookandfeel.font" default="true">Default</setting>
     <setting id="lookandfeel.skinzoom" default="true">0</setting>
     <setting id="lookandfeel.stereostrength" default="true">5</setting>
@@ -263,9 +263,9 @@
     <setting id="services.upnprenderer" default="true">false</setting>
     <setting id="services.airplay" default="true">false</setting>
     <setting id="services.airplayvolumecontrol" default="true">true</setting>
-    <setting id="services.airplayvideosupport" default="true">false</setting>
     <setting id="services.useairplaypassword" default="true">false</setting>
     <setting id="services.airplaypassword" default="true" />
+    <setting id="services.airplayvideosupport" default="true">false</setting>
     <setting id="smb.workgroup" default="true">WORKGROUP</setting>
     <setting id="smb.winsserver" default="true">0.0.0.0</setting>
     <setting id="smb.minprotocol" default="true">0</setting>

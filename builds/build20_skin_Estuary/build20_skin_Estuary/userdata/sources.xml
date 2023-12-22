@@ -29,13 +29,13 @@
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>repository.Fen</name>
-            <path pathversion="1">https://tikipeter.github.io/</path>
+            <name>packages.Fen + Fen Light </name>
+            <path pathversion="1">https://tikipeter.github.io/packages</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>packages.Fen + Fen Light </name>
-            <path pathversion="1">https://tikipeter.github.io/packages</path>
+            <name>repository.Fen</name>
+            <path pathversion="1">https://tikipeter.github.io/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
@@ -51,6 +51,11 @@
         <source>
             <name>repository.peno64</name>
             <path pathversion="1">https://peno64.github.io/repository.peno64/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>repository.FENtastic</name>
+            <path pathversion="1">https://ivarbrandt.github.io/repository.ivarbrandt/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
