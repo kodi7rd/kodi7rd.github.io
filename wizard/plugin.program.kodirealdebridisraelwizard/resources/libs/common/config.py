@@ -34,6 +34,9 @@ def set_quick_updates_notification_files(BUILDNAME):
     elif "FENtastic" in BUILDNAME:
         # FENtastic build
         return uservar.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
+    elif "קודי ריל דבריד ישראל" in BUILDNAME:
+        # Unified KODI-RD-IL build
+        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_KODI_RD_IL
     else:
         return None
 #########################################################################################################
@@ -271,6 +274,11 @@ class Config:
         self.NOTIFY = self.get_setting('notify')
         self.NOTEID = self.get_setting('noteid')
         self.NOTEDISMISS = self.get_setting('notedismiss')
+        
+        #########################################################################################################
+        # KODI-RD-IL - Build skin switch after install
+        self.BUILD_SKIN_SWITCH_DISMISS = self.get_setting('build_skin_switch_dismiss')
+        #########################################################################################################
         
         # Save Data variables
         self.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG = self.get_setting('use_github_custom_save_data_config')

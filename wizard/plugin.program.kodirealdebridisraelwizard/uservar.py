@@ -136,4 +136,5 @@ BACKGROUND = 'http://'
 # KODI-RD-IL - Quick Update Notification Files
 QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/Estuary.txt'
 QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/FENtastic.txt'
+QUICK_UPDATE_NOTIFICATION_FILE_KODI_RD_IL = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/kodirdil.txt'
 #########################################################

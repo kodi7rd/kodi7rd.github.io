@@ -131,9 +131,16 @@ def show_notification():
                     level=xbmc.LOGINFO)
 
 
+# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=build_switch_skin)")
+def build_skin_switch_prompt():
+    # Show wizard.build_skin_switch prompt after FIRST build install
+    CONFIG.set_setting('build_skin_switch_dismiss', 'true')
+    xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=build_switch_skin)")
+
+
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=quick_update&name={quote_plus(CONFIG.BUILDNAME)}&auto_quick_update=true)")
 def auto_quick_update():
-    if xbmc.Player().isPlaying() or not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return
+    if not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return
         
     note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD)
     
@@ -400,9 +407,16 @@ if CONFIG.get_setting('enable_all') == 'true':
 
 ######################################
 # KODI-RD-IL - AUTO QUICK UPDATE
-if CONFIG.get_setting('buildname'):
+if CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
     auto_quick_update()
 ######################################
+
+######################################
+# KODI-RD-IL - INITIAL BUILD SKIN SWITCH
+# TEMPORARY: static "קודי ריל דבריד ישראל" name, after migration need only to check if build is installed.
+if "קודי ריל דבריד ישראל" in CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false' and not xbmc.Player().isPlaying():
+    build_skin_switch_prompt()
+#####################################
 
 # BUILD UPDATE CHECK
 buildcheck = CONFIG.get_setting('nextbuildcheck')

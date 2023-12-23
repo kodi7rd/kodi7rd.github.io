@@ -166,6 +166,8 @@ class Wizard:
                         # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
                         CONFIG.set_setting('notedismiss', 'false')
                         CONFIG.set_setting('noteid', note_id)
+                # Set build_skin_switch_dismiss to false for build_switch_skin prompt after install.
+                CONFIG.set_setting('build_skin_switch_dismiss', 'false')
                 #########################################################################################################
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
@@ -487,6 +489,9 @@ def switch_skin_in_gui_settings(gotoskin):
         # Find the setting with id="lookandfeel.skin"
         for setting in root.iter('setting'):
             if setting.get('id') == 'lookandfeel.skin':
+                # Remove default attribute, if present
+                if 'default' in setting.attrib:
+                    del setting.attrib['default']
                 # Change the value to gotoskin
                 setting.text = gotoskin
         # Write the modified tree back to the file

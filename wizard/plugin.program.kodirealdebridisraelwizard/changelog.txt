@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.2.4[/B][/COLOR]
+* Build skin switch prompt now shows up after fresh build install.
+* BUG Fix: Remove "default" attribute when editing lookandfeel.skin setting.
 [COLOR yellow][B]v1.2.3[/B][/COLOR]
 * Added "build_switch_skin" functionality for unified build.
 [COLOR yellow][B]v1.2.2[/B][/COLOR]
