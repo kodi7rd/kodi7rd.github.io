@@ -413,7 +413,7 @@ if CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
 
 ######################################
 # KODI-RD-IL - INITIAL BUILD SKIN SWITCH
-# TEMPORARY: static "קודי ריל דבריד ישראל" name, after migration need only to check if build is installed.
+# TEMPORARY: static "קודי ריל דבריד ישראל" name, after migration need only to check if a build is installed.
 if "קודי ריל דבריד ישראל" in CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false' and not xbmc.Player().isPlaying():
     build_skin_switch_prompt()
 #####################################
@@ -470,7 +470,19 @@ else:
 # KODI-RD-IL - Auto force addon updates on Kodi startup
 if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
+# AUTO CLEAN
+if CONFIG.get_setting('autoclean') == 'true':
+    logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
+    auto_clean()
+else:
+    logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
 
+# if "Estuary" in CONFIG.get_setting('buildname') or "FENtastic" in CONFIG.get_setting('buildname'):
+    # dialog = xbmcgui.Dialog()
+    # dialog.ok(CONFIG.ADDONTITLE,
+              # '[B]לא להיבהל! ה-Wizard עכשיו יבצע התקנה מלאה לבילד החדש:\n\"קודי ריל דבריד ישראל\"\nתנו לו לסיים ולקסם לקרות..\nאחרי ההתקנה, תקראו היטב את ההודעה שתקפוץ.[/B]')
+    # from resources.libs.wizard import Wizard
+    # Wizard().build(name="קודי ריל דבריד ישראל", over=False)
 
 
 ###################UNUSED####################
@@ -480,13 +492,6 @@ if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
     # save_login()
 # else:
     # logging.log("[Login Info] Not Enabled", level=xbmc.LOGINFO)
-
-# AUTO CLEAN
-# if CONFIG.get_setting('autoclean') == 'true':
-    # logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
-    # auto_clean()
-# else:
-    # logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
 
 # AUTO INSTALL REPO
 # if CONFIG.AUTOINSTALL == 'Yes':
