@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog" id="1123">
+<defaultcontrol always="true">1123</defaultcontrol>
+	<controls>
+		
+				<control type="image">
+				<include>lefttoright_fix</include>
+						<top>320</top>
+						<left>-200</left>
+					<animation condition="true" effect="fade" end="65" time="0">Conditional</animation>
+					<height>420</height>
+					<width>800</width>
+					<texture colordiffuse="black">kodirdil/shadows/shadow_mask_v6.png</texture>
+					</control>
+		
+		<control type="group">
+		<centerleft>50%</centerleft>
+		<centertop>50%</centertop>
+		<width>1150</width>
+		<height>720</height>
+		<control type="group">
+		<animation type="WindowOpen">
+			<effect type="fade" start="0" end="100" time="250" delay="50"/>
+			</animation>
+			<animation type="WindowClose">
+			<effect type="fade" start="100" end="0" time="250" delay="50"/>
+			</animation>
+				<include content="DialogBackgroundCommons">
+				<param name="width" value="1150" />
+				<param name="height" value="720" />
+				<param name="logovisible">false</param>
+				<param name="header_label" value="" />
+				<param name="header_id" value="1" />
+				<param name="diffusetexture" value="masks/landscape-502.png" />
+			</include>
+		</control>
+	<control type="textbox" id="2">
+	<include>righttoleft_fix</include>
+		<centerleft>73%</centerleft>
+		<centertop>4%</centertop>
+		<align>center</align>
+		<width>725</width>
+		<height>200</height>
+		<font>font45</font>
+		<label>[B]$LOCALIZE[700028][/B]</label>
+		</control>
+		<control type="textbox">
+		<include>lefttoright_fix</include>
+		<centerleft>38%</centerleft>
+		<centertop>32%</centertop>
+		<align>center</align>
+		<width>725</width>
+		<height>200</height>
+		<font>font45</font>
+		<label>$INFO[Container(1123).ListItem.Title]</label>
+		</control>
+		<control type="textbox">
+		<include>lefttoright_fix</include>
+		<centerleft>38%</centerleft>
+		<centertop>76%</centertop>
+		<align>center</align>
+		<width>725</width>
+		<height>350</height>
+		<font>font12</font>
+		<label>$INFO[Container(1123).ListItem.Plot]</label>
+		</control>
+		
+		</control>
+		<control type="group">
+		<left>1215</left>
+		<top>460</top>
+		<include>FrameBorder</include>
+		</control>
+		<control type="group">
+		<include>righttoleft_fix</include>
+			<top>235</top>
+			<left>825</left>
+				<control type="wraplist" id="1123">
+						<centerleft>50%</centerleft>
+						<centertop>38%</centertop>
+					<width>500</width>
+					<height>520</height>
+					<left>420</left>
+					<onleft>9102</onleft>
+					<orientation>vertical</orientation>
+					<focusposition>1</focusposition>
+					<scrolltime tween="sine">300</scrolltime>
+						<itemlayout width="220" height="185">
+							<control type="image">
+								<top>0</top>
+								<width>250</width>
+								<height>150</height>
+								<texture diffuse="masks/landscape1.png">$INFO[ListItem.Icon]</texture>
+							</control>
+						</itemlayout>
+						<focusedlayout width="220" height="185">
+							<control type="image">
+							<animation type="Focus">
+								<effect type="zoom" center="auto" start="100,100" end="120,120" time="150"/>
+								</animation>
+								<top>0</top>
+								<width>250</width>
+								<height>150</height>
+								<texture diffuse="masks/landscape1.png">$INFO[ListItem.Icon]</texture>
+							</control>
+						</focusedlayout>
+						<include>ContentTarget</include>
+						</control>
+					</control>
+					
+					
+				<include content="SetPrompLevel">
+					<param name="id">9102</param>
+					<param name="label1">[B]$LOCALIZE[700026][/B]</param>
+					<param name="label2">[B]$LOCALIZE[700027][/B]</param>
+				</include>
+	
+	</controls>
+</window>

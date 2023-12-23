@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.KodiRealDebridIsrael" name="Kodi + Real Debrid Israel Repository" version="1.0.1" provider-name="KodiRealDebridIsrael">
+	<extension point="xbmc.addon.repository" name="Kodi + Real Debrid Israel Repository">
+		<dir>
+			<info compressed="false">https://raw.githubusercontent.com/kodi7rd/repository/master/addons.xml</info>
+			<checksum>https://raw.githubusercontent.com/kodi7rd/repository/master/addons.xml.md5</checksum>
+			<datadir zip="true">https://raw.githubusercontent.com/kodi7rd/repository/master/zips</datadir>
+		</dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<assets>
+			<icon>icon.jpg</icon>
+		</assets>
+		<summary>Kodi + Real Debrid Israel Repository</summary>
+		<description>Kodi + Real Debrid Israel Repository</description>
+		<platform>all</platform>
+	</extension>
+</addon>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>	
+	<category label="מקורות תרגום">
+		<setting label="היכן לחפש" type="lsep"/>
+		
+		<setting label="אתרי כתוביות ישראליים" type="lsep"/>
+		<setting id="ktuvit" label="Ktuvit [COLOR blue](https://www.ktuvit.me/)[/COLOR]" type="bool" default="true" />
+		<setting id="wizdom" label="Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
+		
+		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
+		<setting id="opensubtitles" label="OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]" type="bool" default="true" />
+		<setting id="subscene" label="Subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="true" />
+		<setting id="bsplayer" label="BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
+	</category>
+	
+	<category label="שפות">
+	
+		<setting label="שפות נפוצות" type="lsep"/>
+		<setting id="language_hebrew" label="עברית" type="bool" default="true" />
+		<setting id="language_english" label="אנגלית" type="bool" default="true" />
+		<setting id="language_russian" label="רוסית" type="bool" default="false" />
+		<setting id="language_arab" label="ערבית" type="bool" default="false" />
+		
+		<setting label="תרגום מכונה" type="lsep"/>
+		<setting id="auto_translate" label="הפעל תרגום מכונה" type="bool" default="true" />
+		<setting id="translate_p" type="enum" label="מקור תרגום" values="Google|Yandex|Bing" default="0" visible="eq(-1,true)"/>
+		<setting id="bing_translate_keys_method" type="enum" label="סדר חיפוש מפתחות" values="עולה|אקראי" default="1" visible="eq(-2,true) + eq(-1,2)"/>
+		
+		<setting label="שפות נוספות (הגדר קוד שפה על פי הקישור למטה)" type="lsep"/>
+		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
+		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
+		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
+		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
+	</category>
+	
+	<category label="הגדרות כלליות">
+		
+		<setting label="Log DEBUG" type="lsep"/>
+		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
+		
+		<setting label="הורדת כתוביות אוטומטית (יש להפעיל מחדש את קודי לאחר שינוי!)" type="lsep"/>
+		<setting id="autosub" label="אפשר הורדה אוטומטית של כתוביות מהרשת" type="bool" default="true" />
+		<setting id="force" label="הורד למרות שיש כתוביות" type="bool" default="true" />
+		<setting id="enable_autosub_notifications" label="הצג הודעות מידע בעת חיפוש כתוביות" type="bool" default="true" />
+		
+		<setting label="ניתן לכבות אם אתה נתקל הרבה בתרגום מובנה עם פיסוק הפוך:" type="lsep"/>
+		<setting id="auto_place_hebrew_embedded_subs" label="אפשר הורדה אוטומטית של תרגום מובנה בעברית (אם קיים)" type="bool" default="true" />
+		<setting type="sep"/>
+		
+		<setting label="זמן חיפוש כתוביות" type="lsep"/>
+		<setting id="time_s" type="number" label="זמן חיפוש מקסימלי (בשניות)" default="10"/>
+		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />
+		
+		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
+		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
+		<setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
+		
+		<setting label="הרחבת Twilight" type="lsep"/>
+		<setting id="write_heb_embedded_taglines_to_twilight_repo" label="שפר את מאגר התרגום המובנה של הרחבת Twilight" type="bool" default="false" />
+	</category>
+	
+	<category label="הגדרות קאש">
+	
+		<setting label="ניקוי קאש" type="lsep"/>
+		<setting id="clean_cache_on_startup" label="נקה קאש אוטומטית בעת הפעלת קודי" type="bool" default="false" />
+		<setting label="[COLOR blue]לחץ כדי לנקות קאש כתוביות[/COLOR]" type="action" action="RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)" />
+		
+		<setting label="הגדרות נוספות" type="lsep"/>
+		<setting id="subtitle_trans_cache" type="number" label="מספר כתוביות מקסימלי בקאש" default="15"/>
+	</category>
+	
+	<category label="חלון כתוביות DarkSubs">
+		<setting label="מיקום וגודל חלון כתוביות DarkSubs" type="lsep"/>
+		<setting id="subs_width" label="רוחב חלון" type="number" default="1145"/>
+		<setting id="subs_height" label="גובה חלון" type="number" default="360" />
+		<setting id="subs_px" label="מיקום X" type="number" default="1" />
+		<setting id="subs_py" label="מיקום Y" type="number" default="7" />
+	</category>
+	
+</settings>
