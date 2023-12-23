@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.2.6[/B][/COLOR]
+* Temporary force users to migrate to new unified build - PROD.
 [COLOR yellow][B]v1.2.5[/B][/COLOR]
 * Temporary force users to migrate to new unified build - COMMENTED.
 * Renable the setting of auto cache clean on startup.

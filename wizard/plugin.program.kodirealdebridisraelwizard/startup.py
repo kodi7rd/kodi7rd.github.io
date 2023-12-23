@@ -477,12 +477,13 @@ if CONFIG.get_setting('autoclean') == 'true':
 else:
     logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
 
-# if "Estuary" in CONFIG.get_setting('buildname') or "FENtastic" in CONFIG.get_setting('buildname'):
-    # dialog = xbmcgui.Dialog()
-    # dialog.ok(CONFIG.ADDONTITLE,
-              # '[B]לא להיבהל! ה-Wizard עכשיו יבצע התקנה מלאה לבילד החדש:\n\"קודי ריל דבריד ישראל\"\nתנו לו לסיים ולקסם לקרות..\nאחרי ההתקנה, תקראו היטב את ההודעה שתקפוץ.[/B]')
-    # from resources.libs.wizard import Wizard
-    # Wizard().build(name="קודי ריל דבריד ישראל", over=False)
+# TEMPORARY
+if "Estuary" in CONFIG.get_setting('buildname') or "FENtastic" in CONFIG.get_setting('buildname'):
+    dialog = xbmcgui.Dialog()
+    dialog.ok(CONFIG.ADDONTITLE,
+              '[B]לא להיבהל! ה-Wizard עכשיו יבצע התקנה מלאה לבילד החדש:\n\"קודי ריל דבריד ישראל\"\nתנו לו לסיים ולקסם לקרות..\nאחרי ההתקנה, תקראו היטב את ההודעה שתקפוץ.[/B]')
+    from resources.libs.wizard import Wizard
+    Wizard().build(name="קודי ריל דבריד ישראל", over=True)
 
 
 ###################UNUSED####################
