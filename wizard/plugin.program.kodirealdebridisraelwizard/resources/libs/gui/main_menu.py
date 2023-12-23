@@ -58,7 +58,7 @@ class MainMenu:
             ##############################################################################################
             # KODI-RD-IL
             if not version:
-                build = '{0} [COLOR red][B][שם הבילד השתנה, אנא התקן בילד מחדש][/B][/COLOR]'.format(build, version)
+                build = '{0} [COLOR red][B][הבילד לא קיים יותר, אנא התקן בילד מחדש][/B][/COLOR]'.format(build, version)
                 directory.add_dir(build, {'mode': 'viewbuild', 'name': CONFIG.BUILDNAME}, themeit=CONFIG.THEME4)
             ##############################################################################################
             else:
