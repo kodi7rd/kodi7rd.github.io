@@ -94,6 +94,10 @@ class Router:
             # KODI-RD-IL
             elif action == 'quick_update':
                 Wizard().quick_update(name, auto_quick_update)
+            # KODI-RD-IL
+            elif action == 'build_switch_skin':
+                from resources.libs.wizard import build_switch_skin
+                build_switch_skin()
             #####################################################
             elif action == 'theme':  # Builds -> "Your Build" -> "Your Theme"
                 Wizard().theme(name, url)

@@ -151,7 +151,7 @@ def auto_quick_update():
             if not quick_update_status:
                 CONFIG.set_setting('notedismiss', 'true')
                 return
-            Wizard().force_close_kodi_in_5_seconds(source="quick_update")
+            Wizard().force_close_kodi_in_5_seconds(dialog_header="עדכון מהיר הסתיים בהצלחה")
 
 
 def installed_build_check():
@@ -233,8 +233,8 @@ def build_update_check():
     if not response:
         logging.log("[Build Check] Not a valid URL for Build File: {0}".format(CONFIG.BUILDFILE), level=xbmc.LOGINFO)
     elif not CONFIG.BUILDNAME == '':
-        if CONFIG.SKIN in ['skin.confluence', 'skin.estuary', 'skin.estouchy'] and not CONFIG.DEFAULTIGNORE == 'true':
-            check.check_skin()
+        # if CONFIG.SKIN in ['skin.confluence', 'skin.estuary', 'skin.estouchy'] and not CONFIG.DEFAULTIGNORE == 'true':
+            # check.check_skin()
 
         logging.log("[Build Check] Build Installed: Checking Updates", level=xbmc.LOGINFO)
         check.check_build_update()

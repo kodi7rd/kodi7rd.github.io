@@ -55,13 +55,21 @@ class MainMenu:
         if len(CONFIG.BUILDNAME) > 0:
             version = check.check_build(CONFIG.BUILDNAME, 'version')
             build = '{0} (v{1})'.format(CONFIG.BUILDNAME, CONFIG.BUILDVERSION)
+            ##############################################################################################
+            # KODI-RD-IL
             if not version:
                 build = '{0} [COLOR red][B][שם הבילד השתנה, אנא התקן בילד מחדש][/B][/COLOR]'.format(build, version)
                 directory.add_dir(build, {'mode': 'viewbuild', 'name': CONFIG.BUILDNAME}, themeit=CONFIG.THEME4)
+            ##############################################################################################
             else:
                 if version > CONFIG.BUILDVERSION:
                     build = '{0} [COLOR red][B][עדכן לגרסה v{1}][/B][/COLOR]'.format(build, version)
                 directory.add_dir(build, {'mode': 'viewbuild', 'name': CONFIG.BUILDNAME}, themeit=CONFIG.THEME4)
+                
+                ##############################################################################################
+                # KODI-RD-IL BUILD SWITCH SKIN
+                directory.add_dir('החלף סקין בבילד', {'mode': 'install', 'action': 'build_switch_skin'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME1)
+                ##############################################################################################
                 
             from resources.libs.gui.build_menu import BuildMenu
             themefile = BuildMenu().theme_count(CONFIG.BUILDNAME)

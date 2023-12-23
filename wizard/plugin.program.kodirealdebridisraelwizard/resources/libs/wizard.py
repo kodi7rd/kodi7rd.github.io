@@ -170,7 +170,7 @@ class Wizard:
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
                 # tools.kill_kodi(over=True)
-                self.force_close_kodi_in_5_seconds(source="build_install")
+                self.force_close_kodi_in_5_seconds(dialog_header="התקנת הבילד הסתיימה בהצלחה")
             else:
                 from resources.libs.gui import window
                 window.show_text_box("Viewing Build Install Errors", error)
@@ -297,7 +297,7 @@ class Wizard:
                                
             if not auto_quick_update:
                 CONFIG.set_setting('notedismiss', 'false')
-                self.force_close_kodi_in_5_seconds(source="quick_update")
+                self.force_close_kodi_in_5_seconds(dialog_header="עדכון מהיר הסתיים בהצלחה")
                 
             return True
 
@@ -310,8 +310,7 @@ class Wizard:
 
     #####################################################
     # KODI-RD-IL
-    def force_close_kodi_in_5_seconds(self, source):
-        dialog_header = "התקנת הבילד הסתיימה בהצלחה" if source == "build_install" else "עדכון מהיר הסתיים בהצלחה"
+    def force_close_kodi_in_5_seconds(self, dialog_header):
         self.dialogProgress.create(f"[COLOR yellow][B]{dialog_header}[/B][/COLOR]", "[B]קודי ייסגר בעוד 5 שניות[/B]")
         for s in range(5, -1, -1):
             self.dialogProgress.update(int((5 - s) / 5.0 * 100), f"[B]קודי ייסגר בעוד {s} שניות[/B]")
@@ -458,3 +457,98 @@ def wizard(action, name, url):
         cls.gui(name)
     elif action == 'theme':
         cls.theme(name, url)
+
+
+
+#########################################################################################################
+# KODI-RD-IL - BUILD SKIN SWITCH
+def update_favourites_xml_file(gotoskin):
+    try:
+        import xbmcvfs
+        source_favourites_xml = xbmcvfs.translatePath(f"special://home/media/builds_favourites_xml/{gotoskin}/favourites.xml")
+        destination_favourites_xml = xbmcvfs.translatePath("special://userdata/favourites.xml")
+        from shutil import copyfile
+        copyfile(source_favourites_xml,destination_favourites_xml)
+        return True
+    except Exception as e:
+        logging.log_notify(CONFIG.ADDONTITLE,
+                           '[COLOR {0}]שגיאה בהגדרת מסך הבית![/COLOR]'.format(CONFIG.COLOR2))
+        logging.log(f"DEBUG | update_favourites_xml_file | Exception: {str(e)}")
+        return False
+    
+
+def switch_skin_in_gui_settings(gotoskin):
+    try:
+        import xbmcvfs
+        guisettings_file_path = xbmcvfs.translatePath("special://userdata/guisettings.xml")
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(guisettings_file_path)
+        root = tree.getroot()
+        # Find the setting with id="lookandfeel.skin"
+        for setting in root.iter('setting'):
+            if setting.get('id') == 'lookandfeel.skin':
+                # Change the value to gotoskin
+                setting.text = gotoskin
+        # Write the modified tree back to the file
+        tree.write(guisettings_file_path)
+        return True
+    except Exception as e:
+        logging.log_notify(CONFIG.ADDONTITLE,
+                           '[COLOR {0}]שגיאה בהחלפת סקין![/COLOR]'.format(CONFIG.COLOR2))
+        logging.log(f"DEBUG | switch_skin_in_gui_settings | Exception: {str(e)}")
+        return False
+        
+def build_switch_skin():
+
+    if not CONFIG.get_setting('buildname'):
+        logging.log_notify(CONFIG.ADDONTITLE,
+                           '[COLOR {0}]לא מותקן בילד![/COLOR]'.format(CONFIG.COLOR2))
+        return
+
+    skin_mapping = {
+        'סקין Estuary - מראה פשוט ומהיר': 'skin.estuary',
+        'סקין FENtastic - למכשירים חזקים!': 'skin.fentastic'
+    }
+
+    # Create a list of items for selection
+    skins_list = list(skin_mapping.keys())
+
+    # Create a dialog window
+    dialog = xbmcgui.Dialog()
+    gotoskin_index_number = dialog.select("[B]בחר סקין אליו תרצה לעבור[/B]", skins_list)
+    
+    if gotoskin_index_number == -1:  # User cancelled the menu
+        return
+    else:
+        selected_skin = skins_list[gotoskin_index_number]
+        gotoskin = skin_mapping[selected_skin]
+        
+    yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                       '[B][COLOR {0}]האם ברצונך להחליף סקין ל:'.format(CONFIG.COLOR2) + '\n' + '[COLOR {0}]{1}[/COLOR]?[/COLOR][/B]'.format(CONFIG.COLOR1, selected_skin),
+                       nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
+                       yeslabel='[B][COLOR springgreen]החלף סקין[/COLOR][/B]')
+    if yes_pressed:
+        # If the selected skin is already the current skin
+        if gotoskin in CONFIG.SKIN:
+            dialog.ok(CONFIG.ADDONTITLE, "[B]זהו כבר הסקין הנוכחי שלך![/B]")
+            return
+
+        dialogProgress = xbmcgui.DialogProgress()
+        dialog_text = '[COLOR {0}][B]מחליף סקין ומגדיר את מסך הבית של:[/B][/COLOR]\n[COLOR {1}][B]{2}[/B][/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, selected_skin)
+        dialogProgress.create(CONFIG.ADDONTITLE, dialog_text)
+        for s in range(3, -1, -1):
+            dialogProgress.update(int((3 - s) / 3.0 * 100), dialog_text)
+            xbmc.sleep(1000)
+            
+        # guisettings.xml | Configure lookandfeel.skin setting
+        if not switch_skin_in_gui_settings(gotoskin): return
+        
+        xbmc.sleep(500)
+        
+        # favourites.xml | Switch to selected build's skin favourites.xml 
+        if not update_favourites_xml_file(gotoskin): return
+        
+        dialogProgress.close()
+        Wizard().force_close_kodi_in_5_seconds(dialog_header="סקין הוחלף בהצלחה!")
+    else:
+        return
