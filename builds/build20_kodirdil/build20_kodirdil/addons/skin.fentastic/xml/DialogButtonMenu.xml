@@ -50,6 +50,13 @@
 						<visible>System.ShowExitButton</visible>
 					</item>
 					<item>
+						<!-- Build Switch Skin  -->
+						<label>[B][COLOR blue]$LOCALIZE[700058][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=build_switch_skin&quot;)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
 						<!-- Skin settings -->
 						<label>[B][COLOR blue]$LOCALIZE[700018][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>

@@ -48,6 +48,13 @@
 						<onclick>RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)</onclick>
 						<visible>System.ShowExitButton</visible>
 					</item>
+					<item>
+						<!-- Build Switch Skin  -->
+						<label>[B][COLOR blue]$LOCALIZE[700039][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=build_switch_skin&quot;)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
 				</content>
 			</control>
 		</control>

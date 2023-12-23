@@ -1130,4 +1130,10 @@ msgctxt "#700038"
 msgid "\"Choose subtitles\" button opens Kodi window"
 msgstr ""
 
+# Build Switch Skin In Power Menu - DialogButtonMenu.xml
+
+msgctxt "#700039"
+msgid "Switch Skin"
+msgstr ""
+
 ################################################################
