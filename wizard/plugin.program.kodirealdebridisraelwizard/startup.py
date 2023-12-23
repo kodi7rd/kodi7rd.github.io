@@ -140,9 +140,8 @@ def build_skin_switch_prompt():
 
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=quick_update&name={quote_plus(CONFIG.BUILDNAME)}&auto_quick_update=true)")
 def auto_quick_update():
-    if not CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD: return
         
-    note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD)
+    note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
     
     if note_id:
         if note_id == CONFIG.NOTEID:

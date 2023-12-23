@@ -154,18 +154,12 @@ class Wizard:
                 
                 #########################################################################################################
                 # KODI-RD-IL
-                # Sync to latest quick update notification version - to avoid running quick update after build install.
-                from resources.libs.common.config import set_quick_updates_notification_files
-                QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = set_quick_updates_notification_files(name)
-                # To set for static build (uservar.py - NOTIFICATION) - comment the previous 2 lines and uncomment this line:
-                # QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD = CONFIG.NOTIFICATION
-                if QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD:
-                    from resources.libs.gui import window
-                    note_id, msg = window.split_notify(QUICK_UPDATE_NOTIFICATION_FILE_NEW_BUILD)
-                    if note_id:
-                        # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
-                        CONFIG.set_setting('notedismiss', 'false')
-                        CONFIG.set_setting('noteid', note_id)
+                from resources.libs.gui import window
+                note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
+                if note_id:
+                    # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
+                    CONFIG.set_setting('notedismiss', 'false')
+                    CONFIG.set_setting('noteid', note_id)
                 # Set build_skin_switch_dismiss to false for build_switch_skin prompt after install.
                 CONFIG.set_setting('build_skin_switch_dismiss', 'false')
                 #########################################################################################################

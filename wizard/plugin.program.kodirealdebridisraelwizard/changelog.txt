@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.2.8[/B][/COLOR]
+* Go back to single quick update notification file URL.
 [COLOR yellow][B]v1.2.7[/B][/COLOR]
 * Rename main menu from "בחירת בילד להתקנה" to "התקן את הבילד"
 [COLOR yellow][B]v1.2.6[/B][/COLOR]

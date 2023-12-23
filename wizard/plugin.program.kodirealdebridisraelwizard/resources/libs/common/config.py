@@ -24,22 +24,6 @@ import xbmcvfs
 import os
 
 import uservar
-        
-#########################################################################################################
-# KODI-RD-IL - Auto quick update on startup
-def set_quick_updates_notification_files(BUILDNAME):
-    if "Estuary" in BUILDNAME:
-        # Estuary build
-        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_ESTUARY
-    elif "FENtastic" in BUILDNAME:
-        # FENtastic build
-        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_FENTASTIC
-    elif "קודי ריל דבריד ישראל" in BUILDNAME:
-        # Unified KODI-RD-IL build
-        return uservar.QUICK_UPDATE_NOTIFICATION_FILE_KODI_RD_IL
-    else:
-        return None
-#########################################################################################################
 
 
 class Config:
@@ -229,13 +213,6 @@ class Config:
         self.INSTALLED = self.get_setting('installed')
         self.EXTRACT = self.get_setting('extract')
         self.EXTERROR = self.get_setting('errors')
-        
-        #########################################################################################################
-        # KODI-RD-IL - Auto quick update on startup
-        self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = set_quick_updates_notification_files(self.BUILDNAME)
-        # To set for static build (uservar.py - NOTIFICATION) - comment the previous line and uncomment this line:
-        # self.QUICK_UPDATE_NOTIFICATION_FILE_CURRENT_BUILD = uservar.NOTIFICATION
-        #########################################################################################################
         
         # View variables
         self.SHOW19 = self.get_setting('show19')
