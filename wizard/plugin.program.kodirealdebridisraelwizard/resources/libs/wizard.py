@@ -520,7 +520,7 @@ def build_switch_skin():
 
     # Create a dialog window
     dialog = xbmcgui.Dialog()
-    gotoskin_index_number = dialog.select("[B]בחר סקין אליו תרצה לעבור[/B]", skins_list)
+    gotoskin_index_number = dialog.select("[B]בחר סקין איתו תרצה לעבוד[/B]", skins_list)
     
     if gotoskin_index_number == -1:  # User cancelled the menu
         return
