@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.2.9[/B][/COLOR]
+* Skin switch - Don't show the current skin in the skins list.
 [COLOR yellow][B]v1.2.8[/B][/COLOR]
 * Go back to single quick update notification file URL.
 [COLOR yellow][B]v1.2.7[/B][/COLOR]

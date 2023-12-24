@@ -505,33 +505,32 @@ def build_switch_skin():
         return
 
     skin_mapping = {
-        'סקין Estuary - מראה פשוט ומהיר': 'skin.estuary',
-        'סקין FENtastic - למכשירים חזקים!': 'skin.fentastic'
+        'סקין Estuary - מראה פשוט עם כפתורים': 'skin.estuary',
+        'סקין FENtastic - יפהפה!': 'skin.fentastic'
     }
+        
+    # Get the name of the current active skin   
+    current_skin_name = next((skin_name for skin_name, skin_addon_name in skin_mapping.items() if skin_addon_name in CONFIG.SKIN))
 
-    # Create a list of items for selection
-    skins_list = list(skin_mapping.keys())
+    # Filter out the current active skin from the list
+    skins_list = [skin_name for skin_name, skin_addon_name in skin_mapping.items() if skin_addon_name not in CONFIG.SKIN]
 
     # Create a dialog window
     dialog = xbmcgui.Dialog()
-    gotoskin_index_number = dialog.select("[B]בחר סקין איתו תרצה לעבוד[/B]", skins_list)
+    gotoskin_index_number = dialog.select(f"[B]סקין נוכחי: [COLOR gold]{current_skin_name}[/COLOR][/B]", skins_list)    
     
     if gotoskin_index_number == -1:  # User cancelled the menu
         return
-    else:
-        selected_skin = skins_list[gotoskin_index_number]
-        gotoskin = skin_mapping[selected_skin]
+        
+    selected_skin = skins_list[gotoskin_index_number]
+    gotoskin = skin_mapping[selected_skin]
         
     yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
                        '[B][COLOR {0}]האם ברצונך להחליף סקין ל:'.format(CONFIG.COLOR2) + '\n' + '[COLOR {0}]{1}[/COLOR]?[/COLOR][/B]'.format(CONFIG.COLOR1, selected_skin),
                        nolabel='[B][COLOR red]ביטול[/COLOR][/B]',
                        yeslabel='[B][COLOR springgreen]החלף סקין[/COLOR][/B]')
-    if yes_pressed:
-        # If the selected skin is already the current skin
-        if gotoskin in CONFIG.SKIN:
-            dialog.ok(CONFIG.ADDONTITLE, "[B]זהו כבר הסקין הנוכחי שלך![/B]")
-            return
 
+    if yes_pressed:
         dialogProgress = xbmcgui.DialogProgress()
         dialog_text = '[COLOR {0}][B]מחליף סקין ומגדיר את מסך הבית של:[/B][/COLOR]\n[COLOR {1}][B]{2}[/B][/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, selected_skin)
         dialogProgress.create(CONFIG.ADDONTITLE, dialog_text)
