@@ -1298,7 +1298,7 @@ for _lang in main_languages:
 if len(all_setting["other_lang"]) > 0:
     all_lang=all_setting["other_lang"].split(",")
     for item in all_lang:
-        selected_langs.append(str(convertLanguage(item, xbmc.ENGLISH_NAME)))
+        selected_langs.append(str(xbmc.convertLanguage(item, xbmc.ENGLISH_NAME)))
 if all_setting["all_lang"] == 'true':
     selected_langs=[]
 myLogger('Allsubs Langs: ' + repr(selected_langs))
@@ -1856,92 +1856,97 @@ def get_now_played():
     item['file'] = xbmc.Player().getPlayingFile()  # It provides more correct result
     return item
 
-def calc_sub_percent_sync(sub_filename,array_original):
-    #json_value is the subtitle filename
-    #array_original is the video/source filename
+def calc_sub_percent_sync(sub_filename, array_original):
+    try:
+        #json_value is the subtitle filename
+        #array_original is the video/source filename
 
-    release_names=['bluray','blu-ray','bdrip','brrip','brip',
-                   'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip','hc',
-                   'web','web-dl','web dl','web-dlrip','webrip','web-rip',
-                   'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip',
-                   'screener','dvdscr','dvd-full',
-                   'tc','telecine','ts','hdts','telesync']
+        release_names = ['bluray','blu-ray','bdrip','brrip','brip',
+                    'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip','hc',
+                    'web','web-dl','web dl','web-dlrip','webrip','web-rip',
+                    'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip',
+                    'screener','dvdscr','dvd-full',
+                    'tc','telecine','ts','hdts','telesync']
 
-    resolutions = ['720p','1080p','1440p','2160p','2k','4320p','4k']
+        resolutions = ['720p','1080p','1440p','2160p','2k','4320p','4k']
 
-    quality = xbmc.getInfoLabel("VideoPlayer.VideoResolution")+'p'
+        quality = xbmc.getInfoLabel("VideoPlayer.VideoResolution")+'p'
 
-    text = sub_filename
+        text = sub_filename
 
-    text = clean_allsubs_tags(text)
-    text = replace_chars_from_text(text)
-    text = (text.replace(".srt",''))
-    # text = remove_brackets_content_from_text(text)
-    array_subs = (text.split("."))
-    ##array_subs.pop(0)
+        text = clean_allsubs_tags(text)
+        text = replace_chars_from_text(text)
+        text = (text.replace(".srt",''))
+        # text = remove_brackets_content_from_text(text)
+        array_subs = (text.split("."))
+        ##array_subs.pop(0)
 
-    #remove empty items from sub array
-    array_subs = [element.strip().lower() for element in array_subs if element != '']
-    #array_subs=[str(x).lower() for x in array_subs if x != '']
+        #remove empty items from sub array
+        array_subs = [element.strip().lower() for element in array_subs if element != '']
+        #array_subs=[str(x).lower() for x in array_subs if x != '']
 
-    # remove language code if exist
-    if array_subs[-1].lower() != 'hi' and len(array_subs[-1]) == 2:
-        array_subs.pop(-1)
+        # remove language code if exist
+        if array_subs[-1].lower() != 'hi' and len(array_subs[-1]) == 2:
+            array_subs.pop(-1)
 
-    # fix for 'Opensubtitles" subs - remove 'cc' addition ('hi', 'no hi') if exist
-    if array_subs[-1].lower()=='hi' and array_subs[-2].lower()=='no':
-        array_subs.pop(-1)
-        array_subs.pop(-1)
-    #array_subs=[element for element in array_subs if element not in ('hi')] # was ('-','no','hi')
+        # fix for 'Opensubtitles" subs - remove 'cc' addition ('hi', 'no hi') if exist
+        if array_subs[-1].lower() == 'hi' and array_subs[-2].lower() == 'no':
+            array_subs.pop(-1)
+            array_subs.pop(-1)
+        #array_subs=[element for element in array_subs if element not in ('hi')] # was ('-','no','hi')
 
-    #myLogger("Video source array before compare: %s" %array_original)
-    #myLogger("Subtitle array before compare: %s" %array_subs)
+        #myLogger("Video source array before compare: %s" %array_original)
+        #myLogger("Subtitle array before compare: %s" %array_subs)
 
-    array_original=[element.strip().lower() for element in array_original if element != '']
-    #array_original=[element.strip().lower() for element in array_original]
-    #array_original=[str(x).lower() for x in array_original if x != '']
+        array_original = [element.strip().lower() for element in array_original if element != '']
+        #array_original=[element.strip().lower() for element in array_original]
+        #array_original=[str(x).lower() for x in array_original if x != '']
 
-    #----------------------------------------------------------------------------------#
-    # 1st priority "release name" (+3 if "release name" are equal)
-    # 2nd priority "release type" (+2 if "release name" and "release type" are equal)
-    # 3th priority "resolution"   (+1 if "release name" and "release type" and "resolution" are equal)
-    #----------------------------------------------------------------------------------#
+        #----------------------------------------------------------------------------------#
+        # 1st priority "release name" (+3 if "release name" are equal)
+        # 2nd priority "release type" (+2 if "release name" and "release type" are equal)
+        # 3th priority "resolution"   (+1 if "release name" and "release type" and "resolution" are equal)
+        #----------------------------------------------------------------------------------#
 
-    # Give "release name" more weight (x3) to the ratio score of the compare
-    # 1st priority "release name"
-    #myLogger("Video source release: %s" %array_original[-1])
-    #myLogger("Subtitle release: %s" %array_subs[-1])
-    release_name_position = -2 if array_subs[-1].lower()=='hi' else -1
-    sub_release_name = array_subs[release_name_position]
-    video_release_name = array_original[-1]
-    if sub_release_name.lower() == video_release_name.lower():
-        for i in range(3):
-            array_subs.append(sub_release_name)
-            array_original.append(video_release_name)
+        # Give "release name" more weight (x3) to the ratio score of the compare
+        # 1st priority "release name"
+        #myLogger("Video source release: %s" %array_original[-1])
+        #myLogger("Subtitle release: %s" %array_subs[-1])
+        release_name_position = -2 if array_subs[-1].lower() == 'hi' else -1
+        sub_release_name = array_subs[release_name_position]
+        video_release_name = array_original[-1]
+        if sub_release_name.lower() == video_release_name.lower():
+            for i in range(3):
+                array_subs.append(sub_release_name)
+                array_original.append(video_release_name)
 
-        # Give "release type" more weight (x2) to the ratio score of the compare
-        # 2nd priority "release type"
-        sub_release_type = list(set(array_subs).intersection(release_names))
-        video_release_type = list(set(array_original).intersection(release_names))
-        if len(sub_release_type) > 0 and len(video_release_type) > 0 and sub_release_type[-1] == video_release_type[-1]:
-            for i in range(2):
-                array_original.append(video_release_type[-1])
-                array_subs.append(sub_release_type[-1])
+            # Give "release type" more weight (x2) to the ratio score of the compare
+            # 2nd priority "release type"
+            sub_release_type = list(set(array_subs).intersection(release_names))
+            video_release_type = list(set(array_original).intersection(release_names))
+            if len(sub_release_type) > 0 and len(video_release_type) > 0 and sub_release_type[-1] == video_release_type[-1]:
+                for i in range(2):
+                    array_original.append(video_release_type[-1])
+                    array_subs.append(sub_release_type[-1])
 
-            # 3th priority "resolution"
-            video_quality = list(set(array_original).intersection(resolutions))
-            sub_quality = list(set(array_subs).intersection(resolutions))
-            if len(video_quality) > 0 and len(sub_quality) > 0 and sub_quality[-1] == video_quality[-1]:
-                for i in range(1):
-                    array_original.append(video_quality[-1])
-                    array_subs.append(sub_quality[-1])
-                    #myLogger("Video source quality: %s" %repr(video_quality[0]))
-                    #myLogger("Subtitle quality: %s" %repr(sub_quality[0]))
+                # 3th priority "resolution"
+                video_quality = list(set(array_original).intersection(resolutions))
+                sub_quality = list(set(array_subs).intersection(resolutions))
+                if len(video_quality) > 0 and len(sub_quality) > 0 and sub_quality[-1] == video_quality[-1]:
+                    for i in range(1):
+                        array_original.append(video_quality[-1])
+                        array_subs.append(sub_quality[-1])
+                        #myLogger("Video source quality: %s" %repr(video_quality[0]))
+                        #myLogger("Subtitle quality: %s" %repr(sub_quality[0]))
 
-    # myLogger("Video source array for compare: %s" %array_original)
-    # myLogger("Subtitle array for compare: %s" %array_subs)
-    precent = similar(array_original,array_subs)
-    return precent
+        # myLogger("Video source array for compare: %s" %array_original)
+        # myLogger("Subtitle array for compare: %s" %array_subs)
+        precent = similar(array_original,array_subs)
+        return precent
+
+    except Exception as e:
+        myLogger("Error in calc_sub_percent_sync: " + repr(e) + " | sub_filename: " + repr(sub_filename))
+        return 0
 
 def autosubs_download_first_sub(all_data,mode_subtitle,all_setting,save_all_data):
     counter=0
@@ -2139,7 +2144,7 @@ def search_all(mode_subtitle,all_setting,manual_search=False,manual_title=''):
 
     myLogger("search_all: mode_subtitle - " + repr(mode_subtitle))
 
-    if mode_subtitle==3:
+    if mode_subtitle == 3:
         dp = dialogprogress()
         dp.create(__language__(32107), __language__(32115))
     else:
@@ -2514,19 +2519,23 @@ def replace_chars_from_text(_text):
     text = (_text.strip()
             .replace("_",".").replace(" ",".")
             .replace("/",".")
+            .replace(":","")
             .replace("-",".").replace("+",".")
             .replace("[",".").replace("]",".")
             .replace("(",".").replace(")","."))
 
     return text
 
-def orginaize_video_filename_for_compare(_text):
+def orginaize_video_filename_for_compare(_text, _index):
     text = remove_brackets_content_from_text(_text)
     text = replace_chars_from_text(text)
     text = (text.replace(".avi","").replace(".mp4","").replace(".mkv",""))
-    text = (text.split("."))
+    myLogger("Video source %s for compare: %s" %(_index, text))
 
-    return text
+    _array = (text.split("."))
+    myLogger("Video source %s for compare (array): %s" %(_index, _array))
+
+    return _array
 
 def results_subs_processing(save_all_data,item,last_sub):
     ########## Calc Percent and Langauge Sorting ##########
@@ -2540,16 +2549,19 @@ def results_subs_processing(save_all_data,item,last_sub):
     all_other=[]
 
     ############## Subs Proccessing ###############
-    array_original = orginaize_video_filename_for_compare(item['file_original_path'])
-    array_original2 = orginaize_video_filename_for_compare(xbmc.getInfoLabel("VideoPlayer.title"))
+    video_player_title = xbmc.getInfoLabel("VideoPlayer.OriginalTitle") if item['episode'] == 0 else xbmc.getInfoLabel("VideoPlayer.TVShowTitle")
+    array_original = orginaize_video_filename_for_compare(item['file_original_path'], 1)
+    array_original2 = orginaize_video_filename_for_compare(video_player_title, 2)
+
+    check_sub_sync = is_to_check_percent(item)
 
     for save_data_value in save_all_data:
-        json_value2=json.loads(json.dumps(save_data_value))
+        json_value2 = json.loads(json.dumps(save_data_value))
 
         for json_value in json_value2:
             if 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value and 'sync' in json_value and 'hearing_imp' in json_value:
                 ############## Calc Sync Match Percentage ###############
-                if is_to_check_percent(item):
+                if check_sub_sync:
                     percent = calc_sub_percent_sync(json_value['label2'], array_original) if len(array_original) > 1 else 0
                     percent2 = calc_sub_percent_sync(json_value['label2'], array_original2) if len(array_original2) > 1 else 0
 
@@ -2567,23 +2579,23 @@ def results_subs_processing(save_all_data,item,last_sub):
                 #     all_eng.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent))
                 # else:
                 #     all_heb.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent))
-                if ('Hebrew' in json_value['label'] or 'hebrew' in json_value['label']
-                    or 'He' in json_value['thumbnailImage'] or 'he' in json_value['thumbnailImage']):
+                if ('hebrew' in json_value['label'].casefold()
+                    or 'he' in  json_value['thumbnailImage'].casefold()):
                     all_heb.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
-                elif ('English' in json_value['label'] or 'english' in json_value['label']
-                      or 'En' in json_value['thumbnailImage'] or 'en' in json_value['thumbnailImage']):
+                elif ('english' in json_value['label'].casefold()
+                    or 'en' in  json_value['thumbnailImage'].casefold()):
                     all_eng.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
-                elif ('Russian' in json_value['label'] or 'russian' in json_value['label']
-                      or 'Ru' in json_value['thumbnailImage'] or 'ru' in json_value['thumbnailImage']):
+                elif ('russian' in json_value['label'].casefold()
+                    or 'ru' in  json_value['thumbnailImage'].casefold()):
                     all_rus.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
-                elif ('Arabic' in json_value['label'] or 'arabic' in json_value['label']
-                       or 'Ar' in json_value['thumbnailImage'] or 'ar' in json_value['thumbnailImage']):
+                elif ('arabic' in json_value['label'].casefold()
+                    or 'ar' in  json_value['thumbnailImage'].casefold()):
                     all_arb.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
-                elif ('French' in json_value['label'] or 'french' in json_value['label']
-                        or 'Fr' in json_value['thumbnailImage'] or 'fr' in json_value['thumbnailImage']):
+                elif ('french' in json_value['label'].casefold()
+                    or 'fr' in  json_value['thumbnailImage'].casefold()):
                     all_fre.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
-                elif ('Spanish' in json_value['label'] or 'spanish' in json_value['label']
-                        or 'Es' in json_value['thumbnailImage'] or 'es' in json_value['thumbnailImage']):
+                elif ('spanish' in json_value['label'].casefold()
+                    or 'es' in  json_value['thumbnailImage'].casefold()):
                     all_spn.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))
                 elif (len(json_value['label']) == 0 and len(json_value['thumbnailImage']) == 0):
                     all_unknown.append((json_value['label'],json_value['label2'],json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],percent,json_value['hearing_imp']))

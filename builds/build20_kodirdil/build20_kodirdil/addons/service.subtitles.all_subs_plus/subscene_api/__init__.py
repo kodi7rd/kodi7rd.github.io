@@ -423,20 +423,20 @@ class SubtitleAPI:
                                                                                 lang,
                                                                                 nthumb)
 
-            json_data={'url':url,
-                            'label':nlabel,
-                            'label2':nlabel2,
-                            'iconImage':nicon,
-                            'thumbnailImage':nthumb,
-                            'hearing_imp':'false',
-                            'sync': 'false'}
+            json_data = {'url':url,
+                         'label':nlabel,
+                         'label2':nlabel2,
+                         'iconImage':nicon,
+                         'thumbnailImage':nthumb,
+                         'hearing_imp':'false',
+                         'sync': 'false'}
 
             subtitle_list.append(json_data)
             links_subscene=subtitle_list
             #z=z+1
 
-        myLogger("Subscene subtitles final: " + repr(subtitle_list))
-        return subtitle_list,result
+        # myLogger("Subscene subtitles final: " + repr(subtitle_list))
+        return subtitle_list, result
 
     # def subscene_download_process(self, params, mode_subtitle):
     #     from service import download
