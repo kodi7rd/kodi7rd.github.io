@@ -1,4 +1,0 @@
-v1.0.1
-- Use new schema <dir> definition
-v1.0.0
-- Initial Release
