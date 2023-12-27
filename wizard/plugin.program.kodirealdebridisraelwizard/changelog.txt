@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.3.1[/B][/COLOR]
+* Support restarting Kodi for custom Windows software (using -p flag, for portable_data dir)
 [COLOR yellow][B]v1.2.9[/B][/COLOR]
 * Skin switch - Don't show the current skin in the skins list.
 [COLOR yellow][B]v1.2.8[/B][/COLOR]

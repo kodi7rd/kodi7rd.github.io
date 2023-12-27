@@ -318,10 +318,14 @@ class Wizard:
     # KODI-RD-IL
     def restart_kodi(self):
         if xbmc.getCondVisibility('System.Platform.Windows'):
-            import subprocess, xbmcvfs
             try:
-                kodi_path = [os.path.join(xbmcvfs.translatePath('special://xbmc/'), 'kodi.exe')]
-                subprocess.Popen(kodi_path, shell=True)
+                import subprocess, xbmcvfs
+                kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
+                kodi_full_path = [os.path.join(kodi_root_path, 'kodi.exe')]
+                # KODI-RD-IL Custom Windows software - AppData stored in C:\Kodi + Real Debrid Israel\portable_data
+                if "Kodi + Real Debrid Israel" in kodi_root_path:
+                    kodi_full_path.append('-p')
+                subprocess.Popen(kodi_full_path, shell=True)
             except:
                 pass
         tools.kill_kodi(over=True)
