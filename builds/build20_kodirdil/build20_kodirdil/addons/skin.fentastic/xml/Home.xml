@@ -1187,22 +1187,30 @@
 				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 				<top>30</top>
 				<left>90</left>
-        <control type="image">
-          <left>-55</left>
-          <top>-20</top>
-          <aspectratio>keep</aspectratio>
-          <width>230</width>
-          <height>98</height>
-          <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture>
-        </control>
-        <control type="image">
-          <left>55</left>
-          <top>0</top>
-          <aspectratio>keep</aspectratio>
-          <width>192</width>
-          <height>56</height>
-          <texture>special://skin/media/logos/letters.png</texture>
-        </control>
+				<control type="image">
+					<left>-45</left>
+					<top>-70</top>
+					<aspectratio>keep</aspectratio>
+					<width>350</width>
+					<height>208</height>
+					<texture>special://skin/media/kodirdil/group_logo/kodirdil-vendor_logo.png</texture>
+				</control>
+				<!-- <control type="image"> -->
+				  <!-- <left>-55</left> -->
+				  <!-- <top>-20</top> -->
+				  <!-- <aspectratio>keep</aspectratio> -->
+				  <!-- <width>230</width> -->
+				  <!-- <height>98</height> -->
+				  <!-- <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture> -->
+				<!-- </control> -->
+				<!-- <control type="image"> -->
+				  <!-- <left>55</left> -->
+				  <!-- <top>0</top> -->
+				  <!-- <aspectratio>keep</aspectratio> -->
+				  <!-- <width>192</width> -->
+				  <!-- <height>56</height> -->
+				  <!-- <texture>special://skin/media/logos/letters.png</texture> -->
+				<!-- </control> -->
 			</control>
 		</control>
 	</controls>
