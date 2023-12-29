@@ -1,7 +1,7 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
 [COLOR dodgerblue][B]Version 3.2.33[/B][/COLOR]
-- [B][COLOR yellow]THE NEW ONLINE AUTOMATIC UPDATE METHOD IS NOT RELEVANT TO TWILIGHT ADDON, UPDATES WILL KEEP COME FROM REPOSITORY ONLY[/COLOR][/B]
+- [B][COLOR yellow]THE NEW ONLINE AUTOMATIC UPDATE METHOD IS NOT RELEVANT TO TWILIGHT ADDON, UPDATES WILL KEEP COMING FROM REPOSITORY ONLY[/COLOR][/B]
 - Tikipeter's version 3.2.16 + 3.2.17:
 - Added updating ability within the addon. Tools->"Check for Updates" will make Twilight check online for an update for itself. If found, you can choose to install the update. This replaces Kodi's repository and addon management system.
 - Added new startup updater to run on Kodi start.
