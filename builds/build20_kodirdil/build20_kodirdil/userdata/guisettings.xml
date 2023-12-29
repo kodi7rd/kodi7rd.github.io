@@ -342,7 +342,7 @@
     <setting id="powermanagement.shutdownstate" default="true">0</setting>
     <setting id="powermanagement.waitfornetwork" default="true">0</setting>
     <setting id="powermanagement.wakeonaccess" default="true">false</setting>
-    <setting id="general.addonupdates" default="true">0</setting>
+    <setting id="general.addonupdates">0</setting>
     <setting id="general.addonnotifications">true</setting>
     <setting id="addons.unknownsources">true</setting>
     <setting id="addons.updatemode">1</setting>
