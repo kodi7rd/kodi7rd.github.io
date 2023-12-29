@@ -1,5 +1,21 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.33[/B][/COLOR]
+- [B][COLOR yellow]THE NEW ONLINE AUTOMATIC UPDATE METHOD IS NOT RELEVANT TO TWILIGHT ADDON, UPDATES WILL KEEP COME FROM REPOSITORY ONLY[/COLOR][/B]
+- Tikipeter's version 3.2.16 + 3.2.17:
+- Added updating ability within the addon. Tools->"Check for Updates" will make Twilight check online for an update for itself. If found, you can choose to install the update. This replaces Kodi's repository and addon management system.
+- Added new startup updater to run on Kodi start.
+- 2 settings for startup updater in General->Manage Addon Updates:
+        
+"Delay Before Running": Choose time in seconds to delay the service after Kodi starts. Defaults to 45 secs. Best not to set this too low.
+        
+"Update Action": Set this to one of the following. Defaults to Notification:
+                "Prompt": Confirm dialog appears when update available,
+                "Automatic": Update without user interaction,
+                "Notification": Alert the user of an update with a notification,
+                "Off": No update performed or dialog/notification displayed.
+- Other changes/fixes.
+
 [COLOR dodgerblue][B]Version 3.2.32[/B][/COLOR]
 - Add setting to set minimum days until account expiration for Real Debrid account status notification.
 [B]Provider Accounts - General - Notify Only Under (Days Until Account Expiration)[/B]

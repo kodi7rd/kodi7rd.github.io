@@ -403,3 +403,9 @@ def nextep_content_settings():
 	sort_airing_today_to_top = get_setting('twilight.nextep.sort_airing_today_to_top', 'false') == 'true'
 	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
 			'include_unaired': include_unaired, 'include_unwatched': include_unwatched, 'sort_airing_today_to_top': sort_airing_today_to_top}
+
+def update_delay():
+	return int(get_setting('twilight.update.delay', '45'))
+
+def update_action():
+	return int(get_setting('twilight.update.action', '2'))

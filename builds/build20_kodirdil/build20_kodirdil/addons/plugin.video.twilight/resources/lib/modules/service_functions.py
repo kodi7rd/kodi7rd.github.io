@@ -7,6 +7,7 @@ from windows.base_window import FontUtils
 from caches.base_cache import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
 from indexers import real_debrid, premiumize, alldebrid, furk, easynews
+from modules.updater import update_check
 from modules import kodi_utils, settings
 from modules.utils import jsondate_to_datetime, datetime_workaround
 
@@ -15,7 +16,7 @@ ls, translate_path, custom_context_main_menu_prop, mdParse = kodi_utils.local_st
 custom_context_prop, custom_info_prop, addon_object, user_settings = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.addon_object, kodi_utils.user_settings
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
 get_window_id, Thread, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, settings.check_premium_account_status
-make_directories, path_exists,  = kodi_utils.make_directories, kodi_utils.path_exists, 
+make_directories, path_exists, update_action, update_delay = kodi_utils.make_directories, kodi_utils.path_exists, settings.update_action, settings.update_delay
 get_setting, set_setting, external, make_settings_props = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.external, kodi_utils.make_settings_props
 logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
@@ -261,6 +262,22 @@ class PremiumExpiryCheck:
 class OnSettingsChangedActions:
 	def run(self):
 		if get_property(pause_settings_prop) != 'true': make_settings_props()
+
+class UpdateCheck:
+	def run(self):
+		logger(twilight_str, 'UpdateCheck Service Starting')
+		monitor, player = xbmc_monitor(), xbmc_player()
+		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
+		while not monitor.abortRequested():
+			wait_for_abort(update_delay())
+			while get_property(pause_services_prop) == 'true' or is_playing(): wait_for_abort(5)
+			update_check(update_action())
+			break
+		try: del monitor
+		except: pass
+		try: del player
+		except: pass
+		return logger(twilight_str, 'UpdateCheck Service Finished')
 
 class OnNotificationActions:
 	def run(self, sender, method, data):

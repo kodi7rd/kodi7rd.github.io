@@ -67,7 +67,7 @@ current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 
 int_window_prop, pause_services_prop, suppress_sett_dict_prop, highlight_prop = 'twilight.internal_results.%s', 'twilight.pause_services', 'twilight.suppress_settings_dict', 'twilight.main_highlight'
 pause_settings_prop, current_skin_prop, use_skin_fonts_prop, custom_info_prop = 'twilight.pause_settings', 'twilight.current_skin', 'twilight.use_skin_fonts', 'twilight.custom_info_dialog'
 custom_context_main_menu_prop, custom_context_prop, sett_addoninfo_active_prop = 'twilight.custom_context_main_menu', 'twilight.custom_context_menu', 'twilight.setting_addoninfo_active'
-myvideos_db_paths = {19: '119', 20: '121', 21: '121'}
+myvideos_db_paths = {19: '119', 20: '121', 21: '124'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
 extras_button_label_values = {'movie': {'movies_play': 32174, 'show_trailers': 32606, 'show_images': 32798,  'show_extrainfo': 32605,
@@ -333,6 +333,16 @@ def restart_services():
 def update_local_addons():
 	execute_builtin('UpdateLocalAddons', True)
 	sleep(2500)
+ 
+def update_kodi_addons_db(addon_name='plugin.video.twilight'):
+	import time
+	import sqlite3 as database
+	try:
+		date = time.strftime('%Y-%m-%d %H:%M:%S')
+		dbcon = database.connect(translate_path('special://database/Addons33.db'), timeout=40.0)
+		dbcon.execute("INSERT OR REPLACE INTO installed (addonID, enabled, lastUpdated) VALUES (?, ?, ?)", (addon_name, 1, date))
+		dbcon.close()
+	except: pass
 
 def get_jsonrpc(request):
 	response = execute_JSON(json.dumps(request))
@@ -499,6 +509,18 @@ def toggle_language_invoker():
 	execute_builtin('ActivateWindow(Home)', True)
 	update_local_addons()
 	disable_enable_addon()
+
+def unzip(zip_location, destination_location, destination_check, show_busy=True):
+	if show_busy: show_busy_dialog()
+	try:
+		from zipfile import ZipFile
+		zipfile = ZipFile(zip_location)
+		zipfile.extractall(path=destination_location)
+		if path_exists(destination_check): status = True
+		else: status = False
+	except: status = False
+	if show_busy: hide_busy_dialog()
+	return status
 
 def upload_logfile(params):
 	log_files = [(33145, 'kodi.log'), (33146, 'kodi.old.log')]

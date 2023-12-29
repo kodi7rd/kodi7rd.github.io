@@ -14,7 +14,7 @@ set_sort_method, set_category, container_refresh_input, get_property = k.set_sor
 vid_str, fl_str, se_str, acc_str, dl_str, people_str, keywords_str, add_cont_str = ls(32491), ls(32493), ls(32450), ls(32494), ls(32107), ls(32507), ls(32092), ls(33140)
 tools_str, changelog_str, source_str, cl_dbs_str, langinv_str, shortcut_manager_str, ext_str = ls(32456), ls(32508), ls(32515), ls(32512), ls(33017), ls(32514), ls(32118)
 user_str, ml_str, ll_str, rec_str, cal_str, lv_str, lu_str, k_str, genre_select_str = ls(32065), ls(32454), ls(32502), ls(32503), ls(32081), ls(32509), ls(32853), ls(32538), ls(32847)
-recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, res_serv_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32680)
+recent_added_str, recently_aired_str, random_str, episodes_str, settings_str, res_serv_str, upd_str = ls(32498), ls(32505), ls(32504), ls(32506), ls(32247), ls(32680), ls(32789)
 log_utils_str, tips_use_str, views_str, updates_str, twilight_str, all_str, cache_str, clean_str = ls(32777), ls(32518), ls(32510), ls(32196), ls(32036), ls(32129), ls(32524), ls(32526)
 discover_str, history_str, help_str, furk_str, easy_str, rd_str, pm_str, ad_str = ls(32451), ls(32486), ls(32487), ls(32069), ls(32070), ls(32054), ls(32061), ls(32063)
 cloud_str, clca_str, trakt_str, imdb_str, coll_str, wlist_str, ls_str, fav_str = ls(32496), ls(32497), ls(32037), ls(32064), ls(32499), ls(32500), ls(32501), ls(32453)
@@ -205,6 +205,7 @@ class Navigator:
 		self.add({'mode': 'navigator.maintenance'}, tools_ins % cl_dbs_str, 'settings2')
 		self.add({'mode': 'default_highlight_colors_choice', 'isFolder': 'false'}, tools_ins % res_hc, 'settings2')
 		self.add({'mode': 'restart_services', 'isFolder': 'false'}, tools_ins % res_serv_str, 'settings')
+		self.add({'mode': 'update_check', 'isFolder': 'false'}, tools_ins % upd_str, 'settings2')
 		self.add({'mode': 'toggle_language_invoker', 'isFolder': 'false'}, tools_ins % langinv_str, 'settings2')
 		self.end_directory()
 
