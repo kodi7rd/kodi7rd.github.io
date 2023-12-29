@@ -172,7 +172,7 @@
         <setting type="action" label="Open Kodi Android Updater Settings" action="RunPlugin(plugin://plugin.program.openwizard/?mode=fmchoose)" option="close" />
         <setting id="apk_path" type="folder" label="בחר מיקום הורדה" default="/storage/emulated/0/Download/"/>
         <setting type="lsep" label="שמירת נתונים בזמן התקנת בילד:"/>
-        <setting id="use_github_custom_save_data_config" type="bool" label="קבל הגדרות שמירת נתונים מ-GitHub" default="true"/>
+        <!-- <setting id="use_github_custom_save_data_config" type="bool" label="קבל הגדרות שמירת נתונים מ-GitHub" default="true"/> -->
         <setting id="keeptrakt" type="bool" label="Trakt שמירת חשבון" default="true"/>
         <setting id="traktnextsave" type="text" label="נשמר לאחרונה - Trakt" visible="!eq(-1, false)" enable="false" default="2019-01-01 00:00:00"/>
         <setting id="keepdebrid" type="bool" label="Debrid שמירת חשבון" default="true"/>

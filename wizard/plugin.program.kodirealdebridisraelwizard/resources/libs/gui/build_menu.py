@@ -193,13 +193,13 @@ class BuildMenu:
             
             directory.add_separator('התקנה מלאה')
             
-            directory.add_file('התקנה מלאה של הבילד? לחץ כאן', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
+            directory.add_file('לחץ כאן להתקנה מלאה של הבילד', {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart,
                                icon=icon, themeit=CONFIG.THEME1)
                                
             if guicheck:
                 directory.add_separator('עדכון מהיר')
-                directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'quick_update', 'name': name, 'auto_quick_update': 'false'}, description=description, fanart=fanart,icon=icon, themeit=CONFIG.THEME1)
-                # directory.add_file('הבילד כבר מותקן ויש עדכון? לחץ כאן', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
+                directory.add_file('לחץ כאן לעדכון מהיר ידני', {'mode': 'install', 'action': 'quick_update', 'name': name, 'auto_quick_update': 'false'}, description=description, fanart=fanart,icon=icon, themeit=CONFIG.THEME1)
+                # directory.add_file('לחץ כאן לעדכון מהיר ידני', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
                                    # icon=icon, themeit=CONFIG.THEME1)
                                    
             directory.add_separator()

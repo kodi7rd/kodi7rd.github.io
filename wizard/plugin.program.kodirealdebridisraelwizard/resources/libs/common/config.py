@@ -258,7 +258,7 @@ class Config:
         #########################################################################################################
         
         # Save Data variables
-        self.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG = self.get_setting('use_github_custom_save_data_config')
+        # self.USE_GITHUB_CUSTOM_SAVE_DATA_CONFIG = self.get_setting('use_github_custom_save_data_config')
         self.TRAKTSAVE = self.get_setting('traktnextsave')
         self.DEBRIDSAVE = self.get_setting('debridnextsave')
         self.LOGINSAVE = self.get_setting('loginnextsave')

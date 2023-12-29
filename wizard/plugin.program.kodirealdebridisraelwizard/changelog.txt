@@ -1,3 +1,7 @@
+[COLOR yellow][B]v1.3.2[/B][/COLOR]
+* Remove from startup.py temporary build migration code.
+* Rename build install / quick update menu text.
+* Comment out unused "use_github_custom_save_data_config" code + remove from save data menu.
 [COLOR yellow][B]v1.3.1[/B][/COLOR]
 * Support restarting Kodi for custom Windows software (using -p flag, for portable_data dir)
 [COLOR yellow][B]v1.2.9[/B][/COLOR]
