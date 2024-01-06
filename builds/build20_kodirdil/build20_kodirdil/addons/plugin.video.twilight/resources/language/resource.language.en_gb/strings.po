@@ -4007,7 +4007,7 @@ msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
 msgstr ""
 
 msgctxt "#40009"
-msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
+msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]"
 msgstr ""
 
 msgctxt "#400010"

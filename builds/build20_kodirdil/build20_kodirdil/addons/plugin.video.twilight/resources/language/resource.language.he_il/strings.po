@@ -153,8 +153,8 @@ msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
 msgstr "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
 
 msgctxt "#40009"
-msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
-msgstr "OpenSubtitles [COLOR blue](http://www.opensubtitles.org)[/COLOR]"
+msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]"
+msgstr "OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]"
 
 msgctxt "#400010"
 msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"

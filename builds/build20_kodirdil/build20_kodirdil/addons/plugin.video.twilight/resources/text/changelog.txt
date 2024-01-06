@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.34[/B][/COLOR]
+- Rewrite OpenSubtitles code to use new OpenSubtitles.com API (For subtitles matching feature).
+  https://opensubtitles.stoplight.io/
+
 [COLOR dodgerblue][B]Version 3.2.33[/B][/COLOR]
 - [B][COLOR yellow]THE NEW ONLINE AUTOMATIC UPDATE METHOD IS NOT RELEVANT TO TWILIGHT ADDON, UPDATES WILL KEEP COMING FROM REPOSITORY ONLY[/COLOR][/B]
 - Tikipeter's version 3.2.16 + 3.2.17:
