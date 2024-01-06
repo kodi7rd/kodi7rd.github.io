@@ -1,4 +1,12 @@
-﻿[COLOR yellow][B]v4.0.0[/B][/COLOR]
+﻿[COLOR yellow][B]v4.0.6[/B][/COLOR]
+* Rewrite OpenSubtitles code to use new OpenSubtitles.com API.
+  https://opensubtitles.stoplight.io/
+* Add user setting to add your own OpenSubtitles API key (Optional).
+[COLOR yellow][B]v4.0.4[/B][/COLOR]
+* Fix Yandex machine translate progress text.
+* Remove Bing machine translate.
+* Other small fixes.
+[COLOR yellow][B]v4.0.0[/B][/COLOR]
 * BUG FIX: Limit "write_heb_embedded_taglines_check" function to Twilight addon.
 * Remove empty log line (autosub.py)
 [COLOR yellow][B]v3.9.9[/B][/COLOR]

@@ -395,6 +395,7 @@ def c_get_subtitles(video_data):
             
             
     for td in thread:
+      xbmc.sleep(100)
       td.start()
       
     
@@ -500,7 +501,10 @@ def get_translated(base_url,items,counter,headers):
         except:
             num=get_random_number()
             base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
-            translation=requests.get(base_url+(items),headers=headers).text
+            try:
+                translation=requests.get(base_url+(items),headers=headers,timeout=2).text
+            except:
+                translation='Error code'
         if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
             
             bing=Bing()
@@ -519,14 +523,14 @@ def get_translated(base_url,items,counter,headers):
     if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation):
         translation='Error now:'+str(count_error)
     trans_result.append((translation,counter))
-def c_get_keys():
+def c_get_bing_keys():
     import requests
     
     x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json').json()
     return x
 def get_last_key():
     try:
-        last_key_file=os.path.join(user_dataDir,'last_key.txt')
+        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
         file = open(last_key_file, 'r') 
         file_data= file.read()
         file.close()
@@ -534,19 +538,22 @@ def get_last_key():
         file_data=int(file_data)
     except:
         if Addon.getSetting("bing_translate_keys_method") == '1':
-            x=c_get_keys()
+            x=c_get_bing_keys()
             file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
         else:
             file_data=0
     return file_data
 def set_last_key(count_key):
-    last_key_file=os.path.join(user_dataDir,'last_key.txt')
-    file = open(last_key_file, 'w') 
-    file.write(str(count_key))
-    file.close()
+    try:
+        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
+        file = open(last_key_file, 'w') 
+        file.write(str(count_key))
+        file.close()
+    except:
+        pass
     
 def select_key(count_key):
-    x=cache.get(c_get_keys, 24,table='subs')
+    x=cache.get(c_get_bing_keys, 24,table='subs')
     
     
     return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
@@ -601,7 +608,7 @@ def translate_subs(input_file,output_file):
  
     counter=0
     
-    if Addon.getSetting("translate_p")== '0':
+    if Addon.getSetting("translate_p")== '0': # Google
         
         from resources.modules.auto_translate.googletrans import Translator  
         
@@ -617,7 +624,7 @@ def translate_subs(input_file,output_file):
         
         general.progress_msg=0
         for items in ax2:
-             general.show_msg=f"GOOGLE מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
+             general.show_msg=f"Google Translate מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
              general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
              if general.break_all:
                  break
@@ -628,7 +635,7 @@ def translate_subs(input_file,output_file):
              xx+=1
         f_sub_pre=f_sub_pre.replace('\r','\n')
         #all_text=f_sub_pre.replace(': ',':').replace('"# ','"#').split('\n')
-    elif Addon.getSetting("translate_p")== '1':
+    elif Addon.getSetting("translate_p")== '1': # Yandex
         
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0',
@@ -663,8 +670,8 @@ def translate_subs(input_file,output_file):
              thread.append(Thread(get_translated,base_url,items.replace('ה',''),counter,headers))
              counter+=1
 
-             general.show_msg=f"YANDEX מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
-             general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
+             # general.show_msg=f"YANDEX מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
+             # general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
              if general.break_all:
                  break
              xx+=1
@@ -689,6 +696,8 @@ def translate_subs(input_file,output_file):
                       
                     else:
                       still_alive=1
+            general.show_msg=f"Yandex מתרגם {encoding} | {str(int(((num_live* 100.0)/(len(thread))) ))}%"
+            general.progress_msg=int(((num_live* 100.0)/(len(thread))) )
                       
                   
                  
@@ -701,8 +710,8 @@ def translate_subs(input_file,output_file):
         for sub_title,index in translation:
             f_sub_pre=f_sub_pre+sub_title
              
-    else:
-        general.show_msg='BING מתרגם ' 
+    elif Addon.getSetting("translate_p")== '2': #Bing
+        general.show_msg='Bing מתרגם ' 
         import requests, uuid, json
         
         
@@ -749,7 +758,7 @@ def translate_subs(input_file,output_file):
             }]
             count_test=0
             while count_test<amount:
-                general.show_msg=f"BING מתרגם {encoding} | {nm} {str(count_key)}/{str(amount)} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
+                general.show_msg=f"Bing מתרגם {encoding} | {nm} {str(count_key)}/{str(amount)} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
                 request = requests.post(constructed_url, params=params, headers=headers, json=body)
                 response = request.json()
                 try:
@@ -833,6 +842,9 @@ def download_sub(source,download_data,MySubFolder,language,filename):
     log.warning('Download sub')
     log.warning('filename: ')
     log.warning(filename)
+    CachedSubFolder=xbmc_tranlate_path(os.path.join(user_dataDir, 'Cached_subs'))
+    if not os.path.exists(CachedSubFolder):
+         os.makedirs(CachedSubFolder)
     from resources.modules import general
     try:
         x=int(download_data['url'])

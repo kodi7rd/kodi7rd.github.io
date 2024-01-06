@@ -4,6 +4,7 @@ import threading
 
 from urllib.parse import  unquote_plus, unquote,  quote
 from resources.modules import log
+log.warning('Start General')
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 xbmc_tranlate_path=xbmcvfs.translatePath
 user_dataDir = xbmc_tranlate_path(xbmcaddon.Addon().getAddonInfo("profile"))

@@ -544,7 +544,7 @@ def sub_from_main(arg):
             log.warning(filename)
             save_file_name(filename,language)
         elif sub_file=='FaultSubException':
-            notify( 'תקלה בהורדה בחר כתובית אחרת' )
+            notify( 'תקלה בהורדה נסה שנית' )
         else: # External subtitle
         
             log.warning('Auto Sub result:'+str(sub_file))
@@ -797,7 +797,12 @@ class KodiMonitor(xbmc.Monitor):
             
             
             video_data=unque(Mando_search)
+            
             video_data=json.loads(video_data)
+            if 'imdb' not in video_data:
+                video_data=get_video_data()
+            if 'TVshowtitle' not in video_data:
+                video_data['TVshowtitle']=""
             log.warning('FoundMando_search33:')
             
             video_data['title']=clean_name(video_data['title'])

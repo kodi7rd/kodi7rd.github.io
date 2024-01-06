@@ -1,293 +1,264 @@
-import uuid,shutil
+# Import necessary libraries
+import random
+import shutil
 import xbmcaddon,os,xbmc
-global global_var,stop_all,site_id,sub_color#global
+global global_var,site_id,sub_color#global
 global_var=[]
-import socket
-import http.client as httplib
 from resources.modules import log
-import requests,json,re
-from resources.modules import cache
-from urllib.request import urlretrieve,urlopen
-from urllib.parse import  unquote_plus, unquote,  quote
+import requests,json
 import urllib
-import urllib.parse
 from resources.modules.extract_sub import extract
+from resources.modules.general import notify
+from resources.modules import cache
+import xbmcvfs
+import struct
+#########################################
 
 que=urllib.parse.quote_plus
 Addon=xbmcaddon.Addon()
 MyScriptID=Addon.getAddonInfo('id')
-BASE_URL_XMLRPC = u"https://api.opensubtitles.org/xml-rpc"
-__version__    = Addon.getAddonInfo('version') # Module version
-__scriptname__ = "XBMC Subtitles Unofficial"
-site_id='[Ops]'
-sub_color='bisque'
-try:
-    import xmlrpclib
-    from xmlrpclib import Transport
-except:
-    import xmlrpc.client as xmlrpclib
-    from xmlrpc.client import Transport
-import xbmcvfs
-import struct
+MyAddonName = Addon.getAddonInfo('name')
+MyAddonVersion    = Addon.getAddonInfo('version') # Module version
+USER_AGENT = '%s v%s' %(MyAddonName, MyAddonVersion)
 xbmc_tranlate_path=xbmcvfs.translatePath
 __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_open'))
 
+########### Settings ####################
+# Retrieve OS_USER_API_KEY_VALUE from settings
+OS_USER_API_KEY_VALUE = Addon.getSetting("OS_USER_API_KEY_VALUE")
+# Check if OS_USER_API_KEY_VALUE is not empty
+USE_OS_USER_API_KEY = bool(OS_USER_API_KEY_VALUE)
+#########################################
 
-class TimeoutTransport(xmlrpclib.Transport):
+########### Constants ###################
+OPS_API_BASE_URL = u"https://api.opensubtitles.com/api/v1"
+# OPS_API_LOGIN_URL = f"{OPS_API_BASE_URL}/login"
+OPS_API_SEARCH_URL = f"{OPS_API_BASE_URL}/subtitles"
+OPS_API_DOWNLOAD_URL = f"{OPS_API_BASE_URL}/download"
+site_id='[Ops]'
+sub_color='bisque'
+#########################################
 
-    def __init__(self, use_datetime=0, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
-                 secure=False):
-        xmlrpclib.Transport.__init__(self, use_datetime)
-        self.timeout = timeout
-        self.secure = secure
+###### Requests Params ##############
+REQUEST_TIMEOUT_IN_SECONDS = 5
+REQUEST_MAX_RETRIES_NUMBER = 8
+REQUEST_RETRY_DELAY_IN_MS = 500
+#########################################
 
-    def make_connection(self, host):
-        if self._connection and host == self._connection[0]:
-            return self._connection[1]
-        chost, self._extra_headers, x509 = self.get_host_info(host)
-        if self.secure:
-            self._connection = host, httplib.HTTPSConnection(
-                chost, None, timeout=self.timeout, **(x509 or {})
-            )
-        else:
-            self._connection = host, httplib.HTTPConnection(
-                chost, timeout=self.timeout
-            )
+def searchsubtitles(item):
 
-        return self._connection[1]
-
+    # New OpenSubtitles.com API Search docs:
+    # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
     
-class OSDBServer:
-  def __init__( self, *args, **kwargs ):
-    Addon=xbmcaddon.Addon()
-    socket.setdefaulttimeout(5)
-    self.server = xmlrpclib.Server( BASE_URL_XMLRPC, verbose=0 ,transport=TimeoutTransport())
-     
-    login = self.server.LogIn("", "", "en", "%s_v%s" %(__scriptname__.replace(" ","_"),__version__))
-    log.warning(login)
-    self.osdb_token  = login[ "token" ]
-  def hashFile(self): 
-      
-                 
-                longlongformat = '<q'  # little-endian long long
-                bytesize = int(struct.calcsize(longlongformat) )
-                    
-                f = xbmcvfs.File( xbmc.Player().getPlayingFile())
-                    
-                filesize = f.size()
-                hash = filesize 
-                    
-                if filesize < 65536 * 2: 
-                       return "SizeError" 
-                 
-                for x in range(int(65536/bytesize)): 
-                        #buffer = f.read(bytesize)
-                        try: buffer = f.readBytes(bytesize)
-                        except: buffer = f.read(bytesize)
-        
-                        (l_value,)= struct.unpack(longlongformat, buffer)  
-                        hash += l_value 
-                        hash = hash & 0xFFFFFFFFFFFFFFFF #to remain as 64bit number  
-                         
+
+    title = item.get('OriginalTitle', '')
+    tvshow = item.get('TVshowtitle', '')
+    season = item.get('season', '')
+    episode = item.get('episode', '')
+    year = item.get('year', '')
+    imdb_id = item.get('imdb', '')
     
-                f.seek(max(0,filesize-65536),0) 
-                for x in range(int(65536/bytesize)): 
-                        try: buffer = f.readBytes(bytesize)
-                        except: buffer = f.read(bytesize)
-                        (l_value,)= struct.unpack(longlongformat, buffer)  
-                        hash += l_value 
-                        hash = hash & 0xFFFFFFFFFFFFFFFF 
-                 
-                f.close() 
-                returnedhash =  "%016x" % hash 
-                return returnedhash ,filesize
-    
-      
-                
-  
-    
-  def searchsubtitles( self, item):
-     try:
-        file_hash,filesize=self.hashFile()
-     except:
-        file_hash=None
-        filesize=None
-     
-     Addon=xbmcaddon.Addon()
-     tvshow=item['TVshowtitle']
-     season=item['season']
-     episode=item['episode']
-     year=item['year']
-     title=item['OriginalTitle']
-     imdb=item['imdb']
-     imdb_id=imdb
-     if ( self.osdb_token ) :
-      searchlist  = []
-      lang=[]
-      
-      if Addon.getSetting("language_hebrew")=='true':
-       lang.append('heb')
-      if Addon.getSetting("language_english")=='true':
-       lang.append('eng')
-      if Addon.getSetting("language_russian")=='true':
-        lang.append('rus')
-      if Addon.getSetting("language_arab")=='true':
-        lang.append('ara')
-      if Addon.getSetting("all_lang")=='true':
-        lang.append('ALL')
-      if len(Addon.getSetting("other_lang"))>0:
-         all_lang=Addon.getSetting("other_lang").split(",")
-         for items in all_lang:
-           lang.append(str(items))
-      log.warning(lang)
-      if len(tvshow) > 0:
-         a=1
-         OS_search_string = ("%s S%.2dE%.2d" % (tvshow,int(season),int(episode),)).replace(" ","+")
-        
-      else:
+    lang=[]
 
-        
-        if not imdb_id:
-          OS_search_string = title.replace(" ","+")
-        else:
-          OS_search_string = imdb_id
-         
-
-      if not False:
-        
-
-
+    # Language codes from: https://opensubtitles.stoplight.io/docs/opensubtitles-api/1de776d20e873-languages
+    if Addon.getSetting("language_hebrew")=='true':
+        lang.append('he')
+    if Addon.getSetting("language_english")=='true':
+        lang.append('en')
+    if Addon.getSetting("language_russian")=='true':
+        lang.append('ru')
+    if Addon.getSetting("language_arab")=='true':
+        lang.append('ar')
+    if len(Addon.getSetting("other_lang"))>0:
+        all_lang=Addon.getSetting("other_lang").split(",")
+        for items in all_lang:
+            lang.append(str(items))
+    # If 'all_lang' is enabled - override lang to 'ALL' only (required 'ALL' only in new API)
+    if Addon.getSetting("all_lang")=='true':
+        lang = ['ALL']
        
-        
-        if 'tt' not in imdb:
-          imdb=imdb_id.replace('tt','')
-        if imdb=='':
-           imdb=str((str(imdb_id)).replace('tt',''))
-        imdb=imdb.replace('tt','')
-        log.warning(imdb)
-        log.warning(tvshow)
-        if  (len(tvshow)==0 and imdb != ""):
-        
-          searchlist.append({'sublanguageid' :",".join(lang),
-                             'imdbid'        :imdb,
-                             
-                             
-                             
-                            })
-        if len(tvshow)>0:
-          searchlist.append({'season' :season,
-                             'sublanguageid' :",".join(lang),
-                             'imdbid'        :imdb,
-                             'query'        :OS_search_string,
-                             'episode':episode,
-                             
-                             
-                            })
+    lang_string = ','.join(lang)
+
+    querystring = {}
+    querystring['languages'] = lang_string
+
+    # Build querystring WITH imdb_id (On new OpenSubtitles API - imdb_id can be with OR without the 'tt' prefix.)
+    if imdb_id.startswith('tt'):
+    
+        if len(tvshow) > 0:
+            #################################################
+            # Option 1 - TV Shows - by imdb id + season + episode
+            #################################################
+            querystring['parent_imdb_id'] = imdb_id
+            querystring['season_number'] = season
+            querystring['episode_number'] = episode
+            
         else:
+            #################################################
+            # Option 2 - Movies - by imdb id
+            #################################################
+            querystring['imdb_id'] = imdb_id
+
+    # Build querystring WITHOUT imdb_id
+    else:
+        querystring['query'] = title
         
-          searchlist.append({'sublanguageid':",".join(lang),
-                          'query'        :OS_search_string,
-                          'year'         :year,
-                          
-                         }) 
-      
-      else:
-        searchlist = [{'sublanguageid':",".join(lang),
-                       'query'        :OS_search_string,
-                       'year'         :year
-                      }]
-      if file_hash:
-        searchlist.append({'sublanguageid':",".join(lang),
-                          'moviehash':(file_hash)
-                          
-                         })
-      search = self.server.SearchSubtitles( self.osdb_token, searchlist )
+        if len(tvshow) > 0:
+            #################################################
+            # Option 3 - TV Shows - by title + season + episode
+            #################################################
+            querystring['season_number'] = season
+            querystring['episode_number'] = episode
+            
+        else:
+            #################################################
+            # Option 4 - Movies - by title + year
+            #################################################
+            querystring['year'] = year
 
 
-      if search["data"]:
-        return search["data"]  
+    #################################################
+    # Overwritten API value:
+    querystring['hearing_impaired'] = "include"
+    # Default API values:
+    querystring['ai_translated'] = "include" 
+    querystring['foreign_parts_only'] = "include"
+    querystring['machine_translated'] = "exclude"
+    #################################################
 
+    #########################################
+    # TODO: make hashFile function work
+    # try:
+        # file_hash = self.hashFile()
+    # except:
+        # file_hash = None
+    
+    # TODO: Send movie hash (from hashFile function) - helps to improve search accuracy according to the guidelines in:
+    # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
+    # if file_hash:
+        # querystring['moviehash'] = file_hash
+    #########################################
+    
+    # Determine which API key to use for Search
+    if USE_OS_USER_API_KEY:
+        OS_API_KEY_NAME = "User_Setting_API_Key"
+        OS_API_KEY_VALUE = OS_USER_API_KEY_VALUE  # Use OS_USER_API_KEY_VALUE from settings
+    else:
+        OS_API_KEY_NAME,OS_API_KEY_VALUE = get_random_key()
+        
+    log.warning(f"DEBUG | OPS | Opensubtitles SearchSubtitles OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
+    
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Api-Key": OS_API_KEY_VALUE
+    }
 
-  def download(self, ID, dest):
-     try:
-       import zlib, base64
-       down_id=[ID,]
-       result = self.server.DownloadSubtitles(self.osdb_token, down_id)
-       if result["data"]:
-         local_file = open(dest, "w" + "b")
-         d = zlib.decompressobj(16+zlib.MAX_WBITS)
-         data = d.decompress(base64.b64decode(result["data"][0]["data"]))
-         local_file.write(data)
-         local_file.close()
-         return True
-       return False
-     except Exception as e:
-       log.warning(f'DEBUG | OPS | XMLRPC | Exception: {e}')
-       return False
+    # Send the first request ONLY to get total_pages count.
+    log.warning("DEBUG | OPS | Opensubtitles SearchSubtitles querystring: " + repr(querystring))
+    
+    for attempt_number in range(REQUEST_MAX_RETRIES_NUMBER):
+        try:
+            response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
+            response_json = response.json()
+
+            # Total subtitles found count.
+            total_subs_count = response_json['total_count']
+            # Increase total_pages by 1 (OpenSubtitles API splits the results as 50 page (not 60 as written in JSON response!)
+            # There is extra page with results.
+            total_pages = response_json['total_pages'] + 1 if total_subs_count > 50 else response_json['total_pages']
+            log.warning(f"DEBUG | OPS | Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
+            
+            search_data = []
+            # Loop through the pages and save all results in search_data
+            for _page in range(1, total_pages + 1):
+                querystring['page'] = _page
+                response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+                response_json = response.json()
+                search_data.extend(response_json['data'])
+                xbmc.sleep(150)
+
+            return search_data
+
+        except requests.exceptions.ConnectionError as ce:
+            log.warning('DEBUG | OPS | OpenSubtitles SearchSubtitles connection error: ' + repr(ce))
+            if attempt_number < REQUEST_MAX_RETRIES_NUMBER - 1:  # Retry if attempts are left
+                log.warning(f"DEBUG | OPS | OpenSubtitles SearchSubtitles | Retrying... Attempt {attempt_number + 2} of {REQUEST_MAX_RETRIES_NUMBER}")
+                continue
+            else:
+                return [] # Exit the loop if all retries failed
+        except Exception as e:
+            log.warning('DEBUG | OPS | OpenSubtitles SearchSubtitles error: ' + repr(e))
+            return []
        
 def get_subs(item):
     global global_var
-    log.warning('Searching Opensubtitles')
-    search_data = []
-
-   
-      
-    search_data = OSDBServer().searchsubtitles(item)
-    log.warning('search_data:')
-    log.warning(search_data)
-   
-    subtitle_list=[]
+    log.warning('DEBUG | OPS | Searching Opensubtitles')
+    subtitle_list = []
     
+    search_data = searchsubtitles(item)
+    
+    if search_data is not None:
 
-    if search_data != None:
-       
-        #search_data.sort(key=lambda x: [not x['MatchedBy'] == 'moviehash',
-        #                 not os.path.splitext(x['SubFileName'])[0] == os.path.splitext(os.path.basename(unquote(item['file_original_path'])))[0],
-        #                 not (item["OriginalTitle"]).lower() in x['SubFileName'].replace('.',' ').lower(),
-        #                 not x['LanguageName'] == 'Undetermined'])
-        x=1
         url_list=[]
-        for item_data in search_data:
-          
+        for search_item in search_data:
+        
+            attributes = search_item.get('attributes', {})
+            SubRating = attributes.get("ratings", '0')
+            hearing_impaired = "true" if attributes.get("hearing_impaired", False) else "false"
+            
+            LanguageName = attributes.get("language")
+            if LanguageName is None:
+                # Skip this iteration of the loop if LanguageName is None
+                continue
 
+            # Attempt language conversion; if it fails, assign the original LanguageName
+            xbmcLanguageName = xbmc.convertLanguage(LanguageName, xbmc.ENGLISH_NAME) or LanguageName
+            
+            try:
+                if attributes['files']:
+                    # Attempt to access 'file_name' and 'file_id' if 'files' exist and have elements
+                    SubFileName = attributes['files'][0]['file_name']  # Get 'file_name'
+                    file_id = str(attributes['files'][0]['file_id'])  # Get 'file_id' and convert to string
+                else:
+                    # If 'files' or its elements are missing or empty, proceed to the next search_item
+                    continue
+            
+            except:
+                # Handle cases where 'file_name' or 'file_id' are missing or incorrectly structured
+                # Go to the next search_item
+                continue
 
-          ## hack to work around issue where Brazilian is not found as language in XBMC
-
-          try:
-           item['season']=int(item['season'])
-           item['episode']=int(item['episode'])
-           item_data['SeriesSeason']=int(item_data['SeriesSeason'])
-           item_data['SeriesEpisode']=int(item_data['SeriesEpisode'])
-          except:
-             pass
-          if ((item['season'] == item_data['SeriesSeason'] and
-              item['episode'] == item_data['SeriesEpisode']) or
-              (item['season'] == 0 and item['episode'] == 0) ## for file search, season and episode == ""
-             ):
+            # Define characters that might break the filename (It caused writing problem to MyTmp dir)
+            characters_to_remove = '\\/:*?"<>|'
+            # Remove characters that might cause issues in the filename
+            SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
+        
+            # Remove "תרגום אולפנים"
+            SubFileName = SubFileName.replace("תרגום אולפנים", "").strip()
+            
             download_data={}
-            download_data['link']=item_data["ZipDownloadLink"]
-            download_data['id']=item_data["IDSubtitleFile"]
-            download_data['format']=item_data["SubFormat"]
-            download_data['filename']=item_data["SubFileName"]
+            download_data['filename']=SubFileName
+            download_data['id']=file_id
+            download_data['format']="srt"
             
             url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=opensubtitles" % (MyScriptID,
-                                                                              
-                                                                              que(item_data["SubFileName"]),
-                                                                              item_data["LanguageName"],
-                                                                              que(json.dumps(download_data))
-                                                                              )
+                                                                                                que(SubFileName),
+                                                                                                xbmcLanguageName,
+                                                                                                que(json.dumps(download_data))
+                                                                                                )
 
             json_data={'url':url,
-                     'label':item_data["LanguageName"],
-                     'label2':site_id+' '+item_data["SubFileName"],
-                     'iconImage':str(int(round(float(item_data["SubRating"])/2))),
-                     'thumbnailImage':item_data["ISO639"],
-                     'hearing_imp':("false", "true")[int(item_data["SubHearingImpaired"]) != 0],
-                     'site_id':site_id,
-                     'sub_color':sub_color,
-                     'filename':item_data["SubFileName"],
-                     'sync': ("false", "true")[str(item_data["MatchedBy"]) == "moviehash"]}
+                    'label':xbmcLanguageName,
+                    'label2':site_id+' '+SubFileName,
+                    'iconImage':str(int(round(float(SubRating)/2))),
+                    'thumbnailImage':LanguageName,
+                    'hearing_imp':hearing_impaired,
+                    'site_id':site_id,
+                    'sub_color':sub_color,
+                    'filename':SubFileName,
+                    'sync': "false"} # TODO: Implement movie hash check (API returns 'moviehash_match' param)
 
             
             if url not in url_list:
@@ -295,46 +266,236 @@ def get_subs(item):
                 url_list.append(url)
                 subtitle_list.append(json_data)
                 global_var=subtitle_list
-              
-            x=x+1
-            
+
+
 def download(download_data,MySubFolder):
+
+    # New OpenSubtitles.com API Download docs:
+    # https://opensubtitles.stoplight.io/docs/opensubtitles-api/6be7f6ae2d918-download
     
     try:
         shutil.rmtree(MyTmp)
     except: pass
     xbmcvfs.mkdirs(MyTmp)
-    id=download_data['id']
+    file_id=download_data['id']
     format=download_data['format']
-    url=download_data['link']
     filename=download_data['filename']
- 
-
-    exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass" ]
     
-    # subFile = os.path.join(MyTmp, "%s.%s" %(str(uuid.uuid4()), format))
     subFile = os.path.join(MyTmp, "%s.%s" %(str(filename), format))
-    try:
-      result =OSDBServer().download(id, subFile)
-      log.warning(f"DEBUG | OPS | XMLRPC | id: {id} | subFile: {subFile} | result: {result}")
-    except Exception as e:
-      log.warning("failed to connect to service for subtitle download")
-      log.warning(str(e))
-      
-    log.warning(result)
-    if not result:
+    log.warning(f'DEBUG | OPS | Desired sub file_id: {file_id} | subFile: {subFile}')
+    
+    # Subtitle File ID
+    payload = {"file_id": int(file_id), "sub_format": "srt"}
 
-        subFile = os.path.join( MyTmp, "OpenSubtitles.zip")
-        log.warning(f"DEBUG | OPS | HTTP | url: {url}")
-        f = urlopen(url)
-        log.warning(url)
-        with open(subFile, "wb") as zip_subFile:
-          zip_subFile.write(f.read())
-        zip_subFile.close()
-        log.warning(subFile)
-    sub_file=extract(subFile,MySubFolder)
-    return sub_file
+    response = None
+    success = False
+    
+    # Get subtitle download link
+    for api_key_attempt_number in range(1, REQUEST_MAX_RETRIES_NUMBER + 1):
+    
+        # Determine which API key to use for Download
+        if USE_OS_USER_API_KEY:
+            OS_API_KEY_NAME = "User_Setting_API_Key"
+            OS_API_KEY_VALUE = OS_USER_API_KEY_VALUE  # Use OS_USER_API_KEY_VALUE from settings
+        else:
+            OS_API_KEY_NAME,OS_API_KEY_VALUE = get_random_key()
+            
+        log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | api_key_attempt_number={api_key_attempt_number} | OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
+
+        headers = {
+            "User-Agent": USER_AGENT,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Api-Key": OS_API_KEY_VALUE
+            # "Authorization": f"Bearer {osdb_token}" # Download works also only with API key, without username/password token authentication, although the API docs. Strange..
+        }
+        
+        retry_number = 1
+        while retry_number <= REQUEST_MAX_RETRIES_NUMBER:
+            try:
+                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | Get sub URL download |  Starting retry_number {retry_number}.")
+                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles payload: {repr(payload)}")
+                response = requests.post(OPS_API_DOWNLOAD_URL, json=payload, headers=headers, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles response.status_code: {repr(response.status_code)}")
+                
+                if response.status_code == 503 or response.status_code == 406:
+                    break # 503 - Wrong API Key | 406 - max usage quota reached for the API key.
+                response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
+                
+                response_json = response.json()
+                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles result: {repr(response_json)}")
+                subtitle_download_url = response_json['link']
+                success = True # Set flag to break both loops
+                break
+
+            except requests.RequestException as req_err:
+                if isinstance(req_err, (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError)):
+                    log.warning(f"DEBUG | OPS | OpenSubtitles DownloadSubtitles RequestException error: {repr(req_err)}")
+                    if response:
+                        log.warning(f"DEBUG | OPS | OpenSubtitles DownloadSubtitles response.status_code: {response.status_code}")
+                    retry_number += 1
+                    if retry_number > REQUEST_MAX_RETRIES_NUMBER:
+                        raise RuntimeError("Reached maximum retry_number for ReadTimeout or ConnectionError error")
+                    xbmc.sleep(REQUEST_RETRY_DELAY_IN_MS)
+                else:
+                    log.warning('DEBUG | OPS | OpenSubtitles DownloadSubtitles error: ' + repr(req_err))
+                    raise RuntimeError("OpenSubtitles DownloadSubtitles error")
+                    
+        if success:
+            break  # Break the for loop if the flag is set
+
+    if not success:
+        log.warning("DEBUG | OPS | OpenSubtitles DownloadSubtitles error | No success in getting sub URL download from any API key")
+        raise RuntimeError(f"OpenSubtitles DownloadSubtitles error | Looped through {REQUEST_MAX_RETRIES_NUMBER} API keys unsucessfully.")
+            
+    # Download subtitle file
+    for attempt_number in range(1, REQUEST_MAX_RETRIES_NUMBER + 1):
+        log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | Download sub file | Starting attempt_number {attempt_number}.")
+        try:
+            sub_download_response = requests.get(subtitle_download_url)
+            log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
+            sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
+
+            with open(subFile, 'wb') as temp_subFile:
+                temp_subFile.write(sub_download_response.content)
+            sub_file=extract(subFile,MySubFolder)
+            return sub_file
+
+        except requests.HTTPError as http_err:
+            if attempt_number < REQUEST_MAX_RETRIES_NUMBER:
+                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles error: {repr(http_err)} on attempt_number {attempt_number}. Retrying in {REQUEST_RETRY_DELAY_IN_MS} seconds...")
+                xbmc.sleep(REQUEST_RETRY_DELAY_IN_MS)
+                continue  # Retry the request
+            else:
+                log.warning('DEBUG | OPS | OpenSubtitles DownloadSubtitles error: ' + repr(http_err))
+                raise RuntimeError("OpenSubtitles DownloadSubtitles HTTPError reached maximum tries.")
+
+def c_get_os_api_keys():    
+    OS_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_OpenSubtitles/darksubs_opensubtitles_api.json').json()
+    return OS_API_KEYS
+    
+def get_random_key():
+    OS_API_KEYS=cache.get(c_get_os_api_keys, 24,table='subs')
+    random_key_index = random.randint(0, len(OS_API_KEYS) - 1)
+    OS_API_KEY_NAME, OS_API_KEY_VALUE =  OS_API_KEYS[random_key_index]['OS_API_KEY_NAME'],OS_API_KEYS[random_key_index]['OS_API_KEY_VALUE']
+    return OS_API_KEY_NAME, OS_API_KEY_VALUE
+
+
+
+
+####################################################################
+####################################################################
+######################### UNUSED ###################################
+
+
+# Create an instance of OSDBServer
+# osdb_server = OSDBServer()
+
+# Retrieve the osdb_token value using the get_osdb_token() method
+# osdb_token = osdb_server.get_osdb_token()
+###########################################
+
+# The class is currently UNUSED - was able to Search+Download with API keys authentication ONLY, without username/password authentication.
+# class OSDBServer:
+    # def __init__( self, *args, **kwargs ):
+    
+        # self.osdb_token = None
+        # self.login_to_osdb()
         
 
+    # def login_to_osdb(self):
+        # try:
+            # usernameSettings = Addon.getSetting("OSuser")
+            # passSettings = Addon.getSetting("OSpass")
+            # username = usernameSettings if len(usernameSettings) > 0 else DEFAULT_USERNAME
+            # password = passSettings if len(passSettings) > 0 else DEFAULT_PASSWORD
+            # username = DEFAULT_USERNAME
+            # password = DEFAULT_PASSWORD
 
+            # payload = {
+                # "username": username,
+                # "password": password
+            # }
+
+            # Determine which API key to use
+            # if USE_OS_USER_API_KEY:
+                # OS_API_KEY_NAME = "User_Setting_API_Key"
+                # OS_API_KEY_VALUE = OS_USER_API_KEY_VALUE  # Use OS_USER_API_KEY_VALUE from settings
+            # else:
+                # OS_API_KEY_NAME,OS_API_KEY_VALUE = get_random_key()
             
+            # headers = {
+                # "Content-Type": "application/json",
+                # "Accept": "application/json",
+                # "User-Agent": USER_AGENT,
+                # "Api-Key": OS_API_KEY_VALUE
+            # }
+
+            # response = requests.post(OPS_API_LOGIN_URL, json=payload, headers=headers, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            # response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
+
+            # if response.status_code == 200:
+                # response_json = response.json()
+
+                # log.warning('DEBUG | OPS | OpenSubtitles Login: Succeeded')
+                # log.warning('DEBUG | OPS | OpenSubtitles Login: response json - ' + repr(response_json))
+
+                # self.osdb_token = response_json.get('token')
+            # else:
+                # log.warning('DEBUG | OPS | OpenSubtitles Login: Failed - status code: ' + repr(response.status_code))
+                # error_message = 'Failed with status code: ' + str(response.status_code)
+                # notify_for_api_error(error_message, response_json)
+
+        # except Exception as e:
+            # log.warning('DEBUG | OPS | OpenSubtitles Login error: ' + repr(e))
+
+        
+    # def get_osdb_token(self):
+        # return self.osdb_token
+
+
+# def notify_for_api_error(error_message, response_json=None):
+    # if response_json:
+        # message = ("OpenSubtitles Error: " + repr(response_json.get('message', ''))).replace(",", " - ").replace("'", "")
+    # else:
+        # message = "OpenSubtitles Error: " + error_message
+        
+    # log.warning(f"DEBUG | OPS notify_for_api_error message: {message}")
+    # notify(message)
+        
+
+# def hashFile(self): 
+
+    # longlongformat = '<q'  # little-endian long long
+    # bytesize = int(struct.calcsize(longlongformat) )
+        
+    # f = xbmcvfs.File( xbmc.Player().getPlayingFile())
+        
+    # filesize = f.size()
+    # hash = filesize 
+        
+    # if filesize < 65536 * 2: 
+        # return "SizeError" 
+     
+    # for x in range(int(65536/bytesize)): 
+        # buffer = f.read(bytesize)
+        # try: buffer = f.readBytes(bytesize)
+        # except: buffer = f.read(bytesize)
+        
+        # (l_value,)= struct.unpack(longlongformat, buffer)  
+        # hash += l_value 
+        # hash = hash & 0xFFFFFFFFFFFFFFFF #to remain as 64bit number  
+             
+
+    # f.seek(max(0,filesize-65536),0) 
+    # for x in range(int(65536/bytesize)): 
+        # try: buffer = f.readBytes(bytesize)
+        # except: buffer = f.read(bytesize)
+        # (l_value,)= struct.unpack(longlongformat, buffer)  
+        # hash += l_value 
+        # hash = hash & 0xFFFFFFFFFFFFFFFF 
+     
+    # f.close() 
+    # returnedhash =  "%016x" % hash 
+    # return returnedhash
+    

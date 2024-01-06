@@ -109,7 +109,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             
             
             if fault_sub:
-                self.label_info.setLabel('[B]תקלה בהורדה בחר כתובית אחרת[/B]' + ' | ' + self.video_file_name_label)
+                self.label_info.setLabel('[B]תקלה בהורדה נסה שנית[/B]' + ' | ' + self.video_file_name_label)
             else:
                 if not hebrewEmbedded:
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)
