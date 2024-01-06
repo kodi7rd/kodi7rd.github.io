@@ -229,7 +229,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
         results_language_text += (
             "[COLOR deepskyblue]עברית[/COLOR]"
             if HEBREW_SUBTITLES_FOUND
-            else "[COLOR deepskyblue]אנגלית + תרגום מכונה[/COLOR] [COLOR red](אין חיצוניות בעברית)[/COLOR]"
+            else "[COLOR deepskyblue]אנגלית[/COLOR] [COLOR red](אין חיצוניות בעברית)[/COLOR]"
         )
 
     total_subtitles_found_text = (
