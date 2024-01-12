@@ -20,7 +20,7 @@ __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_subscene'))
 que=urllib.parse.quote_plus
 site_id='[SS]'
-sub_color='khaki'
+sub_color='deepskyblue'
 main_url = "https://subscene.com"
 class TLSAdapter(requests.adapters.HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):

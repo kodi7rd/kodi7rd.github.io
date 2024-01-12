@@ -78,20 +78,20 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
             listitem.setProperty( "hearing_imp",items[7] )
             all_d.append((items[4],listitem,False))
             #xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=str(items['url']), listitem=listitem, isFolder=False)
-    listitem = xbmcgui.ListItem(label="פתח הגדרות הרחבה",label2='[COLOR plum][I]'+ "פתח הגדרות הרחבה"+'[/I][/COLOR]')
+    listitem = xbmcgui.ListItem(label="הגדרות DarkSubs",label2='[COLOR plum][I]'+ "הגדרות DarkSubs"+'[/I][/COLOR]')
     url = "plugin://%s/?action=open_settings" % (MyScriptID)
     all_d.append((url,listitem,True))
     
-    listitem = xbmcgui.ListItem(label="קאש",label2='[COLOR khaki][I]'+"ניקוי קאש כתוביות"+'[/I][/COLOR]')
-    url = "plugin://%s/?action=clean" % (MyScriptID)
+    listitem = xbmcgui.ListItem(label="קאש",label2='[COLOR khaki][I]'+"ניקוי קאש DarkSubs"+'[/I][/COLOR]')
+    url = "plugin://%s/?action=clean_all_cache" % (MyScriptID)
+    all_d.append((url,listitem,True))
+    
+    listitem = xbmcgui.ListItem(label="חלון כתוביות DarkSubs",label2='[COLOR lightblue][I]'+ "חלון כתוביות"+'[/I][/COLOR]')
+    url = "plugin://%s/?action=sub_window"% (MyScriptID)
     all_d.append((url,listitem,True))
 
     listitem = xbmcgui.ListItem(label="בטל כתוביות",label2='[COLOR seagreen][I]'+ "בטל כתוביות"+'[/I][/COLOR]')
     url = "plugin://%s/?action=disable_subs"% (MyScriptID)
-    all_d.append((url,listitem,True))
-    
-    listitem = xbmcgui.ListItem(label="פתח חלון כתוביות",label2='[COLOR lightblue][I]'+ "חלון כתוביות"+'[/I][/COLOR]')
-    url = "plugin://%s/?action=sub_window"% (MyScriptID)
     all_d.append((url,listitem,True))
     
     

@@ -408,11 +408,27 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                                   "hearing_imp":items[7]})
                                        
                 
-    sub_final_data.append({'label':"פתח הגדרות הרחבה",
-                          'label2':'[COLOR plum][I]'+ "פתח הגדרות הרחבה"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"הגדרות DarkSubs",
+                          'label2':'[COLOR plum][I]'+ "הגדרות DarkSubs"+'[/I][/COLOR]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=open_settings" % (MyScriptID),
+                          "sync": "",
+                          "hearing_imp":""})
+                          
+    sub_final_data.append({'label':"קאש",
+                          'label2':'[COLOR khaki][I]'+"ניקוי קאש DarkSubs"+'[/I][/COLOR]',  
+                          'iconImage':"",
+                          'thumbnailImage':"",
+                          'url':"plugin://%s/?action=clean_all_cache" % (MyScriptID),
+                          "sync": "",
+                          "hearing_imp":""})
+                          
+    sub_final_data.append({'label':"חלון כתוביות DarkSubs",
+                          'label2':'[COLOR lightblue][I]'+ "חלון כתוביות DarkSubs"+'[/I][/COLOR]', 
+                          'iconImage':"",
+                          'thumbnailImage':"",
+                          'url': "plugin://%s/?action=sub_window"% (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
                           
@@ -421,30 +437,6 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=disable_subs"% (MyScriptID),
-                          "sync": "",
-                          "hearing_imp":""})
-                          
-    sub_final_data.append({'label':"פתח חלון כתוביות",
-                          'label2':'[COLOR lightblue][I]'+ "חלון כתוביות"+'[/I][/COLOR]', 
-                          'iconImage':"",
-                          'thumbnailImage':"",
-                          'url': "plugin://%s/?action=sub_window"% (MyScriptID),
-                          "sync": "",
-                          "hearing_imp":""})
-    
-    sub_final_data.append({'label':"קאש",
-                          'label2':'[COLOR khaki][I]'+"ניקוי קאש כתוביות"+'[/I][/COLOR]',
-                          'iconImage':"",
-                          'thumbnailImage':"",
-                          'url':"plugin://%s/?action=clean" % (MyScriptID),
-                          "sync": "",
-                          "hearing_imp":""})
-                          
-    sub_final_data.append({'label':"קאש",
-                          'label2':'[COLOR khaki][I]'+"ניקוי קאש תרגום מכונה"+'[/I][/COLOR]',  
-                          'iconImage':"",
-                          'thumbnailImage':"",
-                          'url':"plugin://%s/?action=clean_folders" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
     return sub_final_data
@@ -583,6 +575,9 @@ def sub_from_main(arg):
     elif action=='clean':
         cache.clear(['subs'])
         notify( "קאש כתוביות נוקה" )
+        return_result=json.dumps(action)
+    elif action=='clean_all_cache':
+        xbmc.executebuiltin("RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)")
         return_result=json.dumps(action)
     elif action=='disable_subs':
         xbmc.Player().setSubtitles("")

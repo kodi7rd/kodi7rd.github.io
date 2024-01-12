@@ -16,7 +16,7 @@ __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_ktuvit'))
 
 site_id='[Kt]'
-sub_color='limegreen'
+sub_color='FF3CFA38'
 
 def extract_imdb_id_from_itt(itt):
 

@@ -23,7 +23,7 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_wizdom'))
 
 
 site_id='[Wiz]'
-sub_color='white'
+sub_color='yellow'
 
 def get_subs(item):
     global global_var

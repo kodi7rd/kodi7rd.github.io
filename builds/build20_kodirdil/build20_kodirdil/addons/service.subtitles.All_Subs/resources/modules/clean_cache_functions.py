@@ -1,5 +1,5 @@
 # Imports
-import xbmcgui,xbmcvfs
+import xbmcgui,xbmcvfs, xbmc
 import os,shutil,sys
 try:
     from sqlite3 import dbapi2 as database
