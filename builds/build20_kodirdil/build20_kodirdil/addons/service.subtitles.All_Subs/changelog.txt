@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.0.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.0.8[/B][/COLOR]
+* Add "תיקון סימני פיסוק עבור תרגום נוכחי" button in Kodi's subtitle window.
+[COLOR yellow][B]v4.0.7[/B][/COLOR]
 * Reorganize DarkSubs buttons in Kodi's subtitles window.
 * Change subtitles websites colors.
 [COLOR yellow][B]v4.0.6[/B][/COLOR]

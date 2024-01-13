@@ -34,6 +34,103 @@ pre_video_id=""
 trigger=False
 que=urllib.parse.quote_plus
 
+def reverse_sub_punctuation_text(sub_file):
+
+    try:
+        # Open the file as binary data
+        import chardet
+        with open(sub_file, 'rb') as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+
+        encoding=chardet.detect(text)['encoding']
+        log.warning(f"PUNCT | encoding={encoding}")
+        with open(sub_file, 'r', encoding=encoding) as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+        
+        all_ch=['?','.','!',',']
+        all_l=[]
+
+        for line in text.splitlines():
+            for ch in all_ch:
+                found=False
+                if line.endswith(ch):
+                   
+                    line=ch+line[:-1]
+                    all_l.append(line)
+                    found=True
+                    break
+            if not found:
+                all_l.append(line)
+        text='\n'.join(all_l)
+        
+        punct_sub_file = f"{sub_file}_punctuation_fix"
+        with open(punct_sub_file, mode="w", encoding="utf8") as f:
+                 f.write(text)
+
+        return punct_sub_file
+    except:
+        return None
+        pass
+    
+def reverse_sub_punctuation():
+    video_data=get_video_data()
+    f_result=cache.get(get_subtitles,24,video_data,table='subs')
+    f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
+    # Avoid f_result=None error if no subs found.
+    f_result = [] if not f_result else f_result
+    
+    f_result=add_embbded_if_exists(f_result)
+    # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
+    last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+    log.warning(f"PUNCT | last_sub_name_in_cache={last_sub_name_in_cache}")
+    log.warning(f"PUNCT | last_sub_language_in_cache={last_sub_language_in_cache}")
+    log.warning(f"PUNCT | all_subs={all_subs}")
+                        
+    last_sub_in_cache_is_empty = True if last_sub_name_in_cache=='' else False
+    last_sub_in_cache_is_heb_embedded = True if 'HebrewSubEmbedded' in last_sub_name_in_cache else False
+    
+    # Return if not sub in cache
+    if last_sub_in_cache_is_empty:
+        notify( "אין תרגום בקאש לתיקון" )
+        return
+    # Return last sub in cache is Hebrew embedded
+    elif last_sub_in_cache_is_heb_embedded:
+        notify ( "לא ניתן לערוך תרגום מובנה" )
+        return
+        
+    notify( "מתקן סימני פיסוק..." )
+    
+    selected_sub=None
+    # Changing subtitle to place to subtitles from database.db cache db
+    for f_sub in f_result:
+        if (last_sub_name_in_cache==f_sub[8]) and (last_sub_language_in_cache==f_sub[0]):
+            selected_sub=f_sub
+    if not selected_sub:
+        notify ( "התרחשה שגיאה" )
+        return
+    log.warning(f"PUNCT | selected_sub AFTER checking last sub in cache: {selected_sub}")
+
+
+    params=get_params(selected_sub[4],"")
+    download_data=unque(params["download_data"])
+    download_data=json.loads(download_data)
+    source=(params["source"])
+    language=(params["language"])
+    filename=unque(params["filename"])
+            
+    sub_file=download_sub(source,download_data,MySubFolder,language,filename)
+    log.warning(f"PUNCT | Last sub in cache BEFORE punct fix: {str(sub_file)}")
+    punct_sub_file = reverse_sub_punctuation_text(sub_file)
+    if not punct_sub_file:
+        notify ( "התרחשה שגיאה" )
+        return
+        
+    log.warning(f"PUNCT | Last sub in cache AFTER punct fix: {str(punct_sub_file)}")
+    xbmc.sleep(200)
+    xbmc.Player().setSubtitles(punct_sub_file)
+
 def wait_for_video():
 
     log.warning('Waiting for video')
@@ -408,8 +505,8 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                                   "hearing_imp":items[7]})
                                        
                 
-    sub_final_data.append({'label':"הגדרות DarkSubs",
-                          'label2':'[COLOR plum][I]'+ "הגדרות DarkSubs"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"הגדרות",
+                          'label2':'[B][COLOR plum][I]'+ "DarkSubs - הגדרות"+'[/I][/COLOR][/B]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=open_settings" % (MyScriptID),
@@ -417,23 +514,32 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                           "hearing_imp":""})
                           
     sub_final_data.append({'label':"קאש",
-                          'label2':'[COLOR khaki][I]'+"ניקוי קאש DarkSubs"+'[/I][/COLOR]',  
+                          'label2':'[B][COLOR khaki][I]'+"DarkSubs - ניקוי קאש"+'[/I][/COLOR][/B]',  
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=clean_all_cache" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
+                                       
+                
+    sub_final_data.append({'label':"פיסוק",
+                          'label2':'[B][COLOR cyan][I]'+ "DarkSubs - תיקון סימני פיסוק עבור תרגום נוכחי"+'[/I][/COLOR][/B]', 
+                          'iconImage':"",
+                          'thumbnailImage':"",
+                          'url':"plugin://%s/?action=reverse_sub_punctuation" % (MyScriptID),
+                          "sync": "",
+                          "hearing_imp":""})
                           
-    sub_final_data.append({'label':"חלון כתוביות DarkSubs",
-                          'label2':'[COLOR lightblue][I]'+ "חלון כתוביות DarkSubs"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"חלון",
+                          'label2':'[B][COLOR lightblue][I]'+ "DarkSubs - חלון כתוביות"+'[/I][/COLOR][/B]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url': "plugin://%s/?action=sub_window"% (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
                           
-    sub_final_data.append({'label':"בטל כתוביות",
-                          'label2':'[COLOR seagreen][I]'+ "בטל כתוביות"+'[/I][/COLOR]', 
+    sub_final_data.append({'label':"ביטול",
+                          'label2':'[B][COLOR seagreen][I]'+ "DarkSubs - בטל כתוביות"+'[/I][/COLOR][/B]', 
                           'iconImage':"",
                           'thumbnailImage':"",
                           'url':"plugin://%s/?action=disable_subs"% (MyScriptID),
@@ -571,6 +677,9 @@ def sub_from_main(arg):
         
     elif action=='open_settings':
         xbmcaddon.Addon().openSettings()
+        return_result=json.dumps(action)
+    elif action=='reverse_sub_punctuation':
+        reverse_sub_punctuation()
         return_result=json.dumps(action)
     elif action=='clean':
         cache.clear(['subs'])
