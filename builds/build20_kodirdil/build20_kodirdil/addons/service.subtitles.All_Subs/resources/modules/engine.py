@@ -558,7 +558,53 @@ def select_key(count_key):
     
     return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
 
-    
+  
+def reverse_sub_punctuation(f_all):
+
+    all_ch=['?','.','!',',']
+    all_l=[]
+
+    for line in f_all.splitlines():
+
+        line_contains_html_i_tag = False
+        # Check if the line contains html <i> tags
+        if '<i>' in line and '</i>' in line:
+            line_contains_html_i_tag = True
+            # Find the start and end positions of the <i> tag
+            start_index = line.find('<i>') + len('<i>')
+            end_index = line.find('</i>')
+            # Extract the text inside the <i> tag
+            line_without_html_i_tag = line[start_index:end_index]
+        
+        if line_contains_html_i_tag:
+            for ch in all_ch:
+                found=False
+                if line_without_html_i_tag.endswith(ch):
+                   
+                    line_without_html_i_tag=ch+line_without_html_i_tag[:-1]
+                    # Create the original line by combining the modified text (line_without_html_i_tag) with the <i> tags
+                    line = line[:start_index] + line_without_html_i_tag + line[end_index:]
+                    all_l.append(line)
+                    found=True
+                    break
+            if not found:
+                all_l.append(line)
+        
+        else:
+            for ch in all_ch:
+                found=False
+                if line.endswith(ch):
+                   
+                    line=ch+line[:-1]
+                    all_l.append(line)
+                    found=True
+                    break
+            if not found:
+                all_l.append(line)
+    f_all='\n'.join(all_l)
+    return f_all
+
+  
 def translate_subs(input_file,output_file):
     global trans_result
     trans_result=[]
@@ -810,21 +856,7 @@ def translate_subs(input_file,output_file):
         log.warning('Error in sub:'+str(e))
         f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
     
-    all_ch=['?','.','!',',']
-    all_l=[]
-    
-    for line in f_all.splitlines():
-        for ch in all_ch:
-            found=False
-            if line.endswith(ch):
-               
-                line=ch+line[:-1]
-                all_l.append(line)
-                found=True
-                break
-        if not found:
-            all_l.append(line)
-    f_all='\n'.join(all_l)
+    f_all = reverse_sub_punctuation(f_all)
     '''
     for line in all_text:
        if '[' and ']' not in line:
