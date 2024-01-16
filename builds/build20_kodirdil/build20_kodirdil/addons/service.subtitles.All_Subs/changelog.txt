@@ -1,7 +1,7 @@
 ﻿[COLOR yellow][B]v4.0.9[/B][/COLOR]
 * BUG FIX: Handle correct Hebrew punctuation fixing when subtitle contains html <i> tags.
 [COLOR yellow][B]v4.0.8[/B][/COLOR]
-* Add "תיקון סימני פיסוק עבור תרגום נוכחי" button in Kodi's subtitle window.
+* Add "תיקון סימני פיסוק עבור תרגום נוכחי" button in Kodi's subtitles window.
 [COLOR yellow][B]v4.0.7[/B][/COLOR]
 * Reorganize DarkSubs buttons in Kodi's subtitles window.
 * Change subtitles websites colors.
