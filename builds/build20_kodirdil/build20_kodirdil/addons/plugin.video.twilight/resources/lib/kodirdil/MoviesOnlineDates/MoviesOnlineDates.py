@@ -83,6 +83,9 @@ def reformat_message_content(message_content):
             message_content = '\n'.join(lines)
         except:
             pass
+        
+    # Remove any YouTube trailer link
+    message_content = re.sub(r'\[טריילר\]\(https://(?:www\.youtube\.com/watch\?v=|youtu\.be/)([^?)]+)[^)]*\)', '', message_content)
             
     message_content = message_content.rstrip()
     

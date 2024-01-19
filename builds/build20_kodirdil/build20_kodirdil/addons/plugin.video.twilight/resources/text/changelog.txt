@@ -1,5 +1,10 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.38[/B][/COLOR]
+- Remove YouTube trailer link from "מתי יגיע לרשת?" messages.
+- Tikipeter's version 3.2.19:
+- Quick fix as "FirstRunActions" was running twice on startup.
+
 [COLOR dodgerblue][B]Version 3.2.37[/B][/COLOR]
 - Tikipeter's version 3.2.18:
 - Quick fix for incorrect rounding down of small TV Show progress floats.
