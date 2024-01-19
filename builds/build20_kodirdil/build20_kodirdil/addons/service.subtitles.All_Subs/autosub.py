@@ -1035,7 +1035,7 @@ class KodiMonitor(xbmc.Monitor):
                         
                         file_org=video_data['file_original_path']
                         video_data.pop('file_original_path')
-                        log.warning(video_data)
+                        #log.warning(video_data)
                         f_result=cache.get(get_subtitles,24,video_data,table='subs')
                         video_data['file_original_path']=file_org
                         video_data['Tagline']=tag_original

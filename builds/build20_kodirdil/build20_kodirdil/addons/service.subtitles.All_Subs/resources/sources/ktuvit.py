@@ -108,7 +108,14 @@ def get_subs(item):
         response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=5).json()
      
         j_data=json.loads(response['d'])['Films']
+        
         f_id=''
+        if len(j_data)==0 and 'and' in s_title:
+            s_title=s_title.replace('and','&')
+            data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":%s}}'%(str(s_title),s_type,s_WithSubsOnly)
+        
+            response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=5).json()
+            j_data=json.loads(response['d'])['Films']
         
         for itt in j_data:
             
@@ -132,7 +139,7 @@ def get_subs(item):
         if f_id!='':
             url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
             
-        if item["TVshowtitle"]:
+        if media_type == 'tv':
             url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
