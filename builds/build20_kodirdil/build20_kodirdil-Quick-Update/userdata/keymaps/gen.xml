@@ -2,11 +2,11 @@
         <fullscreenvideo> <!-- Only on fullscreen video playback - stop video on short "back" press / go back on long "back" press-->
                 <remote>
                         <back>Stop</back>
-                        <back mod="longpress">Back</back>
+                        <back mod="longpress">ActivateWindow(Home)</back>
                 </remote>
                 <keyboard>
                         <key id="61448">Stop</key>
-                        <key id="61448" mod="longpress">Back</key>
+                        <key id="61448" mod="longpress">ActivateWindow(Home)</key>
                 </keyboard>
         </fullscreenvideo>
 </keymap>
