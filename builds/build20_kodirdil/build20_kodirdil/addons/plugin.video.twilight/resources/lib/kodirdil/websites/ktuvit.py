@@ -168,7 +168,17 @@ def ktuvit_search_request(title, media_type):
     kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | data: {data}")
     
     ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
-    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_response: {json.loads(ktuvit_search_response['d'])['Films']}")
+    ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
+    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_page_results: {ktuvit_search_page_results}")
+    
+    # Bug fix: "and/&" mismatch in Ktuvit and media metadata.
+    if len(ktuvit_search_page_results) == 0 and 'and' in title:
+        data["request"]["FilmName"] = title.replace('and','&')
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request ['and/&'] mismatch | data: {data}")
+        
+        ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
+        ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request ['and/&'] mismatch | ktuvit_search_page_results: {ktuvit_search_page_results}")
     
     return ktuvit_search_response
     
