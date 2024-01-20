@@ -33,75 +33,8 @@ video_id=""
 pre_video_id=""
 trigger=False
 que=urllib.parse.quote_plus
-
-def reverse_sub_punctuation_text(sub_file):
-
-    try:
-        # Open the file as binary data
-        import chardet
-        with open(sub_file, 'rb') as f:
-            # Join binary lines for specified number of lines
-            text = f.read()
-
-        encoding=chardet.detect(text)['encoding']
-        log.warning(f"PUNCT | encoding={encoding}")
-        with open(sub_file, 'r', encoding=encoding) as f:
-            # Join binary lines for specified number of lines
-            text = f.read()
-        
-        all_ch=['?','.','!',',']
-        all_l=[]
-
-        for line in text.splitlines():
-        
-            line_contains_html_i_tag = False
-            # Check if the line contains html <i> tags
-            if '<i>' in line and '</i>' in line:
-                line_contains_html_i_tag = True
-                # Find the start and end positions of the <i> tag
-                start_index = line.find('<i>') + len('<i>')
-                end_index = line.find('</i>')
-                # Extract the text inside the <i> tag
-                line_without_html_i_tag = line[start_index:end_index]
-            
-            if line_contains_html_i_tag:
-                for ch in all_ch:
-                    found=False
-                    if line_without_html_i_tag.endswith(ch):
-                       
-                        line_without_html_i_tag=ch+line_without_html_i_tag[:-1]
-                        # Create the original line by combining the modified text (line_without_html_i_tag) with the <i> tags
-                        line = line[:start_index] + line_without_html_i_tag + line[end_index:]
-                        all_l.append(line)
-                        found=True
-                        break
-                if not found:
-                    all_l.append(line)
-            
-            else:
-                for ch in all_ch:
-                    found=False
-                    if line.endswith(ch):
-                       
-                        line=ch+line[:-1]
-                        all_l.append(line)
-                        found=True
-                        break
-                if not found:
-                    all_l.append(line)
-                    
-        text='\n'.join(all_l)
-        
-        punct_sub_file = f"{sub_file}_punctuation_fix"
-        with open(punct_sub_file, mode="w", encoding="utf8") as f:
-                 f.write(text)
-
-        return punct_sub_file
-    except:
-        return None
-        pass
     
-def reverse_sub_punctuation():
+def manual_fix_sub_punctuation():
     video_data=get_video_data()
     f_result=cache.get(get_subtitles,24,video_data,table='subs')
     f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
@@ -149,7 +82,8 @@ def reverse_sub_punctuation():
             
     sub_file=download_sub(source,download_data,MySubFolder,language,filename)
     log.warning(f"PUNCT | Last sub in cache BEFORE punct fix: {str(sub_file)}")
-    punct_sub_file = reverse_sub_punctuation_text(sub_file)
+    from resources.modules.engine import fix_sub_punctuation_and_write
+    punct_sub_file = fix_sub_punctuation_and_write(sub_file, separate_punct_file=True)
     if not punct_sub_file:
         notify ( "התרחשה שגיאה" )
         return
@@ -553,7 +487,7 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                           'label2':'[B][COLOR cyan][I]'+ "DarkSubs - תיקון סימני פיסוק עבור תרגום נוכחי"+'[/I][/COLOR][/B]', 
                           'iconImage':"",
                           'thumbnailImage':"",
-                          'url':"plugin://%s/?action=reverse_sub_punctuation" % (MyScriptID),
+                          'url':"plugin://%s/?action=manual_fix_sub_punctuation" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
                           
@@ -705,8 +639,8 @@ def sub_from_main(arg):
     elif action=='open_settings':
         xbmcaddon.Addon().openSettings()
         return_result=json.dumps(action)
-    elif action=='reverse_sub_punctuation':
-        reverse_sub_punctuation()
+    elif action=='manual_fix_sub_punctuation':
+        manual_fix_sub_punctuation()
         return_result=json.dumps(action)
     elif action=='clean':
         cache.clear(['subs'])

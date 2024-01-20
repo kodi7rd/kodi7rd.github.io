@@ -559,8 +559,7 @@ def select_key(count_key):
     
     return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
 
-  
-def reverse_sub_punctuation(f_all):
+def fix_sub_punctuation_text(f_all):
 
     all_ch=['?','.','!',',']
     all_l=[]
@@ -604,6 +603,32 @@ def reverse_sub_punctuation(f_all):
                 all_l.append(line)
     f_all='\n'.join(all_l)
     return f_all
+
+def fix_sub_punctuation_and_write(sub_file, separate_punct_file=False):
+
+    try:
+        # Open the file as binary data
+        import chardet
+        with open(sub_file, 'rb') as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+
+        encoding=chardet.detect(text)['encoding']
+        log.warning(f"PUNCT | encoding={encoding}")
+        with open(sub_file, 'r', encoding=encoding) as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+        
+        text = fix_sub_punctuation_text(text)
+        
+        if separate_punct_file: sub_file = f"{sub_file}_punctuation_fix"
+        with open(sub_file, mode="w", encoding="utf8") as f:
+                 f.write(text)
+
+        return sub_file
+    except:
+        return None
+        pass
 
 def send_translate(items):
     from resources.modules import general
@@ -866,8 +891,10 @@ def translate_subs(input_file,output_file):
     except Exception as e:
         log.warning('Error in sub:'+str(e))
         f_all=f_sub_pre.replace('\r\r','\n').replace('\n\n','\n')
-    
-    f_all = reverse_sub_punctuation(f_all)
+   
+    # Auto punctuation fix for external translated English to Hebrew subtitles. 
+    if Addon.getSetting("auto_fix_sub_punctuation")=='true':
+        f_all = fix_sub_punctuation_text(f_all)
     '''
     for line in all_text:
        if '[' and ']' not in line:
@@ -933,11 +960,19 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         try:
             sub_file=impmodule.download(download_data,MySubFolder)
         except Exception as e:
-            log.warning(f"Exception downloading sub, configuring general.break_all=True... | Exception: {e}")
+            log.warning(f"Exception downloading sub, configuring general.break_all=True... | Exception: {str(e)}")
             general.break_all=True
             return 'FaultSubException'
         
-    if language!='Hebrew'  and Addon.getSetting("auto_translate")=='true':
+    # Auto punctuation fix for external Hebrew subtitles.
+    if language=='Hebrew' and Addon.getSetting("auto_fix_sub_punctuation")=='true':
+        try:
+            fix_sub_punctuation_and_write(sub_file)
+        except Exception as e:
+            log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
+            pass
+    
+    elif language!='Hebrew' and Addon.getSetting("auto_translate")=='true':
         
         f_count=0
         for filename_o in os.listdir(TransFolder):

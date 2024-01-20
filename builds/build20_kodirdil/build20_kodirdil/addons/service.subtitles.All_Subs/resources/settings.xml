@@ -34,9 +34,6 @@
 	
 	<category label="הגדרות כלליות">
 		
-		<setting label="Log DEBUG" type="lsep"/>
-		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
-		
 		<setting label="הורדת כתוביות אוטומטית (יש להפעיל מחדש את קודי לאחר שינוי!)" type="lsep"/>
 		<setting id="autosub" label="אפשר הורדה אוטומטית של כתוביות מהרשת" type="bool" default="true" />
 		<setting id="force" label="הורד למרות שיש כתוביות" type="bool" default="true" />
@@ -44,7 +41,9 @@
 		
 		<setting label="ניתן לכבות אם אתה נתקל הרבה בתרגום מובנה עם פיסוק הפוך:" type="lsep"/>
 		<setting id="auto_place_hebrew_embedded_subs" label="אפשר הורדה אוטומטית של תרגום מובנה בעברית (אם קיים)" type="bool" default="true" />
-		<setting type="sep"/>
+		
+		<setting label="תיקון סימני פיסוק - עבור תרגום בעברית או תרגום מכונה (לא רלוונטי לתרגום מובנה!)" type="lsep"/>
+		<setting id="auto_fix_sub_punctuation" label="תקן סימני פיסוק אוטומטית" type="bool" default="true" />
 		
 		<setting label="זמן חיפוש כתוביות" type="lsep"/>
 		<setting id="time_s" type="number" label="זמן חיפוש מקסימלי (בשניות)" default="10"/>
@@ -53,6 +52,9 @@
 		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
 		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
 		<setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
+		
+		<setting label="Log DEBUG" type="lsep"/>
+		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
 		
 		<setting label="הרחבת Twilight" type="lsep"/>
 		<setting id="write_heb_embedded_taglines_to_twilight_repo" label="שפר את מאגר התרגום המובנה של הרחבת Twilight" type="bool" default="false" />
