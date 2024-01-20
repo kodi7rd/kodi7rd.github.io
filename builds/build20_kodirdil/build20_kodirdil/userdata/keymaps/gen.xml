@@ -1,11 +1,12 @@
 <keymap>
-        <fullscreenvideo> <!-- Only on fullscreen video playback - stop video on short "back" press -->
+        <fullscreenvideo> <!-- Only on fullscreen video playback - stop video on short "back" press / go back on long "back" press-->
                 <remote>
-                        <back>stop</back>
+                        <back>Stop</back>
+                        <back mod="longpress">Back</back>
                 </remote>
                 <keyboard>
-                        <escape>stop</escape>
-                        <key id="61448">stop</key>
+                        <key id="61448">Stop</key>
+                        <key id="61448" mod="longpress">Back</key>
                 </keyboard>
         </fullscreenvideo>
 </keymap>
