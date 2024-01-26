@@ -6,6 +6,7 @@ from modules import kodi_utils
 from kodirdil import hebrew_subtitles_search_utils
 from kodirdil import string_utils
 from kodirdil import db_utils
+import traceback
 ########### Settings ####################
 enable_hebrew_subtitles_to_twilight_sources_matching = kodi_utils.get_setting('enable_hebrew_subtitles_to_twilight_sources_matching', 'true') == 'true'
 minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
@@ -300,7 +301,7 @@ class SourcesResults(BaseDialog):
 				# except: pass
 				# CUSTOM NEW LINE:
 				except Exception as e:
-					kodi_utils.logger("KODI-RD-IL", f"sources.py builder for loop error: {str(e)}")
+					kodi_utils.logger("KODI-RD-IL", f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}")
 					pass
 				#########################################
 

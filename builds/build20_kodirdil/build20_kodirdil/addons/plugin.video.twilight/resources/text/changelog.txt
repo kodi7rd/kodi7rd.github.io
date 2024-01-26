@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.41[/B][/COLOR]
+- BUG FIX: CAM/SCR/TELE sources now shows up when "Highlight Results Based On - Quality" is configured.
+
 [COLOR dodgerblue][B]Version 3.2.40[/B][/COLOR]
 - Added Clear Debrid + External Providers cache on Kodi startup.
 - [B]Tikipeter's version 3.2.20[/B]:

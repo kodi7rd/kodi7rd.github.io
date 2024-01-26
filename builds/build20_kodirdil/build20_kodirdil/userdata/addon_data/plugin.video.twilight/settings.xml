@@ -167,7 +167,7 @@
     <setting id="results.size.manual" default="true">10000</setting>
     <setting id="results.size.min_manual" default="true">0</setting>
     <setting id="results.include.unknown.size" default="true">true</setting>
-    <setting id="include_prerelease_results">false</setting>
+    <setting id="include_prerelease_results" default="true">true</setting>
     <setting id="include_3d_results">false</setting>
     <setting id="filter_hevc" default="true">0</setting>
     <setting id="filter_hevc.max_quality" default="true">4K</setting>
