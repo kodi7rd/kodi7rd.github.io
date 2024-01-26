@@ -74,8 +74,18 @@ def check_databases():
 	dbcon.close()
 
 	############KODI-RD-IL###################
+
+	# Clear HSM Caches on startup
 	db_utils.clear_hebrew_subtitles_db_cache()
 	db_utils.clear_media_metadata_db_cache()
+
+	# Clear External Providers Cache on startup
+	from caches.providers_cache import ExternalProvidersCache
+	ExternalProvidersCache().delete_cache(silent=True)
+
+	# Clear Debrid Cache on startup
+	from caches.debrid_cache import debrid_cache
+	debrid_cache.clear_database()
 	#########################################
 
 def remove_old_caches():

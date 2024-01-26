@@ -100,7 +100,7 @@ class SourcesResults(BaseDialog):
 			self.setFocusId(self.window_id)
 		if action in self.selection_actions:
 			chosen_listitem = self.get_listitem(self.filter_window_id)
-			filter_type, filter_value = chosen_listitem.getProperty('filter_info').split('_')
+			filter_type, filter_value = chosen_listitem.getProperty('filter_type'), chosen_listitem.getProperty('filter_value')
 			if filter_type in ('quality', 'provider'):
 				if filter_value == prerelease_key: filtered_list = [i for i in self.item_list if i.getProperty(filter_type) in filter_value.split('/')]
 				else: filtered_list = [i for i in self.item_list if i.getProperty(filter_type) == filter_value]
@@ -319,8 +319,7 @@ class SourcesResults(BaseDialog):
 		def builder(data):
 			for item in data:
 				listitem = self.make_listitem()
-				listitem.setProperty('label', item[0])
-				listitem.setProperty('filter_info', item[1])
+				listitem.setProperties({'label': item[0], 'filter_type': item[1], 'filter_value': item[2]})
 				yield listitem
 		duplicates = set()
 		qualities = [i.getProperty('quality') for i in self.item_list \
@@ -337,20 +336,20 @@ class SourcesResults(BaseDialog):
 		provider_choices = sorted(sort_ranks.keys(), key=sort_ranks.get)
 		provider_choices = [upper(i) for i in provider_choices]
 		providers.sort(key=provider_choices.index)
-		qualities = [('Show [B]%s[/B] Only' % i, 'quality_%s' % i) for i in qualities]
-		providers = [('Show [B]%s[/B] Only' % i, 'provider_%s' % i) for i in providers]
+		qualities = [('Show [B]%s[/B] Only' % i, 'quality', i) for i in qualities]
+		providers = [('Show [B]%s[/B] Only' % i, 'provider', i) for i in providers]
 
 		############KODI-RD-IL###################
-		hebrew_subtitles_match = [(f"[B]{filter_hebrewSubtitlesMatch}[/B]", 'special_hebrewSubtitlesMatch')]
-		hebrew_subtitles_full_match = [(f"[B]{filter_hebrewSubtitlesMatchFullMatch}[/B]", 'special_hebrewSubtitlesMatchFullMatch')]
+		hebrew_subtitles_match = [(f"[B]{filter_hebrewSubtitlesMatch}[/B]", 'special', 'hebrewSubtitlesMatch')]
+		hebrew_subtitles_full_match = [(f"[B]{filter_hebrewSubtitlesMatchFullMatch}[/B]", 'special', 'hebrewSubtitlesMatchFullMatch')]
 		# ORIGINAL TWILIGHT LINE:
 		# data = qualities + providers
 		# CUSTOM NEW LINE:
 		data = hebrew_subtitles_full_match + hebrew_subtitles_match + qualities + providers
 		#########################################
 
-		if self.uncached_torrents: data.append(('Show [B]%s[/B] Only' % show_uncached_str, 'special_showuncached'))
-		data.extend([(filter_title, 'special_title'), (filter_extraInfo, 'special_extraInfo')])
+		if self.uncached_torrents: data.append(('Show [B]%s[/B] Only' % show_uncached_str, 'special', 'showuncached'))
+		data.extend([(filter_title, 'special', 'title'), (filter_extraInfo, 'special', 'extraInfo')])
 		self.filter_list = list(builder(data))
 
 	def set_properties(self):

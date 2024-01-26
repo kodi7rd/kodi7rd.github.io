@@ -49,6 +49,7 @@ trakt_collections_ins, trakt_watchlists_ins = _in_str % ('%s %s' % (trakt_str.up
 discover_main_ins, premium_ins, furk_ins = _in_str % (discover_str.upper(), '%s'), _in_str % (ls(32488).upper(), '%s'), _in_str % (furk_str.upper(), '%s %s')
 easynews_ins, real_debrid_ins, premiumize_ins = _in_str % (easy_str.upper(), '%s'), _in_str % (rd_str.upper(), '%s'), _in_str % (pm_str.upper(), '%s')
 trakt_lists_ins, tr_rec_ins, local_source_str = _in_str % (trakt_str.upper(), '%s'), _in_str % (rec_str.upper(), '%s'), _in_str % (local_str.upper(), source_str)
+tr_fav_ins = _in_str % (fav_str.upper(), '%s')
 favorites_ins, imdb_watchlists_ins = _in_str % (fav_str.upper(), '%s'), _in_str % (imdb_watchlist_str.upper(), '%s')
 run_plugin, container_update, log_path = 'RunPlugin(%s)', 'Container.Update(%s)', 'special://home/addons/%s/changelog.txt'
 folder_info = (('folder1', ls(32110)), ('folder2', ls(32111)), ('folder3', ls(32112)), ('folder4', ls(32113)), ('folder5', ls(32114)))
@@ -128,6 +129,7 @@ class Navigator:
 			self.add({'mode': 'navigator.trakt_watchlists'}, my_content_trakt_ins % wlist_str, 'trakt')
 			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'build_list': 'true', 'category_name': ml_str}, trakt_lists_ins % ml_str, 'trakt')
 			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'build_list': 'true', 'category_name': ll_str}, trakt_lists_ins % ll_str, 'trakt')
+			self.add({'mode': 'navigator.trakt_favorites', 'category_name': fav_str}, trakt_lists_ins % fav_str, 'trakt')
 			self.add({'mode': 'navigator.trakt_recommendations', 'category_name': rec_str}, trakt_lists_ins % rec_str, 'trakt')
 			self.add({'mode': 'build_my_calendar'}, trakt_lists_ins % cal_str, 'trakt')
 		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'category_name': tu_str}, trakt_lists_ins % tu_str, 'trakt')
@@ -164,6 +166,12 @@ class Navigator:
 		self.category_name = rec_str
 		self.add({'mode': 'build_movie_list', 'action': 'trakt_recommendations', 'new_page': 'movies', 'category_name': '%s %s' % (mov_str, rec_str)}, tr_rec_ins % mov_str, 'trakt')
 		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_recommendations', 'new_page': 'shows', 'category_name': '%s %s' % (tv_str, rec_str)}, tr_rec_ins % tv_str, 'trakt')
+		self.end_directory()
+
+	def trakt_favorites(self):
+		self.category_name = 'Favorites'
+		self.add({'mode': 'build_movie_list', 'action': 'trakt_favorites', 'category_name': '%s %s' % (mov_str, fav_str)}, tr_fav_ins % mov_str, 'trakt')
+		self.add({'mode': 'build_tvshow_list', 'action': 'trakt_favorites', 'category_name': '%s %s' % (tv_str, fav_str)}, tr_fav_ins % tv_str, 'trakt')
 		self.end_directory()
 
 	def imdb_watchlists(self):

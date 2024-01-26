@@ -1,5 +1,11 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.40[/B][/COLOR]
+- Added Clear Debrid + External Providers cache on Kodi startup.
+- [B]Tikipeter's version 3.2.20[/B]:
+- Fixed some post-results filtering.
+- Added "Trakt Favorites" to My Lists.
+
 [COLOR dodgerblue][B]Version 3.2.39[/B][/COLOR]
 - Small Ktuvit search bug fix.
 - Remove YouTube trailer link from "מתי יגיע לרשת?" messages.
