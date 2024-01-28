@@ -277,8 +277,7 @@ def scraping_settings():
 		highlight = get_setting('twilight.scraper_single_highlight', 'FF008EB2')
 		return {'highlight_type': 2, '4k': highlight, '1080p': highlight, '720p': highlight, 'sd': highlight}
 	hoster_highlight, torrent_highlight, furk_highlight, easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', '', '', '', ''
-	#### CHANGE 1: Added 'highlight_CAM_SCR_TELE' ####
-	rd_highlight, pm_highlight, ad_highlight, highlight_4K, highlight_1080P, highlight_720P, highlight_SD, highlight_CAM_SCR_TELE = '', '', '', '', '', '', '', ''
+	rd_highlight, pm_highlight, ad_highlight, highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', '', '', '', ''
 	if highlight_type in (0, 1):
 		furk_highlight = get_setting('twilight.provider.furk_colour', 'FFE6002E')
 		easynews_highlight = get_setting('twilight.provider.easynews_colour', 'FF00B3B2')
@@ -296,11 +295,9 @@ def scraping_settings():
 		highlight_1080P = get_setting('twilight.scraper_1080p_highlight', 'FFE6B800')
 		highlight_720P = get_setting('twilight.scraper_720p_highlight', 'FF3C9900')
 		highlight_SD = get_setting('twilight.scraper_SD_highlight', 'FF0166FF')
-		#### CHANGE 2: Set color for 'highlight_CAM_SCR_TELE' (static, not from addon settings) ####
-		highlight_CAM_SCR_TELE = 'FFE6B800'
 	return {'highlight_type': highlight_type, 'hoster_highlight': hoster_highlight, 'torrent_highlight': torrent_highlight,'real-debrid': rd_highlight, 'premiumize': pm_highlight,
 			'alldebrid': ad_highlight, 'rd_cloud': debrid_cloud_highlight, 'pm_cloud': debrid_cloud_highlight, 'ad_cloud': debrid_cloud_highlight, 'furk': furk_highlight,
-			'easynews': easynews_highlight, 'folders': folders_highlight, '4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_CAM_SCR_TELE, 'tele': highlight_CAM_SCR_TELE, 'scr': highlight_CAM_SCR_TELE} #### Change 3: added 'cam', 'tele', 'scr' keys with 'highlight_CAM_SCR_TELE' color as value ####
+			'easynews': easynews_highlight, 'folders': folders_highlight, '4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD}
 
 def get_art_provider():
 	if not get_fanart_data(): return default_art_provider_tuple

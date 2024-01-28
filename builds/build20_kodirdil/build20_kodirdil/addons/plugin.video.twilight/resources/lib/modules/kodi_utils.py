@@ -65,8 +65,9 @@ current_dbs = ('navigator.db', 'watched.db', 'favourites.db', 'traktcache4.db', 
 #########################################
 
 int_window_prop, pause_services_prop, suppress_sett_dict_prop, highlight_prop = 'twilight.internal_results.%s', 'twilight.pause_services', 'twilight.suppress_settings_dict', 'twilight.main_highlight'
-pause_settings_prop, current_skin_prop, use_skin_fonts_prop, custom_info_prop = 'twilight.pause_settings', 'twilight.current_skin', 'twilight.use_skin_fonts', 'twilight.custom_info_dialog'
 custom_context_main_menu_prop, custom_context_prop, sett_addoninfo_active_prop = 'twilight.custom_context_main_menu', 'twilight.custom_context_menu', 'twilight.setting_addoninfo_active'
+pause_settings_prop, use_skin_fonts_prop, custom_info_prop = 'twilight.pause_settings', 'twilight.use_skin_fonts', 'twilight.custom_info_dialog'
+current_skin_prop, current_font_prop = 'twilight.current_skin', 'twilight.current_font'
 myvideos_db_paths = {19: '119', 20: '121', 21: '124'}
 sort_method_dict = {'episodes': 24, 'files': 5, 'label': 2}
 playlist_type_dict = {'music': 0, 'video': 1}
@@ -359,6 +360,12 @@ def jsonrpc_get_addons(_type, properties=['thumbnail', 'name']):
 	command = {'jsonrpc': '2.0', 'method': 'Addons.GetAddons','params':{'type':_type, 'properties': properties}, 'id': '1'}
 	results = get_jsonrpc(command).get('addons')
 	return results
+
+def jsonrpc_get_system_setting(setting_id, setting_value=''):
+	command = {'jsonrpc': '2.0', 'id': 1, 'method': 'Settings.GetSettingValue', 'params': {'setting': setting_id}}
+	try: result = get_jsonrpc(command)['value']
+	except: result = setting_value
+	return result
 
 def make_global_list():
 	global global_list
