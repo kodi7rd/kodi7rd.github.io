@@ -45,7 +45,7 @@
                 <top>10</top>
                 <left>110</left>
                 <height>20</height>
-                <font>font12</font> <!-- TWILIGHT_26 -->
+                <font>font_mini</font> <!-- TWILIGHT_26 -->
                 <textcolor>$INFO[Window(10000).Property(twilight.main_highlight)]</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
@@ -71,7 +71,7 @@
                 <onleft>11</onleft>
                 <onright>11</onright>
                 <label>$INFO[Window.Property(ok_label)]</label>
-                <font>font12</font> <!-- TWILIGHT_26 -->
+                <font>font_mini</font> <!-- TWILIGHT_26 -->
                 <textcolor>FFB7B4BB</textcolor>
                 <focusedcolor>FF202020</focusedcolor>
                 <texturefocus colordiffuse="FFB7B4BB" border="30">twilight_common/circle.png</texturefocus>

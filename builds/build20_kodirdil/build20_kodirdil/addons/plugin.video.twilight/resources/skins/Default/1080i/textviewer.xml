@@ -45,7 +45,7 @@
                     <left>105</left>
                     <width max="1115">auto</width>
                     <height>20</height>
-                    <font>font14</font> <!-- TWILIGHT_33 -->
+                    <font>font_midi</font> <!-- TWILIGHT_33 -->
                     <textcolor>$INFO[Window(10000).Property(twilight.main_highlight)]</textcolor>
                     <shadowcolor>FF000000</shadowcolor>
                     <align>center</align>
@@ -58,7 +58,7 @@
                     <top>114</top>
                     <width>1254</width>
                     <height>816</height>
-                    <font>font12</font> <!-- TWILIGHT_26 -->
+                    <font>font_mini</font> <!-- TWILIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                     <pagecontrol>2060</pagecontrol>
@@ -69,7 +69,7 @@
                     <top>114</top>
                     <width>1254</width>
                     <height>826</height>
-                    <font>font14</font> <!-- TWILIGHT_33 -->
+                    <font>font_midi</font> <!-- TWILIGHT_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                     <pagecontrol>2061</pagecontrol>

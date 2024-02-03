@@ -1,5 +1,14 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.44[/B][/COLOR]
+- [B]Tikipeter's version 3.2.23[/B]:
+- Next Page icon fix.
+
+[COLOR dodgerblue][B]Version 3.2.43[/B][/COLOR]
+- [B]Tikipeter's version 3.2.22[/B]:
+- Added episode type support for Jurial skins. Currently only Arctic Fuse. Users should thank Jurial for adding this feature to his skin. He has a donation link where you can throw him some money and love. Users will need to clear metadata in Tools->Clear Databases->Clear Meta Cache.
+- Other fixes.
+
 [COLOR dodgerblue][B]Version 3.2.42[/B][/COLOR]
 - [B]Tikipeter's version 3.2.21[/B]:
 - Added detection of when user changes skin font, so custom xmls can be remade.
