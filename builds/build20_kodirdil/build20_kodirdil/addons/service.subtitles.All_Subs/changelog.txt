@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.1.1[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.2[/B][/COLOR]
+* BUG FIX: Subscene Google machine translate - [B]Temporary[/B] revert "MASSIVE speed improvement of Google machine translate" (4.1.1)
+[COLOR yellow][B]v4.1.1[/B][/COLOR]
 * MASSIVE speed improvement of Google machine translate.
 * Add setting to automatically fix Hebrew subtitles punctuation: (for Machine Translate / External Hebrew subtitles only)
 [B]הגדרות - הגדרות כלליות - תקן סימני פיסוק אוטומטית[/B]

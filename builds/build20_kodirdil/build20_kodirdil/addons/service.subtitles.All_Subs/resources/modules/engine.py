@@ -15,7 +15,6 @@ from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 from resources.modules.general import Thread,CachedSubFolder,TransFolder,user_dataDir
 from resources.modules import cache
 global trans_result
-from concurrent import futures
 trans_result=[]
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
@@ -28,7 +27,6 @@ from resources.sources import ktuvit
 from resources.sources import opensubtitles
 from resources.sources import subscene
 from resources.sources import wizdom
-global global_sub_size,global_progress
 que=urllib.parse.quote_plus
 unque=urllib.parse.unquote_plus
 Addon=xbmcaddon.Addon()
@@ -629,19 +627,6 @@ def fix_sub_punctuation_and_write(sub_file, separate_punct_file=False):
     except:
         return None
         pass
-
-def send_translate(items):
-    from resources.modules import general
-    global global_sub_size,global_progress
-    from resources.modules.auto_translate.googletrans import Translator  
-        
-        
-    translator = Translator()  
-    translation=translator.translate(items, dest='he').text
-    global_progress+=1
-    general.show_msg=f"Google Translate מתרגם  | {str(int(((global_progress* 100.0)/(global_sub_size)) ))}%"
-    general.progress_msg=int(((global_progress* 100.0)/(global_sub_size)) )
-    return translation
         
 def translate_subs(input_file,output_file):
     global trans_result
@@ -693,28 +678,26 @@ def translate_subs(input_file,output_file):
     counter=0
     
     if Addon.getSetting("translate_p")== '0': # Google
-        global global_sub_size,global_progress
+        from resources.modules.auto_translate.googletrans import Translator  
+        translator = Translator()  
         split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+       
         ax2=split_string(text,3000)
-        global_sub_size=len(ax2)
-        global_progress=0
-        log.warning('Start Google')
-        
-        general.show_msg=f"Google Translate מתרגם {encoding}"
-        with futures.ThreadPoolExecutor() as executor:  # optimally defined number of threads
-            res = [executor.submit(send_translate, txt) for txt in split_string(text,3000)]
-            futures.wait(res)
-        
-        
-        
         f_sub_pre=''
         xx=0
         
         general.progress_msg=0
-        
-        translation = '\n'.join((r.result() for r in res))
-        f_sub_pre=translation
-        
+        for items in ax2:
+             general.show_msg=f"Google Translate מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
+             general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
+             if general.break_all:
+                 break
+             
+             translation=translator.translate(items, dest='he').text
+             
+             f_sub_pre=f_sub_pre+translation
+             xx+=1
+
         f_sub_pre=f_sub_pre.replace('\r','\n')
         #all_text=f_sub_pre.replace(': ',':').replace('"# ','"#').split('\n')
     elif Addon.getSetting("translate_p")== '1': # Yandex
