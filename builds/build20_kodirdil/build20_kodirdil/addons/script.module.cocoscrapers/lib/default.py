@@ -111,3 +111,13 @@ elif action == 'plexSeeShare':
 
 elif action == 'ShowOKDialog':
 	control.okDialog(params.get('title', 'default'), int(params.get('message', '')))
+
+elif action == 'TestProwlarrConnection':
+	from cocoscrapers.modules.prowlarr import Prowlarr
+	prowlarr = Prowlarr()
+	prowlarr.test()
+
+elif action == 'ProwlarrIndexers':
+	from cocoscrapers.modules.prowlarr import Prowlarr
+	prowlarr = Prowlarr()
+	prowlarr.get_indexers()

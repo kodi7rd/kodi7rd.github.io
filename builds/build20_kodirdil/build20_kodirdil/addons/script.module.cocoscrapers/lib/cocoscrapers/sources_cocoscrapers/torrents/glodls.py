@@ -18,7 +18,7 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://www.gtdb.to"
+		self.base_link = "https://www.glodls.to"
 		self.moviesearch = '/search_results.php?search={0}&cat=1&incldead=0&inclexternal=0&lang=1&sort=size&order=desc'
 		self.tvsearch = '/search_results.php?search={0}&cat=41&incldead=0&inclexternal=0&lang=1&sort=seeders&order=desc'
 		self.tvsearch_pack = '/search_results.php?search={0}&cat=41,72&incldead=0&inclexternal=0&lang=1&sort=seeders&order=desc' # cat=72 timeout
@@ -43,8 +43,9 @@ class source:
 				hdlr = year
 				search_link = self.moviesearch
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', title), hdlr)
-			url = '%s%s' % (self.base_link, search_link.format(quote_plus(query)))
-			# log_utils.log('url = %s' % url)
+			url = '%s%s%s' % ('https://siteget.net/o.php?u=',self.base_link, search_link.format(quote_plus(query)))
+			from cocoscrapers.modules import log_utils
+			log_utils.log('url = %s' % url)
 			result = client.request(url, timeout=10)
 			if not result: return sources
 			rows = client.parseDOM(result, 'tr', attrs={'class': 't-row'})

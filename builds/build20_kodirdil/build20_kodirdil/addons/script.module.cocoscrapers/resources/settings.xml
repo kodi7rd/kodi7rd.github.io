@@ -242,6 +242,11 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="provider.rutor" type="boolean" label="32128" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="provider.torlock" type="boolean" label="32121" help="">
 					<level>0</level>
 					<default>false</default>
@@ -284,6 +289,68 @@
 				</setting>
 			</group>
 		</category>
+		<!--category id="prowlarr" label="32547" help="32548">
+			<group id="1">
+				<setting id="prowlarr.enabled" type="boolean" label="32549" help="32550">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="prowlarr.serverurl" type="string" label="32551" help="32552" parent="prowlarr.enabled">
+					<level>0</level>
+					<default>http://localhost:9696</default>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="prowlarr.enabled">True</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32551</heading>
+					</control>
+				</setting>
+				<setting id="prowlarr.apikey" type="string" label="32553" help="32554" parent="prowlarr.enabled">
+					<level>0</level>
+					<default />
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="prowlarr.enabled">True</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32553</heading>
+					</control>
+				</setting>
+				<setting id="prowlarr.test" type="action" label="32555" help="32556" parent="prowlarr.enabled">
+					<level>0</level>
+					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=TestProwlarrConnection)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="prowlarr.enabled">True</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action"/>
+				</setting>
+				<setting id="prowlarr.indexers" type="action" label="Indexers" help="" parent="prowlarr.enabled">
+					<level>0</level>
+					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=ProwlarrIndexers)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable">
+							<condition operator="is" setting="prowlarr.enabled">True</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action"/>
+				</setting>
+			</group>
+		</category-->
 		<category id="debug" label="32054" help="">
 			<group id="1">
 				<setting id="debug.enabled" type="boolean" label="32033" help="">

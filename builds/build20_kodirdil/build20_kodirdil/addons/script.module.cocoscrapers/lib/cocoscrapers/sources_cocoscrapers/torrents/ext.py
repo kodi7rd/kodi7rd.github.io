@@ -18,8 +18,8 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://ext.torrentbay.to" # "ext.to" V2 challenge as of 2-9-21
-		#self.base_link = 'https://extranet.torrentbay.net/'
+		#self.base_link = "https://extratorrent.st/" # "ext.to" V2 challenge as of 2-9-21
+		self.base_link = 'https://extranet.torrentbay.net/'
 		self.search_link = "/search/?order=size&sort=desc&q=%s"
 		self.min_seeders = 0
 
@@ -40,7 +40,8 @@ class source:
 				hdlr = year
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', title), hdlr)
 			url = '%s%s' % (self.base_link, self.search_link % quote_plus(query))
-			# log_utils.log('url = %s' % url)
+			from cocoscrapers.modules import log_utils
+			log_utils.log('url = %s' % url)
 			html = client.request(url, timeout='5')
 			if not html or '<tbody' not in html: return sources
 			table = client.parseDOM(html, 'tbody')

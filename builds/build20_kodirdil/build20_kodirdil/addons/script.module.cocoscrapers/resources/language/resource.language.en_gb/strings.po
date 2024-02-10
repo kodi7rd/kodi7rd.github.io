@@ -468,7 +468,7 @@ msgid "YTSMX (movies only)"
 msgstr ""
 
 msgctxt "#32128"
-msgid "ZOOQLE (Pack capable)"
+msgid "RUTOR (Pack capable)"
 msgstr ""
 
 msgctxt "#32129"
@@ -649,4 +649,44 @@ msgstr ""
 
 msgctxt "#32546"
 msgid "Plex Account Link"
+msgstr ""
+
+msgctxt "#32547"
+msgid "Prowlarr"
+msgstr ""
+
+msgctxt "#32548"
+msgid "Prowlarr is a self-hosted torrent indexer management tool that integrates various indexers into a single, easy-to-use web interface."
+msgstr ""
+
+msgctxt "#32549"
+msgid "Enable Prowlarr"
+msgstr ""
+
+msgctxt "#32550"
+msgid "Turn this on to integrate Prowlarr, enhancing your media search capabilities by aggregating various torrent indexers in one place."
+msgstr ""
+
+msgctxt "#32551"
+msgid "Prowlarr Server URL"
+msgstr ""
+
+msgctxt "#32552"
+msgid "Enter the URL where your Prowlarr server is hosted. Example: http://localhost:9696"
+msgstr ""
+
+msgctxt "#32553"
+msgid "Prowlarr API Key"
+msgstr ""
+
+msgctxt "#32554"
+msgid "Enter your Prowlarr API key to authenticate and connect with the Prowlarr server."
+msgstr ""
+
+msgctxt "#32555"
+msgid "Test Prowlarr Connection"
+msgstr ""
+
+msgctxt "#32556"
+msgid "Make a basic HTTP request to make sure your settings are correct."
 msgstr ""
