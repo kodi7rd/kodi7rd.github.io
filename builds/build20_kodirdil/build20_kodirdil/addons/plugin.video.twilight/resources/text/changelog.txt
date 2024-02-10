@@ -1,5 +1,16 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.46[/B][/COLOR]
+- [B]Tikipeter's version 3.2.25[/B]:
+- Couple of quick fixes.
+
+[COLOR dodgerblue][B]Version 3.2.45[/B][/COLOR]
+- [B]Tikipeter's version 3.2.24[/B]:
+- Updated look of custom windows to align more aesthetically with FENtastic skin.
+- Added "episode type" support to Next Episode window.
+- Removed some redundant settings.
+- Quick fixes.
+
 [COLOR dodgerblue][B]Version 3.2.44[/B][/COLOR]
 - [B]Tikipeter's version 3.2.23[/B]:
 - Next Page icon fix.

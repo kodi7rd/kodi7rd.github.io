@@ -3254,11 +3254,7 @@ msgid "Choose Files"
 msgstr ""
 
 msgctxt "#33015"
-msgid "Use Torrent Services"
-msgstr ""
-
-msgctxt "#33016"
-msgid "Use Hoster Services"
+msgid "Open External Scraper Settings"
 msgstr ""
 
 msgctxt "#33017"
@@ -4085,3 +4081,7 @@ msgid "Notify Only Under (Days Until Account Expiration)"
 msgstr ""
 
 ###################################################################################################################################
+
+msgctxt "#33016"
+msgid ""
+msgstr ""
