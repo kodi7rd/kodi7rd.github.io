@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.3.3[/B][/COLOR]
+* BUG FIX: Auto Quick Update note_id integer fix.
 [COLOR yellow][B]v1.3.2[/B][/COLOR]
 * Remove from startup.py temporary build migration code.
 * Rename build install / quick update menu text.

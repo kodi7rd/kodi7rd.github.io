@@ -144,10 +144,11 @@ def auto_quick_update():
     note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
     
     if note_id:
+        logging.log(f'[QUICK-UPDATE] note_id={note_id} | CONFIG.NOTEID={CONFIG.NOTEID}')
         if note_id == CONFIG.NOTEID:
             if CONFIG.NOTEDISMISS == 'false':
                 window.show_notification(msg)
-        elif note_id > CONFIG.NOTEID:
+        elif int(note_id) > int(CONFIG.NOTEID):
             logging.log('[QUICK-UPDATE] Starting quick update number {0}'
                         .format(note_id))
             CONFIG.set_setting('noteid', note_id)
@@ -387,6 +388,8 @@ if CONFIG.AUTOUPDATE == 'Yes':
 else:
     logging.log("[Auto Update Wizard] Not Enabled", level=xbmc.LOGINFO)
 
+# KODI-RD-IL - Auto force addon updates on Kodi startup
+if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
 # ENABLE ALL ADDONS AFTER INSTALL
 if CONFIG.get_setting('enable_all') == 'true':
@@ -464,9 +467,6 @@ if CONFIG.get_setting('keepdebrid') == 'true':
     save_debrid()
 else:
     logging.log("[Debrid Data] Not Enabled", level=xbmc.LOGINFO)
-
-# KODI-RD-IL - Auto force addon updates on Kodi startup
-if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
 # AUTO CLEAN
 if CONFIG.get_setting('autoclean') == 'true':
