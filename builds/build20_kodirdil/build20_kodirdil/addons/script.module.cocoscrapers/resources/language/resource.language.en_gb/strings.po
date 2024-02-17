@@ -232,7 +232,7 @@ msgid "FURK"
 msgstr ""
 
 msgctxt "#32069"
-msgid "GANOOL (movies only)"
+msgid "GANOOL (Movies only)"
 msgstr ""
 
 msgctxt "#32070"
@@ -464,11 +464,11 @@ msgid "YOURBITTORRENT (Pack capable)"
 msgstr ""
 
 msgctxt "#32127"
-msgid "YTSMX (movies only)"
+msgid "YTSMX (Movies only)"
 msgstr ""
 
 msgctxt "#32128"
-msgid "RUTOR (Pack capable)"
+msgid "ZOOQLE (Pack capable)"
 msgstr ""
 
 msgctxt "#32129"
@@ -520,7 +520,11 @@ msgid "Clear ALL Extra Undesirables"
 msgstr ""
 
 msgctxt "#32141"
-msgid ""
+msgid "ELFHOSTED (Pack Capable)"
+msgstr ""
+
+msgctxt "#32142"
+msgid "RUTOR (Pack capable)"
 msgstr ""
 
 msgctxt "#32513"
@@ -689,4 +693,8 @@ msgstr ""
 
 msgctxt "#32556"
 msgid "Make a basic HTTP request to make sure your settings are correct."
+msgstr ""
+
+msgctxt "#32557"
+msgid ""
 msgstr ""
