@@ -8,22 +8,23 @@
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch" default="true">true</setting>
+    <setting id="provider.elfhosted">true</setting>
     <setting id="provider.ext" default="true">false</setting>
     <setting id="provider.eztv" default="true">true</setting>
-    <setting id="provider.glodls">false</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
-    <setting id="provider.knaben">true</setting>
+    <setting id="provider.knaben" default="true">false</setting>
     <setting id="provider.kickass2" default="true">false</setting>
     <setting id="provider.limetorrents" default="true">false</setting>
     <setting id="provider.magnetdl" default="true">true</setting>
     <setting id="provider.nyaa">true</setting>
     <setting id="provider.piratebay">true</setting>
-    <setting id="provider.rutor" default="true">true</setting>
+    <setting id="provider.rutor">true</setting>
     <setting id="provider.torlock" default="true">false</setting>
     <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio" default="true">true</setting>
+    <setting id="provider.torrentz2">true</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
     <setting id="provider.ytsmx" default="true">false</setting>
