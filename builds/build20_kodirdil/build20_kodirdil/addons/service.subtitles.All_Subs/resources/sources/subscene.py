@@ -26,7 +26,7 @@ class TLSAdapter(requests.adapters.HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
         ctx = ssl.create_default_context()
         ctx.set_ciphers('DEFAULT@SECLEVEL=1')
-        ctx.check_hostname = False
+        #ctx.check_hostname = False
         self.poolmanager = urllib3.poolmanager.PoolManager(num_pools=connections,
                                                            maxsize=maxsize,
                                                            block=block,
@@ -168,32 +168,63 @@ def get_subs(item):
         # Requests doesn't support trailers
         # 'TE': 'trailers',
     }
-
+    headers = {
+        'authority': 'subscene.com',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'accept-language': 'he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7',
+        'cache-control': 'no-cache',
+        'content-type': 'application/x-www-form-urlencoded',
+        # 'cookie': 'cf_clearance=R0Jj20tuhfEbzLZcC0HGqAt19wK07WITZLUVXhHuHjw-1707596964-1-AeEa/WKR+uIOq16yj935FAlTlu2FWZaBLiivoqU6QyE3dCL0nGotakBkENAJL4R2fotEqHoqgzFQmg2xzjT8bfY=',
+        'dnt': '1',
+        'origin': 'https://subscene.com',
+        'pragma': 'no-cache',
+        'referer': 'https://subscene.com/subtitles/searchbytitle',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-user': '?1',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+    }
     data = {
       'query': name,
       'l': ''
     }
     
-
-    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-    scraper.mount('https://', TLSAdapter())
+    method = 'GET'
+    
+    #scraper.mount('https://', TLSAdapter())
+    
+    
     xx=0
-    response='Please do not hammer on Subscene'
+    #response='Please do not hammer on Subscene'
     x=0
-    while 'Please do not hammer on Subscene'  in response:
-        response = scraper.post('https://subscene.com/subtitles/searchbytitle?query='+s_title, headers=headers, data=data)
-        if response.status_code in [503, 429, 403]:
+    for i in range(5):#while 'Please do not hammer on Subscene'  in response:
+        scraper = cloudscraper.create_scraper(interpreter='native')  # returns a CloudScraper instance
+        response = scraper.request(method, 'https://subscene.com/subtitles/searchbytitle?query='+s_title)
+        #response = scraper.post('https://subscene.com/subtitles/searchbytitle?query='+s_title, headers=headers, data=data)
+        
+        if response.status_code in [503, 429, 403 , 409]:
             if response.status_code == 503:
                 xbmc.sleep(2000)
              
             if response.status_code == 429:
                 xbmc.sleep(3000)
+            if response.status_code == 403:
+                xbmc.sleep(2000)
+            if response.status_code == 409:
+                xbmc.sleep(2000)
         else:
-            response=response.content.decode('utf-8')
-        xbmc.sleep(100)
-        x+=1
-        if x>10:
+            
+            response=response.text
+            
             break
+        log.warning('I:::'+str(i))
+        xbmc.sleep(100)
+        
         
     
     if tv_movie=='tv':
@@ -230,20 +261,24 @@ def get_subs(item):
             xx=0
             response='Please do not hammer on Subscene'
             x=0
-            while 'Please do not hammer on Subscene'  in response:
-                response = scraper.get('https://subscene.com/'+lk,headers=headers)
-                if response.status_code in [503, 429, 403]:
+            for i in range(5):
+                scraper = cloudscraper.create_scraper(interpreter='native')  # returns a CloudScraper instance
+                response = scraper.request(method,'https://subscene.com/'+lk)
+                if response.status_code in [503, 429, 403 , 409]:
                     if response.status_code == 503:
                         xbmc.sleep(2000)
                      
                     if response.status_code == 429:
                         xbmc.sleep(3000)
+                    if response.status_code == 403:
+                        xbmc.sleep(2000)
+                    if response.status_code == 409:
+                        xbmc.sleep(2000)
                 else:
-                    response=response.content.decode('utf-8')
-                xbmc.sleep(100)
-                x+=1
-                if x>10:
+                    response=response.text
                     break
+                xbmc.sleep(100)
+                
             x=response
            
             regex='<tr>(.+?)</tr'
@@ -331,129 +366,174 @@ def geturl(url, cookies=None):
     return content, return_url
     
 def download(download_data,MySubFolder):
-    
     try:
-        shutil.rmtree(MyTmp)
-    except Exception as e:
-        log.warning(e)
-        pass
-    xbmcvfs.mkdirs(MyTmp)
-    link=download_data['link']
-    episode=download_data['episode']
-    
-    
-    session = cloudscraper.create_scraper(interpreter='native')
-    session.mount('https://', TLSAdapter())
-    subtitle_list = ''
-    exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass"]
-    downloadlink_pattern = "...<a href=\"(.+?)\" rel=\"nofollow\" onclick=\"DownloadSubtitle"
-
-    uid = uuid.uuid4()
-
-
-    content, response_url = geturl(link)
-    match = re.compile(downloadlink_pattern).findall(content)
-    if match:
-        downloadlink = main_url + match[0]
-        viewstate = 0
-        previouspage = 0
-        subtitleid = 0
-        typeid = "zip"
-        filmid = 0
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Origin': 'https://subscene.com',
-            'Connection': 'keep-alive',
-            'Referer': 'https://subscene.com/subtitles/searchbytitle',
-            # 'Cookie': '_ga=GA1.2.1911444577.1676157427; _gid=GA1.2.826212615.1676157427; __cf_bm=U6vk6_ayA3eGJOawuM5ziO3G0MNx.xmU9bv8n3f63Pk-1676157428-0-Ab5tPbuawh9No7AMAdQzwKFPDv9/ukvntu7svSdPjDMgw1IXkiQq7qVs/j6IeRUCvs9QWAY3KTuyNoOjatY5Sfv495P9U2Z3NqeWvgjekVV20mGbHRBKAe7+fL5+UkQ+6rPL0Uheu/AnTBDTBup1WqM=',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-User': '?1',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-            # Requests doesn't support trailers
-            # 'TE': 'trailers',
-        }
-        postparams = url_encode(
-            {'__EVENTTARGET': 's$lc$bcr$downloadLink', '__EVENTARGUMENT': '', '__VIEWSTATE': viewstate,
-             '__PREVIOUSPAGE': previouspage, 'subtitleId': subtitleid, 'typeId': typeid, 'filmId': filmid}).encode('utf-8')
-        
-        useragent = ("User-Agent=Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) "
-                       "Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)")
-        headers2 = {'User-Agent': useragent, 'Referer': link}
-       
-        #request = Request(downloadlink, postparams, headers)
-
-        # xbmc.log('bla bla'+str(request), 5)
-        response=session.get(downloadlink,headers=headers,verify=False,stream=True)
-        #response = urlopen(request)
-        # request = urllib2.Request(downloadlink, postparams, headers)
-        # response = urllib2.urlopen(request)
-        
-
-        local_tmp_file = os.path.join(MyTmp, "subscene.xxx")
-        packed = False
-
         try:
-       
-            with open(local_tmp_file, "wb") as f:
-                for chunk in response.iter_content(chunk_size=512):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-            # Check archive type (rar/zip/else) through the file header (rar=Rar!, zip=PK)
-            myfile = xbmcvfs.File(local_tmp_file, "rb")
-            myfile.seek(0,0)
-            if myfile.read(1) == 'R':
-                typeid = "rar"
-                packed = True
-                
+            shutil.rmtree(MyTmp)
+        except Exception as e:
+            log.warning(e)
+            pass
+        xbmcvfs.mkdirs(MyTmp)
+        link=download_data['link']
+        episode=download_data['episode']
+        
+        method = 'GET'
+        session = cloudscraper.create_scraper(interpreter='native')
+        session.mount('https://', TLSAdapter())
+        subtitle_list = ''
+        exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass"]
+        downloadlink_pattern = "...<a href=\"(.+?)\" rel=\"nofollow\" onclick=\"DownloadSubtitle"
+
+        uid = uuid.uuid4()
+
+      
+        #content, response_url = geturl(link)
+        for i in range(5):
+            scraper = cloudscraper.create_scraper(interpreter='native')  # returns a CloudScraper instance
+            response = scraper.request(method,link)
+            if response.status_code in [503, 429, 403 , 409]:
+                if response.status_code == 503:
+                    xbmc.sleep(2000)
+                 
+                if response.status_code == 429:
+                    xbmc.sleep(3000)
+                if response.status_code == 403:
+                    xbmc.sleep(2000)
+                if response.status_code == 409:
+                    xbmc.sleep(2000)
             else:
+                content=response.text
+                break
+            xbmc.sleep(100)
+            
+        
+        match = re.compile(downloadlink_pattern).findall(content)
+   
+        if match:
+            downloadlink = main_url + match[0]
+            viewstate = 0
+            previouspage = 0
+            subtitleid = 0
+            typeid = "zip"
+            filmid = 0
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                # 'Accept-Encoding': 'gzip, deflate, br',
+                'Origin': 'https://subscene.com',
+                'Connection': 'keep-alive',
+                'Referer': 'https://subscene.com/subtitles/searchbytitle',
+                # 'Cookie': '_ga=GA1.2.1911444577.1676157427; _gid=GA1.2.826212615.1676157427; __cf_bm=U6vk6_ayA3eGJOawuM5ziO3G0MNx.xmU9bv8n3f63Pk-1676157428-0-Ab5tPbuawh9No7AMAdQzwKFPDv9/ukvntu7svSdPjDMgw1IXkiQq7qVs/j6IeRUCvs9QWAY3KTuyNoOjatY5Sfv495P9U2Z3NqeWvgjekVV20mGbHRBKAe7+fL5+UkQ+6rPL0Uheu/AnTBDTBup1WqM=',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-User': '?1',
+                'Pragma': 'no-cache',
+                'Cache-Control': 'no-cache',
+                # Requests doesn't support trailers
+                # 'TE': 'trailers',
+            }
+            postparams = url_encode(
+                {'__EVENTTARGET': 's$lc$bcr$downloadLink', '__EVENTARGUMENT': '', '__VIEWSTATE': viewstate,
+                 '__PREVIOUSPAGE': previouspage, 'subtitleId': subtitleid, 'typeId': typeid, 'filmId': filmid}).encode('utf-8')
+            
+            useragent = ("User-Agent=Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) "
+                           "Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)")
+            headers2 = {'User-Agent': useragent, 'Referer': link}
+           
+            #request = Request(downloadlink, postparams, headers)
+
+            # xbmc.log('bla bla'+str(request), 5)
+          
+            for i in range(5):
+                scraper = cloudscraper.create_scraper(interpreter='native')  # returns a CloudScraper instance
+                response = scraper.request(method,downloadlink)
+                if response.status_code in [503, 429, 403 , 409]:
+                    if response.status_code == 503:
+                        xbmc.sleep(2000)
+                     
+                    if response.status_code == 429:
+                        xbmc.sleep(3000)
+                    if response.status_code == 403:
+                        xbmc.sleep(2000)
+                    if response.status_code == 409:
+                        xbmc.sleep(2000)
+                else:
+                    #response=response.text
+                    break
+                xbmc.sleep(100)
+         
+            #response=session.get(downloadlink,headers=headers,verify=False,stream=True)
+            #response = urlopen(request)
+            # request = urllib2.Request(downloadlink, postparams, headers)
+            # response = urllib2.urlopen(request)
+            
+
+            local_tmp_file = os.path.join(MyTmp, "subscene.xxx")
+            packed = False
+
+            try:
+                with open(local_tmp_file, 'wb') as f:
+                    f.write(response.content)
+            
+                # Check archive type (rar/zip/else) through the file header (rar=Rar!, zip=PK)
+                myfile = xbmcvfs.File(local_tmp_file, "rb")
                 myfile.seek(0,0)
-                if myfile.read(1) == 'P':
-                    typeid = "zip"
+                if myfile.read(1) == 'R':
+                    typeid = "rar"
                     packed = True
                     
                 else:
-                    typeid = "srt"
-                    packed = False
+                    myfile.seek(0,0)
+                    if myfile.read(1) == 'P':
+                        typeid = "zip"
+                        packed = True
+                        
+                    else:
+                        typeid = "srt"
+                        packed = False
+                
+                myfile.close()
+                local_tmp_file = os.path.join(MyTmp, "subscene." + typeid)
+                xbmcvfs.rename(os.path.join(MyTmp, "subscene.xxx"), local_tmp_file)
+                
+            except:
+                log.warning( "Failed to save subtitle to %s" % local_tmp_file)
+            xbmc.sleep(100)
+            log.warning('Extract')
+            sub_file=extract(local_tmp_file,MyTmp)
             
-            myfile.close()
-            local_tmp_file = os.path.join(MyTmp, "subscene." + typeid)
-            xbmcvfs.rename(os.path.join(MyTmp, "subscene.xxx"), local_tmp_file)
-            
-        except:
-            log.warning( "Failed to save subtitle to %s" % local_tmp_file)
-        xbmc.sleep(100)
-        log.warning('Extract')
-        sub_file=extract(local_tmp_file,MyTmp)
-        
 
-        episode_pattern = None
-        if episode != '':
-         
-            episode_pattern = re.compile(get_episode_pattern(episode), re.IGNORECASE)
-   
-        for dir in xbmcvfs.listdir(MyTmp)[0]:
-            for file in xbmcvfs.listdir(os.path.join(MyTmp, dir))[1]:
+            episode_pattern = None
+            if episode != '':
+             
+                episode_pattern = re.compile(get_episode_pattern(episode), re.IGNORECASE)
+       
+            for dir in xbmcvfs.listdir(MyTmp)[0]:
+                for file in xbmcvfs.listdir(os.path.join(MyTmp, dir))[1]:
+                    if os.path.splitext(file)[1] in exts:
+
+                        if episode_pattern and not episode_pattern.search(file):
+                            continue
+                       
+                        subtitle_list=(os.path.join(MyTmp, dir, file))
+
+            for file in xbmcvfs.listdir(MyTmp)[1]:
                 if os.path.splitext(file)[1] in exts:
-
+                   
                     if episode_pattern and not episode_pattern.search(file):
                         continue
-                   
-                    subtitle_list=(os.path.join(MyTmp, dir, file))
+                    
+                    subtitle_list=(os.path.join(MyTmp, file))
 
-        for file in xbmcvfs.listdir(MyTmp)[1]:
-            if os.path.splitext(file)[1] in exts:
-               
-                if episode_pattern and not episode_pattern.search(file):
-                    continue
-                
-                subtitle_list=(os.path.join(MyTmp, file))
-
-
+    except Exception as e:
+        import linecache
+              
+        exc_type, exc_obj, tb = sys.exc_info()
+        f = tb.tb_frame
+        lineno = tb.tb_lineno
+        filename = f.f_code.co_filename
+        linecache.checkcache(filename)
+        log.warning('Error in Download subs:'+str(e)+','+'line:'+str(lineno))
     return subtitle_list

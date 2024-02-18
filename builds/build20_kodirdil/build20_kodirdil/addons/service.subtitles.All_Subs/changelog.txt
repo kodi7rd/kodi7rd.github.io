@@ -1,7 +1,11 @@
-﻿[COLOR yellow][B]v4.1.2[/B][/COLOR]
-* BUG FIX: Subscene Google machine translate - [B]Temporary[/B] revert "MASSIVE speed improvement of Google machine translate" (4.1.1)
+﻿[COLOR yellow][B]v4.1.3[/B][/COLOR]
+* Bring back 4.1.1 "Massive speed improvement of Google machine translate".
+* BUG FIX: Subscene Cloudflare bypass.
+* BUG FIX: Subscene machine translate doesn't appear.
+[COLOR yellow][B]v4.1.2[/B][/COLOR]
+* BUG FIX: Subscene Google machine translate - [B]Temporary[/B] revert "Massive speed improvement of Google machine translate" (4.1.1)
 [COLOR yellow][B]v4.1.1[/B][/COLOR]
-* MASSIVE speed improvement of Google machine translate.
+* Massive speed improvement of Google machine translate.
 * Add setting to automatically fix Hebrew subtitles punctuation: (for Machine Translate / External Hebrew subtitles only)
 [B]הגדרות - הגדרות כלליות - תקן סימני פיסוק אוטומטית[/B]
 * Small Ktuvit search bug fix.
