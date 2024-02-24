@@ -1,3 +1,6 @@
+[COLOR red][B]Version 1.0.19[/B][/COLOR]
+- Self-Hosted Torrentio/ Knightcrawler Instances added.
+
 [COLOR red][B]Version 1.0.18[/B][/COLOR]
 - Changes made to Rutor.
 - GLODLS removed.

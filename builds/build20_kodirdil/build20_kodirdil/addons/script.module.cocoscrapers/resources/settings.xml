@@ -247,6 +247,41 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="provider.selfhosted" type="boolean" label="32558" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="selfhosted.url" type="string" label="32559" help="" parent="provider.selfhosted">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.selfhosted">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32559</heading>
+					</control>
+				</setting>
+				<setting id="selfhosted.name" type="string" label="32560" help="" parent="provider.selfhosted">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.selfhosted">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32560</heading>
+					</control>
+				</setting>
 				<setting id="provider.torlock" type="boolean" label="32121" help="">
 					<level>0</level>
 					<default>false</default>

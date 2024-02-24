@@ -698,3 +698,15 @@ msgstr ""
 msgctxt "#32557"
 msgid ""
 msgstr ""
+
+msgctxt "#32558"
+msgid "SELFHOSTED (Pack Capable)"
+msgstr ""
+
+msgctxt "#32559"
+msgid "SELF-HOSTED URL"
+msgstr ""
+
+msgctxt "#32560"
+msgid "SELF-HOSTED NAME"
+msgstr ""
