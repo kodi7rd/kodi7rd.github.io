@@ -366,12 +366,6 @@ def playback_choice(params):
 	kwargs = {'items': json.dumps(list_items), 'heading': ls(32174)}
 	choice = select_dialog([i['function'] for i in items], **kwargs)
 	if choice == None:
-		############KODI-RD-IL###################
-		try:
-			import xbmc
-			if xbmc.Player().isPlayingVideo() and xbmc.getCondVisibility("Player.Paused"): xbmc.Player().pause()
-		except: pass
-		#########################################
 		return notification(32736, 2500)
 	def clear_caches():
 		from caches.base_cache import clear_cache
