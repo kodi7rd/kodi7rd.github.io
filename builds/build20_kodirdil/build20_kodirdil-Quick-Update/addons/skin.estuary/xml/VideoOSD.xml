@@ -360,11 +360,13 @@
 						<visible>!VideoPlayer.Content(LiveTV)</visible>
 						<!-- If video is unpaused - pause -->
 						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
+						<!-- Rescrape and select source for current playing movie -->
+						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&autoplay=false)</onclick>
 						<!-- Open Twilight "Playback Options" window for current playing movie -->
-						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&query=$INFO[VideoPlayer.Title]&tmdb_id=$INFO[VideoPlayer.IMDBNumber])</onclick>
 						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback_choice&media_type=movie&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.IMDBNumber])</onclick> -->
+						<!-- Rescrape and select source for current playing episode -->
+						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode]&autoplay=false)</onclick>
 						<!-- Open Twilight "Playback Options" window for current playing episode -->
-						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick>
 						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight//?mode=playback_choice&media_type=episode&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick> -->
 					</control>
 					<control type="button" id="700454">
