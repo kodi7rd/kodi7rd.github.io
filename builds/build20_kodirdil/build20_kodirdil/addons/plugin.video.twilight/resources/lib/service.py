@@ -12,6 +12,7 @@ class TwilightMonitor(xbmc_monitor):
 		self.startUpServices()
 
 	def startUpServices(self):
+		service_functions.PlaybackIntegerGenerator().run()
 		try: service_functions.InitializeDatabases().run()
 		except: pass
 		try: service_functions.CheckSettings().run()

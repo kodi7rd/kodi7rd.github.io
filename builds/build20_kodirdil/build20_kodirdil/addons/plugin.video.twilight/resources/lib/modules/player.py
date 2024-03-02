@@ -80,9 +80,9 @@ class TwilightPlayer(xbmc_player):
 				play_random = self.sources_object.random
 				disable_autoplay_next_episode = self.sources_object.disable_autoplay_next_episode
 				if disable_autoplay_next_episode: notification('%s - %s %s' % (ls(32135), ls(32178), ls(32736)), 4500)
-				if any((play_random_continual, play_random, disable_autoplay_next_episode)): self.autoplay_nextep, self.autoscrape_nextep = False, False
-				else: self.autoplay_nextep, self.autoscrape_nextep = self.sources_object.autoplay_nextep, self.sources_object.autoscrape_nextep
-			else: play_random_continual, self.autoplay_nextep, self.autoscrape_nextep = False, False, False
+				if any((play_random_continual, play_random, disable_autoplay_next_episode)): self.autoplay_nextep = False
+				else: self.autoplay_nextep = self.sources_object.autoplay_nextep
+			else: play_random_continual, self.autoplay_nextep = False, False
 			while total_check_time <= 30 and not get_visibility(video_fullscreen_check):
 				sleep(250)
 				total_check_time += 0.25
@@ -100,7 +100,7 @@ class TwilightPlayer(xbmc_player):
 					if self.current_point >= self.set_watched:
 						if play_random_continual: self.run_random_continual(); break
 						if not self.media_marked: self.media_watched_marker()
-					if self.autoplay_nextep or self.autoscrape_nextep:
+					if self.autoplay_nextep:
 						if not self.nextep_info_gathered: self.info_next_ep()
 						if round(self.total_time - self.curr_time) <= self.start_prep: self.run_next_ep(); break
 					if not self.subs_searched: self.run_subtitles()
@@ -204,7 +204,16 @@ class TwilightPlayer(xbmc_player):
 				info_tag.setTrailer(trailer)
 				info_tag.setFirstAired(premiered)
 				info_tag.setStudios((studio or '',))
-				info_tag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
+
+				############KODI-RD-IL###################
+				# For scrape sources for next episode skin button
+				self.season_number_for_next_episode_button, self.episode_number_for_next_episode_button = self.set_next_season_and_episode_number_for_skin_next_episode_button()
+				# ORIGINAL TWILIGHT LINE:
+				# info_tag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
+				# CUSTOM NEW LINE:
+				info_tag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id), 'season_number_for_next_episode_button': str(self.season_number_for_next_episode_button), 'episode_number_for_next_episode_button': str(self.episode_number_for_next_episode_button)})
+				#########################################
+
 				info_tag.setIMDBNumber(self.imdb_id)
 				info_tag.setGenres(genre.split(', '))
 				info_tag.setWriters(writer.split(', '))
@@ -241,6 +250,13 @@ class TwilightPlayer(xbmc_player):
 		if not self.media_marked: self.media_watched_marker(force_watched=True)
 		EpisodeTools(self.meta, self.nextep_settings).auto_nextep()
 
+	############KODI-RD-IL###################
+	def set_next_season_and_episode_number_for_skin_next_episode_button(self):
+		from modules.episode_tools import EpisodeTools
+		season_number_for_next_episode_button, episode_number_for_next_episode_button = EpisodeTools(self.meta).get_next_episode_info_for_skin_next_episode_button()
+		return season_number_for_next_episode_button, episode_number_for_next_episode_button # if not exists - returns 0, 0
+	#########################################
+
 	def run_random_continual(self):
 		from modules.episode_tools import EpisodeTools
 		if not self.media_marked: self.media_watched_marker(force_watched=True)
@@ -257,15 +273,14 @@ class TwilightPlayer(xbmc_player):
 	def info_next_ep(self):
 		self.nextep_info_gathered = True
 		try:
-			play_type = 'autoplay_nextep' if self.autoplay_nextep else 'autoscrape_nextep'
-			nextep_settings = auto_nextep_settings(play_type)
+			nextep_settings = auto_nextep_settings()
 			final_chapter = self.final_chapter() if nextep_settings['use_chapters'] else None
 			percentage = 100 - final_chapter if final_chapter else nextep_settings['window_percentage']
 			window_time = round((percentage/100) * self.total_time)
 			use_window = nextep_settings['alert_method'] == 0
 			default_action = nextep_settings['default_action']
 			self.start_prep = nextep_settings['scraper_time'] + window_time
-			self.nextep_settings = {'use_window': use_window, 'window_time': window_time, 'default_action': default_action, 'play_type': play_type}
+			self.nextep_settings = {'use_window': use_window, 'window_time': window_time, 'default_action': default_action, 'play_type': 'autoplay_nextep'}
 		except: pass
 
 	def final_chapter(self):
