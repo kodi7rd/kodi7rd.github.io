@@ -391,6 +391,7 @@
 		<value condition="Control.HasFocus(700452)">[B]$LOCALIZE[700056][/B]</value>
 		<value condition="Control.HasFocus(700453)">[B]$LOCALIZE[700055][/B]</value>
 		<value condition="Control.HasFocus(700455)">[B]$LOCALIZE[700045][/B]</value>
+		<value condition="Control.HasFocus(700456)">[B]$LOCALIZE[700059][/B]</value>
 	</variable>
 	<variable name="SkinSettingsHelpTextVar">
 		<value condition="Container(9000).HasFocus(1)">$LOCALIZE[31129]</value>

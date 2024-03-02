@@ -954,4 +954,10 @@ msgctxt "#700039"
 msgid "Switch Skin"
 msgstr "החלף סקין"
 
+# Twilight Next Episode Button - VideoOSD.xml
+
+msgctxt "#700040"
+msgid "Next Episode"
+msgstr "לפרק הבא"
+
 ################################################################
