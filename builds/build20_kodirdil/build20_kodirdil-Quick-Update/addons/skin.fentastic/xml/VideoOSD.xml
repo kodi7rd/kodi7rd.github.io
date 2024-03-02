@@ -355,34 +355,30 @@
 						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
 					-->
-					<control type="radiobutton" id="700453">
-						<description>Twilight Switch Source Button</description>
+					<control type="radiobutton" id="700456">
+						<description>Twilight Next Episode Button</description>
 						<include content="OSDButtonAdvanced">
 							<param name="texture" value="kodirdil/twilight_icon/twilight.png"/>
-							<param name="label">$LOCALIZE[700055]</param>
+							<param name="label">$LOCALIZE[700059]</param>
 							<param name="width">68</param>
 							<param name="height">62</param>
 							<param name="radiowidth">57</param>
 							<param name="radioheight">57</param>
 							<param name="textoffsetx">-6</param>
-							<param name="textoffsety">55</param>
+							<param name="textoffsety">56</param>
 						</include>
-						<!-- If current playing media is movie or episode -->
-						<visible>VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)</visible>
+						<!-- If current playing media is episode -->
+						<visible>VideoPlayer.Content(episodes)</visible>
+						<!-- If season_number_for_next_episode_button AND episode_number_for_next_episode_button (from Twilight - player.py) are NOT 0 -->
+						<visible>!String.IsEqual(VideoPlayer.UniqueID(season_number_for_next_episode_button), 0) + !String.IsEqual(VideoPlayer.UniqueID(episode_number_for_next_episode_button), 0)</visible>
 						<!-- If current playing addon is NOT Idan Plus -->
 						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 						<!-- If not Live TV (pvr) -->
 						<visible>!VideoPlayer.Content(LiveTV)</visible>
 						<!-- If video is unpaused - pause -->
 						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
-						<!-- Rescrape and select source for current playing movie -->
-						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&autoplay=false)</onclick>
-						<!-- Open Twilight "Playback Options" window for current playing movie -->
-						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback_choice&media_type=movie&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.IMDBNumber])</onclick> -->
-						<!-- Rescrape and select source for current playing episode -->
-						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode]&autoplay=false)</onclick>
-						<!-- Open Twilight "Playback Options" window for current playing episode -->
-						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight//?mode=playback_choice&media_type=episode&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick> -->
+						<!-- Rescrape and select source for next episode -->
+						<onclick>RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.UniqueID(season_number_for_next_episode_button)]&episode=$INFO[VideoPlayer.UniqueID(episode_number_for_next_episode_button)]&autoplay=false)</onclick>
 					</control>
 					<control type="button" id="700454">
 						<description>Episodes Playlist Menu</description>
@@ -409,6 +405,35 @@
 						<onclick>ActivateWindow(1123)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV)</visible>
 					</control>
+					<control type="radiobutton" id="700453">
+						<description>Twilight Switch Source Button</description>
+						<include content="OSDButtonAdvanced">
+							<param name="texture" value="kodirdil/twilight_icon/twilight.png"/>
+							<param name="label">$LOCALIZE[700055]</param>
+							<param name="width">68</param>
+							<param name="height">62</param>
+							<param name="radiowidth">57</param>
+							<param name="radioheight">57</param>
+							<param name="textoffsetx">-6</param>
+							<param name="textoffsety">56</param>
+						</include>
+						<!-- If current playing media is movie or episode -->
+						<visible>VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)</visible>
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
+						<!-- If not Live TV (pvr) -->
+						<visible>!VideoPlayer.Content(LiveTV)</visible>
+						<!-- If video is unpaused - pause -->
+						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
+						<!-- Rescrape and select source for current playing movie -->
+						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&autoplay=false)</onclick>
+						<!-- Open Twilight "Playback Options" window for current playing movie -->
+						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback_choice&media_type=movie&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.IMDBNumber])</onclick> -->
+						<!-- Rescrape and select source for current playing episode -->
+						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode]&autoplay=false)</onclick>
+						<!-- Open Twilight "Playback Options" window for current playing episode -->
+						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight//?mode=playback_choice&media_type=episode&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick> -->
+					</control>
 					<control type="button" id="700452">
 						<description>Switch to next Audio track</description>
 						<texturenofocus colordiffuse="grey_a">kodirdil/next_audio_track/next_audio_track.png</texturenofocus>
@@ -417,20 +442,6 @@
 						<height>76</height>
 						<visible>Integer.IsGreater(VideoPlayer.AudioStreamCount,1)</visible>
 						<onclick>AudioNextLanguage</onclick>
-					</control>
-					<control type="radiobutton" id="598">
-					<visible>$EXP[SkinZoomToggle]</visible>
-						<include content="OSDButtonAdvanced">
-							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
-							<param name="label">$LOCALIZE[700038]</param>
-							<param name="width">68</param>
-							<param name="height">62</param>
-							<param name="radiowidth">55</param>
-							<param name="radioheight">55</param>
-							<param name="textoffsetx">13</param>
-							<param name="textoffsety">60</param>
-						</include>
-						<include condition="$EXP[LiveTvCondition]">Out</include>
 					</control>
 					<control type="radiobutton" id="599">
 						<visible>$EXP[SkinZoomToggle]</visible>
@@ -445,6 +456,20 @@
 							<param name="textoffsety">60</param>
 						</include>
 						<include condition="$EXP[LiveTvCondition]">In</include>
+					</control>
+					<control type="radiobutton" id="598">
+					<visible>$EXP[SkinZoomToggle]</visible>
+						<include content="OSDButtonAdvanced">
+							<param name="texture" value="kodirdil/zoom/zoom-out-hand.png"/>
+							<param name="label">$LOCALIZE[700038]</param>
+							<param name="width">68</param>
+							<param name="height">62</param>
+							<param name="radiowidth">55</param>
+							<param name="radioheight">55</param>
+							<param name="textoffsetx">13</param>
+							<param name="textoffsety">60</param>
+						</include>
+						<include condition="$EXP[LiveTvCondition]">Out</include>
 					</control>
 					<!-- Info button - unused because Pause Window (Custom_1122_PlayerPauseWindow.xml)
 					<control type="radiobutton" id="70043">
