@@ -97,8 +97,6 @@
     <setting id="rd.token" default="true" />
     <setting id="rd.enabled" default="true">true</setting>
     <setting id="rd.account_id" default="true" />
-    <setting id="rd.torrent.enabled" default="true">true</setting>
-    <setting id="rd.hoster.enabled" default="true">true</setting>
     <setting id="store_resolved_torrent.real-debrid" default="true">0</setting>
     <setting id="provider.rd_cloud">true</setting>
     <setting id="rd_cloud.title_filter" default="true">true</setting>
@@ -109,8 +107,6 @@
     <setting id="pm.token" default="true" />
     <setting id="pm.enabled" default="true">true</setting>
     <setting id="pm.account_id" default="true" />
-    <setting id="pm.torrent.enabled" default="true">true</setting>
-    <setting id="pm.hoster.enabled" default="true">true</setting>
     <setting id="store_resolved_torrent.premiumize.me" default="true">0</setting>
     <setting id="provider.pm_cloud" default="true">false</setting>
     <setting id="pm_cloud.title_filter" default="true">true</setting>
@@ -121,8 +117,6 @@
     <setting id="ad.token" default="true" />
     <setting id="ad.enabled" default="true">true</setting>
     <setting id="ad.account_id" default="true" />
-    <setting id="ad.torrent.enabled" default="true">true</setting>
-    <setting id="ad.hoster.enabled" default="true">true</setting>
     <setting id="store_resolved_torrent.alldebrid" default="true">0</setting>
     <setting id="provider.ad_cloud" default="true">false</setting>
     <setting id="ad_cloud.title_filter" default="true">true</setting>
@@ -205,9 +199,6 @@
     <setting id="autoplay_default_action" default="true">0</setting>
     <setting id="autoplay_next_window_percentage" default="true">95</setting>
     <setting id="autoplay_use_chapters" default="true">true</setting>
-    <setting id="autoscrape_next_episode">true</setting>
-    <setting id="autoscrape_next_window_percentage" default="true">95</setting>
-    <setting id="autoscrape_use_chapters" default="true">true</setting>
     <setting id="auto_resume_episode">1</setting>
     <setting id="playback.resume_percent">3</setting>
     <setting id="playback.watched_percent" default="true">90</setting>
@@ -233,7 +224,7 @@
     <setting id="meta_language">he</setting>
     <setting id="meta_mpaa_region" default="true">US</setting>
     <setting id="results.sort_order" default="true">1</setting>
-    <setting id="database.maintenance.due">1700613188</setting>
+    <setting id="database.maintenance.due">1709644869</setting>
     <setting id="reuse_language_invoker" default="true">true</setting>
     <setting id="folder1.display_name" default="true">Folder 1</setting>
     <setting id="folder1.movies_directory" default="true">None</setting>
@@ -252,7 +243,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.2.24</setting>
+    <setting id="version_number">3.2.50</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</setting>
     <setting id="main_highlight">FF3285FF</setting>
