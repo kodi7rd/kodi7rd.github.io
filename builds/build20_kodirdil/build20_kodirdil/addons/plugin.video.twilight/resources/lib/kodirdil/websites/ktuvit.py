@@ -343,11 +343,13 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
         # burekas fix for KT titles
         if ('i class' in title_subtitle):
             burekas_title_regex = 'כתובית מתוקנת\'></i>(.+?)$'
-            burekas_title = re.compile(burekas_title_regex, re.DOTALL).findall(title_subtitle)
-            title_subtitle = burekas_title[0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+            burekas_title = re.compile(burekas_title_regex,re.DOTALL).findall(title_subtitle)
+            final_title_subtitle = burekas_title[0]
         else:
-            title_subtitle = title_subtitle.replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+            final_title_subtitle = title_subtitle
+
+        final_title_subtitle = final_title_subtitle.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
             
-        ktuvit_subtitles_list.append(title_subtitle)
+        ktuvit_subtitles_list.append(final_title_subtitle)
     
     return ktuvit_subtitles_list
