@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.1.3[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.4[/B][/COLOR]
+* Slightly improve subtitles to source percentage matching accuracy.
+* Ktuvit TV Shows search bug fix.
+[COLOR yellow][B]v4.1.3[/B][/COLOR]
 * Bring back 4.1.1 "Massive speed improvement of Google machine translate".
 * BUG FIX: Subscene Cloudflare bypass.
 * BUG FIX: Subscene machine translate doesn't appear.

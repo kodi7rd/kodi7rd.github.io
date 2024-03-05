@@ -98,14 +98,14 @@ def sort_subtitles(save_all_data,video_data):
           
          
           
-          if 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value and 'sync' in json_value and 'hearing_imp' in json_value:
+          if 'filename' in json_value and 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value:
           
            # Video file array
            array_original=video_data['file_original_path'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
            array_original=[x.strip().lower() for x in array_original if x != '']
            
            # Subtitle name array
-           array_subs=json_value['label2'].replace(json_value['site_id'],'').strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").split(".")
+           array_subs=json_value['filename'].strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").split(".")
            array_subs=[x.strip().lower() for x in array_subs if x != '']
            
            # Original subtitle name array

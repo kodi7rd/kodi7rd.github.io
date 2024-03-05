@@ -84,7 +84,7 @@ def get_subs(item):
         s_WithSubsOnly = "true"
     else:
         s_type='1'
-        s_title=item["TVshowtitle"]
+        s_title=item["OriginalTitle"]
         s_WithSubsOnly = "false"
         
     if 1:
@@ -195,13 +195,16 @@ def get_subs(item):
             m=re.compile(regex,re.DOTALL).findall(itt)
             if len(m)==0:
                 continue
-                
+
             if ('i class' in m[0][0]):    #burekas fix for KT titles
                 regex='כתובית מתוקנת\'></i>(.+?)$'
                 n=re.compile(regex,re.DOTALL).findall(m[0][0])
-                nm=n[0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+                nm=n[0]
             else:
-                nm=m[0][0].replace('\n','').replace('\r','').replace('\t','').replace(' ','')            
+                nm=m[0][0]
+
+            nm=nm.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
+            nm=nm.replace("'", '') # Remove problematic character from sub filename (creates error saving the file)
             
             data='{"request":{"FilmID":"%s","SubtitleID":"%s","FontSize":0,"FontColor":"","PredefinedLayout":-1}}'%(f_id,m[0][1])
             download_data={}
