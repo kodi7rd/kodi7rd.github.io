@@ -17,7 +17,7 @@ xbmc_tranlate_path=xbmcvfs.translatePath
 __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_bs'))
 
-site_id='[Bs]'
+site_id='[BSPlayer]'
 sub_color='lightblue'
 
 __soap_format = (

@@ -81,7 +81,7 @@
 	
 	<category label="חלון כתוביות DarkSubs">
 		<setting label="מיקום וגודל חלון כתוביות DarkSubs" type="lsep"/>
-		<setting id="subs_width" label="רוחב חלון" type="number" default="1145"/>
+		<setting id="subs_width" label="רוחב חלון" type="number" default="1190"/>
 		<setting id="subs_height" label="גובה חלון" type="number" default="360" />
 		<setting id="subs_px" label="מיקום X" type="number" default="1" />
 		<setting id="subs_py" label="מיקום Y" type="number" default="7" />

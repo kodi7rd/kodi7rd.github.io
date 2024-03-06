@@ -36,7 +36,7 @@ OPS_API_BASE_URL = u"https://api.opensubtitles.com/api/v1"
 # OPS_API_LOGIN_URL = f"{OPS_API_BASE_URL}/login"
 OPS_API_SEARCH_URL = f"{OPS_API_BASE_URL}/subtitles"
 OPS_API_DOWNLOAD_URL = f"{OPS_API_BASE_URL}/download"
-site_id='[Ops]'
+site_id='[OpenSubtitles]'
 sub_color='FFFE9900'
 #########################################
 

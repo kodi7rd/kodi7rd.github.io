@@ -147,7 +147,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                     pass
                 
                 if (self.last_sub_name_in_cache==items[8]) and (self.last_sub_language_in_cache==items[0]):
-                    added_string='[COLOR yellow][B][I]כתובית נוכחית << '
+                    added_string='[COLOR FFFF00FE][B][I]כתובית נוכחית << '
                 elif val and items[0] in val:
                     added_string='[COLOR deepskyblue][B][I]'
                 else:

@@ -19,7 +19,7 @@ xbmc_tranlate_path=xbmcvfs.translatePath
 __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_subscene'))
 que=urllib.parse.quote_plus
-site_id='[SS]'
+site_id='[Subscene]'
 sub_color='deepskyblue'
 main_url = "https://subscene.com"
 class TLSAdapter(requests.adapters.HTTPAdapter):

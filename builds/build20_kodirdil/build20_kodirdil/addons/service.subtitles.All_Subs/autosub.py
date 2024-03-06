@@ -441,7 +441,7 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                 pass
 
             if (last_sub_name_in_cache==items[8]) and (last_sub_language_in_cache==items[0]):
-                added_string='[COLOR yellow][B][I]כתובית נוכחית << '
+                added_string='[COLOR FFFF00FE][B][I]כתובית נוכחית << '
             elif val and items[0] in val:
                 added_string='[COLOR deepskyblue][B][I]'
             else:

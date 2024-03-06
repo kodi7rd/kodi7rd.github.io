@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v4.1.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.5[/B][/COLOR]
+* Change site_id parameter in subtitle name to full website name.
+* Change selected subtitle caption color to [COLOR FFFF00FE][B][I]כתובית נוכחית[/I][/B][/COLOR].
+* Change default sub window width setting.
+[COLOR yellow][B]v4.1.4[/B][/COLOR]
 * Slightly improve subtitles to source percentage matching accuracy.
 * Ktuvit TV Shows search bug fix.
 [COLOR yellow][B]v4.1.3[/B][/COLOR]
