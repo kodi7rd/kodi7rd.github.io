@@ -10,7 +10,6 @@
     <setting id="language_arab" default="true">false</setting>
     <setting id="auto_translate">true</setting>
     <setting id="translate_p" default="true">0</setting>
-    <setting id="bing_translate_keys_method">1</setting>
     <setting id="other_lang" default="true" />
     <setting id="all_lang">true</setting>
     <setting id="autosub">true</setting>
@@ -27,10 +26,10 @@
     <setting id="subtitle_trans_cache">15</setting>
     <setting id="dummy_setting" default="true" />
     <setting id="OS_USER_API_KEY_VALUE" default="true" />
-    <setting id="subs_width">1145</setting>
+    <setting id="subs_width">1190</setting>
     <setting id="subs_height">360</setting>
     <setting id="subs_px">1</setting>
     <setting id="subs_py">7</setting>
-    <setting id="fast_subs" default="true" />
     <setting id="man_search_subs" default="true" />
+    <setting id="fast_subs" default="true" />
 </settings>
