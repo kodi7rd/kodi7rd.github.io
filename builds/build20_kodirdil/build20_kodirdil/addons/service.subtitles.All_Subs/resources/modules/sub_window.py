@@ -1,7 +1,8 @@
-import xbmc,xbmcaddon,json,os
+import xbmc,xbmcaddon,json,os,shutil
 Addon=xbmcaddon.Addon()
 from resources.modules import log
 from resources.modules.engine import download_sub
+from resources.modules.general import CachedSubFolder
 from urllib.parse import parse_qsl
 from resources.modules.general import user_dataDir,MySubFolder,save_file_name,get_db_data,Thread
 import urllib.parse
@@ -114,9 +115,34 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                 if not hebrewEmbedded:
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)
                     save_file_name(filename,language)
+                    # Save sub in Cached_subs
+                    f_count=0
+                    max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
+                    for filename_o in os.listdir(CachedSubFolder):
+                        
+                        f_count+=1
+                    
+                    if (f_count>max_sub_cache):
+                            for filename_o in os.listdir(CachedSubFolder):
+                                f = os.path.join(CachedSubFolder, filename_o)
+                                os.remove(f) 
+                    
+                    
+                    try:
+                        file_type=(os.path.splitext(sub_file)[1])
+                    except:
+                        file_type=""
+                    c_sub_file=os.path.join(CachedSubFolder, f"{source}_{language}_{filename}{file_type}")
+                    
+                    if not os.path.exists(c_sub_file):
+                            if file_type=='.idx' or file_type=='.sup':
+                                shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
+                            
+                            shutil.copy(sub_file,c_sub_file)
                 else:
-                   self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
-                   save_file_name(unque(filename),language)
+                    self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
+                    save_file_name(unque(filename),language)
+                           
                 self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data(self.full_list)
                 self.set_active_controls()
                 from resources.modules import general
@@ -161,7 +187,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                     sub_name='[COLOR gold] GOLD '+sub_name+'[/COLOR]'
 
                 # Subtitle language is taken from items[0] (json_value['label'])
-                sub_language = f"[COLOR blue]{items[0]}[/COLOR]" if items[0]=="Hebrew" else items[0]
+                sub_language = f"[COLOR blue]Hebrew[/COLOR]" if "Hebrew" in items[0] else items[0]
                 n_items.append(f"[B]{sub_language} |[/B] {sub_name}")
               
               

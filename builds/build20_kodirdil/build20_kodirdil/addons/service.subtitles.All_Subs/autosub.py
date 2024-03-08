@@ -196,10 +196,14 @@ def format_website_source_name(source):
     
 # Currently only for Hebrew/English, the most common.
 def translate_sub_language_to_hebrew(language):
-    if language == "Hebrew":
+    if "Hebrew" in language:
         return "עברית"
     elif language == "English":
         return "אנגלית"
+    elif language == "Russian":
+        return "רוסית"
+    elif language == "Arabic":
+        return "ערבית"
     else:
         return language
     
@@ -399,7 +403,7 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
                 file_type=(os.path.splitext(sub_file)[1])
             except:
                 file_type=""
-            c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
+            c_sub_file=os.path.join(CachedSubFolder, f"{source}_{language}_{filename}{file_type}")
             if not os.path.exists(c_sub_file):
                     if file_type=='.idx'  or file_type=='.sup':
                         shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
@@ -626,7 +630,7 @@ def sub_from_main(arg):
                 file_type=(os.path.splitext(sub_file)[1])
             except:
                 file_type=""
-            c_sub_file=os.path.join(CachedSubFolder,source+language+filename+file_type)
+            c_sub_file=os.path.join(CachedSubFolder, f"{source}_{language}_{filename}{file_type}")
             
             if not os.path.exists(c_sub_file):
                     if file_type=='.idx' or file_type=='.sup':

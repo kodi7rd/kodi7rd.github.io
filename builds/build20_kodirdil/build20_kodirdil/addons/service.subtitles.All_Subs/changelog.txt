@@ -1,4 +1,9 @@
-﻿[COLOR yellow][B]v4.1.5[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.6[/B][/COLOR]
+* Deleted unnecessary code files.
+* DarkSubs's sub window bug fix (cached subs).
+* Rearranged some settings labels.
+* Small code refactor.
+[COLOR yellow][B]v4.1.5[/B][/COLOR]
 * Change site_id parameter in subtitle name to full website name.
 * Change selected subtitle caption color to [COLOR FFFF00FE][B][I]כתובית נוכחית[/I][/B][/COLOR].
 * Change default sub window width setting.

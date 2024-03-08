@@ -3,17 +3,20 @@
 	<category label="מקורות תרגום">
 		
 		<setting label="אתרי כתוביות ישראליים" type="lsep"/>
-		<setting id="ktuvit" label="Ktuvit [COLOR blue](https://www.ktuvit.me/)[/COLOR]" type="bool" default="true" />
+		<setting id="ktuvit" label="Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
 		<setting id="wizdom" label="Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
 		
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
 		<setting id="opensubtitles" label="OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
-		<setting id="subscene" label="Subscene [COLOR blue](https://subscene.com/)[/COLOR]" type="bool" default="true" />
+		<setting id="subscene" label="Subscene [COLOR blue](https://subscene.com)[/COLOR]" type="bool" default="true" />
 		<setting id="bsplayer" label="BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
 	
 	<category label="שפות">
 	
+		<setting label="הפעל כדי לחפש בכל השפות (כולל עברית!)" type="lsep"/>
+		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
+		
 		<setting label="שפות נפוצות" type="lsep"/>
 		<setting id="language_hebrew" label="עברית" type="bool" default="true" />
 		<setting id="language_english" label="אנגלית" type="bool" default="true" />
@@ -29,7 +32,7 @@
 		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
 		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
-		<setting id="all_lang" label="חפש בכל השפות" type="bool" default="false" />
+		<setting id="dummy_setting1" label="" type="action" action="" visible="false" />
 	</category>
 	
 	<category label="הגדרות כלליות">
@@ -49,9 +52,10 @@
 		<setting id="time_s" type="number" label="זמן חיפוש מקסימלי (בשניות)" default="10"/>
 		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />
 		
-		<setting label="אל תכלול הרחבה פסיק ביניהם" type="lsep"/>
-		<setting label="('idanplus','sdarot.tv','youtube','kids_new' Excluded)" type="lsep"/>
-		<setting id="ExcludedAddons" type="text" source="video" label="אל תכלול הרחבות" default="" />
+		<setting label="החרג חיפוש כתוביות בהרחבות (עם פסיק ביניהם)" type="lsep"/>
+		<setting id="ExcludedAddons" type="text" source="video" label="הזן כאן" default="" />
+		<setting label="['idanplus','sdarot.tv','youtube','kids_new'] :מוחרגות ברירת מחדל" type="lsep"/>
+		<setting id="dummy_setting2" label="" type="action" action="" visible="false" />
 		
 		<setting label="Log DEBUG" type="lsep"/>
 		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
@@ -73,7 +77,7 @@
 	<category label="חשבונות">
 	
 		<setting label="OpenSubtitles.com" type="lsep"/>
-		<setting id="dummy_setting" label="" type="action" action="" visible="false" />
+		<setting id="dummy_setting3" label="" type="action" action="" visible="false" />
 		
 		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 100 הורדות ביום)" type="lsep"/>
 		<setting id="OS_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>

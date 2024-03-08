@@ -19,7 +19,6 @@ from concurrent import futures
 trans_result=[]
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
-#import requests
 break_all=False
 
 
@@ -922,7 +921,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
     except:
         pass
     
-    ext=['.srt','.sub','.sup','.idx']
+    ext=['.srt','.sub','.sup','.idx','.ass']
     Addon=xbmcaddon.Addon()
     try:
         shutil.rmtree(MySubFolder)
@@ -948,16 +947,16 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             for filename_o in os.listdir(CachedSubFolder):
                 f = os.path.join(CachedSubFolder, filename_o)
                 os.remove(f) 
-    c_sub_file=os.path.join(CachedSubFolder,source+language+filename)
-    found=False
+    c_sub_file=os.path.join(CachedSubFolder, f"{source}_{language}_{filename}")
+    found_in_cache=False
     for items in ext:
         log.warning(c_sub_file+items)
         if os.path.exists(c_sub_file+items):
             sub_file=c_sub_file+items
-            found=True
+            found_in_cache=True
             log.warning('Found cache')
             break
-    if not found:
+    if not found_in_cache:
         try:
             sub_file=impmodule.download(download_data,MySubFolder)
         except Exception as e:
@@ -966,14 +965,15 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             return 'FaultSubException'
         
     # Auto punctuation fix for external Hebrew subtitles.
-    if language=='Hebrew' and Addon.getSetting("auto_fix_sub_punctuation")=='true':
-        try:
-            fix_sub_punctuation_and_write(sub_file)
-        except Exception as e:
-            log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
-            pass
+    if 'Hebrew' in language:
+        if Addon.getSetting("auto_fix_sub_punctuation")=='true':
+            try:
+                fix_sub_punctuation_and_write(sub_file)
+            except Exception as e:
+                log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
+                pass
     
-    elif language!='Hebrew' and Addon.getSetting("auto_translate")=='true':
+    elif Addon.getSetting("auto_translate")=='true':
         
         f_count=0
         for filename_o in os.listdir(TransFolder):
@@ -983,9 +983,10 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             for filename_o in os.listdir(TransFolder):
                 f = os.path.join(TransFolder, filename_o)
                 os.remove(f)
-        trans_file=os.path.join(TransFolder, language+filename)
-        
+        trans_file=os.path.join(TransFolder, filename)
+        already_translated=True
         if not os.path.exists(trans_file):
+            already_translated=False
             translate_subs(sub_file,trans_file)
         sub_file=trans_file
     log.warning(f"general.break_all: {general.break_all}")
