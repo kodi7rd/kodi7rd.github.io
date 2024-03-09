@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.1.6[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.7[/B][/COLOR]
+* Colorized website names in addon settings.
+[COLOR yellow][B]v4.1.6[/B][/COLOR]
 * Deleted unnecessary code files.
 * DarkSubs's sub window bug fix (cached subs).
 * Rearranged some settings labels.

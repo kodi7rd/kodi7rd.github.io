@@ -3,13 +3,12 @@
 	<category label="מקורות תרגום">
 		
 		<setting label="אתרי כתוביות ישראליים" type="lsep"/>
-		<setting id="ktuvit" label="Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
-		<setting id="wizdom" label="Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
-		
+		<setting id="ktuvit" label="[COLOR FF3CFA38]Ktuvit[/COLOR] [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
+		<setting id="wizdom" label="[COLOR yellow]Wizdom[/COLOR] [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
-		<setting id="opensubtitles" label="OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
-		<setting id="subscene" label="Subscene [COLOR blue](https://subscene.com)[/COLOR]" type="bool" default="true" />
-		<setting id="bsplayer" label="BSPlayer [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
+		<setting id="opensubtitles" label="[COLOR FFFE9900]OpenSubtitles[/COLOR] [COLOR blue](http://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
+		<setting id="subscene" label="[COLOR deepskyblue]Subscene[/COLOR] [COLOR blue](https://subscene.com)[/COLOR]" type="bool" default="true" />
+		<setting id="bsplayer" label="[COLOR lightblue]BSPlayer[/COLOR] [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
 	
 	<category label="שפות">
