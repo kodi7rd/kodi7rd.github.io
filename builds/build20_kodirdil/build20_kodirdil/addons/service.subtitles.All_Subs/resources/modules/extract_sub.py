@@ -3,6 +3,7 @@ import zipfile
 import xbmcvfs
 import os,gzip,shutil
 from resources.modules import log
+exts = [".idx",".sup",".srt", ".sub", ".str", ".ass"]
 def convert_to_utf(file):
     import codecs
     try:
@@ -15,7 +16,6 @@ def convert_to_utf(file):
     
 def extract(archive_file,MySubFolder):
     try:
-        exts = [".idx",".sup",".srt", ".sub", ".str"]
         with zipfile.ZipFile(archive_file, 'r') as zip_ref:
                     zip_ref.extractall(MySubFolder)
                         
@@ -33,7 +33,6 @@ def extract(archive_file,MySubFolder):
         return archive_file
     return '0'
 def g_extract(archive_file,dest,MySubFolder):
-    exts = [".srt", ".sub", ".str"]
     log.warning(archive_file)
     with gzip.open(archive_file, 'rb') as f_in:
             with open(dest, 'wb') as f_out:
