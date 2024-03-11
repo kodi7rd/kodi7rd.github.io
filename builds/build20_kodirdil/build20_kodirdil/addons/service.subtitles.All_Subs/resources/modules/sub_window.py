@@ -138,7 +138,11 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                             if file_type=='.idx' or file_type=='.sup':
                                 shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
                             
-                            shutil.copy(sub_file,c_sub_file)
+                            try:
+                                shutil.copy(sub_file,c_sub_file)
+                            except Exception as e:
+                                log.warning(f"shutil.copy(sub_file,c_sub_file) | Exception: {str(e)}")
+                                pass
                 else:
                     self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
                     save_file_name(unque(filename),language)

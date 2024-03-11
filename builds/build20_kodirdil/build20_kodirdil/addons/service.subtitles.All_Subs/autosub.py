@@ -407,7 +407,11 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             if not os.path.exists(c_sub_file):
                     if file_type=='.idx'  or file_type=='.sup':
                         shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
-                    shutil.copy(sub_file,c_sub_file)
+                    try:
+                        shutil.copy(sub_file,c_sub_file)
+                    except Exception as e:
+                        log.warning(f"shutil.copy(sub_file,c_sub_file) | Exception: {str(e)}")
+                        pass
             
             ################################################################################################################################
             # Reformatting variables for user notification of auto selected subtitle
@@ -636,7 +640,11 @@ def sub_from_main(arg):
                     if file_type=='.idx' or file_type=='.sup':
                         shutil.copy(sub_file,c_sub_file.replace('idx','sub').replace('sup','sub'))
                     
-                    shutil.copy(sub_file,c_sub_file)
+                    try:
+                        shutil.copy(sub_file,c_sub_file)
+                    except Exception as e:
+                        log.warning(f"shutil.copy(sub_file,c_sub_file) | Exception: {str(e)}")
+                        pass
                     
         return_result=json.dumps(sub_file)
         

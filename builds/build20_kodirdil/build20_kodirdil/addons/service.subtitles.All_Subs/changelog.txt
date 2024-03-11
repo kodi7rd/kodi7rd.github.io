@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.1.8[/B][/COLOR]
+﻿[COLOR yellow][B]v4.1.9[/B][/COLOR]
+* Small cached subs bug fix.
+[COLOR yellow][B]v4.1.8[/B][/COLOR]
 * Extract sub function: add .ass extension.
 [COLOR yellow][B]v4.1.7[/B][/COLOR]
 * Colorized website names in addon settings.
