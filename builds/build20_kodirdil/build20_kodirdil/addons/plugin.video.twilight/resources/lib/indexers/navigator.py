@@ -338,7 +338,6 @@ class Navigator:
 					listitem.setLabel(display)
 					listitem.setArt({'fanart': fanart})
 					info_tag = listitem.getVideoInfoTag()
-					# info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
 					listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': clean_title, 'iconImage': folder_icon,
 										'service': 'FOLDERS', 'id': link_id}))
@@ -376,7 +375,6 @@ class Navigator:
 					listitem.setLabel(display)
 					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart, 'banner': folder_icon, 'landscape': folder_icon})
 					info_tag = listitem.getVideoInfoTag()
-					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
 					yield (url, listitem, isFolder)
 		action = self.params_get('action')
@@ -392,7 +390,6 @@ class Navigator:
 			listitem.setLabel('[I]%s...[/I]' % make_short_str)
 			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon})
 			info_tag = listitem.getVideoInfoTag()
-			# info_tag.setMediaType('video')
 			info_tag.setPlot(' ')
 			add_item(int(sys.argv[1]), url, listitem, False)
 		def _builder():
@@ -408,7 +405,6 @@ class Navigator:
 					listitem.setLabel(name)
 					listitem.setArt({'icon': folder_icon, 'poster': folder_icon, 'thumb': folder_icon, 'fanart': fanart, 'banner': folder_icon})
 					info_tag = listitem.getVideoInfoTag()
-					# info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
 					listitem.setProperty('twilight.context_main_menu_params', build_url({'mode': 'menu_editor.edit_menu_external', 'name': name, 'iconImage': folder_icon}))
 					if self.is_home: listitem.setProperty('twilight.external', 'true')
@@ -426,7 +422,6 @@ class Navigator:
 			listitem.setLabel('[I]%s...[/I]' % add_cont_str)
 			listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': fanart, 'banner': new_icon})
 			info_tag = listitem.getVideoInfoTag()
-			# info_tag.setMediaType('video')
 			info_tag.setPlot(' ')
 			add_item(int(sys.argv[1]), url, listitem, False)
 		def _process():
@@ -451,7 +446,6 @@ class Navigator:
 					listitem.setLabel(name)
 					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					info_tag = listitem.getVideoInfoTag()
-					# info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
 					listitem.addContextMenuItems(cm)
 					listitem.setProperty('twilight.context_main_menu_params', menu_editor_url)
@@ -513,7 +507,6 @@ class Navigator:
 				listitem.setLabel(ls(item_get('name', '')))
 				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
 				info_tag = listitem.getVideoInfoTag()
-				# info_tag.setMediaType('video')
 				info_tag.setPlot(' ')
 				listitem.addContextMenuItems(cm)
 				listitem.setProperty('twilight.context_main_menu_params', menu_editor_url)
@@ -531,7 +524,6 @@ class Navigator:
 		listitem.setLabel(list_name)
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
 		info_tag = listitem.getVideoInfoTag()
-		# info_tag.setMediaType('video')
 		info_tag.setPlot(' ')
 		if contextmenu_edit:
 			cm = []
