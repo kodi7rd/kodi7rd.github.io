@@ -25,6 +25,7 @@ break_all=False
 from resources.sources import bsplayer
 from resources.sources import ktuvit
 from resources.sources import opensubtitles
+from resources.sources import subdl
 from resources.sources import subscene
 from resources.sources import wizdom
 global global_sub_size,global_progress
@@ -79,7 +80,7 @@ def sort_subtitles(save_all_data,video_data):
                      'telecine','hdts','telesync']
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
-    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[Subscene]', '[BSPlayer]']
+    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[Subscene]', '[BSPlayer]']
     #########################################
     
     all_data=[]
@@ -343,6 +344,8 @@ def format_website_source_name(source):
         return "Subscene"
     elif source == "opensubtitles":
         return "OpenSubtitles"
+    elif source == "subdl":
+        return "SubDL"
     else:
         return source
         
@@ -362,9 +365,12 @@ def c_get_subtitles(video_data):
     bsplayer.global_var=[]
     ktuvit.global_var=[]
     opensubtitles.global_var=[]
+    subdl.global_var=[]
     subscene.global_var=[]
     wizdom.global_var=[]
         
+    # Israeli subtitles websites
+    
     if Addon.getSetting('ktuvit')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
         
         thread.append(Thread(ktuvit.get_subs,video_data))
@@ -375,10 +381,17 @@ def c_get_subtitles(video_data):
         thread.append(Thread(wizdom.get_subs,video_data))
         all_sources.append(('wizdom',wizdom))
         
+    # Global subtitles websites
+        
     if Addon.getSetting('opensubtitles')=='true':
         
         thread.append(Thread(opensubtitles.get_subs,video_data))
         all_sources.append(('opensubtitles',opensubtitles))
+        
+    if Addon.getSetting('subdl')=='true':
+        
+        thread.append(Thread(subdl.get_subs,video_data))
+        all_sources.append(('subdl',subdl))
         
     if Addon.getSetting('subscene')=='true':
         

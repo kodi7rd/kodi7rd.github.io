@@ -15,6 +15,7 @@ from resources.modules import general
 from resources.sources import bsplayer
 from resources.sources import ktuvit
 from resources.sources import opensubtitles
+from resources.sources import subdl
 from resources.sources import subscene
 from resources.sources import wizdom
 Addon=xbmcaddon.Addon()
@@ -191,6 +192,8 @@ def format_website_source_name(source):
         return "Subscene"
     elif source == "opensubtitles":
         return "OpenSubtitles"
+    elif source == "subdl":
+        return "SubDL"
     else:
         return source
     

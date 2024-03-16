@@ -6,7 +6,8 @@
 		<setting id="ktuvit" label="[COLOR FF3CFA38]Ktuvit[/COLOR] [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
 		<setting id="wizdom" label="[COLOR yellow]Wizdom[/COLOR] [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
-		<setting id="opensubtitles" label="[COLOR FFFE9900]OpenSubtitles[/COLOR] [COLOR blue](http://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
+		<setting id="opensubtitles" label="[COLOR FFFE9900]OpenSubtitles[/COLOR] [COLOR blue](https://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
+		<setting id="subdl" label="[COLOR plum]SubDL[/COLOR] [COLOR blue](https://subdl.com)[/COLOR]" type="bool" default="true" />
 		<setting id="subscene" label="[COLOR deepskyblue]Subscene[/COLOR] [COLOR blue](https://subscene.com)[/COLOR]" type="bool" default="true" />
 		<setting id="bsplayer" label="[COLOR lightblue]BSPlayer[/COLOR] [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
@@ -75,11 +76,17 @@
 	
 	<category label="חשבונות">
 	
-		<setting label="OpenSubtitles.com" type="lsep"/>
+		<setting label="[COLOR FFFE9900]OpenSubtitles[/COLOR]" type="lsep"/>
 		<setting id="dummy_setting3" label="" type="action" action="" visible="false" />
 		
 		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 100 הורדות ביום)" type="lsep"/>
 		<setting id="OS_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
+	
+		<setting label="[COLOR plum]SubDL[/COLOR]" type="lsep"/>
+		<setting id="dummy_setting4" label="" type="action" action="" visible="false" />
+		
+		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 200 הורדות ביום)" type="lsep"/>
+		<setting id="SUBDL_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
 	</category>
 	
 	<category label="חלון כתוביות DarkSubs">

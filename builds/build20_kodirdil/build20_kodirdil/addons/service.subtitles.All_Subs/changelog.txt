@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.1.9[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.0[/B][/COLOR]
+* Add SubDL subtitles website (https://subdl.com)
+* Add user setting to add your own SubDL API key (Optional).
+[COLOR yellow][B]v4.1.9[/B][/COLOR]
 * Small cached subs bug fix.
 [COLOR yellow][B]v4.1.8[/B][/COLOR]
 * Extract sub function: add .ass extension.
