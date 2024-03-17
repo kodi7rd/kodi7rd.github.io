@@ -369,7 +369,7 @@ def c_get_subtitles(video_data):
     subscene.global_var=[]
     wizdom.global_var=[]
         
-    # Israeli subtitles websites
+    # Israeli subtitles sources
     
     if Addon.getSetting('ktuvit')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
         
@@ -381,7 +381,7 @@ def c_get_subtitles(video_data):
         thread.append(Thread(wizdom.get_subs,video_data))
         all_sources.append(('wizdom',wizdom))
         
-    # Global subtitles websites
+    # Global subtitles sources
         
     if Addon.getSetting('opensubtitles')=='true':
         
