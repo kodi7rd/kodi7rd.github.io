@@ -239,13 +239,11 @@ def get_video_data_playing():
     
     
     # Get the season number of the currently playing video (if empty - 0)
-    season = xbmc.getInfoLabel("VideoPlayer.Season")
-    video_data['season'] = int(season) if season else 0
+    video_data['season'] = xbmc.getInfoLabel("VideoPlayer.Season") or '0'
         
         
     # Get the episode number of the currently playing video (if empty - 0)
-    episode = xbmc.getInfoLabel("VideoPlayer.Episode")
-    video_data['episode'] = int(episode) if episode else 0
+    video_data['episode'] = xbmc.getInfoLabel("VideoPlayer.Episode") or '0'
     
     
     # Get the MPAA rating of the currently playing video
@@ -297,13 +295,11 @@ def get_video_data_not_playing():
     
     
     # Get the season number of the currently selected item (if empty - 0)
-    season = xbmc.getInfoLabel("ListItem.Season")
-    video_data['season'] = int(season) if season else 0
+    video_data['season'] = xbmc.getInfoLabel("ListItem.Season") or '0'
     
     
     # Get the episode number of the currently selected item (if empty - 0)
-    episode = xbmc.getInfoLabel("ListItem.Episode")
-    video_data['episode'] = int(episode) if episode else 0
+    video_data['episode'] = xbmc.getInfoLabel("ListItem.Episode") or '0'
     
     
     # Get the MPAA rating of the currently selected item
@@ -354,7 +350,7 @@ def get_video_data():
 
 
     ##########################################################################################
-    if video_data['TVShowTitle'] and (video_data['season'] != 0 or video_data['episode'] != 0):
+    if video_data['TVShowTitle'] and (video_data['season'] != '0' or video_data['episode'] != '0'):
         media_type = 'tv'
     else:
         media_type = 'movie'
