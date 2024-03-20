@@ -224,19 +224,20 @@ def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
                 ID_from_ktuvit = result['ID']
                 break
 
-    # if ID_from_ktuvit == '':
-        # regex_helper = re.compile('\W+', re.UNICODE)
-        # title = regex_helper.sub('', title).lower()
-        # for result in ktuvit_search_page_results:
+    # if ids still empty (wrong imdb on ktuvit page) filtered by text      
+    if ID_from_ktuvit == '':
+        regex_helper = re.compile('\W+', re.UNICODE)
+        title = regex_helper.sub('', title).lower()
+        for result in ktuvit_search_page_results:
         
-            # eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
-            # heb_name = regex_helper.sub('', result['HebName'])
+            eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
+            heb_name = regex_helper.sub('', result['HebName'])
             
-            # if (title.startswith(eng_name) or eng_name.startswith(title) or
-                    # title.startswith(heb_name) or heb_name.startswith(title)):
-                # kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
-                # ID_from_ktuvit = result["ID"]
-                # break
+            if (title.startswith(eng_name) or eng_name.startswith(title) or
+                    title.startswith(heb_name) or heb_name.startswith(title)):
+                kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
+                ID_from_ktuvit = result["ID"]
+                break
     
     return ID_from_ktuvit
 

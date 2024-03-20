@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.53[/B][/COLOR]
+- Small Ktuvit code improvement.
+
 [COLOR dodgerblue][B]Version 3.2.52[/B][/COLOR]
 - [B]Tikipeter's FINAL version 3.2.29[/B]:
 - Added Kodi version check to startup services.
