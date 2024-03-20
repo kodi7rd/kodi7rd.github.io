@@ -69,9 +69,9 @@ def get_subs(item):
     login_cook=cache.get(get_login_cook,1, table='subs')
   
    
-    # if item["TVshowtitle"]:
+    # if item["TVShowTitle"]:
         # s_type='1'
-        # s_title=item["TVshowtitle"]
+        # s_title=item["TVShowTitle"]
     # else:
         # s_type='0'
         # s_title=item["OriginalTitle"]
@@ -124,17 +124,17 @@ def get_subs(item):
                 f_id=itt['ID']
                 break
 
-        #if ids still empty (wrong imdb on ktuvit page) filtered by text                
-        # if f_id == '':
-            # s_title = regexHelper.sub('', s_title).lower()        
-            # for itt in j_data:
-                # eng_name = regexHelper.sub('', regexHelper.sub(' ', itt['EngName'])).lower()
-                # heb_name = regexHelper.sub('', itt['HebName'])
+        # if ids still empty (wrong imdb on ktuvit page) filtered by text                
+        if f_id == '':
+            s_title = regexHelper.sub('', s_title).lower()        
+            for itt in j_data:
+                eng_name = regexHelper.sub('', regexHelper.sub(' ', itt['EngName'])).lower()
+                heb_name = regexHelper.sub('', itt['HebName'])
 
-                # if (s_title.startswith(eng_name) or eng_name.startswith(s_title) or
-                        # s_title.startswith(heb_name) or heb_name.startswith(s_title)):
-                    # f_id=itt["ID"]
-                    # break
+                if (s_title.startswith(eng_name) or eng_name.startswith(s_title) or
+                        s_title.startswith(heb_name) or heb_name.startswith(s_title)):
+                    f_id=itt["ID"]
+                    break
                 
         if f_id!='':
             url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id

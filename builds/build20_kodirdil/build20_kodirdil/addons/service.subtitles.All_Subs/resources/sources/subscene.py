@@ -117,7 +117,7 @@ def get_subs(item):
     all_nam_lang={}
     ok_lang=[]
     episode=""
-    if item['TVshowtitle']:
+    if item['TVShowTitle']:
         tv_movie='tv'
         name=item['OriginalTitle']
         season=item['season']

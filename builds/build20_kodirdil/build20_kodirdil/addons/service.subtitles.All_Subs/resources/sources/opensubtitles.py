@@ -53,11 +53,11 @@ def searchsubtitles(item):
     
 
     title = item.get('OriginalTitle', '')
-    tvshow = item.get('TVshowtitle', '')
     season = item.get('season', '')
     episode = item.get('episode', '')
     year = item.get('year', '')
     imdb_id = item.get('imdb', '')
+    media_type = item.get('media_type', '')
     
     lang=[]
 
@@ -84,9 +84,9 @@ def searchsubtitles(item):
     querystring['languages'] = lang_string
 
     # Build querystring WITH imdb_id (On new OpenSubtitles API - imdb_id can be with OR without the 'tt' prefix.)
-    if imdb_id.startswith('tt'):
+    if imdb_id:
     
-        if len(tvshow) > 0:
+        if media_type == 'tv':
             #################################################
             # Option 1 - TV Shows - by imdb id + season + episode
             #################################################
@@ -104,7 +104,7 @@ def searchsubtitles(item):
     else:
         querystring['query'] = title
         
-        if len(tvshow) > 0:
+        if media_type == 'tv':
             #################################################
             # Option 3 - TV Shows - by title + season + episode
             #################################################

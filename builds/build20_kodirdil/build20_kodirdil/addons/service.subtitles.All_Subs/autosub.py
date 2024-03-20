@@ -179,23 +179,6 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
             log.warning("isPlayingAddonExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%items )
             return True
     return False
-
-# Prettify website source name for autosub notification
-def format_website_source_name(source):
-    if source == "ktuvit":
-        return "Ktuvit"
-    elif source == "wizdom":
-        return "Wizdom"
-    elif source == "bsplayer":
-        return "BSPlayer"
-    elif source == "subscene":
-        return "Subscene"
-    elif source == "opensubtitles":
-        return "OpenSubtitles"
-    elif source == "subdl":
-        return "SubDL"
-    else:
-        return source
     
 # Currently only for Hebrew/English, the most common.
 def translate_sub_language_to_hebrew(language):
@@ -419,7 +402,8 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             ################################################################################################################################
             # Reformatting variables for user notification of auto selected subtitle
             if Addon.getSetting("enable_autosub_notifications")=='true':
-            
+                
+                from resources.modules.engine import format_website_source_name
                 notify_website_name = format_website_source_name(source)
                 notify_language = f"{translate_sub_language_to_hebrew(language)} (תרגום מכונה)" if language != "Hebrew" and Addon.getSetting("auto_translate")=='true' else translate_sub_language_to_hebrew(language)
                 notify_sync_percent = str(selected_sub[5])
@@ -881,8 +865,8 @@ class KodiMonitor(xbmc.Monitor):
             video_data=json.loads(video_data)
             if 'imdb' not in video_data:
                 video_data=get_video_data()
-            if 'TVshowtitle' not in video_data:
-                video_data['TVshowtitle']=""
+            if 'TVShowTitle' not in video_data:
+                video_data['TVShowTitle']=""
             log.warning('FoundMando_search33:')
             
             video_data['title']=clean_name(video_data['title'])
@@ -924,8 +908,8 @@ class KodiMonitor(xbmc.Monitor):
             
             video_data=get_video_data()
             
-            pre_video_id=video_id
-            video_id=video_data['OriginalTitle']+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])
+            # pre_video_id=video_id
+            # video_id=video_data['OriginalTitle']+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])
             
             # if (video_id!=pre_video_id):
                 
@@ -933,7 +917,7 @@ class KodiMonitor(xbmc.Monitor):
                 # trigger=True
             # Always trigger autosub, even when replaying the same content    
             trigger=True
-            pre_video_id=video_id
+            # pre_video_id=video_id
             
 
             sub_name=None

@@ -197,97 +197,186 @@ def take_title_from_focused_item():
         title = ("%s S%.2dE%.2d" % (labelTVShowTitle, int(labelSeason), int(labelEpisode)))
 
     return title
-def clean_name(name):
 
-  
+
+def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
 
-def get_video_data():
-    
 
+def get_video_data_playing():
+
+    video_data = {}
+
+    # Get the IMDb unique ID property of the currently playing video
+    video_data['imdb_UniqueID'] = xbmc.getInfoLabel("VideoPlayer.UniqueID(imdb)")
+    # Get the IMDBNumber property of the currently playing video
+    video_data['IMDBNumber'] = xbmc.getInfoLabel("VideoPlayer.IMDBNumber")
     
-    
-    video_data={}
-    if xbmc.Player().isPlaying():
-        
-        video_data['title']=xbmc.getInfoLabel("VideoPlayer.Title")
-        video_data['OriginalTitle']=xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
-        tag_fen=xbmcgui.Window(10000).getProperty("subs.player_filename")
-        
-        video_data['Tagline']=xbmc.getInfoLabel("VideoPlayer.Tagline")
-        if tag_fen!="":
-            video_data['Tagline']=tag_fen
-        
-        video_data['UniqueID']=xbmc.getInfoLabel("VideoPlayer.UniqueID(imdb)")
-        video_data['IMDBNumber']=xbmc.getInfoLabel("VideoPlayer.IMDBNumber")
-        video_data['year']=xbmc.getInfoLabel("VideoPlayer.Year")
-        video_data['TVshowtitle']=xbmc.getInfoLabel("VideoPlayer.TVshowtitle")
-        video_data['season']=xbmc.getInfoLabel("VideoPlayer.Season")
-        if video_data['season']=='' or str(video_data['season'])=='0':
-            video_data['season']=0
-        video_data['episode']=xbmc.getInfoLabel("VideoPlayer.Episode")
-        if video_data['episode']=='' or str(video_data['episode'])=='0':
-            video_data['episode']=0
-            
-        if 'tt' in video_data['UniqueID']:
-            video_data['imdb']=video_data['UniqueID']
-        else:
-            video_data['imdb']=video_data['IMDBNumber']
-        
-        
-        video_data['file_original_path'] = unquote((xbmc.Player().getPlayingFile()))  # Full path of a playing file
-        video_data['file_original_path'] = video_data['file_original_path'].split("?")
-        video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
-        video_data['mpaa']=xbmc.getInfoLabel("VideoPlayer.mpaa")
-        
+    if video_data['imdb_UniqueID'].startswith('tt'):
+        video_data['imdb'] = video_data['imdb_UniqueID']
     else:
-        video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
-        video_data['year'] = xbmc.getInfoLabel("ListItem.Year")
-        video_data['season'] = xbmc.getInfoLabel("ListItem.Season")
-        video_data['episode'] = xbmc.getInfoLabel("ListItem.Episode")
-        
-        
-
-        
-        if str(video_data['season'])=='' or str(video_data['season'])<str(1):
-            video_data['season'] = 0
+        video_data['imdb'] = video_data['IMDBNumber']
 
 
-        if str(video_data['episode'])=='' or int(video_data['episode'])<1:
-            video_data['episode'] = 0
-        if str(video_data['season']) == '0' or str(video_data['episode']) == '0':
-          video_data['tvshow'] =''
+    # Get the TMDB unique ID property of the currently playing video
+    video_data['tmdb'] = xbmc.getInfoLabel("VideoPlayer.UniqueID(tmdb)")
+    
+    
+    # Get the title of the currently playing video
+    video_data['title'] = xbmc.getInfoLabel("VideoPlayer.Title")
 
-        else:
-          video_data['tvshow'] =take_title_from_focused_item()
-        
-        video_data['title'] = take_title_from_focused_item().replace("%20"," ")
 
+    # Get the original title of the currently playing video
+    video_data['OriginalTitle'] = xbmc.getInfoLabel("VideoPlayer.OriginalTitle")
         
+    
+    # Get the title of the TV show if the currently playing video is an episode of a TV show
+    video_data['TVShowTitle'] = xbmc.getInfoLabel("VideoPlayer.TVShowTitle")
         
-        labelType = xbmc.getInfoLabel("ListItem.DBTYPE")  #movie/tvshow/season/episode    
-        isItMovie = labelType == 'movie' or xbmc.getCondVisibility("Container.Content(movies)")
-        isItEpisode = labelType == 'episode' or xbmc.getCondVisibility("Container.Content(episodes)")
 
-        if isItMovie:
-            video_data['title'] = xbmc.getInfoLabel("ListItem.OriginalTitle").replace("%20"," ")
-        elif isItEpisode:
-            video_data['title'] = xbmc.getInfoLabel("ListItem.TVShowTitle").replace("%20"," ")  
-        video_data['file_original_path'] =video_data['title']
-        video_data['OriginalTitle']=video_data['title']
-        video_data['TVshowtitle']=video_data['tvshow']
-        video_data['Tagline']=video_data['title']
-        video_data['mpaa']=""
-    video_data['title']=clean_name(video_data['title'])
-    video_data['OriginalTitle']=clean_name(video_data['OriginalTitle'])
+    # Get the year of release of the currently playing video
+    video_data['year'] = xbmc.getInfoLabel("VideoPlayer.Year")
+    
+    
+    # Get the season number of the currently playing video (if empty - 0)
+    season = xbmc.getInfoLabel("VideoPlayer.Season")
+    video_data['season'] = int(season) if season else 0
         
-    # Determine media type based on TVshowtitle, season, and episode
-    if video_data['TVshowtitle'] and (video_data['season'] != 0 or video_data['episode'] != 0):
-        video_data['media_type'] = 'tv'
+        
+    # Get the episode number of the currently playing video (if empty - 0)
+    episode = xbmc.getInfoLabel("VideoPlayer.Episode")
+    video_data['episode'] = int(episode) if episode else 0
+    
+    
+    # Get the MPAA rating of the currently playing video
+    video_data['mpaa'] = xbmc.getInfoLabel("VideoPlayer.mpaa")
+
+
+    # Get the tagline of the currently playing video
+    video_data['VideoPlayer_Tagline'] = xbmc.getInfoLabel("VideoPlayer.Tagline")
+    # Fen addon tagline property
+    video_data['Fen_Tagline'] = xbmcgui.Window(10000).getProperty("subs.player_filename")
+
+    if video_data['Fen_Tagline']:
+        video_data['Tagline'] = video_data['Fen_Tagline']
     else:
-        video_data['media_type'] = 'movie'
+        video_data['Tagline'] = video_data['VideoPlayer_Tagline']
+    
+    
+    # Get the full path of the currently playing video
+    video_data['file_original_path'] = unquote((xbmc.Player().getPlayingFile()))
+    # Split the path to remove any query parameters
+    video_data['file_original_path'] = video_data['file_original_path'].split("?")
+     # Get the filename from the path and remove the file extension
+    video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
     
     return video_data
+    
+def get_video_data_not_playing():
+
+    video_data = {}
+    
+    # Get the IMDBNumber property of the currently selected item
+    video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
+        
+        
+    # Get the title of the cucurrently selected item
+    video_data['title'] = xbmc.getInfoLabel("ListItem.Title")
+    
+    
+    # Get the original title of the currently selected item
+    video_data['OriginalTitle'] = xbmc.getInfoLabel("ListItem.OriginalTitle")
+    
+    
+    # Get the title of the TV show if the currently selected item is an episode of a TV show
+    video_data['TVShowTitle'] = xbmc.getInfoLabel("ListItem.TVShowTitle")
+    
+    
+    # Get the year of release of the currently selected item
+    video_data['year'] = xbmc.getInfoLabel("ListItem.Year")
+    
+    
+    # Get the season number of the currently selected item (if empty - 0)
+    season = xbmc.getInfoLabel("ListItem.Season")
+    video_data['season'] = int(season) if season else 0
+    
+    
+    # Get the episode number of the currently selected item (if empty - 0)
+    episode = xbmc.getInfoLabel("ListItem.Episode")
+    video_data['episode'] = int(episode) if episode else 0
+    
+    
+    # Get the MPAA rating of the currently selected item
+    video_data['mpaa'] = xbmc.getInfoLabel("ListItem.Mpaa")
+    
+    
+    # Get the tagline of the currently selected item
+    video_data['Tagline'] = xbmc.getInfoLabel("ListItem.Tagline")
+        
+        
+    # Set the full path of the currently selected item to title
+    video_data['file_original_path'] = video_data['title']
+    
+    
+    return video_data
+    
+    ################################# UNUSED #################################################
+    # if str(video_data['season'])=='0' or str(video_data['episode'])=='0':
+      # video_data['tvshow'] = ''
+
+    # else:
+      # video_data['tvshow'] = take_title_from_focused_item()
+
+    
+    # Get media type of the currently selected item (movie / tvshow / season / episode)
+    # labelType = xbmc.getInfoLabel("ListItem.DBTYPE")
+    # Check if it's a movie
+    # isItMovie = labelType == 'movie' or xbmc.getCondVisibility("Container.Content(movies)")
+    # Check if it's an episode
+    # isItEpisode = labelType == 'episode' or xbmc.getCondVisibility("Container.Content(episodes)")
+
+    # if isItMovie:
+        # video_data['title'] = xbmc.getInfoLabel("ListItem.OriginalTitle")
+    # elif isItEpisode:
+        # video_data['title'] = xbmc.getInfoLabel("ListItem.TVShowTitle")
+    ################################# UNUSED #################################################
+
+def get_video_data():
+
+    ##########################################################################################
+    isPlayerPlaying = xbmc.Player().isPlaying()
+    
+    if isPlayerPlaying:
+        video_data = get_video_data_playing()
+    else:
+        video_data = get_video_data_not_playing()
+    ##########################################################################################
+
+
+    ##########################################################################################
+    if video_data['TVShowTitle'] and (video_data['season'] != 0 or video_data['episode'] != 0):
+        media_type = 'tv'
+    else:
+        media_type = 'movie'
+    video_data['media_type'] = media_type
+    ##########################################################################################
+
+
+    ##########################################################################################
+    if media_type == 'tv':
+        video_data['OriginalTitle'] = video_data['OriginalTitle'] or video_data['TVShowTitle']
+    else:
+        video_data['OriginalTitle'] = video_data['OriginalTitle'] or video_data['title']
+    ##########################################################################################
+
+
+    video_data['title'] = clean_name(video_data['title'])
+    video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
+
+
+    log.warning(f"DEBUG | get_video_data | video_data={video_data}")
+    return video_data
+
 def save_file_name(filename,language):
       
     video_data_tagline = quote(get_video_data()['Tagline'])
@@ -356,3 +445,164 @@ def get_db_data(f_result):
     return last_sub_name_in_cache,last_sub_language_in_cache,all_subs
     
 
+
+
+
+
+################# BUREKAS FUNCTIONS - TODO: IMPLEMENT IMDB ID MANUAL SEARCH ################################
+
+def lowercase_with_underscores(_str):   ####### burekas
+    return unicodedata.normalize('NFKD', _str).encode('utf-8','ignore').decode('utf-8')
+    
+def get_TMDB_data_filtered(url,filename,query,type):    ##### burekas
+    myLogger=log.warning
+    myLogger("searchTMDB: %s" % url)
+    myLogger("query filtered: %s" % query)
+    json = caching_json(filename,url)
+    json_results = json["results"]
+    myLogger("searchTMDB: json_results - " + repr(json_results))
+    if type=='tv':
+        json_results.sort(key = lambda x:x["name"]==query, reverse=True)
+    else:
+        json_results.sort(key = lambda x:x["title"]==query, reverse=True)
+    myLogger("searchTMDB: json_results sorted - " + repr(json_results))
+
+    return json_results      
+
+def checkAndParseIfTitleIsTVshowEpisode(manualTitle): 
+
+        manualTitle = manualTitle.replace("%20", " ")
+
+        matchShow = re.search(r'(?i)^(.*?)\sS\d', manualTitle)
+        if matchShow == None:
+            return ["NotTVShowEpisode", "0", "0",'']
+        else:
+            tempShow = matchShow.group(1)
+        
+        matchSnum = re.search(r'(?i)%s(.*?)E' %(tempShow+" s"), manualTitle)
+        if matchSnum == None:
+            return ["NotTVShowEpisode", "0", "0",'']
+        else:
+            tempSnum = matchSnum.group(1)
+        
+        matchEnum = re.search(r'(?i)%s(.*?)$' %(tempShow+" s"+tempSnum+"e"), manualTitle)
+        if matchEnum == None:
+            return ["NotTVShowEpisode", "0", "0",'']
+        else:
+            tempEnum = matchEnum.group(1)
+
+        return [tempShow, tempSnum, tempEnum, 'episode']
+
+
+def searchForIMDBID(query,item):  ##### burekas 
+    import requests                       
+    from resources.modules import PTN
+    myLogger=log.warning
+    year=item["year"]
+    info=(PTN.parse(query))
+    tmdbKey = '653bb8af90162bd98fc7ee32bcbbfb3d'
+
+    if item["tvshow"] and item['dbtype'] == 'episode':   
+        type_search='tv'
+            
+        url="https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en&append_to_response=external_ids"%(type_search,tmdbKey,quote_plus(item['tvshow']))
+        x=requests.get(url).json()
+        try:
+            tmdb_id = int(x['results'][0]["id"])
+        except:
+            myLogger( "[%s]" % (e,))
+            return 0        
+
+        
+        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
+        x=requests.get(url).json()
+        log.warning(url)
+        log.warning(x)
+        try:    imdb_id = x['external_ids']["imdb_id"]
+        except Exception as e:    
+            myLogger( "[%s]" % (e,))
+            return 0        
+        
+        log.warning(imdb_id)
+        return imdb_id
+   
+    elif info['title']: # and item['dbtype'] == 'movie':
+        type_search='movie'
+        filename = 'subs.search.tmdb.%s.%s.%s.json'%(type_search,lowercase_with_underscores(query),year)        
+        if int(year) > 0:
+            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&year=%s&language=en"%(type_search,tmdbKey,quote(info['title']),year)
+        else:
+            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en"%(type_search,tmdbKey,quote(info['title']))
+
+        #json_results = get_TMDB_data_popularity_and_votes_sorted(url,filename)
+        json_results = get_TMDB_data_filtered(url,filename,item['title'],type_search)
+        
+        try:
+            tmdb_id = int(json_results[0]["id"])
+        except:
+            myLogger( "[%s]" % (e,))
+            return 0
+
+        filename = 'subs.search.tmdb.fulldata.%s.%s.json'%(type_search,tmdb_id)
+        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
+        myLogger("searchTMDB fulldata id: %s" % url)        
+        json = caching_json(filename,url)
+        
+        try:    imdb_id = json['external_ids']["imdb_id"]
+        except:
+            myLogger( "[%s]" % (e,))
+            return 0
+
+        return imdb_id
+def getIMDB(title):    
+    
+
+    item = {}
+    item['tvshow'], item['season'], item['episode'], item['dbtype'] = checkAndParseIfTitleIsTVshowEpisode(title)
+    
+
+    if item['tvshow'] == 'NotTVShowEpisode':
+        item['title'] = title
+        item['tvshow'] = ''          
+        _query = item['title'].rsplit(' ', 1)[0]    
+
+        try:
+            item['year'] = item['title'].rsplit(' ', 1)[1]
+            item['title'] = _query            
+            if item['year'].isdigit():
+                if int(item['year']) > 1900:
+                    item['imdb_id'] = searchForIMDBID(_query, item)               
+                        
+                else:
+                    #item['year'] is not present a year
+                    item['imdb_id'] = ''
+            else:
+                item['imdb_id'] = '' 
+        except:  
+            item['imdb_id'] = ''        
+
+    else:  # TVShowEpisode
+        item['year'] = '0000'
+        _query = item['tvshow']    
+        item['title'] = _query
+        item['TVShowTitle']= _query
+        item['OriginalTitle']= _query
+        
+        _season = item['season'].split("0")
+        _episode = item['episode'].split("0")
+        if _season[0] == '':
+            item['season'] = _season[1].replace('.','')
+        if _episode[0] == '':
+            item['episode'] = _episode[1]
+
+        item['imdb_id'] = searchForIMDBID(_query, item)                
+        item['imdb']=item['imdb_id']
+    try:
+        if item['imdb_id']:        
+            return item
+        else:
+            return 0
+
+    except Exception as err:
+        log.warning('Caught Exception: error in manual search: %s' % format(err))
+        pass
