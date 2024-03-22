@@ -201,7 +201,28 @@ def take_title_from_focused_item():
 
 def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
+      
+def get_playing_filename_and_remove_extension_if_exists():
 
+    # Get the full path of the currently playing video and unquote it to handle any URL encoding
+    file_original_path = unquote((xbmc.Player().getPlayingFile()))
+    
+    # Split the path to remove any query parameters
+    file_original_path = file_original_path.split("?")[0]
+    
+    # Extract the basename of the file from the path
+    file_original_path = os.path.basename(file_original_path)
+    
+    # Define a list of common video file extensions
+    video_file_extensions = ['mkv', 'mp4', 'm4p', 'avi', 'mov', 'mpeg', 'mpg', 'flv', 'wmv', 'm4v', 'webm', '3gp', 'ogg', 'ogv', 'rmvb', 'divx', 'vob', 'dat', 'mts', 'm2ts', 'ts', 'yuv']
+    
+    # Iterate through the list of video extensions and remove the extension from the basename if found
+    for extension in video_file_extensions:
+        if file_original_path.endswith(extension):
+            file_original_path = file_original_path[:-len(extension) - 1]
+            break
+            
+    return file_original_path
 
 def get_video_data_playing():
 
@@ -261,12 +282,9 @@ def get_video_data_playing():
         video_data['Tagline'] = video_data['VideoPlayer_Tagline']
     
     
-    # Get the full path of the currently playing video
-    video_data['file_original_path'] = unquote((xbmc.Player().getPlayingFile()))
-    # Split the path to remove any query parameters
-    video_data['file_original_path'] = video_data['file_original_path'].split("?")
-     # Get the filename from the path and remove the file extension
-    video_data['file_original_path'] = os.path.basename(video_data['file_original_path'][0])[:-4]
+    # Get the full path of the currently playing video and remove video file extension if exists
+    video_data['file_original_path'] = get_playing_filename_and_remove_extension_if_exists()
+    
     
     return video_data
     

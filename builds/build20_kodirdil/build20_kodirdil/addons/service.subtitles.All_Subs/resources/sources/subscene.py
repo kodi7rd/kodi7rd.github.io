@@ -209,14 +209,14 @@ def get_subs(item):
         
         if response.status_code in [503, 429, 403 , 409]:
             if response.status_code == 503:
-                xbmc.sleep(2000)
+                xbmc.sleep(1000)
              
             if response.status_code == 429:
-                xbmc.sleep(3000)
+                xbmc.sleep(2000)
             if response.status_code == 403:
-                xbmc.sleep(2000)
+                xbmc.sleep(1000)
             if response.status_code == 409:
-                xbmc.sleep(2000)
+                xbmc.sleep(1000)
         else:
             
             response=response.text
@@ -266,14 +266,14 @@ def get_subs(item):
                 response = scraper.request(method,'https://subscene.com/'+lk)
                 if response.status_code in [503, 429, 403 , 409]:
                     if response.status_code == 503:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                      
                     if response.status_code == 429:
-                        xbmc.sleep(3000)
+                        xbmc.sleep(2000)
                     if response.status_code == 403:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                     if response.status_code == 409:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                 else:
                     response=response.text
                     break
@@ -392,14 +392,14 @@ def download(download_data,MySubFolder):
             response = scraper.request(method,link)
             if response.status_code in [503, 429, 403 , 409]:
                 if response.status_code == 503:
-                    xbmc.sleep(2000)
+                    xbmc.sleep(1000)
                  
                 if response.status_code == 429:
-                    xbmc.sleep(3000)
+                    xbmc.sleep(2000)
                 if response.status_code == 403:
-                    xbmc.sleep(2000)
+                    xbmc.sleep(1000)
                 if response.status_code == 409:
-                    xbmc.sleep(2000)
+                    xbmc.sleep(1000)
             else:
                 content=response.text
                 break
@@ -451,14 +451,14 @@ def download(download_data,MySubFolder):
                 response = scraper.request(method,downloadlink)
                 if response.status_code in [503, 429, 403 , 409]:
                     if response.status_code == 503:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                      
                     if response.status_code == 429:
-                        xbmc.sleep(3000)
+                        xbmc.sleep(2000)
                     if response.status_code == 403:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                     if response.status_code == 409:
-                        xbmc.sleep(2000)
+                        xbmc.sleep(1000)
                 else:
                     #response=response.text
                     break

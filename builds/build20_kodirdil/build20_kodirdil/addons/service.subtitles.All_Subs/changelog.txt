@@ -1,5 +1,6 @@
-﻿[COLOR yellow][B]v4.2.2[/B][/COLOR]
-* Rebuild get_video_data function to improve metadata identification (W.I.P).
+﻿[COLOR yellow][B]v4.2.3[/B][/COLOR]
+* Rewrite get_video_data function to improve metadata identification (W.I.P).
+[COLOR yellow][B]v4.2.2[/B][/COLOR]
 * Remove redundant code (format_website_source_name).
 * Small Ktuvit code bug fix.
 [COLOR yellow][B]v4.2.1[/B][/COLOR]
