@@ -194,6 +194,8 @@
 						<texturefocus colordiffuse="button_focus"></texturefocus>
 						<onclick>SubtitleDelay</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 					</control>
 					<control type="button" id="700451">
 						<description>DarkSubs Subtitles Window Button</description>
@@ -204,6 +206,8 @@
 						<onclick condition="!Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)">RunScript(service.subtitles.All_Subs,sub_window_unpause)</onclick>
 						<onclick condition="Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)">ActivateWindow(SubtitleSearch)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 					</control>
 					<!--
 					<control type="radiobutton" id="600">
