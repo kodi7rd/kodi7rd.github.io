@@ -126,6 +126,8 @@
 						<height>140</height>
 						<texture>kodirdil/subtitles_window/sync_subtitle.png</texture>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 					</control>
 					<control type="image" id="2232320">
 					<visible>$EXP[fakebuttonsync]</visible>
@@ -136,6 +138,8 @@
 						<height>140</height>
 						<texture colordiffuse="button_focus">kodirdil/subtitles_window/sync_subtitle.png</texture>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
+						<!-- If current playing addon is NOT Idan Plus -->
+						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 					</control>
 					
 		
