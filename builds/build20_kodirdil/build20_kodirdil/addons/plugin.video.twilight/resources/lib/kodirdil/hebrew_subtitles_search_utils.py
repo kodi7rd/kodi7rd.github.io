@@ -13,7 +13,7 @@ from kodirdil.websites import subscene
 #########################################
 
 ########### Settings ####################
-minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
+minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '70'))
 search_for_english_subtitles_when_no_hebrew_subtitles_found = kodi_utils.get_setting('search_for_english_subtitles_when_no_hebrew_subtitles_found', 'true') == 'true'
 search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subtitles_in_embedded', 'true') == 'true'
 #########################################

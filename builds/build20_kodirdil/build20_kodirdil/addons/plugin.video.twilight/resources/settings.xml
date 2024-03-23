@@ -23,7 +23,7 @@
 			<group id="2" label="40004">
 				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40005" help="">
 					<level>0</level>
-					<default>75</default>
+					<default>70</default>
 					<constraints>
 						<minimum>10</minimum>
 						<step>1</step>

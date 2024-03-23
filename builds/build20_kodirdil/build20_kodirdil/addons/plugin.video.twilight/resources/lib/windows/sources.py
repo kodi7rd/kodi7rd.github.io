@@ -9,7 +9,7 @@ from kodirdil import db_utils
 import traceback
 ########### Settings ####################
 enable_hebrew_subtitles_to_twilight_sources_matching = kodi_utils.get_setting('enable_hebrew_subtitles_to_twilight_sources_matching', 'true') == 'true'
-minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '75'))
+minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '70'))
 search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subtitles_in_embedded', 'true') == 'true'
 ########### Global Strings ##############
 twilight_total_results_panel_text = ""
