@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.2.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.5[/B][/COLOR]
+* DarkSubs's sub window labels bug fix.
+[COLOR yellow][B]v4.2.4[/B][/COLOR]
 * Rewrite get_video_data function to improve metadata identification.
 * Implement manual IMDb ID search when it is not provided by video addon (using media title/year and TMDB API).
 * Add IMDb ID to sub_window label (if exists).

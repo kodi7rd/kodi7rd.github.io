@@ -182,14 +182,14 @@ def format_website_source_name(source):
         return "Ktuvit"
     if source == "wizdom":
         return "Wizdom"
-    if source == "bsplayer":
-        return "BSPlayer"
-    if source == "subscene":
-        return "Subscene"
     if source == "opensubtitles":
         return "OpenSubtitles"
     if source == "subdl":
         return "SubDL"
+    if source == "subscene":
+        return "Subscene"
+    if source == "bsplayer":
+        return "BSPlayer"
     return source
         
 def c_get_subtitles(video_data):

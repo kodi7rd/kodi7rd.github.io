@@ -56,10 +56,10 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             #########################################
             
             # Video File Name Label
-            video_file_name_label = self.video_data['Tagline']
-            imdb_ib_label = f" (IMDb ID: {self.video_data['imdb']})" if self.video_data['imdb'] else ''
-            self.label_info = f"[B][COLOR deepskyblue]{video_file_name_label}{imdb_ib_label}[/COLOR][/B]"
-            self.label_info = pyxbmct.Label(self.label_info)
+            self.video_file_name_label = self.video_data['Tagline']
+            self.imdb_ib_label = f" (IMDb ID: {self.video_data['imdb']})" if self.video_data['imdb'] else ''
+            self.label_info_text = f"[B][COLOR deepskyblue]{self.video_file_name_label}{self.imdb_ib_label}[/COLOR][/B]"
+            self.label_info = pyxbmct.Label(self.label_info_text)
             self.placeControl(self.label_info,  0, 0, 1, 1)
             #########################################
             
@@ -86,7 +86,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             list_index=self.list.getSelectedPosition()
             log.warning(self.full_list[list_index])
             log.warning('list_index:'+str(list_index))
-            self.label_info.setLabel('[B]מוריד[/B]' + ' | ' + self.video_file_name_label)
+            self.label_info.setLabel('[B]מוריד[/B]' + ' | ' + self.label_info_text)
             params=self.get_params(self.full_list[list_index][4])
             download_data=unque(params["download_data"])
             download_data=json.loads(download_data)
@@ -112,10 +112,10 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             
             
             if fault_sub:
-                self.label_info.setLabel('[B]תקלה בהורדה נסה שנית[/B]' + ' | ' + self.video_file_name_label)
+                self.label_info.setLabel('[B]תקלה בהורדה נסה שנית[/B]' + ' | ' + self.label_info_text)
             else:
                 if not hebrewEmbedded:
-                    self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.video_file_name_label)
+                    self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.label_info_text)
                     save_file_name(filename,language)
                     # Save sub in Cached_subs
                     f_count=0
@@ -146,7 +146,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                                 log.warning(f"shutil.copy(sub_file,c_sub_file) | Exception: {str(e)}")
                                 pass
                 else:
-                    self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.video_file_name_label)
+                    self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.label_info_text)
                     save_file_name(unque(filename),language)
                            
                 self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data(self.full_list)
