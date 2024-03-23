@@ -1,10 +1,9 @@
-﻿[COLOR yellow][B]v4.2.3[/B][/COLOR]
-* Rewrite get_video_data function to improve metadata identification (W.I.P).
-[COLOR yellow][B]v4.2.2[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.4[/B][/COLOR]
+* Rewrite get_video_data function to improve metadata identification.
+* Implement manual IMDb ID search when it is not provided by video addon (using media title/year and TMDB API).
+* Add IMDb ID to sub_window label (if exists).
+* Ktuvit/Wizdom/OpenSubtitles code refactor and bug fixes.
 * Remove redundant code (format_website_source_name).
-* Small Ktuvit code bug fix.
-[COLOR yellow][B]v4.2.1[/B][/COLOR]
-* Small SubDL code refactor.
 [COLOR yellow][B]v4.2.0[/B][/COLOR]
 * Add SubDL subtitles website (https://subdl.com)
 * Add user setting to add your own SubDL API key (Optional).

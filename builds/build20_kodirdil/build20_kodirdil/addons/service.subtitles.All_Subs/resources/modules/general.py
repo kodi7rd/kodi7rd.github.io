@@ -201,6 +201,91 @@ def take_title_from_focused_item():
 
 def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
+
+def manual_search_for_imdb_id(media_type, original_title, year):
+                
+    ################### Manual Search for IMDb ID using TMDB API #############################
+    # Queries TMDB API with media_type, original_title, and year - Gets TMDB ID
+    # Queries TMDB API with TMDB ID - Gets IMDb ID
+    
+    import requests
+    
+    log.warning(f"DEBUG | manual_search_for_imdb_id | Searching manually for IMDb ID | media_type={media_type} | original_title={original_title} | year={year}")
+    
+    TMDB_API_KEY = 'b370b60447737762ca38457bd77579b3'
+    TMDB_API_BASE_URL = 'https://api.themoviedb.org/3/'
+
+    params = {
+        'api_key': TMDB_API_KEY,
+        'query': original_title,
+        'language': 'en'
+    }
+
+    search_with_year = False
+    if year and int(year) > 0:
+        search_with_year = True
+        params['year'] = year
+
+    search_for_tmdb_id_url = f'{TMDB_API_BASE_URL}search/{media_type}'
+
+    try:
+        response = requests.get(search_for_tmdb_id_url, params=params)
+        log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_tmdb_id_url: {response.request.url}")
+        data = response.json()
+                
+        ################### Sort results from TMDB API #############################
+        # First by title, then by year
+        # title - JSON parameter from TMDB API - For movies: ['title'] | For TV Shows: ['name']
+        # year - JSON parameter from TMDB API - For movies: ['release_date'] | For TV Shows: ['first_air_date']
+        
+        # Define lambda function for title comparison
+        title_comparison = lambda x: (
+            x['title'].lower() == original_title.lower() if media_type == 'movie' else x['name'].lower() == original_title.lower()
+        )
+        
+        # Define lambda function for year comparison
+        year_comparison = lambda x: (
+            str(year) in str(x.get('release_date', '')) if media_type == 'movie' else str(year) in str(x.get('first_air_date', ''))
+        )
+
+        # Define sorting key based on media type and year
+        if search_with_year:
+            key = lambda x: (title_comparison(x), year_comparison(x))
+        else:
+            key = title_comparison
+
+        # Sort results based on sorting key
+        sorted_results = sorted(data['results'], key=key, reverse=True)
+        ############################################################################
+
+        # Get the first result from the sorted list
+        if sorted_results:
+            first_result = sorted_results[0]
+            # Check if the search result has an ID
+            tmdb_id = first_result.get('id')
+            # Fetch the details of the movie or TV show to get the IMDb ID
+            search_for_imdb_id_url = f'{TMDB_API_BASE_URL}{media_type}/{tmdb_id}'
+            params = {
+                'api_key': TMDB_API_KEY,
+                'append_to_response': 'external_ids',
+                'language': 'en'
+            }
+            
+            response = requests.get(search_for_imdb_id_url, params=params)
+            log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_imdb_id_url: {response.request.url}")
+            data = response.json()
+            
+            imdb_id = data['external_ids']['imdb_id']
+            log.warning(f"DEBUG | manual_search_for_imdb_id | Found imdb_id={imdb_id} | IMDb URL: https://www.imdb.com/title/{imdb_id}")
+            return imdb_id
+            
+        else:
+            log.warning(f"DEBUG | manual_search_for_imdb_id | No TMDB results found.")
+            return ''
+            
+    except Exception as e:
+        log.warning(f"DEBUG | manual_search_for_imdb_id | manual_search_for_imdb_id | Exception: {str(e)}")
+        return ''
       
 def get_playing_filename_and_remove_extension_if_exists():
 
@@ -272,14 +357,11 @@ def get_video_data_playing():
 
 
     # Get the tagline of the currently playing video
-    video_data['VideoPlayer_Tagline'] = xbmc.getInfoLabel("VideoPlayer.Tagline")
+    video_data['VideoPlayer.Tagline'] = xbmc.getInfoLabel("VideoPlayer.Tagline")
     # Fen addon tagline property
-    video_data['Fen_Tagline'] = xbmcgui.Window(10000).getProperty("subs.player_filename")
-
-    if video_data['Fen_Tagline']:
-        video_data['Tagline'] = video_data['Fen_Tagline']
-    else:
-        video_data['Tagline'] = video_data['VideoPlayer_Tagline']
+    video_data['Tagline_From_Fen'] = xbmcgui.Window(10000).getProperty("subs.player_filename")
+    # Assign video_data['Tagline']
+    video_data['Tagline'] = video_data['Tagline_From_Fen'] or video_data['VideoPlayer.Tagline']
     
     
     # Get the full path of the currently playing video and remove video file extension if exists
@@ -357,37 +439,36 @@ def get_video_data_not_playing():
 
 def get_video_data():
 
-    ##########################################################################################
-    isPlayerPlaying = xbmc.Player().isPlaying()
-    
-    if isPlayerPlaying:
+    ################### Get Video Data #######################################################
+    if xbmc.Player().isPlaying():
         video_data = get_video_data_playing()
     else:
         video_data = get_video_data_not_playing()
     ##########################################################################################
 
 
-    ##########################################################################################
+    ################### Set Media Type #######################################################
     if video_data['TVShowTitle'] and (video_data['season'] != '0' or video_data['episode'] != '0'):
-        media_type = 'tv'
+        video_data['media_type'] = 'tv'
     else:
-        media_type = 'movie'
-    video_data['media_type'] = media_type
+        video_data['media_type'] = 'movie'
     ##########################################################################################
 
 
     ##########################################################################################
-    if media_type == 'tv':
+    if video_data['media_type'] == 'tv':
         video_data['OriginalTitle'] = video_data['OriginalTitle'] or video_data['TVShowTitle']
     else:
         video_data['OriginalTitle'] = video_data['OriginalTitle'] or video_data['title']
     ##########################################################################################
 
 
+    ################### Clean Titles #########################################################
     video_data['title'] = clean_name(video_data['title'])
     video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
-
-
+    ##########################################################################################
+    
+    
     log.warning(f"DEBUG | get_video_data | video_data={video_data}")
     return video_data
 
@@ -457,166 +538,3 @@ def get_db_data(f_result):
             break
     
     return last_sub_name_in_cache,last_sub_language_in_cache,all_subs
-    
-
-
-
-
-
-################# BUREKAS FUNCTIONS - TODO: IMPLEMENT IMDB ID MANUAL SEARCH ################################
-
-def lowercase_with_underscores(_str):   ####### burekas
-    return unicodedata.normalize('NFKD', _str).encode('utf-8','ignore').decode('utf-8')
-    
-def get_TMDB_data_filtered(url,filename,query,type):    ##### burekas
-    myLogger=log.warning
-    myLogger("searchTMDB: %s" % url)
-    myLogger("query filtered: %s" % query)
-    json = caching_json(filename,url)
-    json_results = json["results"]
-    myLogger("searchTMDB: json_results - " + repr(json_results))
-    if type=='tv':
-        json_results.sort(key = lambda x:x["name"]==query, reverse=True)
-    else:
-        json_results.sort(key = lambda x:x["title"]==query, reverse=True)
-    myLogger("searchTMDB: json_results sorted - " + repr(json_results))
-
-    return json_results      
-
-def checkAndParseIfTitleIsTVshowEpisode(manualTitle): 
-
-        manualTitle = manualTitle.replace("%20", " ")
-
-        matchShow = re.search(r'(?i)^(.*?)\sS\d', manualTitle)
-        if matchShow == None:
-            return ["NotTVShowEpisode", "0", "0",'']
-        else:
-            tempShow = matchShow.group(1)
-        
-        matchSnum = re.search(r'(?i)%s(.*?)E' %(tempShow+" s"), manualTitle)
-        if matchSnum == None:
-            return ["NotTVShowEpisode", "0", "0",'']
-        else:
-            tempSnum = matchSnum.group(1)
-        
-        matchEnum = re.search(r'(?i)%s(.*?)$' %(tempShow+" s"+tempSnum+"e"), manualTitle)
-        if matchEnum == None:
-            return ["NotTVShowEpisode", "0", "0",'']
-        else:
-            tempEnum = matchEnum.group(1)
-
-        return [tempShow, tempSnum, tempEnum, 'episode']
-
-
-def searchForIMDBID(query,item):  ##### burekas 
-    import requests                       
-    from resources.modules import PTN
-    myLogger=log.warning
-    year=item["year"]
-    info=(PTN.parse(query))
-    tmdbKey = '653bb8af90162bd98fc7ee32bcbbfb3d'
-
-    if item["tvshow"] and item['dbtype'] == 'episode':   
-        type_search='tv'
-            
-        url="https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en&append_to_response=external_ids"%(type_search,tmdbKey,quote_plus(item['tvshow']))
-        x=requests.get(url).json()
-        try:
-            tmdb_id = int(x['results'][0]["id"])
-        except:
-            myLogger( "[%s]" % (e,))
-            return 0        
-
-        
-        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
-        x=requests.get(url).json()
-        log.warning(url)
-        log.warning(x)
-        try:    imdb_id = x['external_ids']["imdb_id"]
-        except Exception as e:    
-            myLogger( "[%s]" % (e,))
-            return 0        
-        
-        log.warning(imdb_id)
-        return imdb_id
-   
-    elif info['title']: # and item['dbtype'] == 'movie':
-        type_search='movie'
-        filename = 'subs.search.tmdb.%s.%s.%s.json'%(type_search,lowercase_with_underscores(query),year)        
-        if int(year) > 0:
-            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&year=%s&language=en"%(type_search,tmdbKey,quote(info['title']),year)
-        else:
-            url = "https://api.tmdb.org/3/search/%s?api_key=%s&query=%s&language=en"%(type_search,tmdbKey,quote(info['title']))
-
-        #json_results = get_TMDB_data_popularity_and_votes_sorted(url,filename)
-        json_results = get_TMDB_data_filtered(url,filename,item['title'],type_search)
-        
-        try:
-            tmdb_id = int(json_results[0]["id"])
-        except:
-            myLogger( "[%s]" % (e,))
-            return 0
-
-        filename = 'subs.search.tmdb.fulldata.%s.%s.json'%(type_search,tmdb_id)
-        url = "https://api.tmdb.org/3/%s/%s?api_key=%s&language=en&append_to_response=external_ids"%(type_search,tmdb_id,tmdbKey)
-        myLogger("searchTMDB fulldata id: %s" % url)        
-        json = caching_json(filename,url)
-        
-        try:    imdb_id = json['external_ids']["imdb_id"]
-        except:
-            myLogger( "[%s]" % (e,))
-            return 0
-
-        return imdb_id
-def getIMDB(title):    
-    
-
-    item = {}
-    item['tvshow'], item['season'], item['episode'], item['dbtype'] = checkAndParseIfTitleIsTVshowEpisode(title)
-    
-
-    if item['tvshow'] == 'NotTVShowEpisode':
-        item['title'] = title
-        item['tvshow'] = ''          
-        _query = item['title'].rsplit(' ', 1)[0]    
-
-        try:
-            item['year'] = item['title'].rsplit(' ', 1)[1]
-            item['title'] = _query            
-            if item['year'].isdigit():
-                if int(item['year']) > 1900:
-                    item['imdb_id'] = searchForIMDBID(_query, item)               
-                        
-                else:
-                    #item['year'] is not present a year
-                    item['imdb_id'] = ''
-            else:
-                item['imdb_id'] = '' 
-        except:  
-            item['imdb_id'] = ''        
-
-    else:  # TVShowEpisode
-        item['year'] = '0000'
-        _query = item['tvshow']    
-        item['title'] = _query
-        item['TVShowTitle']= _query
-        item['OriginalTitle']= _query
-        
-        _season = item['season'].split("0")
-        _episode = item['episode'].split("0")
-        if _season[0] == '':
-            item['season'] = _season[1].replace('.','')
-        if _episode[0] == '':
-            item['episode'] = _episode[1]
-
-        item['imdb_id'] = searchForIMDBID(_query, item)                
-        item['imdb']=item['imdb_id']
-    try:
-        if item['imdb_id']:        
-            return item
-        else:
-            return 0
-
-    except Exception as err:
-        log.warning('Caught Exception: error in manual search: %s' % format(err))
-        pass

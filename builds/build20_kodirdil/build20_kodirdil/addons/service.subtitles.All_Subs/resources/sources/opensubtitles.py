@@ -236,7 +236,7 @@ def get_subs(item):
             SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
         
             # Remove "תרגום אולפנים"
-            SubFileName = SubFileName.replace("תרגום אולפנים", "").strip()
+            SubFileName = SubFileName.replace("תרגום אולפנים", "").replace("אולפנים", "").strip()
             
             download_data={}
             download_data['filename']=SubFileName

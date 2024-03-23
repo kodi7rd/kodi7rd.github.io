@@ -56,8 +56,10 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             #########################################
             
             # Video File Name Label
-            self.video_file_name_label = f"[B][COLOR deepskyblue]{self.video_data['Tagline']}[/COLOR][/B]"
-            self.label_info = pyxbmct.Label(self.video_file_name_label)
+            video_file_name_label = self.video_data['Tagline']
+            imdb_ib_label = f" (IMDb ID: {self.video_data['imdb']})" if self.video_data['imdb'] else ''
+            self.label_info = f"[B][COLOR deepskyblue]{video_file_name_label}{imdb_ib_label}[/COLOR][/B]"
+            self.label_info = pyxbmct.Label(self.label_info)
             self.placeControl(self.label_info,  0, 0, 1, 1)
             #########################################
             

@@ -32,8 +32,9 @@ def get_subs(item):
     imdb=item['imdb']
     season=item['season']
     episode=item['episode']
-    title=item['OriginalTitle']
-    url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s&version=%s" % (imdb, season, episode, title)
+    # title=item['OriginalTitle']
+    # url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s&version=%s" % (imdb, season, episode, title)
+    url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s" % (imdb, season, episode)
     try:
       x=requests.get(url).json()
     except:

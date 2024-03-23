@@ -98,7 +98,7 @@ def search_subtitles(item):
     # querystring['languages'] = lang_string
 
     # Build querystring WITH imdb_id
-    if imdb_id.startswith('tt'):
+    if imdb_id:
     
         if media_type == 'tv':
             #################################################
