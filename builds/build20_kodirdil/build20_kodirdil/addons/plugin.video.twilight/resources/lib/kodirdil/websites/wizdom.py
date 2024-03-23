@@ -47,7 +47,7 @@ def search_for_subtitles(media_metadata):
     kodi_utils.logger("KODI-RD-IL", f"Searching in [WIZDOM]: media_type: {media_type} title: {title}: season: {season} episode: {episode} imdb_id: {imdb_id}")
 
     # Build the API URL
-    wizdom_api_url = f"{WIZDOM_URL}/api/search?action=by_id&imdb={imdb_id}&season={season}&episode={episode}&version={title}"
+    wizdom_api_url = f"{WIZDOM_URL}/api/search?action=by_id&imdb={imdb_id}&season={season}&episode={episode}"
 
     try:
         # Send the API request and parse the response
