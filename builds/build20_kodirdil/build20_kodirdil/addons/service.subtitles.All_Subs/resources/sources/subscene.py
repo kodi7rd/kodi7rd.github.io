@@ -347,11 +347,6 @@ def get_subs(item):
     episode = item.get('episode', '')
     year = item.get('year', '')
     
-    #############################################################################
-    from resources.modules.general import remove_year_from_title
-    title = remove_year_from_title(title)
-    #############################################################################
-    
     
     ######################### LANGUAGE FILTER ####################################
     selected_lang=[]

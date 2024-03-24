@@ -54,11 +54,6 @@ def search_subtitles(item):
     year = item.get('year', '')
     imdb_id = item.get('imdb', '')
     
-    #############################################################################
-    from resources.modules.general import remove_year_from_title
-    title = remove_year_from_title(title)
-    #############################################################################
-    
     #####################################################################################################################################
     # API is in beta version. due to limitations - for start - search only for Hebrew + English languages (In the future - all languages)
     #####################################################################################################################################

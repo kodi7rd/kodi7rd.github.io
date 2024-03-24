@@ -218,7 +218,6 @@ def manual_search_for_imdb_id(media_type, original_title, year):
     # Queries TMDB API with TMDB ID - Gets IMDb ID
     
     import requests
-    original_title = remove_year_from_title(original_title)
     
     log.warning(f"DEBUG | manual_search_for_imdb_id | Searching manually for IMDb ID | media_type={media_type} | original_title={original_title} | year={year}")
     
@@ -474,8 +473,8 @@ def get_video_data():
 
 
     ################### Clean Titles #########################################################
-    video_data['title'] = clean_name(video_data['title'])
-    video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
+    video_data['title'] = remove_year_from_title(clean_name(video_data['title']))
+    video_data['OriginalTitle'] = remove_year_from_title(clean_name(video_data['OriginalTitle']))
     ##########################################################################################
     
     
