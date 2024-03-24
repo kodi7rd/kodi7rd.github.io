@@ -198,7 +198,7 @@ def c_get_subtitles(video_data):
     from resources.modules import general
 
     ################### Manual Search for IMDb ID using TMDB API #############################
-    if not video_data['imdb']:
+    if not video_data['imdb'].startswith('tt'):
         from resources.modules.general import manual_search_for_imdb_id
         log.warning(f"DEBUG | c_get_subtitles | IMDb ID from video addon not found. searching manually using TMDB API...")
         video_data['imdb'] = manual_search_for_imdb_id(video_data['media_type'], video_data['OriginalTitle'], video_data['year'])

@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.2.5[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.6[/B][/COLOR]
+* Complete rewrite of subscene code: Bug fixes, speed improvement, and proper langauge filter (whitelist instead of blacklist)
+* Improve manual IMDb ID search and search by title accuracy for all websites.
+[COLOR yellow][B]v4.2.5[/B][/COLOR]
 * DarkSubs's sub window labels bug fix.
 [COLOR yellow][B]v4.2.4[/B][/COLOR]
 * Rewrite get_video_data function to improve metadata identification.

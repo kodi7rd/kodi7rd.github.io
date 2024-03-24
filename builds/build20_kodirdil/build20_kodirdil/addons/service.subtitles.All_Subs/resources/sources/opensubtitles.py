@@ -59,6 +59,11 @@ def searchsubtitles(item):
     imdb_id = item.get('imdb', '')
     media_type = item.get('media_type', '')
     
+    #############################################################################
+    from resources.modules.general import remove_year_from_title
+    title = remove_year_from_title(title)
+    #############################################################################
+    
     lang=[]
 
     # Language codes from: https://opensubtitles.stoplight.io/docs/opensubtitles-api/1de776d20e873-languages
@@ -84,7 +89,7 @@ def searchsubtitles(item):
     querystring['languages'] = lang_string
 
     # Build querystring WITH imdb_id (On new OpenSubtitles API - imdb_id can be with OR without the 'tt' prefix.)
-    if imdb_id:
+    if imdb_id.startswith('tt'):
     
         if media_type == 'tv':
             #################################################

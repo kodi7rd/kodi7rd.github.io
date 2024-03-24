@@ -86,6 +86,11 @@ def get_subs(item):
         s_type='1'
         s_title=item["OriginalTitle"]
         s_WithSubsOnly = "false"
+    
+    #############################################################################
+    from resources.modules.general import remove_year_from_title
+    s_title = remove_year_from_title(s_title)
+    #############################################################################
         
     if 1:
         headers = {

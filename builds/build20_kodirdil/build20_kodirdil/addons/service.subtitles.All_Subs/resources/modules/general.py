@@ -202,6 +202,15 @@ def take_title_from_focused_item():
 def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
 
+def remove_year_from_title(title):
+    import re
+    # Remove year from title if exists ("Avengers 2012" / "Avengers (2012)" --> "Avengers")
+    try:
+        title = re.compile("([ .\w']+?)(\W\d{4}\W?.*)").findall(title)[0][0]
+        return title
+    except:
+        return title
+
 def manual_search_for_imdb_id(media_type, original_title, year):
                 
     ################### Manual Search for IMDb ID using TMDB API #############################
@@ -209,6 +218,7 @@ def manual_search_for_imdb_id(media_type, original_title, year):
     # Queries TMDB API with TMDB ID - Gets IMDb ID
     
     import requests
+    original_title = remove_year_from_title(original_title)
     
     log.warning(f"DEBUG | manual_search_for_imdb_id | Searching manually for IMDb ID | media_type={media_type} | original_title={original_title} | year={year}")
     

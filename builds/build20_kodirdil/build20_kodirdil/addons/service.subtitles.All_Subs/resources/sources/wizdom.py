@@ -33,6 +33,10 @@ def get_subs(item):
     season=item['season']
     episode=item['episode']
     # title=item['OriginalTitle']
+    #############################################################################
+	# from resources.modules.general import remove_year_from_title
+	# title = remove_year_from_title(title)
+    #############################################################################
     # url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s&version=%s" % (imdb, season, episode, title)
     url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s" % (imdb, season, episode)
     try:

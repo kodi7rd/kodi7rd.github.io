@@ -54,6 +54,11 @@ def search_subtitles(item):
     year = item.get('year', '')
     imdb_id = item.get('imdb', '')
     
+    #############################################################################
+    from resources.modules.general import remove_year_from_title
+    title = remove_year_from_title(title)
+    #############################################################################
+    
     #####################################################################################################################################
     # API is in beta version. due to limitations - for start - search only for Hebrew + English languages (In the future - all languages)
     #####################################################################################################################################
@@ -98,7 +103,7 @@ def search_subtitles(item):
     # querystring['languages'] = lang_string
 
     # Build querystring WITH imdb_id
-    if imdb_id:
+    if imdb_id.startswith('tt'):
     
         if media_type == 'tv':
             #################################################
@@ -177,7 +182,7 @@ def get_subs(item):
             FullLanguageName = xbmc.convertLanguage(FullLanguageName, xbmc.ENGLISH_NAME) or FullLanguageName
             
             # Attempt language conversion; Two letter code as defined in ISO 639-1
-            thumbnailImageLanguageName = xbmc.convertLanguage(FullLanguageName, xbmc.ISO_639_1) or FullLanguageName
+            thumbnailImageLanguageName = xbmc.convertLanguage(FullLanguageName, xbmc.ISO_639_1)
 
             # Define characters that might break the filename (It caused writing problem to MyTmp dir)
             characters_to_remove = '\\/:*?"<>|'
