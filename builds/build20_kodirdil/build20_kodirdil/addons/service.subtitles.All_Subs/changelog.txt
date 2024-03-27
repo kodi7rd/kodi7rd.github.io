@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.2.6[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.7[/B][/COLOR]
+* Subscene langauge filter bug fixes and code refactor.
+* video_data - Remove release year from title if exists.
+[COLOR yellow][B]v4.2.6[/B][/COLOR]
 * Complete rewrite of subscene code: Bug fixes, speed improvement, and proper langauge filter (whitelist instead of blacklist)
 * Improve manual IMDb ID search and search by title accuracy for all websites.
 [COLOR yellow][B]v4.2.5[/B][/COLOR]

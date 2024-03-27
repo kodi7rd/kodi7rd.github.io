@@ -8,7 +8,6 @@ from resources.modules import log
 import requests,json
 import urllib
 from resources.modules.extract_sub import extract
-from resources.modules.general import notify
 from resources.modules import cache
 import xbmcvfs
 import struct
@@ -163,7 +162,6 @@ def get_subs(item):
     
     if response_subtitles_list is not None:
 
-        url_list=[]
         for response_subtitle in response_subtitles_list:
         
             SubRating = '0'
@@ -207,11 +205,9 @@ def get_subs(item):
                     'sync': "false"}
 
             
-            if url not in url_list:
-               
-                url_list.append(url)
-                subtitle_list.append(json_data)
-    global_var=subtitle_list
+            subtitle_list.append(json_data)
+                
+        global_var=subtitle_list
 
 
 def download(download_data,MySubFolder):

@@ -202,7 +202,13 @@ def take_title_from_focused_item():
 def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
 
-def remove_year_from_title(title):
+def remove_release_year_from_title_if_exists(title, year):
+    # Avoids: "Wonder Woman 1984" --> "Wonder Woman" (Release year is 2020)
+    if not year in title:
+        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | No release year to remove from {title}")
+        return title
+    log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Removing {year} from {title}...")
+    
     import re
     # Remove year from title if exists ("Avengers 2012" / "Avengers (2012)" --> "Avengers")
     try:
@@ -307,14 +313,16 @@ def get_playing_filename_and_remove_extension_if_exists():
     # Extract the basename of the file from the path
     file_original_path = os.path.basename(file_original_path)
     
+    # Extract the basename of the file from the path
+    file_name_without_extension, file_extension = os.path.splitext(file_original_path)
+    
     # Define a list of common video file extensions
     video_file_extensions = ['mkv', 'mp4', 'm4p', 'avi', 'mov', 'mpeg', 'mpg', 'flv', 'wmv', 'm4v', 'webm', '3gp', 'ogg', 'ogv', 'rmvb', 'divx', 'vob', 'dat', 'mts', 'm2ts', 'ts', 'yuv']
     
-    # Iterate through the list of video extensions and remove the extension from the basename if found
-    for extension in video_file_extensions:
-        if file_original_path.endswith(extension):
-            file_original_path = file_original_path[:-len(extension) - 1]
-            break
+    # If the extension is in the list of video extensions, remove it
+    if file_extension.lstrip('.') in video_file_extensions:
+        file_original_path = file_name_without_extension
+        
             
     return file_original_path
 
@@ -473,8 +481,12 @@ def get_video_data():
 
 
     ################### Clean Titles #########################################################
-    video_data['title'] = remove_year_from_title(clean_name(video_data['title']))
-    video_data['OriginalTitle'] = remove_year_from_title(clean_name(video_data['OriginalTitle']))
+    video_data['title'] = clean_name(video_data['title'])
+    video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
+    
+    
+    video_data['title'] = remove_release_year_from_title_if_exists(video_data['title'], video_data['year'])
+    video_data['OriginalTitle'] = remove_release_year_from_title_if_exists(video_data['OriginalTitle'], video_data['year'])
     ##########################################################################################
     
     

@@ -3,7 +3,7 @@ import zipfile
 import xbmcvfs
 import os,gzip,shutil
 from resources.modules import log
-exts = [".idx",".sup",".srt", ".sub", ".str", ".ass"]
+exts = [".idx", ".sup", ".srt", ".sub", ".str", ".ass"]
 def convert_to_utf(file):
     import codecs
     try:

@@ -42,10 +42,6 @@ def get_subs(item):
       pass
     json_object = x
     
-    subs_rate = []
-    subtitle=' '
-    x=0
-    id_all_collection=[]
     subtitle_list=[]
     if json_object!=0:
         for item_data in json_object:
@@ -65,15 +61,11 @@ def get_subs(item):
                              'site_id':site_id,
                              'sub_color':sub_color,
                              'filename':item_data["versioname"],
-                             'sync': 'false'}
-            if item_data["id"] not in id_all_collection:
-                id_all_collection.append(item_data["id"])
-          
+                             'sync': 'false'}          
                 
-                subtitle_list.append(json_data)
-                links_wizdom=subtitle_list
-                x=x+1
-                global_var=subtitle_list
+            subtitle_list.append(json_data)
+
+        global_var=subtitle_list
 def download(download_data,MySubFolder):
     
     try:

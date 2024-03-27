@@ -8,7 +8,6 @@ from resources.modules import log
 import requests,json
 import urllib
 from resources.modules.extract_sub import extract
-from resources.modules.general import notify
 from resources.modules import cache
 import xbmcvfs
 import struct
@@ -201,20 +200,19 @@ def get_subs(item):
     
     if search_data is not None:
 
-        url_list=[]
         for search_item in search_data:
         
             attributes = search_item.get('attributes', {})
             SubRating = attributes.get("ratings", '0')
             hearing_impaired = "true" if attributes.get("hearing_impaired", False) else "false"
             
-            LanguageName = attributes.get("language")
-            if LanguageName is None:
-                # Skip this iteration of the loop if LanguageName is None
+            thumbnailImageLanguageName = attributes.get("language")
+            if thumbnailImageLanguageName is None:
+                # Skip this iteration of the loop if thumbnailImageLanguageName is None
                 continue
 
-            # Attempt language conversion; if it fails, assign the original LanguageName
-            xbmcLanguageName = xbmc.convertLanguage(LanguageName, xbmc.ENGLISH_NAME) or LanguageName
+            # Attempt language conversion; if it fails, assign the original thumbnailImageLanguageName
+            FullLanguageName = xbmc.convertLanguage(thumbnailImageLanguageName, xbmc.ENGLISH_NAME) or thumbnailImageLanguageName
             
             try:
                 if attributes['files']:
@@ -245,15 +243,15 @@ def get_subs(item):
             
             url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=opensubtitles" % (MyScriptID,
                                                                                                 que(SubFileName),
-                                                                                                xbmcLanguageName,
+                                                                                                FullLanguageName,
                                                                                                 que(json.dumps(download_data))
                                                                                                 )
 
             json_data={'url':url,
-                    'label':xbmcLanguageName,
+                    'label':FullLanguageName,
                     'label2':site_id+' '+SubFileName,
                     'iconImage':str(int(round(float(SubRating)/2))),
-                    'thumbnailImage':LanguageName,
+                    'thumbnailImage':thumbnailImageLanguageName,
                     'hearing_imp':hearing_impaired,
                     'site_id':site_id,
                     'sub_color':sub_color,
@@ -261,11 +259,10 @@ def get_subs(item):
                     'sync': "false"} # TODO: Implement movie hash check (API returns 'moviehash_match' param)
 
             
-            if url not in url_list:
                
-                url_list.append(url)
-                subtitle_list.append(json_data)
-                global_var=subtitle_list
+            subtitle_list.append(json_data)
+            
+        global_var=subtitle_list
 
 
 def download(download_data,MySubFolder):

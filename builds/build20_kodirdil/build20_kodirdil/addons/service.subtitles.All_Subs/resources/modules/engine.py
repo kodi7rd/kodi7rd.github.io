@@ -782,7 +782,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
     except:
         pass
     
-    ext=['.srt','.sub','.sup','.idx','.ass']
+    ext=[".idx",".sup",".srt",".sub",".str",".ass"]
     Addon=xbmcaddon.Addon()
     try:
         shutil.rmtree(MySubFolder)
