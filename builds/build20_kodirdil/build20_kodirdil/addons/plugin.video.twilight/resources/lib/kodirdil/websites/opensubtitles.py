@@ -208,13 +208,13 @@ def create_subtitles_names_list(opensubtitles_subtitles_list):
             # Go to the next search_item
             continue
 
-        # Define characters that might break the filename (It caused writing problem to MyTmp dir)
+        # Define characters that might break the filename
         characters_to_remove = '\\/:*?"<>|'
         # Remove characters that might cause issues in the filename
         SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
         
         # Remove "תרגום אולפנים"
-        SubFileName = SubFileName.replace("תרגום אולפנים", "").strip()
+        SubFileName = SubFileName.replace("תרגום אולפנים", "").replace("אולפנים", "").strip()
         
         opensubtitles_subtitles_names_list.append(SubFileName)
         

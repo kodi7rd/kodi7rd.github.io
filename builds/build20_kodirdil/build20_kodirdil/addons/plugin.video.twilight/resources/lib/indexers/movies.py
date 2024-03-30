@@ -204,7 +204,14 @@ class Movies:
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('movie')
 			info_tag.setTitle(display)
-			info_tag.setOriginalTitle(meta_get('original_title'))
+
+			############KODI-RD-IL###################
+			# ORIGINAL TWILIGHT LINE:
+			# info_tag.setOriginalTitle(meta_get('original_title'))
+			# CUSTOM NEW LINE:
+			info_tag.setOriginalTitle(meta_get('english_title') or meta_get('original_title'))
+			#########################################
+
 			info_tag.setPlot(meta_get('plot'))
 			info_tag.setYear(int(year))
 			info_tag.setRating(meta_get('rating'))

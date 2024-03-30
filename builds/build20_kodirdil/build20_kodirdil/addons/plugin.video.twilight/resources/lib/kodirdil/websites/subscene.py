@@ -1,9 +1,11 @@
 ########### Imports ##################### 
 import xbmc
 import requests,re
-import ssl,urllib3
+import ssl,urllib3,json
 from kodirdil.websites.modules import cloudscraper
+from kodirdil.websites.modules import num2ordinal
 from modules import kodi_utils
+from urllib.parse import quote_plus as que
 #########################################
 
 ########### Settings ####################
@@ -17,16 +19,192 @@ DEFAULT_EPISODE = 0
 DEFAULT_TITLE = 0
 DEFAULT_YEAR = 0
 
-seasons = ["Specials", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
-           "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth",
-           "Eighteenth", "Nineteenth", "Twentieth",
-           "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth", "Twenty-fifth", "Twenty-sixth",
-           "Twenty-seventh", "Twenty-eighth", "Twenty-ninth"]
-           
-# Default value for SUBTITLE_SEARCH_LANGUAGE
-SS_SUBTITLE_SEARCH_LANGUAGE = ['hebrew']
+all_lang_codes = {
+    'English': {'id': 13, '3let': 'eng', '2let': 'en', 'name': 'English'},
+    'Hebrew': {'id': 22, '3let': 'heb', '2let': 'he', 'name': 'Hebrew'}
+}
 
+# global subscene title_href:
+title_href = ''
 #########################################
+
+################### CLOUDFLARE REQUESTS FUNCTIONS ###################################
+class TLSAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, connections, maxsize, block=False):
+        ctx = ssl.create_default_context()
+        ctx.set_ciphers('DEFAULT@SECLEVEL=1')
+        self.poolmanager = urllib3.poolmanager.PoolManager(num_pools=connections,
+                                                           maxsize=maxsize,
+                                                           block=block,
+                                                           ssl_version=ssl.PROTOCOL_TLSv1_2,
+                                                           ssl_context=ctx)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+def __retry(request, response, next, cfscrape, retry=0):
+    if retry > 6:
+        return None
+
+    if response.status_code in [503, 429, 409, 403]:
+        if response.status_code == 403:
+            xbmc.sleep(100)
+        if response.status_code == 503:
+            xbmc.sleep(2000)
+            retry = 6
+        if response.status_code == 429:
+            xbmc.sleep(3000)
+        if response.status_code == 409:
+            xbmc.sleep(3000)
+
+        retry += 1
+        request['validate'] = lambda response: __retry(request, response, next, cfscrape, retry)
+        request['next'] = next
+        request['cfscrape'] = cfscrape
+        return request
+
+def execute_request(request, session=None):
+
+    default_timeout = 10
+    request.setdefault('timeout', default_timeout)
+
+    next = request.pop('next', None)
+
+    cfscrape = 'cfscrape' in request
+    request.pop('cfscrape', None)
+
+    validate = request.pop('validate', None)
+    if not validate:
+        validate = lambda response: __retry(request, response, next, cfscrape)
+
+    if next:
+        request.pop('stream', None)
+
+    # kodi_utils.logger("KODI-RD-IL", 'Subscene | execute_request params | %s ^ - %s, %s' % (request['method'], request['url'], json.dumps(request.get('params', {}))))
+    try:
+        if cfscrape:
+            request.pop('cfscrape', None)
+            if not session:
+                session = cloudscraper.create_scraper(interpreter='native')
+            response = session.request(**request)
+        else:
+            session = requests.session()
+            session.mount('https://', TLSAdapter())
+            response = session.request(**request)
+        exc = ''
+    except:
+        try:
+            if cfscrape:
+                if not session:
+                    session = cloudscraper.create_scraper(interpreter='native')
+                response = session.request(verify=False, **request)
+            else:
+                response = requests.request(verify=False, **request)
+            exc = ''
+        except:
+            exc = traceback.format_exc()
+            response = lambda: None
+            response.text = ''
+            response.content = ''
+            response.status_code = 500
+    kodi_utils.logger("KODI-RD-IL", 'Subscene | execute_request result | %s $ - %s - %s, %s' % (request['method'], request['url'], response.status_code, exc))
+
+    alt_request = validate(response)
+    if alt_request:
+        return execute_request(alt_request)
+
+    if next and response.status_code == 200:
+        next_request = next(response)
+        if next_request:
+            return execute_request(next_request, session)
+        else:
+            return None
+
+    return response
+#####################################################################################
+
+
+############## SUBSCENE SUBTTILES SEARCH FUNCTIONS ##################################
+    
+    
+def __match_title(title, year, response):
+    title_with_year = '%s (%s)' % (title, year)
+    href_regex = r'<a href="(.*?)">' + re.escape(title_with_year) + r'</a>'
+    return re.search(href_regex, response.text, re.IGNORECASE)
+
+def __find_title_result(title, year, response, subscene_lang_ids):
+
+    # Try match with the previous year
+    previous_year = int(year) - 1
+    # Try match with the next year
+    next_year = int(year) + 1
+    result = __match_title(title, year, response) or __match_title(title, previous_year, response) or __match_title(title, next_year, response) or None
+
+    if not result:
+        return None
+
+    global title_href
+    title_href = result.group(1)
+
+    request = {
+        'cfscrape': True,
+        'method': 'GET',
+        'url': SUBSCENE_URL + title_href
+    }
+
+    # Add LanguageFilter parameter as a cookie (from subscene_lang_ids)
+    if subscene_lang_ids: # If empty - will search in all languages
+        languages_ids_filter = f"LanguageFilter={','.join(map(str, subscene_lang_ids))}"
+        request['headers'] = {}
+        request['headers']['Cookie'] = languages_ids_filter
+
+    return request
+
+def build_search_requests(media_type, title, year, season, subscene_lang_ids):
+
+    if media_type == 'tv':
+        ordinal_season = num2ordinal.convert(season).strip()
+        title = '%s - %s Season' % (title, ordinal_season)
+
+    request = {
+        'cfscrape': True,
+        'method': 'GET',
+        'url': SUBSCENE_URL + ('/subtitles/searchbytitle?query=' + que(title)),
+        'next': lambda response: __find_title_result(title, year, response, subscene_lang_ids),
+    }
+
+    return request
+
+def parse_search_response(media_type, season, episode, search_response):
+    global title_href
+    any_regex = r'.*?'
+
+    results_regex = (
+            r'<a href="' + re.escape(title_href) + r'(.*?)">' +
+                any_regex + r'</span>' + any_regex +
+                r'<span>(.*?)</span>' + any_regex +
+            r'</a>' + any_regex +
+            r'(<td class="a41">)?' + any_regex +
+        r'</tr>'
+    )
+
+    results = re.findall(results_regex, search_response.text, re.DOTALL)
+    if not results:
+        return []
+
+    if media_type == 'tv':
+        season_number = season.zfill(2)
+        episode_number = episode.zfill(2)
+        episodeid = 's%se%s' % (season_number, episode_number)
+        # Regex Options: .S01. | S01E01 | 01x01
+        identifier = r'(\.s%s\.|%s|\b%sx%s\b)' % (season_number, episodeid, season_number, episode_number)
+        results = list(filter(lambda x: re.search(identifier, x[1], re.IGNORECASE), results))
+
+    def map_result(result):
+        subtitle_file_name = result[1].strip()
+        return subtitle_file_name
+
+    return list(map(map_result, results))
+#####################################################################################
 
 def search_for_subtitles(media_metadata, language='Hebrew'):
 
@@ -44,17 +222,6 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
     if not search_hebrew_subtitles_in_subscene:
         kodi_utils.logger("KODI-RD-IL", f"SETTING search_hebrew_subtitles_in_subscene is: {search_hebrew_subtitles_in_subscene}. Skipping [SUBSCENE] website...")
         return []
-    
-    # Set up variables
-    global SS_SUBTITLE_SEARCH_LANGUAGE  # Use the global variable
-
-    if language == 'English':
-    
-        # Temporarily set the subtitle search language based on the 'language' parameter
-        ORIGINAL_SS_SUBTITLE_SEARCH_LANGUAGE = SS_SUBTITLE_SEARCH_LANGUAGE
-        SS_SUBTITLE_SEARCH_LANGUAGE = ['english']
-    
-    subscene_subtitles_list = []
 
     # Get metadata values from the media_metadata dictionary
     media_type = media_metadata.get("media_type")
@@ -64,181 +231,43 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
     year = media_metadata.get("year", DEFAULT_YEAR)
     kodi_utils.logger("KODI-RD-IL", f"Searching in [SUBSCENE] in {language} language: media_type: {media_type} Title: {title}: Season: {season} Episode: {episode} Year: {year}")
     
+    
+    ######################### LANGUAGE FILTER ####################################
+    selected_lang=[]
+    if language=='Hebrew':
+        selected_lang=['heb']
+    if language=='English':
+        selected_lang=['eng']
+
+
+    subscene_lang_ids = []
+    for lang in selected_lang:
+        for lang_name, lang_info in all_lang_codes.items():
+            if lang == lang_info['3let']:
+                subscene_lang_ids.append(lang_info['id'])
+    # kodi_utils.logger("KODI-RD-IL", f"Subscene | LanguageFilter is: {str(selected_lang)} | {str(subscene_lang_ids)}")
+    ################################################################################
+    
+    subscene_subtitles_list = []
+            
     try:
-        if media_type == "tv":
-            episode = season + ":" + episode
-            padded_episode_number = episode.zfill(2)
-            padded_season_number = season.zfill(2)
+        search_request = build_search_requests(media_type, title, year, season, subscene_lang_ids)
+        search_response = execute_request(search_request)
             
-            
-        headers, data = setup_search_request(title)
-        
-        # Extract the title without the year from the title
-        title_without_year = re.compile("([ .\w']+?)(\W\d{4}\W?.*)").findall(title)
-        title_for_search = title_without_year[0][0] if title_without_year else title
-        
+        if search_response:
+            kodi_utils.logger("KODI-RD-IL", f"Subscene | search_for_subtitles | search_response.status_code={search_response.status_code}")
 
-        # Set up scraper and send HTTP requests
-        scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-        scraper.mount('https://', TLSAdapter())
-        
-        search_results = search_subtitles_by_title(scraper, title_for_search, headers, data)
-        
-        regex = '<div class="title">.+?<a href="(.+?)">(.+?)<'
-        matching_titles = re.compile(regex,re.DOTALL).findall(search_results)
-        
-        for link, subtitle_name in matching_titles:
-            is_matching_subtitle = False
-            
-            if media_type == 'movie':
-                movie_title_without_year = subtitle_name.split('(')[0].strip()
-         
-                if title.lower() == movie_title_without_year.lower() and str(year) in subtitle_name:
-                    is_matching_subtitle = True
+            if search_response.status_code == 200 and search_response.text:
+                subscene_subtitles_list = parse_search_response(media_type, season, episode, search_response)
             else:
-                tv_season_name = '%s - %s Season'%(title, seasons[int(season)])
-               
-                if tv_season_name.lower() == subtitle_name.lower():
-                    is_matching_subtitle = True
+                kodi_utils.logger("KODI-RD-IL", f"Subscene | search_for_subtitles | no results.")
+                return []
+        else:
+            kodi_utils.logger("KODI-RD-IL", f"Subscene | search_for_subtitles | search_response is None.")
+            return []
             
-            
-            if is_matching_subtitle:  
-                response = 'Please do not hammer on Subscene'
-                counter = 0
-                while 'Please do not hammer on Subscene'  in response:
-                    # Send a GET request to retrieve the subtitle page
-                    response = scraper.get(f'{SUBSCENE_URL}/' + link, headers=headers)
-                    
-                    if response.status_code in [503, 429, 403]:
-                        if response.status_code == 503:
-                            xbmc.sleep(2000)
-                        if response.status_code == 429:
-                            xbmc.sleep(3000)
-                    else:
-                        response = response.content.decode('utf-8')
-                        
-                    xbmc.sleep(100)
-                    counter += 1
-                    if counter > 10:
-                        break
-                subtitle_page_html = response
-               
-                regex = '<tr>(.+?)</tr'
-                subtitle_links = re.compile(regex,re.DOTALL).findall(subtitle_page_html)
-                
-                for subtitle_link_html in subtitle_links:
-                
-                    regex = '<a href="(.+?)">.+?<span class=".+?">(.+?)</span>.+?<span>(.+?)</span>'
-                    subtitle_info = re.compile(regex,re.DOTALL).findall(subtitle_link_html)
-                    
-                    if len(subtitle_info) == 0:
-                        continue
-                        
-                    subtitle_link, subtitle_language, subtitle_filename = subtitle_info[0]
-                    
-                    subtitle_language = subtitle_language.replace('\t','').replace('\r','').replace('\n','').strip()
-                    
-                    subtitle_filename = subtitle_filename.replace('\t','').replace('\r','').replace('\n','').strip()
-                    
-                    if media_type == 'tv':
-                        if ('S%sE%s.'%(padded_season_number, padded_episode_number)).lower() not in subtitle_filename.lower() and ('S%sE%s '%(padded_season_number, padded_episode_number)).lower() not in subtitle_filename.lower() and ('S%s.'%(padded_season_number)).lower() not in subtitle_filename.lower():
-                            continue
-                            
-                    if subtitle_language.lower() not in SS_SUBTITLE_SEARCH_LANGUAGE:
-                        continue
-                    
-                    subscene_subtitles_list.append(subtitle_filename)
-
-        if language == 'English':
-            # Reset the subtitle search language to the original value
-            SS_SUBTITLE_SEARCH_LANGUAGE = ORIGINAL_SS_SUBTITLE_SEARCH_LANGUAGE                       
-        
         return subscene_subtitles_list
         
     except Exception as e:
         kodi_utils.logger("KODI-RD-IL", f"An error occurred while searching for subtitles on [SUBSCENE]: {str(e)}")
         return []
-    
-    
-def search_subtitles_by_title(scraper, title_for_search, headers, data):
-
-    """
-    Searches for subtitles on Subscene by title.
-
-    Args:
-    - scraper: The CloudScraper instance to use for sending HTTP requests.
-    - title_for_search: The title of the media to search for subtitles.
-    - headers: The headers to use for HTTP requests.
-    - data: The data to use for HTTP requests.
-
-    Returns:
-    - The HTTP response as a string.
-    """
-    
-    response = 'Please do not hammer on Subscene'
-    
-    num_tries = 0    
-    while 'Please do not hammer on Subscene'  in response:
-        # Send a POST request to search for subtitles by title
-        response = scraper.post(f"{SUBSCENE_URL}/subtitles/searchbytitle?query={title_for_search}", headers=headers, data=data)
-        if response.status_code in [503, 429, 403]:
-            if response.status_code == 503:
-                xbmc.sleep(2000)
-            if response.status_code == 429:
-                xbmc.sleep(3000)
-        else:
-            response = response.content.decode('utf-8')
-        xbmc.sleep(100)
-        num_tries += 1
-        if num_tries > 10:
-            break
-            
-    return response
-     
-def setup_search_request(title):
-
-    """
-    Sets up headers and data for HTTP requests to Subscene to search for subtitles by title.
-
-    Args:
-    - title: The title of the media to search for subtitles.
-
-    Returns:
-    - A dictionary containing headers and data for HTTP requests.
-    """
-    
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Origin': f'{SUBSCENE_URL}',
-        'Connection': 'keep-alive',
-        'Referer': f'{SUBSCENE_URL}/subtitles/searchbytitle',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-User': '?1',
-        'Pragma': 'no-cache',
-        'Cache-Control': 'no-cache',
-    }
-
-    data = {
-      'query': title,
-      'l': ''
-    }
-    
-    return headers, data
-    
-    
-class TLSAdapter(requests.adapters.HTTPAdapter):
-    def init_poolmanager(self, connections, maxsize, block=False):
-        ctx = ssl.create_default_context()
-        ctx.set_ciphers('DEFAULT@SECLEVEL=1')
-        ctx.check_hostname = False
-        self.poolmanager = urllib3.poolmanager.PoolManager(num_pools=connections,
-                                                           maxsize=maxsize,
-                                                           block=block,
-                                                           ssl_version=ssl.PROTOCOL_TLSv1_2,
-                                                           ssl_context=ctx)
-                                                           

@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.56[/B][/COLOR]
+- Hebrew Subtitles Matching - complete rewrite of Subscene code: Bug fixes, speed improvement, and proper langauge filter (whitelist instead of blacklist).
+- Foreign languages titles context menu subtitles search bug fix. (movies/episodes.py --> english_title or original_title)
+
 [COLOR dodgerblue][B]Version 3.2.55[/B][/COLOR]
 - Change default minimum HSM sync percentage value to 70.
 

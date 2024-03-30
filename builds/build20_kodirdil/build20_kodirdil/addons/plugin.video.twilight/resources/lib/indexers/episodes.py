@@ -89,7 +89,14 @@ def build_episode_list(params):
 				info_tag = listitem.getVideoInfoTag()
 				info_tag.setMediaType('episode')
 				info_tag.setTitle(display)
-				info_tag.setOriginalTitle(orig_title)
+
+				############KODI-RD-IL###################
+				# ORIGINAL TWILIGHT LINE:
+				# info_tag.setOriginalTitle(orig_title)
+				# CUSTOM NEW LINE:
+				info_tag.setOriginalTitle(english_title or orig_title)
+				#########################################
+
 				info_tag.setTvShowTitle(title)
 				info_tag.setTvShowStatus(show_status)
 				info_tag.setSeason(season)
@@ -133,6 +140,11 @@ def build_episode_list(params):
 	meta = tv_meta_function('tmdb_id', params.get('tmdb_id'), meta_user_info, current_date)
 	meta_get = meta.get
 	tmdb_id, tvdb_id, imdb_id, tvshow_plot, orig_title = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('plot'), meta_get('original_title')
+
+	############KODI-RD-IL###################
+	english_title = meta_get('english_title')
+	#########################################
+
 	title, show_year, rootname, show_duration, show_status = meta_get('title'), meta_get('year') or '2050', meta_get('rootname'), meta_get('duration'), meta_get('status')
 	cast, mpaa, trailer, genre, studio, country = meta_get('cast', []), meta_get('mpaa'), string(meta_get('trailer')), meta_get('genre'), meta_get('studio'), meta_get('country')
 	season = params['season']
@@ -211,6 +223,11 @@ def build_single_episode(list_type, params={}):
 			else: unaired = False
 			tmdb_id, tvdb_id, imdb_id, title, show_year = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('title'), meta_get('year') or '2050'
 			orig_title, rootname, trailer, genre, studio = meta_get('original_title'), meta_get('rootname'), string(meta_get('trailer')), meta_get('genre'), meta_get('studio')
+
+			############KODI-RD-IL###################
+			english_title = meta_get('english_title')
+			#########################################
+
 			cast, mpaa, tvshow_plot, show_status = meta_get('cast', []), meta_get('mpaa'), meta_get('plot'), meta_get('status')
 			show_poster = meta_get('custom_poster') or meta_get(poster_main) or meta_get(poster_backup) or poster_empty
 			show_fanart = meta_get('custom_fanart') or meta_get(fanart_main) or meta_get(fanart_backup) or fanart_empty
@@ -289,7 +306,14 @@ def build_single_episode(list_type, params={}):
 			info_tag = listitem.getVideoInfoTag()
 			info_tag.setMediaType('episode')
 			info_tag.setTitle(display)
-			info_tag.setOriginalTitle(orig_title)
+
+			############KODI-RD-IL###################
+			# ORIGINAL TWILIGHT LINE:
+			# info_tag.setOriginalTitle(orig_title)
+			# CUSTOM NEW LINE:
+			info_tag.setOriginalTitle(english_title or orig_title)
+			#########################################
+
 			info_tag.setTvShowTitle(title)
 			info_tag.setTvShowStatus(show_status)
 			info_tag.setSeason(season)

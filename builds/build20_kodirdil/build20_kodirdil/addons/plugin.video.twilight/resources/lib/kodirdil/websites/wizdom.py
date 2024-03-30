@@ -62,8 +62,7 @@ def search_for_subtitles(media_metadata):
     
      # Extract the subtitle versions from the API response
     for wizdom_subtitle in wizdom_api_response:
-        if wizdom_subtitle["versioname"] not in wizdom_subtitles_list:
-            wizdom_subtitles_list.append(wizdom_subtitle["versioname"])
+        wizdom_subtitles_list.append(wizdom_subtitle["versioname"])
             
     return wizdom_subtitles_list
       
