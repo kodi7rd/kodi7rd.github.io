@@ -119,7 +119,7 @@ def create_querystring_to_opensubtitles_api(media_metadata, language):
     return: List of dictionaries of search criteria for opensubtitles server search'''
 
     media_type = media_metadata.get("media_type")
-    title = media_metadata.get("title", DEFAULT_TITLE)
+    title = media_metadata.get("title", DEFAULT_TITLE).lower()
     season = media_metadata.get("season", DEFAULT_SEASON)
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     year = media_metadata.get("year", DEFAULT_YEAR)

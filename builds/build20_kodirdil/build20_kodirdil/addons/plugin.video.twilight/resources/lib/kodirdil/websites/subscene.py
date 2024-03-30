@@ -225,7 +225,7 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
 
     # Get metadata values from the media_metadata dictionary
     media_type = media_metadata.get("media_type")
-    title = media_metadata.get("title", DEFAULT_TITLE)
+    title = media_metadata.get("title", DEFAULT_TITLE).lower()
     season = str(media_metadata.get("season", DEFAULT_SEASON))
     episode = str(media_metadata.get("episode", DEFAULT_EPISODE))
     year = media_metadata.get("year", DEFAULT_YEAR)

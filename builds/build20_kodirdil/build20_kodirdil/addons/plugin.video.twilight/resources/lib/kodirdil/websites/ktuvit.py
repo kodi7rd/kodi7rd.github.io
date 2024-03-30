@@ -40,11 +40,16 @@ def search_for_subtitles(media_metadata):
         return []
         
     media_type = media_metadata.get("media_type")
-    title = media_metadata.get("title", DEFAULT_TITLE)
+    title = media_metadata.get("title", DEFAULT_TITLE).lower()
     season = media_metadata.get("season", DEFAULT_SEASON)
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     imdb_id = media_metadata.get("imdb_id", "")
     kodi_utils.logger("KODI-RD-IL", f"Searching in [KTUVIT]: media_type: {media_type} Title: {title} Season: {season} Episode: {episode} imdb_id: {imdb_id}")
+        
+    ################ KTUVIT TITLE MISMATCH MAPPING ##############################
+    title = get_matching_ktuvit_name(title)
+    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | get_matching_ktuvit_name | title after mapping: {title}")
+    #############################################################################
     
     try:
         # Search for movie/show in Ktuvit search page
@@ -170,15 +175,6 @@ def ktuvit_search_request(title, media_type):
     ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
     kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_page_results: {ktuvit_search_page_results}")
-    
-    # Bug fix: "and/&" mismatch in Ktuvit and media metadata.
-    if len(ktuvit_search_page_results) == 0 and 'and' in title:
-        data["request"]["FilmName"] = title.replace('and','&')
-        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request ['and/&'] mismatch | data: {data}")
-        
-        ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
-        ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
-        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request ['and/&'] mismatch | ktuvit_search_page_results: {ktuvit_search_page_results}")
     
     return ktuvit_search_response
     
@@ -354,3 +350,19 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
         ktuvit_subtitles_list.append(final_title_subtitle)
     
     return ktuvit_subtitles_list
+
+
+################ KTUVIT TITLE MISMATCH MAPPING ##############################
+def get_ktuvit_original_title_mapping():
+    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json').json()
+    return ktuvit_original_title_mapping
+
+def get_matching_ktuvit_name(video_data_original_title):
+    try:
+        ktuvit_original_title_mapping = get_ktuvit_original_title_mapping()
+        return ktuvit_original_title_mapping.get(video_data_original_title, video_data_original_title).lower()
+    except Exception as e:
+        kodi_utils.logger("KODI-RD-IL", f"KTUVIT | get_matching_ktuvit_name | Exception: {str(e)}")
+        return video_data_original_title
+        pass
+#############################################################################
