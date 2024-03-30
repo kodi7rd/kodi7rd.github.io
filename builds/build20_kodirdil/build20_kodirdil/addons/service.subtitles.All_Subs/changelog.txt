@@ -1,5 +1,5 @@
 ﻿[COLOR yellow][B]v4.2.8[/B][/COLOR]
-* [COLOR springgreen]Ktuvit[/COLOR]: Add website's title mismatching dictionary mapping.
+* [COLOR springgreen]Ktuvit[/COLOR]: Add website's title mismatch dictionary mapping.
 * BUG FIX: "man_search_subs" setting reset (search/download actions ran twice).
 [COLOR yellow][B]v4.2.7[/B][/COLOR]
 * Subscene langauge filter bug fixes and code refactor.
