@@ -203,6 +203,7 @@ def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
 
 def remove_release_year_from_title_if_exists(title, year):
+    year = str(year)
     # Avoids: "Wonder Woman 1984" --> "Wonder Woman" (Release year is 2020)
     if not year in title:
         log.warning(f"DEBUG | remove_release_year_from_title_if_exists | No release year to remove from {title}")
@@ -212,7 +213,7 @@ def remove_release_year_from_title_if_exists(title, year):
     import re
     # Remove year from title if exists ("Avengers 2012" / "Avengers (2012)" --> "Avengers")
     try:
-        title = re.compile("([ .\w']+?)(\W\d{4}\W?.*)").findall(title)[0][0]
+        title = re.compile(r"([ .\w'\-]+?)(\W" + year + r"\W?.*)").findall(title)[0][0].strip()
         return title
     except:
         return title

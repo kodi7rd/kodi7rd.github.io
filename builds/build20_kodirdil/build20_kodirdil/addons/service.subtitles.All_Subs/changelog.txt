@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.2.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.2.8[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Add website's title mismatching dictionary mapping.
+* BUG FIX: "man_search_subs" setting reset (search/download actions ran twice).
+[COLOR yellow][B]v4.2.7[/B][/COLOR]
 * Subscene langauge filter bug fixes and code refactor.
 * video_data - Remove release year from title if exists.
 [COLOR yellow][B]v4.2.6[/B][/COLOR]

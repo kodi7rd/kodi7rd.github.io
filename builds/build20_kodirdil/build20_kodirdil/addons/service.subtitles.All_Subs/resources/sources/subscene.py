@@ -105,7 +105,7 @@ all_lang_codes = {
 }
 #########################################
 
-################### CLOUDFLARE REUQESTS FUNCTIONS ###################################
+################### CLOUDFLARE REQUESTS FUNCTIONS ###################################
 class TLSAdapter(requests.adapters.HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
         ctx = ssl.create_default_context()
@@ -119,13 +119,15 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def __retry(request, response, next, cfscrape, retry=0):
-    if retry > 5:
+    if retry > 6:
         return None
 
     if response.status_code in [503, 429, 409, 403]:
+        if response.status_code == 403:
+            xbmc.sleep(100)
         if response.status_code == 503:
             xbmc.sleep(2000)
-            retry = 5
+            retry = 6
         if response.status_code == 429:
             xbmc.sleep(3000)
         if response.status_code == 409:
@@ -281,7 +283,7 @@ def parse_search_response(media_type, season, episode, search_response):
 
     results = re.findall(results_regex, search_response.text, re.DOTALL)
     if not results:
-        return None
+        return []
 
     if media_type == 'tv':
         season_number = season.zfill(2)
@@ -409,11 +411,12 @@ def get_subs(item):
 
     search_request = build_search_requests(media_type, title, year, season, subscene_lang_ids)
     search_response = execute_request(search_request)
+    
+    subtitles_search_results = []
         
     if search_response:
         log.warning(f"DEBUG | Subscene | get_subs | search_response.status_code={search_response.status_code}")
 
-        subtitles_search_results = []
         if search_response.status_code == 200 and search_response.text:
             subtitles_search_results = parse_search_response(media_type, season, episode, search_response)
         else:

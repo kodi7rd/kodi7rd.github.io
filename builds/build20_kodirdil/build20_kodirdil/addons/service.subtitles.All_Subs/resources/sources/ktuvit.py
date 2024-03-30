@@ -87,6 +87,11 @@ def get_subs(item):
         s_title=item["OriginalTitle"]
         s_WithSubsOnly = "false"
         
+    ################ KTUVIT TITLE MISMATCH MAPPING ##############################
+    s_title = get_matching_ktuvit_name(s_title)
+    log.warning(f"KTUVIT | get_matching_ktuvit_name | title after mapping: {s_title}")
+    #############################################################################
+        
     headers = {
         'authority': 'www.ktuvit.me',
         'accept': 'application/json, text/javascript, */*; q=0.01',
@@ -109,12 +114,6 @@ def get_subs(item):
     j_data=json.loads(response['d'])['Films']
     
     f_id=''
-    if len(j_data)==0 and 'and' in s_title:
-        s_title=s_title.replace('and','&')
-        data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":%s}}'%(str(s_title),s_type,s_WithSubsOnly)
-    
-        response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=5).json()
-        j_data=json.loads(response['d'])['Films']
     
     for itt in j_data:
         
@@ -314,4 +313,19 @@ def download(download_data,MySubFolder):
     sub_file=extract(archive_file,MySubFolder)
     log.warning(sub_file)
     return sub_file
-             
+
+
+################ KTUVIT TITLE MISMATCH MAPPING ##############################
+def c_get_ktuvit_original_title_mapping():
+    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json').json()
+    return ktuvit_original_title_mapping
+
+def get_matching_ktuvit_name(video_data_original_title):
+    try:
+        ktuvit_original_title_mapping = cache.get(c_get_ktuvit_original_title_mapping, 24,table='subs')
+        return ktuvit_original_title_mapping.get(video_data_original_title, video_data_original_title).lower()
+    except Exception as e:
+        log.warning(f"KTUVIT | get_matching_ktuvit_name | Exception: {str(e)}")
+        return video_data_original_title
+        pass
+#############################################################################

@@ -255,7 +255,7 @@ def add_demo_embbded(f_result_temp):
     download_data['file_name']=str(index_sub)
     save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
     
-    url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=bsplayer" % (MyScriptID,
+    url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=HebrewSubEmbedded" % (MyScriptID,
                                                         que(json.dumps(download_data)),
                                                         que(que(que(save_data))),
                                                         "Hebrew")
@@ -313,7 +313,7 @@ def add_embbded_if_exists(f_result):
                 download_data['file_name']=str(index_sub)
                 save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
                 
-                url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=bsplayer" % (MyScriptID,
+                url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=HebrewSubEmbedded" % (MyScriptID,
                                                                     que(json.dumps(download_data)),
                                                                     que(que(que(save_data))),
                                                                     "Hebrew")
@@ -518,7 +518,6 @@ def sub_from_main(arg):
     params = get_params(argv2,argv1)
 
     video_data=get_video_data()
-    log.warning(params)
     action=None
     
     
@@ -526,7 +525,7 @@ def sub_from_main(arg):
         action=(params["action"])
     except:
             pass
-    log.warning(action)
+    log.warning(f"DEBUG | sub_from_main | action={action} | params={params}")
     try:
         download_data=unque(params["download_data"])
         download_data=json.loads(download_data)
@@ -670,7 +669,6 @@ def sub_from_main(arg):
         xbmc.Player().pause()
         f_result=add_embbded_if_exists(f_result)
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
-        xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='sub_window_unpause':
@@ -690,7 +688,6 @@ def sub_from_main(arg):
         xbmc.executebuiltin('Dialog.Close(all,true)')
         f_result=add_embbded_if_exists(f_result)
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
-        xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='next':
@@ -851,11 +848,14 @@ class KodiMonitor(xbmc.Monitor):
         #notify('Settings change')
         manual_search=xbmcaddon.Addon('service.subtitles.All_Subs').getSetting("man_search_subs")
         if  manual_search!='':
+
+            # Reset man_search_subs setting (bug fix --> search/download actions ran "sub_from_main" twice)
+            xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
             
             sub_from_main(manual_search)
         
             general.show_msg="END"
-            xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
+
         Mando_search=xbmcaddon.Addon('service.subtitles.All_Subs').getSetting("fast_subs")
         if Mando_search!='':
             
