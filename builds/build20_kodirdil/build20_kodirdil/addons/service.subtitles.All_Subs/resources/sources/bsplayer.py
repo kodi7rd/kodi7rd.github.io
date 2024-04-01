@@ -9,6 +9,7 @@ MyScriptID=Addon.getAddonInfo('id')
 from resources.modules.extract_sub import extract,g_extract
 import urllib.parse
 import struct
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 
 Addon=xbmcaddon.Addon()
 MyScriptID=Addon.getAddonInfo('id')
@@ -252,7 +253,7 @@ def download(download_data,MySubFolder):
     file_name=download_data['file_name']
     url=get_subs("",file_name)
     log.warning('New Url:'+str(url))
-    response = requests.get(url, headers=__headers)
+    response = requests.get(url, headers=__headers, timeout=DEFAULT_REQUEST_TIMEOUT)
     
 
     

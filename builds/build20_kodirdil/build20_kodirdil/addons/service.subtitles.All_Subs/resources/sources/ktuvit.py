@@ -8,6 +8,7 @@ Addon=xbmcaddon.Addon()
 MyScriptID=Addon.getAddonInfo('id')
 from resources.modules.extract_sub import extract
 import urllib.parse
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 Addon=xbmcaddon.Addon()
 MyScriptID=Addon.getAddonInfo('id')
 que=urllib.parse.quote_plus
@@ -51,7 +52,7 @@ def get_login_cook():
 
     data = '{"request":{"Email":"hatzel6969@gmail.com","Password":"Jw1n9nPOZRAHw9aVdarvjMph2L85pKGx79oAAFTCsaE="}}'
 
-    login_cook = requests.post('https://www.ktuvit.me/Services/MembershipService.svc/Login', headers=headers, data=data,timeout=5).cookies
+    login_cook = requests.post('https://www.ktuvit.me/Services/MembershipService.svc/Login', headers=headers, data=data,timeout=DEFAULT_REQUEST_TIMEOUT).cookies
     login_cook_fix={}
     for cookie in login_cook:
 
@@ -109,7 +110,7 @@ def get_subs(item):
     
     data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":%s}}'%(str(s_title),s_type,s_WithSubsOnly)
     
-    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=5).json()
+    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=DEFAULT_REQUEST_TIMEOUT).json()
  
     j_data=json.loads(response['d'])['Films']
     
@@ -158,7 +159,7 @@ def get_subs(item):
             ('Episode', item["episode"]),
         )
 
-        response = requests.get('https://www.ktuvit.me/Services/GetModuleAjax.ashx', headers=headers, params=params, cookies=login_cook,timeout=5).content
+        response = requests.get('https://www.ktuvit.me/Services/GetModuleAjax.ashx', headers=headers, params=params, cookies=login_cook,timeout=DEFAULT_REQUEST_TIMEOUT).content
     else:
         headers = {
             'authority': 'www.ktuvit.me',
@@ -178,7 +179,7 @@ def get_subs(item):
             ('ID', f_id),
         )
         
-        response = requests.get('https://www.ktuvit.me/MovieInfo.aspx', headers=headers, params=params, cookies=login_cook,timeout=5).content
+        response = requests.get('https://www.ktuvit.me/MovieInfo.aspx', headers=headers, params=params, cookies=login_cook,timeout=DEFAULT_REQUEST_TIMEOUT).content
         
     
     regex='<tr>(.+?)</tr>'
@@ -266,7 +267,7 @@ def download(download_data,MySubFolder):
             'TE': 'Trailers',
             }
         
-        x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data).json()
+        x = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, cookies=login_cook, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
         log.warning(f"KTUVIT | Number of try: {count} | RequestSubtitleDownload response: {json.loads(x['d'])['DownloadIdentifier']}")
         
         headers = {
@@ -285,7 +286,7 @@ def download(download_data,MySubFolder):
         ('DownloadIdentifier', json.loads(x['d'])['DownloadIdentifier']),
         )
 
-        response = requests.get('https://www.ktuvit.me/Services/DownloadFile.ashx', headers=headers, params=params, cookies=login_cook)
+        response = requests.get('https://www.ktuvit.me/Services/DownloadFile.ashx', headers=headers, params=params, cookies=login_cook, timeout=DEFAULT_REQUEST_TIMEOUT)
         log.warning(f"KTUVIT | Number of try: {count} | Sending DownloadFile request...")
        
     
@@ -317,7 +318,7 @@ def download(download_data,MySubFolder):
 
 ################ KTUVIT TITLE MISMATCH MAPPING ##############################
 def c_get_ktuvit_original_title_mapping():
-    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json').json()
+    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
     return ktuvit_original_title_mapping
 
 def get_matching_ktuvit_name(video_data_original_title):

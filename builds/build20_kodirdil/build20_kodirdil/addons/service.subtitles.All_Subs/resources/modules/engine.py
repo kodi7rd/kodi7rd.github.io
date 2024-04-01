@@ -14,6 +14,7 @@ global break_all
 from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 from resources.modules.general import Thread,CachedSubFolder,TransFolder,user_dataDir
 from resources.modules import cache
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 global trans_result
 from concurrent import futures
 trans_result=[]
@@ -386,8 +387,7 @@ def get_translated(base_url,items,counter,headers):
     trans_result.append((translation,counter))
 def c_get_bing_keys():
     import requests
-    
-    x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json').json()
+    x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
     return x
 def get_last_key():
     try:

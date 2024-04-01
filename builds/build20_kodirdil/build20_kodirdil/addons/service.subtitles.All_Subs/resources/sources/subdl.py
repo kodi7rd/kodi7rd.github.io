@@ -227,7 +227,7 @@ def download(download_data,MySubFolder):
     subtitle_download_url = f"{SUBDL_API_DOWNLOAD_URL}{file_id}"
         
     try:
-        sub_download_response = requests.get(subtitle_download_url)
+        sub_download_response = requests.get(subtitle_download_url, timeout=REQUEST_TIMEOUT_IN_SECONDS)
         log.warning(f"DEBUG | SubDL | SubDL DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
         sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
@@ -239,7 +239,7 @@ def download(download_data,MySubFolder):
         log.warning(f'DEBUG | SubDL | SubDL DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
 
 def c_get_subdl_api_keys():    
-    SUBDL_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_SubDL/darksubs_subdl_api.json').json()
+    SUBDL_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_SubDL/darksubs_subdl_api.json', timeout=REQUEST_TIMEOUT_IN_SECONDS).json()
     return SUBDL_API_KEYS
     
 def get_random_key():

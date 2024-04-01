@@ -25,6 +25,7 @@ progress_msg=0
 global break_all
 break_all=False
 with_dp=True
+DEFAULT_REQUEST_TIMEOUT = 10
 
 class OverlayText:
     def __init__(self):
@@ -245,7 +246,7 @@ def manual_search_for_imdb_id(media_type, original_title, year):
     search_for_tmdb_id_url = f'{TMDB_API_BASE_URL}search/{media_type}'
 
     try:
-        response = requests.get(search_for_tmdb_id_url, params=params)
+        response = requests.get(search_for_tmdb_id_url, params=params, timeout=DEFAULT_REQUEST_TIMEOUT)
         log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_tmdb_id_url: {response.request.url}")
         data = response.json()
                 
@@ -287,7 +288,7 @@ def manual_search_for_imdb_id(media_type, original_title, year):
                 'language': 'en'
             }
             
-            response = requests.get(search_for_imdb_id_url, params=params)
+            response = requests.get(search_for_imdb_id_url, params=params, timeout=DEFAULT_REQUEST_TIMEOUT)
             log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_imdb_id_url: {response.request.url}")
             data = response.json()
             

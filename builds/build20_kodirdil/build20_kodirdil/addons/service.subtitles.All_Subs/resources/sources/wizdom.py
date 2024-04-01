@@ -9,6 +9,7 @@ import zipfile
 import shutil,os
 
 from resources.modules.extract_sub import extract
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 import urllib
 import urllib.parse
 import urllib.request
@@ -36,7 +37,7 @@ def get_subs(item):
     # url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s&version=%s" % (imdb, season, episode, title)
     url = "http://wizdom.xyz/api/search?action=by_id&imdb=%s&season=%s&episode=%s" % (imdb, season, episode)
     try:
-      x=requests.get(url).json()
+      x=requests.get(url, timeout=DEFAULT_REQUEST_TIMEOUT).json()
     except:
       x={}
       pass

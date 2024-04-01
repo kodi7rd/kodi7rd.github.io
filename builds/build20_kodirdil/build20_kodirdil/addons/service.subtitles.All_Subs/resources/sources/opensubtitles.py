@@ -349,7 +349,7 @@ def download(download_data,MySubFolder):
     for attempt_number in range(1, REQUEST_MAX_RETRIES_NUMBER + 1):
         log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | Download sub file | Starting attempt_number {attempt_number}.")
         try:
-            sub_download_response = requests.get(subtitle_download_url)
+            sub_download_response = requests.get(subtitle_download_url, timeout=REQUEST_TIMEOUT_IN_SECONDS)
             log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
             sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
@@ -368,7 +368,7 @@ def download(download_data,MySubFolder):
                 raise RuntimeError("OpenSubtitles DownloadSubtitles HTTPError reached maximum tries.")
 
 def c_get_os_api_keys():    
-    OS_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_OpenSubtitles/darksubs_opensubtitles_api.json').json()
+    OS_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_OpenSubtitles/darksubs_opensubtitles_api.json', timeout=REQUEST_TIMEOUT_IN_SECONDS).json()
     return OS_API_KEYS
     
 def get_random_key():
