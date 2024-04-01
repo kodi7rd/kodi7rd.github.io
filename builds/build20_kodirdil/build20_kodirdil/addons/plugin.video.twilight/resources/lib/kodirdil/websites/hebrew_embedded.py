@@ -7,6 +7,7 @@ import base64
 ########### Constants ###################
 MOVIES_TAGLINES_FILE_URL = "https://darksubshebsubs.github.io/DarkSubsHebSubs/movies_taglines.txt"
 TV_SHOWS_TAGLINES_FILE_URL = "https://darksubshebsubs.github.io/DarkSubsHebSubs/tvshows_taglines.txt"
+DEFAULT_REQUEST_TIMEOUT = 10
 #########################################
 
 
@@ -17,7 +18,7 @@ def get_hebrew_embedded_taglines(media_type):
             return None
             
         HEBREW_EMBEDDED_TAGLINES_URL = MOVIES_TAGLINES_FILE_URL if media_type == "movie" else TV_SHOWS_TAGLINES_FILE_URL
-        response = requests.get(HEBREW_EMBEDDED_TAGLINES_URL)
+        response = requests.get(HEBREW_EMBEDDED_TAGLINES_URL, timeout=DEFAULT_REQUEST_TIMEOUT)
         
         if response.status_code == 200:
             hebrew_embedded_taglines = [line.strip() for line in response.text.split("\n")]

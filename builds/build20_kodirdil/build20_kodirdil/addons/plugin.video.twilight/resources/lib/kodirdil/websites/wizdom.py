@@ -14,6 +14,7 @@ WIZDOM_URL = "http://wizdom.xyz"
 DEFAULT_SEASON = 0
 DEFAULT_EPISODE = 0
 DEFAULT_TITLE = 0
+DEFAULT_REQUEST_TIMEOUT = 10
 #########################################
 
 
@@ -51,7 +52,7 @@ def search_for_subtitles(media_metadata):
 
     try:
         # Send the API request and parse the response
-        wizdom_api_response = requests.get(wizdom_api_url).json()
+        wizdom_api_response = requests.get(wizdom_api_url, timeout=DEFAULT_REQUEST_TIMEOUT).json()
     except Exception as e:
         # Handle any errors that occur during the API request
         wizdom_api_response = {}

@@ -6,6 +6,10 @@ from modules.kodi_utils import local_string as ls
 from modules.kodi_utils import get_setting
 from modules.kodi_utils import show_text_RTL
 
+########### Constants ###################
+DEFAULT_REQUEST_TIMEOUT = 10
+#########################################
+
 # Settings
 show_MoviesOnlineDates_upcoming_this_month_only_current_month = get_setting('show_MoviesOnlineDates_upcoming_this_month_only_current_month', 'true') == 'true'
 
@@ -93,7 +97,7 @@ def reformat_message_content(message_content):
 
 # Function to load JSON data from the URL
 def load_json_data(url):
-    response = requests.get(url)
+    response = requests.get(url, timeout=DEFAULT_REQUEST_TIMEOUT)
     if response.status_code == 200:
         return json.loads(response.text)
     return None

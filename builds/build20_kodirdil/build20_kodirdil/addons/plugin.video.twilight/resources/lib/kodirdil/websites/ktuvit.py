@@ -13,6 +13,7 @@ KTUVIT_URL = "https://www.ktuvit.me"
 DEFAULT_TITLE = ""
 DEFAULT_SEASON = 0
 DEFAULT_EPISODE = 0
+DEFAULT_REQUEST_TIMEOUT = 10
 #########################################
 
 
@@ -70,7 +71,7 @@ def search_for_subtitles(media_metadata):
         ktuvit_login_cookie = login_to_ktuvit()
 
         # Search subtitles in Ktuvit and fetch response
-        ktuvit_subtitles_search_response = requests.get(ktuvit_search_subtitles_api_url, headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=5).content
+        ktuvit_subtitles_search_response = requests.get(ktuvit_search_subtitles_api_url, headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).content
         
         # Extract subtitles list from search response
         ktuvit_subtitles_list = extract_subtitles_list(ktuvit_subtitles_search_response)
@@ -113,7 +114,7 @@ def login_to_ktuvit():
     data = f'{{"request":{{"Email":"{email}","Password":"{password}"}}}}'
 
     # Send login request and get cookies
-    ktuvit_api_response = requests.post(f"{KTUVIT_URL}/Services/MembershipService.svc/Login", headers=headers, data=data, timeout=5).cookies
+    ktuvit_api_response = requests.post(f"{KTUVIT_URL}/Services/MembershipService.svc/Login", headers=headers, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).cookies
 
     # Create dictionary of cookies with names as keys and values as values
     ktuvit_login_cookies_dict = {}
@@ -172,7 +173,7 @@ def ktuvit_search_request(title, media_type):
     }
     kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | data: {data}")
     
-    ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=5).json()
+    ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
     kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_page_results: {ktuvit_search_page_results}")
     
@@ -354,7 +355,7 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
 
 ################ KTUVIT TITLE MISMATCH MAPPING ##############################
 def get_ktuvit_original_title_mapping():
-    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json').json()
+    ktuvit_original_title_mapping = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Ktuvit_Title_Mapping/darksubs_ktuvit_title_mapping.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
     return ktuvit_original_title_mapping
 
 def get_matching_ktuvit_name(video_data_original_title):
