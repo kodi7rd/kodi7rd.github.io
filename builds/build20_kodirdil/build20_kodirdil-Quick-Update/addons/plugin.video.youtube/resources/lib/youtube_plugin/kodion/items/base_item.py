@@ -14,12 +14,13 @@ import json
 from datetime import date, datetime
 from hashlib import md5
 
-from ..compatibility import datetime_infolabel, string_type, to_str, unescape
+from ..compatibility import datetime_infolabel, string_type, unescape
 from ..constants import MEDIA_PATH
 
 
 class BaseItem(object):
     VERSION = 3
+    INFO_DATE = 'date'  # (string) iso 8601
 
     _playable = False
 
@@ -47,19 +48,43 @@ class BaseItem(object):
         self._next_page = False
 
     def __str__(self):
-        return ('------------------------------\n'
-                'Name: |{0}|\n'
-                'URI: |{1}|\n'
-                'Image: |{2}|\n'
-                '------------------------------'.format(self._name,
-                                                        self._uri,
-                                                        self._image))
+        name = self._name
+        uri = self._uri
+        image = self._image
+        obj_str = "------------------------------\n'%s'\nURI: %s\nImage: %s\n------------------------------" % (name, uri, image)
+        return obj_str
 
     def to_dict(self):
         return {'type': self.__class__.__name__, 'data': self.__dict__}
 
     def dumps(self):
-        return json.dumps(self.to_dict(), ensure_ascii=False, cls=_Encoder)
+        def _encoder(obj):
+            if isinstance(obj, (date, datetime)):
+                class_name = obj.__class__.__name__
+
+                if 'fromisoformat' in dir(obj):
+                    return {
+                        '__class__': class_name,
+                        '__isoformat__': obj.isoformat(),
+                    }
+
+                if class_name == 'datetime':
+                    if obj.tzinfo:
+                        format_string = '%Y-%m-%dT%H:%M:%S%z'
+                    else:
+                        format_string = '%Y-%m-%dT%H:%M:%S'
+                else:
+                    format_string = '%Y-%m-%d'
+
+                return {
+                    '__class__': class_name,
+                    '__format_string__': format_string,
+                    '__value__': obj.strftime(format_string)
+                }
+
+            return json.JSONEncoder().default(obj)
+
+        return json.dumps(self.to_dict(), ensure_ascii=False, default=_encoder)
 
     def get_id(self):
         """
@@ -205,43 +230,5 @@ class BaseItem(object):
         self._next_page = bool(value)
 
     @property
-    def playable(self):
-        return self._playable
-
-
-class _Encoder(json.JSONEncoder):
-    def encode(self, obj):
-        if isinstance(obj, string_type):
-            return to_str(obj)
-
-        if isinstance(obj, dict):
-            return {to_str(key): self.encode(value)
-                    for key, value in obj.items()}
-
-        if isinstance(obj, (list, tuple)):
-            return [self.encode(item) for item in obj]
-
-        if isinstance(obj, (date, datetime)):
-            class_name = obj.__class__.__name__
-
-            if 'fromisoformat' in dir(obj):
-                return {
-                    '__class__': class_name,
-                    '__isoformat__': obj.isoformat(),
-                }
-
-            if class_name == 'datetime':
-                if obj.tzinfo:
-                    format_string = '%Y-%m-%dT%H:%M:%S%z'
-                else:
-                    format_string = '%Y-%m-%dT%H:%M:%S'
-            else:
-                format_string = '%Y-%m-%d'
-
-            return {
-                '__class__': class_name,
-                '__format_string__': format_string,
-                '__value__': obj.strftime(format_string)
-            }
-
-        return self.iterencode(obj)
+    def playable(cls):
+        return cls._playable

@@ -13,7 +13,7 @@ from __future__ import absolute_import, division, unicode_literals
 import os
 
 from .. import logger
-from ..compatibility import to_str, urlencode
+from ..compatibility import urlencode
 from ..json_store import AccessManager
 from ..sql_store import (
     DataCache,
@@ -265,7 +265,7 @@ class AbstractContext(object):
                         val for val in value.split(',') if val
                     ]
                 elif param in self._STRING_PARAMS:
-                    parsed_value = to_str(value)
+                    parsed_value = str(value)
                     # process and translate deprecated parameters
                     if param == 'action':
                         if parsed_value in ('play_all', 'play_video'):
@@ -385,6 +385,3 @@ class AbstractContext(object):
     @staticmethod
     def get_listitem_detail(detail_name, attr=False):
         raise NotImplementedError()
-
-    def tear_down(self):
-        pass

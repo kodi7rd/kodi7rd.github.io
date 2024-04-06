@@ -534,7 +534,7 @@ class XbmcContext(AbstractContext):
                                    'properties': ['enabled']})
         try:
             return response['result']['addon']['enabled'] is True
-        except (KeyError, TypeError):
+        except KeyError:
             error = response.get('error', {})
             self.log_error('XbmcContext.addon_enabled error - |{0}: {1}|'
                            .format(error.get('code', 'unknown'),
@@ -547,7 +547,7 @@ class XbmcContext(AbstractContext):
                                    'enabled': enabled})
         try:
             return response['result'] == 'OK'
-        except (KeyError, TypeError):
+        except KeyError:
             error = response.get('error', {})
             self.log_error('XbmcContext.set_addon_enabled error - |{0}: {1}|'
                            .format(error.get('code', 'unknown'),
@@ -648,8 +648,3 @@ class XbmcContext(AbstractContext):
             if attr else
             'Container.ListItem(0).Property({0})'.format(detail_name)
         )
-
-    def tear_down(self):
-        self._settings.flush()
-        del self._addon
-        self._addon = None
