@@ -485,10 +485,14 @@ def get_video_data():
     ################### Clean Titles #########################################################
     video_data['title'] = clean_name(video_data['title'])
     video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
+    if video_data['media_type'] == 'tv':
+        video_data['TVShowTitle'] = clean_name(video_data['TVShowTitle'])
     
     
     video_data['title'] = remove_release_year_from_title_if_exists(video_data['title'], video_data['year'])
     video_data['OriginalTitle'] = remove_release_year_from_title_if_exists(video_data['OriginalTitle'], video_data['year'])
+    if video_data['media_type'] == 'tv':
+        video_data['TVShowTitle'] = remove_release_year_from_title_if_exists(video_data['TVShowTitle'], video_data['year'])
     ##########################################################################################
     
     

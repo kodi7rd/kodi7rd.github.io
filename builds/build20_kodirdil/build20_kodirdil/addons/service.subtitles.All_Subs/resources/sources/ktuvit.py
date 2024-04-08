@@ -33,7 +33,8 @@ def extract_imdb_id_from_itt(itt):
         
     return imdb_id_from_ktuvit
 
-def get_login_cook():
+
+def get_login_cookie():
   
     headers = {
     'authority': 'www.ktuvit.me',
@@ -59,39 +60,9 @@ def get_login_cook():
             login_cook_fix[cookie.name]=cookie.value
 
     return login_cook_fix
-    
-    
-def get_subs(item):
-    log.warning('Searching Ktuvit')
-    global global_var
-    regexHelper = re.compile('\W+', re.UNICODE)
-    
 
-    login_cook=cache.get(get_login_cook,1, table='subs')
-  
-   
-    # if item["TVShowTitle"]:
-        # s_type='1'
-        # s_title=item["TVShowTitle"]
-    # else:
-        # s_type='0'
-        # s_title=item["OriginalTitle"]
-        
-    media_type = item["media_type"]
-    
-    if media_type == 'movie':
-        s_type='0'
-        s_title=item["OriginalTitle"]
-        s_WithSubsOnly = "true"
-    else:
-        s_type='1'
-        s_title=item["OriginalTitle"]
-        s_WithSubsOnly = "false"
-        
-    ################ KTUVIT TITLE MISMATCH MAPPING ##############################
-    s_title = get_matching_ktuvit_name(s_title)
-    log.warning(f"KTUVIT | get_matching_ktuvit_name | title after mapping: {s_title}")
-    #############################################################################
+
+def search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly):
         
     headers = {
         'authority': 'www.ktuvit.me',
@@ -104,15 +75,70 @@ def get_subs(item):
         'sec-fetch-mode': 'cors',
         'sec-fetch-dest': 'empty',
         'referer': 'https://www.ktuvit.me/Search.aspx',
-        'accept-language': 'en-US,en;q=0.9',
-        
+        'accept-language': 'en-US,en;q=0.9'
     }
+
+    data = {
+        "request": {
+            "FilmName": s_title,
+            "Actors": [],
+            "Studios": None,
+            "Directors": [],
+            "Genres": [],
+            "Countries": [],
+            "Languages": [],
+            "Year": "",
+            "Rating": [],
+            "Page": 1,
+            "SearchType": s_type,
+            "WithSubsOnly": s_WithSubsOnly
+        }
+    }
+
+    try:
+        response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+        j_data = json.loads(response['d'])['Films']
+        return j_data
+    except Exception as e:
+        log.warning(f"KTUVIT | search_title_in_ktuvit | Exception: {str(e)}")
+        return []
     
-    data = '{"request":{"FilmName":"%s","Actors":[],"Studios":null,"Directors":[],"Genres":[],"Countries":[],"Languages":[],"Year":"","Rating":[],"Page":1,"SearchType":"%s","WithSubsOnly":%s}}'%(str(s_title),s_type,s_WithSubsOnly)
     
-    response = requests.post('https://www.ktuvit.me/Services/ContentProvider.svc/SearchPage_search', headers=headers, data=data.encode('utf-8'),timeout=DEFAULT_REQUEST_TIMEOUT).json()
- 
-    j_data=json.loads(response['d'])['Films']
+def get_subs(item):
+    log.warning('Searching Ktuvit')
+    global global_var
+    regexHelper = re.compile('\W+', re.UNICODE)
+    
+
+    login_cook=cache.get(get_login_cookie,1, table='subs')
+        
+    media_type = item["media_type"]
+    
+    s_title=item["OriginalTitle"]
+    if media_type == 'movie':
+        s_type='0'
+        s_WithSubsOnly = "true"
+    else:
+        s_type='1'
+        s_WithSubsOnly = "false"
+        
+    ################ KTUVIT TITLE MISMATCH MAPPING ##############################
+    s_title = get_matching_ktuvit_name(s_title)
+    log.warning(f"KTUVIT | get_matching_ktuvit_name | title after mapping: {s_title}")
+    #############################################################################
+    
+    
+    j_data = search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly)
+    
+    
+    #############################################################################
+    # IF NO RESULTS FOR TV SHOW's OriginalTitle - RE-SEARCH BY TVShowTitle
+    if not j_data and media_type == 'tv' and item["TVShowTitle"]:
+        s_title = item["TVShowTitle"]
+        log.warning(f"KTUVIT | Re-searching TV Show title | s_title={s_title}")
+        j_data = search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly)
+    #############################################################################
+    
     
     f_id=''
     
@@ -134,9 +160,6 @@ def get_subs(item):
                     s_title.startswith(heb_name) or heb_name.startswith(s_title)):
                 f_id=itt["ID"]
                 break
-            
-    if f_id!='':
-        url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
         
     if media_type == 'tv':
         url='https://www.ktuvit.me/MovieInfo.aspx?ID='+f_id
@@ -227,7 +250,8 @@ def get_subs(item):
         subtitle_list.append(json_data)
         
     global_var=subtitle_list
-            
+
+
 def download(download_data,MySubFolder):
     
     try:
@@ -235,13 +259,11 @@ def download(download_data,MySubFolder):
     except: pass
     xbmcvfs.mkdirs(MyTmp)
 
-    log.warning(download_data)
-    #a+=1
-  
+    log.warning(download_data)  
 
 
     id=download_data['data']
-    login_cook=cache.get(get_login_cook,1, table='subs')
+    login_cook=cache.get(get_login_cookie,1, table='subs')
 
     f_id=download_data['id']
     count=0

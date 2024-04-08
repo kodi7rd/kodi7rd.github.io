@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.3.0[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.1[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Add subtitles re-search by TVShowTitle if no results found through OriginalTitle search.
+* [COLOR springgreen]Ktuvit[/COLOR]: Code refactor.
+[COLOR yellow][B]v4.3.0[/B][/COLOR]
 * Change context menu label to "חפש כתוביות (DarkSubs)"
 [COLOR yellow][B]v4.2.9[/B][/COLOR]
 * Set default timeout for requests (10s).
