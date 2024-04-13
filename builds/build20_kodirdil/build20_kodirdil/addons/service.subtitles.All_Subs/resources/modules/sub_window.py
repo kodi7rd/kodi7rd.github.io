@@ -149,7 +149,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                     self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.label_info_text)
                     save_file_name(unque(filename),language)
                            
-                self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data(self.full_list)
+                self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data()
                 self.set_active_controls()
                 from resources.modules import general
                 general.show_msg="END"

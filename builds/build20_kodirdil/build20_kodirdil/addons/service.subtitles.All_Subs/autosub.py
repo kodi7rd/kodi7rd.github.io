@@ -44,7 +44,7 @@ def manual_fix_sub_punctuation():
     
     f_result=add_embbded_if_exists(f_result)
     # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
-    last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+    last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
     log.warning(f"PUNCT | last_sub_name_in_cache={last_sub_name_in_cache}")
     log.warning(f"PUNCT | last_sub_language_in_cache={last_sub_language_in_cache}")
     log.warning(f"PUNCT | all_subs={all_subs}")
@@ -245,37 +245,6 @@ def set_embedded_hebrew_sub():
             
         index_sub+=1
     xbmc.sleep(500)
-    
-def add_demo_embbded(f_result_temp):
-    index_sub=0
-    video_data=get_video_data()
-    f_result_start=[]
-    download_data={}
-    download_data['url']=str(index_sub)
-    download_data['file_name']=str(index_sub)
-    save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
-    
-    url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=HebrewSubEmbedded" % (MyScriptID,
-                                                        que(json.dumps(download_data)),
-                                                        que(que(que(save_data))),
-                                                        "Hebrew")
-    json_value={'url':url,
-                         'label':"Hebrew",
-                         'label2':'[LOC] '+' תרגום מובנה',
-                         'iconImage':"0",
-                         'thumbnailImage':"he",
-                         'hearing_imp':'false',
-                         'site_id':'[LOC]',
-                         'sub_color':'cyan',
-                         'filename':que(save_data),
-                         'sync': 'true'}
-                         
-                    
-    f_result_start.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
-    
-    for items in f_result_temp:
-        f_result_start.append(items)
-    return f_result_start
     
 def add_embbded_if_exists(f_result):
 
@@ -580,7 +549,7 @@ def sub_from_main(arg):
         
         f_result=add_embbded_if_exists(f_result)
   
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
 
         return_result=display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,argv1)
         log.warning(return_result)
@@ -668,7 +637,7 @@ def sub_from_main(arg):
         xbmc.executebuiltin('Dialog.Close(all,true)')
         xbmc.Player().pause()
         f_result=add_embbded_if_exists(f_result)
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='sub_window_unpause':
@@ -687,7 +656,7 @@ def sub_from_main(arg):
         f_result = [] if not f_result else f_result
         xbmc.executebuiltin('Dialog.Close(all,true)')
         f_result=add_embbded_if_exists(f_result)
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='next':
@@ -715,7 +684,7 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         f_result=add_embbded_if_exists(f_result)
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         next_one=False
         selected_sub=None
         for items in f_result:
@@ -774,7 +743,7 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         f_result=add_embbded_if_exists(f_result)
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(f_result)
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         pre_one=None
         found=None
         for items in f_result:
@@ -980,11 +949,8 @@ class KodiMonitor(xbmc.Monitor):
                         # Set is_embedded_hebrew_sub_exists to True if embedded Hebrew subs exists in playing video.
                         is_embedded_hebrew_sub_exists = check_if_embedded_hebrew_sub_exists()
                         
-                        # Adds temp Hebrew embedded (LOC 101%) sub to demo subtitles list.
-                        demo_embbded_f_result=add_demo_embbded(f_result)
-                        
                         # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
-                        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(demo_embbded_f_result)
+                        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
                         
                         # Get sub language of first subtitle in external subs list found.
                         if len(f_result) > 0:

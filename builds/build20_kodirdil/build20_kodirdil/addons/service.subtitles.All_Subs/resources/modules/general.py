@@ -525,7 +525,7 @@ def save_file_name(filename,language):
 
     dbcon.commit()
     dbcon.close()
-def get_db_data(f_result):
+def get_db_data():
       
     video_data_tagline = quote(get_video_data()['Tagline'])
     video_data_file_original_path = quote(get_video_data()['file_original_path'])
