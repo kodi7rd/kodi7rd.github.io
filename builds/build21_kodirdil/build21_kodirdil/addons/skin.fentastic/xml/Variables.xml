@@ -714,29 +714,6 @@
     <value condition="Skin.HasSetting(DefaultSearchWindowBehavior)">Open keyboard</value>
     <value>Open search window</value>
 	</variable>
-	<!-- <variable name="InfoPanel"> -->
-		<!-- COLLECTIONS -->
-		<!-- <value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- MOVIES -->
-		<!-- KODI-RD-IL CHANGES -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year]$INFO[ListItem.Mpaa,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Genre,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Director,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(h,[COLOR button_focus][B] • [/B][/COLOR], hr] $INFO[ListItem.Duration(m,, mins]$INFO[ListItem.EndTime,[COLOR button_focus][B] • [/B][/COLOR]$LOCALIZE[31080]: ][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- ##################### -->
-		
-		<!-- KODI-RD-IL ADDITION -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[700039]:[/B] [/COLOR]$INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700010]:[/B] [/COLOR]$INFO[ListItem.Director][CR]$INFO[ListItem.EndTime,[COLOR button_focus][B]$LOCALIZE[31080]:[/B][/COLOR] ]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- ##################### -->
-		
-		<!-- SHOWS -->
-		<!-- KODI-RD-IL CHANGES -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year]$INFO[ListItem.Mpaa,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Studio,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Genre,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(mins),[COLOR button_focus][B] • [/B][/COLOR], mins]$INFO[ListItem.Property(TotalSeasons),[COLOR button_focus][B] • [/B][/COLOR], seasons]$INFO[ListItem.Status,[COLOR button_focus][B] • [/B][/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- ##################### -->
-		
-		<!-- KODI-RD-IL ADDITION -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[7000151]:[/B] [/COLOR]$INFO[ListItem.Property(TotalSeasons)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700014]:[/B] [/COLOR]$VAR[SetHebStatus]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- ##################### -->
-		
-		<!-- SEASONS -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,season)">$INFO[ListItem.Genre][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
 
 	<!-- INFOPANEL VARIABLES -->
 	<!-- Released -->
@@ -815,10 +792,6 @@
 	<!-- EPISODES -->
 	<variable name="InfoPanelEpisode">
 		<value condition="!ListItem.IsCollection + String.IsEqual(ListItem.DBtype,episode)">$VAR[_Aired]$VAR[_Mpaa]$VAR[_Network]$VAR[_RuntimeEpisodes]$VAR[_Endsat][CR]$VAR[_Plot][CR]</value>
-		<!-- KODI-RD-IL CHANGES -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">$INFO[ListItem.Mpaa]$INFO[ListItem.Studio,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(mins),[COLOR button_focus][B] • [/B][/COLOR], mins]$INFO[ListItem.EndTime,[COLOR button_focus][B] • [/B][/COLOR]$LOCALIZE[31080]: ][CR][CR]$INFO[ListItem.Plot][CR][CR]</value> -->
-		<!-- ##################### -->
-		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">[COLOR button_focus][B]$LOCALIZE[705][/B]:[/COLOR] $INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[700039][/B]:[/COLOR] $INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[31080][/B]:[/COLOR] $INFO[ListItem.EndTime][CR][CR][B]$INFO[ListItem.Plot][/B][CR][CR]</value> -->
 	</variable>
 	
 	<!-- KODI-RD-IL ADDITION -->
