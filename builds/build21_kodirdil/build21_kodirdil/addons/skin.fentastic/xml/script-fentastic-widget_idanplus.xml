@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="IdanPlusWidgets">
+        <include content="WidgetListBigPoster">
+            <param name="content_path" value="plugin://plugin.video.idanplus/?name=%5BB%5D%D7%98%D7%9C%D7%95%D7%99%D7%96%D7%99%D7%94%5B%2FB%5D&amp;url=&amp;mode=1&amp;iconimage=C%253A%255CUsers%255Cbarro%255CAppData%255CRoaming%255CKodi%255Caddons%255Cplugin.video.idanplus%255Cicon.png&amp;module=&amp;moredata="/>
+            <param name="widget_header" value="[B][COLOR yellow]ערוצים[/COLOR][/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="25011"/>
+        </include>
+        <include content="WidgetListBigEpisodes">
+            <param name="content_path" value="plugin://plugin.video.idanplus/?name=%5BB%5DVOD%5B%2FB%5D&amp;url=&amp;mode=2&amp;iconimage=C%253A%255CUsers%255Cbarro%255CAppData%255CRoaming%255CKodi%255Caddons%255Cplugin.video.idanplus%255Cicon.png&amp;module=&amp;moredata="/>
+            <param name="widget_header" value="[B][COLOR yellow]VOD[/COLOR][/B]"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="25012"/>
+        </include>
+    </include>
+</includes>
