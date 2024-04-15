@@ -71,6 +71,8 @@
 						<onclick>NextSubtitle</onclick>
 						<visible>VideoPlayer.HasSubtitles</visible>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="radiobutton" id="11110">
 						<width>700</width>
 						<include>DialogSettingButton</include>
@@ -92,6 +94,8 @@
 						<onclick>Skin.ToggleSetting(ChooseSubtitlesButtonOpensKodiWindow)</onclick>
 						<selected>Skin.HasSetting(ChooseSubtitlesButtonOpensKodiWindow)</selected>	
 					</control>
+					<!-- ##################### -->
+					
 					<control type="button" id="11105">
 						<width>700</width>
 						<include>DialogSettingButton</include>

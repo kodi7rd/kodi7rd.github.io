@@ -18,6 +18,7 @@
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
 				<content>
+					<!-- KODI-RD-IL CHANGES -->
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[13012][/COLOR][/B]</label>
 						<!-- Original - <onclick>Quit()</onclick> -->
@@ -68,6 +69,7 @@
 						<onclick>Dialog.Close(all)</onclick>
 						<onclick>ReloadSkin()</onclick>
 					</item>
+					<!-- ##################### -->
 				</content>
 			</control>
 		<include content="UpDownArrows">

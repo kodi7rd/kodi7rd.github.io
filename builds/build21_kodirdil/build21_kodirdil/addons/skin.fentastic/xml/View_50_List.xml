@@ -324,13 +324,19 @@
 					<left>30</left>
 					<!-- Plot control -->
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<top>460</top>
 						<width>540</width>
 						<bottom>80</bottom>
 						<label>$VAR[InfoPanel]</label>
 						<autoscroll time="3000" delay="10000" repeat="10000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<top>460</top>
@@ -340,6 +346,8 @@
 						<label>$VAR[InfoPanel]</label>
 						<autoscroll time="3000" delay="10000" repeat="10000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox" id="15500">
 						<top>600</top>
 						<width>540</width>
@@ -350,13 +358,19 @@
 					</control>
 					<!-- Plot control episodes -->
 					<control type="textbox" id="15501">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<top>523</top>
 						<width>540</width>
 						<bottom>100</bottom>
 						<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 						<label>$VAR[InfoPanelEpisode]</label>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox" id="15502">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<top>523</top>
@@ -366,8 +380,14 @@
 						<autoscroll time="3000" delay="7000" repeat="5000">!System.HasModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 						<label>$VAR[InfoPanelEpisode]</label>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<top>418</top>
 						<width>550</width>
 						<aligny>center</aligny>
@@ -377,6 +397,8 @@
 						<label>$LOCALIZE[700015] $INFO[ListItem.Season], $LOCALIZE[700016] $INFO[ListItem.Episode]</label>
 						<visible>String.IsEqual(ListItem.DbType,episode)</visible>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<top>418</top>
@@ -389,6 +411,8 @@
 						<label>$LOCALIZE[700015] $INFO[ListItem.Season], $LOCALIZE[700016] $INFO[ListItem.Episode]</label>
 						<visible>String.IsEqual(ListItem.DbType,episode)</visible>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox" id="15503">
 						<top>600</top>
 						<width>540</width>

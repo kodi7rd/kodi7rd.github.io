@@ -1050,4 +1050,16 @@ msgctxt "#700059"
 msgid "Next Episode"
 msgstr "לפרק הבא"
 
+# Kodi Manual Sync Subtitles - VideoOSD.xml
+
+msgctxt "#700060"
+msgid "Sync Subtitles"
+msgstr "סנכרון כתוביות"
+
+# DarkSubs Subtitles Window Button - VideoOSD.xml
+
+msgctxt "#700061"
+msgid "Choose Subtitles (DarkSubs)"
+msgstr "בחירת כתוביות (DarkSubs)"
+
 ################################################################

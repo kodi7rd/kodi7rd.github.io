@@ -4,6 +4,7 @@
 		<param name="bottom_offset">list_bottom_offset</param>
 		<definition>
 		
+		<!-- KODI-RD-IL ADDITION -->
 		<control type="group">
 		<top>-980</top>
 		<left>800</left>
@@ -19,6 +20,7 @@
 					</include>
 			</include>
 		</control>
+		<!-- ##################### -->
 		
 			<control type="group">
 				<include>OpenClose_Right</include>

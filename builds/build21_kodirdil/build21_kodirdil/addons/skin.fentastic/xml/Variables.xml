@@ -17,9 +17,6 @@
 		<value condition="String.IsEmpty(Container.PluginName)">$INFO[ListItem.FolderPath]</value>
 		<value></value>
 	</variable>
-	<variable name="Episode_prefix">
-	<value condition="VideoPlayer.Content(episodes)">[B][COLOR white]$LOCALIZE[700015][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Season][/COLOR][/B] / [B][COLOR white]$LOCALIZE[700016][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Episode][/COLOR][/B]</value>
-	</variable>
 	<variable name="AddonCountLabel">
 		<value condition="Integer.IsGreater(System.AddonUpdateCount,0)">$INFO[System.AddonUpdateCount]</value>
 		<value>$INFO[System.AddonUpdateCount,[COLOR grey],[/COLOR]]</value>
@@ -28,9 +25,6 @@
 		<value condition="String.IsEqual(ListItem.DbType,song)">$INFO[ListItem.Comment,[B]$LOCALIZE[569][/B][CR][COLOR=white],[/COLOR]]</value>
 		<value condition="String.IsEqual(ListItem.DbType,album)">$INFO[ListItem.Property(Album_Description),[COLOR=white],[/COLOR]]</value>
 		<value condition="String.IsEqual(ListItem.DbType,artist)">$INFO[ListItem.Property(Artist_Description),[COLOR=white],[/COLOR]]</value>
-	</variable>
-	<variable name="BoxFrame">
-	<value>kodirdil/overlays/</value>
 	</variable>
 	<variable name="NowPlayingSublabelVar">
 		<value condition="VideoPlayer.Content(musicvideos)">$INFO[VideoPlayer.Artist]$INFO[VideoPlayer.Album, - ]</value>
@@ -46,20 +40,12 @@
 	<variable name="NowPlayingPosterVar">
 		<value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
 		<value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="String.IsEmpty(Player.Icon) + VideoPlayer.Content(livetv)">DefaultTVShows.png</value> -->
+		<!-- <value>$INFO[Player.Icon]</value> -->
 		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
 		<value>DefaultTVShows.png</value>
-	</variable>
-		<variable name="NowPlayingLabelVar">
-		<value condition="!String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
-		<value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.TvShowTitle]</value>
-		<value>$INFO[VideoPlayer.Title]</value>
-	</variable>
-	<variable name="NowPlayingFanartVar">
-		<value condition="!String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
-		<value condition="!String.IsEmpty(Player.Art(tvshow.fanart))">$INFO[Player.Art(tvshow.fanart)]</value>
-		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
-		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
-	<value>DefaultNoPreview.png</value>
+		<!-- ##################### -->
 	</variable>
 	<variable name="ShiftThumbVar">
 		<value condition="!String.IsEmpty(Listitem.Art(poster))">$INFO[Listitem.Art(poster)]</value>
@@ -97,21 +83,6 @@
 		<value condition="ListItem.IsParentFolder">DefaultFolderBackPoster.png</value>
 		<value>$INFO[ListItem.Icon]</value>
 	</variable>
-	
-	  <!--set your label flag -->
-  	<variable name="NoLabelFlagFound">
-	<value>$INFO[Player.Process(VideoFPS)]</value>
-	</variable>
-	
-	<!-- video osd seeksteps focus-->
-	<variable name="SeekStepFocuedTexture">
-	<value>flags/flag.png</value>
-	</variable>
-	
-	<variable name="SetLabelflag">
-	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
-	</variable>
-	
 	<variable name="IconWallThumbVar">
 		<value condition="String.IsEqual(listitem.dbtype,genre) + System.AddonIsEnabled(resource.images.moviegenreicons.transparent)">$INFO[ListItem.Label,resource://resource.images.moviegenreicons.transparent/,.png]</value>
 		<value condition="String.IsEqual(listitem.dbtype,studio) + System.AddonIsEnabled(resource.images.studios.white)">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</value>
@@ -136,8 +107,12 @@
 		<value>$INFO[ListItem.Label2]</value>
 	</variable>
 	<variable name="PlotTextBoxVar">
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline]</value> -->
+		<!-- <value>$INFO[ListItem.Plot]</value> -->
 		<value condition="!String.IsEmpty(ListItem.PlotOutline)">$INFO[ListItem.PlotOutline][CR]]$INFO[ListItem.Genre]</value>
 		<value condition="!String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Plot)">[B][COLOR button_focus]$LOCALIZE[70008]: [/COLOR][/B] [I][LOWERCASE]$INFO[ListItem.Genre][/I][/LOWERCASE][CR]$INFO[ListItem.Plot]</value>
+		<!-- ##################### -->
 	</variable>
 	<variable name="ShiftLeftTextBoxVar">
 		<value condition="Window.IsActive(pictures)">$INFO[ListItem.Property(description),,[CR]]$INFO[ListItem.PictureDatetime,[COLOR button_focus]$LOCALIZE[552]:  [/COLOR],[CR]]$INFO[ListItem.PictureResolution,[COLOR button_focus]$LOCALIZE[169]:  [/COLOR],[CR]]$INFO[ListItem.PictureCamMake,[COLOR button_focus]$LOCALIZE[31041]:  [/COLOR],[CR]]$INFO[ListItem.PictureCamModel,[COLOR button_focus]$LOCALIZE[21823]:  [/COLOR],[CR]]</value>
@@ -376,9 +351,15 @@
 		<value condition="Control.HasFocus(70043)">$LOCALIZE[19033]</value>
 		<value condition="Control.HasFocus(70044)">$LOCALIZE[298]</value>
 		<value condition="Control.HasFocus(70045)">$LOCALIZE[31106]</value>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="Control.HasFocus(70046)">$LOCALIZE[24012]</value> -->
 		<value condition="Control.HasFocus(70046)">[B]$LOCALIZE[24012][/B]</value>
+		<!-- ##################### -->
 		<value condition="Control.HasFocus(70047)">$LOCALIZE[36501]</value>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="Control.HasFocus(70048)">$LOCALIZE[5]</value> -->
 		<value condition="Control.HasFocus(70048)">[B]$LOCALIZE[5][/B]</value>
+		<!-- ##################### -->
 		<value condition="Control.HasFocus(70050)">$LOCALIZE[29900]</value>
 		<value condition="Control.HasFocus(70051)">$LOCALIZE[31066]</value>
 		<value condition="Control.HasFocus(70052)">$LOCALIZE[31033]$INFO[MusicPlayer.UserRating, : ]</value>
@@ -386,12 +367,18 @@
 		<value condition="Control.HasFocus(70054) + Playlist.IsRandom">$LOCALIZE[590]: $LOCALIZE[16041]</value>
 		<value condition="Control.HasFocus(70054)">$LOCALIZE[590]: $LOCALIZE[16039]</value>
 		<value condition="Control.HasFocus(70055)">$LOCALIZE[24013]</value>
-		<value condition="Control.HasFocus(599)">[B]ZOOM IN[/B]</value>
-		<value condition="Control.HasFocus(598)">[B]ZOOM OUT[/B]</value>
+		
+		<!-- KODI-RD-IL ADDITION -->
+		<value condition="Control.HasFocus(599)">[B]Zoom In[/B]</value>
+		<value condition="Control.HasFocus(598)">[B]Zoom Out[/B]</value>
+		<value condition="Control.HasFocus(700450)">[B]$LOCALIZE[700060][/B]</value>
+		<value condition="Control.HasFocus(700451)">[B]$LOCALIZE[700061][/B]</value>
 		<value condition="Control.HasFocus(700452)">[B]$LOCALIZE[700056][/B]</value>
 		<value condition="Control.HasFocus(700453)">[B]$LOCALIZE[700055][/B]</value>
 		<value condition="Control.HasFocus(700455)">[B]$LOCALIZE[700045][/B]</value>
 		<value condition="Control.HasFocus(700456)">[B]$LOCALIZE[700059][/B]</value>
+		<!-- ##################### -->
+		
 	</variable>
 	<variable name="SkinSettingsHelpTextVar">
 		<value condition="Container(9000).HasFocus(1)">$LOCALIZE[31129]</value>
@@ -727,47 +714,176 @@
     <value condition="Skin.HasSetting(DefaultSearchWindowBehavior)">Open keyboard</value>
     <value>Open search window</value>
 	</variable>
-	
+	<!-- <variable name="InfoPanel"> -->
+		<!-- COLLECTIONS -->
+		<!-- <value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- MOVIES -->
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year]$INFO[ListItem.Mpaa,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Genre,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Director,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(h,[COLOR button_focus][B] • [/B][/COLOR], hr] $INFO[ListItem.Duration(m,, mins]$INFO[ListItem.EndTime,[COLOR button_focus][B] • [/B][/COLOR]$LOCALIZE[31080]: ][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- ##################### -->
+		
+		<!-- KODI-RD-IL ADDITION -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[700039]:[/B] [/COLOR]$INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700010]:[/B] [/COLOR]$INFO[ListItem.Director][CR]$INFO[ListItem.EndTime,[COLOR button_focus][B]$LOCALIZE[31080]:[/B][/COLOR] ]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- ##################### -->
+		
+		<!-- SHOWS -->
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year]$INFO[ListItem.Mpaa,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Studio,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Genre,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(mins),[COLOR button_focus][B] • [/B][/COLOR], mins]$INFO[ListItem.Property(TotalSeasons),[COLOR button_focus][B] • [/B][/COLOR], seasons]$INFO[ListItem.Status,[COLOR button_focus][B] • [/B][/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- ##################### -->
+		
+		<!-- KODI-RD-IL ADDITION -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[7000151]:[/B] [/COLOR]$INFO[ListItem.Property(TotalSeasons)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700014]:[/B] [/COLOR]$VAR[SetHebStatus]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- ##################### -->
+		
+		<!-- SEASONS -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,season)">$INFO[ListItem.Genre][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value> -->
+
+	<!-- INFOPANEL VARIABLES -->
+	<!-- Released -->
+	<variable name="_Year">
+		<value condition="!String.IsEmpty(ListItem.Year) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year]</value>
+		<value condition="!String.IsEmpty(ListItem.Year) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Year,[COLOR button_focus][B]Released: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Aired -->
+	<variable name="_Aired">
+		<value condition="!String.IsEmpty(ListItem.Premiered) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Premiered]</value>
+		<value condition="!String.IsEmpty(ListItem.Premiered) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Premiered,[COLOR button_focus][B]Aired: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- MPAA Rating -->
+	<variable name="_Mpaa">
+		<value condition="!String.IsEmpty(ListItem.Mpaa) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Mpaa,[COLOR button_focus][B] • [/B][/COLOR]]</value>
+		<value condition="!String.IsEmpty(ListItem.Mpaa) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Mpaa,[COLOR button_focus][B]Rated: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Genre -->
+	<variable name="_Genre">
+		<value condition="!String.IsEmpty(ListItem.Genre) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Genre,[COLOR button_focus][B] • [/B][/COLOR]]</value>
+		<value condition="!String.IsEmpty(ListItem.Genre) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Genre,[COLOR button_focus][B]Genre: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Director -->
+	<variable name="_Director">
+		<value condition="!String.IsEmpty(ListItem.Director) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Director,[COLOR button_focus][B] • [/B][/COLOR]]</value>
+		<value condition="!String.IsEmpty(ListItem.Director) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Director,[COLOR button_focus][B]Director: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Network -->
+	<variable name="_Network">
+		<value condition="!String.IsEmpty(ListItem.Studio) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Studio,[COLOR button_focus][B] • [/B][/COLOR]]</value>
+		<value condition="!String.IsEmpty(ListItem.Studio) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Studio,[COLOR button_focus][B]Network: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Total Seasons -->
+	<variable name="_TotalSeasons">
+		<value condition="!String.IsEmpty(ListItem.Property(TotalSeasons)) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Property(TotalSeasons),[COLOR button_focus][B] • [/B][/COLOR], seasons]</value>
+		<value condition="!String.IsEmpty(ListItem.Property(TotalSeasons)) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Property(TotalSeasons),[COLOR button_focus][B]Seasons: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Status -->
+	<variable name="_Status">
+		<value condition="!String.IsEmpty(ListItem.Status) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Status,[COLOR button_focus][B] • [/B][/COLOR]]</value>
+		<value condition="!String.IsEmpty(ListItem.Status) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Status,[COLOR button_focus][B]Status: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Runtime -->
+	<variable name="_Runtime">
+		<value condition="!String.IsEmpty(ListItem.Duration) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Duration(h),[COLOR button_focus][B] • [/B][/COLOR], hr] $INFO[ListItem.Duration(m),, mins]</value>
+		<value condition="!String.IsEmpty(ListItem.Duration) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Duration(h),[COLOR button_focus][B]Runtime: [/B][/COLOR], hr] $INFO[ListItem.Duration(m),, mins][CR]</value>
+	</variable>
+	<!-- Runtime Episodes -->
+	<variable name="_RuntimeEpisodes">
+		<value condition="!String.IsEmpty(ListItem.Duration) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Duration(mins),[COLOR button_focus][B] • [/B][/COLOR], mins]</value>
+		<value condition="!String.IsEmpty(ListItem.Duration) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Duration(mins),[COLOR button_focus][B]Runtime: [/B][/COLOR], mins][CR]</value>
+	</variable>
+	<!-- Ends at: -->
+	<variable name="_Endsat">
+		<value condition="!String.IsEmpty(ListItem.EndTime) + !String.IsEmpty(ListItem.Duration) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.EndTime,[COLOR button_focus][B] • [/B][/COLOR]$LOCALIZE[31080]: ]</value>
+		<value condition="!String.IsEmpty(ListItem.EndTime) + !String.IsEmpty(ListItem.Duration) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.EndTime,[COLOR button_focus][B]$LOCALIZE[31080]: [/B][/COLOR]][CR]</value>
+	</variable>
+	<!-- Plot -->
+	<variable name="_Plot">
+		<value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Plot][CR]</value>
+		<value condition="!String.IsEmpty(ListItem.Plot) + !Skin.HasSetting(Enable.AlternateInfo)">[CR]$INFO[ListItem.Plot][CR]</value>
+		<value condition="!String.IsEmpty(ListItem.Plot) + Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Plot][CR]</value>
+	</variable>
+
 	<variable name="InfoPanel">
 		<!-- COLLECTIONS -->
-		<value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
+		<value condition="String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)">$VAR[_Plot][CR]</value>
 		<!-- MOVIES -->
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Studio]$INFO[ListItem.Year, [COLOR button_focus][B]• [/B][/COLOR]]$INFO[ListItem.Mpaa, [COLOR button_focus][B]• [/B][/COLOR]]$INFO[ListItem.Genre, [COLOR button_focus][B]• [/B][/COLOR]]$INFO[ListItem.Director, [COLOR button_focus][B]• [/B][/COLOR]] $INFO[ListItem.EndTime,[COLOR button_focus][B]• [/B][/COLOR]$LOCALIZE[31080]: ][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot) + String.IsEmpty(ListItem.Genre)] + String.IsEqual(ListItem.DBtype,movie) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[700039]:[/B] [/COLOR]$INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700010]:[/B] [/COLOR]$INFO[ListItem.Director][CR]$INFO[ListItem.EndTime,[COLOR button_focus][B]$LOCALIZE[31080]:[/B][/COLOR] ]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
+		<value condition="!ListItem.IsCollection + String.IsEqual(ListItem.DBtype,movie)">$VAR[_Year]$VAR[_Mpaa]$VAR[_Genre]$VAR[_Director]$VAR[_Runtime]$VAR[_Endsat][CR]$VAR[_Plot][CR]</value>
 		<!-- SHOWS -->
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + !Skin.HasSetting(Enable.AlternateInfo)">$INFO[ListItem.Studio]$INFO[ListItem.Year, [COLOR button_focus][B]• [/B][/COLOR]]$INFO[ListItem.Mpaa, [COLOR button_focus][B]• [/B][/COLOR]]$INFO[ListItem.Genre, [COLOR button_focus][B]• [/B][/COLOR]]$VAR[SetHebStatus, [COLOR button_focus][B]• [/B][/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,tvshow) + Skin.HasSetting(Enable.AlternateInfo)">[COLOR button_focus][B]$LOCALIZE[7000151]:[/B] [/COLOR]$INFO[ListItem.Property(TotalSeasons)][CR][COLOR button_focus][B]$LOCALIZE[705]:[/B] [/COLOR]$INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[70007]:[/B] [/COLOR]$INFO[ListItem.Year][CR][COLOR button_focus][B]$LOCALIZE[70008]:[/B] [/COLOR]$INFO[ListItem.Genre][CR][COLOR button_focus][B]$LOCALIZE[700014]:[/B] [/COLOR]$VAR[SetHebStatus]$INFO[ListItem.Mpaa,[CR][COLOR button_focus][B]$LOCALIZE[700042]:[/B] [/COLOR]][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
+		<value condition="!ListItem.IsCollection + String.IsEqual(ListItem.DBtype,tvshow)">$VAR[_Year]$VAR[_Mpaa]$VAR[_Network]$VAR[_Genre]$VAR[_RuntimeEpisodes]$VAR[_TotalSeasons]$VAR[_Status]$VAR[_Endsat][CR]$VAR[_Plot][CR]</value>
 		<!-- SEASONS -->
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,season)">$INFO[ListItem.Genre][CR][CR]$INFO[ListItem.Tagline,[I],[/I][CR][CR]]$INFO[ListItem.Plot][CR][CR]</value>
-	
+		<value condition="!ListItem.IsCollection + String.IsEqual(ListItem.DBtype,season)">$VAR[_Mpaa]$VAR[_Network]$VAR[_Genre]$VAR[_RuntimeEpisodes]$VAR[_Endsat][CR]$VAR[_Plot][CR]</value>
 	</variable>
 
 	<!-- EPISODES -->
 	<variable name="InfoPanelEpisode">
-		<value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">[COLOR button_focus][B]$LOCALIZE[705][/B]:[/COLOR] $INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[700039][/B]:[/COLOR] $INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[31080][/B]:[/COLOR] $INFO[ListItem.EndTime][CR][CR][B]$INFO[ListItem.Plot][/B][CR][CR]</value>
+		<value condition="!ListItem.IsCollection + String.IsEqual(ListItem.DBtype,episode)">$VAR[_Aired]$VAR[_Mpaa]$VAR[_Network]$VAR[_RuntimeEpisodes]$VAR[_Endsat][CR]$VAR[_Plot][CR]</value>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">$INFO[ListItem.Mpaa]$INFO[ListItem.Studio,[COLOR button_focus][B] • [/B][/COLOR]]$INFO[ListItem.Duration(mins),[COLOR button_focus][B] • [/B][/COLOR], mins]$INFO[ListItem.EndTime,[COLOR button_focus][B] • [/B][/COLOR]$LOCALIZE[31080]: ][CR][CR]$INFO[ListItem.Plot][CR][CR]</value> -->
+		<!-- ##################### -->
+		<!-- <value condition="![ListItem.IsCollection + String.IsEmpty(ListItem.Plot)] + String.IsEqual(ListItem.DBtype,episode)">[COLOR button_focus][B]$LOCALIZE[705][/B]:[/COLOR] $INFO[ListItem.Studio][CR][COLOR button_focus][B]$LOCALIZE[700039][/B]:[/COLOR] $INFO[ListItem.Duration(hh:mm:ss)][CR][COLOR button_focus][B]$LOCALIZE[31080][/B]:[/COLOR] $INFO[ListItem.EndTime][CR][CR][B]$INFO[ListItem.Plot][/B][CR][CR]</value> -->
+	</variable>
+	
+	<!-- KODI-RD-IL ADDITION -->
+	<variable name="BoxFrame">
+		<value>kodirdil/overlays/</value>
+	</variable>
+	
+	<!-- Custom_1122_PlayerPauseWindow.xml - Playing Label -->
+	<variable name="NowPlayingLabelVar">
+		<value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.TvShowTitle]</value>
+		<value>$INFO[VideoPlayer.Title]</value>
+	</variable>
+	
+	<!-- Custom_1122_PlayerPauseWindow.xml - Playing Fanart -->
+	<variable name="NowPlayingFanartVar">
+		<value condition="!String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Art(tvshow.fanart))">$INFO[Player.Art(tvshow.fanart)]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value condition="!String.IsEmpty(Player.Icon)">$INFO[Player.Icon]</value>
+		<value>DefaultNoPreview.png</value>
+	</variable>
+	
+	  <!--set your label flag -->
+  	<variable name="NoLabelFlagFound">
+	<value>$INFO[Player.Process(VideoFPS)]</value>
+	</variable>
+	
+	<!-- Video OSD seeksteps focus-->
+	<variable name="SeekStepFocuedTexture">
+	<value>flags/flag.png</value>
+	</variable>
+	
+	<variable name="SetLabelflag">
+	<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
 	
 	<variable name="NextPreviousIndicator">
-	<value>kodirdil/arrows/circle-down.png</value>
+		<value>kodirdil/arrows/circle-down.png</value>
 	</variable>
 	
-	<variable name="clearartlogo">
-	<value condition="!String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearlogo)]</value>
-	<value condition="String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearart)]</value>
+	<!-- Clear Art Logo for Poster View Type -->	
+	<variable name="ClearArtLogo">
+		<value condition="!String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearlogo)]</value>
+		<value condition="String.IsEmpty(ListItem.Art(clearlogo)">$INFO[ListItem.Art(clearart)]</value>
 	</variable>
 	
+	<!-- Seasons Label -->	
 	<variable name="SeasonCorrectLabel">
-	<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[700015]</value>
-	<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[7000151]</value>
+		<value condition="Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[700015]</value>
+		<value condition="!Integer.IsEqual(ListItem.Property(TotalSeasons),1)">$LOCALIZE[7000151]</value>
 	</variable>
 	
 	<!-- TV Show InfoPanel Status Hebrew Translation -->
 	<variable name="SetHebStatus">
-	<value condition="String.IsEqual(ListItem.Status,returning series)">$LOCALIZE[700027]</value>
-	<value condition="String.IsEqual(ListItem.Status,in production)">$LOCALIZE[700028]</value>
-	<value condition="String.IsEqual(ListItem.Status,planned)">$LOCALIZE[700029]</value>
-	<value condition="String.IsEqual(ListItem.Status,canceled)">$LOCALIZE[700030]</value>
-	<value condition="String.IsEqual(ListItem.Status,ended)">$LOCALIZE[700031]</value>
+		<value condition="String.IsEqual(ListItem.Status,returning series)">$LOCALIZE[700027]</value>
+		<value condition="String.IsEqual(ListItem.Status,in production)">$LOCALIZE[700028]</value>
+		<value condition="String.IsEqual(ListItem.Status,planned)">$LOCALIZE[700029]</value>
+		<value condition="String.IsEqual(ListItem.Status,canceled)">$LOCALIZE[700030]</value>
+		<value condition="String.IsEqual(ListItem.Status,ended)">$LOCALIZE[700031]</value>
 	</variable>
+	
+	<!-- Episode Prefix -->	
+	<variable name="Episode_prefix">
+		<value condition="VideoPlayer.Content(episodes)">[B][COLOR white]$LOCALIZE[700015][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Season][/COLOR][/B] / [B][COLOR white]$LOCALIZE[700016][/COLOR] [COLOR button_focus]$INFO[VideoPlayer.Episode][/COLOR][/B]</value>
+	</variable>
+	<!-- ##################### -->
 	
 </includes>

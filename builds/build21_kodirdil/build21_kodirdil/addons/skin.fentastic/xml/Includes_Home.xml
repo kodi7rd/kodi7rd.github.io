@@ -14,6 +14,11 @@
 	<include name="CategoryLabel">
 		<param name="visible">true</param>
 		<param name="item_treshold">0</param>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <param name="label_focus">$INFO[Container($PARAM[list_id]).ListItem.Title,[COLOR button_focus][B] | [/B][/COLOR]]</param> -->
+		<!-- <param name="label_focus_episodes">$INFO[Container($PARAM[list_id]).ListItem.TVShowTitle,[COLOR button_focus][B] | [/B][/COLOR]]$INFO[Container($PARAM[list_id]).ListItem.Title,[COLOR button_focus][B] | [/B][/COLOR]]</param> -->
+		<!-- <param name="label_focus_collections">$INFO[Container($PARAM[list_id]).ListItem.Label,[COLOR button_focus][B] | [/B][/COLOR]]</param> -->
+		<!-- ##################### -->
 		<param name="label_focus">$INFO[Container($PARAM[list_id]).ListItem.TVShowTitle, [COLOR button_focus][B] | [/COLOR][/B]]</param>
 		<param name="label_focus1">$INFO[Container($PARAM[list_id]).ListItem.Label, [COLOR button_focus][B] | [/COLOR][/B]]</param>
 		<param name="label_focus_collections"></param>
@@ -34,12 +39,26 @@
 			<control type="label">
 				<label>$PARAM[label]$PARAM[label_focus]</label>
 				<shadowcolor>text_shadow</shadowcolor>
+				<!-- KODI-RD-IL CHANGES -->
+				<!-- <visible>!String.IsEqual(ListItem.DBType,episode) + Control.HasFocus($PARAM[list_id])</visible> -->
+			<!-- </control> -->
+			<!-- <control type="label"> -->
+				<!-- <label>$PARAM[label]$PARAM[label_focus_episodes]</label> -->
+				<!-- <shadowcolor>text_shadow</shadowcolor> -->
+				<!-- <visible>String.IsEqual(ListItem.DBType,episode) + Control.HasFocus($PARAM[list_id])</visible> -->
 				<visible>String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) + Control.HasFocus($PARAM[list_id])</visible>
+				<!-- ##################### -->
 			</control>
 			<control type="label">
+				<!-- KODI-RD-IL CHANGES -->
+				<!-- <label>$PARAM[label]$PARAM[label_focus_collections]</label> -->
 				<label>$PARAM[label]$PARAM[label_focus1]</label>
+				<!-- ##################### -->
 				<shadowcolor>text_shadow</shadowcolor>
+				<!-- KODI-RD-IL CHANGES -->
+				<!-- <visible>[String.IsEqual(ListItem.DBtype,movie) + String.IsEmpty(ListItem.Genre)] + Control.HasFocus($PARAM[list_id])</visible> -->
 				<visible>![String.IsEqual(ListItem.DBType,episode) + Stgring.IsEqual(ListItem.DBType,tvshow)] + Control.HasFocus($PARAM[list_id])</visible>
+				<!-- ##################### -->
 			</control>
 		</control>
 		</definition>
@@ -898,6 +917,7 @@
 							<height>$PARAM[icon_height]</height>
 							<texture colordiffuse="dialog_bg2" fallback="DefaultFolder.png">$PARAM[icon]</texture>
 							<aspectratio>scale</aspectratio>
+							<visible>!Skin.HasSetting(NoIconSilhouettes)</visible>
 						</control>
 						<control type="textbox">
 							<visible>!String.IsEqual(ListItem.FolderPath,addons://outdated/)</visible>
@@ -950,6 +970,7 @@
 							<height>$PARAM[icon_height]</height>
 							<texture colordiffuse="dialog_bg2" fallback="DefaultFolder.png">$PARAM[icon]</texture>
 							<aspectratio>scale</aspectratio>
+							<visible>!Skin.HasSetting(NoIconSilhouettes)</visible>
 						</control>
 						<!-- <control type="image">
 							<top>23</top>
@@ -1046,6 +1067,7 @@
 									<height>$PARAM[icon_height]</height>
 									<texture colordiffuse="dialog_bg2" fallback="DefaultFolder.png">$PARAM[icon]</texture>
 									<aspectratio>scale</aspectratio>
+									<visible>!Skin.HasSetting(NoIconSilhouettes)</visible>
 								</control>
 								<control type="textbox">
 									<left>47</left>
@@ -1084,6 +1106,7 @@
 									<height>$PARAM[icon_height]</height>
 									<texture colordiffuse="dialog_bg2" fallback="DefaultFolder.png">$PARAM[icon]</texture>
 									<aspectratio>scale</aspectratio>
+									<visible>!Skin.HasSetting(NoIconSilhouettes)</visible>
 								</control>
 								<!-- <control type="image">
 									<top>23</top>
@@ -1128,7 +1151,10 @@
 		<param name="visible_2">true</param>
 		<param name="visible_3">true</param>
 		<param name="button2_label">$LOCALIZE[31116]</param>
+		<!-- KODI-RD-IL CHANGES -->
+		<!-- <param name="button3_label">Return to the home screen</param> -->
 		<param name="button3_label">$LOCALIZE[700049]</param>
+		<!-- ##################### -->
 		<param name="button2_onclick">true</param>
 		<definition>
 			<control type="group" id="$PARAM[button_id]889">

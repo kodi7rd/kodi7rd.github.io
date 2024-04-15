@@ -40,6 +40,14 @@
 				<include>SettingsPanel</include>
 				<content>
 					<item>
+						<!-- KODI-RD-IL CHANGES -->
+						<!-- <label>Skin settings</label> -->
+						<label>$LOCALIZE[700018]</label>
+						<!-- ##################### -->
+						<onclick>ActivateWindow(skinsettings)</onclick>
+						<icon>icons/settings/skin.png</icon>
+					</item>
+					<item>
 						<label>$LOCALIZE[10003]</label>
 						<onclick>ActivateWindow(filemanager)</onclick>
 						<icon>icons/settings/filemanager.png</icon>
@@ -53,11 +61,6 @@
 						<label>$LOCALIZE[138]</label>
 						<onclick>ActivateWindow(systeminfo)</onclick>
 						<icon>icons/settings/sysinfo.png</icon>
-					</item>
-					<item>
-						<label>$LOCALIZE[700018]</label>
-						<onclick>ActivateWindow(skinsettings)</onclick>
-						<icon>icons/settings/skin.png</icon>
 					</item>
 				</content>
 			</control>

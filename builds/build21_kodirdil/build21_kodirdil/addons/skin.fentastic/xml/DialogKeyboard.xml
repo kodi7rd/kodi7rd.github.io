@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
+	<!-- KODI-RD-IL CHANGES -->
+	<!-- <defaultcontrol always="true">300</defaultcontrol> -->
 	<defaultcontrol always="true">3010</defaultcontrol>
+	<!-- ##################### -->
 	<include>Keyboard_Slide_Up</include>
 	<depth>DepthDialog+</depth>
 	<controls>
@@ -582,6 +585,7 @@
 					<param name="label" value="$LOCALIZE[222]" />
 					<param name="width" value="300" />
 				</include>
+				
 				<!-- KODI-RD-IL ADDITION - Voice Search Button -->
 				<control type="button" id="3010">
 					<width>300</width>
@@ -598,6 +602,7 @@
 					<visible>true</visible>
 				</control>
 				<!-- ########################################## -->
+				
 				<include content="DefaultDialogButton">
 					<param name="id" value="310" />
 					<param name="width" value="300" />

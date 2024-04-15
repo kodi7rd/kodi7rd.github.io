@@ -50,6 +50,8 @@
 					<effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
 				</animation>
 				<include>OpenClose_Right</include>
+				
+				<!-- KODI-RD-IL ADDITION -->
 				<!-- ReuseLangInvoker ON Crashes fix -->
 				<control type="group" id="27000">
 					<visible>false</visible>
@@ -79,6 +81,8 @@
 						</include>
 					</control>
 				</control>
+				<!-- ##################### -->
+				
 				<!-- MOVIES -->
 				<control type="group" id="19000">
 					<visible>String.IsEqual(Container(9000).ListItem.Property(id),movies)</visible>
@@ -109,21 +113,51 @@
 						<param name="scrollbar_id" value="22099"/>
 					</include>
 				</control>
-				<!-- IDAN PLUS -->
-				<control type="group" id="25000">
-					<visible>String.IsEqual(Container(9000).ListItem.Property(id),idanplus)</visible>
+				<!-- CUSTOM 1 -->
+				<control type="group" id="23000">
+					<visible>String.IsEqual(Container(9000).ListItem.Property(id),custom1)</visible>
 					<include content="Visible_Right_Delayed">
-						<param name="id" value="idanplus"/>
+						<param name="id" value="custom1"/>
+					</include>
+					<control type="grouplist" id="23001">
+						<include>WidgetGroupListCommon</include>
+						<pagecontrol>23099</pagecontrol>
+						<include content="Custom1Widgets" condition="!Skin.HasSetting(HomeMenuNoCustom1Button)" />
+					</control>
+					<include content="WidgetScrollbar" condition="Skin.HasSetting(touchmode)">
+						<param name="scrollbar_id" value="23099"/>
+					</include>
+				</control>
+				<!-- CUSTOM 2 -->
+				<control type="group" id="24000">
+					<visible>String.IsEqual(Container(9000).ListItem.Property(id),custom2)</visible>
+					<include content="Visible_Right_Delayed">
+						<param name="id" value="custom2"/>
+					</include>
+					<control type="grouplist" id="24001">
+						<include>WidgetGroupListCommon</include>
+						<pagecontrol>24099</pagecontrol>
+						<include content="Custom2Widgets" condition="!Skin.HasSetting(HomeMenuNoCustom2Button)" />
+					</control>
+					<include content="WidgetScrollbar" condition="Skin.HasSetting(touchmode)">
+						<param name="scrollbar_id" value="24099"/>
+					</include>
+				</control>
+				<!-- CUSTOM 3 -->
+				<control type="group" id="25000">
+					<visible>String.IsEqual(Container(9000).ListItem.Property(id),custom3)</visible>
+					<include content="Visible_Right_Delayed">
+						<param name="id" value="custom3"/>
 					</include>
 					<control type="grouplist" id="25001">
 						<include>WidgetGroupListCommon</include>
 						<pagecontrol>25099</pagecontrol>
-						<include content="IdanPlusWidgets" condition="!Skin.HasSetting(HomeMenuNoIdanPlusButton)" />
+						<include content="Custom3Widgets" condition="!Skin.HasSetting(HomeMenuNoCustom3Button)" />
 					</control>
 					<include content="WidgetScrollbar" condition="Skin.HasSetting(touchmode)">
 						<param name="scrollbar_id" value="25099"/>
 					</include>
-				</control>				
+				</control>
 				<control type="group" id="7000">
 					<visible>String.IsEqual(Container(9000).ListItem.Property(id),music)</visible>
 					<include content="Visible_Right_Delayed">
@@ -505,8 +539,8 @@
 							<control type="group">
 								<depth>DepthContentPopout</depth>
 								<top>130</top>
-								<animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
-								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation>
+								<!-- <animation effect="zoom" start="100" end="105" time="200" tween="sine" easing="inout" center="142,300">Focus</animation>
+								<animation effect="zoom" start="105" end="100" time="200" tween="sine" easing="inout" center="142,300">UnFocus</animation> -->
 								<include content="InfoWallMusicLayout">
 									<param name="fallback_image" value="DefaultFavourites.png" />
 									<param name="list_id" value="$PARAM[list_id]" />
@@ -867,7 +901,7 @@
 								<shadowcolor>text_shadow</shadowcolor>
 							</control>
 						</focusedlayout>
-						<itemlayout height="95">
+						<itemlayout height="90">
 							<control type="image">
 								<left>5</left>
 								<top>1</top>
@@ -891,8 +925,12 @@
 							<include content="MoviesMainMenu" condition="!Skin.HasSetting(HomeMenuNoMoviesButton)" />
 							<!-- TVSHOWS 22000 -->
 							<include content="TVShowsMainMenu" condition="!Skin.HasSetting(HomeMenuNoTVShowsButton)" />
-							<!-- IDAN PLUS 25000 -->
-							<include content="IdanPlusMainMenu" condition="!Skin.HasSetting(HomeMenuNoIdanPlusButton)" />
+							<!-- CUSTOM 1 23000 -->
+							<include content="Custom1MainMenu" condition="!Skin.HasSetting(HomeMenuNoCustom1Button)" />
+							<!-- CUSTOM 2 24000 -->
+							<include content="Custom2MainMenu" condition="!Skin.HasSetting(HomeMenuNoCustom2Button)" />
+							<!-- CUSTOM 3 25000 -->
+							<include content="Custom3MainMenu" condition="!Skin.HasSetting(HomeMenuNoCustom3Button)" />
 							<item>
 								<label>$LOCALIZE[2]</label>
 								<onclick>ActivateWindow(Music,root,return)</onclick>
@@ -918,7 +956,10 @@
 								<visible>!Skin.HasSetting(HomeMenuNoMusicVideoButton)</visible>
 							</item>
 							<item>
+							<!-- KODI-RD-IL CHANGES -->
+								<!-- <label>Live TV</label> -->
 								<label>$LOCALIZE[19020]</label>
+							<!-- ##################### -->
 								<property name="menu_id">$NUMBER[12000]</property>
 								<onclick>ActivateWindow(TVGuide)</onclick>
 								<thumb>icons/sidemenu/livetv.png</thumb>
@@ -1050,16 +1091,25 @@
 						<aspectratio align="center">keep</aspectratio>
 					</control>
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<top>75</top>
 						<left>30</left>
 						<width>430</width>
 						<aligny>center</aligny>
 						<height>98</height>
 						<font>font36_title</font>
+						<!-- KODI-RD-IL CHANGES -->
+						<!-- <label>$INFO[ListItem.Label]</label> -->
 						<label>[COLOR yellow]$INFO[ListItem.Label][/COLOR]</label>
+						<!-- ##################### -->
 						<visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<top>75</top>
@@ -1072,8 +1122,14 @@
 						<label>[COLOR yellow]$INFO[ListItem.Label][/COLOR]</label>
 						<visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<left>30</left>
 						<top>239</top>
 						<width>410</width>
@@ -1081,6 +1137,8 @@
 						<label>$VAR[InfoPanel]</label>
 						<autoscroll delay="10000" time="3000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<left>30</left>
@@ -1091,8 +1149,14 @@
 						<label>$VAR[InfoPanel]</label>
 						<autoscroll delay="10000" time="3000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<left>30</left>
 						<top>323</top>
 						<width>410</width>
@@ -1100,6 +1164,8 @@
 						<label>$VAR[InfoPanelEpisode]</label>
 						<autoscroll delay="10000" time="3000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<left>30</left>
@@ -1110,8 +1176,14 @@
 						<label>$VAR[InfoPanelEpisode]</label>
 						<autoscroll delay="10000" time="3000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox">
+					
+						<!-- KODI-RD-IL ADDITION -->
 						<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+						<!-- ##################### -->
+						
 						<left>30</left>
 						<top>213</top>
 						<width>410</width>
@@ -1122,6 +1194,8 @@
 						<label>$LOCALIZE[700015] $INFO[ListItem.Season], $LOCALIZE[700016] $INFO[ListItem.Episode]</label>
 						<visible>String.IsEqual(ListItem.DbType,episode)</visible>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="textbox">
 						<visible>String.IsEqual(System.Language,Hebrew)</visible>
 						<left>30</left>
@@ -1135,6 +1209,8 @@
 						<label>$LOCALIZE[700015] $INFO[ListItem.Season], $LOCALIZE[700016] $INFO[ListItem.Episode]</label>
 						<visible>String.IsEqual(ListItem.DbType,episode)</visible>
 					</control>
+					<!-- ##################### -->
+					
 					<control type="textbox">
 						<left>30</left>
 						<top>467</top>
@@ -1166,13 +1242,13 @@
 					<bottom>0</bottom>
 					<height>39</height>
 					<width>100%</width>
-					<font>font30_title</font>
+					<font>font12</font>
 					<urlset>1</urlset>
 					<hitrect x="-100" y="0" w="1" h="1" />
-					<titlecolor>yellow</titlecolor>
-					<textcolor>yellow</textcolor>
-					<shadowcolor>yellow</shadowcolor>
-					<headlinecolor>yellow</headlinecolor>
+					<titlecolor>button_focus</titlecolor>
+					<textcolor>button_focus</textcolor>
+					<shadowcolor>text_shadow</shadowcolor>
+					<headlinecolor>FFC0C0C0</headlinecolor>
 					<visible>Skin.HasSetting(hide_mediaflags) | !ControlGroup(2000).HasFocus</visible>
 					<animation effect="fade" time="300">VisibleChange</animation>
 				</control>
@@ -1187,6 +1263,7 @@
 				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 				<top>30</top>
 				<left>90</left>
+				<!-- KODI-RD-IL ADDITION -->
 				<control type="image">
 					<left>-45</left>
 					<top>-70</top>
@@ -1195,22 +1272,7 @@
 					<height>208</height>
 					<texture>special://skin/media/kodirdil/group_logo/kodirdil-vendor_logo.png</texture>
 				</control>
-				<!-- <control type="image"> -->
-				  <!-- <left>-55</left> -->
-				  <!-- <top>-20</top> -->
-				  <!-- <aspectratio>keep</aspectratio> -->
-				  <!-- <width>230</width> -->
-				  <!-- <height>98</height> -->
-				  <!-- <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture> -->
-				<!-- </control> -->
-				<!-- <control type="image"> -->
-				  <!-- <left>55</left> -->
-				  <!-- <top>0</top> -->
-				  <!-- <aspectratio>keep</aspectratio> -->
-				  <!-- <width>192</width> -->
-				  <!-- <height>56</height> -->
-				  <!-- <texture>special://skin/media/logos/letters.png</texture> -->
-				<!-- </control> -->
+				<!-- ##################### -->
 			</control>
 		</control>
 	</controls>
