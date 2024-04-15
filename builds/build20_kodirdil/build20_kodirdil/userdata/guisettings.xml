@@ -122,7 +122,7 @@
     <setting id="videoplayer.adjustrefreshrate" default="true">0</setting>
     <setting id="videoplayer.usedisplayasclock" default="true">false</setting>
     <setting id="videoplayer.errorinaspect" default="true">0</setting>
-    <setting id="videoplayer.stretch43">4</setting>
+    <setting id="videoplayer.stretch43" default="true">0</setting>
     <setting id="videoplayer.rendermethod" default="true">0</setting>
     <setting id="videoplayer.hqscalers" default="true">20</setting>
     <setting id="videoplayer.usemediacodecsurface" default="true">true</setting>
