@@ -29,11 +29,6 @@
 		<animation effect="fade" end="100" time="200">Visible</animation>
 		<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
 	</include>
-	<include name="Visible_Fade_fix">
-		<animation effect="fade" end="100" time="150">Visible</animation>
-		<animation effect="fade" start="100" end="0" time="250">Hidden</animation>
-		<animation type="zoom" center="auto" start="100,100" end="80,80" time="150">Hidden</animation>
-	</include>
 	<include name="OpenClose_Fade">
 		<animation effect="fade" end="100" time="200">WindowOpen</animation>
 		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
@@ -43,14 +38,6 @@
 		<include content="Vis_FadeSlide_Right_Delayed" condition="!Skin.HasSetting(no_slide_animations)">
 			<param name="id" value="$PARAM[id]" />
 		</include>
-	</include>
-	<include name="VisibleChange_Delayed">
-		<animation type="Visible">
-		<effect type="fade" start="0" end="100" time="250"/>
-		</animation>
-		<animation type="Hidden">
-		<effect type="fade" start="100" end="0" time="250"/>
-		</animation>
 	</include>
 	<include name="Vis_FadeSlide_Right_Delayed">
 		<animation type="Conditional" condition="String.IsEqual(Container(9000).ListItem.Property(id),$PARAM[id])">
@@ -149,11 +136,27 @@
 		</animation>
 	</include>
 	
+	<!-- KODI-RD-IL ADDITION -->
+	<include name="Visible_Fade_fix">
+		<animation effect="fade" end="100" time="150">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="250">Hidden</animation>
+		<animation type="zoom" center="auto" start="100,100" end="80,80" time="150">Hidden</animation>
+	</include>
+	
+	<include name="VisibleChange_Delayed">
+		<animation type="Visible">
+			<effect type="fade" start="0" end="100" time="250"/>
+		</animation>
+		<animation type="Hidden">
+			<effect type="fade" start="100" end="0" time="250"/>
+		</animation>
+	</include>
+	
 	<include name="SetSlideAnimation">
-	<definition>
-	<param name="end" default="-400"/>
-	<animation condition="$PARAM[setproperty]" effect="slide" end="$PARAM[end]" time="0">Conditional</animation>
-	</definition>
+		<definition>
+			<param name="end" default="-400"/>
+			<animation condition="$PARAM[setproperty]" effect="slide" end="$PARAM[end]" time="0">Conditional</animation>
+		</definition>
 	</include>
 	
 	<include name="lefttoright_fix">
@@ -166,11 +169,12 @@
 			<effect type="fade" start="100" end="0" time="150" delay="50"/>
 		</animation>
 	</include>
+	
 	<include name="righttoleft_fix">
 		<animation type="WindowOpen">
 			<effect type="slide" start="150" end="0" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="0" end="100" time="250" delay="50"/>
-			</animation>
+		</animation>
 		<animation type="WindowClose">
 			<effect type="slide" start="0" end="150" time="250" tween="sine" easing="inout"/>
 			<effect type="fade" start="100" end="0" time="250" delay="50"/>
@@ -188,5 +192,6 @@
 		<animation condition="Container($PARAM[id]).Position(3)" effect="slide" start="0" end="360" time="120" tween="sine" easing="inout">Conditional</animation>
 		<animation condition="Container($PARAM[id]).Position(4)" effect="slide" start="0" end="480" time="120" tween="sine" easing="inout">Conditional</animation>
 	</include>
+	<!-- ##################### -->
 	
 </includes>

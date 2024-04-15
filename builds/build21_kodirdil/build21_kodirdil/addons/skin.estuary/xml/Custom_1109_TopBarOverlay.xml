@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window type="dialog" id="1109">
-	<onload>Skin.TimerStart(1110_topbaroverlay)</onload>
+	<onload>Skin.TimerStart(1109_topbaroverlay)</onload>
 	<visible>Window.IsActive(fullscreenvideo) | Window.IsActive(visualisation)</visible>
 	<visible>Window.IsActive(seekbar) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)</visible>
 	<depth>DepthOSD</depth>
@@ -10,7 +10,7 @@
 		<control type="group">
 			<visible>![Player.ShowInfo | Window.IsActive(fullscreeninfo) | Player.ShowTime | Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(playerprocessinfo) | Window.IsActive(pvrosdchannels) | Window.IsActive(pvrchannelguide)] + [!String.IsEmpty(Player.SeekNumeric) | Player.Seeking | Player.HasPerformedSeek(3) | Player.Forwarding | Player.Rewinding | Player.Paused] | !String.IsEmpty(PVR.ChannelNumberInput)</visible>
 			<animation effect="fade" start="0" end="100" time="300">VisibleChange</animation>
-			<animation effect="slide" start="0,0" end="0,-80" time="300" condition="Player.Paused + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(1110_topbaroverlay),5)">Conditional</animation>
+			<animation effect="slide" start="0,0" end="0,-80" time="300" condition="Player.Paused + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(1109_topbaroverlay),5)">Conditional</animation>
 			<control type="image">
 				<left>0</left>
 				<top>0</top>
@@ -176,8 +176,10 @@
 				<height>170</height>
 				<texture>frame/osdfade.png</texture>
 			</control>
+			
+			<!-- KODI-RD-IL ADDITION -->
+			<!-- Studio Logo in player (Top of screen) -->
 			<control type="image">
-			<!-- Studio Logo in player -->
 			<top>5</top>
 				<right>800</right>
 				<width>240</width>
@@ -185,6 +187,8 @@
 				<texture>special://skin/media/kodirdil/studiologos/$INFO[VideoPlayer.Studio].png</texture>
 				<aspectratio aligny="center" align="left">keep</aspectratio>
 			</control>
+			<!-- ##################### -->
+			
 			<control type="group">
 				<animation effect="slide" end="90,0" time="0" condition="Skin.HasSetting(touchmode)">conditional</animation>
 				<control type="grouplist">

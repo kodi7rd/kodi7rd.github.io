@@ -14,6 +14,9 @@
 			<texturenofocus />
 			<onclick>Action(close)</onclick>
 		</control>
+		
+		<!-- KODI-RD-IL ADDITION -->
+		<!-- Seek Forward -->
 		<include>SetSeekStepdVideoOSD</include>
 		<control type="group">
 		<visible>Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + !ControlGroup(202).HasFocus()</visible>
@@ -74,8 +77,7 @@
 			</control>
 		</control>
 		
-		
-		
+		<!-- Seek Backward -->
 		<control type="group">
 		<left>-1015</left>
 		<top>-20</top>
@@ -136,14 +138,15 @@
 			</control>
 		</control>
 		
-		<include content="ZoomFocusd">
+		<include content="ZoomFocused">
 			<param id="id">43434</param>
 			<param name="Control_id">43434</param>
-				<include content="ZoomFocusd">
+				<include content="ZoomFocused">
 					<param id="id">43435</param>
 					<param name="Control_id">43435</param>
 				</include>
 		</include>
+		<!-- ##################### -->
 		
 		<include condition="Skin.HasSetting(touchmode)">TouchBackOSDButton</include>
 		<control type="group">
@@ -165,7 +168,11 @@
 			</control>
 			<control type="group" id="200">
 				<include>Animation_BottomSlide</include>
+				
+				<!-- KODI-RD-IL ADDITION -->
 				<include>syncfakebutton</include>
+				<!-- ##################### -->
+				
 				<control type="grouplist" id="201">
 					<left>20</left>
 					<top>90</top>
@@ -174,8 +181,11 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
+					<!-- KODI-RD-IL CHANGES -->
+					<!-- <onup>87</onup> -->
 					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606)">Control.SetFocus(43434,0)</onup>
 					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601)">Control.SetFocus(43435,0)</onup>
+					<!-- ##################### -->
 					<ondown>noop</ondown>
 					<onleft>70048</onleft>
 					<onright>804</onright>
@@ -186,6 +196,8 @@
 						<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
 						<visible>!VideoPlayer.Content(LiveTV) | VideoPlayer.HasSubtitles</visible>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="button" id="700450">
 						<description>Manual Subtitles Delay Sync</description>
 						<width>100</width>
@@ -209,7 +221,9 @@
 						<!-- If current playing addon is NOT Idan Plus -->
 						<visible>!String.Contains(Player.Folderpath, plugin.video.idanplus)</visible>
 					</control>
-					<!--
+					<!-- ##################### -->
+
+					<!-- KODI-RD-IL Commented (unused)
 					<control type="radiobutton" id="600">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/previous.png"/>
@@ -218,12 +232,18 @@
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | [Player.SeekEnabled + VideoPlayer.Content(livetv)]</visible>
 					</control>
 					-->
+					<!-- ##################### -->
 					<control type="radiobutton" id="601">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/rewind.png"/>
 						</include>
+						<!-- KODI-RD-IL CHANGES -->
+						<!-- <onclick condition="Player.Paused">PlayerControl(Play)</onclick> -->
+						<!-- <onclick condition="!Player.Paused">PlayerControl(Rewind)</onclick> -->
+						<!-- <visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible> -->
 						<onclick>PlayerControl(Rewind)</onclick>
 						<visible>[Player.SeekEnabled + !VideoPlayer.Content(livetv)] + !Player.Paused</visible>
+						<!-- ##################### -->
 					</control>
 					<control type="group" id="698">
 						<width>76</width>
@@ -263,10 +283,15 @@
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/forward.png"/>
 						</include>
+						<!-- KODI-RD-IL CHANGES -->
+						<!-- <onclick condition="Player.Paused">PlayerControl(Play)</onclick> -->
+						<!-- <onclick condition="!Player.Paused">PlayerControl(Forward)</onclick> -->
+						<!-- <visible>Player.SeekEnabled + !VideoPlayer.Content(livetv)</visible> -->
 						<onclick>PlayerControl(Forward)</onclick>
 						<visible>[Player.SeekEnabled + !VideoPlayer.Content(livetv)] + !Player.Paused</visible>
+						<!-- ##################### -->
 					</control>
-					<!--
+					<!-- KODI-RD-IL - Commented (unused)
 					<control type="radiobutton" id="607">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/next.png"/>
@@ -275,6 +300,7 @@
 						<visible>Player.HasSceneMarkers | Player.ChapterCount | Integer.IsGreater(Playlist.Length(video),1) | PVR.IsTimeShift</visible>
 					</control>
 					-->
+					<!-- ##################### -->
 					<control type="radiobutton" id="608">
 						<textureradioonfocus colordiffuse="white">osd/fullscreen/buttons/record-white.png</textureradioonfocus>
 						<textureradioonnofocus>osd/fullscreen/buttons/record-white.png</textureradioonnofocus>
@@ -310,7 +336,10 @@
 					<ondown condition="Control.HasFocus(704)">12104</ondown>
 					<ondown condition="Control.HasFocus(255)">13103</ondown>
 					<onleft>608</onleft>
+					<!-- KODI-RD-IL CHANGES -->
+					<!-- <onright>600</onright> -->
 					<onright>70046</onright>
+					<!-- ##################### -->
 					<control type="radiobutton" id="804">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/home.png"/>
@@ -334,7 +363,7 @@
 						<onclick>ActivateWindow(pvrchannelguide)</onclick>
 						<visible>VideoPlayer.Content(livetv) + VideoPlayer.HasEPG</visible>
 					</control>
-					<!-- Commented due to Episodes Playlist Menu button (id 700454)
+					<!-- KODI-RD-IL - Commented due to Episodes Playlist Menu button (id 700454)
 					<control type="radiobutton" id="70042">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/playlist.png"/>
@@ -344,6 +373,9 @@
 						<visible>Integer.IsGreater(Playlist.Length(video),1)</visible>
 					</control>
 					-->
+					<!-- ##################### -->
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<control type="radiobutton" id="700456">
 						<description>Twilight Next Episode Button</description>
 						<include content="OSDButtonAdvanced">
@@ -416,12 +448,8 @@
 						<onclick condition="!Player.Paused">PlayerControl(Play)</onclick>
 						<!-- Rescrape and select source for current playing movie -->
 						<onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=movie&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&autoplay=false)</onclick>
-						<!-- Open Twilight "Playback Options" window for current playing movie -->
-						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(movies)">RunPlugin(plugin://plugin.video.twilight/?mode=playback_choice&media_type=movie&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.IMDBNumber])</onclick> -->
 						<!-- Rescrape and select source for current playing episode -->
 						<onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight/?mode=playback.media&media_type=episode&tmdb_id=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode]&autoplay=false)</onclick>
-						<!-- Open Twilight "Playback Options" window for current playing episode -->
-						<!-- Playback Options Window: <onclick condition="VideoPlayer.Content(episodes)">RunPlugin(plugin://plugin.video.twilight//?mode=playback_choice&media_type=episode&poster=$VAR[NowPlayingPosterVar]&meta=$INFO[VideoPlayer.UniqueID(tmdb)]&season=$INFO[VideoPlayer.Season]&episode=$INFO[VideoPlayer.Episode])</onclick> -->
 					</control>
 					<control type="button" id="700452">
 						<description>Switch to next Audio track</description>
@@ -460,7 +488,9 @@
 						</include>
 						<include condition="$EXP[LiveTvCondition]">Out</include>
 					</control>
-					<!-- Info button - unused because Pause Window (Custom_1122_PlayerPauseWindow.xml)
+					<!-- ##################### -->
+					
+					<!-- KODI-RD-IL - Info button - Commented (unused because Pause Window Custom_1122_PlayerPauseWindow.xml)
 					<control type="radiobutton" id="70043">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/information.png"/>
@@ -468,7 +498,8 @@
 						<onclick>Info</onclick>
 					</control>
 					-->
-					<!--
+					<!-- ##################### -->
+					<!-- KODI-RD-IL - Bookmarks button - Commented (unused)
 					<control type="radiobutton" id="70044">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/bookmarks.png"/>
@@ -477,6 +508,7 @@
 						<visible>!VideoPlayer.Content(livetv)</visible>
 					</control>
 					-->
+					<!-- ##################### -->
 					<control type="radiobutton" id="70045">
 						<include content="OSDButton">
 							<param name="texture" value="osd/fullscreen/buttons/teletext.png"/>
@@ -502,6 +534,8 @@
 						<onclick>SetProperty(settingslist_header,$LOCALIZE[5],home)</onclick>
 						<onclick>ActivateWindow(1101)</onclick>
 					</control>
+					
+					<!-- KODI-RD-IL ADDITION -->
 					<!-- IMAX Button - not used currently.
 					<control type="togglebutton" id="70049">
 					<visible>System.AddonIsEnabled(script.black.bars.never)</visible>
@@ -510,10 +544,13 @@
 						<onclick>RunScript(script.black.bars.never,toggle)</onclick>
 					</control>
 					-->
+					<!-- ##################### -->
+					
 				</control>
 			</control>
 			
-			
+				<!-- KODI-RD-IL ADDITION -->
+				<!-- OSD Video Media Flags -->
 				<control type="grouplist">
 				<visible>!Player.Paused | !Skin.HasSetting(ShowPlayerPauseWindow)</visible>
 				<animation effect="fade" start="0" end="100" time="450">VisibleChange</animation>
@@ -563,6 +600,8 @@
 					</include>
 					</control>
 				</control>
+				<!-- ##################### -->
+				
 			<control type="group" id="6000">
 				<top>60</top>
 				<animation type="WindowOpen" condition="!Window.IsVisible(fullscreeninfo)" reversible="False">
@@ -582,6 +621,9 @@
 				<visible>Player.SeekEnabled</visible>
 				<control type="button" id="87">
 					<include>HiddenObject</include>
+					<!-- KODI-RD-IL CHANGES -->
+					<!-- <onup>200</onup> -->
+					<!-- ##################### -->
 					<ondown>200</ondown>
 					<onleft>StepBack</onleft>
 					<onright condition="!Player.Paused">StepForward</onright>

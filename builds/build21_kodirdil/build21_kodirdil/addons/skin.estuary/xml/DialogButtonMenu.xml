@@ -17,6 +17,7 @@
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
 				<content>
+					<!-- KODI-RD-IL CHANGES -->
 					<item>
 						<label>[B][COLOR blue]$LOCALIZE[13012][/COLOR][/B]</label>
 						<!-- Original - <onclick>Quit()</onclick> -->
@@ -55,6 +56,7 @@
 						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=build_switch_skin&quot;)</onclick>
 						<visible>System.ShowExitButton</visible>
 					</item>
+					<!-- ##################### -->
 				</content>
 			</control>
 		</control>

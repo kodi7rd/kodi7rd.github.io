@@ -11,6 +11,8 @@
 				<param name="list_id" value="502" />
 				<param name="viewtype_label" value="$LOCALIZE[20445]" />
 			</include>
+			
+			<!-- KODI-RD-IL ADDITION -->
 			<include content="NextPreviousIndicator">
 			<param name="indicator">HasNext</param>
 			<param name="flipy">false</param>
@@ -19,6 +21,8 @@
 					<param name="flipy">true</param>
 				</include>
 			</include>
+			<!-- ##################### -->
+			
 		</control>
 		<control type="group">
 			<depth>DepthContentPanel</depth>
@@ -49,7 +53,9 @@
 					<include condition="Skin.HasSetting(circle_rating) | Skin.HasSetting(circle_userrating)">RatingCircle</include>
 				</control>
 				<control type="textbox">
+					<!-- KODI-RD-IL ADDITION -->
 					<visible>!String.IsEqual(System.Language,Hebrew)</visible>
+					<!-- ##################### -->
 					<left>50</left>
 					<right>50</right>
 					<top>769</top>
@@ -57,6 +63,8 @@
 					<label>$VAR[PlotTextBoxVar]</label>
 					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 				</control>
+				
+				<!-- KODI-RD-IL ADDITION -->
 				<control type="textbox">
 					<visible>String.IsEqual(System.Language,Hebrew)</visible>
 					<left>50</left>
@@ -67,6 +75,8 @@
 					<label>$VAR[PlotTextBoxVar]</label>
 					<autoscroll time="3000" delay="7000" repeat="5000">!System.HasActiveModalDialog + Skin.HasSetting(AutoScroll)</autoscroll>
 				</control>
+				<!-- ##################### -->
+				
 				<control type="scrollbar" id="502600">
 					<left>20</left>
 					<top>list_top_offset</top>

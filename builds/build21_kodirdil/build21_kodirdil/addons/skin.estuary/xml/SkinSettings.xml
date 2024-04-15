@@ -73,12 +73,16 @@
 					<onclick>Skin.SelectBool(31164, 31165|show_profilename, 31166|show_profileavatar, 16018|show_none)</onclick>
 					<label2>$VAR[ProfileIdentificationLabel2Var]</label2>
 				</control>
+				
+				<!-- KODI-RD-IL ADDITION -->
 				<control type="radiobutton" id="708">
 					<label>$LOCALIZE[700030]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(OpenKeyboardOnSearchDialog)</onclick>
 					<selected>Skin.HasSetting(OpenKeyboardOnSearchDialog)</selected>
 				</control>
+				<!-- ##################### -->
+				
 			</control>
 			<control type="grouplist" id="600">
 				<top>133</top>

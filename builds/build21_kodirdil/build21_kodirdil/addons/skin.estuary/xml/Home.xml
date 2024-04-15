@@ -80,6 +80,7 @@
 							<param name="content_path" value="special://skin/playlists/random_movies.xsp"/>
 							<param name="widget_header" value="$LOCALIZE[31006]"/>
 							<param name="widget_target" value="videos"/>
+							<param name="browse_mode" value="never"/>
 							<param name="list_id" value="5400"/>
 						</include>
 						<include content="WidgetListCategories" condition="Library.HasContent(movies)">
@@ -214,6 +215,7 @@
 							<param name="content_path" value="special://skin/playlists/random_albums.xsp"/>
 							<param name="widget_header" value="$LOCALIZE[31012]"/>
 							<param name="widget_target" value="music"/>
+							<param name="browse_mode" value="never"/>
 							<param name="list_id" value="7300"/>
 							<param name="fallback_icon" value="DefaultMusicAlbums.png"/>
 							<param name="onclick_condition" value="true"/>
@@ -223,6 +225,7 @@
 							<param name="content_path" value="special://skin/playlists/random_artists.xsp"/>
 							<param name="widget_header" value="$LOCALIZE[31013]"/>
 							<param name="widget_target" value="music"/>
+							<param name="browse_mode" value="never"/>
 							<param name="list_id" value="7400"/>
 							<param name="fallback_icon" value="DefaultMusicArtists.png"/>
 						</include>
@@ -365,7 +368,7 @@
 							<param name="widget_header" value="$LOCALIZE[136]"/>
 							<param name="widget_target" value="videos"/>
 							<param name="list_id" value="11200"/>
-							<param name="icon" value="DefaultPlaylist.png"/>
+							<param name="icon" value="$VAR[WidgetPlaylistIconVar]"/>
 						</include>
 					</control>
 					<include content="ImageWidget">
@@ -398,6 +401,7 @@
 							<param name="sortby" value="lastplayed"/>
 							<param name="sortorder" value="descending"/>
 							<param name="widget_header" value="$LOCALIZE[31016]"/>
+							<param name="widget_target" value="tvchannels"/>
 							<param name="item_limit" value="15"/>
 							<param name="list_id" value="12200"/>
 							<param name="info_update" value="5000"/>
@@ -407,6 +411,7 @@
 							<param name="sortby" value="date"/>
 							<param name="sortorder" value="descending"/>
 							<param name="widget_header" value="$LOCALIZE[31015]"/>
+							<param name="widget_target" value="tvrecordings"/>
 							<param name="item_limit" value="15"/>
 							<param name="list_id" value="12300"/>
 							<param name="label" value="$INFO[ListItem.Title]$INFO[ListItem.Date, (,)]"/>
@@ -468,6 +473,7 @@
 							<param name="sortby" value="lastplayed"/>
 							<param name="sortorder" value="descending"/>
 							<param name="widget_header" value="$LOCALIZE[31018]"/>
+							<param name="widget_target" value="radiochannels"/>
 							<param name="item_limit" value="15"/>
 							<param name="list_id" value="13200"/>
 							<param name="info_update" value="5000"/>
@@ -477,6 +483,7 @@
 							<param name="sortby" value="date"/>
 							<param name="sortorder" value="descending"/>
 							<param name="widget_header" value="$LOCALIZE[31015]"/>
+							<param name="widget_target" value="radiorecordings"/>
 							<param name="item_limit" value="15"/>
 							<param name="list_id" value="13300"/>
 							<param name="label" value="$INFO[ListItem.Title]$INFO[ListItem.Date, (,)]"/>
@@ -530,8 +537,12 @@
 						<top>0</top>
 						<right>0</right>
 						<bottom>0</bottom>
+						<!-- KODI-RD-IL CHANGES -->
+						<!-- <onleft>9000</onleft> -->
+						<!-- <onright>9000</onright> -->
 						<onleft>801</onleft>
 						<onright>801</onright>
+						<!-- ##################### -->
 						<onup>14100</onup>
 						<ondown>14100</ondown>
 						<preloaditems>2</preloaditems>
@@ -735,6 +746,7 @@
 							<param name="content_path" value="special://skin/playlists/random_musicvideo_artists.xsp"/>
 							<param name="widget_header" value="$LOCALIZE[31013]"/>
 							<param name="widget_target" value="music"/>
+							<param name="browse_mode" value="never"/>
 							<param name="list_id" value="16200"/>
 							<param name="widget_limit" value="10"/>
 						</include>
@@ -752,6 +764,7 @@
 							<param name="content_path" value="special://skin/playlists/random_musicvideos.xsp"/>
 							<param name="widget_header" value="$LOCALIZE[31152]"/>
 							<param name="widget_target" value="videos"/>
+							<param name="browse_mode" value="never"/>
 							<param name="fallback_image" value="DefaultMusicSongs.png" />
 							<param name="list_id" value="16500"/>
 						</include>
@@ -1071,7 +1084,14 @@
 						<param name="onclick" value="Fullscreen" />
 						<param name="icon" value="icons/now-playing/fullscreen.png" />
 						<param name="label" value="$LOCALIZE[31000]" />
-						<param name="visible" value="Player.HasMedia" />
+						<param name="visible" value="Player.HasMedia + !Player.IsRemote" />
+					</include>
+					<include content="IconButton">
+						<param name="control_id" value="805" />
+						<param name="onclick" value="ActivateWindow(playercontrols)" />
+						<param name="icon" value="icons/now-playing/fullscreen.png" />
+						<param name="label" value="$LOCALIZE[31000]" />
+						<param name="visible" value="Player.HasMedia + Player.IsRemote + !Player.HasAudio" />
 					</include>
 				</control>
 			</control>
@@ -1092,13 +1112,13 @@
 					<bottom>0</bottom>
 					<height>39</height>
 					<width>100%</width>
-					<font>font30_title</font>
+					<font>font12</font>
 					<urlset>1</urlset>
 					<hitrect x="-100" y="0" w="1" h="1" />
-					<titlecolor>yellow</titlecolor>
-					<textcolor>yellow</textcolor>
-					<shadowcolor>yellow</shadowcolor>
-					<headlinecolor>yellow</headlinecolor>
+					<titlecolor>button_focus</titlecolor>
+					<textcolor>button_focus</textcolor>
+					<shadowcolor>text_shadow</shadowcolor>
+					<headlinecolor>FFC0C0C0</headlinecolor>
 					<visible>Skin.HasSetting(hide_mediaflags) | !ControlGroup(2000).HasFocus</visible>
 					<animation effect="fade" time="300">VisibleChange</animation>
 				</control>
@@ -1114,29 +1134,22 @@
 				<top>30</top>
 				<left>90</left>
 				<control type="image">
+					<!-- KODI-RD-IL CHANGES -->
+					<!-- <left>4</left> -->
+					<!-- <top>0</top> -->
 					<left>-45</left>
 					<top>-70</top>
+					<!-- ##################### -->
 					<aspectratio>keep</aspectratio>
+					<!-- KODI-RD-IL CHANGES -->
+					<!-- <width>192</width> -->
+					<!-- <height>56</height> -->
+					<!-- <texture>special://xbmc/media/vendor_logo.png</texture> -->
 					<width>350</width>
 					<height>208</height>
 					<texture>special://skin/media/kodirdil/group_logo/kodirdil-vendor_logo.png</texture>
+					<!-- ##################### -->
 				</control>
-				<!-- <control type="image"> -->
-				  <!-- <left>-55</left> -->
-				  <!-- <top>-20</top> -->
-				  <!-- <aspectratio>keep</aspectratio> -->
-				  <!-- <width>230</width> -->
-				  <!-- <height>98</height> -->
-				  <!-- <texture>special://skin/media/kodirdil/group_logo/kodirdil-logo.png</texture> -->
-				<!-- </control> -->
-				<!-- <control type="image"> -->
-				  <!-- <left>55</left> -->
-				  <!-- <top>0</top> -->
-				  <!-- <aspectratio>keep</aspectratio> -->
-				  <!-- <width>192</width> -->
-				  <!-- <height>56</height> -->
-				  <!-- <texture>special://skin/media/kodirdil/group_logo/letters.png</texture> -->
-				<!-- </control> -->
 			</control>
 		</control>
 	</controls>
