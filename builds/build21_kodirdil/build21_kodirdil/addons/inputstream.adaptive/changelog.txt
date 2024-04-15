@@ -1,78 +1,184 @@
-v20.3.18 (2024-02-20)
+v21.4.5 (2024-04-13)
+- [Dash] Implemented segment-controlled live stream
+- [Dash] Introduced new property inputstream.adaptive.manifest_config to configure manifest, see Wiki for details
+- [Dash] Handled TimeShiftBuffer between multiple periods
+- [Dash] Limited TimeShiftBuffer to 4 hours to avoid excessive memory consumption, configurable by using the new manifest_config property
+- [Dash] Fix TimeShiftBuffer, regression of v21.4.4
+- [Dash] Fix wrong start period on live streams
+- [Dash] Fix broken playback with MPD providing availabilityStartTime
+- Fixes to not displayed subtitles, regressions of v21.4.4
+- Fix broken playback with avc3/avc4 codecs (Kodi 21 patched on next release)
+- Add RapidJSON dependency
+
+v21.4.4 (2024-03-29)
+- [Dash] Fix video freeze/buffering on live streaming
+- [Dash] Improved live streaming manifest update
+- [Dash] Fixed and improved live streaming with multiple periods/chapters
+- [Dash] Improved live streaming with misaligned segments
+- [Dash] Improved SegmentTemplate, SegmentTimeline tag parsing
+- [Dash] Fix 'default' attribute parsing on AdaptationSet tag
+- [Dash] Fix wrong video duration with SegmentList case
+- [Dash] Fix possible wrong duration/timescale into periods
+- [Dash] Various cleanup of parsing code
+- [Dash] Fix possible broken playback due to wrongly parsed encryption
+- [HLS] Add support to EXT-X-PROGRAM-DATE-TIME tag
+- [TTML] Fix missing text on multiline subtitles
+- [TTML] Fix broken subtitles when they have same begin PTS
+- [TTML] Add workaround to try improve display of overlapping subtitles
+- [TTML] Improved time parsing was potentially causing display problems
+- [TTML] Add support to DFXP fourcc (Smooth Streaming)
+- [TTML] Fixed a problem that could cause doubled display of text
+- Fix possible broken (segmented) subtitles when disabled/re-enabled
+- Updated bento4 library to v1.6.0-641
+
+v21.4.3 (2024-02-21)
+- [Dash] Fix broken playback on streams with widevine encrypted subs (not supported)
+- [Dash] Removed timeline segments limit based on SIDX max references
 - [Widevine] Fix decrypter issue that was causing corrupted AVC videos
+- [Widevine] Fix library loading on MacOs
+- Fix inputstream.adaptive.manifest_params which params was not applied to manifest request
 - Fix inputstream.adaptive.stream_params which data could be corrupted
 
-v20.3.17 (2024-02-03)
+v21.4.2 (2024-02-03)
 - Allowed manifest URLs until to 8000 chars
 - Allowed inputstream.adaptive.stream_params to add params to URLs that already have params
 - Fix crash when playing some widevine videos (e.g. amazon)
+- Fix video starting with lower resolution with Manual OSD stream selector
 - Fix Response-Data template field on inputstream.adaptive.license_key to accept R for raw binary format
+- [HLS] Fix stopping of live stream playback after some time
+- [HLS] Fix stopping playback after stream quality switching (not fully but improved a lot)
+- [HLS] Fix audio with 0 channels when a rendition has no CHANNELS info param
+- [HLS] On live streaming no more subtitles child manifest downloaded when disabled
+- [HLS] Fix broken WebVTT subtitles on live streaming due to not downloaded segments
 - [HLS] Fix broken WebVTT subtitles with playlists having multiple discontinuities (D+)
 - [HLS] Fix broken WebVTT subtitles after disabled and re-enabled (D+)
+- [HLS] Fix possible multiple included audio tracks shown on GUI that point to the same stream
+- Ask Quality stream selector will no longer display empty resolution when unavailable
+
+v21.4.1 (2023-12-24)
+- New properties license_url / license_url_append, workaround for PVR playlist bug, see wiki
+- New property internal_cookies, enable add-on to handle persistent cookies, see wiki
+- [Dash] Implemented support to last segment signal
+- [HLS] Fix issue that caused audio tracks to be missing
+- [HLS] Fix possible playback freeze on videos with ADS
+- [Settings] Lowered the minimum threshold for initial bandwidth to 50kbps
 - Add support to LoongArch systems
 
-v20.3.16 (2024-01-07)
-- Increased url length limits, fix some Dash manifests
-- [HLS] Fix video playback of some streams with avc codec
-- [HLS] Add support to m4s segment files
+v21.4.0 (2023-11-21)
+- Restored TTML stpp mime type support
+- Fix crashes when a subtitle format is not supported
 
-v20.3.15 (2023-12-24)
-- New properties license_url / license_url_append, workaround for PVR playlist bug, see wiki
-- [Dash] Implemented support to last segment signal
-- [Settings] Lowered the minimum threshold for initial bandwidth to 50kbps
-
-v20.3.14 (2023-11-02)
+v21.3.1 (2023-11-02)
+- [Dash] Add support to Location tag with relative url
+- [HLS] Implemented EXT-X-KEY URI parsing with base64 data support
+- [HLS] Improved PSSH parsing
+- Fix mishandled license failure after refactor
 - Fix missing http requests params and headers when downloading subtitle streams
+- Fix crash when playback fails to start
+- [Widevine] No more empty folders will be created under the cdm folder
+- Changes on how to implement custom manifest/license, search note for <addon_name> on Wiki: https://github.com/xbmc/inputstream.adaptive/wiki/How-to-provide-custom-manifest-and-license
+- Code cleanup to PSSH/KID extraction
+- Code cleanup to handle data as uint8_t instead of string
+- Code cleanup through implementation sample reader factory
+- Code cleanup through implementation service broker
+- Enabled multiprocess builds for VS
 
-v20.3.13 (2023-09-22)
+v21.3.0 (2023-09-22)
+- Massive refactoring of decrypters (thanks @glennguy)
+- Fix missing headers to manifest request (fix HTTP error 403)
+- [HLS] Fix playback of some manifests that dont provide info to detect the stream type
 - [DASH] Fix a possible crash when you stop a live video playback
-- Fix a possible crash when starting a video playback
+- Cleanups to CMake build files
+- Dev info: changes have been made to the binaries that are compiled, the libssd_wv.xxx library file no longer exists, instead for linux aarch64/arm64 platform only, a new library file libcdm_aarch64_loader.xxx will be created, which must be included in the add-on folder
 
-v20.3.12 (2023-08-25)
-[wvdecrypter] Fix memory heap corruption
-Fixes to support gcc-13
+v21.2.1 (2023-09-07)
+- [HLS] Fixed possible duplicated audio/video streams
+- [HLS] Fixed broken playback with some manifests containing EXT-X-DISCONTINUITY
+- [HLS] Fixed possible playback problems with audio/subtitles tracks
+- [DASH] Fixed inputstream.adaptive.license_data property
+- Removed support to KID placeholder on inputstream.adaptive.license_data property
 
-v20.3.11 (2023-07-18)
-- [ADTS] [HLS] fallback when TS container is incorrectly selected due to lack of metadata
+v21.2.0 (2023-08-25)
+- Kodi inputstream API update to version 3.3.0
+- Kodi inputstream videocodec API update to version 2.1.0
+- Improved codecs detection from malformed manifests
+- [wvdecrypter] Fix memory heap corruption
+- [DASH] Fix and improved SIDX parsing
+- [DASH] Fix a regression on live streams caused unstable playback
+- [DASH] Fix SegmentTemplate WebVTT support
+- [DASH/HLS] Improved parsing of impaired stream types
+- [HLS] Reworked multivariant playlist parser
+- [HLS] Add support to multivariant audio only streams
+- [HLS] Fix audio streams misdetected as video
+- [HLS] Fix Ask quality stream selector was showing multi-codecs
+- Add support to audio profiles (shown on GUI tracks list) DD Atmos included
 
-v20.3.10 (2023-07-18)
-- remove extraneous checks for stream changes on each sample read (fixes Amazon HDR stuttering)
-- [VP9] fix unsupported codec error
-- fix manifest saving
-- [DASH] don't round segment count, allows streams to finish correctly
+v21.1.3 (2023-07-17)
+- [DASH] Rework of manifest update parameters. NOTE: inputstream.adaptive.manifest_update_parameter is now deprecated and replaced by inputstream.adaptive.manifest_upd_params which has a different implementation - add-on devs please see the wiki
+- [DASH] fix rounding of segment count calculation - allows affected VOD streams to finish correctly
+- [AdaptiveTree] rework and cleanup of segment objects, fixing some live DASH streams
+- [TS] improved logging capabilities
+- multiple improvements for live manifest refresh handling
+- [HLS] fix wrong offset for byteranged downloads
+- Cleanup of codec names/fourcc codes, fix incorrect codec displaying in quality chooser
+- [AdaptiveTree] Preserve path to save manifest on cloning class
+- [DASH] Fix replaced init segment from SegmentTemplate
+- [HLS] fix file extension (container) detection
+- Fixes relating to high memory allocation (was causing crashes on high bitrate streams due to memory exhaustion)
+- [AdaptiveStream] On ResetSegment check for byterange not url
+- [SmoothTree] big rework to fix regressions and improve logging. Many affected streams are now playable
+- [HLS] fix for directly playing variant playlists
 
-v20.3.9 (2023-05-30)
-- [DASH] Stop update thread attempting to start for temp update tree
+v21.1.2 (2023-06-09)
+- [DASH] - allow contentprotection tag without systemID URN
+- [ADTS] - add support for AC-3 and EAC-3 in ADTS container
+- [HLS] fix key url resolution
+- Remove getinfo checks from getnextsample (fixes Amazon stuttering issues)
+- [AdaptiveTree] - introduce feature to autodetect manifest type
+- [DASH] - always set startNumber from SegmentTemplate
 
-v20.3.8 (2023-05-12)
-- Fix memory leaks - should resolve instability issues on live DASH streams.
+v21.1.1 (2023-05-30)
+- [AdaptiveStream] Overhaul threading (fixes some freezes/deadlocks)
+- [AdaptiveTree] Massive overhaul of manifest and ttml parsers (thanks @CastagnaIT !)
+- [Widevine] Remove multi-subsample decrypting, use only 1 session where possible
+- Improved debug logging and add option to save manifest files
+- [AdaptiveTree] fix possible deadlocking
+- Several code cleanups
+- [ADTS] fix missing audio for some streams
+- Add Live Delay property to force distance between live edge
+- [webm] Parse audio track extradata (fixes audio)
+- [MP4] Fix memory leak
+- [DASH] Don't start update thread for temp update tree
 
-v20.3.7 (2023-05-07)
-- Fix some causes of potential freezing
-- [Widevine] use single decrypter session where possible (resolves some license issues)
-- Bumped Bento4
-- Fix no audio issue with some aac streams
-- Add new property live_delay to force playback away from live edge
+v21.1.0 (2023-04-04)
+- Minor version bump - missed at time of v21.0.3
 
-v20.3.6 (2023-04-04)
-- [MP4] Handle PIFF protection scheme
-- [DASH] Better period matching for multiperiod live manifest refreshes
-- [AdaptiveStream] allow segment download retrys for VOD
+v21.0.4 (2023-04-04)
+- [DASH] Fix live period sequence numbers
 - [DASH] Fix live duration updates on some manifests
+- [MP4] Fix for crash when missing STSD atom
 - [DRM] rework CDM timer handling, fixes crashing after playback stop on non-Android devices
 
-v20.3.5 (2023-03-10)
-- [Widevine] Reimplement saving license data, controllable in settings
+v21.0.3 (2023-03-24)
+- [DASH] better period matching for live refreshes
+- [AdaptiveStream] rework/update of download retries, allowing for VOD retry attempts
+- [SSD] add xbmcaltbinaddons to search path
+- [SSD][Widevine] Add new video formats
+
+v21.0.2 (2023-03-10)
+- Reimplement saving license data, controllable in settings
 - [DASH] fix representation updates for identical adaptationsets
 - [Widevine] add support for linux arm64
 - reduce logging when waiting for new segments in live manifests
 - [DASH] fix url calculation issues
+- bump gtest
+- handle PIFF protection scheme
 
-v20.3.4 (2023-02-23)
+v21.0.1 (2023-02-23)
 - overhaul url utils to follow RFC 3986
 - [Debug] option to save manifests to disk for debugging purposes
+- remove deprecated properties and pipe support for manifest url
 - [DRM] fix bug when supplying license_data property
-- translation updates
 
 v20.3.3 (2023-02-08)
 - [Repchooser] Don't give stream selector dialog when only one available
