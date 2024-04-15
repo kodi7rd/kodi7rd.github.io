@@ -31,7 +31,7 @@
     <setting id="locale.speedunit" default="true">regional</setting>
     <setting id="screensaver.mode" />
     <setting id="screensaver.time" default="true">3</setting>
-    <setting id="screensaver.usemusicvisinstead" default="true">true</setting>
+    <setting id="screensaver.disableforaudio" default="true">true</setting>
     <setting id="screensaver.usedimonpause" default="true">true</setting>
     <setting id="masterlock.startuplock" default="true">false</setting>
     <setting id="masterlock.maxretries" default="true">3</setting>
@@ -43,6 +43,8 @@
     <setting id="window.left" default="true">0</setting>
     <setting id="videolibrary.updateonstartup" default="true">false</setting>
     <setting id="videolibrary.backgroundupdate" default="true">false</setting>
+    <setting id="videolibrary.ignorevideoversions" default="true">true</setting>
+    <setting id="videolibrary.ignorevideoextras" default="true">true</setting>
     <setting id="musiclibrary.updateonstartup" default="true">false</setting>
     <setting id="musiclibrary.backgroundupdate" default="true">false</setting>
     <setting id="musiclibrary.exportfiletype" default="true">0</setting>
@@ -59,6 +61,8 @@
     <setting id="filelists.showhidden" default="true">false</setting>
     <setting id="filelists.allowfiledeletion" default="true">false</setting>
     <setting id="myvideos.selectaction" default="true">1</setting>
+    <setting id="myvideos.selectdefaultversion" default="true">false</setting>
+    <setting id="myvideos.playaction" default="true">1</setting>
     <setting id="myvideos.usetags" default="true">false</setting>
     <setting id="myvideos.extractflags" default="true">true</setting>
     <setting id="myvideos.extractchapterthumbs" default="true">true</setting>
@@ -68,6 +72,7 @@
     <setting id="videolibrary.showunwatchedplots" default="true">0,1,2</setting>
     <setting id="videolibrary.groupmoviesets" default="true">false</setting>
     <setting id="videolibrary.groupsingleitemsets" default="true">false</setting>
+    <setting id="videolibrary.showvideoversionsasfolder" default="true">false</setting>
     <setting id="myvideos.flatten" default="true">false</setting>
     <setting id="videolibrary.flattentvshows" default="true">1</setting>
     <setting id="videolibrary.showemptytvshows" default="true">true</setting>
@@ -75,7 +80,6 @@
     <setting id="videolibrary.tvshowsincludeallseasonsandspecials" default="true">0</setting>
     <setting id="videolibrary.moviesetsfolder" default="true" />
     <setting id="videolibrary.musicvideosallperformers" default="true">true</setting>
-    <setting id="videolibrary.artsettingsupdated">true</setting>
     <setting id="videolibrary.artworklevel" default="true">0</setting>
     <setting id="videolibrary.movieartwhitelist" default="true" />
     <setting id="videolibrary.tvshowartwhitelist" default="true" />
@@ -93,7 +97,6 @@
     <setting id="musiclibrary.albumsscraper" default="true">metadata.generic.albums</setting>
     <setting id="musiclibrary.artistsscraper" default="true">metadata.generic.artists</setting>
     <setting id="musiclibrary.overridetags" default="true">false</setting>
-    <setting id="musiclibrary.artsettings">true</setting>
     <setting id="musiclibrary.artworklevel" default="true">0</setting>
     <setting id="musiclibrary.usealllocalart" default="true">false</setting>
     <setting id="musiclibrary.useallremoteart" default="true">false</setting>
@@ -112,7 +115,7 @@
     <setting id="pictures.usetags" default="true">true</setting>
     <setting id="pictures.generatethumbs" default="true">true</setting>
     <setting id="pictures.showvideos" default="true">true</setting>
-    <setting id="pictures.displayresolution" default="true">14</setting>
+    <setting id="pictures.displayresolution">126</setting>
     <setting id="scrapers.moviesdefault" default="true">metadata.themoviedb.org.python</setting>
     <setting id="scrapers.tvshowsdefault" default="true">metadata.tvshows.themoviedb.org.python</setting>
     <setting id="scrapers.musicvideosdefault" default="true">metadata.local</setting>
@@ -120,16 +123,20 @@
     <setting id="videoplayer.seeksteps">-30,-10,10,30</setting>
     <setting id="videoplayer.seekdelay">500</setting>
     <setting id="videoplayer.adjustrefreshrate" default="true">0</setting>
+    <setting id="winsystem.ishdrdisplay" default="true">true</setting>
     <setting id="videoplayer.usedisplayasclock" default="true">false</setting>
     <setting id="videoplayer.errorinaspect" default="true">0</setting>
     <setting id="videoplayer.stretch43" default="true">0</setting>
     <setting id="videoplayer.rendermethod" default="true">0</setting>
     <setting id="videoplayer.hqscalers" default="true">20</setting>
+    <setting id="videoplayer.usesuperresolution" default="true">false</setting>
     <setting id="videoplayer.usemediacodecsurface" default="true">true</setting>
     <setting id="videoplayer.usemediacodec" default="true">true</setting>
     <setting id="videoplayer.usedxva2" default="true">true</setting>
     <setting id="videoplayer.usevtb" default="true">true</setting>
-    <setting id="winsystem.ishdrdisplay" default="true">true</setting>
+    <setting id="videoplayer.highprecision" default="true">true</setting>
+    <setting id="videoplayer.convertdovi" default="true">false</setting>
+    <setting id="videoplayer.allowedhdrformats" default="true">0,1</setting>
     <setting id="videoplayer.stereoscopicplaybackmode" default="true">0</setting>
     <setting id="videoplayer.quitstereomodeonstop" default="true">true</setting>
     <setting id="videoplayer.teletextenabled" default="true">true</setting>
@@ -195,7 +202,7 @@
     <setting id="subtitles.downloadfirst" default="true">false</setting>
     <setting id="subtitles.tv">service.subtitles.All_Subs</setting>
     <setting id="subtitles.movie">service.subtitles.All_Subs</setting>
-    <setting id="pvrmanager.syncchannelgroups" default="true">true</setting>
+    <setting id="pvrmanager.backendchannelgroupsorder" default="true">true</setting>
     <setting id="pvrmanager.backendchannelorder" default="true">true</setting>
     <setting id="pvrmanager.usebackendchannelnumbersalways" default="true">false</setting>
     <setting id="pvrmanager.usebackendchannelnumbers" default="true">false</setting>
@@ -216,6 +223,7 @@
     <setting id="pvrplayback.delaymarklastwatched" default="true">0</setting>
     <setting id="pvrplayback.signalquality" default="true">true</setting>
     <setting id="pvrplayback.fps" default="true">0</setting>
+    <setting id="pvrplayback.autoplaynextprogramme" default="true">true</setting>
     <setting id="pvrplayback.enableradiords" default="true">true</setting>
     <setting id="pvrplayback.trafficadvisory" default="true">false</setting>
     <setting id="pvrplayback.trafficadvisoryvolume" default="true">10</setting>
@@ -260,19 +268,26 @@
     <setting id="services.upnpannounce" default="true">true</setting>
     <setting id="services.upnplookforexternalsubtitles" default="true">false</setting>
     <setting id="services.upnpcontroller" default="true">false</setting>
+    <setting id="services.upnpplayervolumesync" default="true">true</setting>
     <setting id="services.upnprenderer" default="true">false</setting>
     <setting id="services.airplay" default="true">false</setting>
     <setting id="services.airplayvolumecontrol" default="true">true</setting>
+    <setting id="services.airplayvideosupport" default="true">false</setting>
     <setting id="services.useairplaypassword" default="true">false</setting>
     <setting id="services.airplaypassword" default="true" />
-    <setting id="services.airplayvideosupport" default="true">false</setting>
     <setting id="smb.workgroup" default="true">WORKGROUP</setting>
     <setting id="smb.winsserver" default="true">0.0.0.0</setting>
     <setting id="smb.minprotocol" default="true">0</setting>
     <setting id="smb.maxprotocol" default="true">3</setting>
     <setting id="smb.legacysecurity" default="true">false</setting>
     <setting id="services.wsdiscovery" default="true">true</setting>
+    <setting id="smb.chunksize" default="true">128</setting>
     <setting id="nfs.version" default="true">3</setting>
+    <setting id="nfs.chunksize" default="true">128</setting>
+    <setting id="filecache.buffermode" default="true">4</setting>
+    <setting id="filecache.memorysize" default="true">20</setting>
+    <setting id="filecache.readfactor" default="true">400</setting>
+    <setting id="filecache.chunksize" default="true">131072</setting>
     <setting id="weather.currentlocation" default="true">1</setting>
     <setting id="weather.addon" default="true" />
     <setting id="videoscreen.monitor" default="true">Default</setting>
@@ -282,7 +297,6 @@
     <setting id="videoscreen.fakefullscreen" default="true">true</setting>
     <setting id="videoscreen.blankdisplays" default="true">false</setting>
     <setting id="videoscreen.delayrefreshchange" default="true">0</setting>
-    <setting id="videoscreen.guisdrpeakluminance" default="true">60</setting>
     <setting id="videoscreen.10bitsurfaces" default="true">0</setting>
     <setting id="videoscreen.dither" default="true">false</setting>
     <setting id="videoscreen.ditherdepth" default="true">8</setting>
@@ -296,6 +310,8 @@
     <setting id="videoscreen.cmsgamma" default="true">220</setting>
     <setting id="videoscreen.cmslutsize" default="true">6</setting>
     <setting id="videoscreen.limitedrange" default="true">false</setting>
+    <setting id="videoscreen.usesystemsdrpeakluminance" default="true">true</setting>
+    <setting id="videoscreen.guipeakluminance" default="true">40</setting>
     <setting id="videoscreen.whitelist" default="true" />
     <setting id="videoscreen.whitelistpulldown" default="true">false</setting>
     <setting id="videoscreen.whitelistdoublerefreshrate" default="true">false</setting>
