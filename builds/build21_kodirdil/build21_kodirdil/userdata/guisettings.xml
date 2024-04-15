@@ -284,9 +284,9 @@
     <setting id="smb.chunksize" default="true">128</setting>
     <setting id="nfs.version" default="true">3</setting>
     <setting id="nfs.chunksize" default="true">128</setting>
-    <setting id="filecache.buffermode" default="true">4</setting>
-    <setting id="filecache.memorysize" default="true">20</setting>
-    <setting id="filecache.readfactor" default="true">400</setting>
+    <setting id="filecache.buffermode">0</setting>
+    <setting id="filecache.memorysize">128</setting>
+    <setting id="filecache.readfactor">1000</setting>
     <setting id="filecache.chunksize" default="true">131072</setting>
     <setting id="weather.currentlocation" default="true">1</setting>
     <setting id="weather.addon" default="true" />
