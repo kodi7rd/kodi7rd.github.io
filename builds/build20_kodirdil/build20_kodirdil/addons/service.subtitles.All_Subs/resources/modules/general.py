@@ -500,9 +500,10 @@ def get_video_data():
     return video_data
 
 def save_file_name(filename,language):
-      
-    video_data_tagline = quote(get_video_data()['Tagline'])
-    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+
+    video_data=get_video_data()
+    video_data_tagline = quote(video_data['Tagline'])
+    video_data_file_original_path = quote(video_data['file_original_path'])
     
     try:
         from sqlite3 import dbapi2 as database
@@ -526,9 +527,10 @@ def save_file_name(filename,language):
     dbcon.commit()
     dbcon.close()
 def get_db_data():
-      
-    video_data_tagline = quote(get_video_data()['Tagline'])
-    video_data_file_original_path = quote(get_video_data()['file_original_path'])
+
+    video_data=get_video_data()
+    video_data_tagline = quote(video_data['Tagline'])
+    video_data_file_original_path = quote(video_data['file_original_path'])
     
     try:
       from sqlite3 import dbapi2 as database

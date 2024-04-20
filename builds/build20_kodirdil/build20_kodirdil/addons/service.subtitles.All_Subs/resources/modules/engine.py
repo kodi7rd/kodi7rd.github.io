@@ -217,62 +217,53 @@ def c_get_subtitles(video_data):
     subdl.global_var=[]
     subscene.global_var=[]
     wizdom.global_var=[]
-        
+    
+    # Determine wether to search hebrew langauge
+    search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+    
     # Israeli subtitles sources
     
-    if Addon.getSetting('ktuvit')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
-        
+    if Addon.getSetting('ktuvit')=='true' and search_language_hebrew_bool:
         thread.append(Thread(ktuvit.get_subs,video_data))
         all_sources.append(('ktuvit',ktuvit))
         
-    if Addon.getSetting('wizdom')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
-        
+    if Addon.getSetting('wizdom')=='true' and search_language_hebrew_bool:
         thread.append(Thread(wizdom.get_subs,video_data))
         all_sources.append(('wizdom',wizdom))
         
     # Global subtitles sources
         
     if Addon.getSetting('opensubtitles')=='true':
-        
         thread.append(Thread(opensubtitles.get_subs,video_data))
         all_sources.append(('opensubtitles',opensubtitles))
         
     if Addon.getSetting('subdl')=='true':
-        
         thread.append(Thread(subdl.get_subs,video_data))
         all_sources.append(('subdl',subdl))
         
     if Addon.getSetting('subscene')=='true':
-        
         thread.append(Thread(subscene.get_subs,video_data))
         all_sources.append(('subscene',subscene))
     
-    if Addon.getSetting('bsplayer')=='true' and (Addon.getSetting('language_hebrew')=='true' or Addon.getSetting("all_lang")=='true'):
-        
+    if Addon.getSetting('bsplayer')=='true' and search_language_hebrew_bool:
         thread.append(Thread(bsplayer.get_subs,video_data))
         all_sources.append(('bsplayer',bsplayer))
         
-    
-            
-            
-            
+
     for td in thread:
       xbmc.sleep(100)
       td.start()
       
-    
 
     tt={}
     for i in range (0,40): 
       tt[i]="red"
     start_time = time.time()
-    #while 1:
     num_live=0
     break_all=False
     ExcludeTime = int((Addon.getSetting('time_s')))
     
-    
-       
+
     while 1:
         elapsed_time = time.time() - start_time
         still_alive=0
@@ -309,9 +300,7 @@ def c_get_subtitles(video_data):
         if still_alive==0:
             break
         
-        
         if  elapsed_time>ExcludeTime: 
-               
             for threads in thread:
                  if threads.is_alive():
                      break_all=True
@@ -323,102 +312,22 @@ def c_get_subtitles(video_data):
         # If searching subtitles from context menu - will show the message.
         general.show_msg="מסדר כתוביות"
     
-    
     return f_result
+    
 def get_subtitles(video_data):
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
     from resources.modules import general
-   
-    
-    
+
     if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
         # If searching subtitles from context menu - will show the message.
         general.show_msg='מחפש כתוביות'
     
     f_result=c_get_subtitles(video_data)
-    
-    
     xbmc.sleep(100)
-    
-    
-    
     return f_result
 
-
-def get_random_number():
-    import random
-    result=22
-    while (result == 20) or (result == 21) or (result == 22):
-        result=int(random.random()*22+1)
-    return result
-def get_translated(base_url,items,counter,headers):
-    import requests
-    global trans_result
-    translation='Error code'
-    count_error=0
-    while ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
-        try:
-            translation=requests.get(base_url+(items),headers=headers).text
-        except:
-            num=get_random_number()
-            base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
-            try:
-                translation=requests.get(base_url+(items),headers=headers,timeout=2).text
-            except:
-                translation='Error code'
-        if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
-            
-            bing=Bing()
-            log.warning('Error Found')
-            
-            x=bing.translate('en', 'he',que(items))
-            translation=unque(x)
-      
-            if ('onError_3' in translation):
-                time.sleep(1)
-                count_error+=1
-                if (count_error>5):
-                    log.warning('Error 5')
-                    break
-                
-    if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation):
-        translation='Error now:'+str(count_error)
-    trans_result.append((translation,counter))
-def c_get_bing_keys():
-    import requests
-    x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
-    return x
-def get_last_key():
-    try:
-        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
-        file = open(last_key_file, 'r') 
-        file_data= file.read()
-        file.close()
-    
-        file_data=int(file_data)
-    except:
-        if Addon.getSetting("bing_translate_keys_method") == '1':
-            x=c_get_bing_keys()
-            file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
-        else:
-            file_data=0
-    return file_data
-def set_last_key(count_key):
-    try:
-        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
-        file = open(last_key_file, 'w') 
-        file.write(str(count_key))
-        file.close()
-    except:
-        pass
-    
-def select_key(count_key):
-    x=cache.get(c_get_bing_keys, 24,table='subs')
-    
-    
-    return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
-
+#################### PUNCTUATION FIX ###########################################################
 def fix_sub_punctuation_text(f_all):
 
     all_ch=['?','.','!',',']
@@ -490,7 +399,11 @@ def fix_sub_punctuation_and_write(sub_file, separate_punct_file=False):
         return None
         pass
 
-def send_translate(items):
+
+#################### MACHINE TRANSLATE WEBSITES #######################################
+
+#################### GOOGLE ###########################################################
+def google_send_translate(items):
     from resources.modules import general
     global global_sub_size,global_progress
     from resources.modules.auto_translate.googletrans import Translator  
@@ -502,8 +415,267 @@ def send_translate(items):
     general.show_msg=f"Google Translate מתרגם  | {str(int(((global_progress* 100.0)/(global_sub_size)) ))}%"
     general.progress_msg=int(((global_progress* 100.0)/(global_sub_size)) )
     return translation
+    
+def google_machine_translate(text, encoding):
+    from resources.modules import general
+    global global_sub_size,global_progress
+    split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+    ax2=split_string(text,3000)
+    global_sub_size=len(ax2)
+    global_progress=0
+    log.warning('Start Google')
+
+    general.show_msg=f"Google Translate מתרגם {encoding}"
+    with futures.ThreadPoolExecutor() as executor:  # optimally defined number of threads
+        res = [executor.submit(google_send_translate, txt) for txt in split_string(text,3000)]
+        futures.wait(res)
+
+    f_sub_pre=''
+    xx=0
+
+    general.progress_msg=0
+
+    translation = '\n'.join((r.result() for r in res))
+    f_sub_pre=translation
+
+    f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
+    f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
+    
+    return f_sub_pre
+
+
+#################### YANDEX ###########################################################
+def yandex_get_random_number():
+    import random
+    result=22
+    while (result == 20) or (result == 21) or (result == 22):
+        result=int(random.random()*22+1)
+    return result
+    
+def yandex_get_translated(base_url,items,counter,headers):
+    import requests
+    global trans_result
+    translation='Error code'
+    count_error=0
+    while ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
+        try:
+            translation=requests.get(base_url+(items),headers=headers).text
+        except:
+            num=yandex_get_random_number()
+            base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
+            try:
+                translation=requests.get(base_url+(items),headers=headers,timeout=2).text
+            except:
+                translation='Error code'
+        if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation or 'onError_3' in translation):
+            
+            bing=Bing()
+            log.warning('Error Found')
+            
+            x=bing.translate('en', 'he',que(items))
+            translation=unque(x)
+      
+            if ('onError_3' in translation):
+                time.sleep(1)
+                count_error+=1
+                if (count_error>5):
+                    log.warning('Error 5')
+                    break
+                
+    if ('Error code' in translation or 'Resource Limit Is Reached' in translation or 'Access denied' in translation):
+        translation='Error now:'+str(count_error)
+    trans_result.append((translation,counter))
+    
+def yandex_machine_translate(text, encoding):
+    global trans_result
+    from resources.modules import general
         
-def translate_subs(input_file,output_file):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Alt-Used': 't19.freetranslations.org',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-site',
+        'Sec-Fetch-User': '?1',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+    }
+    num=yandex_get_random_number()
+    base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
+
+
+    split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+    f_sub_pre=''
+    xx=0
+
+    general.progress_msg=0
+    ax2=split_string(text,500)
+    thread=[]
+    counter=0
+    for items in ax2:
+         thread.append(Thread(yandex_get_translated,base_url,items.replace('ה',''),counter,headers))
+         counter+=1
+         if general.break_all:
+             break
+         xx+=1
+    for td in thread:
+        td.start()
+    while 1:
+        
+        still_alive=0
+        for threads in thread:
+              
+              if general.break_all:
+                 
+                 break
+                                
+              num_live=0
+              string_dp=''
+
+              still_alive=0
+              for yy in range(0,len(thread)):
+                if not thread[yy].is_alive():
+                  num_live=num_live+1
+                  
+                else:
+                  still_alive=1
+        general.show_msg=f"Yandex מתרגם {encoding} | {str(int(((num_live* 100.0)/(len(thread))) ))}%"
+        general.progress_msg=int(((num_live* 100.0)/(len(thread))) )
+                  
+
+        if still_alive==0:
+                break
+    translation=sorted(trans_result, key=lambda x: x[1], reverse=False)
+    for sub_title,index in translation:
+        f_sub_pre=f_sub_pre+sub_title
+        
+    return f_sub_pre
+
+
+#################### BING #############################################################
+def bing_c_get_keys():
+    import requests
+    x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
+    return x
+    
+def bing_get_last_key():
+    try:
+        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
+        file = open(last_key_file, 'r') 
+        file_data= file.read()
+        file.close()
+    
+        file_data=int(file_data)
+    except:
+        if Addon.getSetting("bing_translate_keys_method") == '1':
+            x=bing_c_get_keys()
+            file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
+        else:
+            file_data=0
+    return file_data
+    
+def bing_set_last_key(count_key):
+    try:
+        last_key_file=os.path.join(user_dataDir,'last_bing_key.txt')
+        file = open(last_key_file, 'w') 
+        file.write(str(count_key))
+        file.close()
+    except:
+        pass
+    
+def bing_select_key(count_key):
+    x=cache.get(bing_c_get_keys, 24,table='subs')
+    
+    
+    return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
+    
+def bing_machine_translate(text, encoding):
+    from resources.modules import general
+    general.show_msg='Bing מתרגם'
+    import requests, uuid, json
+    
+    
+    count_key=bing_get_last_key()
+    # Add your key and endpoint
+    nm,key,location,amount = bing_select_key(count_key)
+    endpoint = "https://api.cognitive.microsofttranslator.com"
+
+    # location, also known as region.
+    # required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
+    
+
+    path = '/translate'
+    constructed_url = endpoint + path
+
+    params = {
+        'api-version': '3.0',
+        #'from': 'en',
+        'to': ['he']
+    }
+
+    headers = {
+        'Ocp-Apim-Subscription-Key': key,
+        # location required if you're using a multi-service or regional (not global) resource.
+        'Ocp-Apim-Subscription-Region': location,
+        'Content-type': 'application/json',
+        'X-ClientTraceId': str(uuid.uuid4())
+    }
+
+    split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+   
+    ax2=split_string(text,50000)
+    f_sub_pre=''
+    xx=0
+    
+    general.progress_msg=0
+    for items in ax2:
+        
+        general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
+        if general.break_all:
+             break
+        body = [{
+            'text': items
+        }]
+        count_test=0
+        while count_test<amount:
+            general.show_msg=f"Bing מתרגם {encoding} | {nm} {str(count_key)}/{str(amount)} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
+            request = requests.post(constructed_url, params=params, headers=headers, json=body)
+            response = request.json()
+            try:
+                f_sub_pre=f_sub_pre+response[0]['translations'][0]['text']
+                
+                bing_set_last_key(count_key)
+                break
+            except:
+                general.show_msg=str(response)
+                
+                if Addon.getSetting("bing_translate_keys_method") == '1':
+                    count_key = random.randint(0, amount - 1) # Generate random number from 0 to keys count
+                else:
+                    count_key+=1
+                    if (count_key>amount):
+                        count_key=0
+                nm,key,location,amount = bing_select_key(count_key)
+                log.warning(f"DarkSubs Bing API: bing_translator_name={nm} | bing_api_key={key} | total_keys_amount={amount}")
+                headers = {
+                    'Ocp-Apim-Subscription-Key': key,
+                    # location required if you're using a multi-service or regional (not global) resource.
+                    'Ocp-Apim-Subscription-Region': location,
+                    'Content-type': 'application/json',
+                    'X-ClientTraceId': str(uuid.uuid4())
+                }
+                count_test+=1
+        xx+=1
+        
+    return f_sub_pre
+    
+      
+#################### MACHINE TRANSLATE ################################################
+def machine_translate_subs(input_file,output_file):
     global trans_result
     trans_result=[]
     
@@ -511,25 +683,17 @@ def translate_subs(input_file,output_file):
     
     g_show_msg=general.show_msg
     progress_msg=general.progress_msg
-    sourcelang='eng'
     general.show_msg='אנא המתן'+'\n'+'מתרגם'
     log.warning('אנא המתן'+'\n'+'מתרגם')
-    url = 'https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}'
-    targetlang='he'
-    api_key='AIzaSyCk5TfD_K1tU1AB2salwn2Lb_yZbesSmY8'
-    import chardet
 
     # Open the file as binary data
     with open(input_file, 'rb') as f:
         # Join binary lines for specified number of lines
-        rawdata = f.read()
+        text = f.read()
 
-    encoding=chardet.detect(rawdata)['encoding']
+    import chardet
+    encoding=chardet.detect(text)['encoding']
     log.warning('encoding:'+encoding)
-    
-   
-    text=rawdata
-    
     
     if encoding=='ISO-8859-7':
       text=text.decode('cp1253','ignore')
@@ -537,203 +701,26 @@ def translate_subs(input_file,output_file):
       text=text.decode('cp1256','ignore')
     else:
       text=text.decode(encoding,'ignore')
-      
-    
-    
-    #from resources.modules.n_trans.t import translate_all
-    
-    #f_sub_pre=translate_all(text)
-    #a+=1
+
     path=xbmc_tranlate_path('special://home/addons/%s/resources/modules/auto_translate'%MyScriptID)
-    sys.path.append( path)
-    Addon = xbmcaddon.Addon()
-    all_text_p1=[]
-    all_data=''
- 
-    counter=0
+    sys.path.append(path)
     
-    if Addon.getSetting("translate_p")== '0': # Google
-        global global_sub_size,global_progress
-        split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
-        ax2=split_string(text,3000)
-        global_sub_size=len(ax2)
-        global_progress=0
-        log.warning('Start Google')
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
+    # Google
+    if Addon.getSetting("translate_p")=='0':
+        f_sub_pre = google_machine_translate(text, encoding)
         
-        general.show_msg=f"Google Translate מתרגם {encoding}"
-        with futures.ThreadPoolExecutor() as executor:  # optimally defined number of threads
-            res = [executor.submit(send_translate, txt) for txt in split_string(text,3000)]
-            futures.wait(res)
-        
-        
-        
-        f_sub_pre=''
-        xx=0
-        
-        general.progress_msg=0
-        
-        translation = '\n'.join((r.result() for r in res))
-        f_sub_pre=translation
-        
-        f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
-        f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
-        #all_text=f_sub_pre.replace(': ',':').replace('"# ','"#').split('\n')
-    elif Addon.getSetting("translate_p")== '1': # Yandex
-        
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            # 'Accept-Encoding': 'gzip, deflate, br',
-            'Alt-Used': 't19.freetranslations.org',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'same-site',
-            'Sec-Fetch-User': '?1',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache',
-            # Requests doesn't support trailers
-            # 'TE': 'trailers',
-        }
-        num=get_random_number()
-        base_url='https://t%s.freetranslations.org/freetranslationsorg.php?p1=auto&p2=he&p3='%str(num)
-        
-        
-        split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
-        f_sub_pre=''
-        xx=0
-        
-        general.progress_msg=0
-        ax2=split_string(text,500)
-        thread=[]
-        counter=0
-        for items in ax2:
-             thread.append(Thread(get_translated,base_url,items.replace('ה',''),counter,headers))
-             counter+=1
-
-             # general.show_msg=f"YANDEX מתרגם {encoding} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
-             # general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
-             if general.break_all:
-                 break
-             xx+=1
-        for td in thread:
-            td.start()
-        while 1:
+    # Yandex
+    elif Addon.getSetting("translate_p")=='1':
+        f_sub_pre = yandex_machine_translate(text, encoding)
+             
+    # Bing - Currently unused.
+    elif Addon.getSetting("translate_p")=='2':
+        f_sub_pre = bing_machine_translate(text, encoding)
             
-            still_alive=0
-            for threads in thread:
-                  
-                  if general.break_all:
-                     
-                     break
-                                    
-                  num_live=0
-                  string_dp=''
-
-                  still_alive=0
-                  for yy in range(0,len(thread)):
-                    if not thread[yy].is_alive():
-                      num_live=num_live+1
-                      
-                    else:
-                      still_alive=1
-            general.show_msg=f"Yandex מתרגם {encoding} | {str(int(((num_live* 100.0)/(len(thread))) ))}%"
-            general.progress_msg=int(((num_live* 100.0)/(len(thread))) )
-                      
-                  
-                 
-                  
-                  
-                  
-            if still_alive==0:
-                    break
-        translation=sorted(trans_result, key=lambda x: x[1], reverse=False)
-        for sub_title,index in translation:
-            f_sub_pre=f_sub_pre+sub_title
-             
-    elif Addon.getSetting("translate_p")== '2': #Bing
-        general.show_msg='Bing מתרגם ' 
-        import requests, uuid, json
-        
-        
-        count_key=get_last_key()
-        # Add your key and endpoint
-        nm,key,location,amount = select_key(count_key)
-        endpoint = "https://api.cognitive.microsofttranslator.com"
-
-        # location, also known as region.
-        # required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
-        
-
-        path = '/translate'
-        constructed_url = endpoint + path
-
-        params = {
-            'api-version': '3.0',
-            #'from': 'en',
-            'to': ['he']
-        }
-
-        headers = {
-            'Ocp-Apim-Subscription-Key': key,
-            # location required if you're using a multi-service or regional (not global) resource.
-            'Ocp-Apim-Subscription-Region': location,
-            'Content-type': 'application/json',
-            'X-ClientTraceId': str(uuid.uuid4())
-        }
-
-        split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
-       
-        ax2=split_string(text,50000)
-        f_sub_pre=''
-        xx=0
-        
-        general.progress_msg=0
-        for items in ax2:
-            
-            general.progress_msg=int(((xx* 100.0)/(len(ax2))) )
-            if general.break_all:
-                 break
-            body = [{
-                'text': items
-            }]
-            count_test=0
-            while count_test<amount:
-                general.show_msg=f"Bing מתרגם {encoding} | {nm} {str(count_key)}/{str(amount)} | {str(int(((xx* 100.0)/(len(ax2))) ))}%"
-                request = requests.post(constructed_url, params=params, headers=headers, json=body)
-                response = request.json()
-                try:
-                    f_sub_pre=f_sub_pre+response[0]['translations'][0]['text']
-                    
-                    set_last_key(count_key)
-                    break
-                except:
-                    general.show_msg=str(response)
-                    
-                    if Addon.getSetting("bing_translate_keys_method") == '1':
-                        count_key = random.randint(0, amount - 1) # Generate random number from 0 to keys count
-                    else:
-                        count_key+=1
-                        if (count_key>amount):
-                            count_key=0
-                    nm,key,location,amount = select_key(count_key)
-                    log.warning(f"DarkSubs Bing API: bing_translator_name={nm} | bing_api_key={key} | total_keys_amount={amount}")
-                    headers = {
-                        'Ocp-Apim-Subscription-Key': key,
-                        # location required if you're using a multi-service or regional (not global) resource.
-                        'Ocp-Apim-Subscription-Region': location,
-                        'Content-type': 'application/json',
-                        'X-ClientTraceId': str(uuid.uuid4())
-                    }
-                    count_test+=1
-             
-             
-             
-            xx+=1
-            # You can pass more than one object in body.
-            
+    
     f_all=f_sub_pre.replace('\r\r','\n')
     
     source_dir = os.path.join(addonPath, 'resources', 'modules')
@@ -756,13 +743,8 @@ def translate_subs(input_file,output_file):
     # Auto punctuation fix for external translated English to Hebrew subtitles. 
     if Addon.getSetting("auto_fix_sub_punctuation")=='true':
         f_all = fix_sub_punctuation_text(f_all)
-    '''
-    for line in all_text:
-       if '[' and ']' not in line:
-        f_all=f_all+rtl(line.encode('utf-8'))+'\n'
-       else:
-        f_all=f_all+line.replace('] [','][')+'\n'
-    '''
+        
+        
     if not general.break_all:
         with open(output_file, mode="w", encoding="utf8") as f:
                  f.write(f_all)
@@ -848,7 +830,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         already_translated=True
         if not os.path.exists(trans_file):
             already_translated=False
-            translate_subs(sub_file,trans_file)
+            machine_translate_subs(sub_file,trans_file)
         sub_file=trans_file
     log.warning(f"general.break_all: {general.break_all}")
     return sub_file

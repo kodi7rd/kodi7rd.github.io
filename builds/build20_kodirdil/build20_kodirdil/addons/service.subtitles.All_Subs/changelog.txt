@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v4.3.2[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.4[/B][/COLOR]
+* engine.py - Refactor machine translate code.
+[COLOR yellow][B]v4.3.3[/B][/COLOR]
+* engine.py + general.py - Small code refactor.
+[COLOR yellow][B]v4.3.2[/B][/COLOR]
 * Remove redundant code [get_db_data(f_result), add_demo_embbded].
 [COLOR yellow][B]v4.3.1[/B][/COLOR]
 * [COLOR springgreen]Ktuvit[/COLOR]: Add subtitles re-search by TVShowTitle if no results found through OriginalTitle search.
