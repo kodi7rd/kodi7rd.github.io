@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.3.6[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.7[/B][/COLOR]
+* autosub.py - "add_embbded_sub_if_exists" usage refactor.
+[COLOR yellow][B]v4.3.6[/B][/COLOR]
 * Rewrite Hebrew embedded subtitles code + add support for English embedded subtitles.
 * Remove IMDb ID from DarkSub's sub_window top label.
 * Small OpenSubtitles settings change bug fix.

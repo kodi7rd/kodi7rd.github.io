@@ -223,6 +223,24 @@ def add_embbded_sub_if_exists(video_data, f_result, embedded_language):
         f_result.insert(index, (json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
         
     return f_result
+    
+    
+def add_embbded_subs_to_subs_list(video_data, f_result):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+        
+    # Add Hebrew Embbeded Subtitles if exists
+    search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+    if search_language_hebrew_bool:
+        f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        
+    # Add English Embbeded Subtitles if exists
+    search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+    if search_language_english_bool:
+        f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+    
+    return f_result
         
 ####################################################################################
     
@@ -484,14 +502,8 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
-        # Add Hebrew Embbeded Subtitles if exists
-        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_hebrew_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
-        # Add English Embbeded Subtitles if exists
-        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_english_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        # Add embbeded subtitles to subtitles list
+        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
   
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
@@ -579,14 +591,8 @@ def sub_from_main(arg):
         xbmc.executebuiltin('Dialog.Close(all,true)')
         xbmc.Player().pause()
         
-        # Add Hebrew Embbeded Subtitles if exists
-        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_hebrew_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
-        # Add English Embbeded Subtitles if exists
-        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_english_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        # Add embbeded subtitles to subtitles list
+        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
@@ -608,14 +614,8 @@ def sub_from_main(arg):
         f_result = [] if not f_result else f_result
         xbmc.executebuiltin('Dialog.Close(all,true)')
         
-        # Add Hebrew Embbeded Subtitles if exists
-        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_hebrew_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
-        # Add English Embbeded Subtitles if exists
-        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_english_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        # Add embbeded subtitles to subtitles list
+        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
@@ -646,14 +646,8 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
-        # Add Hebrew Embbeded Subtitles if exists
-        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_hebrew_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
-        # Add English Embbeded Subtitles if exists
-        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_english_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        # Add embbeded subtitles to subtitles list
+        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
@@ -715,14 +709,8 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
-        # Add Hebrew Embbeded Subtitles if exists
-        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_hebrew_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
-        # Add English Embbeded Subtitles if exists
-        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
-        if search_language_english_bool:
-            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        # Add embbeded subtitles to subtitles list
+        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
