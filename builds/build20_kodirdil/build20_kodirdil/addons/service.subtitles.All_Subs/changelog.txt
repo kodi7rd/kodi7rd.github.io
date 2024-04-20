@@ -1,4 +1,10 @@
-﻿[COLOR yellow][B]v4.3.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.6[/B][/COLOR]
+* Rewrite Hebrew embedded subtitles code + add support for English embedded subtitles.
+* Remove IMDb ID from DarkSub's sub_window top label.
+* Small OpenSubtitles settings change bug fix.
+[COLOR yellow][B]v4.3.5[/B][/COLOR]
+* autosub.py - Remove "manual_fix_sub_punctuation" button.
+[COLOR yellow][B]v4.3.4[/B][/COLOR]
 * engine.py - Refactor machine translate code.
 [COLOR yellow][B]v4.3.3[/B][/COLOR]
 * engine.py + general.py - Small code refactor.

@@ -369,6 +369,7 @@ def build_download_request(download_href_url, lang_from_subscene):
 
 def get_subs(item):
 
+    # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
     global global_var
     log.warning('DEBUG | Subscene | Searching Subcene')

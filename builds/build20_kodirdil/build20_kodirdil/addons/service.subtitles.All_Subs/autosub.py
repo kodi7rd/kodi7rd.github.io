@@ -12,12 +12,6 @@ from urllib.parse import parse_qsl
 from resources.modules.sub_window import MySubs
 import urllib.parse
 from resources.modules import general
-from resources.sources import bsplayer
-from resources.sources import ktuvit
-from resources.sources import opensubtitles
-from resources.sources import subdl
-from resources.sources import subscene
-from resources.sources import wizdom
 Addon=xbmcaddon.Addon()
 MyScriptName = xbmcaddon.Addon().getAddonInfo('name')
 MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
@@ -35,63 +29,21 @@ pre_video_id=""
 trigger=False
 que=urllib.parse.quote_plus
     
-def manual_fix_sub_punctuation():
-    video_data=get_video_data()
-    f_result=cache.get(get_subtitles,24,video_data,table='subs')
-    f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
-    # Avoid f_result=None error if no subs found.
-    f_result = [] if not f_result else f_result
+####################################################################################
     
-    f_result=add_embbded_if_exists(f_result)
-    # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
-    last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
-    log.warning(f"PUNCT | last_sub_name_in_cache={last_sub_name_in_cache}")
-    log.warning(f"PUNCT | last_sub_language_in_cache={last_sub_language_in_cache}")
-    log.warning(f"PUNCT | all_subs={all_subs}")
-                        
-    last_sub_in_cache_is_empty = True if last_sub_name_in_cache=='' else False
-    last_sub_in_cache_is_heb_embedded = True if 'HebrewSubEmbedded' in last_sub_name_in_cache else False
-    
-    # Return if not sub in cache
-    if last_sub_in_cache_is_empty:
-        notify( "אין תרגום בקאש לתיקון" )
-        return
-    # Return last sub in cache is Hebrew embedded
-    elif last_sub_in_cache_is_heb_embedded:
-        notify ( "לא ניתן לערוך תרגום מובנה" )
-        return
-        
-    notify( "מתקן סימני פיסוק..." )
-    
-    selected_sub=None
-    # Changing subtitle to place to subtitles from database.db cache db
-    for f_sub in f_result:
-        if (last_sub_name_in_cache==f_sub[8]) and (last_sub_language_in_cache==f_sub[0]):
-            selected_sub=f_sub
-    if not selected_sub:
-        notify ( "התרחשה שגיאה" )
-        return
-    log.warning(f"PUNCT | selected_sub AFTER checking last sub in cache: {selected_sub}")
-
-
-    params=get_params(selected_sub[4],"")
-    download_data=unque(params["download_data"])
-    download_data=json.loads(download_data)
-    source=(params["source"])
-    language=(params["language"])
-    filename=unque(params["filename"])
-            
-    sub_file=download_sub(source,download_data,MySubFolder,language,filename)
-    log.warning(f"PUNCT | Last sub in cache BEFORE punct fix: {str(sub_file)}")
-    from resources.modules.engine import fix_sub_punctuation_and_write
-    punct_sub_file = fix_sub_punctuation_and_write(sub_file, separate_punct_file=True)
-    if not punct_sub_file:
-        notify ( "התרחשה שגיאה" )
-        return
-        
-    log.warning(f"PUNCT | Last sub in cache AFTER punct fix: {str(punct_sub_file)}")
-    xbmc.sleep(200)
-    xbmc.Player().setSubtitles(punct_sub_file)
+# Currently only for Hebrew/English, the most common.
+def translate_sub_language_to_hebrew(language):
+    if "Hebrew" in language:
+        return "עברית"
+    elif language == "English":
+        return "אנגלית"
+    elif language == "Russian":
+        return "רוסית"
+    elif language == "Arabic":
+        return "ערבית"
+    else:
+        return language
+####################################################################################
 
 def wait_for_video():
 
@@ -118,7 +70,33 @@ def wait_for_video():
           
     log.warning(f"DEBUG | Time waited for video to start (wait_for_video): {counter/10} seconds.")
 
+######################### EMBEDDED SUBS #####################################
+    
+def determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language):
 
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+
+    # Check if "auto_place_hebrew_embedded_subs" setting is 'true'
+    if Addon.getSetting("auto_place_hebrew_embedded_subs") == 'true':
+        # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
+        if not last_sub_in_cache_is_external:
+            return True
+            
+    else:
+        # Check if first external subtitle language is NOT "Hebrew"
+        if first_external_sub_language != "Hebrew":
+            # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
+            if not last_sub_in_cache_is_external:
+                return True
+                
+        # If first_external_sub_language=="Hebrew", Check if last sub cache is Hebrew embedded
+        elif last_sub_in_cache_is_heb_embedded:
+            return True 
+    
+    return False
+    
+    
 def wait_for_video_and_return_subs_list():
 
     log.warning('Waiting for video')
@@ -128,7 +106,6 @@ def wait_for_video_and_return_subs_list():
     subs=[]
     
     while counter<70:
-        
         try:
           subs=xbmc.Player().getAvailableSubtitleStreams()
           if len(subs)>0:
@@ -145,12 +122,109 @@ def wait_for_video_and_return_subs_list():
                 vidtime_pre=vidtime
         except:
           pass
-          
         counter+=1
         xbmc.sleep(100)
     
     log.warning(f"DEBUG | Time waited for video to start (wait_for_video_and_return_subs_list): {counter/10} seconds.")    
     return subs
+        
+        
+def check_if_embedded_sub_exists(embedded_language):
+    subs = wait_for_video_and_return_subs_list()
+    return any(sub == embedded_language for sub in subs)
+    
+    
+def get_embedded_sub_index(subs, embedded_language):
+    return next((index for index, sub in enumerate(subs) if sub == embedded_language), None)
+
+    
+def set_embedded_hebrew_sub(video_data):
+
+    subs = wait_for_video_and_return_subs_list()
+    index_sub = get_embedded_sub_index(subs, 'heb')
+    
+    if index_sub is not None:
+        log.warning(f'Placing Hebrew embedded Stream Sub: index_sub={str(index_sub)}')
+        xbmc.Player().setSubtitleStream(index_sub)
+        
+        save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
+        save_file_name(que(save_data),"Hebrew")
+            
+        xbmc.sleep(300)
+    
+    
+def add_embbded_sub_if_exists(video_data, f_result, embedded_language):
+
+    # Avoid checking when using subtitles search from context menu (display_subtitle)
+    if not xbmc.Player().isPlaying():
+        log.warning(f'DEBUG | add_embbded_sub_if_exists STOP | embedded_language={embedded_language} | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
+        return f_result
+
+    if embedded_language=='heb':
+        try:
+            global is_embedded_hebrew_sub_exists
+            if not is_embedded_hebrew_sub_exists:
+                log.warning(f'DEBUG | add_embbded_sub_if_exists STOP | embedded_language={embedded_language} | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}')
+                return f_result
+        except:
+            pass
+            
+    if embedded_language=='heb':
+        embedded_sub_name_prefix = 'HebrewSubEmbedded'
+        FullLanguageName = 'Hebrew'
+        thumbnailImageLanguageName = 'he'
+        EmbeddedSubLabel = 'תרגום מובנה בעברית'
+    elif embedded_language=='eng':
+        embedded_sub_name_prefix = 'EnglishSubEmbedded'
+        FullLanguageName = 'English'
+        thumbnailImageLanguageName = 'en'
+        EmbeddedSubLabel = 'תרגום מובנה באנגלית'
+        
+    # Exit if embedded sub is already present in f_result. Else, continue. Safe checking again.
+    for items in f_result:
+        if embedded_sub_name_prefix in items[8]:
+            return f_result
+            
+    subs=wait_for_video_and_return_subs_list()
+    index_sub = get_embedded_sub_index(subs, embedded_language)
+    log.warning(f'add_embbded_sub_if_exists | embedded_language={embedded_language} | Embbeded subs list: {subs} | index_sub={index_sub}')
+
+    if index_sub is not None:
+        download_data={}
+        download_data['url']=str(index_sub)
+        download_data['file_name']=str(index_sub)
+        save_data=embedded_sub_name_prefix+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
+        
+        url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=%s" % (MyScriptID,
+                                                            que(json.dumps(download_data)),
+                                                            que(que(que(save_data))),
+                                                            FullLanguageName,
+                                                            embedded_sub_name_prefix)
+        json_value={'url':url,
+                             'label':FullLanguageName,
+                             'label2':'[LOC] '+ EmbeddedSubLabel,
+                             'iconImage':"0",
+                             'thumbnailImage':thumbnailImageLanguageName,
+                             'hearing_imp':'false',
+                             'site_id':'[LOC]',
+                             'sub_color':'cyan',
+                             'filename':que(save_data),
+                             'sync': 'true'}
+                             
+                        
+        index = 0
+        if embedded_language=='eng':
+            # Find the index where English subtitles should be inserted
+            for i, sub in enumerate(f_result):
+                if sub[0] == 'Hebrew':
+                    index = i + 1  # Insert after the last Hebrew subtitle
+                             
+            
+        f_result.insert(index, (json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
+        
+    return f_result
+        
+####################################################################################
     
 def isPlayingAddonExcluded(movieFullPath,current_list_item):
     excluded_addons=['idanplus','sdarot.tv','youtube','kids_new']
@@ -179,134 +253,6 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
             log.warning("isPlayingAddonExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%items )
             return True
     return False
-    
-# Currently only for Hebrew/English, the most common.
-def translate_sub_language_to_hebrew(language):
-    if "Hebrew" in language:
-        return "עברית"
-    elif language == "English":
-        return "אנגלית"
-    elif language == "Russian":
-        return "רוסית"
-    elif language == "Arabic":
-        return "ערבית"
-    else:
-        return language
-    
-def determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language):
-
-    # For settings changes to take effect.
-    Addon=xbmcaddon.Addon()
-
-    # Check if "auto_place_hebrew_embedded_subs" setting is 'true'
-    if Addon.getSetting("auto_place_hebrew_embedded_subs") == 'true':
-        # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
-        if not last_sub_in_cache_is_external:
-            return True
-            
-    else:
-        # Check if first external subtitle language is NOT "Hebrew"
-        if first_external_sub_language != "Hebrew":
-            # Check if last sub cache is not an external subtitle (not empty or not embedded Hebrew sub).
-            if not last_sub_in_cache_is_external:
-                return True
-                
-        # If first_external_sub_language=="Hebrew", Check if last sub cache is Hebrew embedded
-        elif last_sub_in_cache_is_heb_embedded:
-            return True 
-    
-    return False
-        
-def check_if_embedded_hebrew_sub_exists():
-
-    subs = wait_for_video_and_return_subs_list()
-    
-    for items in subs:
-        if items=='heb':
-            return True
-    return False
-    
-def set_embedded_hebrew_sub():
-
-    subs = wait_for_video_and_return_subs_list()
-    
-    index_sub=0
-    for items in subs:
-    
-        if items=='heb':
-                
-            log.warning('Placing Hebrew embedded Stream Sub: '+str(index_sub))
-            xbmc.Player().setSubtitleStream(index_sub)
-            
-            video_data=get_video_data()
-            save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
-            save_file_name(que(save_data),"Hebrew")
-            break
-            
-        index_sub+=1
-    xbmc.sleep(500)
-    
-def add_embbded_if_exists(f_result):
-
-        try:
-            global is_embedded_hebrew_sub_exists
-            if not is_embedded_hebrew_sub_exists:
-                log.warning(f'DEBUG | add_embbded_if_exists STOP | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}')
-                return f_result
-        except:
-            pass
-        
-        # Avoid checking when using subtitles search from context menu (display_subtitle)
-        if not xbmc.Player().isPlaying():
-            log.warning(f'DEBUG | add_embbded_if_exists STOP | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
-            return f_result
-            
-        # Exit if embedded Hebrew sub is already present in f_result. Else, continue. Safe checking again.
-        for items in f_result:
-            if 'HebrewSubEmbedded' in items[8]:
-                return f_result
-                
-        video_data=get_video_data()
-        subs=wait_for_video_and_return_subs_list()
-        log.warning('add_embbded_if_exists | Embbeded subs list:')
-        log.warning(subs)
-        
-        index_sub=0
-        
-        f_result_start=[]
-        for items in subs:
-            
-            if items=='heb':
-                download_data={}
-                download_data['url']=str(index_sub)
-                download_data['file_name']=str(index_sub)
-                save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
-                
-                url = "plugin://%s/?action=download&download_data=%s&filename=%s&language=%s&source=HebrewSubEmbedded" % (MyScriptID,
-                                                                    que(json.dumps(download_data)),
-                                                                    que(que(que(save_data))),
-                                                                    "Hebrew")
-                json_value={'url':url,
-                                     'label':"Hebrew",
-                                     'label2':'[LOC] '+' תרגום מובנה',
-                                     'iconImage':"0",
-                                     'thumbnailImage':"he",
-                                     'hearing_imp':'false',
-                                     'site_id':'[LOC]',
-                                     'sub_color':'cyan',
-                                     'filename':que(save_data),
-                                     'sync': 'true'}
-                                     
-                                
-                f_result_start.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],101,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
-                break
-                
-            index_sub+=1
-       
-        for items in f_result_start:
-        
-            f_result.insert(0, items)
-        return f_result
     
 def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty):
 
@@ -445,15 +391,6 @@ def display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_languag
                           'url':"plugin://%s/?action=clean_all_cache" % (MyScriptID),
                           "sync": "",
                           "hearing_imp":""})
-                                       
-                
-    sub_final_data.append({'label':"פיסוק",
-                          'label2':'[B][COLOR cyan][I]'+ "DarkSubs - תיקון סימני פיסוק עבור תרגום נוכחי"+'[/I][/COLOR][/B]', 
-                          'iconImage':"",
-                          'thumbnailImage':"",
-                          'url':"plugin://%s/?action=manual_fix_sub_punctuation" % (MyScriptID),
-                          "sync": "",
-                          "hearing_imp":""})
                           
     sub_final_data.append({'label':"חלון",
                           'label2':'[B][COLOR lightblue][I]'+ "DarkSubs - חלון כתוביות"+'[/I][/COLOR][/B]', 
@@ -547,7 +484,15 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
-        f_result=add_embbded_if_exists(f_result)
+        # Add Hebrew Embbeded Subtitles if exists
+        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_hebrew_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        # Add English Embbeded Subtitles if exists
+        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_english_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        ############################################################
   
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
 
@@ -561,7 +506,7 @@ def sub_from_main(arg):
         log.warning(params["filename"])
         sub_file=download_sub(source,download_data,MySubFolder,language,filename)
         fault=False
-        if sub_file=='HebSubEmbeddedSelected': # Hebrew embedded subtitle
+        if sub_file=='EmbeddedSubSelected': # embedded subtitle
             notify( 'התרגום המובנה יופיע בעוד 10 שניות' )
             log.warning(filename)
             save_file_name(filename,language)
@@ -606,9 +551,6 @@ def sub_from_main(arg):
     elif action=='open_settings':
         xbmcaddon.Addon().openSettings()
         return_result=json.dumps(action)
-    elif action=='manual_fix_sub_punctuation':
-        manual_fix_sub_punctuation()
-        return_result=json.dumps(action)
     elif action=='clean':
         cache.clear(['subs'])
         notify( "קאש כתוביות נוקה" )
@@ -636,7 +578,17 @@ def sub_from_main(arg):
         f_result = [] if not f_result else f_result
         xbmc.executebuiltin('Dialog.Close(all,true)')
         xbmc.Player().pause()
-        f_result=add_embbded_if_exists(f_result)
+        
+        # Add Hebrew Embbeded Subtitles if exists
+        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_hebrew_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        # Add English Embbeded Subtitles if exists
+        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_english_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        ############################################################
+        
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
@@ -655,7 +607,17 @@ def sub_from_main(arg):
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         xbmc.executebuiltin('Dialog.Close(all,true)')
-        f_result=add_embbded_if_exists(f_result)
+        
+        # Add Hebrew Embbeded Subtitles if exists
+        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_hebrew_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        # Add English Embbeded Subtitles if exists
+        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_english_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        ############################################################
+        
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
@@ -683,7 +645,17 @@ def sub_from_main(arg):
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
-        f_result=add_embbded_if_exists(f_result)
+        
+        # Add Hebrew Embbeded Subtitles if exists
+        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_hebrew_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        # Add English Embbeded Subtitles if exists
+        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_english_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        ############################################################
+        
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         next_one=False
         selected_sub=None
@@ -709,7 +681,7 @@ def sub_from_main(arg):
             sub_file=download_sub(source,download_data,MySubFolder,language,filename)
             log.warning('Next Sub result:'+str(sub_file))
             general.show_msg="מוכן"
-            if (sub_file!='HebSubEmbeddedSelected') and (sub_file!='FaultSubException'):
+            if (sub_file!='EmbeddedSubSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
             save_file_name(filename,language)
             
@@ -742,7 +714,17 @@ def sub_from_main(arg):
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
-        f_result=add_embbded_if_exists(f_result)
+        
+        # Add Hebrew Embbeded Subtitles if exists
+        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_hebrew_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        # Add English Embbeded Subtitles if exists
+        search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
+        if search_language_english_bool:
+            f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        ############################################################
+        
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
         pre_one=None
         found=None
@@ -771,7 +753,7 @@ def sub_from_main(arg):
             log.warning('previous Sub result:'+str(sub_file))
             general.show_msg=sub_file
             xbmc.sleep(100)
-            if (sub_file!='HebSubEmbeddedSelected') and (sub_file!='FaultSubException'):
+            if (sub_file!='EmbeddedSubSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
                 save_file_name(filename,language)
             else:
@@ -937,7 +919,6 @@ class KodiMonitor(xbmc.Monitor):
                         
                         file_org=video_data['file_original_path']
                         video_data.pop('file_original_path')
-                        #log.warning(video_data)
                         f_result=cache.get(get_subtitles,24,video_data,table='subs')
                         video_data['file_original_path']=file_org
                         video_data['Tagline']=tag_original
@@ -947,7 +928,10 @@ class KodiMonitor(xbmc.Monitor):
                         f_result = [] if not f_result else f_result
                         
                         # Set is_embedded_hebrew_sub_exists to True if embedded Hebrew subs exists in playing video.
-                        is_embedded_hebrew_sub_exists = check_if_embedded_hebrew_sub_exists()
+                        search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+                        is_embedded_hebrew_sub_exists = False
+                        if search_language_hebrew_bool:
+                            is_embedded_hebrew_sub_exists = check_if_embedded_sub_exists(embedded_language='heb')
                         
                         # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
                         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
@@ -965,6 +949,7 @@ class KodiMonitor(xbmc.Monitor):
                         
                         # LOGGING
                         log.warning(f"DEBUG | first_external_sub_language: {first_external_sub_language}")
+                        log.warning(f"DEBUG | search_language_hebrew_bool: {search_language_hebrew_bool}")
                         log.warning(f"DEBUG | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}")
                         log.warning(f"DEBUG | auto_place_hebrew_embedded_subs setting: {Addon.getSetting('auto_place_hebrew_embedded_subs')}")
                         log.warning(f"DEBUG | last_sub_name_in_cache: {last_sub_name_in_cache}")
@@ -974,7 +959,9 @@ class KodiMonitor(xbmc.Monitor):
                         log.warning(f"DEBUG | last_sub_in_cache_is_external: {last_sub_in_cache_is_external}")
 
                         # set placeHebrewEmbeddedSub value
-                        placeHebrewEmbeddedSub = determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language) if is_embedded_hebrew_sub_exists else False
+                        placeHebrewEmbeddedSub = False
+                        if search_language_hebrew_bool and is_embedded_hebrew_sub_exists:
+                            placeHebrewEmbeddedSub = determine_placeHebrewEmbeddedSub(last_sub_in_cache_is_external, last_sub_in_cache_is_heb_embedded, first_external_sub_language)
                                     
                         log.warning(f"DEBUG | placeHebrewEmbeddedSub: {placeHebrewEmbeddedSub}")   
                   
@@ -983,7 +970,7 @@ class KodiMonitor(xbmc.Monitor):
                             # I don't know why but only by wait_for_video() before + after the hebrew subs set, the general.show_msg appears. (anyway its waiting 0 seconds, since video already started)
                             wait_for_video()
                             log.warning('DEBUG | Placing embedded Hebrew sub.')
-                            set_embedded_hebrew_sub()
+                            set_embedded_hebrew_sub(video_data)
             
                             if Addon.getSetting("enable_autosub_notifications")=='true':
                             
@@ -1013,7 +1000,8 @@ class KodiMonitor(xbmc.Monitor):
                                 # Show the message for 5 seconds before general.show_msg="END"
                                 xbmc.sleep(5000)
                                 
-                                notify( "קיים גם תרגום מובנה בעברית" ) if is_embedded_hebrew_sub_exists else None
+                                if search_language_hebrew_bool and is_embedded_hebrew_sub_exists:
+                                    notify( "קיים גם תרגום מובנה בעברית" )
 
                         # Write video tagline in embedded Hebrew subs taglines list
                         __ = write_heb_embedded_taglines_check_func(bytes,compile)

@@ -123,11 +123,8 @@ def sort_subtitles(save_all_data,video_data):
               array_subs.append(item_2)
               array_subs.append(item_2)
               array_subs.append(item_2)
-           
-           if ('תרגום מובנה' in json_value['label2']):
-               precent=101
-           else:
-                precent=similar(array_original,array_subs)
+              
+            precent=similar(array_original,array_subs)
            
            # Video Tagline array
            array_original=video_data['Tagline'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
@@ -760,7 +757,7 @@ def download_sub(source,download_data,MySubFolder,language,filename):
         x=int(download_data['url'])
         log.warning(x)
         xbmc.Player().setSubtitleStream(x)
-        return 'HebSubEmbeddedSelected'
+        return 'EmbeddedSubSelected'
     except:
         pass
     

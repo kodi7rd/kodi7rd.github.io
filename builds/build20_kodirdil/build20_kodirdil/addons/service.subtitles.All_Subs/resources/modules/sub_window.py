@@ -57,8 +57,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             
             # Video File Name Label
             self.video_file_name_label = self.video_data['Tagline']
-            self.imdb_ib_label = f" (IMDb ID: {self.video_data['imdb']})" if self.video_data['imdb'] else ''
-            self.label_info_text = f"[B][COLOR deepskyblue]{self.video_file_name_label}{self.imdb_ib_label}[/COLOR][/B]"
+            self.label_info_text = f"[B][COLOR deepskyblue]{self.video_file_name_label}[/COLOR][/B]"
             self.label_info = pyxbmct.Label(self.label_info_text)
             self.placeControl(self.label_info,  0, 0, 1, 1)
             #########################################
@@ -94,12 +93,12 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             language=(params["language"])
             filename=(params["filename"])
             fault_sub=False
-            hebrewEmbedded=False
+            EmbeddedSubSelected=False
             try:
                 sub_file=download_sub(source,download_data,MySubFolder,language,filename)
                 xbmc.sleep(100)
-                if sub_file=='HebSubEmbeddedSelected': # Hebrew embedded subtitle
-                    hebrewEmbedded=True
+                if sub_file=='EmbeddedSubSelected': # embedded subtitle
+                    EmbeddedSubSelected=True
                 elif sub_file=='FaultSubException':
                     fault_sub=True
                 else: # External subtitle
@@ -114,7 +113,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             if fault_sub:
                 self.label_info.setLabel('[B]תקלה בהורדה נסה שנית[/B]' + ' | ' + self.label_info_text)
             else:
-                if not hebrewEmbedded:
+                if not EmbeddedSubSelected:
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.label_info_text)
                     save_file_name(filename,language)
                     # Save sub in Cached_subs
