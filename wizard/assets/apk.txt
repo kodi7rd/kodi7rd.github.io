@@ -1,6 +1,6 @@
-name="KODI 21 TEST"
+name="TEST"
 section="no"
-url="https://mirrors.kodi.tv/releases/android/arm64-v8a/kodi-21.0-Omega-arm64-v8a.apk"
+url="https://kodi7rd.github.io/apk/KodiRD-IL-20.3-64Bit.apk"
 icon="http://"
 fanart="http://"
 adult="no"
