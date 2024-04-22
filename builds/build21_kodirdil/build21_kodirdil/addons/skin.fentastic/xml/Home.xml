@@ -1274,6 +1274,14 @@
 				</control>
 				<!-- ##################### -->
 			</control>
+			<control type="label">
+				<description>KODI-RD-IL - Kodi Version</description>
+				<left>15</left>
+				<bottom>0</bottom>
+				<height>50</height>
+				<font>font25_title</font>
+				<label>$LOCALIZE[700062]: $INFO[System.BuildVersionShort]</label>
+			</control>
 		</control>
 	</controls>
 </window>
