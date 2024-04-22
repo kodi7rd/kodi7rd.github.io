@@ -960,4 +960,10 @@ msgctxt "#700040"
 msgid "Next Episode"
 msgstr "לפרק הבא"
 
+# Kodi Version - Home.xml
+
+msgctxt "#700041"
+msgid "Kodi Version"
+msgstr "גרסת קודי"
+
 ################################################################

@@ -1142,4 +1142,10 @@ msgctxt "#700040"
 msgid "Next Episode"
 msgstr ""
 
+# Kodi Version - Home.xml
+
+msgctxt "#700041"
+msgid "Kodi Version"
+msgstr ""
+
 ################################################################
