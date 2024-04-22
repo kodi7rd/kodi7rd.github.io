@@ -1146,4 +1146,10 @@ msgctxt "#700042"
 msgid "Choose Subtitles (DarkSubs)"
 msgstr ""
 
+# Kodi Version - Home.xml
+
+msgctxt "#700043"
+msgid "Kodi Version"
+msgstr ""
+
 ################################################################
