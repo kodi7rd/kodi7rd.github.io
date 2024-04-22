@@ -180,7 +180,7 @@
 			<!-- KODI-RD-IL ADDITION -->
 			<!-- Studio Logo in player (Top of screen) -->
 			<control type="image">
-			<top>5</top>
+				<top>5</top>
 				<right>800</right>
 				<width>240</width>
 				<height>120</height>

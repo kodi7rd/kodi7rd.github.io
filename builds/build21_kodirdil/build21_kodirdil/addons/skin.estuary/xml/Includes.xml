@@ -419,12 +419,12 @@
 				
 				<!-- KODI-RD-IL ADDITION -->
 				<include content="SetSlideAnimation">
-				<param name="setproperty">Container.Content(seasons) | Container.Content(episodes)</param>
-				<param name="end">0</param>
+					<param name="setproperty">Container.Content(seasons) | Container.Content(episodes)</param>
+					<param name="end">0</param>
 				</include>
 				<include content="SetSlideAnimation">
-				<param name="setproperty">Container.Content(episodes)</param>
-				<param name="end">0</param>
+					<param name="setproperty">Container.Content(episodes)</param>
+					<param name="end">0</param>
 				</include>
 				<!-- ##################### -->
 				
@@ -2224,26 +2224,26 @@
 	
 	<include name="TimeFadeLabel">
 		<param name="id" default="$PARAM[id]"/>
-	<definition>
-		<control type="fadelabel" id="$PARAM[id]">
-			<animation effect="fade" start="0" end="100" time="400">VisibleChange</animation>
-			<description>My First fadelabel</description>
-			<left>-2000</left>
-			<top>-2060</top>
-			<width>1</width>
-			<scrollout>true</scrollout>
-			<pauseatend>500</pauseatend>
-			<label>6</label>
-			<info>VideoPlayer.Genre</info>
-			<info>VideoPlayer.Year</info>
-			<font>font10</font>
-			<textcolor>FFB2D4F5</textcolor>
-			<textoffsetx>20</textoffsetx>
-			<scroll>true</scroll>
-			<randomize>true</randomize>
-		</control>
-		<nested />
-	</definition>
+		<definition>
+			<control type="fadelabel" id="$PARAM[id]">
+				<animation effect="fade" start="0" end="100" time="400">VisibleChange</animation>
+				<description>My First fadelabel</description>
+				<left>-2000</left>
+				<top>-2060</top>
+				<width>1</width>
+				<scrollout>true</scrollout>
+				<pauseatend>500</pauseatend>
+				<label>6</label>
+				<info>VideoPlayer.Genre</info>
+				<info>VideoPlayer.Year</info>
+				<font>font10</font>
+				<textcolor>FFB2D4F5</textcolor>
+				<textoffsetx>20</textoffsetx>
+				<scroll>true</scroll>
+				<randomize>true</randomize>
+			</control>
+			<nested />
+		</definition>
 	</include>
 	
 	<include name="ContentTarget">

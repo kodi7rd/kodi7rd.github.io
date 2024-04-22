@@ -368,8 +368,8 @@
 		<value condition="Control.HasFocus(70055)">$LOCALIZE[24013]</value>
 		
 		<!-- KODI-RD-IL ADDITION -->
-		<value condition="Control.HasFocus(599)">[B]ZOOM IN[/B]</value>
-		<value condition="Control.HasFocus(598)">[B]ZOOM OUT[/B]</value>
+		<value condition="Control.HasFocus(599)">[B]Zoom In[/B]</value>
+		<value condition="Control.HasFocus(598)">[B]Zoom Out[/B]</value>
 		<value condition="Control.HasFocus(700450)">[B]$LOCALIZE[700041][/B]</value>
 		<value condition="Control.HasFocus(700451)">[B]$LOCALIZE[700042][/B]</value>
 		<value condition="Control.HasFocus(700452)">[B]$LOCALIZE[700037][/B]</value>
@@ -858,7 +858,6 @@
 		<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>
 	
-	<!-- EPISODES -->	
 	<variable name="NextPreviousIndicator">
 		<value>kodirdil/arrows/circle-down.png</value>
 	</variable>
