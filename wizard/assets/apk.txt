@@ -1,0 +1,7 @@
+name="KODI 21 TEST"
+section="no"
+url="https://mirrors.kodi.tv/releases/android/arm64-v8a/kodi-21.0-Omega-arm64-v8a.apk"
+icon="http://"
+fanart="http://"
+adult="no"
+description="KODI 21 APK 64 BIT"
