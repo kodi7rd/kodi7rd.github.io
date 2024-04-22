@@ -1,0 +1,12 @@
+<settings version="2">
+    <setting id="Enable_Debugging">true</setting>
+    <setting id="Disable_Maintenance">true</setting>
+    <setting id="Disable_Cache">false</setting>
+    <setting id="File_Manager">1</setting>
+    <setting id="Custom_Manager">com.esaba.downloader</setting>
+    <setting id="LastURL" default="true" />
+    <setting id="LastPath" default="true" />
+    <setting id="Platform" default="true" />
+    <setting id="Version" default="true" />
+    <setting id="Build" default="true">{&quot;major&quot;: 20, &quot;minor&quot;: 3, &quot;revision&quot;: &quot;20240110-6fb2bfc7ff-dirty&quot;, &quot;tag&quot;: &quot;stable&quot;}</setting>
+</settings>
