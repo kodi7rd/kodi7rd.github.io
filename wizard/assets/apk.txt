@@ -1,7 +1,0 @@
-name="TEST"
-section="no"
-url="https://kodi7rd.github.io/apk/KodiRD-IL-20.3-64Bit.apk"
-icon="http://"
-fanart="http://"
-adult="no"
-description="KODI 21 APK 64 BIT"
