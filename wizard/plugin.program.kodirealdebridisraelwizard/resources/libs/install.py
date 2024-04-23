@@ -613,14 +613,13 @@ def install_apk(name, url):
         
         ##########################################
         # KODI-RD-IL
-        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else '\n[B]כעת ייפתח מנהל הקבצים שהגדרת.[/B]'
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else f'\n[B]כעת ייפתח מנהל הקבצים שהגדרת:\n{use_manager}[/B]'
         dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
         ##########################################
         
         
         logging.log('Opening {} with {}'.format(lib, use_manager), level=xbmc.LOGINFO)
-        # xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
-        xbmc.executebuiltin('StartAndroidActivity({})'.format(use_manager))
+        xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
     else:
         logging.log_notify(CONFIG.ADDONTITLE,
                            '[COLOR {0}]שגיאה: לא מכשיר אנדרואיד[/COLOR]'.format(CONFIG.COLOR2))

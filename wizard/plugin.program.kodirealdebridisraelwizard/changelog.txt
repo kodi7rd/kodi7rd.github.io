@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.3.9[/B][/COLOR]
+* install.py - show configured file explorer if not downloader.
 [COLOR yellow][B]v1.3.8[/B][/COLOR]
 * "downloader_installed_text" text change.
 [COLOR yellow][B]v1.3.7[/B][/COLOR]
