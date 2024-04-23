@@ -81,7 +81,7 @@ def check_if_downloader_app_installed():
         dialog = xbmcgui.Dialog()
         choose = dialog.yesno(CONFIG.ADDONTITLE, 'אפליקציית Downloader לא מותקנת במכשיר שלך! האם ברצונך להגדיר מנהל קבצים אחר עבור ההתקנה?')
         if not choose:
-            dialog.ok(CONFIG.ADDONTITLE, 'לאחר הורדת ה-APK, אם לא קורה כלום, הגדר מנהל קבצים דרך "הגדרות Kodi Android Installer".'.format(CONFIG.ADDONTITLE))
+            dialog.ok(CONFIG.ADDONTITLE, 'לאחר הורדת ה-APK, אם לא קורה כלום, הגדר מנהל קבצים דרך "הגדרת מנהל קבצים להתקנה".'.format(CONFIG.ADDONTITLE))
         else:
             from resources.libs import install
             install.choose_file_manager()
@@ -112,7 +112,7 @@ def apk_menu(url=None):
     install_script_kodi_android_update_addon()
     check_if_downloader_app_installed()
     directory.add_separator(f'[B]גרסת קודי נוכחית: {CONFIG.KODIV}[/B]')
-    directory.add_file('הגדרות Kodi Android Installer (עבור בחירת מנהל קבצים להתקנה)', {'mode': 'settings', 'name': 'script.kodi.android.update'}, icon=CONFIG.ICONSETTINGS, themeit=CONFIG.THEME_YELLOW)
+    directory.add_file('הגדרת מנהל קבצים להתקנה', {'mode': 'settings', 'name': 'script.kodi.android.update'}, icon=CONFIG.ICONSETTINGS, themeit=CONFIG.THEME_YELLOW)
     directory.add_separator()
     ##########################################
 
@@ -149,7 +149,7 @@ def apk_menu(url=None):
         
     ##########################################
     # KODI-RD-IL
-    directory.add_dir('קבצי APK רשמיים של קודי', {'mode': 'kodiapk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME2)
+    directory.add_dir('קבצי APK של קודי נקי', {'mode': 'kodiapk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME2)
     ##########################################
 
 

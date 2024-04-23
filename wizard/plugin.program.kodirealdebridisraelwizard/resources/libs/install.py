@@ -525,10 +525,10 @@ def choose_file_manager():
 
 ##########################################
 # KODI-RD-IL
-def check_if_downloader_app_installed():
+# def check_if_downloader_app_installed():
 
-    apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
-    return 'com.esaba.downloader' in apps
+    # apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
+    # return 'com.esaba.downloader' in apps
 ##########################################
     
     
@@ -560,7 +560,8 @@ def install_apk(name, url):
     ##########################################
     # KODI-RD-IL
     use_downloader_app = False
-    if check_if_downloader_app_installed() and use_manager == 'com.esaba.downloader':
+    # if check_if_downloader_app_installed() and use_manager == 'com.esaba.downloader':
+    if use_manager == 'com.esaba.downloader':
         use_downloader_app = True
         # Override configured path to Downloader files location
         path = '/storage/emulated/0/Download/Downloader/'
@@ -612,7 +613,7 @@ def install_apk(name, url):
         
         ##########################################
         # KODI-RD-IL
-        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files.[/B]' if use_downloader_app else ''
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else ''
         dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
         ##########################################
         
