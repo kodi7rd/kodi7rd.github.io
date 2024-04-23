@@ -620,8 +620,13 @@ def install_apk(name, url):
             Downloader().download(url, lib)
             xbmc.sleep(100)
             progress_dialog.close()
-                
-        dialog.ok(CONFIG.ADDONTITLE, 'הקובץ [COLOR {}]{}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {}]{}[/COLOR]\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files.[/B]'.format(CONFIG.COLOR1, apk, CONFIG.COLOR1, path))
+        
+        ##########################################
+        # KODI-RD-IL
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files.[/B]' if downloader_app_installed else ''
+        dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
+        ##########################################
+        
         
         logging.log('Opening {} with {}'.format(lib, use_manager), level=xbmc.LOGINFO)
         xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
