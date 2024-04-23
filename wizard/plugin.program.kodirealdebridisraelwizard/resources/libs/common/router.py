@@ -48,6 +48,7 @@ class Router:
         #####################################################
         # KODI-RD-IL
         auto_quick_update = self.params['auto_quick_update'] if 'auto_quick_update' in self.params else None
+        apk_update_check_manual = self.params['apk_update_check_manual'] if 'apk_update_check_manual' in self.params else None
         #####################################################
 
         # MAIN MENU
@@ -98,6 +99,10 @@ class Router:
             elif action == 'build_switch_skin':
                 from resources.libs.wizard import build_switch_skin
                 build_switch_skin()
+            # KODI-RD-IL
+            elif action == 'apk_update_check':
+                from resources.libs.wizard import apk_update_check
+                apk_update_check(apk_update_check_manual)
             #####################################################
             elif action == 'theme':  # Builds -> "Your Build" -> "Your Theme"
                 Wizard().theme(name, url)

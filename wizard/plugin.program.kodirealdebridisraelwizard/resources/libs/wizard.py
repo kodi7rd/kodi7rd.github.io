@@ -554,3 +554,59 @@ def build_switch_skin():
         Wizard().force_close_kodi_in_5_seconds(dialog_header="סקין הוחלף בהצלחה!")
     else:
         return
+            
+##########################################
+# KODI-RD-IL - APK UPDATE CHECK
+def check_if_downloader_app_installed():
+    import xbmcvfs
+    apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
+    return 'com.esaba.downloader' in apps
+
+# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
+def apk_update_check(apk_update_check_manual="false"):
+
+    apk_update_check_manual = True if apk_update_check_manual=="true" else False
+    
+    try:
+        dialog = xbmcgui.Dialog()
+    
+        LATEST_APK_VERSION_TEXT_FILE = float(tools.open_url(CONFIG.LATEST_APK_VERSION_TEXT_FILE).text)
+        is_new_apk_version_available = LATEST_APK_VERSION_TEXT_FILE > CONFIG.KODIV
+        
+        if is_new_apk_version_available:
+        
+            yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                               f'[COLOR yellow][B]קיים עדכון גרסה לאפליקציה שלנו![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR red]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]\nהאם ברצונך לעדכן את האפליקציה?',
+                               nolabel='[B][COLOR red]מאוחר יותר[/COLOR][/B]',
+                               yeslabel='[B][COLOR springgreen]עדכן[/COLOR][/B]')
+                               
+            if yes_pressed:
+            
+                yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                                   f'[B]משתמש בסטרימר Android TV? בחר את אפליקציית .Downloader\nמשתמש במכשיר אנדרואיד אחר ולא מותקן לך Downloader? בחר "מנהל קבצים אחר".[/B]',
+                                   nolabel='[B][COLOR orange]Downloader[/COLOR][/B]',
+                                   yeslabel='[B]מנהל קבצים אחר[/B]') 
+                                   
+                if yes_pressed:
+                    url = f'plugin://{CONFIG.ADDON_ID}/?mode=apk'
+                    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
+                    
+                else:
+                    # Check if Downloader app installed.
+                    if not check_if_downloader_app_installed():
+                        dialog.ok(CONFIG.ADDONTITLE, f'[B]אפליקציית Downloader לא מותקנת.[/B]')
+                        return
+                    
+                    msg = f"כעת תיפתח אפליקציית Downloader. יש להזין את המספר:\n[COLOR orange]{CONFIG.APK_DOWNLOADER_CODE}[/COLOR]\nולבחור את גרסת ה-APK (32/64 ביט) המתאימה למכשיר שלכם.\n[COLOR limegreen]עכשיו זה הזמן לרשום/לצלם את המספר![/COLOR]"
+                    from resources.libs.gui import window
+                    window.show_notification_with_downloader_image(msg)
+                    xbmc.executebuiltin('StartAndroidActivity(com.esaba.downloader)')
+                    
+        elif apk_update_check_manual:
+            dialog.ok(CONFIG.ADDONTITLE, f'[COLOR yellow][B]לא קיים עדכון לאפליקציה![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR limegreen]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]')
+                         
+    except Exception as e:
+        logging.log(f'[apk_update_check] Exception: {str(e)}')
+        if apk_update_check_manual:
+            dialog.ok(CONFIG.ADDONTITLE, f'התרחשה שגיאה:\n{str(e)}')
+##########################################

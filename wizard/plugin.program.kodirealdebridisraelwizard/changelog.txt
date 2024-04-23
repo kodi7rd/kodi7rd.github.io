@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.4.1[/B][/COLOR]
+* Add APK update check: 2 options - open Downloader manually, or download through Kodi to externalFX
 [COLOR yellow][B]v1.4.0[/B][/COLOR]
 * Add auto prompt for APK update check on Kodi startup.
 * Cancel downloader as default fx app. must configure on inital setup.

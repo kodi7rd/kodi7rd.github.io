@@ -535,6 +535,60 @@ def show_notification(msg, test=False):
     del notify
 
 
+#####################################
+# KODI-RD-IL
+def show_notification_with_downloader_image(msg):
+    class Notification(xbmcgui.WindowXMLDialog):
+
+        def __init__(self, *args, **kwargs):
+            self.msg = kwargs['msg']
+
+        def onInit(self):
+            self.image = 101
+            self.titlebox = 102
+            self.titleimage = 103
+            self.textbox = 104
+            self.scroller = 105
+            self.dismiss = 201
+            # self.remindme = 202
+            self.show_dialog()
+
+        def show_dialog(self):
+            self.testimage = os.path.join(CONFIG.ART, 'text.png')
+            self.getControl(self.image).setImage(CONFIG.BACKGROUND)
+            self.getControl(self.image).setColorDiffuse('9FFFFFFF')
+            msg_text = CONFIG.THEME6.format(self.msg)
+            self.getControl(self.textbox).setText(msg_text)
+            self.setFocusId(self.dismiss)
+            if CONFIG.HEADERTYPE == 'Text':
+                self.getControl(self.titlebox).setLabel(CONFIG.THEME3.format(CONFIG.HEADERMESSAGE))
+            else:
+                self.getControl(self.titleimage).setImage(CONFIG.HEADERIMAGE)
+
+        # def do_remind(self):
+            # self.close()
+
+        def do_dismiss(self):
+            self.close()
+
+        def onAction(self, action):
+            if action.getId() in BACK_ACTIONS:
+                self.do_dismiss()
+
+        def onClick(self, controlid):
+            if controlid == self.dismiss:
+                self.do_dismiss()
+            # elif controlid == self.remindme:
+                # self.do_remind()
+
+    xbmc.executebuiltin('Skin.SetString(headertexttype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Text' else 'false'))
+    xbmc.executebuiltin('Skin.SetString(headerimagetype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Image' else 'false'))
+    notify = Notification("NotificationsWithDownloaderImage.xml", CONFIG.ADDON_PATH, 'Default', msg=msg)
+    notify.doModal()
+    del notify
+#####################################
+
+
 def show_log_viewer(window_title="Viewing Log File", window_msg=None, log_file=None, ext_buttons=False):
     class LogViewer(xbmcgui.WindowXMLDialog):
         def __init__(self, *args, **kwargs):

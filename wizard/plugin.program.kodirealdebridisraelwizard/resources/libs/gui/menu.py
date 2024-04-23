@@ -77,9 +77,9 @@ def prompt_config_for_file_explorer_if_needed():
     
     if fm == 0 and 'com.android.documentsui' not in apps:
         dialog = xbmcgui.Dialog()
-        choose = dialog.yesno(CONFIG.ADDONTITLE, 'נראה כי לא מוגדר אפליקציית מנהל קבצים עבור ההתקנה. האם ברצונך להגדיר כעת?\n[B]שים לב! אם גרסת האנדרואיד שלך היא 11 ומעלה והגדרת את אפליקציית Downloader והקובץ לא מופיע בה - הגדר מנהל קבצים אחר ויעבוד.[/B]')
+        choose = dialog.yesno(CONFIG.ADDONTITLE, 'נראה כי לא מוגדר אפליקציית מנהל קבצים עבור ההתקנה. האם ברצונך להגדיר כעת?')
         if not choose:
-            dialog.ok(CONFIG.ADDONTITLE, 'לאחר הורדת ה-APK, אם לא קורה כלום, הגדר מנהל קבצים דרך "הגדרת מנהל קבצים להתקנה".\n[B]שים לב! אם גרסת האנדרואיד שלך היא 11 ומעלה והגדרת את אפליקציית Downloader והקובץ לא מופיע בה - הגדר מנהל קבצים אחר ויעבוד.[/B]'.format(CONFIG.ADDONTITLE))
+            dialog.ok(CONFIG.ADDONTITLE, 'לאחר הורדת ה-APK, אם לא קורה כלום, הגדר מנהל קבצים דרך "הגדרת מנהל קבצים להתקנה".'.format(CONFIG.ADDONTITLE))
         else:
             from resources.libs import install
             install.choose_file_manager()

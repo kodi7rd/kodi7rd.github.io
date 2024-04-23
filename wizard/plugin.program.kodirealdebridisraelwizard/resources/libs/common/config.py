@@ -54,7 +54,7 @@ class Config:
         self.APKFILE = uservar.APKFILE
         ###################################
         # KODI-RD-IL
-        self.LATEST_APK_VERSION = uservar.LATEST_APK_VERSION
+        self.LATEST_APK_VERSION_TEXT_FILE = uservar.LATEST_APK_VERSION_TEXT_FILE
         self.APK_DOWNLOADER_CODE = uservar.APK_DOWNLOADER_CODE
         ###################################
         self.YOUTUBETITLE = uservar.YOUTUBETITLE
