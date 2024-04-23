@@ -91,7 +91,7 @@ def get_current_use_manager():
 
     common_file_managers_list = {
         'com.esaba.downloader': 'Downloader',
-        'com.lonelycatgamers.Xplore': 'X-plore',
+        'com.lonelycatgames.Xplore': 'X-plore',
         'com.mobisystems.fileman': 'File Commander',
         'nextapp.fx': 'FX File Explorer',
         'pl.solidexplorer2': 'Solid Explorer'
