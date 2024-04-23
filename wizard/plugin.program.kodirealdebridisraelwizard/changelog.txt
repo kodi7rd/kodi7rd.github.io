@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.3.4[/B][/COLOR]
+* Add support for APK download through Downloader.
+* Disable auto kodi restart on PC on build updates.
 [COLOR yellow][B]v1.3.3[/B][/COLOR]
 * BUG FIX: Auto Quick Update note_id integer fix.
 [COLOR yellow][B]v1.3.2[/B][/COLOR]
