@@ -317,17 +317,17 @@ class Wizard:
     #####################################################
     # KODI-RD-IL
     def restart_kodi(self):
-        if xbmc.getCondVisibility('System.Platform.Windows'):
-            try:
-                import subprocess, xbmcvfs
-                kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
-                kodi_full_path = [os.path.join(kodi_root_path, 'kodi.exe')]
+        # if xbmc.getCondVisibility('System.Platform.Windows'):
+            # try:
+                # import subprocess, xbmcvfs
+                # kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
+                # kodi_full_path = [os.path.join(kodi_root_path, 'kodi.exe')]
                 # KODI-RD-IL Custom Windows software - AppData stored in C:\Kodi + Real Debrid Israel\portable_data
-                if "Kodi + Real Debrid Israel" in kodi_root_path:
-                    kodi_full_path.append('-p')
-                subprocess.Popen(kodi_full_path, shell=True)
-            except:
-                pass
+                # if "Kodi + Real Debrid Israel" in kodi_root_path:
+                    # kodi_full_path.append('-p')
+                # subprocess.Popen(kodi_full_path, shell=True)
+            # except:
+                # pass
         tools.kill_kodi(over=True)
     #####################################################
 
