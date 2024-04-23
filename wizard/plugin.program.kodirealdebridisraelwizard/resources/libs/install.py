@@ -528,13 +528,7 @@ def choose_file_manager():
 def check_if_downloader_app_installed():
 
     apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
-    
-    if 'com.esaba.downloader' not in apps:
-        dialog = xbmcgui.Dialog()
-        dialog.ok(CONFIG.ADDONTITLE, 'אפליקציית Downloader לא מותקנת במכשיר שלך!')
-        return False
-    
-    return True
+    return 'com.esaba.downloader' in apps
 ##########################################
     
     
@@ -549,18 +543,6 @@ def install_apk(name, url):
     
     addon = xbmcaddon.Addon()
     path = addon.getSetting('apk_path')
-    
-    ##########################################
-    # KODI-RD-IL
-    downloader_app_installed = False
-    if check_if_downloader_app_installed():
-        downloader_app_installed = True
-        path = '/storage/emulated/0/Download/Downloader/'
-    ##########################################
-        
-    apk = os.path.basename(url).replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
-    apk = apk if apk.endswith('.apk') else '{}.apk'.format(apk)
-    lib = os.path.join(path, apk)
     
     if not xbmc.getCondVisibility('System.HasAddon(script.kodi.android.update)'):
         from resources.libs.gui import addon_menu
@@ -577,9 +559,16 @@ def install_apk(name, url):
     
     ##########################################
     # KODI-RD-IL
-    if downloader_app_installed:
-        use_manager = 'com.esaba.downloader'
+    use_downloader_app = False
+    if check_if_downloader_app_installed() and use_manager == 'com.esaba.downloader':
+        use_downloader_app = True
+        # Override configured path to Downloader files location
+        path = '/storage/emulated/0/Download/Downloader/'
     ##########################################
+        
+    apk = os.path.basename(url).replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+    apk = apk if apk.endswith('.apk') else '{}.apk'.format(apk)
+    lib = os.path.join(path, apk)
     
     if tools.platform() == 'android':
         redownload = True
@@ -623,13 +612,14 @@ def install_apk(name, url):
         
         ##########################################
         # KODI-RD-IL
-        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files.[/B]' if downloader_app_installed else ''
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files.[/B]' if use_downloader_app else ''
         dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
         ##########################################
         
         
         logging.log('Opening {} with {}'.format(lib, use_manager), level=xbmc.LOGINFO)
-        xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
+        # xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
+        xbmc.executebuiltin('StartAndroidActivity({})'.format(use_manager))
     else:
         logging.log_notify(CONFIG.ADDONTITLE,
                            '[COLOR {0}]שגיאה: לא מכשיר אנדרואיד[/COLOR]'.format(CONFIG.COLOR2))

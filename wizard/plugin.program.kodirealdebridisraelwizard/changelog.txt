@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.3.6[/B][/COLOR]
+* APK installer menu - add settings button to kodi android update addon.
+* Prompt to change file explorer if Downloader app installed + configured.
 [COLOR yellow][B]v1.3.5[/B][/COLOR]
 * Adjust APK download finished dialog by downloader_app_installed bool
 [COLOR yellow][B]v1.3.4[/B][/COLOR]
