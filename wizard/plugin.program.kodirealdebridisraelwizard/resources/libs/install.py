@@ -522,14 +522,6 @@ def choose_file_manager():
     updater.setSetting('File_Manager', '1')
     
     CONFIG.open_settings('script.kodi.android.update', 0, 4, True)
-
-##########################################
-# KODI-RD-IL
-# def check_if_downloader_app_installed():
-
-    # apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
-    # return 'com.esaba.downloader' in apps
-##########################################
     
     
 def install_apk(name, url):
@@ -613,7 +605,7 @@ def install_apk(name, url):
         
         ##########################################
         # KODI-RD-IL
-        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else f'\n[B]כעת ייפתח מנהל הקבצים שהגדרת:\n{use_manager}[/B]'
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, הגדר מנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else f'\n[B]כעת ייפתח מנהל הקבצים שהגדרת:\n{use_manager}[/B]'
         dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
         ##########################################
         

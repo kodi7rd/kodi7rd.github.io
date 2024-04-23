@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.4.0[/B][/COLOR]
+* Add auto prompt for APK update check on Kodi startup.
+* Cancel downloader as default fx app. must configure on inital setup.
 [COLOR yellow][B]v1.3.9[/B][/COLOR]
 * install.py - show configured file explorer if not downloader.
 [COLOR yellow][B]v1.3.8[/B][/COLOR]

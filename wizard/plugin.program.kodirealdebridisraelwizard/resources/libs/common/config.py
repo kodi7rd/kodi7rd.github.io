@@ -52,6 +52,11 @@ class Config:
         self.BUILDFILE = uservar.BUILDFILE
         self.UPDATECHECK = uservar.UPDATECHECK
         self.APKFILE = uservar.APKFILE
+        ###################################
+        # KODI-RD-IL
+        self.LATEST_APK_VERSION = uservar.LATEST_APK_VERSION
+        self.APK_DOWNLOADER_CODE = uservar.APK_DOWNLOADER_CODE
+        ###################################
         self.YOUTUBETITLE = uservar.YOUTUBETITLE
         self.YOUTUBEFILE = uservar.YOUTUBEFILE
         self.ADDONFILE = uservar.ADDONFILE

@@ -159,6 +159,27 @@ def auto_quick_update():
                 CONFIG.set_setting('notedismiss', 'true')
                 return
             Wizard().force_close_kodi_in_5_seconds(dialog_header="עדכון מהיר הסתיים בהצלחה")
+            
+def apk_update_prompt():
+    try:
+        LATEST_APK_VERSION = float(tools.open_url(CONFIG.LATEST_APK_VERSION).text)
+        is_new_apk_version_available = LATEST_APK_VERSION > CONFIG.KODIV
+        
+        if is_new_apk_version_available:
+        
+            APK_DOWNLOADER_CODE = int(tools.open_url(CONFIG.APK_DOWNLOADER_CODE).text)
+            dialog = xbmcgui.Dialog()
+            
+            yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                               f'[COLOR yellow][B]קיים עדכון גרסה לאפליקציה שלנו![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR red]{CONFIG.KODIV}[/COLOR][/B] | גרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION}[/COLOR][/B]\nבאפשרותך להתקין דרך אפליקציית Downloader עם הזנת הקוד: [B]{APK_DOWNLOADER_CODE}[/B], או ללחוץ "עדכן" ולהוריד את האפליקציה המעודכנת ישירות.',
+                               nolabel='[B][COLOR red]מאוחר יותר[/COLOR][/B]',
+                               yeslabel='[B][COLOR springgreen]עדכן[/COLOR][/B]')
+                               
+            if yes_pressed:
+                url = f'plugin://{CONFIG.ADDON_ID}/?mode=apk'
+                xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
+    except:
+        pass
 
 
 def installed_build_check():
@@ -441,13 +462,11 @@ if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installe
 else:
     logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
     
-# KOD-RD-IL - TODO: New APK version check on startup
+# KOD-RD-IL - New APK version check on startup
+if tools.platform() == 'android' and CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
+    apk_update_prompt()
 
-# SHOW NOTIFICATIONS
-if CONFIG.ENABLE_NOTIFICATION == 'Yes':
-    show_notification()
-else:
-    logging.log('[Notifications] Not Enabled', level=xbmc.LOGINFO)
+
 
 # INSTALLED BUILD CHECK
 if CONFIG.get_setting('installed') == 'true':
@@ -470,15 +489,14 @@ if CONFIG.get_setting('keepdebrid') == 'true':
 else:
     logging.log("[Debrid Data] Not Enabled", level=xbmc.LOGINFO)
 
-# AUTO CLEAN
-if CONFIG.get_setting('autoclean') == 'true':
-    logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
-    auto_clean()
-else:
-    logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
-
 
 ###################UNUSED####################
+# SHOW NOTIFICATIONS
+# if CONFIG.ENABLE_NOTIFICATION == 'Yes':
+    # show_notification()
+# else:
+    # logging.log('[Notifications] Not Enabled', level=xbmc.LOGINFO)
+    
 # SAVE LOGIN
 # if CONFIG.get_setting('keeplogin') == 'true':
     # logging.log("[Login Info] Started", level=xbmc.LOGINFO)
@@ -501,4 +519,11 @@ else:
     # restore.restore('binaries')
 # else:
     # logging.log("[Binary Detection] Eligible Binary Addons to Reinstall", level=xbmc.LOGINFO)
+
+# AUTO CLEAN
+# if CONFIG.get_setting('autoclean') == 'true':
+    # logging.log("[Auto Clean Up] Started", level=xbmc.LOGINFO)
+    # auto_clean()
+# else:
+    # logging.log('[Auto Clean Up] Not Enabled', level=xbmc.LOGINFO)
     
