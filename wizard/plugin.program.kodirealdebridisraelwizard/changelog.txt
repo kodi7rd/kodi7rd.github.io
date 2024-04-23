@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.3.5[/B][/COLOR]
+* Adjust APK download finished dialog by downloader_app_installed bool
 [COLOR yellow][B]v1.3.4[/B][/COLOR]
 * Add support for APK download through Downloader.
 * Disable auto kodi restart on PC on build updates.
