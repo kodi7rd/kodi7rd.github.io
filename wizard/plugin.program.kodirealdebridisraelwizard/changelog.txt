@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.3.8[/B][/COLOR]
+* "downloader_installed_text" text change.
 [COLOR yellow][B]v1.3.7[/B][/COLOR]
 * APK installer menu - add settings button to kodi android update addon.
 [COLOR yellow][B]v1.3.6[/B][/COLOR]

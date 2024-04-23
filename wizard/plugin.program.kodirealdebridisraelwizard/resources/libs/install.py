@@ -613,7 +613,7 @@ def install_apk(name, url):
         
         ##########################################
         # KODI-RD-IL
-        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else ''
+        downloader_installed_text = '\n[B]כעת תיפתח אפליקציית Downloader, יש להתקין את ה-APK מתוך הלשונית Files. שים לב! אם הקובץ לא מופיע שם ואתה בגרסת אנדרואיד 11 ומעלה, השתמש במנהל קבצים אחר ויעבוד.[/B]' if use_downloader_app else '\n[B]כעת ייפתח מנהל הקבצים שהגדרת.[/B]'
         dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{downloader_installed_text}')
         ##########################################
         
