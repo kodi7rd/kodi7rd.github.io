@@ -440,6 +440,8 @@ if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installe
     xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
 else:
     logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
+    
+# KOD-RD-IL - TODO: New APK version check on startup
 
 # SHOW NOTIFICATIONS
 if CONFIG.ENABLE_NOTIFICATION == 'Yes':

@@ -80,15 +80,15 @@ class MainMenu:
             directory.add_dir('None', {'mode': 'builds'}, themeit=CONFIG.THEME4)
         directory.add_separator()
         directory.add_dir('התקן בילד', {'mode': 'builds'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME1)
-        #if (tools.platform() == 'android' or CONFIG.DEVELOPER == 'true'):
-        #    directory.add_dir('APK Installer', {'mode': 'apk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
         #if tools.open_url(CONFIG.ADDONFILE, check=True) or os.path.exists(os.path.join(CONFIG.ADDON_PATH, 'resources', 'text', 'addons.json')):
         #    directory.add_dir('Addon Installer', {'mode': 'addons'}, icon=CONFIG.ICONADDONS, themeit=CONFIG.THEME1)
-        if tools.open_url(CONFIG.YOUTUBEFILE, check=True) and not CONFIG.YOUTUBETITLE == '':
-            directory.add_dir(CONFIG.YOUTUBETITLE, {'mode': 'youtube'}, icon=CONFIG.ICONYOUTUBE, themeit=CONFIG.THEME1)
+        # if tools.open_url(CONFIG.YOUTUBEFILE, check=True) and not CONFIG.YOUTUBETITLE == '':
+            # directory.add_dir(CONFIG.YOUTUBETITLE, {'mode': 'youtube'}, icon=CONFIG.ICONYOUTUBE, themeit=CONFIG.THEME1)
         directory.add_dir('תפריט שמירת נתונים', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-        if CONFIG.HIDECONTACT == 'No':
-            directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
+        if (tools.platform() == 'android' or CONFIG.DEVELOPER == 'true'):
+            directory.add_dir('APK התקנת', {'mode': 'apk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
+        # if CONFIG.HIDECONTACT == 'No':
+            # directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
         directory.add_separator()
         directory.add_dir('תחזוקה', {'mode': 'maint'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
         #directory.add_file('Upload Log File', {'mode': 'uploadlog'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
