@@ -2,8 +2,8 @@
     <setting id="Enable_Debugging">true</setting>
     <setting id="Disable_Maintenance">true</setting>
     <setting id="Disable_Cache">false</setting>
-    <setting id="File_Manager" default="true">0</setting>
-    <setting id="Custom_Manager" default="true" />
+    <setting id="File_Manager">1</setting>
+    <setting id="Custom_Manager">com.esaba.downloader</setting>
     <setting id="LastURL" default="true" />
     <setting id="LastPath" default="true" />
     <setting id="Platform" default="true" />
