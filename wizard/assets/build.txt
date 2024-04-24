@@ -1,6 +1,6 @@
 id="plugin.program.kodirealdebridisraelwizard"
-version="1.4.1"
-zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-1.4.1.zip"
+version="1.4.2"
+zip="https://kodi7rd.github.io/wizard/plugin.program.kodirealdebridisraelwizard-1.4.2.zip"
 
 name="קודי ריל דבריד ישראל"
 version="1.0.0"
