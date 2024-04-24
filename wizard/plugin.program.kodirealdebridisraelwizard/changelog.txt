@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.4.3[/B][/COLOR]
+* APK Update prompt - Remove TV Bro support - only Downloader/Google Chrome.
+* Always show Downloader code notification window before checking if installed.
 [COLOR yellow][B]v1.4.2[/B][/COLOR]
 * APK Update prompt - Open Downloader / Browser (Chrome/TV Bro) instead of wizard's APK menu.
 [COLOR yellow][B]v1.4.1[/B][/COLOR]
