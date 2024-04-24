@@ -966,4 +966,10 @@ msgctxt "#700041"
 msgid "Kodi Version"
 msgstr "גרסת קודי"
 
+# APK Update Check In Power Menu - DialogButtonMenu.xml
+
+msgctxt "#700042"
+msgid "APK Update Check"
+msgstr "עדכון גרסת APK"
+
 ################################################################
