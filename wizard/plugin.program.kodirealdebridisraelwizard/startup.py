@@ -418,6 +418,12 @@ if CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
 if CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false' and not xbmc.Player().isPlaying():
     build_skin_switch_prompt()
 #####################################
+    
+# KOD-RD-IL - New APK version check on startup
+# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
+if tools.platform() == 'android' and CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
+    from resources.libs.wizard import apk_update_check
+    apk_update_check(apk_update_check_manual="false")
 
 # BUILD UPDATE CHECK
 buildcheck = CONFIG.get_setting('nextbuildcheck')
@@ -436,16 +442,27 @@ if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installe
     logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
     CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
     CONFIG.set_setting('installed', 'ignored')
-    url = 'plugin://{0}/?mode=builds'.format(CONFIG.ADDON_ID)
-    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
+    
+    # Taken from build_menu.py - get_listing()
+    import re
+    response = tools.open_url(CONFIG.BUILDFILE)
+    link = tools.clean_text(response.text)
+        
+    total, *_ = check.build_count()
+    match = re.compile('name="(.+?)".+?ersion="(.+?)".+?rl="(.+?)".+?ui="(.+?)".+?odi="(.+?)".+?heme="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?dult="(.+?)".+?escription="(.+?)"').findall(link)
+    
+    # If only one build exists - Auto install build - without manual prompt
+    if total == 1:
+        SINGLE_BUILD_NAME = match[0][0]
+        from resources.libs.wizard import Wizard
+        Wizard().build(SINGLE_BUILD_NAME, over=True)
+        
+    # If more than 1 build - show build menu
+    else:
+        url = 'plugin://{0}/?mode=builds'.format(CONFIG.ADDON_ID)
+        xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
 else:
     logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
-    
-# KOD-RD-IL - New APK version check on startup
-# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
-if tools.platform() == 'android' and CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
-    from resources.libs.wizard import apk_update_check
-    apk_update_check(apk_update_check_manual="false")
 
 
 # INSTALLED BUILD CHECK

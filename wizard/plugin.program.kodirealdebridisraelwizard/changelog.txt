@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.4.4[/B][/COLOR]
+* AUTO BUILD INSTALL ON FIRST LAUNCH - Auto install single build (no prompt), else - open builds menu
 [COLOR yellow][B]v1.4.3[/B][/COLOR]
 * APK Update prompt - Remove TV Bro support - only Downloader/Google Chrome.
 * Always show Downloader code notification window before checking if installed.
