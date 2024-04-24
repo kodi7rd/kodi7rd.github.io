@@ -56,6 +56,15 @@
 						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=build_switch_skin&quot;)</onclick>
 						<visible>System.ShowExitButton</visible>
 					</item>
+					<item>
+						<!-- APK Update Check -->
+						<label>[B][COLOR blue]$LOCALIZE[700044][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=apk_update_check&amp;apk_update_check_manual=true&quot;)</onclick>
+						<!-- Android only -->
+						<visible>System.Platform.Android</visible>
+						<visible>System.ShowExitButton</visible>
+					</item>
 					<!-- ##################### -->
 				</content>
 			</control>
