@@ -557,10 +557,10 @@ def build_switch_skin():
             
 ##########################################
 # KODI-RD-IL - APK UPDATE CHECK
-def check_if_downloader_app_installed():
+def check_if_app_installed(app_package_id):
     import xbmcvfs
     apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
-    return 'com.esaba.downloader' in apps
+    return app_package_id in apps
 
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
 def apk_update_check(apk_update_check_manual="false"):
@@ -583,24 +583,65 @@ def apk_update_check(apk_update_check_manual="false"):
             if yes_pressed:
             
                 yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
-                                   f'[B]משתמש בסטרימר Android TV? בחר את אפליקציית .Downloader\nמשתמש במכשיר אנדרואיד אחר ולא מותקן לך Downloader? בחר "מנהל קבצים אחר".[/B]',
-                                   nolabel='[B][COLOR orange]Downloader[/COLOR][/B]',
-                                   yeslabel='[B]מנהל קבצים אחר[/B]') 
+                                   f'[B]משתמש בסטרימר Android TV? בחר את אפליקציית .[COLOR orange]Downloader[/COLOR]\nמשתמש בסטרימר/מכשיר אנדרואיד רגיל? בחר דפדפן.\n[COLOR yellow]דפדנים נתמכים: Google Chrome, TV Bro[/COLOR][/B]',
+                                   nolabel='[B][COLOR orange]Downloader (ATV)[/COLOR][/B]',
+                                   yeslabel='[B][COLOR yellow]דפדפן[/COLOR][/B]') 
                                    
                 if yes_pressed:
-                    url = f'plugin://{CONFIG.ADDON_ID}/?mode=apk'
-                    xbmc.executebuiltin('ActivateWindow(Programs, {0}, return)'.format(url))
+    
+                    # First Chrome (Android) then TV Bro (Android TV)
+                    android_apps_browsers_list = ['com.android.chrome', 'com.phlox.tvwebbrowser']
+                    installed_browser_package_id = None
+
+                    # Loop through each browser in the list
+                    for browser_package_id in android_apps_browsers_list:
+                        # Check if the browser is installed
+                        if check_if_app_installed(browser_package_id):
+                            installed_browser_package_id = browser_package_id
+                            break
+                            
+                    if not installed_browser_package_id:
+                        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                                           f'[B]לא מותקן דפדפן תומך!\n[COLOR yellow]דפדנים נתמכים: Google Chrome, TV Bro[/COLOR][/B]',
+                                           nolabel='[B]קח אותי לחנות[/B]',
+                                           yeslabel='[B]ביטול[/B]')
+                        if yes_pressed:
+                            return
+                        else:
+                            # Open Google Play Store
+                            xbmc.executebuiltin('StartAndroidActivity(com.android.vending)')
+                            return
+                        
+                    app      = installed_browser_package_id
+                    intent   = 'android.intent.action.VIEW'
+                    dataType = ''
+                    dataURI  = CONFIG.APK_DOWNLOAD_URL
+                    xbmc.executebuiltin(f'StartAndroidActivity("{app}", "{intent}", "{dataType}", "{dataURI}")')
                     
                 else:
+                    downloader_app_packge_id = 'com.esaba.downloader'
+                    
                     # Check if Downloader app installed.
-                    if not check_if_downloader_app_installed():
-                        dialog.ok(CONFIG.ADDONTITLE, f'[B]אפליקציית Downloader לא מותקנת.[/B]')
-                        return
+                    if not check_if_app_installed(downloader_app_packge_id):
+                        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                                           '[B]אפליקציית [COLOR orange]Downloader[/COLOR] לא מותקנת.[/B]',
+                                           nolabel='[B]קח אותי לחנות[/B]',
+                                           yeslabel='[B]ביטול[/B]')
+                        if yes_pressed:
+                            return
+                        else:
+                            # Open Google Play Store on Downloader app.
+                            app      = 'com.android.vending'
+                            intent   = 'android.intent.action.VIEW'
+                            dataType = ''
+                            dataURI  = f'https://play.google.com/store/apps/details?id={downloader_app_packge_id}'
+                            xbmc.executebuiltin(f'StartAndroidActivity("{app}", "{intent}", "{dataType}", "{dataURI}")')
+                            return
                     
                     msg = f"כעת תיפתח אפליקציית Downloader. יש להזין את המספר:\n[COLOR orange]{CONFIG.APK_DOWNLOADER_CODE}[/COLOR]\nולבחור את גרסת ה-APK (32/64 ביט) המתאימה למכשיר שלכם.\n[COLOR limegreen]עכשיו זה הזמן לרשום/לצלם את המספר![/COLOR]"
                     from resources.libs.gui import window
                     window.show_notification_with_downloader_image(msg)
-                    xbmc.executebuiltin('StartAndroidActivity(com.esaba.downloader)')
+                    xbmc.executebuiltin(f'StartAndroidActivity({downloader_app_packge_id})')
                     
         elif apk_update_check_manual:
             dialog.ok(CONFIG.ADDONTITLE, f'[COLOR yellow][B]לא קיים עדכון לאפליקציה![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR limegreen]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]')

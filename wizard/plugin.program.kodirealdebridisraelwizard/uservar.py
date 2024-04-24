@@ -27,6 +27,7 @@ APKFILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_apk.txt'
 # KODI-RD-IL
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_latest_apk_version.txt'
 APK_DOWNLOADER_CODE = '864332'
+APK_DOWNLOAD_URL = 'https://kodi7rd.github.io/apk'
 # Text File with Youtube Videos urls.  Leave as 'http://' to ignore
 YOUTUBETITLE = ''
 YOUTUBEFILE = 'http://'
