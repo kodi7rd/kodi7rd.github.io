@@ -94,21 +94,14 @@
 		</category>
 		<!-- MoviesOnlineDates -->
 		<category id="MoviesOnlineDates" label="400019" help="">
-			<group id="1" label="400019">
-				<setting id="search_MoviesOnlineDates_when_no_results" type="boolean" label="400022" help="">
-					<level>0</level>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
-			<group id="2" label="400020">
+			<group id="1" label="400020">
 				<setting id="show_MoviesOnlineDates_movie_search" type="boolean" label="400017" help="">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
 			</group>
-			<group id="3" label="400020">
+			<group id="2" label="400020">
 				<setting id="show_MoviesOnlineDates_upcoming_this_month" type="boolean" label="400018" help="">
 					<level>0</level>
 					<default>true</default>

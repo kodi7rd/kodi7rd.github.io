@@ -364,25 +364,6 @@ class Sources():
 		if self.background: return notification('%s %s' % (ls(32801), ls(32760)), 5000)
 		notification(32760, 2000)
 
-		############KODI-RD-IL###################
-		try:
-			search_MoviesOnlineDates_when_no_results_setting = get_setting('search_MoviesOnlineDates_when_no_results', 'true') == 'true'
-			
-			if (
-				search_MoviesOnlineDates_when_no_results_setting
-				and self.media_type == 'movie'
-				# Failure conditions from activate_external_providers(self) function - If no scraper enabled / no Debrid account configured.
-				and (self.ext_folder or self.ext_name)
-				and self.debrid_torrent_enabled
-				and self.import_external_scrapers()
-				and self.external_providers
-			):
-				from kodirdil.MoviesOnlineDates import MoviesOnlineDates
-				return MoviesOnlineDates.MoviesOnlineDates_parser(search_movie_bool=True, title=self.meta.get('title'), original_title=self.meta.get('original_title', None))
-		except:
-			pass
-		#########################################
-
 	def _update_meta(self):
 		self.meta.update({'media_type': self.media_type, 'season': self.season, 'episode': self.episode, 'background': self.background, 'custom_title': self.custom_title,
 						'custom_year': self.custom_year, 'custom_season': self.custom_season, 'custom_episode': self.custom_episode})

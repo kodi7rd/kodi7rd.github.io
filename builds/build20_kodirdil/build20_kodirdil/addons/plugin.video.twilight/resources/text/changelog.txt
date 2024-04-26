@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.59[/B][/COLOR]
+- Remove MoviesOnlineDates automatic search when no Movie results are found.
+
 [COLOR dodgerblue][B]Version 3.2.58[/B][/COLOR]
 - Set default timeout for requests (10s).
 

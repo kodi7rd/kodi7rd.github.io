@@ -4062,10 +4062,6 @@ msgctxt "#400021"
 msgid "הצג מידע עבור החודש הנוכחי בלבד"
 msgstr ""
 
-msgctxt "#400022"
-msgid "הצג מידע זמין כאשר אין מקורות לסרט שנבחר"
-msgstr ""
-
 # For settings menu - Provider Accounts
 
 msgctxt "#400023"
