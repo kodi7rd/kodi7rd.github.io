@@ -4072,6 +4072,20 @@ msgctxt "#400024"
 msgid "Notify Only Under (Days Until Account Expiration)"
 msgstr ""
 
+# Account Manager (navigator.py)
+
+msgctxt "#400025"
+msgid " [B](Paid Subscription)[/B]"
+msgstr ""
+
+msgctxt "#400026"
+msgid " [B](Track Watch Progress)[/B]"
+msgstr ""
+
+msgctxt "#400027"
+msgid " [B](Free Trial)[/B]"
+msgstr ""
+
 ###################################################################################################################################
 
 msgctxt "#33016"

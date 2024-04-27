@@ -44,6 +44,14 @@ msgctxt "#32059"
 msgid "Revoke Authorization"
 msgstr "מחובר (לחץ לניתוק)"
 
+msgctxt "#32515"
+msgid "Sources Folders"
+msgstr "תיקיית מקורות"
+
+msgctxt "#33104"
+msgid "Local"
+msgstr "מקומי"
+
 # Dialog Messages
 
 msgctxt "#32736"
@@ -224,6 +232,20 @@ msgstr "Notify Real Debrid Account Status on Startup"
 msgctxt "#400024"
 msgid "Notify Only Under (Days Until Account Expiration)"
 msgstr "Notify Only Under (Days Until Account Expiration)"
+
+# CONTINUE Account Manager (navigator.py)
+
+msgctxt "#400025"
+msgid " [B](Paid Subscription)[/B]"
+msgstr " [B](מנוי בתשלום)[/B]"
+
+msgctxt "#400026"
+msgid " [B](Track Watch Progress)[/B]"
+msgstr " [B](מעקב צפייה)[/B]"
+
+msgctxt "#400027"
+msgid " [B](Free Trial)[/B]"
+msgstr " [B](ניסיון חינם)[/B]"
 
 # real_debrid.py - Real Debrid Account Info
 

@@ -229,11 +229,18 @@ class Navigator:
 		pm_info = (revoke_ins % pm_str, 'premiumize_green') if pm_active else (auth_ins % pm_str, 'premiumize_red')
 		ad_info = (revoke_ins % ad_str, 'alldebrid_green') if ad_active else (auth_ins % ad_str, 'alldebrid_red')
 		folder_icon = 'folder_green' if folder_active else 'folder_red'
-		self.add({'mode': 'auth_accounts_choice', 'service': 'realdebrid', 'active': rd_active, 'isFolder': 'false'}, rd_info[0], rd_info[1])
-		self.add({'mode': 'auth_accounts_choice', 'service': 'trakt', 'active': trakt_active, 'isFolder': 'false'}, trakt_info[0], trakt_info[1])
-		self.add({'mode': 'auth_accounts_choice', 'service': 'alldebrid', 'active': ad_active, 'isFolder': 'false'}, ad_info[0], ad_info[1])
-		self.add({'mode': 'auth_accounts_choice', 'service': 'premiumize', 'active': pm_active, 'isFolder': 'false'}, pm_info[0], pm_info[1])
-		# self.add({'mode': 'navigator.sources_folders', 'action': 'set'}, local_source_str, folder_icon)
+
+		############KODI-RD-IL###################
+		twilight_extra_rd_pm_info = ls(400025)
+		twilight_extra_trakt_info = ls(400026)
+		twilight_extra_ad_info = ls(400027)
+		#########################################
+
+		self.add({'mode': 'auth_accounts_choice', 'service': 'realdebrid', 'active': rd_active, 'isFolder': 'false'}, rd_info[0] + twilight_extra_rd_pm_info, rd_info[1])
+		self.add({'mode': 'auth_accounts_choice', 'service': 'trakt', 'active': trakt_active, 'isFolder': 'false'}, trakt_info[0] + twilight_extra_trakt_info, trakt_info[1])
+		self.add({'mode': 'auth_accounts_choice', 'service': 'alldebrid', 'active': ad_active, 'isFolder': 'false'}, ad_info[0] + twilight_extra_ad_info, ad_info[1])
+		self.add({'mode': 'auth_accounts_choice', 'service': 'premiumize', 'active': pm_active, 'isFolder': 'false'}, pm_info[0] + twilight_extra_rd_pm_info, pm_info[1])
+		self.add({'mode': 'navigator.sources_folders', 'action': 'set'}, local_source_str, folder_icon)
 		self.end_directory()
 
 	def maintenance(self):
