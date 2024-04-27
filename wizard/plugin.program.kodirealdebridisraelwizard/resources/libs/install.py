@@ -523,7 +523,7 @@ def choose_file_manager():
     
     CONFIG.open_settings('script.kodi.android.update', 0, 4, True)
     
-    
+
 def install_apk(name, url):
     from resources.libs.downloader import Downloader
     from resources.libs.common import logging
@@ -535,6 +535,9 @@ def install_apk(name, url):
     
     addon = xbmcaddon.Addon()
     path = addon.getSetting('apk_path')
+    apk = os.path.basename(url).replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+    apk = apk if apk.endswith('.apk') else '{}.apk'.format(apk)
+    lib = os.path.join(path, apk)
     
     if not xbmc.getCondVisibility('System.HasAddon(script.kodi.android.update)'):
         from resources.libs.gui import addon_menu
@@ -549,48 +552,37 @@ def install_apk(name, url):
     custom_manager = updater.getSetting('Custom_Manager')
     use_manager = {0: 'com.android.documentsui', 1: custom_manager}[file_manager]
     
-    ##########################################
-    # KODI-RD-IL
-    if use_manager == 'com.esaba.downloader':
-        # Override configured path to Downloader files location
-        path = '/storage/emulated/0/Download/Downloader/'
-    ##########################################
-        
-    apk = os.path.basename(url).replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
-    apk = apk if apk.endswith('.apk') else '{}.apk'.format(apk)
-    lib = os.path.join(path, apk)
-    
     if tools.platform() == 'android':
         redownload = True
         yes = True
         if os.path.exists(lib):
-            redownload = dialog.yesno(CONFIG.ADDONTITLE, 'הקובץ [COLOR {}]{}[/COLOR] כבר קיים. האם ברצונך להתקין אותו או להוריד אותו שוב?'.format(CONFIG.COLOR1, apk),
-                               yeslabel="[B]הורד שוב[/B]",
-                               nolabel="[B]התקן את ה-APK[/B]")
+            redownload = dialog.yesno(CONFIG.ADDONTITLE, '[COLOR {}]{}[/COLOR] already exists. Would you like to redownload it?'.format(CONFIG.COLOR1, apk),
+                               yeslabel="[B]Redownload[/B]",
+                               nolabel="[B]Install[/B]")
             yes = False
         else:
             yes = dialog.yesno(CONFIG.ADDONTITLE,
-                                   "[COLOR {0}]האם ברצונך להוריד את: ".format(CONFIG.COLOR2)
+                                   "[COLOR {0}]Would you like to download and install: ".format(CONFIG.COLOR2)
                                    +'\n'+"[COLOR {0}]{1}[/COLOR]".format(CONFIG.COLOR1, name),
-                                   yeslabel="[B][COLOR springgreen]הורד[/COLOR][/B]",
-                                   nolabel="[B][COLOR red]ביטול[/COLOR][/B]")
+                                   yeslabel="[B][COLOR springgreen]Download[/COLOR][/B]",
+                                   nolabel="[B][COLOR red]Cancel[/COLOR][/B]")
                                    
             if not yes:
                 logging.log_notify(CONFIG.ADDONTITLE,
-                               '[COLOR {0}]ההתקנה בוטלה![/COLOR]'.format(CONFIG.COLOR2))
+                               '[COLOR {0}]ERROR: Install Cancelled[/COLOR]'.format(CONFIG.COLOR2))
                 return
         
         if yes or redownload:
             response = tools.open_url(url, check=True)
             if not response:
                 logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]הקישור ל-APK לא תקין![/COLOR]'.format(CONFIG.COLOR2))
+                                   '[COLOR {0}]APK Installer: Invalid Apk Url![/COLOR]'.format(CONFIG.COLOR2))
                 return
                 
             progress_dialog.create(CONFIG.ADDONTITLE,
-                          '[COLOR {0}][B]מוריד:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, apk)
+                          '[COLOR {0}][B]Downloading:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, apk)
                           +'\n'+''
-                          +'\n'+'נא המתן')
+                          +'\n'+'Please Wait')
             
             try:
                 os.remove(lib)
@@ -599,16 +591,11 @@ def install_apk(name, url):
             Downloader().download(url, lib)
             xbmc.sleep(100)
             progress_dialog.close()
-        
-        ##########################################
-        # KODI-RD-IL
-        use_manager_text = f'\n[B]כעת ייפתח מנהל הקבצים שהגדרת:\n{use_manager}[/B]'
-        dialog.ok(CONFIG.ADDONTITLE, f'הקובץ [COLOR {CONFIG.COLOR1}]{apk}[/COLOR] ירד בהצלחה לנתיב:\n[COLOR {CONFIG.COLOR1}]{path}[/COLOR]{use_manager_text}')
-        ##########################################
-        
+                
+        dialog.ok(CONFIG.ADDONTITLE, '[COLOR {}]{}[/COLOR] downloaded to [COLOR {}]{}[/COLOR]. If installation doesn\'t start by itself, navigate to that location to install the APK.'.format(CONFIG.COLOR1, apk, CONFIG.COLOR1, path))
         
         logging.log('Opening {} with {}'.format(lib, use_manager), level=xbmc.LOGINFO)
         xbmc.executebuiltin('StartAndroidActivity({},,,"content://{}")'.format(use_manager, lib))
     else:
         logging.log_notify(CONFIG.ADDONTITLE,
-                           '[COLOR {0}]שגיאה: לא מכשיר אנדרואיד[/COLOR]'.format(CONFIG.COLOR2))
+                           '[COLOR {0}]ERROR: None Android Device[/COLOR]'.format(CONFIG.COLOR2))

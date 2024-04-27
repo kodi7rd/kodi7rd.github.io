@@ -23,7 +23,7 @@ BUILDFILE = 'https://kodi7rd.github.io/wizard/assets/build.txt'
 # 0 being every startup of kodi
 UPDATECHECK = 0
 # Text File with apk info in it.  Leave as 'http://' to ignore
-APKFILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_apk.txt'
+APKFILE = 'http://'
 #########################################################
 # KODI-RD-IL - APK AUTO UPDATE PROMPT
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_latest_apk_version.txt'

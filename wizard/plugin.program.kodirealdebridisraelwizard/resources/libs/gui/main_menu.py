@@ -87,8 +87,8 @@ class MainMenu:
         directory.add_dir('תפריט שמירת נתונים', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
         if (tools.platform() == 'android' or CONFIG.DEVELOPER == 'true'):
             directory.add_separator('APK')
+            # directory.add_dir('APK Installer', {'mode': 'apk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
             directory.add_file('APK עדכון גרסת', {'mode': 'install', 'action': 'apk_update_check', 'apk_update_check_manual': 'true'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME1)
-            directory.add_dir('(דרך מנהל קבצים) APK התקנת', {'mode': 'apk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
         # if CONFIG.HIDECONTACT == 'No':
             # directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
         directory.add_separator()

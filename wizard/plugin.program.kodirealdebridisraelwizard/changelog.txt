@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.4.6[/B][/COLOR]
+* Revert Custom APK Installer code (unnecessary).
 [COLOR yellow][B]v1.4.5[/B][/COLOR]
 * Downloader notification window - switch to remote image "APK_DOWNLOADER_CODE_IMAGE_URL".
 * wizard.py - apk_update_check - Fix yesno dialogs correct buttons order.

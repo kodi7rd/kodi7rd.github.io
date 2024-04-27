@@ -64,79 +64,14 @@ def check_for_fm():
             
     return True
 
-##########################################
-# KODI-RD-IL
-def prompt_config_for_file_explorer_if_needed():
-    try:
-        updater = xbmcaddon.Addon('script.kodi.android.update')
-    except RuntimeError as e:
-        return False
-        
-    fm = int(updater.getSetting('File_Manager'))
-    apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
-    
-    if fm == 0 and 'com.android.documentsui' not in apps:
-        dialog = xbmcgui.Dialog()
-        choose = dialog.yesno(CONFIG.ADDONTITLE, 'נראה כי לא מוגדר אפליקציית מנהל קבצים עבור ההתקנה. האם ברצונך להגדיר כעת?')
-        if not choose:
-            dialog.ok(CONFIG.ADDONTITLE, 'לאחר הורדת ה-APK, אם לא קורה כלום, הגדר מנהל קבצים דרך "הגדרת מנהל קבצים להתקנה".'.format(CONFIG.ADDONTITLE))
-        else:
-            from resources.libs import install
-            install.choose_file_manager()
-##########################################
-
-##########################################
-# KODI-RD-IL
-def get_current_use_manager():
-
-    common_file_managers_list = {
-        'com.esaba.downloader': 'Downloader',
-        'com.lonelycatgames.Xplore': 'X-plore',
-        'com.mobisystems.fileman': 'File Commander',
-        'nextapp.fx': 'FX File Explorer',
-        'pl.solidexplorer2': 'Solid Explorer'
-    }
-    
-    try:
-        updater = xbmcaddon.Addon('script.kodi.android.update')
-    except RuntimeError as e:
-        return 'התרחשה שגיאה'
-        
-    file_manager = int(updater.getSetting('File_Manager'))
-    custom_manager = updater.getSetting('Custom_Manager')
-    use_manager = {0: 'com.android.documentsui', 1: custom_manager}[file_manager]
-    
-    # Translate use_manager to display name using common_file_managers_list
-    use_manager = common_file_managers_list.get(use_manager, use_manager)
-    return f'אפליקציית {use_manager}'
-##########################################
-
-##########################################
-# KODI-RD-IL
-def install_script_kodi_android_update_addon():
-    from resources.libs.common import tools
-    if tools.platform() == 'android' and not xbmc.getCondVisibility('System.HasAddon(script.kodi.android.update)'):
-        from resources.libs.gui import addon_menu
-        addon_menu.install_from_kodi('script.kodi.android.update')
-##########################################
-    
 
 def apk_menu(url=None):
     from resources.libs.common import logging
     from resources.libs.common import tools
 
-    # if check_for_fm():
-        # directory.add_dir('Official Kodi APK\'s', {'mode': 'kodiapk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
-        # directory.add_separator()
-        
-    ##########################################
-    # KODI-RD-IL
-    install_script_kodi_android_update_addon()
-    prompt_config_for_file_explorer_if_needed()
-    directory.add_separator(f'[B]גרסת קודי נוכחית: {CONFIG.KODIV}[/B]')
-    directory.add_file(f'הגדרת מנהל קבצים להתקנה (מוגדר: {get_current_use_manager()})', {'mode': 'settings', 'name': 'script.kodi.android.update'}, icon=CONFIG.ICONSETTINGS, themeit=CONFIG.THEME_YELLOW)
-    directory.add_separator()
-    ##########################################
+    if check_for_fm():
+        directory.add_dir('Official Kodi APK\'s', {'mode': 'kodiapk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
+        directory.add_separator()
 
     response = tools.open_url(CONFIG.APKFILE)
     url_response = tools.open_url(url)
@@ -156,7 +91,7 @@ def apk_menu(url=None):
                         directory.add_dir("[B]{0}[/B]".format(aname), {'mode': 'apk', 'name': aname, 'url': url}, description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME3)
                     else:
                         x += 1
-                        directory.add_file(aname, {'mode': 'apkinstall', 'name': aname, 'url': url}, description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME_YELLOW)
+                        directory.add_file(aname, {'mode': 'apkinstall', 'name': aname, 'url': url}, description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME2)
                     if x == 0:
                         directory.add_file("No addons added to this menu yet!", themeit=CONFIG.THEME2)
             else:
@@ -167,12 +102,6 @@ def apk_menu(url=None):
             directory.add_file('{0}'.format(CONFIG.APKFILE), themeit=CONFIG.THEME3)
     else:
         logging.log("[APK Menu] No APK list added.")
-        
-    ##########################################
-    # KODI-RD-IL
-    directory.add_separator()
-    directory.add_dir('קבצי APK של קודי נקי', {'mode': 'kodiapk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME2)
-    ##########################################
 
 
 def youtube_menu(url=None):
