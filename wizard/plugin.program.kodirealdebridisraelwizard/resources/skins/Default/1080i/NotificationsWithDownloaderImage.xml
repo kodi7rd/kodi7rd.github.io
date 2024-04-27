@@ -40,13 +40,12 @@
                 <visible>Skin.String(headerimagetype)</visible>
             </control>
             <!-- KODI-RD-IL APK Downloader code -->
-            <control type="image">
+            <control type="image" id="999">
                 <centerleft>46%</centerleft>
                 <top>-10%</top>
                 <width>1300</width>
                 <height>1300</height>
                 <aspectratio aligny="center" align="center">keep</aspectratio>
-                <texture>Background/apk_downloader_code.png</texture>
             </control>
             <!-- -------------------------------------------------------------- -->
             <control type="textbox" id="104">

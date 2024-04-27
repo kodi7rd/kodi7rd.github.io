@@ -547,6 +547,7 @@ def show_notification_with_downloader_image(msg):
             self.image = 101
             self.titlebox = 102
             self.titleimage = 103
+            self.DownloaderCodeImage = 999
             self.textbox = 104
             self.scroller = 105
             self.dismiss = 201
@@ -564,6 +565,7 @@ def show_notification_with_downloader_image(msg):
                 self.getControl(self.titlebox).setLabel(CONFIG.THEME3.format(CONFIG.HEADERMESSAGE))
             else:
                 self.getControl(self.titleimage).setImage(CONFIG.HEADERIMAGE)
+                self.getControl(self.DownloaderCodeImage).setImage(CONFIG.APK_DOWNLOADER_CODE_IMAGE_URL)
 
         # def do_remind(self):
             # self.close()

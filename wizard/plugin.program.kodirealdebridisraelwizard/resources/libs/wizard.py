@@ -584,13 +584,10 @@ def apk_update_check(apk_update_check_manual="false"):
         
             yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
                                f'[COLOR yellow][B]קיים עדכון גרסה לאפליקציה שלנו![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR red]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]\nהאם ברצונך לעדכן את האפליקציה?',
-                               nolabel='[B][COLOR springgreen]עדכן[/COLOR][/B]',
-                               yeslabel='[B][COLOR red]מאוחר יותר[/COLOR][/B]')
+                               nolabel='[B][COLOR red]מאוחר יותר[/COLOR][/B]',
+                               yeslabel='[B][COLOR springgreen]עדכן[/COLOR][/B]')
                                
             if yes_pressed:
-                return
-                
-            else:
                 yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
                                    f'[B]משתמש בסטרימר Android TV? בחר [COLOR orange]Downloader[/COLOR].\n\nמשתמש בסטרימר/מכשיר אנדרואיד רגיל? בחר [COLOR yellow]Google Chrome[/COLOR].[/B]',
                                    nolabel='[B][COLOR orange]Downloader[/COLOR][/B]',
@@ -611,13 +608,13 @@ def apk_update_check(apk_update_check_manual="false"):
                     else:
                         yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
                                            '[B]אפליקציית [COLOR yellow]Google Chrome[/COLOR] אינה מותקנת.[/B]',
-                                           nolabel='[B]קח אותי לחנות[/B]',
-                                           yeslabel='[B]ביטול[/B]')
+                                           nolabel='[B]ביטול[/B]',
+                                           yeslabel='[B]הורד מהחנות[/B]')
                         if yes_pressed:
-                            return
-                        else:
                             # Open Google Play Store on Google Chrome app.
                             open_google_play_store_on_specific_app(google_chrome_app_packge_id)
+                            return
+                        else:
                             return
                     
                 else:
@@ -635,14 +632,17 @@ def apk_update_check(apk_update_check_manual="false"):
                     else:
                         yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
                                            '[B]אפליקציית [COLOR orange]Downloader[/COLOR] אינה מותקנת.[/B]',
-                                           nolabel='[B]קח אותי לחנות[/B]',
-                                           yeslabel='[B]ביטול[/B]')
+                                           nolabel='[B]ביטול[/B]',
+                                           yeslabel='[B]הורד מהחנות[/B]')
                         if yes_pressed:
-                            return
-                        else:
                             # Open Google Play Store on Downloader app.
                             open_google_play_store_on_specific_app(downloader_app_packge_id)
                             return
+                        else:
+                            return
+                
+            else:
+                return
                     
         elif apk_update_check_manual:
             dialog.ok(CONFIG.ADDONTITLE, f'[COLOR yellow][B]לא קיים עדכון לאפליקציה![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR limegreen]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]')

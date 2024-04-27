@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.4.5[/B][/COLOR]
+* Downloader notification window - switch to remote image "APK_DOWNLOADER_CODE_IMAGE_URL".
+* wizard.py - apk_update_check - Fix yesno dialogs correct buttons order.
 [COLOR yellow][B]v1.4.4[/B][/COLOR]
 * AUTO BUILD INSTALL ON FIRST LAUNCH - Auto install single build (no prompt), else - open builds menu
 [COLOR yellow][B]v1.4.3[/B][/COLOR]

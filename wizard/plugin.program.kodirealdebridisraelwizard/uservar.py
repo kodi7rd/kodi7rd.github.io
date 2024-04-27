@@ -24,10 +24,13 @@ BUILDFILE = 'https://kodi7rd.github.io/wizard/assets/build.txt'
 UPDATECHECK = 0
 # Text File with apk info in it.  Leave as 'http://' to ignore
 APKFILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_apk.txt'
-# KODI-RD-IL
+#########################################################
+# KODI-RD-IL - APK AUTO UPDATE PROMPT
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_latest_apk_version.txt'
-APK_DOWNLOADER_CODE = '864332'
 APK_DOWNLOAD_URL = 'https://kodi7rd.github.io/apk'
+APK_DOWNLOADER_CODE = '864332'
+APK_DOWNLOADER_CODE_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/apk/apk_downloader_code.png'
+#########################################################
 # Text File with Youtube Videos urls.  Leave as 'http://' to ignore
 YOUTUBETITLE = ''
 YOUTUBEFILE = 'http://'
