@@ -8,6 +8,7 @@ from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
+from cocoscrapers.modules import log_utils
 
 
 class source:
@@ -48,7 +49,7 @@ class source:
 				hdlr = year
 				years = [str(int(year)-1), str(year), str(int(year)+1)]
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
-			# log_utils.log('url = %s' % url)
+			log_utils.log('url = %s' % url)
 			results = client.request(url, timeout=5)
 			try: files = jsloads(results)['streams']
 			except: return sources
@@ -66,7 +67,8 @@ class source:
 				hash = file['infoHash']
 				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
-				name = source_utils.clean_name(file_title[0])
+				#updated by ud to fix elf hosted title format change.
+				name = source_utils.clean_name(file_title[1])
 
 				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
