@@ -361,25 +361,6 @@ tools.ensure_folders()
     # stop_if_duplicate()
 # Ensure that the wizard's name matches its folder
 check.check_paths()
-
-######################################
-# KODI-RD-IL - COMMENTED - NOT NEEDED:
-# FIRST RUN SETTINGS
-# if CONFIG.get_setting('first_install') == 'true':
-    # logging.log("[First Run] Showing Save Data Settings", level=xbmc.LOGINFO)
-    # window.show_save_data_settings()
-# else:
-    # logging.log("[First Run] Skipping Save Data Settings", level=xbmc.LOGINFO)
-######################################
-
-# KODI-RD-IL - COMMENTED - NOT NEEDED:
-# BUILD INSTALL PROMPT
-# if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
-    # logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
-    # window.show_build_prompt()
-# else:
-    # logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
-######################################
     
 # AUTO UPDATE WIZARD
 if CONFIG.AUTOUPDATE == 'Yes':
@@ -391,37 +372,21 @@ else:
 # KODI-RD-IL - Auto force addon updates on Kodi startup
 if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
-# ENABLE ALL ADDONS AFTER INSTALL
-if CONFIG.get_setting('enable_all') == 'true':
-    logging.log("[Post Install] Enabling all Add-ons", level=xbmc.LOGINFO)
-    from resources.libs.gui import menu
-    menu.enable_addons(all=True)
-    if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
-        logging.log("[Post Install] .enableall file found in userdata. Deleting..", level=xbmc.LOGINFO)
-        import xbmcvfs
-        xbmcvfs.delete(os.path.join(CONFIG.USERDATA, '.enableall'))
-    xbmc.executebuiltin('UpdateLocalAddons')
-    xbmc.executebuiltin('UpdateAddonRepos')
-    db.force_check_updates(auto=True)
-    CONFIG.set_setting('enable_all', 'false')
-    xbmc.executebuiltin("ReloadSkin()")
-    tools.reload_profile(xbmc.getInfoLabel('System.ProfileName'))
-
 ######################################
 # KODI-RD-IL - AUTO QUICK UPDATE
-if CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
+if CONFIG.get_setting('buildname'):
     auto_quick_update()
 ######################################
 
 ######################################
 # KODI-RD-IL - INITIAL BUILD SKIN SWITCH
-if CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false' and not xbmc.Player().isPlaying():
+if CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false':
     build_skin_switch_prompt()
 #####################################
     
 # KOD-RD-IL - New APK version check on startup
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
-if tools.platform() == 'android' and CONFIG.get_setting('buildname') and not xbmc.Player().isPlaying():
+if tools.platform() == 'android' and CONFIG.get_setting('buildname'):
     from resources.libs.wizard import apk_update_check
     apk_update_check(apk_update_check_manual="false")
 
@@ -437,7 +402,7 @@ if CONFIG.get_setting('buildname'):
 else:
     logging.log("[Build Update Check] Next Check: {0}".format(buildcheck), level=xbmc.LOGINFO)
 
-# KODI-RD-IL - BUILD INSTALL WINDOW ON STARTUP
+# KODI-RD-IL - BUILD INSTALL ON STARTUP
 if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
     logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
     CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
@@ -488,6 +453,26 @@ else:
 
 
 ###################UNUSED####################
+
+######################################
+# KODI-RD-IL - COMMENTED - NOT NEEDED:
+# FIRST RUN SETTINGS
+# if CONFIG.get_setting('first_install') == 'true':
+    # logging.log("[First Run] Showing Save Data Settings", level=xbmc.LOGINFO)
+    # window.show_save_data_settings()
+# else:
+    # logging.log("[First Run] Skipping Save Data Settings", level=xbmc.LOGINFO)
+######################################
+
+# KODI-RD-IL - COMMENTED - NOT NEEDED:
+# BUILD INSTALL PROMPT
+# if tools.open_url(CONFIG.BUILDFILE, check=True) and CONFIG.get_setting('installed') == 'false':
+    # logging.log("[Current Build Check] Build Not Installed", level=xbmc.LOGINFO)
+    # window.show_build_prompt()
+# else:
+    # logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
+######################################
+
 # SHOW NOTIFICATIONS
 # if CONFIG.ENABLE_NOTIFICATION == 'Yes':
     # show_notification()
@@ -507,6 +492,22 @@ else:
     # auto_install_repo()
 # else:
     # logging.log("[Auto Install Repo] Not Enabled", level=xbmc.LOGINFO)
+
+# ENABLE ALL ADDONS AFTER INSTALL
+# if CONFIG.get_setting('enable_all') == 'true':
+    # logging.log("[Post Install] Enabling all Add-ons", level=xbmc.LOGINFO)
+    # from resources.libs.gui import menu
+    # menu.enable_addons(all=True)
+    # if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
+        # logging.log("[Post Install] .enableall file found in userdata. Deleting..", level=xbmc.LOGINFO)
+        # import xbmcvfs
+        # xbmcvfs.delete(os.path.join(CONFIG.USERDATA, '.enableall'))
+    # xbmc.executebuiltin('UpdateLocalAddons')
+    # xbmc.executebuiltin('UpdateAddonRepos')
+    # db.force_check_updates(auto=True)
+    # CONFIG.set_setting('enable_all', 'false')
+    # xbmc.executebuiltin("ReloadSkin()")
+    # tools.reload_profile(xbmc.getInfoLabel('System.ProfileName'))
 
 # REINSTALL ELIGIBLE BINARIES
 # binarytxt = os.path.join(CONFIG.USERDATA, 'build_binaries.txt')

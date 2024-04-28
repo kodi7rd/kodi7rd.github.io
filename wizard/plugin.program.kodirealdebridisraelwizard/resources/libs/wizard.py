@@ -126,10 +126,10 @@ class Wizard:
                 CONFIG.set_setting('errors', errors)
                 logging.log('INSTALLED {0}: [ERRORS:{1}]'.format(percent, errors))
 
-                try:
-                    os.remove(lib)
-                except:
-                    pass
+                # try:
+                    # os.remove(lib)
+                # except:
+                    # pass
 
                 if int(float(errors)) > 0:
                     yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE,
@@ -149,17 +149,26 @@ class Wizard:
 
                 db.addon_database(CONFIG.ADDON_ID, 1)
                 # db.force_check_updates(over=True)
-                if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
-                    CONFIG.set_setting('enable_all', 'true')
+                # if os.path.exists(os.path.join(CONFIG.USERDATA, '.enableall')):
+                    # CONFIG.set_setting('enable_all', 'true')
                 
                 #########################################################################################################
                 # KODI-RD-IL
+                # Enable all addons in build's ZIP file.
+                installed = db.grab_addons(lib)
+                db.addon_database(installed, 1, True)
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+                
                 from resources.libs.gui import window
                 note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
                 if note_id:
                     # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
                     CONFIG.set_setting('notedismiss', 'false')
                     CONFIG.set_setting('noteid', note_id)
+                    
                 # Set build_skin_switch_dismiss to false for build_switch_skin prompt after install.
                 CONFIG.set_setting('build_skin_switch_dismiss', 'false')
                 #########################################################################################################
@@ -266,7 +275,7 @@ class Wizard:
             xbmc.sleep(2500)
             self.dialogProgress.close()
 
-            lib = os.path.join(CONFIG.PACKAGES, '{0}_guisettings.zip'.format(zipname))
+            lib = os.path.join(CONFIG.PACKAGES, '{0}_quick_update.zip'.format(zipname))
             
             try:
                 os.remove(lib)

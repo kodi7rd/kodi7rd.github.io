@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.4.7[/B][/COLOR]
+* Refactor startup.py.
+* wizard.py - on build install - enable all addons in build ZIP file.
 [COLOR yellow][B]v1.4.6[/B][/COLOR]
 * Revert Custom APK Installer code (unnecessary).
 [COLOR yellow][B]v1.4.5[/B][/COLOR]
