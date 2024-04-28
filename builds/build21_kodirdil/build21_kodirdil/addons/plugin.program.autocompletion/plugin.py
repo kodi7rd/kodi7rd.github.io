@@ -16,6 +16,8 @@ import AutoCompletion
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
+# KODI-RD-IL
+KODI_VERSION = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
 
 
 def get_kodi_json(method, params):
@@ -24,6 +26,20 @@ def get_kodi_json(method, params):
 
     return json.loads(json_query)
 
+def is_hebrew(input_str):
+       try:
+        import unicodedata
+        input_str=input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ','')
+        nfkd_form = unicodedata.normalize('NFKD', input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ',''))
+        a=False
+        for cha in input_str:
+            
+            a='HEBREW' in unicodedata.name(cha.strip())
+            if a:
+                break
+        return a
+       except:
+            return True
 
 def start_info_actions(infos, params):
     listitems = []
@@ -33,9 +49,12 @@ def start_info_actions(infos, params):
         elif info == 'selectautocomplete':
             xbmc.executebuiltin('Dialog.Close(busydialog)')
             xbmc.sleep(500)
+            # KODI-RD-IL
+            input_str = params.get("id")
+            if KODI_VERSION >= 21.0 and is_hebrew(input_str): input_str = input_str[::-1]
             get_kodi_json(
                 method="Input.SendText",
-                params={"text": params.get("id"), "done": False},
+                params={"text": input_str, "done": False},
             )
             xbmc.executebuiltin('ActivateWindowAndFocus(virtualkeyboard,300,0)')
 

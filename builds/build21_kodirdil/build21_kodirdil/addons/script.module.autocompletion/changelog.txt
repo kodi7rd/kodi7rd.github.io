@@ -1,3 +1,7 @@
+2.1.2
+
+- Kodi 20+21 Hebrew fix
+
 1.1.2
 
 - move some stuff out of this lib (to the places they belong to)

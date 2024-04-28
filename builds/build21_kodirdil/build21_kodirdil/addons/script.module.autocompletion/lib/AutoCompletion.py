@@ -23,6 +23,8 @@ SETTING = PLUGIN_ADDON.getSetting
 ADDON_PATH = xbmcvfs.translatePath(SCRIPT_ADDON.getAddonInfo("path"))
 ADDON_ID = SCRIPT_ADDON.getAddonInfo("id")
 ADDON_DATA_PATH = xbmcvfs.translatePath(SCRIPT_ADDON.getAddonInfo("profile"))
+# KODI-RD-IL
+KODI_VERSION = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
 
 
 def get_autocomplete_items(search_str, limit=10, provider=None):
@@ -98,11 +100,12 @@ class BaseProvider(ABC):
             yield li
 
     def fetch_data(self, search_str):
-        check_heb=is_hebrew(search_str)
-        if check_heb:
-            url = self.build_url(quote_plus(search_str[::-1]))
-        else:
-            url = self.build_url(quote_plus(search_str))
+    
+        # KODI-RD-IL
+        if KODI_VERSION < 21.0 and is_hebrew(search_str): search_str = search_str[::-1]
+        ############
+        
+        url = self.build_url(quote_plus(search_str))
         
         result = get_JSON_response(url=self.BASE_URL.format(endpoint=url), headers=self.HEADERS, folder=self.FOLDER)
         return self.process_result(result)
