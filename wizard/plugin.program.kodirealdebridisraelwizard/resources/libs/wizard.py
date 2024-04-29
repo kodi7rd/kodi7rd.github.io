@@ -563,7 +563,7 @@ def build_switch_skin():
             
 ##########################################
 # KODI-RD-IL - WINDOWS + ANDROID
-def check_if_running_custom_kodi(kodi_custom_path)
+def check_if_running_custom_kodi(kodi_custom_path):
     import xbmcvfs
     kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
     if kodi_custom_path in kodi_root_path:
