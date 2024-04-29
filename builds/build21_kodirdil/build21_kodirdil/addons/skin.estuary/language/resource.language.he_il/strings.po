@@ -974,10 +974,10 @@ msgctxt "#700043"
 msgid "Kodi Version"
 msgstr "גרסת קודי"
 
-# APK Update Check In Power Menu - DialogButtonMenu.xml
+# Kodi Update Check In Power Menu - DialogButtonMenu.xml
 
 msgctxt "#700044"
-msgid "APK Update Check"
-msgstr "עדכון גרסת APK"
+msgid "Update Kodi Version"
+msgstr "עדכון גרסת קודי"
 
 ################################################################
