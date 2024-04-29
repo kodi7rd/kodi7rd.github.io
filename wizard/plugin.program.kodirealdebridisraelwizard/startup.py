@@ -377,11 +377,12 @@ if CONFIG.get_setting('buildname'):
     auto_quick_update()
 ######################################
     
-# KOD-RD-IL - New APK version check on startup
-# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
-if tools.platform() == 'android' and CONFIG.get_setting('buildname'):
-    from resources.libs.wizard import apk_update_check
-    apk_update_check(apk_update_check_manual="false")
+# KOD-RD-IL - New Kodi ANDROID/WINDOWS version check on startup
+# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=kodi_version_update_check&kodi_version_update_check_manual=false)")
+if tools.platform() in ['android', 'windows'] and CONFIG.get_setting('buildname'):
+    from resources.libs.wizard import kodi_version_update_check
+    kodi_version_update_check()
+######################################
 
 # BUILD UPDATE CHECK
 buildcheck = CONFIG.get_setting('nextbuildcheck')

@@ -53,7 +53,11 @@ class Config:
         self.UPDATECHECK = uservar.UPDATECHECK
         self.APKFILE = uservar.APKFILE
         ###################################
-        # KODI-RD-IL
+        # KODI-RD-IL - WINDOWS
+        self.LATEST_WINDOWS_VERSION_TEXT_FILE = uservar.LATEST_WINDOWS_VERSION_TEXT_FILE
+        self.WINDOWS_DOWNLOAD_URL = uservar.WINDOWS_DOWNLOAD_URL
+        self.WINDOWS_INSTALLATION_PATH = uservar.WINDOWS_INSTALLATION_PATH
+        # KODI-RD-IL - ANDROID
         self.LATEST_APK_VERSION_TEXT_FILE = uservar.LATEST_APK_VERSION_TEXT_FILE
         self.APK_DOWNLOAD_URL = uservar.APK_DOWNLOAD_URL
         self.APK_DOWNLOADER_CODE = uservar.APK_DOWNLOADER_CODE

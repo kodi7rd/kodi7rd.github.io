@@ -1,3 +1,6 @@
+[COLOR yellow][B]v1.4.9[/B][/COLOR]
+* Add support for custom Windows kodi software auto update check (Open browser, direct downloaded commented).
+* Refactor code
 [COLOR yellow][B]v1.4.8[/B][/COLOR]
 * Migrate auto quick update notification URL + settings to custom to avoid default notification vars.
 * Enable wizard's default notification settings - show post build install message.

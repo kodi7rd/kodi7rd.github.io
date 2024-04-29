@@ -85,10 +85,14 @@ class MainMenu:
         # if tools.open_url(CONFIG.YOUTUBEFILE, check=True) and not CONFIG.YOUTUBETITLE == '':
             # directory.add_dir(CONFIG.YOUTUBETITLE, {'mode': 'youtube'}, icon=CONFIG.ICONYOUTUBE, themeit=CONFIG.THEME1)
         directory.add_dir('תפריט שמירת נתונים', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-        if (tools.platform() == 'android' or CONFIG.DEVELOPER == 'true'):
-            directory.add_separator('APK')
+        ##############################################################################################
+        # KODI-RD-IL
+        if tools.platform() in ['android', 'windows'] or CONFIG.DEVELOPER == 'true':
+            directory.add_separator('עדכון גרסת קודי')
+            directory.add_file('עדכון גרסת קודי', {'mode': 'install', 'action': 'kodi_version_update_check', 'kodi_version_update_check_manual': 'true'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME1)
+        ##############################################################################################
+        # if (tools.platform() == 'android' or CONFIG.DEVELOPER == 'true'):
             # directory.add_dir('APK Installer', {'mode': 'apk'}, icon=CONFIG.ICONAPK, themeit=CONFIG.THEME1)
-            directory.add_file('APK עדכון גרסת', {'mode': 'install', 'action': 'apk_update_check', 'apk_update_check_manual': 'true'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME1)
         # if CONFIG.HIDECONTACT == 'No':
             # directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
         directory.add_separator()

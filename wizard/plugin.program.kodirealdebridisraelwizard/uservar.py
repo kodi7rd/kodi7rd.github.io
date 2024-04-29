@@ -28,11 +28,16 @@ APKFILE = 'http://'
 #########################################################
 # KODI-RD-IL - AUTO QUICK UPDATES
 QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notification_files/kodirdil.txt'
-# KODI-RD-IL - APK AUTO UPDATE PROMPT
-LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_latest_apk_version.txt'
+# KODI-RD-IL - AUTO ANDROID/WINDOWS UPDATE
+# WINDOWS SOFTWARE
+LATEST_WINDOWS_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/windows/latest_windows_version.txt'
+WINDOWS_DOWNLOAD_URL = "https://kodi7rd.github.io/windows"
+WINDOWS_INSTALLATION_PATH = "C:\Kodi + Real Debrid Israel"
+# ANDROID APK
+LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/apk/latest_apk_version.txt'
 APK_DOWNLOAD_URL = 'https://kodi7rd.github.io/apk'
 APK_DOWNLOADER_CODE = '864332'
-APK_DOWNLOADER_CODE_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/apk/apk_downloader_code.png'
+APK_DOWNLOADER_CODE_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/apk/apk_downloader_code.png'
 #########################################################
 
 # Text File with Youtube Videos urls.  Leave as 'http://' to ignore
