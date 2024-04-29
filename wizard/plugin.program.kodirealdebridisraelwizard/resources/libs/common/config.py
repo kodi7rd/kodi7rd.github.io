@@ -60,6 +60,7 @@ class Config:
         # KODI-RD-IL - ANDROID
         self.LATEST_APK_VERSION_TEXT_FILE = uservar.LATEST_APK_VERSION_TEXT_FILE
         self.APK_DOWNLOAD_URL = uservar.APK_DOWNLOAD_URL
+        self.APK_PACKAGE_ID = uservar.APK_PACKAGE_ID
         self.APK_DOWNLOADER_CODE = uservar.APK_DOWNLOADER_CODE
         self.APK_DOWNLOADER_CODE_IMAGE_URL = uservar.APK_DOWNLOADER_CODE_IMAGE_URL
         ###################################

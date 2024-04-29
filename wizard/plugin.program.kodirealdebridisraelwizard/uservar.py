@@ -36,6 +36,7 @@ WINDOWS_INSTALLATION_PATH = "C:\Kodi + Real Debrid Israel"
 # ANDROID APK
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/apk/latest_apk_version.txt'
 APK_DOWNLOAD_URL = 'https://kodi7rd.github.io/apk'
+APK_PACKAGE_ID = 'kodirdil20.xbmc.kodi'
 APK_DOWNLOADER_CODE = '864332'
 APK_DOWNLOADER_CODE_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/apk/apk_downloader_code.png'
 #########################################################

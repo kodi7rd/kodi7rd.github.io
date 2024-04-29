@@ -562,6 +562,14 @@ def build_switch_skin():
         return
             
 ##########################################
+# KODI-RD-IL - WINDOWS + ANDROID
+def check_if_running_custom_kodi(kodi_custom_path)
+    import xbmcvfs
+    kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
+    if kodi_custom_path in kodi_root_path:
+        return True
+    return False
+    
 # KODI-RD-IL - ANDROID
 def check_if_app_installed(app_package_id):
     import xbmcvfs
@@ -664,7 +672,7 @@ def kill_kodi_and_install_exe(exe_full_path):
         # logging.log_notify(CONFIG.ADDONTITLE,
                             # '[COLOR {0}]הקובץ לא נמצא![/COLOR]'.format(CONFIG.COLOR2))
 
-    def open_in_chrome(url):
+    def open_in_browser(url):
         # Open the URL in Chrome
         import webbrowser
         webbrowser.get().open_new_tab(url)
@@ -677,22 +685,13 @@ def kill_kodi_and_install_exe(exe_full_path):
     kodi_killer = threading.Timer(1.0, kill_kodi)
     xbmc.executebuiltin('AlarmClock(shutdowntimer,XBMC.Quit(),1.0,true)')
     kodi_killer.start()
-    open_in_chrome(CONFIG.WINDOWS_DOWNLOAD_URL)
+    open_in_browser(CONFIG.WINDOWS_DOWNLOAD_URL)
     # subprocess.call(exe_full_path, shell=True)
 
 
 # KODI-RD-IL - WINDOWS
 def kodi_windows_update_check(kodi_version_update_check_manual, os_type_label):
     dialog = xbmcgui.Dialog()
-    
-    ###### KODI WINDOWS SOFTWARE INSTALLED CHECK ###########
-    import xbmcvfs
-    kodi_root_path = xbmcvfs.translatePath('special://xbmc/')
-    logging.log_notify('s',kodi_root_path)
-    if CONFIG.WINDOWS_INSTALLATION_PATH in kodi_root_path:
-        if kodi_version_update_check_manual:
-            dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})",'[B]אינך על תוכנת הקודי הייעודית שלנו![/B]')
-        return
     
     try:
         LATEST_WINDOWS_VERSION_TEXT_FILE = float(tools.open_url(CONFIG.LATEST_WINDOWS_VERSION_TEXT_FILE).text)
@@ -750,13 +749,24 @@ def kodi_version_update_check(kodi_version_update_check_manual="false"):
 
     kodi_version_update_check_manual = True if kodi_version_update_check_manual=="true" else False
     os_type_label = tools.platform().capitalize()
+    dialog = xbmcgui.Dialog()
         
     # Android APK
     if tools.platform() == 'android':
+        ###### KODI ANDROID APK INSTALLED CHECK ###########
+        if not check_if_running_custom_kodi(CONFIG.APK_PACKAGE_ID):
+            if kodi_version_update_check_manual:
+                dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})",'[B]אינך עם האפליקצייה הייעודית שלנו![/B]')
+            return
         kodi_apk_update_check(kodi_version_update_check_manual, os_type_label)
     
     # Windows Software
     elif tools.platform() == 'windows':
+        ###### KODI WINDOWS SOFTWARE INSTALLED CHECK ###########
+        if not check_if_running_custom_kodi(CONFIG.WINDOWS_INSTALLATION_PATH):
+            if kodi_version_update_check_manual:
+                dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})",'[B]אינך עם תוכנת הקודי הייעודית שלנו![/B]')
+            return
         kodi_windows_update_check(kodi_version_update_check_manual, os_type_label)
         
     else:
