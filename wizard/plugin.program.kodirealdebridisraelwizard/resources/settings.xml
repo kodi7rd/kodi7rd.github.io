@@ -12,7 +12,8 @@
         <setting id="notify" type="bool" label="כבה התראות בהפעלה" default="false" visible="false"/>
         <setting id="noteid" type="number" label="התראה אחרונה" visible="true" default="0" enable="false"/>
         <setting id="notedismiss" type="bool" label="הזכר מאוחר יותר" visible="false" />
-        <setting id="build_skin_switch_dismiss" type="bool" label="הצגת חלון בחירת סקין לאחר התקנה ראשונית של הבילד" default="false" visible="false" />
+        <setting id="quick_update_noteid" type="number" label="עדכון מהיר אחרון" visible="true" default="0" enable="false"/>
+        <setting id="quick_update_notedismiss" type="bool" label="הזכר מאוחר יותר" visible="false" />
         <setting type="lsep" label="הצג בילדים:"/>
         <setting id="show19" type="bool" label="הצג בילדים לקודי 19 (Matrix)" default="true"/>
         <setting id="show20" type="bool" label="הצג בילדים לקודי 20 (Nexus)" default="true"/>

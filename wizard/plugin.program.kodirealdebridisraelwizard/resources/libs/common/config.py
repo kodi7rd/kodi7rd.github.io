@@ -106,6 +106,12 @@ class Config:
         # Notification Window
         self.ENABLE_NOTIFICATION = uservar.ENABLE
         self.NOTIFICATION = uservar.NOTIFICATION
+        
+        #########################################################################################################
+        # KODI-RD-IL - AUTO QUICK UPDATES
+        self.QUICK_UPDATE_NOTIFICATION_URL = uservar.QUICK_UPDATE_NOTIFICATION_URL
+        #########################################################################################################
+        
         self.HEADERTYPE = uservar.HEADERTYPE
         self.FONTHEADER = uservar.FONTHEADER
         self.HEADERMESSAGE = uservar.HEADERMESSAGE
@@ -260,8 +266,9 @@ class Config:
         self.NOTEDISMISS = self.get_setting('notedismiss')
         
         #########################################################################################################
-        # KODI-RD-IL - Build skin switch after install
-        self.BUILD_SKIN_SWITCH_DISMISS = self.get_setting('build_skin_switch_dismiss')
+        # KODI-RD-IL - AUTO QUICK UPDATES
+        self.QUICK_UPDATE_NOTEID = self.get_setting('quick_update_noteid')
+        self.QUICK_UPDATE_NOTEDISMISS = self.get_setting('quick_update_notedismiss')
         #########################################################################################################
         
         # Save Data variables

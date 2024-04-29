@@ -38,7 +38,7 @@ ACTION_MOVE_LEFT = 1  # Left arrow key
 ACTION_MOVE_RIGHT = 2  # Right arrow key
 ACTION_MOVE_UP = 3  # Up arrow key
 ACTION_MOVE_DOWN = 4  # Down arrow key
-ACTION_MOUSE_WHEEL_UP = 104	 # Mouse wheel up
+ACTION_MOUSE_WHEEL_UP = 104  # Mouse wheel up
 ACTION_MOUSE_WHEEL_DOWN = 105  # Mouse wheel down
 ACTION_MOVE_MOUSE = 107  # Down arrow key
 ACTION_SELECT_ITEM = 7  # Number Pad Enter
@@ -477,7 +477,7 @@ def split_notify(notify):
         return False, False
 
 
-def show_notification(msg, test=False):
+def show_notification(msg, test=False, source="notification"):
     class Notification(xbmcgui.WindowXMLDialog):
 
         def __init__(self, *args, **kwargs):
@@ -513,9 +513,15 @@ def show_notification(msg, test=False):
             # self.close()
 
         def do_dismiss(self):
+            # KODI-RD-IL
+            noteid_setting = 'quick_update_noteid' if source == "quick_update_notification" else 'noteid'
+            notedismiss_setting = 'quick_update_notedismiss' if source == "quick_update_notification" else 'notedismiss'
+            ###################
             if not test:
-                CONFIG.set_setting('notedismiss', 'true')
-            logging.log('[Notifications] Notification {0} Dismissed'.format(CONFIG.get_setting('noteid')))
+                # CONFIG.set_setting('notedismiss', 'true')
+                CONFIG.set_setting(notedismiss_setting, 'true')
+            # logging.log('[Notifications] Notification {0} Dismissed'.format(CONFIG.get_setting('noteid')))
+            logging.log('[Notifications] Notification {0} Dismissed'.format(CONFIG.get_setting(noteid_setting)))
             self.close()
 
         def onAction(self, action):

@@ -24,13 +24,17 @@ BUILDFILE = 'https://kodi7rd.github.io/wizard/assets/build.txt'
 UPDATECHECK = 0
 # Text File with apk info in it.  Leave as 'http://' to ignore
 APKFILE = 'http://'
+
 #########################################################
+# KODI-RD-IL - AUTO QUICK UPDATES
+QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notification_files/kodirdil.txt'
 # KODI-RD-IL - APK AUTO UPDATE PROMPT
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/apk/kodirdil_latest_apk_version.txt'
 APK_DOWNLOAD_URL = 'https://kodi7rd.github.io/apk'
 APK_DOWNLOADER_CODE = '864332'
 APK_DOWNLOADER_CODE_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/apk/apk_downloader_code.png'
 #########################################################
+
 # Text File with Youtube Videos urls.  Leave as 'http://' to ignore
 YOUTUBETITLE = ''
 YOUTUBEFILE = 'http://'
@@ -124,9 +128,9 @@ REPOZIPURL = 'https://'
 #        Notification Window                            #
 #########################################################
 # Enable Notification screen Yes or No
-ENABLE = 'No'
+ENABLE = 'Yes'
 # Url to notification file
-NOTIFICATION = 'https://kodi7rd.github.io/wizard/assets/quick_update_notify/kodirdil.txt'
+NOTIFICATION = 'https://kodi7rd.github.io/wizard/assets/notification_files/build_first_launch.txt'
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Image'
 # Font size of header

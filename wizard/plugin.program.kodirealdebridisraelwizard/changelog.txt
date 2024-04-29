@@ -1,3 +1,7 @@
+[COLOR yellow][B]v1.4.8[/B][/COLOR]
+* Migrate auto quick update notification URL + settings to custom to avoid default notification vars.
+* Enable wizard's default notification settings - show post build install message.
+* Remove startup build switch skin popup post build install.
 [COLOR yellow][B]v1.4.7[/B][/COLOR]
 * Refactor startup.py.
 * wizard.py - on build install - enable all addons in build ZIP file.

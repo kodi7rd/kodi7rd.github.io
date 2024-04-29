@@ -163,14 +163,11 @@ class Wizard:
                     pass
                 
                 from resources.libs.gui import window
-                note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
+                note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_URL)
                 if note_id:
-                    # Only show the notification window after build install, no quick update will be installed (wizard's noteid == latest noteid from URL)
-                    CONFIG.set_setting('notedismiss', 'false')
-                    CONFIG.set_setting('noteid', note_id)
-                    
-                # Set build_skin_switch_dismiss to false for build_switch_skin prompt after install.
-                CONFIG.set_setting('build_skin_switch_dismiss', 'false')
+                    # Don't show the quick update notification window after build install (first build launch notification window will show), no quick update will be installed (wizard's noteid == latest noteid from URL)
+                    CONFIG.set_setting('quick_update_notedismiss', 'true')
+                    CONFIG.set_setting('quick_update_noteid', note_id)
                 #########################################################################################################
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
@@ -301,7 +298,7 @@ class Wizard:
             db.addon_database(installed, 1, True)
                                
             if not auto_quick_update:
-                CONFIG.set_setting('notedismiss', 'false')
+                CONFIG.set_setting('quick_update_notedismiss', 'false')
                 self.force_close_kodi_in_5_seconds(dialog_header="עדכון מהיר הסתיים בהצלחה")
                 
             return True

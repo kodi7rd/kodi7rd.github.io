@@ -119,7 +119,7 @@ def show_notification():
                 window.show_notification(msg)
             else:
                 logging.log('[Notifications] No new notifications.', level=xbmc.LOGINFO)
-        elif note_id > CONFIG.NOTEID:
+        elif int(note_id) > int(CONFIG.NOTEID):
             logging.log('[Notifications] Showing notification {0}'
                         .format(note_id))
             CONFIG.set_setting('noteid', note_id)
@@ -131,32 +131,25 @@ def show_notification():
                     level=xbmc.LOGINFO)
 
 
-# xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=build_switch_skin)")
-def build_skin_switch_prompt():
-    # Show wizard.build_skin_switch prompt after FIRST build install
-    CONFIG.set_setting('build_skin_switch_dismiss', 'true')
-    xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=build_switch_skin)")
-
-
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=quick_update&name={quote_plus(CONFIG.BUILDNAME)}&auto_quick_update=true)")
 def auto_quick_update():
         
-    note_id, msg = window.split_notify(CONFIG.NOTIFICATION)
+    note_id, msg = window.split_notify(CONFIG.QUICK_UPDATE_NOTIFICATION_URL)
     
     if note_id:
-        logging.log(f'[QUICK-UPDATE] note_id={note_id} | CONFIG.NOTEID={CONFIG.NOTEID}')
-        if note_id == CONFIG.NOTEID:
-            if CONFIG.NOTEDISMISS == 'false':
-                window.show_notification(msg)
-        elif int(note_id) > int(CONFIG.NOTEID):
+        logging.log(f'[QUICK-UPDATE] note_id={note_id} | CONFIG.QUICK_UPDATE_NOTEID={CONFIG.QUICK_UPDATE_NOTEID}')
+        if note_id == CONFIG.QUICK_UPDATE_NOTEID:
+            if CONFIG.QUICK_UPDATE_NOTEDISMISS == 'false':
+                window.show_notification(msg, source="quick_update_notification")
+        elif int(note_id) > int(CONFIG.QUICK_UPDATE_NOTEID):
             logging.log('[QUICK-UPDATE] Starting quick update number {0}'
                         .format(note_id))
-            CONFIG.set_setting('noteid', note_id)
-            CONFIG.set_setting('notedismiss', 'false')
+            CONFIG.set_setting('quick_update_noteid', note_id)
+            CONFIG.set_setting('quick_update_notedismiss', 'false')
             from resources.libs.wizard import Wizard
             quick_update_status = Wizard().quick_update(name=CONFIG.BUILDNAME, auto_quick_update="true")
             if not quick_update_status:
-                CONFIG.set_setting('notedismiss', 'true')
+                CONFIG.set_setting('quick_update_notedismiss', 'true')
                 return
             Wizard().force_close_kodi_in_5_seconds(dialog_header="עדכון מהיר הסתיים בהצלחה")
 
@@ -372,17 +365,17 @@ else:
 # KODI-RD-IL - Auto force addon updates on Kodi startup
 if CONFIG.FORCEUPDATEFAST_ONSTARTUP == "true": db.forceUpdate()
 
+# SHOW NOTIFICATIONS
+if CONFIG.ENABLE_NOTIFICATION == 'Yes' and CONFIG.get_setting('buildname'):
+    show_notification()
+else:
+    logging.log('[Notifications] Not Enabled', level=xbmc.LOGINFO)
+
 ######################################
 # KODI-RD-IL - AUTO QUICK UPDATE
 if CONFIG.get_setting('buildname'):
     auto_quick_update()
 ######################################
-
-######################################
-# KODI-RD-IL - INITIAL BUILD SKIN SWITCH
-if CONFIG.get_setting('buildname') and CONFIG.BUILD_SKIN_SWITCH_DISMISS == 'false':
-    build_skin_switch_prompt()
-#####################################
     
 # KOD-RD-IL - New APK version check on startup
 # xbmc.executebuiltin(f"RunPlugin(plugin://{CONFIG.ADDON_ID}/?mode=install&action=apk_update_check&apk_update_check_manual=False)")
@@ -472,12 +465,6 @@ else:
 # else:
     # logging.log("[Current Build Check] Build Installed: {0}".format(CONFIG.BUILDNAME), level=xbmc.LOGINFO)
 ######################################
-
-# SHOW NOTIFICATIONS
-# if CONFIG.ENABLE_NOTIFICATION == 'Yes':
-    # show_notification()
-# else:
-    # logging.log('[Notifications] Not Enabled', level=xbmc.LOGINFO)
     
 # SAVE LOGIN
 # if CONFIG.get_setting('keeplogin') == 'true':
