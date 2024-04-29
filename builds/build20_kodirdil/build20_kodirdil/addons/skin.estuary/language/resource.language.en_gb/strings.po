@@ -1148,10 +1148,10 @@ msgctxt "#700041"
 msgid "Kodi Version"
 msgstr ""
 
-# APK Update Check In Power Menu - DialogButtonMenu.xml
+# Kodi Update Check In Power Menu - DialogButtonMenu.xml
 
 msgctxt "#700042"
-msgid "APK Update Check"
+msgid "Update Kodi Version"
 msgstr ""
 
 ################################################################
