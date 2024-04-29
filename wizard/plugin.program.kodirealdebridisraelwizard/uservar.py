@@ -27,7 +27,7 @@ APKFILE = 'http://'
 
 #########################################################
 # KODI-RD-IL - AUTO QUICK UPDATES
-QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notification_files/kodirdil.txt'
+QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notification_files/quick_update.txt'
 # KODI-RD-IL - AUTO ANDROID/WINDOWS UPDATE
 # WINDOWS SOFTWARE
 LATEST_WINDOWS_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/windows/latest_windows_version.txt'
