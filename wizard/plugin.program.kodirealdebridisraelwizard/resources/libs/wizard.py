@@ -667,16 +667,10 @@ def kodi_apk_update_check(kodi_version_update_check_manual, os_type_label):
 # KODI-RD-IL - WINDOWS
 def kill_kodi_and_install_exe(exe_full_path):
     
-    # import xbmcvfs
-    # if not xbmcvfs.exists(exe_full_path):
-        # logging.log_notify(CONFIG.ADDONTITLE,
-                            # '[COLOR {0}]הקובץ לא נמצא![/COLOR]'.format(CONFIG.COLOR2))
-
-    def open_in_browser(url):
-        # Open the URL in Chrome
-        import webbrowser
-        webbrowser.get().open_new_tab(url)
-        return
+    import xbmcvfs
+    if not xbmcvfs.exists(exe_full_path):
+        logging.log_notify(CONFIG.ADDONTITLE,
+                            '[COLOR {0}]הקובץ לא נמצא![/COLOR]'.format(CONFIG.COLOR2))
     
     def kill_kodi():
         subprocess.call('taskkill /f /im kodi.exe', shell=True)
@@ -685,8 +679,7 @@ def kill_kodi_and_install_exe(exe_full_path):
     kodi_killer = threading.Timer(1.0, kill_kodi)
     xbmc.executebuiltin('AlarmClock(shutdowntimer,XBMC.Quit(),1.0,true)')
     kodi_killer.start()
-    open_in_browser(CONFIG.WINDOWS_DOWNLOAD_URL)
-    # subprocess.call(exe_full_path, shell=True)
+    subprocess.call(exe_full_path, shell=True)
 
 
 # KODI-RD-IL - WINDOWS
@@ -718,21 +711,21 @@ def kodi_windows_update_check(kodi_version_update_check_manual, os_type_label):
                 exe_file_name = f"kodi_windows_installer_{LATEST_WINDOWS_VERSION_TEXT_FILE}.exe"
                 exe_full_path = os.path.join(destination_path, exe_file_name)
                    
-                # progress_dialog = xbmcgui.DialogProgress() 
-                # progress_dialog.create(f"{CONFIG.ADDONTITLE} ({os_type_label})",
-                              # '[COLOR {0}][B]מוריד:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, exe_file_name)
-                              # +'\n'+''
-                              # +'\n'+'נא המתן')
+                progress_dialog = xbmcgui.DialogProgress() 
+                progress_dialog.create(f"{CONFIG.ADDONTITLE} ({os_type_label})",
+                              '[COLOR {0}][B]מוריד:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, exe_file_name)
+                              +'\n'+''
+                              +'\n'+'נא המתן')
                 
-                # try:
-                    # os.remove(exe_full_path)
-                # except:
-                    # pass
-                # Downloader().download(CONFIG.WINDOWS_DOWNLOAD_URL, exe_full_path)
-                # xbmc.sleep(100)
-                # progress_dialog.close()
+                try:
+                    os.remove(exe_full_path)
+                except:
+                    pass
+                Downloader().download(CONFIG.WINDOWS_DOWNLOAD_URL, exe_full_path)
+                xbmc.sleep(100)
+                progress_dialog.close()
                     
-                # dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})", f"[B]ההורדה הסתיימה בהצלחה.\nלחץ אישור כדי לסגור את קודי ולהתחיל את ההתקנה.[/B]")
+                dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})", f"[B]ההורדה הסתיימה בהצלחה.\nלחץ אישור כדי לסגור את קודי ולהתחיל את ההתקנה.[/B]")
                 kill_kodi_and_install_exe(exe_full_path)
                         
         elif kodi_version_update_check_manual:
