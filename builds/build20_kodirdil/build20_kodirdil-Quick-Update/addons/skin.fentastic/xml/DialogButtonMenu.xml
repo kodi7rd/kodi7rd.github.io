@@ -57,12 +57,12 @@
 						<visible>System.ShowExitButton</visible>
 					</item>
 					<item>
-						<!-- APK Update Check -->
+						<!-- KODI ANDORID/WINDOWS Update Check -->
 						<label>[B][COLOR blue]$LOCALIZE[700061][/COLOR][/B]</label>
 						<onclick>Dialog.Close(all)</onclick>
-						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=apk_update_check&amp;apk_update_check_manual=true&quot;)</onclick>
-						<!-- Android only -->
-						<visible>System.Platform.Android</visible>
+						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=kodi_version_update_check&amp;kodi_version_update_check_manual=true&quot;)</onclick>
+						<!-- Android/Windows only -->
+						<visible>System.Platform.Android | System.Platform.Windows</visible>
 						<visible>System.ShowExitButton</visible>
 					</item>
 					<item>
