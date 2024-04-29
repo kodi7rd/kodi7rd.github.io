@@ -172,6 +172,11 @@ class Router:
         elif mode == 'speedtest': 
             xbmc.executebuiltin('InstallAddon("script.speedtester")')
             xbmc.executebuiltin('RunAddon("script.speedtester")')
+        ############KODI-RD-IL##############
+        elif mode == 'build_speed_test': # KODI-RD-IL Real Debrid Speed Test
+            from resources.libs.wizard import build_speed_test
+            build_speed_test()
+        ####################################
         elif mode == 'apk':  # APK Installer
             menu.apk_menu(url)
             self._finish(handle)

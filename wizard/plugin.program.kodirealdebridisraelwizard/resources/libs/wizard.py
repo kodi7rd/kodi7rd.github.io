@@ -763,5 +763,69 @@ def kodi_version_update_check(kodi_version_update_check_manual="false"):
         kodi_windows_update_check(kodi_version_update_check_manual, os_type_label)
         
     else:
-        dialog.ok(CONFIG.ADDONTITLE, f"הפיצ'ר אינו נתמך עבור: {os_type_label}")
+        dialog.ok(CONFIG.ADDONTITLE, f"[B]הפיצ'ר אינו נתמך עבור: {os_type_label}[/B]")
 ##########################################
+
+
+##########################################
+# KODI-RD-IL - REAL DEBRID SPEED TEST
+def windows_open_real_debrid_speed_test():
+        # Open the URL in default browser
+        import webbrowser
+        webbrowser.get().open_new_tab("https://real-debrid.com/speedtest")
+        
+def build_speed_test():
+    dialog = xbmcgui.Dialog()
+    
+    # Speed Test addon
+    yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
+                       f'[B][COLOR yellow]האם להפעיל בדיקת מהירות דרך הרחבת Speed Test או דרך האתר של ריל דבריד?[/COLOR][/B]',
+                       nolabel='[B]Speed Test[/B]',
+                       yeslabel='[B]Real Debrid[/B]')
+                       
+    if not yes_pressed:
+        xbmc.executebuiltin('InstallAddon("script.speedtester")')
+        xbmc.executebuiltin('RunAddon("script.speedtester")')
+        
+    else:       
+        os_type_label = tools.platform().capitalize()
+        
+        # Windows
+        if tools.platform() == 'windows':
+            windows_open_real_debrid_speed_test()
+            
+        # Android / Android TV - through browsers apps
+        elif tools.platform() == 'android':
+        
+            android_apps_browsers_list = ['com.android.chrome', 'com.phlox.tvwebbrowser', 'com.seraphic.openinet.pre', 'com.tcl.browser']
+            installed_browser_package_id = None
+
+            # Loop through each browser in the list
+            for browser_package_id in android_apps_browsers_list:
+                # Check if the browser is installed
+                if check_if_app_installed(browser_package_id):
+                    installed_browser_package_id = browser_package_id
+                    break
+
+            if not installed_browser_package_id:
+                yes_pressed = dialog.yesno(f"{CONFIG.ADDONTITLE} ({os_type_label})",
+                                   f'[B][COLOR yellow]לא מותקן דפדפן תומך!\nדפדנים נתמכים:[/COLOR]\nGoogle Chrome, TV Bro, OPEN BROWSER, BrowseHere[/B]',
+                                   nolabel='[B]ביטול[/B]',
+                                   yeslabel='[B]קח אותי לחנות[/B]')
+                if yes_pressed:
+                    # Open Google Play Store
+                    xbmc.executebuiltin('StartAndroidActivity(com.android.vending)')
+                    return
+                return
+                            
+            app      = installed_browser_package_id
+            intent   = 'android.intent.action.VIEW'
+            dataType = ''
+            dataURI  = "https://real-debrid.com/speedtest"
+            xbmc.executebuiltin(f'StartAndroidActivity("{app}", "{intent}", "{dataType}", "{dataURI}")')
+            return
+            
+        else:
+            dialog.ok(CONFIG.ADDONTITLE, f"[B]פתיחת דפדפן עבור בדיקת מהירות Real Debrid אינו זמין עבור מערכת ההפעלה: {os_type_label}[/B]")
+##########################################
+    

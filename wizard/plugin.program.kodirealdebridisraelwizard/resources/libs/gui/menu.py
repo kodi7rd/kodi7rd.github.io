@@ -136,6 +136,12 @@ def youtube_menu(url=None):
 
 
 def net_tools():
+
+    ##############################################################################################
+    # KODI-RD-IL
+    directory.add_dir('Real Debrid בדיקת מהירות', {'mode': 'build_speed_test'}, icon=CONFIG.ICONSPEED, themeit=CONFIG.THEME1)
+    ##############################################################################################
+    
     directory.add_dir('Speed Test', {'mode': 'speedtest'}, icon=CONFIG.ICONSPEED, themeit=CONFIG.THEME1)
     if CONFIG.HIDESPACERS == 'No':
         directory.add_separator()
