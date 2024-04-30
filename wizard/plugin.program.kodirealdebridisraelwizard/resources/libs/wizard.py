@@ -168,6 +168,8 @@ class Wizard:
                     # Don't show the quick update notification window after build install (first build launch notification window will show), no quick update will be installed (wizard's noteid == latest noteid from URL)
                     CONFIG.set_setting('quick_update_notedismiss', 'true')
                     CONFIG.set_setting('quick_update_noteid', note_id)
+                # Show first build launch notification window
+                CONFIG.set_setting('notedismiss', 'false')
                 #########################################################################################################
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
