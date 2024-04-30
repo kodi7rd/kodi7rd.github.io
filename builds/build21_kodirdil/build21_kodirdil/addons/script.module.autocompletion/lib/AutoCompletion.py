@@ -48,21 +48,14 @@ def get_autocomplete_items(search_str, limit=10, provider=None):
         provider = LocalDictProvider(limit=limit)
     provider.limit = limit
     return provider.get_predictions(search_str)
-
-def is_hebrew(input_str):    
-       try:
-        import unicodedata
-        input_str=input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ','')
-        nfkd_form = unicodedata.normalize('NFKD', input_str.replace(' ','').replace('\n','').replace('\r','').replace('\t','').replace(' ',''))
-        a=False
-        for cha in input_str:
-            
-            a='HEBREW' in unicodedata.name(cha.strip())
-            if a:
-                break
-        return a
-       except:
+        
+def is_hebrew(input_str):
+    hebrew_range = (0x0590, 0x05FF)  # Hebrew Unicode range
+    for char in input_str:
+        if hebrew_range[0] <= ord(char) <= hebrew_range[1]:
             return True
+    return False
+
 def prep_search_str(text):
     for char in text:
         if 1488 <= ord(char) <= 1514:
