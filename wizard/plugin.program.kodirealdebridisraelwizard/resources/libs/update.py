@@ -56,8 +56,8 @@ def wizard_update():
                 # progress_dialog.create(CONFIG.ADDONTITLE, '[COLOR {0}]מוריד עדכון Wizard...'.format(CONFIG.COLOR2)
                                         # +'\n'+''
                                         # +'\n'+'אנא המתן[/COLOR]')
-                logging.log_notify(CONFIG.ADDONTITLE,
-                                   '[COLOR {0}]מוריד עדכון גרסה לWizard...[/COLOR]'.format(CONFIG.COLOR2))
+                # logging.log_notify(CONFIG.ADDONTITLE,
+                                   # '[COLOR {0}]מוריד עדכון גרסה לWizard...[/COLOR]'.format(CONFIG.COLOR2))
                 lib = os.path.join(CONFIG.PACKAGES, '{0}-{1}.zip'.format(CONFIG.ADDON_ID, ver))
                 try:
                     os.remove(lib)
@@ -65,10 +65,15 @@ def wizard_update():
                     pass
                 from resources.libs.downloader import Downloader
                 from resources.libs import extract
-                Downloader().download(zip, lib)
+                #####################################################
+                # KODI-RD-IL
+                # Downloader().download(zip, lib)
+                Downloader(progress_dialog_bg=True).download(zip, lib)
+                #####################################################
                 xbmc.sleep(2000)
                 # progress_dialog.update(0, '\n'+"Installing {0} update".format(CONFIG.ADDONTITLE))
-                percent, errors, error = extract.all(lib, CONFIG.ADDONS, True)
+                # percent, errors, error = extract.all(lib, CONFIG.ADDONS, True)
+                percent, errors, error = extract.all(lib, CONFIG.ADDONS, True, progress_dialog_bg=True)
                 # progress_dialog.close()
                 xbmc.sleep(1000)
                 # db.force_check_updates(auto=True, over=True)

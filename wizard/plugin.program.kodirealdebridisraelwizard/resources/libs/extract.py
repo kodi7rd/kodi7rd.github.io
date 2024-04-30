@@ -103,14 +103,20 @@ from resources.libs import install
 ########################################################################################################################################################
 
 
-def all(_in, _out, ignore=None, title=None):
-    progress_dialog = xbmcgui.DialogProgress()
+def all(_in, _out, ignore=None, title=None, progress_dialog_bg=False):
+    #####################################################
+    # KODI-RD-IL
+    # progress_dialog = xbmcgui.DialogProgress()
+    progress_dialog = xbmcgui.DialogProgressBG() if progress_dialog_bg else xbmcgui.DialogProgress()
+    #####################################################
     progress_dialog.create(CONFIG.ADDONTITLE, "Extracting Content")
     
-    return all_with_progress(_in, _out, progress_dialog, ignore, title)
+    # return all_with_progress(_in, _out, progress_dialog, ignore, title)
+    return all_with_progress(_in, _out, progress_dialog, ignore, title, progress_dialog_bg)
 
 
-def all_with_progress(_in, _out, dp, ignore, title):
+# def all_with_progress(_in, _out, dp, ignore, title):
+def all_with_progress(_in, _out, dp, ignore, title, progress_dialog_bg):
     from resources.libs import whitelist
 
     count = 0
@@ -224,14 +230,19 @@ def all_with_progress(_in, _out, dp, ignore, title):
                 logging.log('Error Extracting: {0}({1})'.format(item.filename, str(e)), level=xbmc.LOGERROR)
                 pass
         dp.update(prog, line1 + '\n' + line2 + '\n' + line3)
-        if dp.iscanceled():
-            break
+    #####################################################
+    # KODI-RD-IL
+        if not progress_dialog_bg:
+            if dp.iscanceled():
+                break
             
-    if dp.iscanceled():
-        dp.close()
-        logging.log_notify(CONFIG.ADDONTITLE,
-                           "[COLOR {0}]Extract Cancelled[/COLOR]".format(CONFIG.COLOR2))
-        sys.exit()
+    if not progress_dialog_bg:
+        if dp.iscanceled():
+            dp.close()
+            logging.log_notify(CONFIG.ADDONTITLE,
+                               "[COLOR {0}]Extract Cancelled[/COLOR]".format(CONFIG.COLOR2))
+            sys.exit()
+    #####################################################
         
     # KODI_RD_ISRAEL    
     install.restore_fentasticdata()

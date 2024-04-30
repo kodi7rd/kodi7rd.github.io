@@ -31,9 +31,14 @@ from resources.libs.common.config import CONFIG
 
 
 class Downloader:
-    def __init__(self):
+    def __init__(self, progress_dialog_bg=False):
         self.dialog = xbmcgui.Dialog()
-        self.progress_dialog = xbmcgui.DialogProgress()
+        #####################################################
+        # KODI-RD-IL
+        # self.progress_dialog = xbmcgui.DialogProgress()
+        self.progress_dialog_bg = progress_dialog_bg
+        self.progress_dialog = xbmcgui.DialogProgressBG() if self.progress_dialog_bg else xbmcgui.DialogProgress()
+        #####################################################
 
     def download(self, url, dest):
         self.progress_dialog.create(CONFIG.ADDONTITLE, "מוריד...")
@@ -91,4 +96,10 @@ class Downloader:
                     div = divmod(eta, 60)
                     speed += '[B]ETA:[/B] [COLOR %s]%02d:%02d[/COLOR][/COLOR]' % (CONFIG.COLOR1, div[0], div[1])
                     
-                    self.progress_dialog.update(done, '\n' + str(currently_downloaded) + '\n' + str(speed)) 
+                    #####################################################
+                    # KODI-RD-IL
+                    if self.progress_dialog_bg:
+                        self.progress_dialog.update(done)
+                    else:
+                        self.progress_dialog.update(done, '\n' + str(currently_downloaded) + '\n' + str(speed)) 
+                    #####################################################
