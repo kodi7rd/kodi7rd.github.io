@@ -1,5 +1,7 @@
+[COLOR yellow][B]v1.5.3[/B][/COLOR]
+* Small Real Debrid Speed Test function refactor.
 [COLOR yellow][B]v1.5.2[/B][/COLOR]
-* Add Real Debrid Speed test function (Android/Windows only).
+* Add Real Debrid Speed Test function (Android/Windows only).
 [COLOR yellow][B]v1.5.1[/B][/COLOR]
 * Windows kodi auto update - remove open browser, direct download only.
 [COLOR yellow][B]v1.5.0[/B][/COLOR]

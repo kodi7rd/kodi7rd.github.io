@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.kodirealdebridisraelwizard" name="[COLOR yellow]Kodi + Real Debrid Israel Wizard[/COLOR]" version="1.5.2" provider-name="KodiRealDebridIsrael">
+<addon id="plugin.program.kodirealdebridisraelwizard" name="[COLOR yellow]Kodi + Real Debrid Israel Wizard[/COLOR]" version="1.5.3" provider-name="KodiRealDebridIsrael">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />

@@ -768,12 +768,7 @@ def kodi_version_update_check(kodi_version_update_check_manual="false"):
 
 
 ##########################################
-# KODI-RD-IL - REAL DEBRID SPEED TEST
-def windows_open_real_debrid_speed_test():
-        # Open the URL in default browser
-        import webbrowser
-        webbrowser.get().open_new_tab("https://real-debrid.com/speedtest")
-        
+# KODI-RD-IL - REAL DEBRID SPEED TEST        
 def build_speed_test():
     dialog = xbmcgui.Dialog()
     
@@ -792,7 +787,9 @@ def build_speed_test():
         
         # Windows
         if tools.platform() == 'windows':
-            windows_open_real_debrid_speed_test()
+            # Open the URL in default browser
+            import webbrowser
+            webbrowser.get().open_new_tab("https://real-debrid.com/speedtest")
             
         # Android / Android TV - through browsers apps
         elif tools.platform() == 'android':
