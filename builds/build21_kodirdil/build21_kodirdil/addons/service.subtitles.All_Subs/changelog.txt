@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v4.3.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.8[/B][/COLOR]
+* Add subtitles support for local media / Kodi as an external player.
+* Manual IMDb ID search - get year if not exists.
+* Bug fixes.
+[COLOR yellow][B]v4.3.7[/B][/COLOR]
 * autosub.py - "add_embbded_sub_if_exists" usage refactor.
 [COLOR yellow][B]v4.3.6[/B][/COLOR]
 * Rewrite Hebrew embedded subtitles code + add support for English embedded subtitles.

@@ -56,7 +56,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             #########################################
             
             # Video File Name Label
-            self.video_file_name_label = self.video_data['Tagline']
+            self.video_file_name_label = self.video_data['Tagline'] or self.video_data['file_original_path']
             self.label_info_text = f"[B][COLOR deepskyblue]{self.video_file_name_label}[/COLOR][/B]"
             self.label_info = pyxbmct.Label(self.label_info_text)
             self.placeControl(self.label_info,  0, 0, 1, 1)

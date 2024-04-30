@@ -205,11 +205,14 @@ def clean_name(name):
 
 def remove_release_year_from_title_if_exists(title, year):
     year = str(year)
-    # Avoids: "Wonder Woman 1984" --> "Wonder Woman" (Release year is 2020)
-    if not year in title:
-        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | No release year to remove from {title}")
+    if not year:
+        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Year is empty.")
         return title
-    log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Removing {year} from {title}...")
+    # Avoids: "Wonder Woman 1984" --> "Wonder Woman" (Release year is 2020)
+    if year not in title:
+        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | No release year ({year}) to remove from {title}")
+        return title
+    log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Removing year {year} from title {title}...")
     
     import re
     # Remove year from title if exists ("Avengers 2012" / "Avengers (2012)" --> "Avengers")
@@ -219,11 +222,15 @@ def remove_release_year_from_title_if_exists(title, year):
     except:
         return title
 
-def manual_search_for_imdb_id(media_type, original_title, year):
+def manual_search_for_imdb_id(video_data):
                 
     ################### Manual Search for IMDb ID using TMDB API #############################
     # Queries TMDB API with media_type, original_title, and year - Gets TMDB ID
     # Queries TMDB API with TMDB ID - Gets IMDb ID
+    
+    media_type = video_data['media_type']
+    original_title = video_data['OriginalTitle']
+    year = video_data['year']
     
     import requests
     
@@ -292,17 +299,25 @@ def manual_search_for_imdb_id(media_type, original_title, year):
             log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_imdb_id_url: {response.request.url}")
             data = response.json()
             
-            imdb_id = data['external_ids']['imdb_id']
+            # Extract IMDb ID
+            video_data['imdb'] = imdb_id = data['external_ids']['imdb_id']
             log.warning(f"DEBUG | manual_search_for_imdb_id | Found imdb_id={imdb_id} | IMDb URL: https://www.imdb.com/title/{imdb_id}")
-            return imdb_id
+            
+            if not search_with_year:
+                # Extract Release Year
+                release_date_key = 'release_date' if media_type == "movie" else 'first_air_date'
+                video_data['year'] = release_year = str(data.get(release_date_key, year).split('-')[0])
+                log.warning(f"DEBUG | manual_search_for_imdb_id | Found year={release_year}")
+                
+            return video_data
             
         else:
             log.warning(f"DEBUG | manual_search_for_imdb_id | No TMDB results found.")
-            return ''
+            return video_data
             
     except Exception as e:
         log.warning(f"DEBUG | manual_search_for_imdb_id | manual_search_for_imdb_id | Exception: {str(e)}")
-        return ''
+        return video_data
       
 def get_playing_filename_and_remove_extension_if_exists():
 
@@ -327,6 +342,29 @@ def get_playing_filename_and_remove_extension_if_exists():
         
             
     return file_original_path
+    
+def get_local_media_data(video_data):
+
+    log.warning(f"DEBUG | get_video_data | get_local_media_data | file_original_path={video_data['file_original_path']}")
+    log.warning(f"DEBUG | get_video_data | get_local_media_data | BEFORE PTN | video_data={video_data}")
+    
+    # Parse torrent title
+    from resources.modules import parse_torrent_title
+    PTN_results = parse_torrent_title.parse(video_data['file_original_path'])
+    
+    # Update video_data with PTN results
+    video_data['title'] = PTN_results.get('title', video_data['title'])
+    video_data['year'] = str(PTN_results.get('year', video_data['year']))
+    video_data['season'] = str(PTN_results.get('season', video_data['season']))
+    video_data['episode'] = str(PTN_results.get('episode', video_data['episode']))
+    
+    # Set TVShowTitle if it's a TV media type
+    if video_data['season'] != '0' or video_data['episode'] != '0':
+        video_data['TVShowTitle'] = video_data['title']
+
+    log.warning(f"DEBUG | get_video_data | get_local_media_data | AFTER PTN | video_data={video_data}")
+    
+    return video_data
 
 def get_video_data_playing():
 
@@ -464,6 +502,22 @@ def get_video_data():
     else:
         video_data = get_video_data_not_playing()
     ##########################################################################################
+                  
+
+    ################### Local Media / External Player Support ################################
+    if xbmc.Player().isPlaying():
+    
+        # When all three keys are empty
+        if all(not video_data[key] for key in ['OriginalTitle', 'year', 'TVShowTitle']):
+            video_data['is_local_media'] = True
+            log.warning(f"DEBUG | get_video_data | is_local_media=True | Running get_local_media_data function.")
+            video_data = get_local_media_data(video_data)
+            
+        # When at least one of the keys has a value
+        else:
+            video_data['is_local_media'] = False
+            log.warning(f"DEBUG | get_video_data | is_local_media=False | Skipping get_local_media_data function.")
+    ##########################################################################################
 
 
     ################### Set Media Type #######################################################
@@ -474,7 +528,7 @@ def get_video_data():
     ##########################################################################################
 
 
-    ##########################################################################################
+    ################### Fillnull OriginalTitle ###############################################
     if video_data['media_type'] == 'tv':
         video_data['OriginalTitle'] = video_data['OriginalTitle'] or video_data['TVShowTitle']
     else:
@@ -487,8 +541,18 @@ def get_video_data():
     video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
     if video_data['media_type'] == 'tv':
         video_data['TVShowTitle'] = clean_name(video_data['TVShowTitle'])
+    ##########################################################################################
+
+
+    ################### Manual Search for IMDb ID using TMDB API #############################
+    if not video_data['imdb'].startswith('tt'):
+        from resources.modules.general import manual_search_for_imdb_id
+        log.warning(f"DEBUG | get_video_data | IMDb ID from video addon not found. searching manually using TMDB API...")
+        video_data = manual_search_for_imdb_id(video_data)
+    ##########################################################################################
     
     
+    ################### Remove Year From Titles ##############################################
     video_data['title'] = remove_release_year_from_title_if_exists(video_data['title'], video_data['year'])
     video_data['OriginalTitle'] = remove_release_year_from_title_if_exists(video_data['OriginalTitle'], video_data['year'])
     if video_data['media_type'] == 'tv':
@@ -496,7 +560,7 @@ def get_video_data():
     ##########################################################################################
     
     
-    log.warning(f"DEBUG | get_video_data | video_data={video_data}")
+    log.warning(f"DEBUG | get_video_data | FINAL | video_data={video_data}")
     return video_data
 
 def save_file_name(filename,language):
