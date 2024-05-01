@@ -148,7 +148,7 @@ def set_embedded_hebrew_sub(video_data):
         xbmc.Player().setSubtitleStream(index_sub)
         
         save_data='HebrewSubEmbedded'+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])+video_data['OriginalTitle']+video_data['Tagline']
-        save_file_name(que(save_data),"Hebrew")
+        save_file_name(que(save_data),"Hebrew",video_data)
             
         xbmc.sleep(300)
     
@@ -272,7 +272,7 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
             return True
     return False
     
-def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty):
+def place_sub(video_data,f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -307,7 +307,7 @@ def place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_sub
             log.warning('Auto Sub result:'+str(sub_file))
             xbmc.sleep(200)
             xbmc.Player().setSubtitles(sub_file)        
-            save_file_name(params["filename"],language)
+            save_file_name(params["filename"],language,video_data)
             
             f_count=0
             max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
@@ -506,7 +506,7 @@ def sub_from_main(arg):
         f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
   
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
 
         return_result=display_subtitle(f_result,video_data,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,argv1)
         log.warning(return_result)
@@ -521,7 +521,7 @@ def sub_from_main(arg):
         if sub_file=='EmbeddedSubSelected': # embedded subtitle
             notify( 'התרגום המובנה יופיע בעוד 10 שניות' )
             log.warning(filename)
-            save_file_name(filename,language)
+            save_file_name(filename,language,video_data)
         elif sub_file=='FaultSubException':
             notify( 'תקלה בהורדה נסה שנית' )
         else: # External subtitle
@@ -529,7 +529,7 @@ def sub_from_main(arg):
             log.warning('Auto Sub result:'+str(sub_file))
             xbmc.sleep(100)
             xbmc.Player().setSubtitles(sub_file)
-            save_file_name(filename,language)
+            save_file_name(filename,language,video_data)
             f_count=0
             max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
             for filename_o in os.listdir(CachedSubFolder):
@@ -595,7 +595,7 @@ def sub_from_main(arg):
         f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='sub_window_unpause':
@@ -618,7 +618,7 @@ def sub_from_main(arg):
         f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='next':
@@ -650,7 +650,7 @@ def sub_from_main(arg):
         f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
         next_one=False
         selected_sub=None
         for items in f_result:
@@ -677,7 +677,7 @@ def sub_from_main(arg):
             general.show_msg="מוכן"
             if (sub_file!='EmbeddedSubSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
-            save_file_name(filename,language)
+            save_file_name(filename,language,video_data)
             
         else:
             general.show_msg="סוף הכתוביות"
@@ -713,7 +713,7 @@ def sub_from_main(arg):
         f_result = add_embbded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
-        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
         pre_one=None
         found=None
         for items in f_result:
@@ -743,9 +743,9 @@ def sub_from_main(arg):
             xbmc.sleep(100)
             if (sub_file!='EmbeddedSubSelected') and (sub_file!='FaultSubException'):
                 xbmc.Player().setSubtitles(sub_file)
-                save_file_name(filename,language)
+                save_file_name(filename,language,video_data)
             else:
-                save_file_name(unque(filename),language)
+                save_file_name(unque(filename),language,video_data)
                 
         else:
             general.show_msg="זאת הכתובית הראשונה"
@@ -922,7 +922,7 @@ class KodiMonitor(xbmc.Monitor):
                             is_embedded_hebrew_sub_exists = check_if_embedded_sub_exists(embedded_language='heb')
                         
                         # Gets last chosen subtitle from subtitles cache DB (if exists) for playing video tagline.
-                        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data()
+                        last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
                         
                         # Get sub language of first subtitle in external subs list found.
                         if len(f_result) > 0:
@@ -975,7 +975,7 @@ class KodiMonitor(xbmc.Monitor):
                             wait_for_video()
                             
                             if len(f_result)>0:
-                                sub_name,sub_filename=place_sub(f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty)
+                                sub_name,sub_filename=place_sub(video_data,f_result,last_sub_name_in_cache,last_sub_language_in_cache,all_subs,last_sub_in_cache_is_empty)
                             
                             if Addon.getSetting("enable_autosub_notifications")=='true':
                             

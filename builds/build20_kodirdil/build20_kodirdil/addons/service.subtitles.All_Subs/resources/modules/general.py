@@ -563,9 +563,8 @@ def get_video_data():
     log.warning(f"DEBUG | get_video_data | FINAL | video_data={video_data}")
     return video_data
 
-def save_file_name(filename,language):
+def save_file_name(filename,language,video_data):
 
-    video_data=get_video_data()
     video_data_tagline = quote(video_data['Tagline'])
     video_data_file_original_path = quote(video_data['file_original_path'])
     
@@ -590,9 +589,8 @@ def save_file_name(filename,language):
 
     dbcon.commit()
     dbcon.close()
-def get_db_data():
+def get_db_data(video_data):
 
-    video_data=get_video_data()
     video_data_tagline = quote(video_data['Tagline'])
     video_data_file_original_path = quote(video_data['file_original_path'])
     

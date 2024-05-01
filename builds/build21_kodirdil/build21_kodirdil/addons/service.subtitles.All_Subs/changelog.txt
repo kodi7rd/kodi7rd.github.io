@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.3.8[/B][/COLOR]
+﻿[COLOR yellow][B]v4.3.9[/B][/COLOR]
+* Remove redundant call to get_video_data function and reduce API calls to TMDb (general.py | save_file_name/get_db_data).
+[COLOR yellow][B]v4.3.8[/B][/COLOR]
 * Add subtitles support for local media / Kodi as an external player.
 * Manual IMDb ID search - get year if not exists.
 * Bug fixes.

@@ -115,7 +115,7 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             else:
                 if not EmbeddedSubSelected:
                     self.label_info.setLabel('[B]מוכן[/B]' + ' | ' + self.label_info_text)
-                    save_file_name(filename,language)
+                    save_file_name(filename,language,self.video_data)
                     # Save sub in Cached_subs
                     f_count=0
                     max_sub_cache=int(Addon.getSetting("subtitle_trans_cache"))
@@ -146,9 +146,9 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
                                 pass
                 else:
                     self.label_info.setLabel('[B]נבחר תרגום מובנה, יופיע עוד 10 שניות[/B]' + ' | ' + self.label_info_text)
-                    save_file_name(unque(filename),language)
+                    save_file_name(unque(filename),language,self.video_data)
                            
-                self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data()
+                self.last_sub_name_in_cache,self.last_sub_language_in_cache,self.all_subs=get_db_data(self.video_data)
                 self.set_active_controls()
                 from resources.modules import general
                 general.show_msg="END"
