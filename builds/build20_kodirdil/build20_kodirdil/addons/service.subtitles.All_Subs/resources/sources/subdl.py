@@ -59,20 +59,20 @@ def search_subtitles(item):
     lang=[]
     # Language codes from: https://subdl.com/api-files/language_list.json
     if Addon.getSetting("language_hebrew")=='true':
-        lang.append('he')
+        lang.append('HE')
     if Addon.getSetting("language_english")=='true':
-        lang.append('en')
+        lang.append('EN')
     # if Addon.getSetting("language_russian")=='true':
-        # lang.append('ru')
+        # lang.append('RU')
     # if Addon.getSetting("language_arab")=='true':
-        # lang.append('ar')
+        # lang.append('AR')
     # if len(Addon.getSetting("other_lang"))>0:
         # all_lang=Addon.getSetting("other_lang").split(",")
         # for items in all_lang:
             # lang.append(str(items))
     # If 'all_lang' is enabled - override lang to 'ALL' only (required 'ALL' only in new API)
     if Addon.getSetting("all_lang")=='true':
-        lang = ['he','en']
+        lang = ['HE','EN']
         # lang = ['ALL']
        
     # lang_string = ','.join(lang)
@@ -130,7 +130,7 @@ def search_subtitles(item):
             #################################################
             querystring['year'] = year
     
-    log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles final querystring: {str(querystring)}")
+    log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles final querystring: {str(querystring)} | Languages: {str(lang)}")
     response_subtitles_list = []
     for language in lang:
         try:
