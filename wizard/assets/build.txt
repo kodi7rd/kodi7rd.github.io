@@ -28,4 +28,4 @@ fanart="https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/fanart.jp
 preview="http://"
 adult="no"
 info="http://"
-description="הבילד של קודי ריל דבריד ישראל"
+description="TEST"
