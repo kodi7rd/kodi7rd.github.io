@@ -1,84 +1,106 @@
 <settings>
-    <setting id="defaultsearchwindowbehavior" type="bool">false</setting>
-    <setting id="no_fanart" type="bool">false</setting>
-    <setting id="tvshowkeywordresults" type="bool">false</setting>
-    <setting id="tvshowresults" type="bool">true</setting>
-    <setting id="touchmode" type="bool">false</setting>
-    <setting id="homemenunotvshowbutton" type="bool">false</setting>
-    <setting id="homemenunovideosbutton" type="bool">true</setting>
-    <setting id="homemenunogamesbutton" type="bool">true</setting>
-    <setting id="autoscroll" type="bool">true</setting>
-    <setting id="homemenunomusicbutton" type="bool">true</setting>
-    <setting id="homemenunoprogramsbutton" type="bool">true</setting>
-    <setting id="homemenunomoviesbutton" type="bool">false</setting>
-    <setting id="hidetvshowresults" type="bool">false</setting>
-    <setting id="hidetvshowkeywordresults" type="bool">true</setting>
-    <setting id="homemenunofavbutton" type="bool">false</setting>
-    <setting id="homemenunocustom3button" type="bool">true</setting>
-    <setting id="firsttimerun" type="bool">true</setting>
-    <setting id="no_slide_animations" type="bool">true</setting>
-    <setting id="category_widget_display_delay" type="bool">false</setting>
-    <setting id="choosesubtitlesbuttonopenskodiwindow" type="bool">false</setting>
-    <setting id="homemenunocustom1button" type="bool">false</setting>
-    <setting id="homemenunotvshowsbutton" type="bool">false</setting>
-    <setting id="landscapeinfoscroll" type="bool">true</setting>
-    <setting id="enable.alternateinfo" type="bool">true</setting>
-    <setting id="showplayerpausewindow" type="bool">true</setting>
-    <setting id="homemenunoradiobutton" type="bool">true</setting>
-    <setting id="show_weatherinfo" type="bool">false</setting>
-    <setting id="hide_mediaflags" type="bool">false</setting>
-    <setting id="homemenunomoviebutton" type="bool">false</setting>
+    <setting id="disable.imdbpopularrating" type="bool">true</setting>
     <setting id="animate_background_fanart" type="bool">false</setting>
-    <setting id="circle_rating" type="bool">true</setting>
-    <setting id="circle_none" type="bool">false</setting>
-    <setting id="noiconsilhouettes" type="bool">false</setting>
-    <setting id="moviekeywordresults" type="bool">false</setting>
-    <setting id="nofocusanimations" type="bool">true</setting>
-    <setting id="homemenunoweatherbutton" type="bool">true</setting>
-    <setting id="show_profilename" type="bool">false</setting>
-    <setting id="hidepeopleresults" type="bool">true</setting>
-    <setting id="hidemovieresults" type="bool">false</setting>
-    <setting id="homemenunopicturesbutton" type="bool">true</setting>
-    <setting id="home_no_categories_widget" type="bool">true</setting>
-    <setting id="hide_background_fanart" type="bool">false</setting>
-    <setting id="hideraindrops" type="bool">false</setting>
-    <setting id="hidetraktresults" type="bool">true</setting>
-    <setting id="show_musicvideoposter" type="bool">false</setting>
-    <setting id="homemenunotvbutton" type="bool">true</setting>
-    <setting id="peopleresults" type="bool">false</setting>
-    <setting id="homemenunomusicvideobutton" type="bool">true</setting>
-    <setting id="homemenunocustom2button" type="bool">true</setting>
-    <setting id="hidecollectionsresults" type="bool">true</setting>
-    <setting id="nosearchresultswindow" type="bool">false</setting>
-    <setting id="osdautoclose" type="bool">true</setting>
-    <setting id="zoomtoggle" type="bool">true</setting>
+    <setting id="disable.widgetlabelratings" type="bool">true</setting>
+    <setting id="homemenunomoviesbutton" type="bool">false</setting>
     <setting id="movieresults" type="bool">true</setting>
+    <setting id="showplayerpausewindow" type="bool">true</setting>
+    <setting id="home_no_categories_widget" type="bool">true</setting>
+    <setting id="homemenunotvshowsbutton" type="bool">false</setting>
+    <setting id="disable.metacriticrating" type="bool">false</setting>
+    <setting id="choosesubtitlesbuttonopenskodiwindow" type="bool">false</setting>
+    <setting id="homemenunopicturesbutton" type="bool">true</setting>
+    <setting id="tvshowkeywordresults" type="bool">false</setting>
+    <setting id="homemenunomoviebutton" type="bool">false</setting>
+    <setting id="show_weatherinfo" type="bool">false</setting>
+    <setting id="peopleresults" type="bool">false</setting>
+    <setting id="category_widget_display_delay" type="bool">false</setting>
+    <setting id="homemenunogamesbutton" type="bool">true</setting>
+    <setting id="no_fanart" type="bool">false</setting>
+    <setting id="homemenunocustom2button" type="bool">true</setting>
+    <setting id="disable.colorstudio" type="bool">false</setting>
+    <setting id="hideumbrellatrakttvresults" type="bool">false</setting>
+    <setting id="hide_mediaflags" type="bool">false</setting>
+    <setting id="enable.alternateinfo" type="bool">true</setting>
+    <setting id="disable.ratingsinf" type="bool">false</setting>
+    <setting id="homemenunovideosbutton" type="bool">true</setting>
+    <setting id="landscapeinfoscroll" type="bool">true</setting>
+    <setting id="hidetvshowresults" type="bool">false</setting>
+    <setting id="homemenunocustom3button" type="bool">true</setting>
+    <setting id="uselandscape" type="bool">false</setting>
+    <setting id="disable.tmdbrating" type="bool">false</setting>
+    <setting id="hidepeopleresults" type="bool">true</setting>
+    <setting id="homemenunotvshowbutton" type="bool">false</setting>
+    <setting id="hidetraktresults" type="bool">true</setting>
+    <setting id="homemenunoprogramsbutton" type="bool">true</setting>
+    <setting id="trailerplaying" type="bool">false</setting>
+    <setting id="homemenunocustom1button" type="bool">false</setting>
     <setting id="traktresults" type="bool">false</setting>
-    <setting id="collectionsresults" type="bool">false</setting>
-    <setting id="hidemoviekeywordresults" type="bool">true</setting>
-    <setting id="show_profileavatar" type="bool">false</setting>
+    <setting id="no_slide_animations" type="bool">true</setting>
+    <setting id="homemenunomusicvideobutton" type="bool">true</setting>
+    <setting id="hidemovieresults" type="bool">false</setting>
+    <setting id="touchmode" type="bool">false</setting>
+    <setting id="show_profilename" type="bool">false</setting>
+    <setting id="enable.oneclicktrailers" type="bool">false</setting>
     <setting id="homemenunoidanplusbutton" type="bool">false</setting>
+    <setting id="noiconsilhouettes" type="bool">false</setting>
+    <setting id="nosearchresultswindow" type="bool">false</setting>
+    <setting id="oneclickclose" type="bool">false</setting>
+    <setting id="hideraindrops" type="bool">false</setting>
+    <setting id="homemenunoweatherbutton" type="bool">true</setting>
+    <setting id="nofocusanimations" type="bool">true</setting>
+    <setting id="disable.imdbrating" type="bool">false</setting>
+    <setting id="firsttimerun" type="bool">true</setting>
+    <setting id="tvshowresults" type="bool">true</setting>
+    <setting id="homemenunoradiobutton" type="bool">true</setting>
+    <setting id="disable.rtarating" type="bool">false</setting>
+    <setting id="hidecollectionsresults" type="bool">true</setting>
+    <setting id="homemenunofavbutton" type="bool">false</setting>
+    <setting id="homemenunomusicbutton" type="bool">true</setting>
+    <setting id="show_musicvideoposter" type="bool">false</setting>
+    <setting id="hideumbrellatraktmovieresults" type="bool">false</setting>
+    <setting id="zoomtoggle" type="bool">true</setting>
     <setting id="circle_userrating" type="bool">false</setting>
-    <setting id="SearchInputEncoded" type="string"></setting>
-    <setting id="MenuCustom2Label" type="string">Custom 2</setting>
+    <setting id="osdautoclose" type="bool">true</setting>
+    <setting id="circle_rating" type="bool">true</setting>
+    <setting id="hidetvshowkeywordresults" type="bool">true</setting>
+    <setting id="hidemoviekeywordresults" type="bool">true</setting>
+    <setting id="collectionsresults" type="bool">false</setting>
+    <setting id="moviekeywordresults" type="bool">false</setting>
+    <setting id="homemenunotvbutton" type="bool">true</setting>
+    <setting id="autoscroll" type="bool">true</setting>
+    <setting id="hide_background_fanart" type="bool">false</setting>
+    <setting id="circle_none" type="bool">false</setting>
+    <setting id="hideumbrellapeopletvresults" type="bool">false</setting>
+    <setting id="hideumbrellapeoplemovieresults" type="bool">false</setting>
+    <setting id="defaultsearchwindowbehavior" type="bool">false</setting>
+    <setting id="show_profileavatar" type="bool">false</setting>
+    <setting id="disable.rtcrating" type="bool">false</setting>
+    <setting id="WeatherFanart.path" type="string"></setting>
+    <setting id="MenuCustom1Label" type="string">[B]עידן פלוס[/B]</setting>
+    <setting id="MenuCustom3Label" type="string">Custom 3</setting>
+    <setting id="MovieGenreFanart.Name" type="string"></setting>
+    <setting id="mdblist_api_key" type="string">s4oyk5ynj4i0qc40yg5cntffp</setting>
+    <setting id="SearchInputTraktEncoded" type="string">marvel</setting>
     <setting id="MovieGenreFanart.path" type="string"></setting>
     <setting id="WeatherFanart.name" type="string"></setting>
-    <setting id="MenuIdanPlusLabel" type="string">[B]עידן פלוס[/B]</setting>
-    <setting id="MenuCustom3Label" type="string">Custom 3</setting>
-    <setting id="category_widget_delay" type="string">500</setting>
-    <setting id="HomeFanart.ext" type="string"></setting>
-    <setting id="MovieGenreFanart.Name" type="string"></setting>
-    <setting id="MenuCustom1Label" type="string">[B]עידן פלוס[/B]</setting>
-    <setting id="searchinput" type="string"></setting>
-    <setting id="MenuTVShowLabel" type="string">[B]סדרות[/B]</setting>
-    <setting id="background_overlay" type="string">2</setting>
     <setting id="MenuMovieLabel" type="string">[B]סרטים[/B]</setting>
+    <setting id="MenuTVShowLabel" type="string">[B]סדרות[/B]</setting>
+    <setting id="current_search_provider" type="string">0</setting>
+    <setting id="defaultbackgroundbrightness" type="string">High</setting>
     <setting id="WeatherFanart.ext" type="string"></setting>
-    <setting id="databasestatus" type="string"></setting>
-    <setting id="SearchInputTraktEncoded" type="string">&apos;none&apos;</setting>
+    <setting id="MenuIdanPlusLabel" type="string">[B]עידן פלוס[/B]</setting>
+    <setting id="MenuCustom2Label" type="string">Custom 2</setting>
+    <setting id="defaultfanartbrightness" type="string">Low</setting>
+    <setting id="custombackground" type="string">kodirdil/skin_backgrounds/lightning_bg.jpg</setting>
+    <setting id="HomeFanart.ext" type="string"></setting>
+    <setting id="category_widget_delay" type="string">500</setting>
+    <setting id="searchinput" type="string">marvel</setting>
     <setting id="osdautoclosetime" type="string"></setting>
-    <setting id="WeatherFanart.path" type="string"></setting>
-    <setting id="MovieGenreFanart.ext" type="string"></setting>
     <setting id="HomeFanart.name" type="string"></setting>
+    <setting id="databasestatus" type="string"></setting>
+    <setting id="SearchInputEncoded" type="string">marvel</setting>
+    <setting id="background_overlay" type="string">2</setting>
     <setting id="homefanart.path" type="string"></setting>
+    <setting id="MovieGenreFanart.ext" type="string"></setting>
 </settings>

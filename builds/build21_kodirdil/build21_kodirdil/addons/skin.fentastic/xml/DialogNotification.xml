@@ -6,6 +6,7 @@
 			<depth>DepthMax</depth>
 			<top>100</top>
 			<right>0</right>
+			<!-- KODI-RD-IL CHANGES MULTIPLE -->
 			<width>720</width>
 			<include>OpenClose_Right</include>
 			<visible>String.IsEmpty(Window(Home).Property(script.cinemavision.running))</visible>
@@ -25,6 +26,7 @@
 				<texture colordiffuse="dialog_bg">masks/dialog-notification.png</texture>
 				<bordersize>17</bordersize>
 			</control>
+			<!-- TODO Find way to apply diffuse texture -->
 			<control type="image" id="400">
 				<description>avatar</description>
 				<left>590</left>

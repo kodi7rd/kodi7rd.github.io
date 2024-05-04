@@ -1090,21 +1090,21 @@ msgstr ""
 
 # DialogSeekVideoOSD in Player - VideoOSD.XML
 
-msgctxt "#700032"
-msgid "Show Seek Steps Window"
-msgstr ""
+# msgctxt "#700032"
+# msgid "Show Seek Steps Window"
+# msgstr ""
 
-msgctxt "#700033"
-msgid "Forward Seek Steps"
-msgstr ""
+# msgctxt "#700033"
+# msgid "Forward Seek Steps"
+# msgstr ""
 
-msgctxt "#700034"
-msgid "Rewind Seek Steps"
-msgstr ""
+# msgctxt "#700034"
+# msgid "Rewind Seek Steps"
+# msgstr ""
 
-msgctxt "#700035"
-msgid "Mins"
-msgstr ""
+# msgctxt "#700035"
+# msgid "Mins"
+# msgstr ""
 
 # Zoom Toggle Buttons in Player - VideoOSD.XML
 
@@ -1254,6 +1254,26 @@ msgstr ""
 
 msgctxt "#700063"
 msgid "Update Kodi Version"
+msgstr ""
+
+# CONTINUE FENtastic Search Results Window - Custom_1121_SearchResults.xml:
+
+msgctxt "#700064"
+msgid "Search provider"
+msgstr ""
+
+# InfoPanel - Variables.xml:
+
+msgctxt "#700065"
+msgid "Aired"
+msgstr ""
+
+msgctxt "#700066"
+msgid "hr"
+msgstr ""
+
+msgctxt "#700067"
+msgid "mins"
 msgstr ""
 
 ################################################################

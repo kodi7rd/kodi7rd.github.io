@@ -908,21 +908,21 @@ msgstr "הסתיימה"
 
 # DialogSeekVideoOSD in Player - VideoOSD.XML
 
-msgctxt "#700032"
-msgid "Show Seek Steps Window"
-msgstr "הצג חלון לקפיצות זמן מהירות"
+# msgctxt "#700032"
+# msgid "Show Seek Steps Window"
+# msgstr "הצג חלון לקפיצות זמן מהירות"
 
-msgctxt "#700033"
-msgid "Forward Seek Steps"
-msgstr "דלג קדימה"
+# msgctxt "#700033"
+# msgid "Forward Seek Steps"
+# msgstr "דלג קדימה"
 
-msgctxt "#700034"
-msgid "Rewind Seek Steps"
-msgstr "דלג אחורה"
+# msgctxt "#700034"
+# msgid "Rewind Seek Steps"
+# msgstr "דלג אחורה"
 
-msgctxt "#700035"
-msgid "Mins"
-msgstr "דקות"
+# msgctxt "#700035"
+# msgid "Mins"
+# msgstr "דקות"
 
 # Zoom Toggle Buttons in Player - VideoOSD.XML
 
@@ -1073,5 +1073,25 @@ msgstr "גרסת קודי"
 msgctxt "#700063"
 msgid "Update Kodi Version"
 msgstr "עדכון גרסת קודי"
+
+# FENtastic Search Results Window - Custom_1121_SearchResults.xml:
+
+msgctxt "#700064"
+msgid "Search provider"
+msgstr "חיפוש דרך"
+
+# InfoPanel - Variables.xml:
+
+msgctxt "#700065"
+msgid "Aired"
+msgstr "שודר לראשונה"
+
+msgctxt "#700066"
+msgid "hr"
+msgstr "שעות"
+
+msgctxt "#700067"
+msgid "mins"
+msgstr "דקות"
 
 ################################################################
