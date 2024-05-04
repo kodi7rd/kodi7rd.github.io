@@ -568,6 +568,14 @@
 				<onup>600</onup>
 				<ondown>600</ondown>
 				<visible>Container(9000).HasFocus(6)</visible>
+				<!-- KODI-RD-IL ADDITION -->
+				<control type="radiobutton" id="99999">
+					<label>$LOCALIZE[700068]</label>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.ToggleSetting(show_widget_menu_border)</onclick>
+					<selected>!Skin.HasSetting(show_widget_menu_border)</selected>
+				</control>
+				<!-- ##################### -->
 				<control type="radiobutton" id="603">
 					<label>$LOCALIZE[31002]</label>
 					<include>DefaultSettingButton</include>

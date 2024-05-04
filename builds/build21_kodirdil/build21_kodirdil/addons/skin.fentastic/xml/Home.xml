@@ -847,6 +847,7 @@
 								<animation effect="fade" start="100" end="0" time="0">UnFocus</animation>
 								<!-- KODI-RD-IL ADDITION - FOCUS MENU BLUE BACKGRUOND -->
 								<control type="image">
+									<visible>!Skin.HasSetting(show_widget_menu_border)</visible>
 									<left>0</left>
 									<top>0</top>
 									<width>395</width>

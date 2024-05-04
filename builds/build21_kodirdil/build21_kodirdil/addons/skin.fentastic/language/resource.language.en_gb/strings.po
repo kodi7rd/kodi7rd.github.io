@@ -1276,4 +1276,10 @@ msgctxt "#700067"
 msgid "mins"
 msgstr ""
 
+#: Show Widget Menu button_focus Border - SkinSettings.xml
+
+msgctxt "#700068"
+msgid "Show widget menu name colored border"
+msgstr ""
+
 ################################################################
