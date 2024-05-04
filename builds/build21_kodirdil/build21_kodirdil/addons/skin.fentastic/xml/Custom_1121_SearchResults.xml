@@ -270,7 +270,8 @@
 					</control>
 					<control type="textbox">
 						<top>75</top>
-						<left>30</left>
+						<!-- KODI-RD-IL CHANGES -->
+						<left>10</left>
 						<width>430</width>
 						<aligny>center</aligny>
 						<height>98</height>
