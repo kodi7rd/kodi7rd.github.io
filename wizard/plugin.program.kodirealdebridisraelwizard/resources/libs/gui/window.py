@@ -543,7 +543,7 @@ def show_notification(msg, test=False, source="notification"):
 
 #####################################
 # KODI-RD-IL
-def show_notification_with_downloader_image(msg):
+def show_notification_with_extra_image(msg, image_id, ExtraImageURL):
     class Notification(xbmcgui.WindowXMLDialog):
 
         def __init__(self, *args, **kwargs):
@@ -553,7 +553,7 @@ def show_notification_with_downloader_image(msg):
             self.image = 101
             self.titlebox = 102
             self.titleimage = 103
-            self.DownloaderCodeImage = 999
+            self.ExtraImage = image_id
             self.textbox = 104
             self.scroller = 105
             self.dismiss = 201
@@ -571,7 +571,7 @@ def show_notification_with_downloader_image(msg):
                 self.getControl(self.titlebox).setLabel(CONFIG.THEME3.format(CONFIG.HEADERMESSAGE))
             else:
                 self.getControl(self.titleimage).setImage(CONFIG.HEADERIMAGE)
-                self.getControl(self.DownloaderCodeImage).setImage(CONFIG.APK_DOWNLOADER_CODE_IMAGE_URL)
+                self.getControl(self.ExtraImage).setImage(ExtraImageURL)
 
         # def do_remind(self):
             # self.close()
@@ -591,7 +591,7 @@ def show_notification_with_downloader_image(msg):
 
     xbmc.executebuiltin('Skin.SetString(headertexttype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Text' else 'false'))
     xbmc.executebuiltin('Skin.SetString(headerimagetype, {0})'.format('true' if CONFIG.HEADERTYPE == 'Image' else 'false'))
-    notify = Notification("NotificationsWithDownloaderImage.xml", CONFIG.ADDON_PATH, 'Default', msg=msg)
+    notify = Notification("NotificationsWithExtraImage.xml", CONFIG.ADDON_PATH, 'Default', msg=msg)
     notify.doModal()
     del notify
 #####################################

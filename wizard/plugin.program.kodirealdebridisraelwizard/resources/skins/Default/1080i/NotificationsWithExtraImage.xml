@@ -39,6 +39,14 @@
                 <aspectratio aligny="center" align="center">keep</aspectratio>
                 <visible>Skin.String(headerimagetype)</visible>
             </control>
+            <!-- KODI-RD-IL Build skin switch image -->
+            <control type="image" id="888">
+                <centerleft>45%</centerleft>
+                <top>-2%</top>
+				<width>79%</width>
+				<height>100%</height>
+				<aspectratio aligny="center" align="center">keep</aspectratio>
+            </control>
             <!-- KODI-RD-IL APK Downloader code -->
             <control type="image" id="999">
                 <centerleft>46%</centerleft>

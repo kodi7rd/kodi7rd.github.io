@@ -26,6 +26,8 @@ UPDATECHECK = 0
 APKFILE = 'http://'
 
 #########################################################
+# KODI-RD-IL - BUILD SKIN SWITCH
+BUILD_SKIN_SWITCH_IMAGE_URL = 'https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/kodirdil21.png'
 # KODI-RD-IL - AUTO QUICK UPDATES
 QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notification_files/quick_update.txt'
 # KODI-RD-IL - AUTO ANDROID/WINDOWS UPDATE

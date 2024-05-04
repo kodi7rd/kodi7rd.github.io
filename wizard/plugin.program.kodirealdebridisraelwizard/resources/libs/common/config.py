@@ -113,6 +113,8 @@ class Config:
         self.NOTIFICATION = uservar.NOTIFICATION
         
         #########################################################################################################
+        # KODI-RD-IL - BUILD SKIN SWITCH
+        self.BUILD_SKIN_SWITCH_IMAGE_URL = uservar.BUILD_SKIN_SWITCH_IMAGE_URL
         # KODI-RD-IL - AUTO QUICK UPDATES
         self.QUICK_UPDATE_NOTIFICATION_URL = uservar.QUICK_UPDATE_NOTIFICATION_URL
         #########################################################################################################

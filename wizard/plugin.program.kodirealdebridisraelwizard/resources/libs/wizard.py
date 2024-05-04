@@ -170,6 +170,8 @@ class Wizard:
                     CONFIG.set_setting('quick_update_noteid', note_id)
                 # Show first build launch notification window
                 CONFIG.set_setting('notedismiss', 'false')
+                # Show first build launch build skin switch notification window
+                CONFIG.set_setting('build_skin_switch_notifcation_dismiss', 'false')
                 #########################################################################################################
 
                 # self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]התקנת הבילד הסתיימה. לחץ אישור/OK כדי לסגור את קודי. לאחר מכן, הפעל אותו מחדש.[/COLOR]".format(CONFIG.COLOR2))
@@ -516,9 +518,14 @@ def build_switch_skin():
                            '[COLOR {0}]לא מותקן בילד![/COLOR]'.format(CONFIG.COLOR2))
         return
 
+
+    from resources.libs.gui import window   
+    msg = f"הסקינים הקיימים בבילד:\n1. סקין Estuary\n2. סקין FENtastic"
+    window.show_notification_with_extra_image(msg, 888, CONFIG.BUILD_SKIN_SWITCH_IMAGE_URL)
+
     skin_mapping = {
         'סקין Estuary - מראה פשוט עם כפתורים': 'skin.estuary',
-        'סקין FENtastic - יפהפה!': 'skin.fentastic'
+        'סקין FENtastic - יפהפה': 'skin.fentastic'
     }
         
     # Get the name of the current active skin   
@@ -635,7 +642,7 @@ def kodi_apk_update_check(kodi_version_update_check_manual, os_type_label):
                     
                     msg = f"כעת תיפתח אפליקציית Downloader. יש להזין את המספר:\n[COLOR orange]{CONFIG.APK_DOWNLOADER_CODE}[/COLOR]\nולבחור את גרסת ה-APK (32/64 ביט) המתאימה למכשיר שלכם.\n[COLOR limegreen]עכשיו זה הזמן לרשום/לצלם את המספר![/COLOR]"
                     from resources.libs.gui import window
-                    window.show_notification_with_downloader_image(msg)
+                    window.show_notification_with_extra_image(msg, 999, CONFIG.APK_DOWNLOADER_CODE_IMAGE_URL)
                     
                     # Check if Downloader app installed.
                     if check_if_app_installed(downloader_app_packge_id):
