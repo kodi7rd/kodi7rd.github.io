@@ -984,21 +984,21 @@ msgstr ""
 
 # DialogSeekVideoOSD in Player - VideoOSD.XML
 
-msgctxt "#700011"
-msgid "Show Seek Steps Window"
-msgstr ""
+# msgctxt "#700011"
+# msgid "Show Seek Steps Window"
+# msgstr ""
 
-msgctxt "#700012"
-msgid "Forward Seek Steps"
-msgstr ""
+# msgctxt "#700012"
+# msgid "Forward Seek Steps"
+# msgstr ""
 
-msgctxt "#700013"
-msgid "Rewind Seek Steps"
-msgstr ""
+# msgctxt "#700013"
+# msgid "Rewind Seek Steps"
+# msgstr ""
 
-msgctxt "#700014"
-msgid "Mins"
-msgstr ""
+# msgctxt "#700014"
+# msgid "Mins"
+# msgstr ""
 
 # Zoom Toggle Buttons in Player - VideoOSD.XML
 

@@ -54,8 +54,6 @@
 	<expression name="PausedTended_Prefix">Skin.HasSetting(ShowPlayerPauseWindow) + Player.Paused + !String.IsEmpty(VideoPlayer.Plot) + !Window.IsActive(1123)</expression>
 	<expression name="Label_Visible_Prefix">VideoPlayer.Content(movies) | VideoPlayer.Content(tvshows) | VideoPlayer.Content(seasons) | VideoPlayer.Content(episodes) + ![String.IsEmpty(VideoPlayer.Genre) | String.IsEmpty(VideoPlayer.Year)]</expression>
 	<expression name="fakebuttonsync">Control.HasFocus(700450)</expression>
-	<expression name="SeekStepsForward">Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + !ControlGroup(202).HasFocus()</expression>
-	<expression name="SeekStepsBack">Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + !ControlGroup(202).HasFocus()</expression>
 	<!-- ##################### -->
 	
 	<include name="CommonScrollbars">
@@ -2044,58 +2042,6 @@
 		</definition>
 	</include>
 	-->
-	
-	<include name="SetSeekStepsLabel">
-		<param name="visible" default="$EXP[SeekStepsForward]"/>
-		<param name="top" default="$PARAM[top]"/>
-		<param name="left" default="$PARAM[left]"/>
-		<param name="width" default="$PARAM[width]"/>
-		<param name="height" default="$PARAM[height]"/>
-		<param name="label" default="$LOCALIZE[700012]"/>
-		<param name="color" default="$PARAM[color]"/>
-		<definition>
-			<control type="label">
-			<include>VisibleChange_Delayed</include>
-			<visible>$PARAM[visible]</visible>
-			<top>$PARAM[top]</top>
-			<left>$PARAM[left]</left>
-			<width>$PARAM[width]</width>
-			<height>$PARAM[height]</height>
-			<label>[B]$PARAM[label][/B]</label>
-			<textcolor>$PARAM[color]</textcolor>
-			</control>
-			<nested />
-		</definition>
-	</include>
-	
-	<include name="SetSeekStepdVideoOSD">
-		<include content="SetSeekStepsLabel">
-		<param name="top">800</param>
-		<param name="left">25</param>
-		<param name="width">200</param>
-		<param name="height">50</param>
-		<param name="color">button_focus</param>
-			<include content="SetSeekStepsLabel">
-				<param name="visible">$EXP[SeekStepsBack]</param>
-				<param name="label">$LOCALIZE[700013]</param>
-				<param name="top">800</param>
-				<param name="left">25</param>
-				<param name="width">200</param>
-				<param name="height">50</param>
-				<param name="color">button_focus</param>
-			</include>
-		</include>
-	</include>	
-	
-	<include name="DialogSeekVideoOSD">
-		<top>880</top>
-		<left>1025</left>
-		<width>650</width>
-		<height>100</height>
-		<ondown>200</ondown>
-		<onback>201</onback>
-		<orientation>horizontal</orientation>
-	</include>
 
 	<include name="Out">
 		<onclick>ZoomOut</onclick>
@@ -2103,24 +2049,6 @@
 
 	<include name="In">
 		<onclick>ZoomIn</onclick>
-	</include>
-
-	<include name="ZoomFocused">
-		<control type="group">
-		<animation effect="fade" start="0" end="100" time="150" delay="50">Visible</animation>
-		<visible>Control.HasFocus($PARAM[Control_id])</visible>
-		<include content="preFix_VideoOSDZoomFocused">
-			<param name="id">$PARAM[id]</param>
-		</include>
-			<control type="image">
-				<top>850</top>
-				<left>0</left>
-				<width>120</width>
-				<height>50</height>
-				<texture colordiffuse="gray">$VAR[SeekStepFocuedTexture]</texture>
-			</control>
-		</control>
-		<nested />
 	</include>
 	
 	<include name="NextPreviousIndicator">

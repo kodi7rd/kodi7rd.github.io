@@ -849,11 +849,6 @@
 		<value>$INFO[Player.Process(VideoFPS)]</value>
 	</variable>
 	
-	<!-- Video OSD seeksteps focus-->
-	<variable name="SeekStepFocuedTexture">
-		<value>flags/flag.png</value>
-	</variable>
-	
 	<variable name="SetLabelflag">
 		<value condition="!String.IsEmpty(Player.Process(VideoFPS)">$VAR[NoLabelFlagFound]</value>
 	</variable>

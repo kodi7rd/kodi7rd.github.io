@@ -15,139 +15,6 @@
 			<onclick>Action(close)</onclick>
 		</control>
 		
-		<!-- KODI-RD-IL ADDITION -->
-		<!-- Seek Forward -->
-		<include>SetSeekStepdVideoOSD</include>
-		<control type="group">
-		<visible>Control.HasFocus(43434) | ControlGroup(201).HasFocus(606) + !ControlGroup(202).HasFocus()</visible>
-		<visible>!VideoPlayer.Content(livetv)</visible>
-		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
-		<left>-1015</left>
-		<top>-20</top>
-			<control type="group">
-			<top>780</top>
-			<left>820</left>
-			</control>
-		<control type="list" id="43434">
-		<include>DialogSeekVideoOSD</include>
-			<itemlayout width="120">
-				<control type="label">
-					<top>0</top>
-					<left>10</left>
-					<width>80</width>
-					<height>35</height>
-					<align>center</align>
-					<font>font20_title</font>
-					<label>$INFO[ListItem.Label]</label>
-				</control>
-			</itemlayout>
-			<focusedlayout width="120">
-				<control type="label">
-					<top>0</top>
-					<left>10</left>
-					<width>80</width>
-					<height>35</height>
-					<align>center</align>
-					<font>font20_title</font>
-					<label>$INFO[ListItem.Label]</label>
-				</control>
-			</focusedlayout>
-				<content>
-					<item id="1">
-						<label>5 $LOCALIZE[700014]</label>
-						<onclick>seek(300)</onclick>
-					</item>
-					<item id="2">
-						<label>10 $LOCALIZE[700014]</label>
-						<onclick>seek(600)</onclick>
-					</item>
-					<item id="3">
-						<label>15 $LOCALIZE[700014]</label>
-						<onclick>seek(900)</onclick>
-					</item>
-					<item id="4">
-						<label>20 $LOCALIZE[700014]</label>
-						<onclick>seek(1200)</onclick>
-					</item>
-					<item id="5">
-						<label>25 $LOCALIZE[700014]</label>
-						<onclick>seek(1500)</onclick>
-					</item>
-				</content>
-			</control>
-		</control>
-		
-		<!-- Seek Backward -->
-		<control type="group">
-		<left>-1015</left>
-		<top>-20</top>
-		<visible>Control.HasFocus(43435) | ControlGroup(201).HasFocus(601) + !ControlGroup(202).HasFocus()</visible>
-		<visible>!VideoPlayer.Content(livetv)</visible>
-		<animation condition="Window.IsActive(VideoOSDBookmarks.xml)" effect="fade" start="100" end="0" time="0">Conditional</animation>
-		<left>15%</left>
-			<control type="group">
-			<top>780</top>
-			<left>815</left>
-			</control>
-			<control type="list" id="43435">
-			<include>DialogSeekVideoOSD</include>
-			<itemlayout width="120">
-				<control type="label">
-					<top>0</top>
-					<left>10</left>
-					<width>80</width>
-					<height>35</height>
-					<align>center</align>
-					<font>font20_title</font>
-					<label>$INFO[ListItem.Label]</label>
-				</control>
-			</itemlayout>
-			<focusedlayout width="120">
-				<control type="label">
-					<top>0</top>
-					<left>10</left>
-					<width>80</width>
-					<height>35</height>
-					<align>center</align>
-					<font>font20_title</font>
-					<label>$INFO[ListItem.Label]</label>
-				</control>
-			</focusedlayout>
-				<content>
-					<item id="1">
-						<label>5 $LOCALIZE[700014]</label>
-						<onclick>seek(-300)</onclick>
-					</item>
-					<item id="2">
-						<label>10 $LOCALIZE[700014]</label>
-						<onclick>seek(-600)</onclick>
-					</item>
-					<item id="3">
-						<label>15 $LOCALIZE[700014]</label>
-						<onclick>seek(-900)</onclick>
-					</item>
-					<item id="4">
-						<label>20 $LOCALIZE[700014]</label>
-						<onclick>seek(-1200)</onclick>
-					</item>
-					<item id="5">
-						<label>25 $LOCALIZE[700014]</label>
-						<onclick>seek(-1500)</onclick>
-					</item>
-				</content>
-			</control>
-		</control>
-		
-		<include content="ZoomFocused">
-			<param id="id">43434</param>
-			<param name="Control_id">43434</param>
-				<include content="ZoomFocused">
-					<param id="id">43435</param>
-					<param name="Control_id">43435</param>
-				</include>
-		</include>
-		<!-- ##################### -->
-		
 		<include condition="Skin.HasSetting(touchmode)">TouchBackOSDButton</include>
 		<control type="group">
 			<include>Animation_BottomSlide</include>
@@ -181,11 +48,7 @@
 					<itemgap>10</itemgap>
 					<scrolltime tween="sine">200</scrolltime>
 					<orientation>horizontal</orientation>
-					<!-- KODI-RD-IL CHANGES -->
-					<!-- <onup>87</onup> -->
-					<onup condition="Control.HasFocus(43434) | ControlGroup(201).HasFocus(606)">Control.SetFocus(43434,0)</onup>
-					<onup condition="Control.HasFocus(43435) | ControlGroup(201).HasFocus(601)">Control.SetFocus(43435,0)</onup>
-					<!-- ##################### -->
+					<onup>87</onup>
 					<ondown>noop</ondown>
 					<onleft>70048</onleft>
 					<onright>804</onright>
@@ -621,9 +484,7 @@
 				<visible>Player.SeekEnabled</visible>
 				<control type="button" id="87">
 					<include>HiddenObject</include>
-					<!-- KODI-RD-IL CHANGES -->
-					<!-- <onup>200</onup> -->
-					<!-- ##################### -->
+					<onup>200</onup>
 					<ondown>200</ondown>
 					<onleft>StepBack</onleft>
 					<onright condition="!Player.Paused">StepForward</onright>

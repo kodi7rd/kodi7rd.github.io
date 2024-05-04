@@ -806,21 +806,21 @@ msgstr "פרקים"
 
 # DialogSeekVideoOSD in Player - VideoOSD.XML
 
-msgctxt "#700011"
-msgid "Show Seek Steps Window"
-msgstr "הצג חלון לקפיצות זמן מהירות"
+# msgctxt "#700011"
+# msgid "Show Seek Steps Window"
+# msgstr "הצג חלון לקפיצות זמן מהירות"
 
-msgctxt "#700012"
-msgid "Forward Seek Steps"
-msgstr "דלג קדימה"
+# msgctxt "#700012"
+# msgid "Forward Seek Steps"
+# msgstr "דלג קדימה"
 
-msgctxt "#700013"
-msgid "Rewind Seek Steps"
-msgstr "דלג אחורה"
+# msgctxt "#700013"
+# msgid "Rewind Seek Steps"
+# msgstr "דלג אחורה"
 
-msgctxt "#700014"
-msgid "Mins"
-msgstr "דקות"
+# msgctxt "#700014"
+# msgid "Mins"
+# msgstr "דקות"
 
 # Zoom Toggle Buttons in Player - VideoOSD.XML
 
