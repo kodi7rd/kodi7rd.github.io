@@ -9,4 +9,5 @@
 		<disableipv6>true</disableipv6>   <!-- Certain hardware/OS combinations have trouble with ipv6. Set "true" to disable -->
 	</network>
 	<scanirserver>false</scanirserver> <!-- Used to disable the regular connection attempts to the IR Server Suite when there is no remote to connect to. -->
+	<imageres>9999</imageres> <!-- Using <imageres>9999</imageres> will allow caching artwork at original size. -->
 </advancedsettings>
