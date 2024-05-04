@@ -19,7 +19,7 @@ media_xml_body = '\
 
 history_xml_body = "\
 \n        <item>\
-\n            <label>{spath}</label>\
+\n            <label>$NUMBER[{spath}]</label>\
 \n            <onclick>RunScript(script.fentastic.helper,mode=re_search)</onclick>\
 \n        </item>"
 
@@ -76,7 +76,7 @@ main_menu_custom1_xml = '\
 \n            <label>{cpath_header}</label>\
 \n            <onclick>ActivateWindow(Videos,{main_menu_path},return)</onclick>\
 \n            <property name="menu_id">$NUMBER[23000]</property>\
-\n            <thumb>icons/sidemenu/tv.png</thumb>\
+\n            <thumb>icons/sidemenu/livetv.png</thumb>\
 \n            <property name="id">custom1</property>\
 \n            <visible>!Skin.HasSetting(HomeMenuNoCustom1Button)</visible>\
 \n        </item>\

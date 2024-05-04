@@ -103,7 +103,8 @@ class SPaths:
             final_format += body
         final_format += xmls.media_xml_end
         self.write_xml(xml_file, final_format)
-        xbmc.executebuiltin("ReloadSkin()")
+        # KODI-RD-IL
+        # xbmc.executebuiltin("ReloadSkin()")
         if event is not None:
             event.set()
 
@@ -134,6 +135,7 @@ class SPaths:
             xbmc.sleep(200)
             xbmc.executebuiltin("SetFocus(27400)")
         else:
+            self.remake_search_history()
             xbmc.executebuiltin("Skin.Reset(DatabaseStatus)")
             xbmc.executebuiltin("Skin.SetString(SearchInput,)")
             xbmc.executebuiltin("Skin.SetString(SearchInputEncoded,)")
@@ -190,8 +192,8 @@ class SPaths:
             self.make_default_xml()
 
 
-def remake_all_spaths(silent=False):
-    for item in "search_history":
-        SPaths(item).remake_search_history()
-    if not silent:
-        xbmcgui.Dialog().ok("FENtastic", "Search history remade")
+# def remake_all_spaths(silent=False):
+#     for item in "search_history":
+#         SPaths(item).remake_search_history()
+#     if not silent:
+#         xbmcgui.Dialog().ok("FENtastic", "Search history remade")
