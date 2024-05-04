@@ -9,7 +9,6 @@ from kodirdil.websites import hebrew_embedded
 from kodirdil.websites import ktuvit
 from kodirdil.websites import wizdom
 from kodirdil.websites import opensubtitles
-from kodirdil.websites import subscene
 #########################################
 
 ########### Settings ####################
@@ -22,13 +21,11 @@ search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subt
 hebrew_subtitles_websites_info = {
     'ktuvit': {'website': ktuvit, 'short_name': '[HEB|KT]'},
     'wizdom': {'website': wizdom, 'short_name': '[HEB|WIZ]'},
-    'opensubtitles': {'website': opensubtitles, 'short_name': '[HEB|OPS]'},
-    'subscene': {'website': subscene, 'short_name': '[HEB|SS]'}
+    'opensubtitles': {'website': opensubtitles, 'short_name': '[HEB|OPS]'}
     }
     
 english_subtitles_websites_info = {
-    'opensubtitles': {'website': opensubtitles, 'short_name': '[ENG|OPS]'},
-    'subscene': {'website': subscene, 'short_name': '[ENG|SS]'}
+    'opensubtitles': {'website': opensubtitles, 'short_name': '[ENG|OPS]'}
     }
     
 release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',

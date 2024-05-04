@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.4.0[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.1[/B][/COLOR]
+* Remove Subscene website :(
+[COLOR yellow][B]v4.4.0[/B][/COLOR]
 * Small SubDL change.
 [COLOR yellow][B]v4.3.9[/B][/COLOR]
 * Remove redundant call to get_video_data function and reduce API calls to TMDb (general.py | save_file_name/get_db_data).

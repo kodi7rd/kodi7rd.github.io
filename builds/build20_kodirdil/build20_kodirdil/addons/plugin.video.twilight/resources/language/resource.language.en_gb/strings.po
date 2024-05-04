@@ -3995,11 +3995,11 @@ msgid "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
 msgstr ""
 
 msgctxt "#40008"
-msgid "Wizdom [COLOR blue](http://wizdom.xyz)[/COLOR]"
+msgid "Wizdom [COLOR blue](https://wizdom.xyz)[/COLOR]"
 msgstr ""
 
 msgctxt "#40009"
-msgid "OpenSubtitles [COLOR blue](http://www.opensubtitles.com)[/COLOR]"
+msgid "OpenSubtitles [COLOR blue](https://www.opensubtitles.com)[/COLOR]"
 msgstr ""
 
 msgctxt "#400010"

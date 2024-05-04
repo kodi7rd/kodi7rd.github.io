@@ -23,12 +23,11 @@ MyScriptID = xbmcaddon.Addon().getAddonInfo('id')
 break_all=False
 
 
-from resources.sources import bsplayer
 from resources.sources import ktuvit
+from resources.sources import wizdom
 from resources.sources import opensubtitles
 from resources.sources import subdl
-from resources.sources import subscene
-from resources.sources import wizdom
+from resources.sources import bsplayer
 global global_sub_size,global_progress
 que=urllib.parse.quote_plus
 unque=urllib.parse.unquote_plus
@@ -81,7 +80,7 @@ def sort_subtitles(save_all_data,video_data):
                      'telecine','hdts','telesync']
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
-    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[Subscene]', '[BSPlayer]']
+    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[BSPlayer]']
     #########################################
     
     all_data=[]
@@ -184,8 +183,6 @@ def format_website_source_name(source):
         return "OpenSubtitles"
     if source == "subdl":
         return "SubDL"
-    if source == "subscene":
-        return "Subscene"
     if source == "bsplayer":
         return "BSPlayer"
     return source
@@ -205,7 +202,6 @@ def c_get_subtitles(video_data):
     ktuvit.global_var=[]
     opensubtitles.global_var=[]
     subdl.global_var=[]
-    subscene.global_var=[]
     wizdom.global_var=[]
     
     # Determine wether to search hebrew langauge
@@ -230,10 +226,6 @@ def c_get_subtitles(video_data):
     if Addon.getSetting('subdl')=='true':
         thread.append(Thread(subdl.get_subs,video_data))
         all_sources.append(('subdl',subdl))
-        
-    if Addon.getSetting('subscene')=='true':
-        thread.append(Thread(subscene.get_subs,video_data))
-        all_sources.append(('subscene',subscene))
     
     if Addon.getSetting('bsplayer')=='true' and search_language_hebrew_bool:
         thread.append(Thread(bsplayer.get_subs,video_data))
