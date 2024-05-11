@@ -49,9 +49,6 @@ class BuildMenu:
                 elif float(kodi) == 20.0:
                     directory.add_dir('{0} (v{1})'.format(name, version), {'mode': 'viewbuild', 'name': name}, description=description, fanart=fanart, icon=icon, menu=menu, themeit=CONFIG.THEME_YELLOW)
                     directory.add_separator()
-                elif float(kodi) == 19.0:
-                    directory.add_dir('{0} (v{1})'.format(name, version), {'mode': 'viewbuild', 'name': name}, description=description, fanart=fanart, icon=icon, menu=menu, themeit=CONFIG.THEME_LIMEGREEN)
-                    directory.add_separator()
                 else:
                     directory.add_dir('{0} (v{1})'.format(name, version), {'mode': 'viewbuild', 'name': name}, description=description, fanart=fanart, icon=icon, menu=menu, themeit=CONFIG.THEME2)
                     directory.add_separator()
@@ -103,7 +100,7 @@ class BuildMenu:
             directory.add_file('{0}'.format(CONFIG.BUILDFILE), icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             return
 
-        total, count19, count20, count21, adultcount, hidden = check.build_count()
+        total, count20, count21, adultcount, hidden = check.build_count()
 
         match = re.compile('name="(.+?)".+?ersion="(.+?)".+?rl="(.+?)".+?ui="(.+?)".+?odi="(.+?)".+?heme="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?dult="(.+?)".+?escription="(.+?)"').findall(link)
         
@@ -137,12 +134,6 @@ class BuildMenu:
                                        'name': 'show20'}, themeit=CONFIG.THEME_YELLOW)
                     if CONFIG.SHOW20 == 'true':
                         self._list_all(match, kodiv=20)
-                if count19 > 0:
-                    state = '+' if CONFIG.SHOW19 == 'false' else '-'
-                    directory.add_file('[B]{0} בילדים לגרסת קודי 19 ומעלה:[/B]'.format(state), {'mode': 'togglesetting',
-                                       'name': 'show19'}, themeit=CONFIG.THEME_LIMEGREEN)
-                    if CONFIG.SHOW19 == 'true':
-                        self._list_all(match, kodiv=19)
 
         elif hidden > 0:
             if adultcount > 0:

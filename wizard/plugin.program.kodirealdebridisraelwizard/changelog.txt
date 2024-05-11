@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.5.7[/B][/COLOR]
+* Remove Kodi 19 builds settings in builds menu.
 [COLOR yellow][B]v1.5.6[/B][/COLOR]
 * Rename NotificationsWithDownloaderImage.xml to NotificationsWithExtraImage.xml.
 * Change function show_notification_with_extra_image to get generic image id and URL.
