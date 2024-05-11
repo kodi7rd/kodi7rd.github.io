@@ -135,7 +135,7 @@
     <setting id="videoplayer.usedxva2" default="true">true</setting>
     <setting id="videoplayer.usevtb" default="true">true</setting>
     <setting id="videoplayer.highprecision" default="true">true</setting>
-    <setting id="videoplayer.convertdovi" default="true">true</setting>
+    <setting id="videoplayer.convertdovi">true</setting>
     <setting id="videoplayer.allowedhdrformats" default="true">0,1</setting>
     <setting id="videoplayer.stereoscopicplaybackmode" default="true">0</setting>
     <setting id="videoplayer.quitstereomodeonstop" default="true">true</setting>
