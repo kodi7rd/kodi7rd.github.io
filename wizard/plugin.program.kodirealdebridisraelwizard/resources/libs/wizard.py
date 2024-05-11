@@ -606,8 +606,8 @@ def kodi_apk_update_check(kodi_version_update_check_manual, os_type_label):
             from resources.libs.gui import window
             msg = """[COLOR red]לקרוא הכל בלי לרפרף!!![/COLOR]
             
-במעבר לקודי 21, באופן [COLOR yellow]חד פעמי[/COLOR](!!!!) יתקין APK נפרד מה-APK שמותקן עכשיו!
-תותקן אפליקציה נפרדת בשם: Kodi + Real Debrid Israel 21.0
+המעבר לקודי 21, באופן [COLOR yellow]חד פעמי[/COLOR](!!!!) יתקין APK נפרד מה-APK שמותקן עכשיו!
+תותקן אפליקציה נפרדת בשם: Kodi + Real Debrid Israel (21.0)
 
 לאחר שהאפליקציה הותקנה בהצלחה, פתחתם אותה והתקנתם את הבילד, יש למחוק את האפליקציה הישנה (הנוכחית בגרסה 20.3!!)
 

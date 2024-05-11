@@ -203,10 +203,10 @@ class BuildMenu:
                 directory.add_file('View Video Preview', {'mode': 'buildpreview', 'name': name}, description=description, fanart=fanart,
                                    icon=icon, themeit=CONFIG.THEME3)
             
-            if versioncheck:
-                directory.add_file(
-                    '[I]Build designed for Kodi v{0} (installed: v{1})[/I]'.format(str(kodi), str(CONFIG.KODIV)),
-                    fanart=fanart, icon=icon, themeit=CONFIG.THEME3)
+            # if versioncheck:
+                # directory.add_file(
+                    # '[I]Build designed for Kodi v{0} (installed: v{1})[/I]'.format(str(kodi), str(CONFIG.KODIV)),
+                    # fanart=fanart, icon=icon, themeit=CONFIG.THEME3)
                                    
             if themecheck:
                 directory.add_separator('THEMES', fanart=fanart, icon=icon)
