@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.5.8[/B][/COLOR]
+* Windows auto update - make WINDOWS_DOWNLOAD_URL  in uservar.py generic, build download URL using LATEST_WINDOWS_VERSION_TEXT_FILE.
 [COLOR yellow][B]v1.5.7[/B][/COLOR]
 * Remove Kodi 19 builds settings in builds menu.
 [COLOR yellow][B]v1.5.6[/B][/COLOR]

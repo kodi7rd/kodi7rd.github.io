@@ -33,7 +33,7 @@ QUICK_UPDATE_NOTIFICATION_URL = 'https://kodi7rd.github.io/wizard/assets/notific
 # KODI-RD-IL - AUTO ANDROID/WINDOWS UPDATE
 # WINDOWS SOFTWARE
 LATEST_WINDOWS_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/windows/latest_windows_version.txt'
-WINDOWS_DOWNLOAD_URL = "https://kodi7rd.github.io/windows/Kodi%20+%20Real%20Debrid%20Israel%2020.3%20Setup.exe"
+WINDOWS_DOWNLOAD_URL = "https://kodi7rd.github.io/windows"
 WINDOWS_INSTALLATION_PATH = "C:\Kodi + Real Debrid Israel"
 # ANDROID APK
 LATEST_APK_VERSION_TEXT_FILE = 'https://kodi7rd.github.io/wizard/assets/kodi_version_auto_update/apk/latest_apk_version.txt'
