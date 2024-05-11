@@ -736,6 +736,12 @@ def kodi_windows_update_check(kodi_version_update_check_manual, os_type_label):
                 destination_path = CONFIG.PACKAGES
                 exe_file_name = os.path.basename(DIRECT_WINDOWS_DOWNLOAD_URL)
                 exe_full_path = os.path.join(destination_path, exe_file_name)
+                   
+                progress_dialog = xbmcgui.DialogProgress() 
+                progress_dialog.create(f"{CONFIG.ADDONTITLE} ({os_type_label})",
+                              '[COLOR {0}][B]מוריד:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, exe_file_name)
+                              +'\n'+''
+                              +'\n'+'נא המתן')
                 
                 try:
                     os.remove(exe_full_path)
@@ -743,6 +749,7 @@ def kodi_windows_update_check(kodi_version_update_check_manual, os_type_label):
                     pass
                 Downloader().download(DIRECT_WINDOWS_DOWNLOAD_URL, exe_full_path)
                 xbmc.sleep(100)
+                progress_dialog.close()
                     
                 dialog.ok(f"{CONFIG.ADDONTITLE} ({os_type_label})", f"[B]ההורדה הסתיימה בהצלחה.\nלחץ אישור כדי לסגור את קודי ולהתחיל את ההתקנה.[/B]")
                 kill_kodi_and_install_exe(exe_full_path)
