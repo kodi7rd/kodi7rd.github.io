@@ -77,7 +77,7 @@
     <setting id="disable.ratingsinf" type="bool">false</setting>
     <setting id="no_slide_animations" type="bool">true</setting>
     <setting id="homemenunomusicvideobutton" type="bool">true</setting>
-    <setting id="mdblist_api_key" type="string">s4oyk5ynj4i0qc40yg5cntffp</setting>
+    <setting id="mdblist_api_key" type="string">ybi76llhwzhi04fm9d2aoptzm</setting>
     <setting id="HomeFanart.name" type="string"></setting>
     <setting id="databasestatus" type="string">&apos;Empty&apos;</setting>
     <setting id="MovieGenreFanart.Name" type="string"></setting>
