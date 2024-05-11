@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.5.9[/B][/COLOR]
+* APK auto update - TEMPORARY show kodi 21 migration message.
 [COLOR yellow][B]v1.5.8[/B][/COLOR]
 * Windows auto update - make WINDOWS_DOWNLOAD_URL  in uservar.py generic, build download URL using LATEST_WINDOWS_VERSION_TEXT_FILE.
 [COLOR yellow][B]v1.5.7[/B][/COLOR]
