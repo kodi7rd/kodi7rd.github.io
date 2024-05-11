@@ -14,7 +14,7 @@ fanart="https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/fanart.jp
 preview="http://"
 adult="no"
 info="http://"
-description="הבילד של קודי ריל דבריד ישראל"
+description="הבילד של קודי ריל דבריד ישראל - לגרסת קודי 20 ומעלה!"
 
 name="להתעלם"
 version="1.0.0"
@@ -28,4 +28,4 @@ fanart="https://kodi7rd.github.io/wizard/assets/build_menu_screenshots/fanart.jp
 preview="http://"
 adult="no"
 info="http://"
-description="להתעלם"
+description="הבילד של קודי ריל דבריד ישראל - לגרסת קודי 21 ומעלה!"
