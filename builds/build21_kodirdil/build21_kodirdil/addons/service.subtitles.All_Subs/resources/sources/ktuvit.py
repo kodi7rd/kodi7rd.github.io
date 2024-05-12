@@ -132,11 +132,25 @@ def get_subs(item):
     
     
     #############################################################################
-    # IF NO RESULTS FOR TV SHOW's OriginalTitle - RE-SEARCH BY TVShowTitle
-    if not j_data and media_type == 'tv' and item["TVShowTitle"]:
-        s_title = item["TVShowTitle"]
-        log.warning(f"KTUVIT | Re-searching TV Show title | s_title={s_title}")
-        j_data = search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly)
+    if not j_data:
+    
+        # IF NO RESULTS FOR TV SHOW's OriginalTitle - RE-SEARCH BY TVShowTitle
+        if media_type == 'tv' and item.get("TVShowTitle") and s_title != item.get("TVShowTitle"):
+            s_title = item["TVShowTitle"]
+            log.warning(f"KTUVIT | Re-searching TV Show title | s_title={s_title}")
+            j_data = search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly)
+            
+        # IF NO RESULTS FOR MOVIE's OriginalTitle - RE-SEARCH BY title
+        elif media_type == 'movie' and item.get("title") and s_title != item.get("title"):
+            s_title = item["title"]
+            log.warning(f"KTUVIT | Re-searching Movie title | s_title={s_title}")
+            j_data = search_title_in_ktuvit(s_title, s_type, s_WithSubsOnly)
+
+        else:
+            log.warning(f"KTUVIT | j_data is empty | Skipping re-search.")
+
+    else:
+        log.warning(f"KTUVIT | j_data is not empty | Skipping re-search.")
     #############################################################################
     
     

@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.4.2[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.3[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Movies - Add subtitles re-search by title if no results found through OriginalTitle search.
+[COLOR yellow][B]v4.4.2[/B][/COLOR]
 * autosub.py onNotification - Run get_video_data function only after isPlayingAddonExcluded check.
 * autosub.py onNotification - Remove mpaa heb check (covered in isPlayingAddonExcluded).
 [COLOR yellow][B]v4.4.1[/B][/COLOR]
