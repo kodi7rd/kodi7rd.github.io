@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.4.1[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.2[/B][/COLOR]
+* autosub.py onNotification - Run get_video_data function only after isPlayingAddonExcluded check.
+* autosub.py onNotification - Remove mpaa heb check (covered in isPlayingAddonExcluded).
+[COLOR yellow][B]v4.4.1[/B][/COLOR]
 * Remove Subscene website :(
 [COLOR yellow][B]v4.4.0[/B][/COLOR]
 * Small SubDL change.

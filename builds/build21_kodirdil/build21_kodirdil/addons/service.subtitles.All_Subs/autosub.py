@@ -845,7 +845,6 @@ class KodiMonitor(xbmc.Monitor):
                 manual_search=xbmcaddon.Addon('service.subtitles.All_Subs').getSetting("fast_subs")
                 xbmc.sleep(100)
             
-            video_data=get_video_data()
             
             # pre_video_id=video_id
             # video_id=video_data['OriginalTitle']+video_data['imdb']+str(video_data['season'])+str(video_data['episode'])
@@ -885,7 +884,9 @@ class KodiMonitor(xbmc.Monitor):
                   if is_playing_addon_excluded:
                     trigger=False
                   
-                  if  force_download==True and video_data['mpaa']!='heb' and not is_playing_addon_excluded:
+                  if force_download==True and not is_playing_addon_excluded:
+                  
+                    video_data=get_video_data()
                    
                     if  Addon.getSetting("pause")=='true':
                         xbmc.Player().pause()
@@ -1010,7 +1011,6 @@ class KodiMonitor(xbmc.Monitor):
                     log.warning('Not Downloading:')
                     log.warning(force_download)
                     log.warning(is_playing_addon_excluded)
-                    log.warning(video_data['mpaa'])                    
 
                   general.show_msg="END"
                     

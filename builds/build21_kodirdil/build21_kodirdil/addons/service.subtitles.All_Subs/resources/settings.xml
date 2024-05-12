@@ -4,7 +4,7 @@
 		
 		<setting label="אתרי כתוביות ישראליים" type="lsep"/>
 		<setting id="ktuvit" label="[COLOR springgreen][B]Ktuvit[/B][/COLOR] [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
-		<setting id="wizdom" label="[COLOR yellow][B]Wizdom[/B][/COLOR] [COLOR blue](http://wizdom.xyz)[/COLOR]" type="bool" default="true" />
+		<setting id="wizdom" label="[COLOR yellow][B]Wizdom[/B][/COLOR] [COLOR blue](https://wizdom.xyz)[/COLOR]" type="bool" default="true" />
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
 		<setting id="opensubtitles" label="[COLOR orange][B]OpenSubtitles[/B][/COLOR] [COLOR blue](https://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
 		<setting id="subdl" label="[COLOR plum][B]SubDL[/B][/COLOR] [COLOR blue](https://subdl.com)[/COLOR]" type="bool" default="true" />
