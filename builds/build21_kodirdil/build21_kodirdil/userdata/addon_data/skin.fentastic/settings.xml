@@ -90,7 +90,7 @@
     <setting id="databasestatus" type="string">&apos;Empty&apos;</setting>
     <setting id="WeatherFanart.path" type="string"></setting>
     <setting id="SearchInputEncoded" type="string"></setting>
-    <setting id="mdblist_api_key" type="string">ybi76llhwzhi04fm9d2aoptzm</setting>
+    <setting id="mdblist_api_key" type="string">use_my_custom_list</setting>
     <setting id="MovieGenreFanart.ext" type="string"></setting>
     <setting id="MovieGenreFanart.path" type="string"></setting>
     <setting id="MovieGenreFanart.Name" type="string"></setting>
