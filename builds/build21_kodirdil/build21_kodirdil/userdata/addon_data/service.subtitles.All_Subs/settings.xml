@@ -12,7 +12,6 @@
     <setting id="auto_translate">true</setting>
     <setting id="translate_p" default="true">0</setting>
     <setting id="other_lang" default="true" />
-    <setting id="dummy_setting1" default="true" />
     <setting id="autosub">true</setting>
     <setting id="force">true</setting>
     <setting id="enable_autosub_notifications">true</setting>
@@ -21,12 +20,10 @@
     <setting id="time_s">10</setting>
     <setting id="pause" default="true">false</setting>
     <setting id="ExcludedAddons" default="true" />
-    <setting id="dummy_setting2" default="true" />
     <setting id="show_debug">true</setting>
     <setting id="write_heb_embedded_taglines_to_twilight_repo">true</setting>
     <setting id="clean_cache_on_startup" default="true">false</setting>
     <setting id="subtitle_trans_cache">15</setting>
-    <setting id="dummy_setting3" default="true" />
     <setting id="OS_USER_API_KEY_VALUE" default="true" />
     <setting id="subs_width">1190</setting>
     <setting id="subs_height">360</setting>

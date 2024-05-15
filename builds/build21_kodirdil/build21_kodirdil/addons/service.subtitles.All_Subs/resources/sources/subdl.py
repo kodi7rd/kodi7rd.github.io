@@ -244,6 +244,6 @@ def c_get_subdl_api_keys():
     
 def get_random_key():
     SUBDL_API_KEYS=cache.get(c_get_subdl_api_keys, 24,table='subs')
-    random_key_index = random.randint(0, len(SUBDL_API_KEYS) - 1)
-    SUBDL_API_KEY_NAME, SUBDL_API_KEY_VALUE =  SUBDL_API_KEYS[random_key_index]['SUBDL_API_KEY_NAME'],SUBDL_API_KEYS[random_key_index]['SUBDL_API_KEY_VALUE']
+    random_key = random.choice(SUBDL_API_KEYS)
+    SUBDL_API_KEY_NAME, SUBDL_API_KEY_VALUE = random_key["SUBDL_API_KEY_NAME"], random_key["SUBDL_API_KEY_VALUE"]
     return SUBDL_API_KEY_NAME, SUBDL_API_KEY_VALUE

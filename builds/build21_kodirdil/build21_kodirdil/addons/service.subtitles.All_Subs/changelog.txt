@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v4.4.3[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.4[/B][/COLOR]
+* Fix hidden label in addon settings.
+* Remove bing_translate_keys_method setting.
+* OpenSubtitles / SubDL random API Key choice refactor.
+[COLOR yellow][B]v4.4.3[/B][/COLOR]
 * [COLOR springgreen]Ktuvit[/COLOR]: Movies - Add subtitles re-search by title if no results found through OriginalTitle search.
 [COLOR yellow][B]v4.4.2[/B][/COLOR]
 * autosub.py onNotification - Run get_video_data function only after isPlayingAddonExcluded check.

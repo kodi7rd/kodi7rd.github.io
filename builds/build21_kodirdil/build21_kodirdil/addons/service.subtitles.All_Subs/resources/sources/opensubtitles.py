@@ -376,8 +376,8 @@ def c_get_os_api_keys():
     
 def get_random_key():
     OS_API_KEYS=cache.get(c_get_os_api_keys, 24,table='subs')
-    random_key_index = random.randint(0, len(OS_API_KEYS) - 1)
-    OS_API_KEY_NAME, OS_API_KEY_VALUE =  OS_API_KEYS[random_key_index]['OS_API_KEY_NAME'],OS_API_KEYS[random_key_index]['OS_API_KEY_VALUE']
+    random_key = random.choice(OS_API_KEYS)
+    OS_API_KEY_NAME, OS_API_KEY_VALUE = random_key["OS_API_KEY_NAME"], random_key["OS_API_KEY_VALUE"]
     return OS_API_KEY_NAME, OS_API_KEY_VALUE
 
 

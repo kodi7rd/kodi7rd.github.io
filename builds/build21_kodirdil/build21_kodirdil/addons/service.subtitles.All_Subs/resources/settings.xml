@@ -25,13 +25,12 @@
 		<setting label="תרגום מכונה" type="lsep"/>
 		<setting id="auto_translate" label="הפעל תרגום מכונה" type="bool" default="true" />
 		<setting id="translate_p" type="enum" label="מקור תרגום" values="Google Translate|Yandex" default="0" visible="eq(-1,true)"/>
-		<!-- <setting id="bing_translate_keys_method" type="enum" label="סדר חיפוש מפתחות" values="עולה|אקראי" default="1" visible="eq(-2,true) + eq(-1,2)"/> -->
 		
 		<setting label="שפות נוספות (הגדר קוד שפה על פי הקישור למטה)" type="lsep"/>
 		<setting id="other_lang" label="שפות נוספות" type="text" default="" />
 		<setting label="הוסף שפות עם פסיק בניהם לפי תקן" type="lsep"/>
 		<setting label="https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes" type="lsep"/>
-		<setting id="dummy_setting1" label="" type="action" action="" visible="false" />
+		<setting id="dummy_setting" label="" type="action" action="" visible="true" />
 	</category>
 	
 	<category label="הגדרות כלליות">
@@ -54,7 +53,7 @@
 		<setting label="החרג חיפוש כתוביות בהרחבות (עם פסיק ביניהם)" type="lsep"/>
 		<setting id="ExcludedAddons" type="text" source="video" label="הזן כאן" default="" />
 		<setting label="['idanplus','sdarot.tv','youtube','kids_new'] :מוחרגות ברירת מחדל" type="lsep"/>
-		<setting id="dummy_setting2" label="" type="action" action="" visible="false" />
+		<setting id="dummy_setting" label="" type="action" action="" visible="true" />
 		
 		<setting label="Log DEBUG" type="lsep"/>
 		<setting id="show_debug" type="bool" label="הפעל מצב DEBUG בלוג" default="true" />
@@ -76,15 +75,15 @@
 	<category label="חשבונות">
 	
 		<setting label="[COLOR orange]OpenSubtitles[/COLOR]" type="lsep"/>
-		<setting id="dummy_setting3" label="" type="action" action="" visible="false" />
+		<setting id="dummy_setting" label="" type="action" action="" visible="true" />
 		
 		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 100 הורדות ביום)" type="lsep"/>
 		<setting id="OS_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
 	
 		<setting label="[COLOR plum]SubDL[/COLOR]" type="lsep"/>
-		<setting id="dummy_setting4" label="" type="action" action="" visible="false" />
+		<setting id="dummy_setting" label="" type="action" action="" visible="true" />
 		
-		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 200 הורדות ביום)" type="lsep"/>
+		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 2000 פניות ביום)" type="lsep"/>
 		<setting id="SUBDL_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
 	</category>
 	

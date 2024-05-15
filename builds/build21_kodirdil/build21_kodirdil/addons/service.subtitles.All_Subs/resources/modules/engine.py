@@ -553,11 +553,8 @@ def bing_get_last_key():
     
         file_data=int(file_data)
     except:
-        if Addon.getSetting("bing_translate_keys_method") == '1':
-            x=bing_c_get_keys()
-            file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
-        else:
-            file_data=0
+        x=bing_c_get_keys()
+        file_data = random.randint(0, len(x) - 1) # Generate random number from 0 to keys count
     return file_data
     
 def bing_set_last_key(count_key):
@@ -635,12 +632,7 @@ def bing_machine_translate(text, encoding):
             except:
                 general.show_msg=str(response)
                 
-                if Addon.getSetting("bing_translate_keys_method") == '1':
-                    count_key = random.randint(0, amount - 1) # Generate random number from 0 to keys count
-                else:
-                    count_key+=1
-                    if (count_key>amount):
-                        count_key=0
+                count_key = random.randint(0, amount - 1) # Generate random number from 0 to keys count
                 nm,key,location,amount = bing_select_key(count_key)
                 log.warning(f"DarkSubs Bing API: bing_translator_name={nm} | bing_api_key={key} | total_keys_amount={amount}")
                 headers = {
@@ -699,8 +691,8 @@ def machine_translate_subs(input_file,output_file):
         f_sub_pre = yandex_machine_translate(text, encoding)
              
     # Bing - Currently unused.
-    elif Addon.getSetting("translate_p")=='2':
-        f_sub_pre = bing_machine_translate(text, encoding)
+    # elif Addon.getSetting("translate_p")=='2':
+        # f_sub_pre = bing_machine_translate(text, encoding)
             
     
     f_all=f_sub_pre.replace('\r\r','\n')
