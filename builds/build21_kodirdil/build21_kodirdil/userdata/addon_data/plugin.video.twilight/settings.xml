@@ -146,7 +146,7 @@
     <setting id="check.folders" default="true">false</setting>
     <setting id="results.sort_folders_first" default="true">true</setting>
     <setting id="results.folders_ignore_filters" default="true">false</setting>
-    <setting id="results.timeout">15</setting>
+    <setting id="results.timeout">10</setting>
     <setting id="results.list_format">MediaList</setting>
     <setting id="results.use_contrast">false</setting>
     <setting id="search.enable.yearcheck" default="true">false</setting>
@@ -167,7 +167,7 @@
     <setting id="filter_hevc.max_quality" default="true">4K</setting>
     <setting id="filter_hevc.max_autoplay_quality" default="true">4K</setting>
     <setting id="filter_hdr" default="true">0</setting>
-    <setting id="filter_dv">1</setting>
+    <setting id="filter_dv" default="true">0</setting>
     <setting id="filter_av1" default="true">0</setting>
     <setting id="filter_audio" default="true" />
     <setting id="highlight.type">2</setting>
