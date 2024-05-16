@@ -2,4 +2,5 @@
 |||
 שינויים מהעדכון האחרון - 16.05.2024:
 1. סקין Estuary - תיקון מידע על סרט/עונה/פרק חתוך במסך.
-Mike Revivo@, @Ofer Parnasa
+@Mike Revivo
+@Ofer Parnasa
