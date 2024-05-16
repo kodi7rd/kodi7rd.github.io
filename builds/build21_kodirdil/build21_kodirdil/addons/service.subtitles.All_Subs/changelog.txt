@@ -1,5 +1,5 @@
 ﻿[COLOR yellow][B]v4.4.4[/B][/COLOR]
-* Fix hidden label in addon settings.
+* Fix hidden labels in addon settings.
 * Remove bing_translate_keys_method setting.
 * OpenSubtitles / SubDL random API Key choice refactor.
 [COLOR yellow][B]v4.4.3[/B][/COLOR]
