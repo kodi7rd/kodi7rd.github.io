@@ -25,9 +25,9 @@ class source:
 		# self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
 		# self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
 		# CUSTOM NEW LINES:
-		# Add NyaaSi Provider for anime sources (https://nyaa.si/)
-		self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy,nyaasi/stream/movie/%s.json'
-		self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy,nyaasi/stream/series/%s:%s:%s.json'
+		# Enable all Providers
+		self.movieSearch_link = '/stream/movie/%s.json'
+		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		#########################################
 		
 		self.min_seeders = 0
@@ -73,10 +73,11 @@ class source:
 				name = source_utils.clean_name(file_title[0])
 		
 				############KODI-RD-IL###################
+				# COMMENTED - NO FILTERS
 				# ORIGINAL COCOSCRAPERS LINE:
 				# if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
-				# CUSTOM NEW LINE:
-				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years) and 'NyaaSi' not in file['title']: continue
+				# CUSTOM NEW LINE - Disable filtering for Nyaa provider
+				# if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years) and 'NyaaSi' not in file['title']: continue
 				#########################################
 
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
@@ -132,8 +133,11 @@ class source:
 				name = source_utils.clean_name(file_title[0])
 
 				############KODI-RD-IL###################
-				if 'NyaaSi' in file['title']:
-					bypass_filter = True
+				# Disable filtering for Nyaa provider
+				# if 'NyaaSi' in file['title']:
+					# bypass_filter = True
+				# NO FILTERS
+				bypass_filter = True
 				#########################################
 
 				episode_start, episode_end = 0, 0

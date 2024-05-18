@@ -1,6 +1,6 @@
 [COLOR red][B]Version 1.0.20[/B][/COLOR]
 - Changed ElfHosted file title parsing.
-- KODI-RD-IL: Torrentio Provider - Improve Anime Movies/TV Shows sources matching. (NyaaSi)
+- KODI-RD-IL: Torrentio Provider - Enable all providers + disable name filtering.
 
 [COLOR red][B]Version 1.0.19[/B][/COLOR]
 - Self-Hosted Torrentio/ Knightcrawler Instances added.
