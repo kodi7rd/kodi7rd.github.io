@@ -59,7 +59,13 @@ img_url = 'https://i.imgur.com/%s.png'
 invoker_switch_dict = {'true': 'false', 'false': 'true'}
 empty_poster, item_jump, nextpage = img_url % icons.box_office, img_url % icons.item_jump, img_url % icons.nextpage
 nextpage_landscape, item_jump_landscape = img_url % icons.nextpage_landscape, img_url % icons.item_jump_landscape
-tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
+
+############KODI-RD-IL###################
+# ORIGINAL TWILIGHT LINE:
+# tmdb_default_api, fanarttv_default_api = 'b370b60447737762ca38457bd77579b3', 'fa836e1c874ba95ab08a14ee88e05565'
+# NEW CUSTOM LINE - Twilight TMDb API Key
+tmdb_default_api, fanarttv_default_api = '6dcadb9d9188419a2fd73391bd3cdd70', 'fa836e1c874ba95ab08a14ee88e05565'
+#########################################
 
 ############KODI-RD-IL###################
 # ORIGINAL TWILIGHT LINE:

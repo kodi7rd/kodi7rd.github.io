@@ -134,7 +134,14 @@ ls(32553): ['99', 'genre_documentary'],                                ls(32554)
 ls(32555): ['10751', 'genre_family'],                                  ls(32556): ['10762', 'genre_kids'],
 ls(32557): ['9648', 'genre_mystery'],                                  ls(32568):['10763', 'genre_news'],
 ls(32569): ['10764', 'genre_reality'],                                 ls(33057): ['10765', 'genre_scifi'],
-ls(32570): ['10766', 'genre_soap'],                                    ls(32570): ['10767', 'genre_talk'],
+
+############KODI-RD-IL###################
+# ORIGINAL TWILIGHT LINE:
+# ls(32570): ['10766', 'genre_soap'],                                    ls(32570): ['10767', 'genre_talk'],
+# NEW CUSTOM LINE - Fix "Talk" genre label
+ls(32570): ['10766', 'genre_soap'],                                    ls(32571): ['10767', 'genre_talk'],
+#########################################
+
 ls(32572): ['10768', 'genre_war'],                                     ls(32567): ['37', 'genre_western']
 	}
 

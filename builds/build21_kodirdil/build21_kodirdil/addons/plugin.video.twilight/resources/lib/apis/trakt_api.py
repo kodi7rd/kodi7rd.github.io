@@ -7,7 +7,13 @@ from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movie_meta_external_id, tvshow_meta_external_id
 from modules.utils import sort_list, sort_for_article, make_thread_list, get_datetime, timedelta, replace_html_codes, copy2clip, title_key, jsondate_to_datetime as js2date
 
-CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af', '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
+############KODI-RD-IL###################
+# ORIGINAL TWILIGHT LINE:
+# CLIENT_ID, CLIENT_SECRET = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af', '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
+# NEW CUSTOM LINE - Twilight Trakt App
+CLIENT_ID, CLIENT_SECRET = 'f965d9a556281409d13befa3a1a02b557902ed9522fc4331f8f48bcc6a20b4ec', 'c5f75ecf09bb6d2732a57f032ac8a12d83acc2dfee269f6cbb70bd51f328c847'
+#########################################
+
 ls, json, monitor, sleep, get_setting, set_setting = kodi_utils.local_string, kodi_utils.json, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting, kodi_utils.set_setting
 logger, notification, player, confirm_dialog, get_property = kodi_utils.logger, kodi_utils.notification, kodi_utils.player, kodi_utils.confirm_dialog, kodi_utils.get_property
 dialog, unquote, addon_installed, addon_enabled, addon = kodi_utils.dialog, kodi_utils.unquote, kodi_utils.addon_installed, kodi_utils.addon_enabled, kodi_utils.addon
@@ -149,7 +155,14 @@ def trakt_authenticate(dummy=''):
 			user = call_trakt('/users/me')
 			set_setting('trakt.user', str(user['username']))
 		except: pass
-		notification('Trakt Account Authorized', 3000)
+
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINE:
+		# notification('Trakt Account Authorized', 3000)
+		# NEW CUSTOM LINE:
+		notification(32576, 3000)
+		#########################################
+
 		trakt_sync_activities(force_update=True)
 		return True
 	notification('Trakt Error Authorizing', 3000)
