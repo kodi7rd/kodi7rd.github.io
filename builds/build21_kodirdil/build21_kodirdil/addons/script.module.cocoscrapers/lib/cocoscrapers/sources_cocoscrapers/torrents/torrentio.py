@@ -74,10 +74,7 @@ class source:
 		
 				############KODI-RD-IL###################
 				# COMMENTED - NO FILTERS
-				# ORIGINAL COCOSCRAPERS LINE:
 				# if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
-				# CUSTOM NEW LINE - Disable filtering for Nyaa provider
-				# if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years) and 'NyaaSi' not in file['title']: continue
 				#########################################
 
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
@@ -133,9 +130,6 @@ class source:
 				name = source_utils.clean_name(file_title[0])
 
 				############KODI-RD-IL###################
-				# Disable filtering for Nyaa provider
-				# if 'NyaaSi' in file['title']:
-					# bypass_filter = True
 				# NO FILTERS
 				bypass_filter = True
 				#########################################
