@@ -16,9 +16,12 @@
     <setting id="provider.kickass2" default="true">false</setting>
     <setting id="provider.limetorrents" default="true">false</setting>
     <setting id="provider.magnetdl" default="true">true</setting>
-    <setting id="provider.nyaa">true</setting>
-    <setting id="provider.piratebay">true</setting>
+    <setting id="provider.nyaa" default="true">false</setting>
+    <setting id="provider.piratebay" default="true">false</setting>
     <setting id="provider.rutor">true</setting>
+    <setting id="provider.selfhosted" default="true">false</setting>
+    <setting id="selfhosted.url" default="true" />
+    <setting id="selfhosted.name" default="true" />
     <setting id="provider.torlock" default="true">false</setting>
     <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
