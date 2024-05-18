@@ -23,7 +23,7 @@
     <setting id="extras.manage" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="extras.button_choice" default="true">$ADDON[plugin.video.twilight 32652]</setting>
     <setting id="extras.restore_default" default="true">$ADDON[plugin.video.twilight 32652]</setting>
-    <setting id="extras.enable_extra_ratings">false</setting>
+    <setting id="extras.enable_extra_ratings" default="true">true</setting>
     <setting id="extras.enabled_ratings" default="true">Meta, Tom/Critic, Tom/User, IMDb, TMDb</setting>
     <setting id="extras.ratings_amble" default="true" />
     <setting id="extras.enable_scrollbars" default="true">false</setting>
@@ -83,10 +83,10 @@
     <setting id="meta_filter">false</setting>
     <setting id="trakt.amble" default="true" />
     <setting id="trakt.user" default="true" />
-    <setting id="tmdb_api" default="true">b370b60447737762ca38457bd77579b3</setting>
+    <setting id="tmdb_api" default="true">6dcadb9d9188419a2fd73391bd3cdd70</setting>
     <setting id="fanart_amble1" default="true" />
     <setting id="fanart_client_key" default="true">fa836e1c874ba95ab08a14ee88e05565</setting>
-    <setting id="omdb_api" default="true" />
+    <setting id="omdb_api">19376929</setting>
     <setting id="imdb_user" default="true" />
     <setting id="imdb_lists.sort_type" default="true">0</setting>
     <setting id="imdb_lists.sort_direction" default="true">0</setting>
@@ -243,7 +243,7 @@
     <setting id="folder5.tv_shows_directory" default="true">None</setting>
     <setting id="easynews.farm" default="true">auto</setting>
     <setting id="easynews.port" default="true">443</setting>
-    <setting id="version_number">3.2.50</setting>
+    <setting id="version_number">3.2.60</setting>
     <setting id="dummy_setting" default="true">foo</setting>
     <setting id="extras.enabled" default="true">2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063</setting>
     <setting id="main_highlight">FF3285FF</setting>
