@@ -505,18 +505,19 @@ def get_video_data():
                   
 
     ################### Local Media / External Player Support ################################
+    video_data['is_local_media_playing'] = False
+    
     if xbmc.Player().isPlaying():
     
         # When all three keys are empty
         if all(not video_data[key] for key in ['OriginalTitle', 'year', 'TVShowTitle']):
-            video_data['is_local_media'] = True
-            log.warning(f"DEBUG | get_video_data | is_local_media=True | Running get_local_media_data function.")
+            video_data['is_local_media_playing'] = True
+            log.warning(f"DEBUG | get_video_data | is_local_media_playing=True | Running get_local_media_data function.")
             video_data = get_local_media_data(video_data)
             
         # When at least one of the keys has a value
         else:
-            video_data['is_local_media'] = False
-            log.warning(f"DEBUG | get_video_data | is_local_media=False | Skipping get_local_media_data function.")
+            log.warning(f"DEBUG | get_video_data | is_local_media_playing=False | Skipping get_local_media_data function.")
     ##########################################################################################
 
 
@@ -542,6 +543,16 @@ def get_video_data():
     if video_data['media_type'] == 'tv':
         video_data['TVShowTitle'] = clean_name(video_data['TVShowTitle'])
     ##########################################################################################
+    
+    
+    ################### Remove Year From Titles ##############################################
+    # Local media only.
+    if video_data['is_local_media_playing'] == True:
+        video_data['title'] = remove_release_year_from_title_if_exists(video_data['title'], video_data['year'])
+        video_data['OriginalTitle'] = remove_release_year_from_title_if_exists(video_data['OriginalTitle'], video_data['year'])
+        if video_data['media_type'] == 'tv':
+            video_data['TVShowTitle'] = remove_release_year_from_title_if_exists(video_data['TVShowTitle'], video_data['year'])
+    ##########################################################################################
 
 
     ################### Manual Search for IMDb ID using TMDB API #############################
@@ -549,14 +560,6 @@ def get_video_data():
         from resources.modules.general import manual_search_for_imdb_id
         log.warning(f"DEBUG | get_video_data | IMDb ID from video addon not found. searching manually using TMDB API...")
         video_data = manual_search_for_imdb_id(video_data)
-    ##########################################################################################
-    
-    
-    ################### Remove Year From Titles ##############################################
-    video_data['title'] = remove_release_year_from_title_if_exists(video_data['title'], video_data['year'])
-    video_data['OriginalTitle'] = remove_release_year_from_title_if_exists(video_data['OriginalTitle'], video_data['year'])
-    if video_data['media_type'] == 'tv':
-        video_data['TVShowTitle'] = remove_release_year_from_title_if_exists(video_data['TVShowTitle'], video_data['year'])
     ##########################################################################################
     
     

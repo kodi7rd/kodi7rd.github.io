@@ -8,9 +8,9 @@ from resources.modules import log
 import requests,json
 import urllib
 from resources.modules.extract_sub import extract
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 from resources.modules import cache
 import xbmcvfs
-import struct
 #########################################
 
 que=urllib.parse.quote_plus
@@ -31,27 +31,23 @@ USE_SUBDL_USER_API_KEY = bool(SUBDL_USER_API_KEY_VALUE)
 #########################################
 
 ########### Constants ###################
-SUBDL_API_SEARCH_URL = "https://api.subdl.com/api/v1/subtitles"
-SUBDL_API_DOWNLOAD_URL = "https://dl.subdl.com"
 site_id='[SubDL]'
 sub_color='plum'
+SUBDL_API_SEARCH_URL = "https://api.subdl.com/api/v1/subtitles"
+SUBDL_API_DOWNLOAD_URL = "https://dl.subdl.com"
 #########################################
 
-###### Requests Params ##############
-REQUEST_TIMEOUT_IN_SECONDS = 5
-#########################################
-
-def search_subtitles(item):
+def search_subtitles(video_data):
 
     # SubDL API Search docs:
     # https://subdl.com/api-doc
 
-    title = item.get('OriginalTitle', '')
-    media_type = item.get('media_type', '')
-    season = item.get('season', '')
-    episode = item.get('episode', '')
-    year = item.get('year', '')
-    imdb_id = item.get('imdb', '')
+    title = video_data.get('OriginalTitle', '')
+    media_type = video_data.get('media_type', '')
+    season = video_data.get('season', '')
+    episode = video_data.get('episode', '')
+    year = video_data.get('year', '')
+    imdb_id = video_data.get('imdb', '')
     
     #####################################################################################################################################
     # API is in beta version. due to limitations - for start - search only for Hebrew + English languages (In the future - all languages)
@@ -87,7 +83,7 @@ def search_subtitles(item):
         SUBDL_API_KEY_NAME, SUBDL_API_KEY_VALUE = get_random_key()
         
     querystring['api_key'] = SUBDL_API_KEY_VALUE
-    log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles SUBDL_API_KEY_NAME={SUBDL_API_KEY_NAME} | SUBDL_API_KEY_VALUE={SUBDL_API_KEY_VALUE}")
+    log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles SUBDL_API_KEY_NAME={SUBDL_API_KEY_NAME} | SUBDL_API_KEY_VALUE={SUBDL_API_KEY_VALUE}")
     
     # FROM API DOCS: `subs_per_page` (optional): limit of subtitles will see in the results default is 10, (max can be 30)
     querystring['subs_per_page'] = 30
@@ -130,35 +126,35 @@ def search_subtitles(item):
             #################################################
             querystring['year'] = year
     
-    log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles final querystring: {str(querystring)} | Languages: {str(lang)}")
+    log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles final querystring: {str(querystring)} | Languages: {str(lang)}")
     response_subtitles_list = []
     for language in lang:
         try:
             querystring['languages'] = language
-            response = requests.get(SUBDL_API_SEARCH_URL, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            response = requests.get(SUBDL_API_SEARCH_URL, params=querystring, timeout=DEFAULT_REQUEST_TIMEOUT)
             response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
             response_json = response.json()
-            log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles | Status Code: {response.status_code} | response_json={response_json}")
+            log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles | Status Code: {response.status_code} | response_json={response_json}")
             
             response_text_status = response_json.get('status', False)
-            log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles | response_text_status={response_text_status}")
+            log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles | response_text_status={response_text_status}")
             if not response_text_status:
                 continue
         
             subtitles_count = len(response_json['subtitles'])
-            log.warning(f"DEBUG | SubDL | SubDL SearchSubtitles | searching language '{language}' | Count found: {subtitles_count}")
+            log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles | searching language '{language}' | Count found: {subtitles_count}")
             
             response_subtitles_list.extend(response_json['subtitles'])
             xbmc.sleep(300)
         except Exception as e:
-            log.warning(f'DEBUG | SubDL | SubDL SearchSubtitles | type: {type(e)} | Exception: {repr(e)}')
+            log.warning(f'DEBUG | [SubDL] | SubDL SearchSubtitles | type: {type(e)} | Exception: {repr(e)}')
     return response_subtitles_list
        
-def get_subs(item):
+def get_subs(video_data):
     global global_var
-    log.warning('DEBUG | SubDL | Searching SubDL')
+    log.warning('DEBUG | [SubDL] | Searching SubDL')
     subtitle_list = []
-    response_subtitles_list = search_subtitles(item)
+    response_subtitles_list = search_subtitles(video_data)
     
     if response_subtitles_list is not None:
 
@@ -221,14 +217,14 @@ def download(download_data,MySubFolder):
     filename=download_data['filename']
     
     subFile = os.path.join(MyTmp, "%s.%s" %(str(filename), format))
-    log.warning(f'DEBUG | SubDL | Desired sub file_id: {file_id} | subFile: {subFile}')
+    log.warning(f'DEBUG | [SubDL] | Desired sub file_id: {file_id} | subFile: {subFile}')
     
     # Example: https://dl.subdl.com/subtitle/3197651-3213944.zip
     subtitle_download_url = f"{SUBDL_API_DOWNLOAD_URL}{file_id}"
         
     try:
-        sub_download_response = requests.get(subtitle_download_url, timeout=REQUEST_TIMEOUT_IN_SECONDS)
-        log.warning(f"DEBUG | SubDL | SubDL DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
+        sub_download_response = requests.get(subtitle_download_url, timeout=DEFAULT_REQUEST_TIMEOUT)
+        log.warning(f"DEBUG | [SubDL] | SubDL DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
         sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
         with open(subFile, 'wb') as temp_subFile:
@@ -236,10 +232,10 @@ def download(download_data,MySubFolder):
         sub_file=extract(subFile,MySubFolder)
         return sub_file
     except Exception as e:
-        log.warning(f'DEBUG | SubDL | SubDL DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
+        log.warning(f'DEBUG | [SubDL] | SubDL DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
 
 def c_get_subdl_api_keys():    
-    SUBDL_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_SubDL/darksubs_subdl_api.json', timeout=REQUEST_TIMEOUT_IN_SECONDS).json()
+    SUBDL_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_SubDL/darksubs_subdl_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
     return SUBDL_API_KEYS
     
 def get_random_key():

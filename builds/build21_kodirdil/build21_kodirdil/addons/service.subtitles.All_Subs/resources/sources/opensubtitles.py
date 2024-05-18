@@ -45,7 +45,7 @@ REQUEST_MAX_RETRIES_NUMBER = 8
 REQUEST_RETRY_DELAY_IN_MS = 500
 #########################################
 
-def searchsubtitles(item):
+def searchsubtitles(video_data):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -54,12 +54,12 @@ def searchsubtitles(item):
     # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
     
 
-    title = item.get('OriginalTitle', '')
-    season = item.get('season', '')
-    episode = item.get('episode', '')
-    year = item.get('year', '')
-    imdb_id = item.get('imdb', '')
-    media_type = item.get('media_type', '')
+    title = video_data.get('OriginalTitle', '')
+    season = video_data.get('season', '')
+    episode = video_data.get('episode', '')
+    year = video_data.get('year', '')
+    imdb_id = video_data.get('imdb', '')
+    media_type = video_data.get('media_type', '')
     
     lang=[]
 
@@ -128,19 +128,6 @@ def searchsubtitles(item):
     querystring['foreign_parts_only'] = "include"
     querystring['machine_translated'] = "exclude"
     #################################################
-
-    #########################################
-    # TODO: make hashFile function work
-    # try:
-        # file_hash = self.hashFile()
-    # except:
-        # file_hash = None
-    
-    # TODO: Send movie hash (from hashFile function) - helps to improve search accuracy according to the guidelines in:
-    # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
-    # if file_hash:
-        # querystring['moviehash'] = file_hash
-    #########################################
     
     # Determine which API key to use for Search
     if USE_OS_USER_API_KEY:
@@ -149,7 +136,7 @@ def searchsubtitles(item):
     else:
         OS_API_KEY_NAME,OS_API_KEY_VALUE = get_random_key()
         
-    log.warning(f"DEBUG | OPS | Opensubtitles SearchSubtitles OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
+    log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
     
     headers = {
         "User-Agent": USER_AGENT,
@@ -157,7 +144,7 @@ def searchsubtitles(item):
     }
 
     # Send the first request ONLY to get total_pages count.
-    log.warning("DEBUG | OPS | Opensubtitles SearchSubtitles querystring: " + repr(querystring))
+    log.warning("DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles querystring: " + repr(querystring))
     
     for attempt_number in range(REQUEST_MAX_RETRIES_NUMBER):
         try:
@@ -170,7 +157,7 @@ def searchsubtitles(item):
             # Increase total_pages by 1 (OpenSubtitles API splits the results as 50 page (not 60 as written in JSON response!)
             # There is extra page with results.
             total_pages = response_json['total_pages'] + 1 if total_subs_count > 50 else response_json['total_pages']
-            log.warning(f"DEBUG | OPS | Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
+            log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
             
             search_data = []
             # Loop through the pages and save all results in search_data
@@ -184,22 +171,22 @@ def searchsubtitles(item):
             return search_data
 
         except requests.exceptions.ConnectionError as ce:
-            log.warning('DEBUG | OPS | OpenSubtitles SearchSubtitles connection error: ' + repr(ce))
+            log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles SearchSubtitles connection error: ' + repr(ce))
             if attempt_number < REQUEST_MAX_RETRIES_NUMBER - 1:  # Retry if attempts are left
-                log.warning(f"DEBUG | OPS | OpenSubtitles SearchSubtitles | Retrying... Attempt {attempt_number + 2} of {REQUEST_MAX_RETRIES_NUMBER}")
+                log.warning(f"DEBUG | [OpenSubtitles] | OpenSubtitles SearchSubtitles | Retrying... Attempt {attempt_number + 2} of {REQUEST_MAX_RETRIES_NUMBER}")
                 continue
             else:
                 return [] # Exit the loop if all retries failed
         except Exception as e:
-            log.warning('DEBUG | OPS | OpenSubtitles SearchSubtitles error: ' + repr(e))
+            log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles SearchSubtitles error: ' + repr(e))
             return []
        
-def get_subs(item):
+def get_subs(video_data):
     global global_var
-    log.warning('DEBUG | OPS | Searching Opensubtitles')
+    log.warning('DEBUG | [OpenSubtitles] | Searching Opensubtitles')
     subtitle_list = []
     
-    search_data = searchsubtitles(item)
+    search_data = searchsubtitles(video_data)
     
     if search_data is not None:
 
@@ -282,7 +269,7 @@ def download(download_data,MySubFolder):
     filename=download_data['filename']
     
     subFile = os.path.join(MyTmp, "%s.%s" %(str(filename), format))
-    log.warning(f'DEBUG | OPS | Desired sub file_id: {file_id} | subFile: {subFile}')
+    log.warning(f'DEBUG | [OpenSubtitles] | Desired sub file_id: {file_id} | subFile: {subFile}')
     
     # Subtitle File ID
     payload = {"file_id": int(file_id), "sub_format": "srt"}
@@ -300,7 +287,7 @@ def download(download_data,MySubFolder):
         else:
             OS_API_KEY_NAME,OS_API_KEY_VALUE = get_random_key()
             
-        log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | api_key_attempt_number={api_key_attempt_number} | OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
+        log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles | api_key_attempt_number={api_key_attempt_number} | OS_API_KEY_NAME={OS_API_KEY_NAME} | OS_API_KEY_VALUE={OS_API_KEY_VALUE}")
 
         headers = {
             "User-Agent": USER_AGENT,
@@ -313,47 +300,47 @@ def download(download_data,MySubFolder):
         retry_number = 1
         while retry_number <= REQUEST_MAX_RETRIES_NUMBER:
             try:
-                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | Get sub URL download |  Starting retry_number {retry_number}.")
-                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles payload: {repr(payload)}")
+                log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles | Get sub URL download |  Starting retry_number {retry_number}.")
+                log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles payload: {repr(payload)}")
                 response = requests.post(OPS_API_DOWNLOAD_URL, json=payload, headers=headers, timeout=REQUEST_TIMEOUT_IN_SECONDS)
-                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles response.status_code: {repr(response.status_code)}")
+                log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles response.status_code: {repr(response.status_code)}")
                 
                 if response.status_code == 503 or response.status_code == 406:
                     break # 503 - Wrong API Key | 406 - max usage quota reached for the API key.
                 response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
                 
                 response_json = response.json()
-                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles result: {repr(response_json)}")
+                log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles result: {repr(response_json)}")
                 subtitle_download_url = response_json['link']
                 success = True # Set flag to break both loops
                 break
 
             except requests.RequestException as req_err:
                 if isinstance(req_err, (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError)):
-                    log.warning(f"DEBUG | OPS | OpenSubtitles DownloadSubtitles RequestException error: {repr(req_err)}")
+                    log.warning(f"DEBUG | [OpenSubtitles] | OpenSubtitles DownloadSubtitles RequestException error: {repr(req_err)}")
                     if response:
-                        log.warning(f"DEBUG | OPS | OpenSubtitles DownloadSubtitles response.status_code: {response.status_code}")
+                        log.warning(f"DEBUG | [OpenSubtitles] | OpenSubtitles DownloadSubtitles response.status_code: {response.status_code}")
                     retry_number += 1
                     if retry_number > REQUEST_MAX_RETRIES_NUMBER:
                         raise RuntimeError("Reached maximum retry_number for ReadTimeout or ConnectionError error")
                     xbmc.sleep(REQUEST_RETRY_DELAY_IN_MS)
                 else:
-                    log.warning('DEBUG | OPS | OpenSubtitles DownloadSubtitles error: ' + repr(req_err))
+                    log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles DownloadSubtitles error: ' + repr(req_err))
                     raise RuntimeError("OpenSubtitles DownloadSubtitles error")
                     
         if success:
             break  # Break the for loop if the flag is set
 
     if not success:
-        log.warning("DEBUG | OPS | OpenSubtitles DownloadSubtitles error | No success in getting sub URL download from any API key")
+        log.warning("DEBUG | [OpenSubtitles] | OpenSubtitles DownloadSubtitles error | No success in getting sub URL download from any API key")
         raise RuntimeError(f"OpenSubtitles DownloadSubtitles error | Looped through {REQUEST_MAX_RETRIES_NUMBER} API keys unsucessfully.")
             
     # Download subtitle file
     for attempt_number in range(1, REQUEST_MAX_RETRIES_NUMBER + 1):
-        log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles | Download sub file | Starting attempt_number {attempt_number}.")
+        log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles | Download sub file | Starting attempt_number {attempt_number}.")
         try:
             sub_download_response = requests.get(subtitle_download_url, timeout=REQUEST_TIMEOUT_IN_SECONDS)
-            log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
+            log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
             sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
             with open(subFile, 'wb') as temp_subFile:
@@ -363,11 +350,11 @@ def download(download_data,MySubFolder):
 
         except requests.HTTPError as http_err:
             if attempt_number < REQUEST_MAX_RETRIES_NUMBER:
-                log.warning(f"DEBUG | OPS | Opensubtitles DownloadSubtitles error: {repr(http_err)} on attempt_number {attempt_number}. Retrying in {REQUEST_RETRY_DELAY_IN_MS} seconds...")
+                log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles error: {repr(http_err)} on attempt_number {attempt_number}. Retrying in {REQUEST_RETRY_DELAY_IN_MS} seconds...")
                 xbmc.sleep(REQUEST_RETRY_DELAY_IN_MS)
                 continue  # Retry the request
             else:
-                log.warning('DEBUG | OPS | OpenSubtitles DownloadSubtitles error: ' + repr(http_err))
+                log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles DownloadSubtitles error: ' + repr(http_err))
                 raise RuntimeError("OpenSubtitles DownloadSubtitles HTTPError reached maximum tries.")
 
 def c_get_os_api_keys():    
@@ -437,17 +424,17 @@ def get_random_key():
             # if response.status_code == 200:
                 # response_json = response.json()
 
-                # log.warning('DEBUG | OPS | OpenSubtitles Login: Succeeded')
-                # log.warning('DEBUG | OPS | OpenSubtitles Login: response json - ' + repr(response_json))
+                # log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles Login: Succeeded')
+                # log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles Login: response json - ' + repr(response_json))
 
                 # self.osdb_token = response_json.get('token')
             # else:
-                # log.warning('DEBUG | OPS | OpenSubtitles Login: Failed - status code: ' + repr(response.status_code))
+                # log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles Login: Failed - status code: ' + repr(response.status_code))
                 # error_message = 'Failed with status code: ' + str(response.status_code)
                 # notify_for_api_error(error_message, response_json)
 
         # except Exception as e:
-            # log.warning('DEBUG | OPS | OpenSubtitles Login error: ' + repr(e))
+            # log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles Login error: ' + repr(e))
 
         
     # def get_osdb_token(self):
@@ -460,7 +447,7 @@ def get_random_key():
     # else:
         # message = "OpenSubtitles Error: " + error_message
         
-    # log.warning(f"DEBUG | OPS notify_for_api_error message: {message}")
+    # log.warning(f"DEBUG | [OpenSubtitles] notify_for_api_error message: {message}")
     # notify(message)
         
 

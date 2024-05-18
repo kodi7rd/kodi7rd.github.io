@@ -1,5 +1,5 @@
 import xbmcaddon,xbmcvfs,os,re,xbmc
-global global_var,stop_all,site_id,sub_color#global
+global global_var,site_id,sub_color#global
 global_var=[]
 from resources.modules import log
 import requests,json,re,shutil
@@ -181,8 +181,8 @@ def __parse_response( response):
         log.warning('%s - %s' % ("Bs", exc))
         return None
     '''
-def get_subs(item,file_name=""):
-    log.warning('Searching Bsplayer')
+def get_subs(video_data,file_name=""):
+    log.warning('DEBUG | [BSPlayer] | Searching Bsplayer')
     global global_var
     if not xbmc.Player().isPlaying():
         return []
@@ -252,7 +252,7 @@ def download(download_data,MySubFolder):
     url=download_data['url']
     file_name=download_data['file_name']
     url=get_subs("",file_name)
-    log.warning('New Url:'+str(url))
+    log.warning('DEBUG | [BSPlayer] | New Url:'+str(url))
     response = requests.get(url, headers=__headers, timeout=DEFAULT_REQUEST_TIMEOUT)
     
 

@@ -1,4 +1,9 @@
-﻿[COLOR yellow][B]v4.4.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.5[/B][/COLOR]
+* Limit remove_release_year_from_title_if_exists function for playing local media only.
+* Wizdom code refactor.
+* Ktuvit total code rewrite and refactor.
+* Rename "item" to "video_data"
+[COLOR yellow][B]v4.4.4[/B][/COLOR]
 * Fix hidden labels in addon settings.
 * Remove bing_translate_keys_method setting.
 * OpenSubtitles / SubDL random API Key choice refactor.
