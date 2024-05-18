@@ -56,19 +56,19 @@ def search_for_subtitles(media_metadata):
         # Search for movie/show in Ktuvit search page
         ktuvit_search_response = ktuvit_search_request(title, media_type)
         
-        # Get IMDb ID from Ktuvit
-        ID_from_ktuvit = get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title)
-        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ID_from_ktuvit: {ID_from_ktuvit}")
+        # Get matching Ktuvit ID from search results
+        Ktuvit_Page_ID = get_Ktuvit_ID(ktuvit_search_response, imdb_id, title)
+        kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | Ktuvit_Page_ID: {Ktuvit_Page_ID}")
         
-        # Return empty subtitles list if no IMDb ID from Ktuvit found.    
-        if ID_from_ktuvit == '':
+        # Return empty subtitles list if no Ktuvit ID found. 
+        if Ktuvit_Page_ID == '':
             return []
-
-        # Set different API parameters based on media_type (movie / tv)
-        ktuvit_search_subtitles_api_url, headers, params = create_headers_params(media_type, ID_from_ktuvit, season, episode)
             
         # Get login cookie from Ktuvit
         ktuvit_login_cookie = login_to_ktuvit()
+
+        # Set different API parameters based on media_type (movie / tv)
+        ktuvit_search_subtitles_api_url, headers, params = create_headers_params(media_type, Ktuvit_Page_ID, season, episode)
 
         # Search subtitles in Ktuvit and fetch response
         ktuvit_subtitles_search_response = requests.get(ktuvit_search_subtitles_api_url, headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).content
@@ -175,7 +175,6 @@ def ktuvit_search_request(title, media_type):
     
     ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
-    kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | ktuvit_search_page_results: {ktuvit_search_page_results}")
     
     return ktuvit_search_response
     
@@ -188,7 +187,7 @@ def extract_imdb_id_from_result(result):
     imdb_parts = imdb_link_from_ktuvit.split("/")
     imdb_id_from_ktuvit = imdb_parts[-1] if imdb_parts else ''
             
-    # FALLBACK - Check if imdb_id_from_ktuvit is empty or doesn't start with "tt"
+    # FALLBACK - Check if imdb_id_from_ktuvit doesn't start with "tt"
     if not imdb_id_from_ktuvit.startswith("tt"):
         imdb_id_from_ktuvit = str(result.get('ImdbID', ''))
         kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | FALLBACK | KTUVIT IMDB ID (fallback): {imdb_id_from_ktuvit}")
@@ -196,7 +195,7 @@ def extract_imdb_id_from_result(result):
     return imdb_id_from_ktuvit
 
 
-def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
+def get_Ktuvit_ID(ktuvit_search_response, imdb_id, title):
 
     """
     Parses the Ktuvit search results and returns the IMDb ID of the media file.
@@ -207,22 +206,22 @@ def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
     - title (str): A string representing the title of the media file.
 
     Returns:
-    - ID_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
+    - Ktuvit_Page_ID (str): A string representing the IMDb ID of the media file as found on Ktuvit.
     """
 
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
-    ID_from_ktuvit = ''
+    Ktuvit_Page_ID = ''
 
     if imdb_id:
         for result in ktuvit_search_page_results:
             imdb_id_from_ktuvit = extract_imdb_id_from_result(result)
             if imdb_id_from_ktuvit in imdb_id:
                 kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | MATCH | TWILIGHT imdb_id: {imdb_id} | KTUVIT IMDB ID: {imdb_id_from_ktuvit}")
-                ID_from_ktuvit = result['ID']
+                Ktuvit_Page_ID = result['ID']
                 break
 
-    # if ids still empty (wrong imdb on ktuvit page) filtered by text      
-    if ID_from_ktuvit == '':
+    # if Ktuvit_Page_ID still empty (wrong imdb on ktuvit page) - search for match by title eng/heb names
+    if Ktuvit_Page_ID == '':
         regex_helper = re.compile('\W+', re.UNICODE)
         title = regex_helper.sub('', title).lower()
         for result in ktuvit_search_page_results:
@@ -233,13 +232,13 @@ def get_ID_from_ktuvit(ktuvit_search_response, imdb_id, title):
             if (title.startswith(eng_name) or eng_name.startswith(title) or
                     title.startswith(heb_name) or heb_name.startswith(title)):
                 kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
-                ID_from_ktuvit = result["ID"]
+                Ktuvit_Page_ID = result["ID"]
                 break
     
-    return ID_from_ktuvit
+    return Ktuvit_Page_ID
 
 
-def create_headers_params(media_type, ID_from_ktuvit, season, episode):
+def create_headers_params(media_type, Ktuvit_Page_ID, season, episode):
 
     """
     Creates the headers and parameters for the API request to search for subtitles.
@@ -247,7 +246,7 @@ def create_headers_params(media_type, ID_from_ktuvit, season, episode):
     Args:
     - media_type (str): A string indicating the type of the media file ('movie' or 'tv').
     - ktuvit_referer_url (str): A string representing the referer URL for the API request.
-    - ID_from_ktuvit (str): A string representing the IMDb ID of the media file as found on Ktuvit.
+    - Ktuvit_Page_ID (str): A string representing the IMDb ID of the media file as found on Ktuvit.
     - season (int): An integer representing the season number of the media file.
     - episode (int): An integer representing the episode number of the media file.
 
@@ -257,7 +256,7 @@ def create_headers_params(media_type, ID_from_ktuvit, season, episode):
     - params (tuple): A tuple containing the parameters for the API request.
     """
         
-    ktuvit_referer_url = f"{KTUVIT_URL}/MovieInfo.aspx?ID={ID_from_ktuvit}"
+    ktuvit_referer_url = f"{KTUVIT_URL}/MovieInfo.aspx?ID={Ktuvit_Page_ID}"
 
     if media_type == 'movie':
     
@@ -278,7 +277,7 @@ def create_headers_params(media_type, ID_from_ktuvit, season, episode):
         }
 
         params = (
-            ('ID', ID_from_ktuvit),
+            ('ID', Ktuvit_Page_ID),
         )
         
     else:
@@ -299,9 +298,9 @@ def create_headers_params(media_type, ID_from_ktuvit, season, episode):
 
         params = (
             ('moduleName', 'SubtitlesList'),
-            ('SeriesID', ID_from_ktuvit),
-            ('Season', season),
-            ('Episode', episode),
+            ('SeriesID', Ktuvit_Page_ID),
+            ('Season', str(season).zfill(2)),
+            ('Episode', str(episode).zfill(2)),
         )
     
     return ktuvit_search_subtitles_api_url, headers, params
@@ -328,27 +327,25 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
     
     # Extract title and subtitle from each table row
     for table_row in table_rows:
-        title_subtitle_regex = '<div style="float.+?>(.+?)<br />.+?data-subtitle-id="(.+?)"'
-        title_subtitle = re.compile(title_subtitle_regex,re.DOTALL).findall(table_row)
+        subtitle_row_regex = '<div style="float.+?>(.+?)<br />.+?data-subtitle-id="(.+?)"'
+        extracted_subtitle_row = re.compile(subtitle_row_regex,re.DOTALL).findall(table_row)
         
         # Skip if title and subtitle not found
-        if len(title_subtitle)==0:
+        if len(extracted_subtitle_row) == 0:
             continue
     
         # Extract title from title and subtitle
-        title_subtitle = title_subtitle[0][0]
+        extracted_subtitle_name = extracted_subtitle_row[0][0]
             
         # burekas fix for KT titles
-        if ('i class' in title_subtitle):
+        if ('i class' in extracted_subtitle_name):
             burekas_title_regex = 'כתובית מתוקנת\'></i>(.+?)$'
-            burekas_title = re.compile(burekas_title_regex,re.DOTALL).findall(title_subtitle)
-            final_title_subtitle = burekas_title[0]
-        else:
-            final_title_subtitle = title_subtitle
+            burekas_title = re.compile(burekas_title_regex,re.DOTALL).findall(extracted_subtitle_name)
+            extracted_subtitle_name = burekas_title[0]
 
-        final_title_subtitle = final_title_subtitle.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
+        extracted_subtitle_name = extracted_subtitle_name.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
             
-        ktuvit_subtitles_list.append(final_title_subtitle)
+        ktuvit_subtitles_list.append(extracted_subtitle_name)
     
     return ktuvit_subtitles_list
 

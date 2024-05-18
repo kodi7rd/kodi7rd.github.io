@@ -10,7 +10,8 @@ search_hebrew_subtitles_in_wizdom = kodi_utils.get_setting('search_hebrew_subtit
 #########################################
 
 ########### Constants ###################
-WIZDOM_URL = "http://wizdom.xyz"
+WIZDOM_API_BASE_URL = "https://wizdom.xyz/api"
+WIZDOM_API_SEARCH_URL = f"{WIZDOM_API_BASE_URL}/search?action=by_id"
 DEFAULT_SEASON = 0
 DEFAULT_EPISODE = 0
 DEFAULT_TITLE = 0
@@ -39,7 +40,7 @@ def search_for_subtitles(media_metadata):
         return []
     
     media_type = media_metadata.get("media_type")
-    title = lowercase_with_underscores(media_metadata.get("title", DEFAULT_TITLE))
+    title = media_metadata.get("title", DEFAULT_TITLE)
     season = media_metadata.get("season", DEFAULT_SEASON)
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     imdb_id = media_metadata.get("imdb_id", "")
@@ -47,38 +48,32 @@ def search_for_subtitles(media_metadata):
     # Log the search parameters
     kodi_utils.logger("KODI-RD-IL", f"Searching in [WIZDOM]: media_type: {media_type} title: {title}: season: {season} episode: {episode} imdb_id: {imdb_id}")
 
-    # Build the API URL
-    wizdom_api_url = f"{WIZDOM_URL}/api/search?action=by_id&imdb={imdb_id}&season={season}&episode={episode}"
+    querystring = {}
+    querystring['imdb'] = imdb_id
+    
+    if media_type == 'tv':
+        #################################################
+        # TV Shows - by imdb id + season + episode
+        #################################################
+        querystring['season'] = str(season).zfill(2)
+        querystring['episode'] = str(episode).zfill(2)
 
     try:
         # Send the API request and parse the response
-        wizdom_api_response = requests.get(wizdom_api_url, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+        response = requests.get(WIZDOM_API_SEARCH_URL, params=querystring, timeout=DEFAULT_REQUEST_TIMEOUT)
+        response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
+        wizdom_response_json = response.json()
     except Exception as e:
         # Handle any errors that occur during the API request
-        wizdom_api_response = {}
         kodi_utils.logger("KODI-RD-IL", f"Error in sending API request to [WIZDOM]: {str(e)}")
         return []
       
     wizdom_subtitles_list = []
     
-     # Extract the subtitle versions from the API response
-    for wizdom_subtitle in wizdom_api_response:
-        wizdom_subtitles_list.append(wizdom_subtitle["versioname"])
+    if wizdom_response_json:
+        # Extract the subtitle versions from the API response
+        for wizdom_subtitle in wizdom_response_json:
+            wizdom_subtitles_list.append(wizdom_subtitle["versioname"])
             
     return wizdom_subtitles_list
-      
-      
-def lowercase_with_underscores(string):
-
-    """
-    Converts a string to lowercase and replaces spaces with underscores.
-
-    Args:
-        string: A string to convert.
-
-    Returns:
-        A lowercase version of the input string with spaces replaced by underscores.
-    """
-    
-    return normalize('NFKD', (string)).encode('utf-8', 'ignore')
     

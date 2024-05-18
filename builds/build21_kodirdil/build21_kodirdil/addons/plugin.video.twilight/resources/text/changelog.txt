@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.62[/B][/COLOR]
+- Refactor Ktuvit + Wizdom code.
+
 [COLOR dodgerblue][B]Version 3.2.61[/B][/COLOR]
 - Switch to custom Twilight Trakt API app for authorization.
 - Switch to custom TMDb API Key.
