@@ -40,7 +40,18 @@ class RealDebridAPI:
 		except: pass
 		content = line % (ls(32517), ls(32700) % 'https://real-debrid.com/device', ls(32701) % '[COLOR seagreen]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('seagreen')
-		progressDialog = progress_dialog('%s %s' % (ls(32054), ls(32057)), get_icon('rd_qrcode'))
+
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINE:
+		# progressDialog = progress_dialog('%s %s' % (ls(32054), ls(32057)), get_icon('rd_qrcode'))
+		# CUSTOM NEW LINES:
+		# Auto open direct_verification_url on Windows browser / Android Chrome app.
+		real_debrid_api_auto_verification(response)
+		# Generate QR Image to direct_verification_url from Real Debrid API
+		qr_image_file_path = generate_qr_icon(response)
+		progressDialog = progress_dialog('%s %s' % (ls(32054), ls(32057)), qr_image_file_path or get_icon('rd_qrcode'))
+		#########################################
+
 		progressDialog.update(content, 0)
 		expires_in = int(response['expires_in'])
 		sleep_interval = int(response['interval'])
@@ -69,6 +80,15 @@ class RealDebridAPI:
 				break
 		try: progressDialog.close()
 		except: pass
+
+		############KODI-RD-IL###################
+		try:
+			import xbmcvfs
+			xbmcvfs.delete(qr_image_file_path)
+		except:
+			pass
+		#########################################
+
 		restore_highlight(current_highlight)
 		if self.secret:
 			data = {'client_id': self.client_ID, 'client_secret': self.secret, 'code': device_code, 'grant_type': 'http://oauth.net/grant_type/device/1.0'}
@@ -521,3 +541,63 @@ class RealDebridAPI:
 		if False in (user_cloud_success, download_links_success, hoster_links_success, hash_cache_status_success): return False
 		return True
 
+
+
+############KODI-RD-IL###################
+def check_if_app_installed(app_package_id):
+	import xbmcvfs
+	apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
+	return app_package_id in apps
+
+
+def generate_qr_icon(response):
+	try:
+		import pyqrcode, os, xbmcvfs, xbmcaddon
+
+		# Example: f"https://real-debrid.com/authorize?client_id={self.client_ID}&device_id={device_code}"
+		direct_verification_url = response['direct_verification_url']
+		kodi_utils.logger("KODI-RD-IL",f"real_debrid_api.py | generate_qr_icon | direct_verification_url={direct_verification_url}")
+
+		# Set QR icon destination path
+		ADDON_USERDATA_PATH = xbmcaddon.Addon().getAddonInfo('profile')
+		qr_image_file_path = os.path.join(xbmcvfs.translatePath(ADDON_USERDATA_PATH),'qr_icon_rd_auth.png')
+
+		# Generate QR Icon
+		qrIMG = pyqrcode.create(direct_verification_url)
+		qrIMG.png(qr_image_file_path, scale=10)
+		
+		return qr_image_file_path
+
+	except Exception as e:
+		kodi_utils.logger("KODI-RD-IL", f"real_debrid_api.py | generate_qr_icon | type: {type(e)} | Exception: {repr(e)}")
+		return None
+
+
+def real_debrid_api_auto_verification(response):
+	try:
+		import xbmc
+
+		# Example: f"https://real-debrid.com/authorize?client_id={self.client_ID}&device_id={device_code}"
+		direct_verification_url = response['direct_verification_url']
+		kodi_utils.logger("KODI-RD-IL",f"real_debrid_api.py | real_debrid_api_auto_verification | direct_verification_url={direct_verification_url}")
+
+		# Windows
+		if xbmc.getCondVisibility('system.platform.windows'):
+			import webbrowser
+			webbrowser.get().open_new_tab(direct_verification_url)
+
+		# Android
+		elif xbmc.getCondVisibility('system.platform.android'):
+			google_chrome_app_packge_id = 'com.android.chrome'
+
+			if check_if_app_installed(google_chrome_app_packge_id):
+				app      = google_chrome_app_packge_id
+				intent   = 'android.intent.action.VIEW'
+				dataType = ''
+				dataURI  = direct_verification_url
+				xbmc.executebuiltin(f'StartAndroidActivity("{app}", "{intent}", "{dataType}", "{dataURI}")')
+
+	except Exception as e:
+		kodi_utils.logger("KODI-RD-IL", f"real_debrid_api.py | real_debrid_api_auto_verification | type: {type(e)} | Exception: {repr(e)}")
+		pass
+#########################################

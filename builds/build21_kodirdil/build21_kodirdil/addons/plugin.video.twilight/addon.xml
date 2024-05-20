@@ -1,7 +1,8 @@
-<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.2.62">
+<addon id="plugin.video.twilight" name="Twilight" provider-name="Twilight" version="3.2.63">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.requests" version="2.19.1"/>
+        <import addon="script.module.pyqrcode" version="1.2.1+matrix.1"/>
     </requires>
     <extension library="resources/lib/twilight.py" point="xbmc.python.pluginsource">
         <provides>video</provides>

@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.63[/B][/COLOR]
+- Tools --> Account Manager --> Real Debrid - Generate QR image to direct authorization without inserting code.
+- Real Debrid Authorization - Auto open direct authorization page on Windows browser / Android Chrome app.
+
 [COLOR dodgerblue][B]Version 3.2.62[/B][/COLOR]
 - Refactor Ktuvit + Wizdom code.
 
