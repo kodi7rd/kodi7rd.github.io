@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.4.5[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.6[/B][/COLOR]
+* Ktuvit - add constant scraping URLs.
+[COLOR yellow][B]v4.4.5[/B][/COLOR]
 * Limit remove_release_year_from_title_if_exists function for playing local media only.
 * Wizdom code refactor.
 * Ktuvit total code rewrite and refactor.

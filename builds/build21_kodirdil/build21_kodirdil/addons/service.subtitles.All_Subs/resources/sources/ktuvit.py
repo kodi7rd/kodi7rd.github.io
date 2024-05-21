@@ -20,6 +20,12 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_ktuvit'))
 
 ########### Constants ###################
 KTUVIT_URL = "https://www.ktuvit.me"
+LOGIN_URL = f"{KTUVIT_URL}/Services/MembershipService.svc/Login"
+SEARCH_URL = f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search"
+MOVIE_INFO_URL = f"{KTUVIT_URL}/MovieInfo.aspx"
+EPISODE_INFO_URL = f"{KTUVIT_URL}/Services/GetModuleAjax.ashx?"
+REQUEST_DOWNLOAD_IDENTIFIER_URL = f"{KTUVIT_URL}/Services/ContentProvider.svc/RequestSubtitleDownload"
+DOWNLOAD_SUB_URL = f"{KTUVIT_URL}/Services/DownloadFile.ashx"
 site_id='[Ktuvit]'
 sub_color='springgreen'
 #########################################
@@ -115,14 +121,14 @@ def login_to_ktuvit():
     }
 
     # Set email and password
-    email = 'hatzel6969@gmail.com'
-    password = 'Jw1n9nPOZRAHw9aVdarvjMph2L85pKGx79oAAFTCsaE='
+    email = 'darksubsil1@gmail.com'
+    password = 'ZkCyMZfsIHt9HQK4eL8bbfaxXoNBjmFO9w39kt/gA14='
 
     # Set login request data
     data = f'{{"request":{{"Email":"{email}","Password":"{password}"}}}}'
 
     # Send login request and get cookies
-    ktuvit_api_response = requests.post(f"{KTUVIT_URL}/Services/MembershipService.svc/Login", headers=headers, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).cookies
+    ktuvit_api_response = requests.post(LOGIN_URL, headers=headers, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).cookies
 
     # Create dictionary of cookies with names as keys and values as values
     ktuvit_login_cookies_dict = {}
@@ -170,7 +176,7 @@ def search_title_in_ktuvit(title, media_type):
     }
 
     try:
-        ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+        ktuvit_search_response = requests.post(SEARCH_URL, headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
         ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
         return ktuvit_search_page_results
     except Exception as e:
@@ -223,7 +229,7 @@ def get_Ktuvit_Page_ID(ktuvit_search_page_results, imdb_id, title):
 
 def search_subtitles_in_ktuvit(ktuvit_login_cookie, media_type, Ktuvit_Page_ID, season, episode):
         
-    KTUVIT_REFERER_URL = f"{KTUVIT_URL}/MovieInfo.aspx?ID={Ktuvit_Page_ID}"
+    KTUVIT_REFERER_URL = f"{MOVIE_INFO_URL}?ID={Ktuvit_Page_ID}"
 
     params = {}
     
@@ -241,8 +247,6 @@ def search_subtitles_in_ktuvit(ktuvit_login_cookie, media_type, Ktuvit_Page_ID, 
             'referer': KTUVIT_REFERER_URL,
             'accept-language': 'en-US,en;q=0.9',
         }
-        
-        params['ID'] = Ktuvit_Page_ID
         
     else:
         headers = {
@@ -263,7 +267,7 @@ def search_subtitles_in_ktuvit(ktuvit_login_cookie, media_type, Ktuvit_Page_ID, 
         params['Episode'] = episode.zfill(2)
 
     # Search subtitles in Ktuvit and fetch response
-    ktuvit_search_subtitles_request_url = f"{KTUVIT_URL}/MovieInfo.aspx" if media_type == 'movie' else f"{KTUVIT_URL}/Services/GetModuleAjax.ashx"
+    ktuvit_search_subtitles_request_url = f"{MOVIE_INFO_URL}?ID={Ktuvit_Page_ID}" if media_type == 'movie' else EPISODE_INFO_URL
     ktuvit_subtitles_search_response = requests.get(ktuvit_search_subtitles_request_url, headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).content
     log.warning(f"DEBUG | [KTUVIT] | ktuvit_search_subtitles_request_url={ktuvit_search_subtitles_request_url} | params={params}")
     
@@ -346,7 +350,7 @@ def download(download_data,MySubFolder):
 
     # Attempt subtitle download
     count = 0
-    KTUVIT_REFERER_URL = f"{KTUVIT_URL}/MovieInfo.aspx?ID={Ktuvit_Page_ID}"
+    KTUVIT_REFERER_URL = f"{MOVIE_INFO_URL}?ID={Ktuvit_Page_ID}"
     while ("הבקשה לא נמצאה, נא לנסות להוריד את הקובץ בשנית" in subtitle_download_result):
     
         count += 1
@@ -368,7 +372,7 @@ def download(download_data,MySubFolder):
             }
         
         # Send subtitle download request
-        post_response = requests.post(f'{KTUVIT_URL}/Services/ContentProvider.svc/RequestSubtitleDownload', headers=headers, data=data, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+        post_response = requests.post(REQUEST_DOWNLOAD_IDENTIFIER_URL, headers=headers, data=data, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).json()
         
         # Extract DownloadIdentifier from response
         DownloadIdentifier = json.loads(post_response['d'])['DownloadIdentifier']
@@ -388,12 +392,12 @@ def download(download_data,MySubFolder):
             }
             
         # Set parameters for file download
-        params = {'DownloadIdentifier': DownloadIdentifier}
+        params = {'DownloadIdentifier': str(DownloadIdentifier)}
 
         # Send file download request
     
         log.warning(f"DEBUG | [KTUVIT] | Number of try: {count} | Sending DownloadFile request...")
-        response = requests.get(f'{KTUVIT_URL}/Services/DownloadFile.ashx', headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT)
+        response = requests.get(DOWNLOAD_SUB_URL, headers=headers, params=params, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT)
         # Throw an error for bad status codes
         response.raise_for_status()
        
