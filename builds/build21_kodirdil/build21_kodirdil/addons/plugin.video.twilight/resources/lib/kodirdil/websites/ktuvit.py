@@ -10,6 +10,10 @@ search_hebrew_subtitles_in_ktuvit = kodi_utils.get_setting('search_hebrew_subtit
 
 ########### Constants ###################
 KTUVIT_URL = "https://www.ktuvit.me"
+LOGIN_URL = f"{KTUVIT_URL}/Services/MembershipService.svc/Login"
+SEARCH_URL = f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search"
+MOVIE_INFO_URL = f"{KTUVIT_URL}/MovieInfo.aspx"
+EPISODE_INFO_URL = f"{KTUVIT_URL}/Services/GetModuleAjax.ashx?"
 DEFAULT_TITLE = ""
 DEFAULT_SEASON = 0
 DEFAULT_EPISODE = 0
@@ -107,14 +111,14 @@ def login_to_ktuvit():
     }
 
     # Set email and password
-    email = 'hatzel6969@gmail.com'
-    password = 'Jw1n9nPOZRAHw9aVdarvjMph2L85pKGx79oAAFTCsaE='
+    email = 'darksubsil1@gmail.com'
+    password = 'ZkCyMZfsIHt9HQK4eL8bbfaxXoNBjmFO9w39kt/gA14='
 
     # Set login request data
     data = f'{{"request":{{"Email":"{email}","Password":"{password}"}}}}'
 
     # Send login request and get cookies
-    ktuvit_api_response = requests.post(f"{KTUVIT_URL}/Services/MembershipService.svc/Login", headers=headers, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).cookies
+    ktuvit_api_response = requests.post(LOGIN_URL, headers=headers, data=data, timeout=DEFAULT_REQUEST_TIMEOUT).cookies
 
     # Create dictionary of cookies with names as keys and values as values
     ktuvit_login_cookies_dict = {}
@@ -173,7 +177,7 @@ def ktuvit_search_request(title, media_type):
     }
     kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | ktuvit_search_request | data: {data}")
     
-    ktuvit_search_response = requests.post(f"{KTUVIT_URL}/Services/ContentProvider.svc/SearchPage_search", headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+    ktuvit_search_response = requests.post(SEARCH_URL, headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT).json()
     ktuvit_search_page_results = json.loads(ktuvit_search_response['d'])['Films']
     
     return ktuvit_search_response
@@ -221,19 +225,19 @@ def get_Ktuvit_ID(ktuvit_search_response, imdb_id, title):
                 break
 
     # if Ktuvit_Page_ID still empty (wrong imdb on ktuvit page) - search for match by title eng/heb names
-    if Ktuvit_Page_ID == '':
-        regex_helper = re.compile('\W+', re.UNICODE)
-        title = regex_helper.sub('', title).lower()
-        for result in ktuvit_search_page_results:
+    # if Ktuvit_Page_ID == '':
+        # regex_helper = re.compile('\W+', re.UNICODE)
+        # title = regex_helper.sub('', title).lower()
+        # for result in ktuvit_search_page_results:
         
-            eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
-            heb_name = regex_helper.sub('', result['HebName'])
+            # eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
+            # heb_name = regex_helper.sub('', result['HebName'])
             
-            if (title.startswith(eng_name) or eng_name.startswith(title) or
-                    title.startswith(heb_name) or heb_name.startswith(title)):
-                kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
-                Ktuvit_Page_ID = result["ID"]
-                break
+            # if (title.startswith(eng_name) or eng_name.startswith(title) or
+                    # title.startswith(heb_name) or heb_name.startswith(title)):
+                # kodi_utils.logger("KODI-RD-IL", f"[KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
+                # Ktuvit_Page_ID = result["ID"]
+                # break
     
     return Ktuvit_Page_ID
 
@@ -256,11 +260,11 @@ def create_headers_params(media_type, Ktuvit_Page_ID, season, episode):
     - params (tuple): A tuple containing the parameters for the API request.
     """
         
-    ktuvit_referer_url = f"{KTUVIT_URL}/MovieInfo.aspx?ID={Ktuvit_Page_ID}"
+    ktuvit_referer_url = f"{MOVIE_INFO_URL}?ID={Ktuvit_Page_ID}"
+    
+    params = {}
 
     if media_type == 'movie':
-    
-        ktuvit_search_subtitles_api_url = f"{KTUVIT_URL}/MovieInfo.aspx"
         
         headers = {
             'authority': 'www.ktuvit.me',
@@ -275,14 +279,8 @@ def create_headers_params(media_type, Ktuvit_Page_ID, season, episode):
             'referer': ktuvit_referer_url,
             'accept-language': 'en-US,en;q=0.9',
         }
-
-        params = (
-            ('ID', Ktuvit_Page_ID),
-        )
         
     else:
-    
-        ktuvit_search_subtitles_api_url = f"{KTUVIT_URL}/Services/GetModuleAjax.ashx"
         
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0',
@@ -302,6 +300,7 @@ def create_headers_params(media_type, Ktuvit_Page_ID, season, episode):
             ('Season', str(season).zfill(2)),
             ('Episode', str(episode).zfill(2)),
         )
+    ktuvit_search_subtitles_api_url = f"{MOVIE_INFO_URL}?ID={Ktuvit_Page_ID}" if media_type == 'movie' else EPISODE_INFO_URL
     
     return ktuvit_search_subtitles_api_url, headers, params
 
@@ -344,6 +343,11 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
             extracted_subtitle_name = burekas_title[0]
 
         extracted_subtitle_name = extracted_subtitle_name.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
+
+        # Define characters that might break the filename
+        characters_to_remove = '\\/:*?"<>|\''
+        # Remove characters that might cause issues in the filename
+        extracted_subtitle_name = ''.join(c for c in extracted_subtitle_name if c not in characters_to_remove)
             
         ktuvit_subtitles_list.append(extracted_subtitle_name)
     

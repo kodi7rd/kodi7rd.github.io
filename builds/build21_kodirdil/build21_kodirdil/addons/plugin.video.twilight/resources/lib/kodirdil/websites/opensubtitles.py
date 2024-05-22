@@ -131,7 +131,7 @@ def create_querystring_to_opensubtitles_api(media_metadata, language):
     language = "he" if language == "Hebrew" else "en"
     querystring['languages'] = language
 
-    # Build querystring WITH imdb_id (On new OpenSubtitles API - imdb_id can be with OR without the 'tt' prefix.)
+    # Build querystring WITH imdb_id
     if imdb_id.startswith('tt'):
     
         if media_type == 'tv':
@@ -171,7 +171,7 @@ def create_querystring_to_opensubtitles_api(media_metadata, language):
 
 
     #################################################
-    # Overwritten API value:
+    # Overwritten API default value:
     querystring['hearing_impaired'] = "include"
     # Default API values:
     querystring['ai_translated'] = "include" 
@@ -209,7 +209,7 @@ def create_subtitles_names_list(opensubtitles_subtitles_list):
             continue
 
         # Define characters that might break the filename
-        characters_to_remove = '\\/:*?"<>|'
+        characters_to_remove = '\\/:*?"<>|\''
         # Remove characters that might cause issues in the filename
         SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
         
