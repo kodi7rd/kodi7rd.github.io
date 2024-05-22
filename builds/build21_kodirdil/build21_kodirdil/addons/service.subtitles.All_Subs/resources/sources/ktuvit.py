@@ -305,7 +305,7 @@ def extract_subtitles_list_and_build_subtitles_list(ktuvit_subtitles_search_resp
         extracted_subtitle_name = extracted_subtitle_name.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
 
         # Define characters that might break the filename (It caused writing problem to MyTmp dir)
-        characters_to_remove = '\\/:*?"<>|'
+        characters_to_remove = '\\/:*?"<>|\''
         # Remove characters that might cause issues in the filename
         extracted_subtitle_name = ''.join(c for c in extracted_subtitle_name if c not in characters_to_remove)
         

@@ -225,7 +225,7 @@ def get_subs(video_data):
                 continue
 
             # Define characters that might break the filename (It caused writing problem to MyTmp dir)
-            characters_to_remove = '\\/:*?"<>|'
+            characters_to_remove = '\\/:*?"<>|\''
             # Remove characters that might cause issues in the filename
             SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
         
