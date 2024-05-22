@@ -37,41 +37,7 @@ SUBDL_API_SEARCH_URL = "https://api.subdl.com/api/v1/subtitles"
 SUBDL_API_DOWNLOAD_URL = "https://dl.subdl.com"
 #########################################
 
-def search_subtitles(video_data):
-
-    # SubDL API Search docs:
-    # https://subdl.com/api-doc
-
-    title = video_data.get('OriginalTitle', '')
-    media_type = video_data.get('media_type', '')
-    season = video_data.get('season', '')
-    episode = video_data.get('episode', '')
-    year = video_data.get('year', '')
-    imdb_id = video_data.get('imdb', '')
-    
-    #####################################################################################################################################
-    # API is in beta version. due to limitations - for start - search only for Hebrew + English languages (In the future - all languages)
-    #####################################################################################################################################
-    lang=[]
-    # Language codes from: https://subdl.com/api-files/language_list.json
-    if Addon.getSetting("language_hebrew")=='true':
-        lang.append('HE')
-    if Addon.getSetting("language_english")=='true':
-        lang.append('EN')
-    # if Addon.getSetting("language_russian")=='true':
-        # lang.append('RU')
-    # if Addon.getSetting("language_arab")=='true':
-        # lang.append('AR')
-    # if len(Addon.getSetting("other_lang"))>0:
-        # all_lang=Addon.getSetting("other_lang").split(",")
-        # for items in all_lang:
-            # lang.append(str(items))
-    # If 'all_lang' is enabled - override lang to 'ALL' only (required 'ALL' only in new API)
-    if Addon.getSetting("all_lang")=='true':
-        lang = ['HE','EN']
-        # lang = ['ALL']
-       
-    # lang_string = ','.join(lang)
+def search_subtitles(media_type, title, season, episode, year, imdb_id, lang):
 
     querystring = {}
     
@@ -153,15 +119,47 @@ def search_subtitles(video_data):
 def get_subs(video_data):
     global global_var
     log.warning('DEBUG | [SubDL] | Searching SubDL')
+
+    # SubDL API Search docs:
+    # https://subdl.com/api-doc
+
+    media_type = video_data.get('media_type', '')
+    title = video_data.get('OriginalTitle', '')
+    season = video_data.get('season', '')
+    episode = video_data.get('episode', '')
+    year = video_data.get('year', '')
+    imdb_id = video_data.get('imdb', '')
+    
+    #####################################################################################################################################
+    # Due to API subs_per_page=30 limitations (TOTAL and not per language) - for now - search only for Hebrew + English languages
+    #####################################################################################################################################
+    lang=[]
+    # Language codes from: https://subdl.com/api-files/language_list.json
+    if Addon.getSetting("language_hebrew")=='true':
+        lang.append('HE')
+    if Addon.getSetting("language_english")=='true':
+        lang.append('EN')
+    # if Addon.getSetting("language_russian")=='true':
+        # lang.append('RU')
+    # if Addon.getSetting("language_arab")=='true':
+        # lang.append('AR')
+    # if len(Addon.getSetting("other_lang"))>0:
+        # all_lang=Addon.getSetting("other_lang").split(",")
+        # for items in all_lang:
+            # lang.append(str(items))
+    if Addon.getSetting("all_lang")=='true':
+        lang = ['HE','EN']
+    
+    
     subtitle_list = []
-    response_subtitles_list = search_subtitles(video_data)
+    response_subtitles_list = search_subtitles(media_type, title, season, episode, year, imdb_id, lang)
     
     if response_subtitles_list is not None:
 
         for response_subtitle in response_subtitles_list:
         
             SubRating = '0'
-            hearing_impaired = "false"
+            hearing_impaired = "true" if response_subtitle.get("hi", False) else "false"
             
             SubFileName = response_subtitle['release_name']
             file_id = response_subtitle['url']
@@ -179,9 +177,12 @@ def get_subs(video_data):
             SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
             
             download_data={}
-            download_data['filename']=SubFileName
-            download_data['id']=file_id
-            download_data['format']="zip"
+            download_data['filename'] = SubFileName
+            download_data['id'] = file_id
+            # TODO: Implement season pack support using PTN/GuessIt / wait for API support.
+            download_data['season'] = season
+            download_data['episode'] = episode
+            download_data['format'] = "zip"
             
             url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=subdl" % (MyScriptID,
                                                                                                 que(SubFileName),

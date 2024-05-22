@@ -211,18 +211,18 @@ def get_Ktuvit_Page_ID(ktuvit_search_page_results, imdb_id, title):
                 break
 
     # if Ktuvit_Page_ID still empty (wrong imdb on ktuvit page) - search for match by title eng/heb names
-    if Ktuvit_Page_ID == '':
-        regex_helper = re.compile('\W+', re.UNICODE)
-        title = regex_helper.sub('', title).lower()
+    # if Ktuvit_Page_ID == '':
+        # regex_helper = re.compile('\W+', re.UNICODE)
+        # title = regex_helper.sub('', title).lower()
         
-        for result in ktuvit_search_page_results:
-            eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
-            heb_name = regex_helper.sub('', result['HebName'])
-            if (title.startswith(eng_name) or eng_name.startswith(title) or
-                    title.startswith(heb_name) or heb_name.startswith(title)):
-                log.warning(f"DEBUG | [KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
-                Ktuvit_Page_ID = result["ID"]
-                break
+        # for result in ktuvit_search_page_results:
+            # eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
+            # heb_name = regex_helper.sub('', result['HebName'])
+            # if (title.startswith(eng_name) or eng_name.startswith(title) or
+                    # title.startswith(heb_name) or heb_name.startswith(title)):
+                # log.warning(f"DEBUG | [KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
+                # Ktuvit_Page_ID = result["ID"]
+                # break
     
     return Ktuvit_Page_ID
 
@@ -303,8 +303,11 @@ def extract_subtitles_list_and_build_subtitles_list(ktuvit_subtitles_search_resp
             extracted_subtitle_name = burekas_title[0]
 
         extracted_subtitle_name = extracted_subtitle_name.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
-        # Remove problematic character from sub filename (creates error saving the file)
-        extracted_subtitle_name = extracted_subtitle_name.replace("'", '')
+
+        # Define characters that might break the filename (It caused writing problem to MyTmp dir)
+        characters_to_remove = '\\/:*?"<>|'
+        # Remove characters that might cause issues in the filename
+        extracted_subtitle_name = ''.join(c for c in extracted_subtitle_name if c not in characters_to_remove)
         
         download_data={}
         download_data['Ktuvit_Page_ID'] = Ktuvit_Page_ID

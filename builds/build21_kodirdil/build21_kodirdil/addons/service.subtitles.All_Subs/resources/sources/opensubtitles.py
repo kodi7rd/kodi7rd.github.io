@@ -85,7 +85,8 @@ def searchsubtitles(video_data):
     querystring = {}
     querystring['languages'] = lang_string
 
-    # Build querystring WITH imdb_id (On new OpenSubtitles API - imdb_id can be with OR without the 'tt' prefix.)
+
+    # Build querystring WITH imdb_id
     if imdb_id.startswith('tt'):
     
         if media_type == 'tv':
@@ -121,7 +122,7 @@ def searchsubtitles(video_data):
 
 
     #################################################
-    # Overwritten API value:
+    # Overwritten API default value:
     querystring['hearing_impaired'] = "include"
     # Default API values:
     querystring['ai_translated'] = "include" 
@@ -143,8 +144,10 @@ def searchsubtitles(video_data):
         "Api-Key": OS_API_KEY_VALUE
     }
 
+
     # Send the first request ONLY to get total_pages count.
     log.warning("DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles querystring: " + repr(querystring))
+    
     
     for attempt_number in range(REQUEST_MAX_RETRIES_NUMBER):
         try:
@@ -152,12 +155,14 @@ def searchsubtitles(video_data):
             response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
             response_json = response.json()
 
+
             # Total subtitles found count.
             total_subs_count = response_json['total_count']
             # Increase total_pages by 1 (OpenSubtitles API splits the results as 50 page (not 60 as written in JSON response!)
             # There is extra page with results.
             total_pages = response_json['total_pages'] + 1 if total_subs_count > 50 else response_json['total_pages']
             log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
+            
             
             search_data = []
             # Loop through the pages and save all results in search_data
@@ -180,6 +185,7 @@ def searchsubtitles(video_data):
         except Exception as e:
             log.warning('DEBUG | [OpenSubtitles] | OpenSubtitles SearchSubtitles error: ' + repr(e))
             return []
+       
        
 def get_subs(video_data):
     global global_var
@@ -246,7 +252,7 @@ def get_subs(video_data):
                     'site_id':site_id,
                     'sub_color':sub_color,
                     'filename':SubFileName,
-                    'sync': "false"} # TODO: Implement movie hash check (API returns 'moviehash_match' param)
+                    'sync': "false"}
 
             
                
@@ -439,50 +445,3 @@ def get_random_key():
         
     # def get_osdb_token(self):
         # return self.osdb_token
-
-
-# def notify_for_api_error(error_message, response_json=None):
-    # if response_json:
-        # message = ("OpenSubtitles Error: " + repr(response_json.get('message', ''))).replace(",", " - ").replace("'", "")
-    # else:
-        # message = "OpenSubtitles Error: " + error_message
-        
-    # log.warning(f"DEBUG | [OpenSubtitles] notify_for_api_error message: {message}")
-    # notify(message)
-        
-
-# def hashFile(self): 
-
-    # longlongformat = '<q'  # little-endian long long
-    # bytesize = int(struct.calcsize(longlongformat) )
-        
-    # f = xbmcvfs.File( xbmc.Player().getPlayingFile())
-        
-    # filesize = f.size()
-    # hash = filesize 
-        
-    # if filesize < 65536 * 2: 
-        # return "SizeError" 
-     
-    # for x in range(int(65536/bytesize)): 
-        # buffer = f.read(bytesize)
-        # try: buffer = f.readBytes(bytesize)
-        # except: buffer = f.read(bytesize)
-        
-        # (l_value,)= struct.unpack(longlongformat, buffer)  
-        # hash += l_value 
-        # hash = hash & 0xFFFFFFFFFFFFFFFF #to remain as 64bit number  
-             
-
-    # f.seek(max(0,filesize-65536),0) 
-    # for x in range(int(65536/bytesize)): 
-        # try: buffer = f.readBytes(bytesize)
-        # except: buffer = f.read(bytesize)
-        # (l_value,)= struct.unpack(longlongformat, buffer)  
-        # hash += l_value 
-        # hash = hash & 0xFFFFFFFFFFFFFFFF 
-     
-    # f.close() 
-    # returnedhash =  "%016x" % hash 
-    # return returnedhash
-    

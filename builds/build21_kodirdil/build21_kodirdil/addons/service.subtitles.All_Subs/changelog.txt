@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.4.6[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.7[/B][/COLOR]
+* SubDL - Add hearing impaired flag from API.
+* Ktuvit - add sub name characters_to_remove, comment out manual EngName/HebName results matching.
+[COLOR yellow][B]v4.4.6[/B][/COLOR]
 * Ktuvit - add constant scraping URLs.
 [COLOR yellow][B]v4.4.5[/B][/COLOR]
 * Limit remove_release_year_from_title_if_exists function for playing local media only.
