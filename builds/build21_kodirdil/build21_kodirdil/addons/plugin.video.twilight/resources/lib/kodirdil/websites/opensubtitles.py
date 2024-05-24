@@ -74,7 +74,6 @@ def search_subtitles(querystring):
         "Api-Key": OS_SEARCH_API_KEY_VALUE
     }
 
-    # Send the first request ONLY to get total_pages count.
     kodi_utils.logger("KODI-RD-IL", "Opensubtitles SearchSubtitles querystring: " + repr(querystring))
     
     for attempt_number in range(REQUEST_MAX_RETRIES_NUMBER):
@@ -84,20 +83,23 @@ def search_subtitles(querystring):
             response_json = response.json()
 
             # Total subtitles found count.
-            total_subs_count = response_json['total_count']
-            # Increase total_pages by 1 (OpenSubtitles API splits the results as 50 page (not 60 as written in JSON response!)
-            # There is extra page with results.
-            total_pages = response_json['total_pages'] + 1 if total_subs_count > 50 else response_json['total_pages']
+            total_subs_count = response_json.get('total_count', 0)
+            # Calculate total_pages through total_subs_count (OpenSubtitles API splits the results as 50 per page - not 60 as written in "per_page" JSON response!)
+            total_pages = (total_subs_count // 50) + (1 if total_subs_count % 50 > 0 else 0)
             kodi_utils.logger("KODI-RD-IL", f"Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
             
-            search_data = []
-            # Loop through the pages and save all results in search_data
-            for _page in range(1, total_pages + 1):
-                querystring['page'] = _page
-                response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
-                response_json = response.json()
-                search_data.extend(response_json['data'])
-                xbmc.sleep(150)
+            # Initialize search_data with the data from page 1 (which might be empty)
+            search_data = response_json.get('data', [])
+            
+            # Check if there are additional pages to fetch
+            if total_pages > 1:
+                # Loop through the pages and save all results in search_data
+                for _page in range(2, total_pages + 1):
+                    querystring['page'] = _page
+                    response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+                    response_json = response.json()
+                    search_data.extend(response_json.get('data', []))
+                    xbmc.sleep(100)
 
             return search_data
 
@@ -198,7 +200,7 @@ def create_subtitles_names_list(opensubtitles_subtitles_list):
         try:
             if attributes['files']:
                 # Attempt to access 'file_name' if 'files' exist and have elements
-                SubFileName = attributes['files'][0]['file_name']  # Get 'file_name'
+                SubFileName = attributes['release'] or attributes['files'][0]['file_name']  # Get 'file_name'
             else:
                 # If 'files' or its elements are missing or empty, proceed to the next search_item
                 continue
