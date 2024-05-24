@@ -145,7 +145,6 @@ def searchsubtitles(video_data):
     }
 
 
-    # Send the first request ONLY to get total_pages count.
     log.warning("DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles querystring: " + repr(querystring))
     
     
