@@ -111,7 +111,7 @@ def search_subtitles(media_type, title, season, episode, year, imdb_id, lang):
             log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles | searching language '{language}' | Count found: {subtitles_count}")
             
             response_subtitles_list.extend(response_json['subtitles'])
-            xbmc.sleep(300)
+            xbmc.sleep(500)
         except Exception as e:
             log.warning(f'DEBUG | [SubDL] | SubDL SearchSubtitles | type: {type(e)} | Exception: {repr(e)}')
     return response_subtitles_list

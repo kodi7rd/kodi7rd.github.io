@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.4.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.8[/B][/COLOR]
+* [COLOR orange]OpenSubtitles[/COLOR] - Optimize multiple subtitles pages API requests performance.
+* [COLOR orange]OpenSubtitles[/COLOR] - Get accurate subtitle release as subtitle name.
+[COLOR yellow][B]v4.4.7[/B][/COLOR]
 * SubDL - Add hearing impaired flag from API.
 * Ktuvit - add sub name characters_to_remove, comment out manual EngName/HebName results matching.
 [COLOR yellow][B]v4.4.6[/B][/COLOR]
