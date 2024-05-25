@@ -104,7 +104,18 @@ def trakt_get_device_token(device_codes):
 		except: pass
 		content = '[CR]%s[CR]%s' % (ls(32700) % str(device_codes['verification_url']), ls(32701) % '[COLOR red]%s[/COLOR]' % user_code)
 		current_highlight = set_temp_highlight('red')
-		progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), get_icon('trakt_qrcode'))
+
+		############KODI-RD-IL###################
+		# ORIGINAL TWILIGHT LINE:
+		# progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), get_icon('trakt_qrcode'))
+		# CUSTOM NEW LINES:
+		# Auto open verification_url+user_code on Windows browser / Android Chrome app.
+		trakt_api_auto_verification(device_codes)
+		# Generate QR Image to verification_url+user_code from Trakt API
+		qr_image_file_path = generate_qr_icon(device_codes)
+		progressDialog = progress_dialog('%s %s' % (ls(32037), ls(32057)), qr_image_file_path or get_icon('trakt_qrcode'))
+		#########################################
+
 		progressDialog.update(content, 0)
 		try:
 			time_passed = 0
@@ -123,6 +134,15 @@ def trakt_get_device_token(device_codes):
 		except: pass
 		try: progressDialog.close()
 		except: pass
+
+		############KODI-RD-IL###################
+		try:
+			import xbmcvfs
+			xbmcvfs.delete(qr_image_file_path)
+		except:
+			pass
+		#########################################
+
 		restore_highlight(current_highlight)
 	except: pass
 	return result
@@ -764,3 +784,63 @@ def trakt_sync_activities(force_update=False):
 			clear_trakt_list_data(item)
 			clear_trakt_list_contents_data(item)
 	return 'success'
+
+
+############KODI-RD-IL###################
+def check_if_app_installed(app_package_id):
+	import xbmcvfs
+	apps = xbmcvfs.listdir('androidapp://sources/apps/')[1]
+	return app_package_id in apps
+
+
+def generate_qr_icon(device_codes):
+	try:
+		import pyqrcode, os, xbmcvfs, xbmcaddon
+
+		# Example: f"https://trakt.tv/activate/{user_code}"
+		direct_verification_url = f"{device_codes['verification_url']}/{device_codes['user_code']}"
+		kodi_utils.logger("KODI-RD-IL",f"trakt_api.py | generate_qr_icon | direct_verification_url={direct_verification_url}")
+
+		# Set QR icon destination path
+		ADDON_USERDATA_PATH = xbmcaddon.Addon().getAddonInfo('profile')
+		qr_image_file_path = os.path.join(xbmcvfs.translatePath(ADDON_USERDATA_PATH),'qr_icon_trakt_auth.png')
+
+		# Generate QR Icon
+		qrIMG = pyqrcode.create(direct_verification_url)
+		qrIMG.png(qr_image_file_path, scale=10)
+		
+		return qr_image_file_path
+
+	except Exception as e:
+		kodi_utils.logger("KODI-RD-IL", f"trakt_api.py | generate_qr_icon | type: {type(e)} | Exception: {repr(e)}")
+		return None
+
+
+def trakt_api_auto_verification(device_codes):
+	try:
+		import xbmc
+
+		# Example: f"https://trakt.tv/activate/{user_code}"
+		direct_verification_url = f"{device_codes['verification_url']}/{device_codes['user_code']}"
+		kodi_utils.logger("KODI-RD-IL",f"trakt_api.py | trakt_api_auto_verification | direct_verification_url={direct_verification_url}")
+
+		# Windows
+		if xbmc.getCondVisibility('system.platform.windows'):
+			import webbrowser
+			webbrowser.get().open_new_tab(direct_verification_url)
+
+		# Android
+		elif xbmc.getCondVisibility('system.platform.android'):
+			google_chrome_app_packge_id = 'com.android.chrome'
+
+			if check_if_app_installed(google_chrome_app_packge_id):
+				app      = google_chrome_app_packge_id
+				intent   = 'android.intent.action.VIEW'
+				dataType = ''
+				dataURI  = direct_verification_url
+				xbmc.executebuiltin(f'StartAndroidActivity("{app}", "{intent}", "{dataType}", "{dataURI}")')
+
+	except Exception as e:
+		kodi_utils.logger("KODI-RD-IL", f"trakt_api.py | trakt_api_auto_verification | type: {type(e)} | Exception: {repr(e)}")
+		pass
+#########################################
