@@ -602,20 +602,6 @@ def kodi_apk_update_check(kodi_version_update_check_manual, os_type_label):
         
         if is_new_version_available:
         
-            ############ TEMP - DELETE AFTER KODI 21 MIGRATION DONE ############
-            from resources.libs.gui import window
-            msg = """[COLOR red]לקרוא הכל בלי לרפרף!!![/COLOR]
-            
-המעבר לקודי 21, באופן [COLOR yellow]חד פעמי[/COLOR](!!!!) יתקין APK נפרד מה-APK שמותקן עכשיו!
-תותקן אפליקציה נפרדת בשם: Kodi + Real Debrid Israel (21.0)
-
-לאחר שהאפליקציה הותקנה בהצלחה, פתחתם אותה והתקנתם את הבילד, יש למחוק את האפליקציה הישנה (הנוכחית בגרסה 20.3!!)
-
-עדכוני האפליקציה הבאים מהיום (מ21.0 והלאה) - יהיו תמיד עדכון לאפליקציה הקיימת בלי שצריך להסיר ולהתקין מחדש.
-"""
-            window.show_notification(msg)
-            ############ TEMP - DELETE AFTER KODI 21 MIGRATION DONE ############
-        
             yes_pressed = dialog.yesno(f"{CONFIG.ADDONTITLE} ({os_type_label})",
                                f'[COLOR yellow][B]קיים עדכון גרסה לאפליקציה שלנו![/B][/COLOR]\nגרסת קודי נוכחית: [B][COLOR red]{CONFIG.KODIV}[/COLOR][/B]\nגרסת קודי מעודכנת: [B][COLOR limegreen]{LATEST_APK_VERSION_TEXT_FILE}[/COLOR][/B]\nהאם ברצונך לעדכן את האפליקציה?',
                                nolabel='[B][COLOR red]מאוחר יותר[/COLOR][/B]',
