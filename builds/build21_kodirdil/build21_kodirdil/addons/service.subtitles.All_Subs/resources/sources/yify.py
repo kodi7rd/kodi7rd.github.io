@@ -23,7 +23,7 @@ __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
 MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_yify'))
 
 ########### Constants ###################
-site_id='[YIFY Subtitles]'
+site_id='[YIFY]'
 sub_color='chocolate'
 YIFY_BASE_URL = "https://yifysubtitles.ch"
 YIFY_SEARCH_URL = f"{YIFY_BASE_URL}/movie-imdb"
@@ -144,7 +144,7 @@ def get_subs(video_data):
     subtitle_list = []
     for row in rows:
         SubRating, FullLanguageName, SubFileName, SubPageLink, hearing_impaired = _parse_row(row)
-        if not any((SubRating, FullLanguageName, SubFileName, SubPageLink, hearing_impaired)):
+        if any(value is None or value == '' for value in (SubRating, FullLanguageName, SubFileName, SubPageLink, hearing_impaired)):
             continue
         
         # Skip if sub language not in language settings.

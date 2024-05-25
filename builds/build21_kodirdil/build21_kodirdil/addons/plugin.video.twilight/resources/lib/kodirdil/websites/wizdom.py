@@ -2,7 +2,6 @@
 from modules import kodi_utils
 import json
 import requests
-from unicodedata import normalize
 #########################################
 
 ########### Settings ####################

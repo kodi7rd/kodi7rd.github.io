@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.4.9[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.0[/B][/COLOR]
+* [COLOR chocolate]YIFY Subtitles[/COLOR] - Small bug fix + site_id rename.
+[COLOR yellow][B]v4.4.9[/B][/COLOR]
 * Add [COLOR chocolate]YIFY Subtitles[/COLOR] website source (https://yifysubtitles.ch).
 [COLOR yellow][B]v4.4.8[/B][/COLOR]
 * [COLOR orange]OpenSubtitles[/COLOR] - Optimize multiple subtitles pages API requests performance.

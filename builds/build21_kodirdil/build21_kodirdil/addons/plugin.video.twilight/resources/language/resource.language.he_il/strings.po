@@ -168,6 +168,10 @@ msgctxt "#400010"
 msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgstr "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 
+msgctxt "#4000101"
+msgid "YIFY Subtitles (Movies Only) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
+msgstr "YIFY Subtitles (Movies Only) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
+
 # Twilight sources_results.xml
 
 msgctxt "#400011"
