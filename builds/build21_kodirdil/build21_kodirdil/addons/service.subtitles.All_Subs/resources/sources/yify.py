@@ -28,7 +28,6 @@ sub_color='chocolate'
 YIFY_BASE_URL = "https://yifysubtitles.ch"
 YIFY_SEARCH_URL = f"{YIFY_BASE_URL}/movie-imdb"
 YIFY_DOWNLOAD_URL = f"{YIFY_BASE_URL}/subtitle/%s.zip"
-#########################################
 
 all_lang_codes = {
     'sqi': 'Albanian',
@@ -44,7 +43,7 @@ all_lang_codes = {
     'eng': 'English',
     'fas': 'Farsi/Persian',
     'fin': 'Finnish',
-    'fra': 'French',
+    'fre': 'French',
     'deu': 'German',
     'ell': 'Greek',
     'heb': 'Hebrew',
@@ -69,6 +68,7 @@ all_lang_codes = {
     'urd': 'Urdu',
     'vie': 'Vietnamese'
 }
+#########################################
 
 def _parse_row(row):
     # Extracting rating

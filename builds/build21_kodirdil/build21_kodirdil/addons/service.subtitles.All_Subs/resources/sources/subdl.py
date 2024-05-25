@@ -111,12 +111,16 @@ def search_subtitles(media_type, title, season, episode, year, imdb_id, lang):
             log.warning(f"DEBUG | [SubDL] | SubDL SearchSubtitles | searching language '{language}' | Count found: {subtitles_count}")
             
             response_subtitles_list.extend(response_json['subtitles'])
-            xbmc.sleep(500)
+            xbmc.sleep(250)
         except Exception as e:
             log.warning(f'DEBUG | [SubDL] | SubDL SearchSubtitles | type: {type(e)} | Exception: {repr(e)}')
     return response_subtitles_list
        
 def get_subs(video_data):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     global global_var
     log.warning('DEBUG | [SubDL] | Searching SubDL')
 
@@ -131,7 +135,7 @@ def get_subs(video_data):
     imdb_id = video_data.get('imdb', '')
     
     #####################################################################################################################################
-    # Due to API subs_per_page=30 limitations (TOTAL and not per language) - for now - search only for Hebrew + English languages
+    # Due to API subs_per_page=30 limitations (TOTAL and not per language) - for now - search only for Hebrew + English + Arabic languages
     #####################################################################################################################################
     lang=[]
     # Language codes from: https://subdl.com/api-files/language_list.json
@@ -141,14 +145,14 @@ def get_subs(video_data):
         lang.append('EN')
     # if Addon.getSetting("language_russian")=='true':
         # lang.append('RU')
-    # if Addon.getSetting("language_arab")=='true':
-        # lang.append('AR')
+    if Addon.getSetting("language_arab")=='true':
+        lang.append('AR')
     # if len(Addon.getSetting("other_lang"))>0:
         # all_lang=Addon.getSetting("other_lang").split(",")
         # for items in all_lang:
             # lang.append(str(items))
     if Addon.getSetting("all_lang")=='true':
-        lang = ['HE','EN']
+        lang = ['HE','EN','AR']
     
     
     subtitle_list = []

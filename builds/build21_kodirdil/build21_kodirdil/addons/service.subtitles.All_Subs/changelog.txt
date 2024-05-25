@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.5.0[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.1[/B][/COLOR]
+* Add [COLOR deepskyblue]SubSource[/COLOR] website source (https://subsource.net).
+[COLOR yellow][B]v4.5.0[/B][/COLOR]
 * [COLOR chocolate]YIFY Subtitles[/COLOR] - Small bug fix + site_id rename.
 [COLOR yellow][B]v4.4.9[/B][/COLOR]
 * Add [COLOR chocolate]YIFY Subtitles[/COLOR] website source (https://yifysubtitles.ch).

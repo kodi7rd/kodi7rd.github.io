@@ -47,9 +47,6 @@ REQUEST_RETRY_DELAY_IN_MS = 500
 
 def searchsubtitles(video_data):
 
-    # For settings changes to take effect.
-    Addon=xbmcaddon.Addon()
-
     # New OpenSubtitles.com API Search docs:
     # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
     
@@ -189,6 +186,10 @@ def searchsubtitles(video_data):
        
        
 def get_subs(video_data):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     global global_var
     log.warning('DEBUG | [OpenSubtitles] | Searching Opensubtitles')
     subtitle_list = []

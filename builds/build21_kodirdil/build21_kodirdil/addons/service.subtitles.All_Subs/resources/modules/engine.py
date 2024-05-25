@@ -27,6 +27,7 @@ from resources.sources import ktuvit
 from resources.sources import wizdom
 from resources.sources import opensubtitles
 from resources.sources import subdl
+from resources.sources import subsource
 from resources.sources import yify
 from resources.sources import bsplayer
 global global_sub_size,global_progress
@@ -184,6 +185,8 @@ def format_website_source_name(source):
         return "OpenSubtitles"
     if source == "subdl":
         return "SubDL"
+    if source == "subsource":
+        return "SubSource"
     if source == "yify":
         return "YIFY Subtitles"
     if source == "bsplayer":
@@ -205,6 +208,7 @@ def c_get_subtitles(video_data):
     wizdom.global_var=[]
     opensubtitles.global_var=[]
     subdl.global_var=[]
+    subsource.global_var=[]
     yify.global_var=[]
     bsplayer.global_var=[]
     
@@ -230,6 +234,10 @@ def c_get_subtitles(video_data):
     if Addon.getSetting('subdl')=='true':
         thread.append(Thread(subdl.get_subs,video_data))
         all_sources.append(('subdl',subdl))
+        
+    if Addon.getSetting('subsource')=='true':
+        thread.append(Thread(subsource.get_subs,video_data))
+        all_sources.append(('subsource',subsource))
         
     if Addon.getSetting('yify')=='true':
         thread.append(Thread(yify.get_subs,video_data))

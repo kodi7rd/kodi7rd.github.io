@@ -182,6 +182,10 @@ def __parse_response( response):
         return None
     '''
 def get_subs(video_data,file_name=""):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     log.warning('DEBUG | [BSPlayer] | Searching Bsplayer')
     global global_var
     if not xbmc.Player().isPlaying():

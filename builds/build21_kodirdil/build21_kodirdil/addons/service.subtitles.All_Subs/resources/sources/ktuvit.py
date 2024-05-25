@@ -32,6 +32,10 @@ sub_color='springgreen'
     
     
 def get_subs(video_data):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     global global_var
     log.warning('DEBUG | [KTUVIT] | Searching Ktuvit')
         

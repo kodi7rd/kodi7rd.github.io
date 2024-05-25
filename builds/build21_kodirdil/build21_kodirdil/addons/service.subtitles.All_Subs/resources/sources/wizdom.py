@@ -29,6 +29,10 @@ WIZDOM_API_DOWNLOAD_URL = f"{WIZDOM_API_BASE_URL}/files/sub"
 #########################################
 
 def get_subs(video_data):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
+    
     global global_var
     log.warning('DEBUG | [Wizdom] | Searching Wizdom')
     
