@@ -8,6 +8,7 @@
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
 		<setting id="opensubtitles" label="[COLOR orange][B]OpenSubtitles[/B][/COLOR] [COLOR blue](https://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
 		<setting id="subdl" label="[COLOR plum][B]SubDL[/B][/COLOR] [COLOR blue](https://subdl.com)[/COLOR]" type="bool" default="true" />
+		<setting id="yify" label="[COLOR chocolate][B]YIFY Subtitles[/B][/COLOR] [COLOR blue](https://yifysubtitles.ch)[/COLOR]" type="bool" default="true" />
 		<setting id="bsplayer" label="[COLOR lightblue][B]BSPlayer[/B][/COLOR] [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
 	

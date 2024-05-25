@@ -27,6 +27,7 @@ from resources.sources import ktuvit
 from resources.sources import wizdom
 from resources.sources import opensubtitles
 from resources.sources import subdl
+from resources.sources import yify
 from resources.sources import bsplayer
 global global_sub_size,global_progress
 que=urllib.parse.quote_plus
@@ -80,7 +81,7 @@ def sort_subtitles(save_all_data,video_data):
                      'telecine','hdts','telesync']
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
-    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[BSPlayer]']
+    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[YIFY Subtitles]', '[BSPlayer]']
     #########################################
     
     all_data=[]
@@ -183,6 +184,8 @@ def format_website_source_name(source):
         return "OpenSubtitles"
     if source == "subdl":
         return "SubDL"
+    if source == "yify":
+        return "YIFY Subtitles"
     if source == "bsplayer":
         return "BSPlayer"
     return source
@@ -198,11 +201,12 @@ def c_get_subtitles(video_data):
     source_dir = os.path.join(addonPath, 'resources', 'sources')
     thread=[]
     all_sources=[]
-    bsplayer.global_var=[]
     ktuvit.global_var=[]
+    wizdom.global_var=[]
     opensubtitles.global_var=[]
     subdl.global_var=[]
-    wizdom.global_var=[]
+    yify.global_var=[]
+    bsplayer.global_var=[]
     
     # Determine wether to search hebrew langauge
     search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
@@ -226,6 +230,10 @@ def c_get_subtitles(video_data):
     if Addon.getSetting('subdl')=='true':
         thread.append(Thread(subdl.get_subs,video_data))
         all_sources.append(('subdl',subdl))
+        
+    if Addon.getSetting('yify')=='true':
+        thread.append(Thread(yify.get_subs,video_data))
+        all_sources.append(('yify',yify))
     
     if Addon.getSetting('bsplayer')=='true' and search_language_hebrew_bool:
         thread.append(Thread(bsplayer.get_subs,video_data))

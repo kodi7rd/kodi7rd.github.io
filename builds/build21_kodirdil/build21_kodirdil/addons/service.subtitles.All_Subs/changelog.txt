@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.4.8[/B][/COLOR]
+﻿[COLOR yellow][B]v4.4.9[/B][/COLOR]
+* Add [COLOR chocolate]YIFY Subtitles[/COLOR] website source (https://yifysubtitles.ch).
+[COLOR yellow][B]v4.4.8[/B][/COLOR]
 * [COLOR orange]OpenSubtitles[/COLOR] - Optimize multiple subtitles pages API requests performance.
 * [COLOR orange]OpenSubtitles[/COLOR] - Get accurate subtitle release as subtitle name.
 [COLOR yellow][B]v4.4.7[/B][/COLOR]
