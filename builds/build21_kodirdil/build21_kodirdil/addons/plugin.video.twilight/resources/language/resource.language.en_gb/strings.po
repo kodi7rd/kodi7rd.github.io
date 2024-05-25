@@ -4007,7 +4007,7 @@ msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
 msgstr ""
 
 msgctxt "#4000101"
-msgid "YIFY Subtitles (Movies Only) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
+msgid "YIFY Subtitles (לסרטים בלבד) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
 msgstr ""
 
 # Twilight sources_results.xml
