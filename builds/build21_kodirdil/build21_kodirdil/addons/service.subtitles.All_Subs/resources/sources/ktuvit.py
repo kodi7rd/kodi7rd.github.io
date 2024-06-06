@@ -214,19 +214,6 @@ def get_Ktuvit_Page_ID(ktuvit_search_page_results, imdb_id, title):
                 Ktuvit_Page_ID = result['ID']
                 break
 
-    # if Ktuvit_Page_ID still empty (wrong imdb on ktuvit page) - search for match by title eng/heb names
-    # if Ktuvit_Page_ID == '':
-        # regex_helper = re.compile('\W+', re.UNICODE)
-        # title = regex_helper.sub('', title).lower()
-        
-        # for result in ktuvit_search_page_results:
-            # eng_name = regex_helper.sub('', regex_helper.sub(' ', result['EngName'])).lower()
-            # heb_name = regex_helper.sub('', result['HebName'])
-            # if (title.startswith(eng_name) or eng_name.startswith(title) or
-                    # title.startswith(heb_name) or heb_name.startswith(title)):
-                # log.warning(f"DEBUG | [KTUVIT] | REGEX MATCH | title: {title}: | eng_name: {eng_name} | heb_name: {heb_name}")
-                # Ktuvit_Page_ID = result["ID"]
-                # break
     
     return Ktuvit_Page_ID
 
