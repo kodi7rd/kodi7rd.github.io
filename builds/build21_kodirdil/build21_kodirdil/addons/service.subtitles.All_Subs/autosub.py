@@ -832,6 +832,7 @@ class KodiMonitor(xbmc.Monitor):
         Addon=xbmcaddon.Addon()
         from resources.modules import general
         last_sub_name_in_cache=""
+        is_playing_addon_excluded=False
         if method=='Player.OnStop':
             trigger=False
             
