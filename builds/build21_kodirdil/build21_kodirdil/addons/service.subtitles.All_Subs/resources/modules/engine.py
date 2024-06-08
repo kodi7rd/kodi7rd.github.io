@@ -26,9 +26,9 @@ break_all=False
 from resources.sources import ktuvit
 from resources.sources import wizdom
 from resources.sources import opensubtitles
+from resources.sources import yify
 from resources.sources import subdl
 from resources.sources import subsource
-from resources.sources import yify
 from resources.sources import bsplayer
 global global_sub_size,global_progress
 que=urllib.parse.quote_plus
@@ -246,9 +246,9 @@ def c_get_subtitles(video_data):
     ktuvit.global_var=[]
     wizdom.global_var=[]
     opensubtitles.global_var=[]
+    yify.global_var=[]
     subdl.global_var=[]
     subsource.global_var=[]
-    yify.global_var=[]
     bsplayer.global_var=[]
     
     # Determine wether to search hebrew language
@@ -270,6 +270,10 @@ def c_get_subtitles(video_data):
         thread.append(Thread(opensubtitles.get_subs,video_data))
         all_sources.append(('opensubtitles',opensubtitles))
         
+    if Addon.getSetting('yify')=='true':
+        thread.append(Thread(yify.get_subs,video_data))
+        all_sources.append(('yify',yify))
+        
     if Addon.getSetting('subdl')=='true':
         thread.append(Thread(subdl.get_subs,video_data))
         all_sources.append(('subdl',subdl))
@@ -277,10 +281,6 @@ def c_get_subtitles(video_data):
     if Addon.getSetting('subsource')=='true':
         thread.append(Thread(subsource.get_subs,video_data))
         all_sources.append(('subsource',subsource))
-        
-    if Addon.getSetting('yify')=='true':
-        thread.append(Thread(yify.get_subs,video_data))
-        all_sources.append(('yify',yify))
     
     if Addon.getSetting('bsplayer')=='true' and search_language_hebrew_bool:
         thread.append(Thread(bsplayer.get_subs,video_data))
