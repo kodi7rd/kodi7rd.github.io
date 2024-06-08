@@ -9,7 +9,7 @@
   <extension point="xbmc.addon.metadata">
     <reuselanguageinvoker>true</reuselanguageinvoker>
     <summary lang="en">Collect Subs From sites</summary>
-    <description lang="en">Ktuvit, Wizdom, OpenSubtitles, SubDL, BSPlayer</description>
+    <description lang="en">Ktuvit, Wizdom, OpenSubtitles, YIFY, SubDL, SubSource, BSPlayer</description>
     <assets>
             <icon>icon.png</icon>
             <fanart>fanart.png</fanart>
