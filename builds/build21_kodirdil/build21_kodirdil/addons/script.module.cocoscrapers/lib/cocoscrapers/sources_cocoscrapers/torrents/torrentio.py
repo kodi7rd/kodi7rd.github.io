@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# created by Venom for Fenomscrapers (updated 7-19-2022)
+# created by Venom for Fenomscrapers (updated 7-19-2022) ud (updated 05/22/24)
 '''
 	Fenomscrapers Project
 '''
@@ -8,6 +8,7 @@ from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
+from cocoscrapers.modules import control
 
 class source:
 	priority = 1
@@ -19,18 +20,12 @@ class source:
 		self.base_link = "https://torrentio.strem.fun"
 		#self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy|language=english/stream/movie/%s.json' #found this to be broken 12-9-22 umbrelladev
 		#self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy|language=english/stream/series/%s:%s:%s.json' #found this to be broken 12-9-22 umbrelladev
-		
-		############KODI-RD-IL###################
-		# ORIGINAL COCOSCRAPERS LINES:
-		# self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
-		# self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
-		# CUSTOM NEW LINES:
-		# Enable all Providers
+		#self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
+		#self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
-		#########################################
-		
 		self.min_seeders = 0
+		self.bypass_filter = control.setting('torrentio.bypass_filter')
 # Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), HorribleSubs(+), NyaaSi(+), NyaaPantsu(+), Rutor(+), Comando(+), ComoEuBaixo(+), Lapumia(+), OndeBaixa(+), Torrent9(+).
 
 	def sources(self, data, hostDict):
@@ -71,12 +66,8 @@ class source:
 				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				name = source_utils.clean_name(file_title[0])
-		
-				############KODI-RD-IL###################
-				# COMMENTED - NO FILTERS
-				# if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
-				#########################################
-
+				if self.bypass_filter == 'false':
+					if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
@@ -128,11 +119,7 @@ class source:
 				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				name = source_utils.clean_name(file_title[0])
-
-				############KODI-RD-IL###################
-				# NO FILTERS
-				bypass_filter = True
-				#########################################
+				if self.bypass_filter == 'true': bypass_filter = True
 
 				episode_start, episode_end = 0, 0
 				if not search_series:

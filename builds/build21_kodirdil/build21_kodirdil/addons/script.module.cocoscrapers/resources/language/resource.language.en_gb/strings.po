@@ -710,3 +710,11 @@ msgstr ""
 msgctxt "#32560"
 msgid "SELF-HOSTED NAME"
 msgstr ""
+
+msgctxt "#32561"
+msgid "Bypass title filter"
+msgstr ""
+
+msgctxt "#32562"
+msgid "Enabling this setting will bypass the filter removing results that do not match the title name. This may result in some incorrect sources."
+msgstr ""

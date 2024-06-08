@@ -9,6 +9,7 @@
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch" default="true">true</setting>
     <setting id="provider.elfhosted">true</setting>
+    <setting id="elfhosted.bypass_filter">true</setting>
     <setting id="provider.ext" default="true">false</setting>
     <setting id="provider.eztv" default="true">true</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
@@ -27,6 +28,7 @@
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio" default="true">true</setting>
+    <setting id="torrentio.bypass_filter">true</setting>
     <setting id="provider.torrentz2">true</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>

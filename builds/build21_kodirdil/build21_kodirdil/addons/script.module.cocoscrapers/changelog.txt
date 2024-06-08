@@ -1,6 +1,9 @@
+[COLOR red][B]Version 1.0.21[/B][/COLOR]
+- Added setting to bypass title filter for torrentio results.
+- Added setting to bypass title filter for elfhosted results.
+
 [COLOR red][B]Version 1.0.20[/B][/COLOR]
 - Changed ElfHosted file title parsing.
-- KODI-RD-IL: Torrentio Provider - Enable all providers + disable name filtering.
 
 [COLOR red][B]Version 1.0.19[/B][/COLOR]
 - Self-Hosted Torrentio/ Knightcrawler Instances added.

@@ -197,6 +197,16 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="elfhosted.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.elfhosted">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.elfhosted">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 				<setting id="provider.ext" type="boolean" label="32131" help="">
 					<level>0</level>
 					<default>false</default>
@@ -305,6 +315,16 @@
 				<setting id="provider.torrentio" type="boolean" label="32139" help="">
 					<level>0</level>
 					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="torrentio.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.torrentio">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.torrentio">true</condition>
+						</dependency>
+					</dependencies>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.torrentz2" type="boolean" label="32130" help="">

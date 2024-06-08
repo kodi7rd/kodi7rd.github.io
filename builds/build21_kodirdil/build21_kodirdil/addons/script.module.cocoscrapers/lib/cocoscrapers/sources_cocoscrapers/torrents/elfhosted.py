@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# created by Venom for Fenomscrapers (2-10-2024)
+# created by Venom for Fenomscrapers (2-10-2024) ud (updated 05/22/24)
 '''
 	Fenomscrapers Project
 '''
@@ -9,6 +9,7 @@ import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
 from cocoscrapers.modules import log_utils
+from cocoscrapers.modules import control
 
 
 class source:
@@ -25,6 +26,7 @@ class source:
 		# self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
+		self.bypass_filter = control.setting('elfhosted.bypass_filter')
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -70,7 +72,8 @@ class source:
 				#updated by ud to fix elf hosted title format change.
 				name = source_utils.clean_name(file_title[1])
 
-				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
+				if self.bypass_filter == 'false':
+					if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year, years): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
@@ -123,7 +126,8 @@ class source:
 				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				name = source_utils.clean_name(file_title[0])
-
+				if self.bypass_filter == 'true': bypass_filter = True
+    
 				episode_start, episode_end = 0, 0
 				if not search_series:
 					if not bypass_filter:
