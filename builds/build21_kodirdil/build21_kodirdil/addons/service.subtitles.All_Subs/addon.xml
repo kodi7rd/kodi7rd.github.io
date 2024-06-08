@@ -12,7 +12,7 @@
     <description lang="en">Ktuvit, Wizdom, OpenSubtitles, YIFY, SubDL, SubSource, BSPlayer</description>
     <assets>
             <icon>icon.png</icon>
-            <fanart>fanart.png</fanart>
+            <fanart>fanart.jpg</fanart>
     </assets>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
