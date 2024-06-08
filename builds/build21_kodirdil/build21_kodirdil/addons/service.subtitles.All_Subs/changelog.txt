@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.5.1[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.2[/B][/COLOR]
+* Rewrite and refactor sort_subtitles function (engine.py).
+* Add getVideoInfoTag example for future usage (general.py).
+[COLOR yellow][B]v4.5.1[/B][/COLOR]
 * Add [COLOR deepskyblue]SubSource[/COLOR] website source (https://subsource.net).
 [COLOR yellow][B]v4.5.0[/B][/COLOR]
 * [COLOR chocolate]YIFY Subtitles[/COLOR] - Small bug fix + site_id rename.

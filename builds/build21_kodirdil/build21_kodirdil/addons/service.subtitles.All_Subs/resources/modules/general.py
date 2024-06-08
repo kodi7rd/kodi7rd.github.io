@@ -632,3 +632,24 @@ def get_db_data(video_data):
             break
     
     return last_sub_name_in_cache,last_sub_language_in_cache,all_subs
+
+
+################### Future Use ###########################################################
+# https://alwinesch.github.io/group__python___info_tag_video.html
+# https://github.com/a4k-openproject/a4kSubtitles/pull/80
+
+# if xbmc.Player().isPlaying():
+    # videoInfo = xbmc.Player().getVideoInfoTag()
+    # log.warning(f"DEBUG | videoInfo.getFilenameAndPath()={videoInfo.getFilenameAndPath()}")
+    # log.warning(f"DEBUG | videoInfo.getFile()={videoInfo.getFile()}")
+    # log.warning(f"DEBUG | videoInfo.getMediaType()={videoInfo.getMediaType()}")
+    # log.warning(f"DEBUG | videoInfo.getTitle()={videoInfo.getTitle()}")
+    # log.warning(f"DEBUG | videoInfo.getOriginalTitle()={videoInfo.getOriginalTitle()}")
+    # log.warning(f"DEBUG | videoInfo.getTVShowTitle()={videoInfo.getTVShowTitle()}")
+    # log.warning(f"DEBUG | videoInfo.getYear()={videoInfo.getYear()}")
+    # log.warning(f"DEBUG | videoInfo.getSeason()={videoInfo.getSeason()}")
+    # log.warning(f"DEBUG | videoInfo.getEpisode()={videoInfo.getEpisode()}")
+    # log.warning(f"DEBUG | videoInfo.getUniqueID('imdb')={videoInfo.getUniqueID('imdb')}")
+    # log.warning(f"DEBUG | videoInfo.getIMDBNumber()={videoInfo.getIMDBNumber()}")
+    # log.warning(f"DEBUG | videoInfo.getTagLine()={videoInfo.getTagLine()}")
+##########################################################################################

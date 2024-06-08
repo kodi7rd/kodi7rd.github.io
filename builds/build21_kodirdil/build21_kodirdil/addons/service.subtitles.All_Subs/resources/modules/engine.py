@@ -61,119 +61,158 @@ class Bing(object):
             return str_data
         translate_data = str_data[1:str_data.find('"', 1)]
         return translate_data
-def similar(w1, w2):
-    from difflib import SequenceMatcher
-    
-    s = SequenceMatcher(None, w1, w2)
-    return int(round(s.ratio()*100))
 
-def sort_subtitles(save_all_data,video_data):
+def sort_subtitles(f_result,video_data):
+
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
+    
     from resources.modules import general
-    highest_rating=0
     if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
         # If searching subtitles from context menu - will show the message.
-        general.show_msg="מסדר כתוביות 0/"+str(len(save_all_data))
-    release_names=['blueray','bluray','blu-ray','bdrip','brrip','brip',
-                     'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
-                     'web','web-dl','web dl','web-dlrip','webrip','web-rip',
-                     'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
-                     'telecine','hdts','telesync']
+        general.show_msg = f"מסדר כתוביות 0/{len(f_result)}"
                      
-    # Define the specific order for json_value['site_id']. In case of multiple subtitles with same precent - sort also by site_id using this order:
-    site_id_order=['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[SubDL]', '[YIFY]', '[BSPlayer]']
-    #########################################
+    # Define the specific order for json_value['site_id']. In case of multiple subtitles with same percent - sort also by site_id using this order:
+    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubDL]', '[SubSource]', '[BSPlayer]']
     
-    all_data=[]
-    all_heb=[]
-    all_eng=[]
-    all_other_lang=[]
-    Quality=(xbmc.getInfoLabel("VideoPlayer.VideoResolution"))+'p'
-    count=0
-    for save_data_value in save_all_data:
-          if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
+    # Get video quality from Kodi
+    quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p"
+    
+    # List of release names
+    release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
+                      'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
+                      'web','web-dl','web dl','web-dlrip','webrip','web-rip',
+                      'dvdr','dvd-r','dvd-rip','dvdrip','cam','hdcam','cam-rip','camrip','screener','dvdscr','dvd-full',
+                      'telecine','hdts','telesync']
+    
+    hebrew_subtitles = []
+    english_subtitles = []
+    other_languages_subtitles = []
+    count = 0
+    
+    ###############################################################################################
+    # Define functions before the for loop
+    def append_subtitles(subtitles_list, json_value, percent):
+        return subtitles_list.append((
+            json_value['label'],
+            '[COLOR %s]' % json_value['sub_color'] + json_value['label2'] + '[/COLOR]',
+            json_value['iconImage'],
+            json_value['thumbnailImage'],
+            json_value['url'],
+            percent,
+            json_value['sync'],
+            json_value['hearing_imp'],
+            json_value['filename'],
+            json_value['site_id']
+        ))
+        
+        
+    def clean_video_name_string(video_string):
+        cleaned_video_string = (
+            video_string.strip()
+            .replace("_", ".")
+            .replace(" ", ".")
+            .replace("+", ".")
+            .replace("/", ".")
+            .replace("-", ".")
+            .replace(".avi", "")
+            .replace(".mp4", "")
+            .replace(".mkv", "")
+        )
+        return [x.strip().lower() for x in cleaned_video_string.split(".") if x != '']
+        
+        
+    def clean_subtitle_name_string(subtitle_name):
+        cleaned_subtitle_name = (
+            subtitle_name.strip()
+            .replace(".srt", "")
+            .replace("_", ".")
+            .replace(" ", ".")
+            .replace("+", ".")
+            .replace("/", ".")
+            .replace("-", ".")
+        )
+        return [x.strip().lower() for x in cleaned_subtitle_name.split(".") if x != '']
+        
+        
+    def similar(w1, w2):
+        from difflib import SequenceMatcher
+        s = SequenceMatcher(None, w1, w2)
+        return int(round(s.ratio()*100))
+        
+        
+    def calculate_sync_percentage(video_string, subtitle_name):
+        # Clean video and subtitle strings
+        array_video_name = clean_video_name_string(video_string)
+        array_subtitle_name = clean_subtitle_name_string(subtitle_name)
+
+        # Check and add missing quality
+        if quality not in array_video_name and quality in array_subtitle_name:
+            array_video_name.append(quality)
+
+        # Check for release names and extend arrays
+        for release_name in release_names:
+            if release_name in array_video_name and release_name in array_subtitle_name:
+                array_video_name.extend([release_name] * 3)
+                array_subtitle_name.extend([release_name] * 3)
+
+        # Calculate similarity
+        percent = similar(array_video_name, array_subtitle_name)
+
+        return percent
+    ###############################################################################################
+    
+    for result_value in f_result:
+    
+        if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
             # If searching subtitles from context menu - will show the message.
-            general.show_msg="מסדר כתוביות %d/%d"%(count,(len(save_all_data)))
-          count+=1
-          json_value=json.loads(json.dumps(save_data_value))
+            general.show_msg = f"מסדר כתוביות {count}/{len(f_result)}"
+            count += 1
           
-         
-          
-          if 'filename' in json_value and 'label' in json_value and 'label2' in json_value and 'iconImage' in json_value and 'thumbnailImage' in json_value:
-          
-           # Video file array
-           array_original=video_data['file_original_path'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
-           array_original=[x.strip().lower() for x in array_original if x != '']
+        json_value = json.loads(json.dumps(result_value))
+        
+        ################### Calculate Sync Percentage #################################################
+        # Video file_original_path sync percentage
+        percent_from_file_original_path = calculate_sync_percentage(video_data['file_original_path'], json_value['filename'])
+        
+        # Video Tagline sync percentage
+        percent_from_video_tagline = calculate_sync_percentage(video_data['Tagline'], json_value['filename'])
+        
+        percent = max(percent_from_file_original_path, percent_from_video_tagline)
+        ###############################################################################################
+        
+        
+        ################### Append subtitle to corresponding language subs list #######################
+        if 'language=Hebrew' in json_value['url'] or 'Hebrew' in json_value['label']:
+            append_subtitles(hebrew_subtitles, json_value, percent)
+       
+        elif 'language=English' in json_value['url'] or 'English' in json_value['label']:
+            append_subtitles(english_subtitles, json_value, percent)
            
-           # Subtitle name array
-           array_subs=json_value['filename'].strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").split(".")
-           array_subs=[x.strip().lower() for x in array_subs if x != '']
-           
-           # Original subtitle name array
-           array_subs_original=array_subs
-
-           if Quality not in array_original and Quality in array_subs:
-             array_original.append(Quality)
-
-           for item_2 in release_names:
-            if item_2 in array_original and item_2 in array_subs:
-              array_original.append(item_2)
-              array_original.append(item_2)
-              array_original.append(item_2)
-              array_subs.append(item_2)
-              array_subs.append(item_2)
-              array_subs.append(item_2)
-              
-            precent=similar(array_original,array_subs)
-           
-           # Video Tagline array
-           array_original=video_data['Tagline'].strip().replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").replace(".avi","").replace(".mp4","").replace(".mkv","").split(".")
-           array_original=[x.strip().lower() for x in array_original if x != '']
-           
-           # Original subtitle name array
-           array_subs=array_subs_original
-           
-           if Quality not in array_original and Quality in array_subs:
-               array_original.append(Quality)
-               
-
-           for item_2 in release_names:
-            if item_2 in array_original and item_2 in array_subs:
-              array_original.append(item_2)
-              array_original.append(item_2)
-              array_original.append(item_2)
-              array_subs.append(item_2)
-              array_subs.append(item_2)
-              array_subs.append(item_2)
-           
-           
-           precent2=similar(array_original,array_subs)
-
-           if precent2>precent:
-              precent=precent2
-           
-           if 'language=Hebrew' in json_value['url'] or 'Hebrew' in json_value['label']:
-               all_heb.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
-           
-           elif 'language=English' in json_value['url'] or 'English' in json_value['label']:
-               all_eng.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
-               
-           else:
-               all_other_lang.append((json_value['label'],'[COLOR %s]'%json_value['sub_color']+json_value['label2']+'[/COLOR]',json_value['iconImage'],json_value['thumbnailImage'],json_value['url'],precent,json_value['sync'],json_value['hearing_imp'],json_value['filename'],json_value['site_id']))
-      
+        else:
+            append_subtitles(other_languages_subtitles, json_value, percent)
+        ###############################################################################################
     
-    # Sort by precent (index 5) and then by site_id (index 9) using custom order specified in site_id_order.
-    all_heb=sorted(all_heb, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
     
-    all_eng=sorted(all_eng, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
-    
-    # For all other languages - Sort also by language, then by precent (index 5) and then by site_id (index 9) using custom order specified in site_id_order.
-    all_other_lang=sorted(all_other_lang, key=lambda x: (x[0], -x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
-    
-    all_data=all_heb+all_eng+all_other_lang
- 
-    return all_data
+    ################### Final Subtitles Sorting ###################################################
+    def custom_sort(subtitles_list, site_id_order, by_language_name=False):
+        # Sort also by language name (x[0]) if by_language_name is True
+        if by_language_name:
+            return sorted(subtitles_list, key=lambda x: (x[0], -x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+        # Sort by percent (-x[5]) and site_id (x[9]) only
+        return sorted(subtitles_list, key=lambda x: (-x[5], site_id_order.index(x[9]) if x[9] in site_id_order else len(site_id_order)))
+
+    # Sort languages
+    hebrew_subtitles = custom_sort(hebrew_subtitles, site_id_order)
+    english_subtitles = custom_sort(english_subtitles, site_id_order)
+    other_languages_subtitles = custom_sort(other_languages_subtitles, site_id_order, by_language_name=True)
+
+    # Combine all sorted subtitles list
+    sorted_subtitles = []
+    sorted_subtitles = hebrew_subtitles + english_subtitles + other_languages_subtitles
+    ###############################################################################################
+
+    return sorted_subtitles
 
 # Prettify website source name for subs search dialog
 def format_website_source_name(source):
@@ -183,12 +222,12 @@ def format_website_source_name(source):
         return "Wizdom"
     if source == "opensubtitles":
         return "OpenSubtitles"
+    if source == "yify":
+        return "YIFY"
     if source == "subdl":
         return "SubDL"
     if source == "subsource":
         return "SubSource"
-    if source == "yify":
-        return "YIFY Subtitles"
     if source == "bsplayer":
         return "BSPlayer"
     return source
@@ -212,7 +251,7 @@ def c_get_subtitles(video_data):
     yify.global_var=[]
     bsplayer.global_var=[]
     
-    # Determine wether to search hebrew langauge
+    # Determine wether to search hebrew language
     search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
     
     # Israeli subtitles sources
