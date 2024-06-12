@@ -21,7 +21,7 @@ MyAddonVersion    = Addon.getAddonInfo('version') # Module version
 USER_AGENT = '%s v%s' %(MyAddonName, MyAddonVersion)
 xbmc_tranlate_path=xbmcvfs.translatePath
 __profile__ = xbmc_tranlate_path(Addon.getAddonInfo('profile'))
-MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_open'))
+MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_opensubtitles'))
 
 ########### Settings ####################
 # Retrieve OS_USER_API_KEY_VALUE from settings

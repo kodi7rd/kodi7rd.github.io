@@ -9,7 +9,7 @@ xbmc_tranlate_path=xbmcvfs.translatePath
 from urllib.parse import  unquote_plus, unquote,  quote
 import threading
 import urllib.parse
-import chardet,unicodedata
+import chardet
 global break_all
 from urllib.parse import  unquote_plus, unquote, quote, quote_plus
 from resources.modules.general import Thread,CachedSubFolder,TransFolder,user_dataDir

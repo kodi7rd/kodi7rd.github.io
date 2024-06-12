@@ -3,6 +3,7 @@ import xbmc,xbmcaddon,xbmcvfs,xbmcgui
 import threading
 
 from urllib.parse import  unquote_plus, unquote,  quote
+import unicodedata
 from resources.modules import log
 iconx=xbmcaddon.Addon().getAddonInfo('icon')
 xbmc_tranlate_path=xbmcvfs.translatePath
@@ -272,8 +273,18 @@ def remove_color_tags(input_string):
     log.warning(f"DEBUG | get_video_data | AFTER remove_color_tags | output_string={output_string}")
     return output_string
 
-def clean_name(name):
-      return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
+def clean_title(title):
+    
+    def _remove_diacritics(title):
+        # Removing diacritics - Handles titles such as "Shôgun", "Narcos: México" from IMDB/TMDB - To match title in Ktuvit.
+        # Example: https://www.ktuvit.me/MovieInfo.aspx?ID=4BAFC19F06D861F298DB6B723A6888C6
+        return ''.join([c for c in unicodedata.normalize('NFKD', title) if not unicodedata.combining(c)])
+
+    title =  title.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
+
+    title = _remove_diacritics(title)
+    
+    return title
 
 def remove_release_year_from_title_if_exists(title, year):
     year = str(year)
@@ -601,10 +612,12 @@ def get_video_data():
 
 
     ################### Clean Titles #########################################################
-    video_data['title'] = clean_name(video_data['title'])
-    video_data['OriginalTitle'] = clean_name(video_data['OriginalTitle'])
+    video_data['title'] = clean_title(video_data['title'])
+    
+    video_data['OriginalTitle'] = clean_title(video_data['OriginalTitle'])
+    
     if video_data['media_type'] == 'tv':
-        video_data['TVShowTitle'] = clean_name(video_data['TVShowTitle'])
+        video_data['TVShowTitle'] = clean_title(video_data['TVShowTitle'])
     ##########################################################################################
 
 

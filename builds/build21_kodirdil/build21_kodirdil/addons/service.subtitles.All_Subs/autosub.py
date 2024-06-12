@@ -6,7 +6,7 @@ from resources.modules import log
 from resources.modules.engine import download_sub,get_subtitles,sort_subtitles
 from urllib.parse import  unquote_plus, unquote,  quote
 from resources.modules.twilight.write_heb_embedded_taglines_check import write_heb_embedded_taglines_check_func
-from resources.modules.general import TransFolder,clean_name,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
+from resources.modules.general import TransFolder,clean_title,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
 from urllib.parse import parse_qsl
 from resources.modules.sub_window import MySubs
 import urllib.parse
@@ -806,8 +806,8 @@ class KodiMonitor(xbmc.Monitor):
                 video_data['TVShowTitle']=""
             log.warning('FoundMando_search33:')
             
-            video_data['title']=clean_name(video_data['title'])
-            video_data['OriginalTitle']=clean_name(video_data['OriginalTitle'])
+            video_data['title']=clean_title(video_data['title'])
+            video_data['OriginalTitle']=clean_title(video_data['OriginalTitle'])
             log.warning(video_data)
             from resources import main
             main.from_autosub=True
