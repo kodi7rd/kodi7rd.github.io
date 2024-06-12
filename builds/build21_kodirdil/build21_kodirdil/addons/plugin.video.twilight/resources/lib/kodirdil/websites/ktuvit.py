@@ -316,17 +316,20 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
     Returns:
     - ktuvit_subtitles_list (list): A list of strings representing the available subtitles for the media file.
     """
+   
+    # Intialize empty ktuvit_subtitles_list
+    ktuvit_subtitles_list = []
         
     # Extract table rows from HTML response
     table_row_regex = '<tr>(.+?)</tr>'
     table_rows = re.compile(table_row_regex, re.DOTALL).findall(ktuvit_subtitles_search_response.decode('utf-8'))
-   
-    # Intialize empty ktuvit_subtitles_list
-    ktuvit_subtitles_list = []
     
     # Extract title and subtitle from each table row
     for table_row in table_rows:
-        subtitle_row_regex = '<div style="float.+?>(.+?)<br />.+?data-subtitle-id="(.+?)"'
+        # Original regex:
+        # subtitle_row_regex = '<div style="float.+?>(.+?)<br />.+?data-subtitle-id="(.+?)"'
+        # New regex - handles "<i>XXXX</i> tags in subtitle name (Burekas fix for "כתובית מתוקנת")
+        subtitle_row_regex = '<div style="float.+?>\s*(?:<i.*?</i>\s*)?(.*?)<br />.+?data-subtitle-id="(.+?)"'
         extracted_subtitle_row = re.compile(subtitle_row_regex,re.DOTALL).findall(table_row)
         
         # Skip if title and subtitle not found
@@ -336,11 +339,11 @@ def extract_subtitles_list(ktuvit_subtitles_search_response):
         # Extract title from title and subtitle
         extracted_subtitle_name = extracted_subtitle_row[0][0]
             
-        # burekas fix for KT titles
-        if ('i class' in extracted_subtitle_name):
-            burekas_title_regex = 'כתובית מתוקנת\'></i>(.+?)$'
-            burekas_title = re.compile(burekas_title_regex,re.DOTALL).findall(extracted_subtitle_name)
-            extracted_subtitle_name = burekas_title[0]
+        # burekas fix for KT titles - UNUSED because new regex
+        # if ('i class' in extracted_subtitle_name):
+            # burekas_title_regex = 'כתובית מתוקנת\'></i>(.+?)$'
+            # burekas_title = re.compile(burekas_title_regex,re.DOTALL).findall(extracted_subtitle_name)
+            # extracted_subtitle_name = burekas_title[0]
 
         extracted_subtitle_name = extracted_subtitle_name.strip().replace('\n','').replace('\r','').replace('\t','').replace(' ','.')
 

@@ -1,5 +1,10 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.68[/B][/COLOR]
+- Ktuvit - Improve subtitle_row_regex to handle "כתובית מתוקנת" flag in subtitle name (burekas fix).
+- Rename "YIFY Subtitles" website to "YIFY".
+- Refactor "calculate_sync_percent_between_subtitles_and_twilight_source" function (sync to DarkSubs).
+
 [COLOR dodgerblue][B]Version 3.2.67[/B][/COLOR]
 - Hebrew Subtitle Matching - Add YIFY Subtitles (Movies only) subtitles website source (https://yifysubtitles.ch).
 

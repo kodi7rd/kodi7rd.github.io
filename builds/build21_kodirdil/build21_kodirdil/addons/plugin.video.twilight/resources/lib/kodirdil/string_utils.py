@@ -5,7 +5,6 @@ from modules import kodi_utils
 
 def similar(w1, w2):
     from difflib import SequenceMatcher
-    
     s = SequenceMatcher(None, w1, w2)
     return int(round(s.ratio()*100))
     
@@ -73,3 +72,16 @@ def clean_string(string):
     'the.great.gatsby.2013.trailer'
     """
     return string.lower().strip().replace("%20",".").replace("_",".").replace(" ",".").replace("-",".").replace("...",".").replace("..",".").replace("(","").replace(")","").replace("[","").replace("]","").replace(":","").replace(",","").replace(".avi","").replace(".mp4","").replace(".mkv","").replace(".dts","").replace(".truehd","").replace(".atmos","").replace(".aac","").replace(".x265","").replace(".x264","").replace(".7.1.1","").replace(".7.1","").replace(".5.1.1","").replace(".5.1","").replace(".hevc","").replace(".h.264","").replace(".h264","").replace(".h.265","").replace(".h265","").replace(".2160p","").replace(".1080p","").replace(".720p","").replace(".480p","").replace(".360p","").replace(".srt","").replace(".hebrew","").replace(".heb","")
+
+
+def clean_subtitle_name_string(subtitle_name):
+    cleaned_subtitle_name = (
+        subtitle_name.strip()
+        .replace(".srt", "")
+        .replace("_", ".")
+        .replace(" ", ".")
+        .replace("+", ".")
+        .replace("/", ".")
+        .replace("-", ".")
+    )
+    return [x.strip().lower() for x in cleaned_subtitle_name.split(".") if x != '']

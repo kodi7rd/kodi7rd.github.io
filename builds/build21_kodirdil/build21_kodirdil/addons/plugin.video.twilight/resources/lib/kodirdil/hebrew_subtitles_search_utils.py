@@ -438,8 +438,7 @@ def calculate_sync_percent_between_subtitles_and_twilight_source(subtitle_name, 
     # Reset array_twilight_source_file_name (remove quality / releases names)
     array_twilight_source_file_name = [element.strip().lower() for element in array_twilight_source_file_name if element != '']
     
-    array_subtitle_name = subtitle_name.strip().replace(".srt",'').replace("_",".").replace(" ",".").replace("+",".").replace("/",".").replace("-",".").split(".")
-    array_subtitle_name=[element.strip().lower() for element in array_subtitle_name if element != '']
+    array_subtitle_name = string_utils.clean_subtitle_name_string(subtitle_name)
 
     if quality not in array_twilight_source_file_name and quality in array_subtitle_name:
         array_twilight_source_file_name.append(quality)
@@ -449,12 +448,8 @@ def calculate_sync_percent_between_subtitles_and_twilight_source(subtitle_name, 
     
         if release_name in array_twilight_source_file_name and release_name in array_subtitle_name:
             
-            array_twilight_source_file_name.append(release_name)
-            array_twilight_source_file_name.append(release_name)
-            array_twilight_source_file_name.append(release_name)
-            array_subtitle_name.append(release_name)
-            array_subtitle_name.append(release_name)
-            array_subtitle_name.append(release_name)
+            array_twilight_source_file_name.extend([release_name] * 3)
+            array_subtitle_name.extend([release_name] * 3)
 
 
     sync_percent = string_utils.similar(array_twilight_source_file_name, array_subtitle_name)
