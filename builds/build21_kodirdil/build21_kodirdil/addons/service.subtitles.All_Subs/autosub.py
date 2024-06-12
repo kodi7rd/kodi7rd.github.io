@@ -5,7 +5,6 @@ from resources.modules import cache
 from resources.modules import log
 from resources.modules.engine import download_sub,get_subtitles,sort_subtitles
 from urllib.parse import  unquote_plus, unquote,  quote
-from resources.modules.twilight import write_heb_embedded_taglines
 from resources.modules.twilight.write_heb_embedded_taglines_check import write_heb_embedded_taglines_check_func
 from resources.modules.general import TransFolder,clean_name,CachedSubFolder,get_video_data,get_db_data,MySubFolder,notify,Thread,show_results,save_file_name
 from urllib.parse import parse_qsl
@@ -21,9 +20,9 @@ ab_req=monit.abortRequested()
 log.warning('Starting %s Service!!!'%MyScriptName)
 
 global video_id,pre_video_id,trigger
-global current_list_item,break_wait
+global playing_addon,break_wait
 break_wait=False
-current_list_item=""
+playing_addon=""
 video_id=""
 pre_video_id=""
 trigger=False
@@ -244,12 +243,12 @@ def add_embbded_subs_to_subs_list(video_data, f_result):
         
 ####################################################################################
     
-def isPlayingAddonExcluded(movieFullPath,current_list_item):
+def isPlayingAddonExcluded(movieFullPath,playing_addon):
     excluded_addons=['idanplus','sdarot.tv','youtube','kids_new']
 
-    current_list_item=current_list_item+movieFullPath
+    playing_addon=playing_addon+movieFullPath
  
-    if (current_list_item.find("pvr://") > -1) :
+    if (playing_addon.find("pvr://") > -1) :
         log.warning("isPlayingAddonExcluded(): Video is playing via Live TV, which is currently set as excluded location.")
         return True
     if (xbmc.getInfoLabel("VideoPlayer.mpaa")=='heb'):
@@ -257,7 +256,7 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
           return True
     for x in excluded_addons:
         
-        if x in current_list_item.lower():
+        if x in playing_addon.lower():
             
             log.warning("isPlayingAddonExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%x )
             
@@ -267,7 +266,7 @@ def isPlayingAddonExcluded(movieFullPath,current_list_item):
     else:
         ExcludedAddons = [Addon.getSetting('ExcludedAddons')]
     for items in ExcludedAddons:
-        if items.lower() in current_list_item.lower() and (len(items)>0):
+        if items.lower() in playing_addon.lower() and (len(items)>0):
             log.warning("isPlayingAddonExcluded(): Video is playing from '%s', which is currently set as !!excluded_addons!!."%items )
             return True
     return False
@@ -777,8 +776,7 @@ def sub_from_main(arg):
     xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_return",json.dumps(return_result))
 
     
-    
-current_list_item=""
+
 xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_subs",'')
 xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("fast_subs",'')
 class KodiMonitor(xbmc.Monitor):
@@ -827,7 +825,7 @@ class KodiMonitor(xbmc.Monitor):
             
     def onNotification( self, sender, method, data):
         global video_id,pre_video_id,trigger
-        global current_list_item,break_wait
+        global playing_addon,break_wait
         # For settings changes to take effect.
         Addon=xbmcaddon.Addon()
         from resources.modules import general
@@ -875,12 +873,12 @@ class KodiMonitor(xbmc.Monitor):
                   force_download=False
                 
                 
-                log.warning('current_list_item::'+str(current_list_item))
+                log.warning('playing_addon::'+str(playing_addon))
                 if Addon.getSetting("autosub")=='true':
                   try:
                       movieFullPath = xbmc.Player().getPlayingFile()
 
-                      is_playing_addon_excluded=isPlayingAddonExcluded(movieFullPath,current_list_item)
+                      is_playing_addon_excluded=isPlayingAddonExcluded(movieFullPath,playing_addon)
                   except: pass
                   if is_playing_addon_excluded:
                     trigger=False
@@ -1010,8 +1008,8 @@ class KodiMonitor(xbmc.Monitor):
                         
                   else:
                     log.warning('Not Downloading:')
-                    log.warning(force_download)
-                    log.warning(is_playing_addon_excluded)
+                    log.warning(f"force_download={force_download}")
+                    log.warning(f"is_playing_addon_excluded={is_playing_addon_excluded}")
 
                   general.show_msg="END"
                     
@@ -1030,18 +1028,7 @@ if  Addon.getSetting("clean_cache_on_startup") == 'true':
 ###################################################################################################################################################
 
 while not ab_req:
-    
-    current_list_item_temp=(xbmc.getInfoLabel("ListItem.FileNameAndPath"))
-    if len(current_list_item_temp)>0 and (('plugin://') in current_list_item_temp or ('smb://') in current_list_item_temp or ('pvr://') in current_list_item_temp):
-            if 'pvr://' in current_list_item_temp:
-                current_list_item='pvr://video' 
-            else:
-                regex='//(.+?)/'
-                match=re.compile(regex).findall(current_list_item_temp)
-                if len (match)>0:
-                   current_list_item=match[0]
-                else:
-                    current_list_item=current_list_item_temp
+    playing_addon = general.get_playing_addon(playing_addon)
     if monitor.waitForAbort(1):
        break
 del monitor

@@ -1,4 +1,8 @@
-﻿[COLOR yellow][B]v4.5.2[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.3[/B][/COLOR]
+* Add "set_media_type" function and support InfoTagVideo API / ListItem.DBTYPE param. Example supporting addons: Telemedia, Mando, Fen, Fen Light, Cobra, Kitana, Twilight, Otaku (general.py).
+* BUG FIX: Remove color tags for Telemedia ListItem titles. (general.py)
+* Rename "current_list_item" to "playing_addon" + Add "get_playing_addon" function (autosub.py + general.py)
+[COLOR yellow][B]v4.5.2[/B][/COLOR]
 * Rewrite and refactor sort_subtitles function (engine.py).
 * Add getVideoInfoTag example for future usage (general.py).
 [COLOR yellow][B]v4.5.1[/B][/COLOR]

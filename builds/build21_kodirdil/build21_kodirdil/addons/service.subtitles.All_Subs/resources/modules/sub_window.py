@@ -156,7 +156,6 @@ def MySubs(title,list,f_list,video_data,all_subs,last_sub_name_in_cache,last_sub
             global list_index
             
             list_index=888
-            current_list_item=''
             self.close_window=True
             self.close()
         def set_active_controls(self):

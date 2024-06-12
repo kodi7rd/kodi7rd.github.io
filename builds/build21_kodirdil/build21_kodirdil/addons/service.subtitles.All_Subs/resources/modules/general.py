@@ -181,6 +181,68 @@ def notify(msg_id, times=3500, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
         
 
+def set_media_type(video_data):
+
+    def _translate_media_type(media_type):
+        # TV Show
+        if media_type in ['tvshow', 'season', 'episode']:
+            return 'tv'
+            
+        # Movie
+        # TEMPORARY: 'movies' should be 'movie' in Telemedia's code
+        elif media_type in ['movie', 'movies']:
+            return 'movie'
+            
+        return None
+
+    if xbmc.Player().isPlaying():
+        try:
+            # https://alwinesch.github.io/group__python___info_tag_video.html#gae415e4abfc18ab4178c49953159e1233)
+            # Try to get media_type parameter from playing addon's setMediaType function from InfoTagVideo API (From Kodi 20 and above)
+            # Example supporting addons: Telemedia, Mando, Fen, Fen Light, Cobra, Kitana, Twilight, Otaku
+            video_data['media_type_videoInfoTag'] = xbmc.Player().getVideoInfoTag().getMediaType()
+            log.warning(f"DEBUG | get_video_data | set_media_type | media_type_videoInfoTag = {video_data['media_type_videoInfoTag']}")
+
+            media_type = _translate_media_type(video_data['media_type_videoInfoTag'])
+            if media_type:
+                video_data['media_type'] = media_type
+                return video_data
+        except:
+            pass
+            
+    else:
+            video_data['media_type_ListItem.DBTYPE'] = xbmc.getInfoLabel("ListItem.DBTYPE")
+            log.warning(f"DEBUG | get_video_data | set_media_type | media_type_ListItem.DBTYPE = {video_data['media_type_ListItem.DBTYPE']}")
+
+            media_type = _translate_media_type(video_data['media_type_ListItem.DBTYPE'])
+            if media_type:
+                video_data['media_type'] = media_type
+                return video_data
+    
+
+    # Fallback - manually determine media_type based on other parameters
+    log.warning(f"DEBUG | get_video_data | set_media_type | Fallbacks to manually set media_type.")
+    if video_data['TVShowTitle'] and (video_data['season'] != '0' or video_data['episode'] != '0'):
+        video_data['media_type'] = 'tv'
+    else:
+        video_data['media_type'] = 'movie'
+    return video_data
+        
+
+def get_playing_addon(playing_addon=""):
+    playing_addon_temp = xbmc.getInfoLabel("ListItem.FileNameAndPath")
+    
+    if len(playing_addon_temp) > 0 and any(prefix in playing_addon_temp for prefix in ['plugin://', 'smb://', 'pvr://']):
+        if 'pvr://' in playing_addon_temp:
+            playing_addon = 'pvr://video' 
+        else:
+            regex = '//(.+?)/'
+            import re
+            match = re.findall(regex, playing_addon_temp)
+            playing_addon = match[0] if match else playing_addon_temp
+            
+    return playing_addon
+      
 def take_title_from_focused_item():
     labelType = xbmc.getInfoLabel("ListItem.DBTYPE")  # movie/tvshow/season/episode
     labelMovieTitle = xbmc.getInfoLabel("ListItem.OriginalTitle")
@@ -200,19 +262,29 @@ def take_title_from_focused_item():
     return title
 
 
+def remove_color_tags(input_string):
+    log.warning(f"DEBUG | get_video_data | BEFORE remove_color_tags | input_string={input_string}")
+    
+    # Example: [COLOR white]הכפיל[/COLOR]
+    import re
+    output_string = re.sub(r'\[COLOR [^\]]*\]|\[/COLOR\]', '', input_string, flags=re.IGNORECASE)
+    
+    log.warning(f"DEBUG | get_video_data | AFTER remove_color_tags | output_string={output_string}")
+    return output_string
+
 def clean_name(name):
       return name.lower().replace('%20',' ').replace('%3a',':').replace('%27',"'").replace('  ',' ')
 
 def remove_release_year_from_title_if_exists(title, year):
     year = str(year)
     if not year:
-        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Year is empty.")
+        log.warning(f"DEBUG | get_video_data | remove_release_year_from_title_if_exists | Year is empty.")
         return title
     # Avoids: "Wonder Woman 1984" --> "Wonder Woman" (Release year is 2020)
     if year not in title:
-        log.warning(f"DEBUG | remove_release_year_from_title_if_exists | No release year ({year}) to remove from {title}")
+        log.warning(f"DEBUG | get_video_data | remove_release_year_from_title_if_exists | No release year ({year}) to remove from {title}")
         return title
-    log.warning(f"DEBUG | remove_release_year_from_title_if_exists | Removing year {year} from title {title}...")
+    log.warning(f"DEBUG | get_video_data | remove_release_year_from_title_if_exists | Removing year {year} from title {title}...")
     
     import re
     # Remove year from title if exists ("Avengers 2012" / "Avengers (2012)" --> "Avengers")
@@ -234,7 +306,7 @@ def manual_search_for_imdb_id(video_data):
     
     import requests
     
-    log.warning(f"DEBUG | manual_search_for_imdb_id | Searching manually for IMDb ID | media_type={media_type} | original_title={original_title} | year={year}")
+    log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | Searching manually for IMDb ID | media_type={media_type} | original_title={original_title} | year={year}")
     
     TMDB_API_KEY = 'b370b60447737762ca38457bd77579b3'
     TMDB_API_BASE_URL = 'https://api.themoviedb.org/3/'
@@ -254,7 +326,7 @@ def manual_search_for_imdb_id(video_data):
 
     try:
         response = requests.get(search_for_tmdb_id_url, params=params, timeout=DEFAULT_REQUEST_TIMEOUT)
-        log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_tmdb_id_url: {response.request.url}")
+        log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | Full search_for_tmdb_id_url: {response.request.url}")
         data = response.json()
                 
         ################### Sort results from TMDB API #############################
@@ -296,27 +368,27 @@ def manual_search_for_imdb_id(video_data):
             }
             
             response = requests.get(search_for_imdb_id_url, params=params, timeout=DEFAULT_REQUEST_TIMEOUT)
-            log.warning(f"DEBUG | manual_search_for_imdb_id | Full search_for_imdb_id_url: {response.request.url}")
+            log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | Full search_for_imdb_id_url: {response.request.url}")
             data = response.json()
             
             # Extract IMDb ID
             video_data['imdb'] = imdb_id = data['external_ids']['imdb_id']
-            log.warning(f"DEBUG | manual_search_for_imdb_id | Found imdb_id={imdb_id} | IMDb URL: https://www.imdb.com/title/{imdb_id}")
+            log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | Found imdb_id={imdb_id} | IMDb URL: https://www.imdb.com/title/{imdb_id}")
             
             if not search_with_year:
                 # Extract Release Year
                 release_date_key = 'release_date' if media_type == "movie" else 'first_air_date'
                 video_data['year'] = release_year = str(data.get(release_date_key, year).split('-')[0])
-                log.warning(f"DEBUG | manual_search_for_imdb_id | Found year={release_year}")
+                log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | Found year={release_year}")
                 
             return video_data
             
         else:
-            log.warning(f"DEBUG | manual_search_for_imdb_id | No TMDB results found.")
+            log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | No TMDB results found.")
             return video_data
             
     except Exception as e:
-        log.warning(f"DEBUG | manual_search_for_imdb_id | manual_search_for_imdb_id | Exception: {str(e)}")
+        log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | manual_search_for_imdb_id | Exception: {str(e)}")
         return video_data
       
 def get_playing_filename_and_remove_extension_if_exists():
@@ -369,6 +441,10 @@ def get_local_media_data(video_data):
 def get_video_data_playing():
 
     video_data = {}
+    
+
+    video_data['state'] = "playing"
+
 
     # Get the IMDb unique ID property of the currently playing video
     video_data['imdb_UniqueID'] = xbmc.getInfoLabel("VideoPlayer.UniqueID(imdb)")
@@ -431,11 +507,22 @@ def get_video_data_not_playing():
 
     video_data = {}
     
+
+    video_data['state'] = "not_playing"
+
+
+    # Get the IMDb unique ID property of the currently selected item
+    video_data['imdb_UniqueID'] = xbmc.getInfoLabel("ListItem.UniqueID(imdb)")
     # Get the IMDBNumber property of the currently selected item
-    video_data['imdb'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
+    video_data['IMDBNumber'] = xbmc.getInfoLabel("ListItem.IMDBNumber")
+    
+    if video_data['imdb_UniqueID'].startswith('tt'):
+        video_data['imdb'] = video_data['imdb_UniqueID']
+    else:
+        video_data['imdb'] = video_data['IMDBNumber']
         
         
-    # Get the title of the cucurrently selected item
+    # Get the title of the currently selected item
     video_data['title'] = xbmc.getInfoLabel("ListItem.Title")
     
     
@@ -472,27 +559,6 @@ def get_video_data_not_playing():
     
     
     return video_data
-    
-    ################################# UNUSED #################################################
-    # if str(video_data['season'])=='0' or str(video_data['episode'])=='0':
-      # video_data['tvshow'] = ''
-
-    # else:
-      # video_data['tvshow'] = take_title_from_focused_item()
-
-    
-    # Get media type of the currently selected item (movie / tvshow / season / episode)
-    # labelType = xbmc.getInfoLabel("ListItem.DBTYPE")
-    # Check if it's a movie
-    # isItMovie = labelType == 'movie' or xbmc.getCondVisibility("Container.Content(movies)")
-    # Check if it's an episode
-    # isItEpisode = labelType == 'episode' or xbmc.getCondVisibility("Container.Content(episodes)")
-
-    # if isItMovie:
-        # video_data['title'] = xbmc.getInfoLabel("ListItem.OriginalTitle")
-    # elif isItEpisode:
-        # video_data['title'] = xbmc.getInfoLabel("ListItem.TVShowTitle")
-    ################################# UNUSED #################################################
 
 def get_video_data():
 
@@ -522,10 +588,7 @@ def get_video_data():
 
 
     ################### Set Media Type #######################################################
-    if video_data['TVShowTitle'] and (video_data['season'] != '0' or video_data['episode'] != '0'):
-        video_data['media_type'] = 'tv'
-    else:
-        video_data['media_type'] = 'movie'
+    video_data = set_media_type(video_data)
     ##########################################################################################
 
 
@@ -543,6 +606,16 @@ def get_video_data():
     if video_data['media_type'] == 'tv':
         video_data['TVShowTitle'] = clean_name(video_data['TVShowTitle'])
     ##########################################################################################
+
+
+    ################### Telemedia - ListItem Remove Color Tags ###############################
+    # Only when NOT playing
+    if not xbmc.Player().isPlaying() and get_playing_addon() == 'plugin.video.telemedia':
+        video_data['title'] = remove_color_tags(video_data['title'])
+        video_data['OriginalTitle'] = remove_color_tags(video_data['OriginalTitle'])
+        if video_data['media_type'] == 'tv':
+            video_data['TVShowTitle'] = remove_color_tags(video_data['TVShowTitle'])
+    ##########################################################################################
     
     
     ################### Remove Year From Titles ##############################################
@@ -557,7 +630,6 @@ def get_video_data():
 
     ################### Manual Search for IMDb ID using TMDB API #############################
     if not video_data['imdb'].startswith('tt'):
-        from resources.modules.general import manual_search_for_imdb_id
         log.warning(f"DEBUG | get_video_data | IMDb ID from video addon not found. searching manually using TMDB API...")
         video_data = manual_search_for_imdb_id(video_data)
     ##########################################################################################
