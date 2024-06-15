@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.5.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.5[/B][/COLOR]
+* [COLOR orange]OpenSubtitles[/COLOR] - Fix total_pages definition according to API change.
+[COLOR yellow][B]v4.5.4[/B][/COLOR]
 * Refactor [COLOR lightblue]BSPlayer[/COLOR] Code.
 * [COLOR springgreen]Ktuvit[/COLOR]: Improve subtitle_row_regex to handle "כתובית מתוקנת" flag in subtitle name (burekas fix).
 * Add "_remove_diacritics" function to remove diacritics - Handles titles such as "Shôgun", "Narcos: México" from IMDB/TMDB - To match title in Ktuvit (general.py)

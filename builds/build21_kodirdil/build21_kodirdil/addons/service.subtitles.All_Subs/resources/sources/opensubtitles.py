@@ -45,7 +45,7 @@ REQUEST_MAX_RETRIES_NUMBER = 8
 REQUEST_RETRY_DELAY_IN_MS = 500
 #########################################
 
-def searchsubtitles(video_data):
+def api_search_subtitles(video_data):
 
     # New OpenSubtitles.com API Search docs:
     # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
@@ -154,8 +154,8 @@ def searchsubtitles(video_data):
 
             # Total subtitles found count.
             total_subs_count = response_json.get('total_count', 0)
-            # Calculate total_pages through total_subs_count (OpenSubtitles API splits the results as 50 per page - not 60 as written in "per_page" JSON response!)
-            total_pages = (total_subs_count // 50) + (1 if total_subs_count % 50 > 0 else 0)
+            # Each page has 50 subtitles.
+            total_pages = response_json.get('total_pages', 0)
             log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles SearchSubtitles search result: Total subs count: {repr(total_subs_count)} |  Number of pages - {repr(total_pages)}")
             
             # Initialize search_data with the data from page 1 (which might be empty)
@@ -194,7 +194,7 @@ def get_subs(video_data):
     log.warning('DEBUG | [OpenSubtitles] | Searching Opensubtitles')
     subtitle_list = []
     
-    search_data = searchsubtitles(video_data)
+    search_data = api_search_subtitles(video_data)
     
     if search_data is not None:
 

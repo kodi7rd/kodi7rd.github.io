@@ -383,6 +383,7 @@ def download(download_data,MySubFolder):
         
         # Send subtitle download request
         post_response = requests.post(REQUEST_DOWNLOAD_IDENTIFIER_URL, headers=headers, data=data, cookies=ktuvit_login_cookie, timeout=DEFAULT_REQUEST_TIMEOUT).json()
+        xbmc.sleep(100)
         
         # Extract DownloadIdentifier from response
         DownloadIdentifier = json.loads(post_response['d'])['DownloadIdentifier']
@@ -411,7 +412,6 @@ def download(download_data,MySubFolder):
         # Throw an error for bad status codes
         response.raise_for_status()
        
-        xbmc.sleep(100)
         subtitle_download_result = response.text
 
         # Break the loop if the maximum number of tries is reached
