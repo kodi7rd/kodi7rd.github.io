@@ -76,7 +76,9 @@ def sort_subtitles(f_result,video_data):
     site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubDL]', '[SubSource]', '[BSPlayer]']
     
     # Get video quality from Kodi
-    quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p"
+    quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p" if xbmc.Player().isPlaying() else None
+    if quality and quality.lower()=="4kp":
+        quality = "2160p"
     
     # List of release names
     release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
@@ -147,7 +149,7 @@ def sort_subtitles(f_result,video_data):
         array_subtitle_name = clean_subtitle_name_string(subtitle_name)
 
         # Check and add missing quality
-        if quality not in array_video_name and quality in array_subtitle_name:
+        if quality and quality not in array_video_name and quality in array_subtitle_name:
             array_video_name.append(quality)
 
         # Check for release names and extend arrays

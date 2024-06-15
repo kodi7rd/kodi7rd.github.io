@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.5.5[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.6[/B][/COLOR]
+* BUG FIX: sort_subtitles function - quality comparison (engine.py).
+[COLOR yellow][B]v4.5.5[/B][/COLOR]
 * [COLOR orange]OpenSubtitles[/COLOR] - Fix total_pages definition according to API change.
 [COLOR yellow][B]v4.5.4[/B][/COLOR]
 * Refactor [COLOR lightblue]BSPlayer[/COLOR] Code.
