@@ -8,6 +8,7 @@ from resources.modules import log
 import requests,json
 import urllib
 from resources.modules.extract_sub import extract
+from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 from resources.modules import cache
 import xbmcvfs
 import struct
@@ -40,7 +41,6 @@ sub_color='orange'
 #########################################
 
 ###### Requests Params ##############
-REQUEST_TIMEOUT_IN_SECONDS = 5
 REQUEST_MAX_RETRIES_NUMBER = 8
 REQUEST_RETRY_DELAY_IN_MS = 500
 #########################################
@@ -147,7 +147,7 @@ def api_search_subtitles(video_data):
     
     for attempt_number in range(REQUEST_MAX_RETRIES_NUMBER):
         try:
-            response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=DEFAULT_REQUEST_TIMEOUT)
             response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
             response_json = response.json()
 
@@ -166,7 +166,7 @@ def api_search_subtitles(video_data):
                 # Loop through the pages and save all results in search_data
                 for _page in range(2, total_pages + 1):
                     querystring['page'] = _page
-                    response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+                    response = requests.get(OPS_API_SEARCH_URL, headers=headers, params=querystring, timeout=DEFAULT_REQUEST_TIMEOUT)
                     response_json = response.json()
                     search_data.extend(response_json.get('data', []))
                     xbmc.sleep(100)
@@ -310,7 +310,7 @@ def download(download_data,MySubFolder):
             try:
                 log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles | Get sub URL download |  Starting retry_number {retry_number}.")
                 log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles payload: {repr(payload)}")
-                response = requests.post(OPS_API_DOWNLOAD_URL, json=payload, headers=headers, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+                response = requests.post(OPS_API_DOWNLOAD_URL, json=payload, headers=headers, timeout=DEFAULT_REQUEST_TIMEOUT)
                 log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles response.status_code: {repr(response.status_code)}")
                 
                 if response.status_code == 503 or response.status_code == 406:
@@ -347,7 +347,7 @@ def download(download_data,MySubFolder):
     for attempt_number in range(1, REQUEST_MAX_RETRIES_NUMBER + 1):
         log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles | Download sub file | Starting attempt_number {attempt_number}.")
         try:
-            sub_download_response = requests.get(subtitle_download_url, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            sub_download_response = requests.get(subtitle_download_url, timeout=DEFAULT_REQUEST_TIMEOUT)
             log.warning(f"DEBUG | [OpenSubtitles] | Opensubtitles DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
             sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
@@ -366,7 +366,7 @@ def download(download_data,MySubFolder):
                 raise RuntimeError("OpenSubtitles DownloadSubtitles HTTPError reached maximum tries.")
 
 def c_get_os_api_keys():    
-    OS_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_OpenSubtitles/darksubs_opensubtitles_api.json', timeout=REQUEST_TIMEOUT_IN_SECONDS).json()
+    OS_API_KEYS = requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_OpenSubtitles/darksubs_opensubtitles_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
     return OS_API_KEYS
     
 def get_random_key():
@@ -426,7 +426,7 @@ def get_random_key():
                 # "Api-Key": OS_API_KEY_VALUE
             # }
 
-            # response = requests.post(OPS_API_LOGIN_URL, json=payload, headers=headers, timeout=REQUEST_TIMEOUT_IN_SECONDS)
+            # response = requests.post(OPS_API_LOGIN_URL, json=payload, headers=headers, timeout=DEFAULT_REQUEST_TIMEOUT)
             # response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
             # if response.status_code == 200:

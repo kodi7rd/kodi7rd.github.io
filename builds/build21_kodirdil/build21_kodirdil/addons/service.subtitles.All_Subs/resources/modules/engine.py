@@ -300,7 +300,7 @@ def c_get_subtitles(video_data):
     start_time = time.time()
     num_live=0
     break_all=False
-    ExcludeTime = int((Addon.getSetting('time_s')))
+    ExcludeTime = int((Addon.getSetting('max_search_time')))
     
 
     while 1:

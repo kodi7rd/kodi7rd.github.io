@@ -142,7 +142,7 @@ def __retry(request, response, next, cfscrape, retry=0):
 def execute_request(request, session=None):
      
     try:
-        default_timeout = int(Addon.getSetting("time_s"))
+        default_timeout = int(Addon.getSetting("max_search_time"))
     except:
         default_timeout = 10
     request.setdefault('timeout', default_timeout)

@@ -26,7 +26,7 @@ progress_msg=0
 global break_all
 break_all=False
 with_dp=True
-DEFAULT_REQUEST_TIMEOUT = 10
+DEFAULT_REQUEST_TIMEOUT = int(xbmcaddon.Addon().getSetting('max_search_time')) or 10
 
 class OverlayText:
     def __init__(self):

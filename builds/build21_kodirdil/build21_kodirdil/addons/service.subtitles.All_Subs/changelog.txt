@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.5.6[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.7[/B][/COLOR]
+* Rename "time_s" setting name to "max_search_time".
+* use "max_search_time" setting value for DEFAULT_REQUEST_TIMEOUT (general.py).
+[COLOR yellow][B]v4.5.6[/B][/COLOR]
 * BUG FIX: sort_subtitles function - quality comparison (engine.py).
 [COLOR yellow][B]v4.5.5[/B][/COLOR]
 * [COLOR orange]OpenSubtitles[/COLOR] - Fix total_pages definition according to API change.
