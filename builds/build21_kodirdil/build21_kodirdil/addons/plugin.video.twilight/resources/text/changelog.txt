@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.69[/B][/COLOR]
+- OpenSubtitles - Fix total_pages definition according to API change.
+
 [COLOR dodgerblue][B]Version 3.2.68[/B][/COLOR]
 - Ktuvit - Improve subtitle_row_regex to handle "כתובית מתוקנת" flag in subtitle name (burekas fix).
 - Rename "YIFY Subtitles" website to "YIFY".
