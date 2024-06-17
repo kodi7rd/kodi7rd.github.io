@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.6.3[/B][/COLOR]
+* Temporary migrate build name from Hebrew to English.
 [COLOR yellow][B]v1.6.2[/B][/COLOR]
 * Change APK_PACKAGE_ID to 'org.xbmc.kodirdil'
 * Remove temporary Kodi 21 migration message.

@@ -454,6 +454,10 @@ else:
     logging.log("[Debrid Data] Not Enabled", level=xbmc.LOGINFO)
 
 
+#########TEMPORARY#############
+if CONFIG.get_setting('buildname') == "קודי ריל דבריד ישראל":
+    CONFIG.set_setting('buildname', "Kodi Real Debrid Israel")
+###############################
 ###################UNUSED####################
 
 ######################################
