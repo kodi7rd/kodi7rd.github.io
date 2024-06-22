@@ -119,9 +119,8 @@ def api_search_subtitles(video_data):
 
 
     #################################################
-    # Overwritten API default value:
-    querystring['hearing_impaired'] = "include"
     # Default API values:
+    querystring['hearing_impaired'] = "include"
     querystring['ai_translated'] = "include" 
     querystring['foreign_parts_only'] = "include"
     querystring['machine_translated'] = "exclude"

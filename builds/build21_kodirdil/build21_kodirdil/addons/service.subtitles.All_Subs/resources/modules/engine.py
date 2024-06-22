@@ -2,7 +2,7 @@
 import random
 import xbmc,xbmcgui,time,xbmcplugin
 from resources.modules import log
-import pkgutil,json,re
+import pkgutil,json
 import os,sys,shutil
 import xbmcvfs,xbmcaddon
 xbmc_tranlate_path=xbmcvfs.translatePath
@@ -107,34 +107,41 @@ def sort_subtitles(f_result,video_data):
             json_value['filename'],
             json_value['site_id']
         ))
+      
+      
+    def remove_subtitle_or_video_extension_if_exists(file_name):
+        
+        # Define a list of common video file extensions
+        video_file_extensions = ['mkv', 'mp4', 'm4p', 'avi', 'mov', 'mpeg', 'mpg', 'flv', 'wmv', 'm4v', 'webm', '3gp', 'ogg', 'ogv', 'rmvb', 'divx', 'vob', 'dat', 'mts', 'm2ts', 'ts', 'yuv']
+        # Define a list of common video file extensions
+        subtitle_file_extensions = ['srt', 'str', 'sub', 'sup', 'idx', 'ass', 'ssa', 'vtt', 'smi']
+        
+        # Extract the basename of the file from the path
+        file_name_without_extension, file_extension = os.path.splitext(file_name)
+    
+        # Remove the dot and check the extension
+        file_extension = file_extension.lstrip('.')
+        
+        # If the extension is in the list of video extensions, remove it
+        if file_extension in video_file_extensions or file_extension in subtitle_file_extensions:
+            return file_name_without_extension
+            
+        return file_name
         
         
-    def clean_video_name_string(video_string):
-        cleaned_video_string = (
-            video_string.strip()
+    def clean_string_and_create_array(file_name):
+    
+        file_name = remove_subtitle_or_video_extension_if_exists(file_name)
+        
+        cleaned_file_name = (
+            file_name.strip()
             .replace("_", ".")
             .replace(" ", ".")
             .replace("+", ".")
             .replace("/", ".")
             .replace("-", ".")
-            .replace(".avi", "")
-            .replace(".mp4", "")
-            .replace(".mkv", "")
         )
-        return [x.strip().lower() for x in cleaned_video_string.split(".") if x != '']
-        
-        
-    def clean_subtitle_name_string(subtitle_name):
-        cleaned_subtitle_name = (
-            subtitle_name.strip()
-            .replace(".srt", "")
-            .replace("_", ".")
-            .replace(" ", ".")
-            .replace("+", ".")
-            .replace("/", ".")
-            .replace("-", ".")
-        )
-        return [x.strip().lower() for x in cleaned_subtitle_name.split(".") if x != '']
+        return [x.strip().lower() for x in cleaned_file_name.split(".") if x != '']
         
         
     def similar(w1, w2):
@@ -143,26 +150,28 @@ def sort_subtitles(f_result,video_data):
         return int(round(s.ratio()*100))
         
         
-    def calculate_sync_percentage(video_string, subtitle_name):
-        # Clean video and subtitle strings
-        array_video_name = clean_video_name_string(video_string)
-        array_subtitle_name = clean_subtitle_name_string(subtitle_name)
+    def calculate_sync_percentage(video_name_array, subtitle_name_array):
 
         # Check and add missing quality
-        if quality and quality not in array_video_name and quality in array_subtitle_name:
-            array_video_name.append(quality)
+        if quality and quality not in video_name_array and quality in subtitle_name_array:
+            video_name_array.append(quality)
 
         # Check for release names and extend arrays
         for release_name in release_names:
-            if release_name in array_video_name and release_name in array_subtitle_name:
-                array_video_name.extend([release_name] * 3)
-                array_subtitle_name.extend([release_name] * 3)
+            if release_name in video_name_array and release_name in subtitle_name_array:
+                video_name_array.extend([release_name] * 3)
+                subtitle_name_array.extend([release_name] * 3)
 
         # Calculate similarity
-        percent = similar(array_video_name, array_subtitle_name)
+        percent = similar(video_name_array, subtitle_name_array)
 
         return percent
     ###############################################################################################
+    
+    # Clean video file_original_path
+    video_file_original_path_array = clean_string_and_create_array(video_data['file_original_path'])
+    # Clean video Tagline
+    video_tagline_array = clean_string_and_create_array(video_data['Tagline'])
     
     for result_value in f_result:
     
@@ -174,11 +183,14 @@ def sort_subtitles(f_result,video_data):
         json_value = json.loads(json.dumps(result_value))
         
         ################### Calculate Sync Percentage #################################################
+        # Clean subtitle name
+        subtitle_name_array = clean_string_and_create_array(json_value['filename'])
+        
         # Video file_original_path sync percentage
-        percent_from_file_original_path = calculate_sync_percentage(video_data['file_original_path'], json_value['filename'])
+        percent_from_file_original_path = calculate_sync_percentage(video_file_original_path_array, subtitle_name_array)
         
         # Video Tagline sync percentage
-        percent_from_video_tagline = calculate_sync_percentage(video_data['Tagline'], json_value['filename'])
+        percent_from_video_tagline = calculate_sync_percentage(video_tagline_array, subtitle_name_array)
         
         percent = max(percent_from_file_original_path, percent_from_video_tagline)
         ###############################################################################################
@@ -367,52 +379,55 @@ def get_subtitles(video_data):
     return f_result
 
 #################### PUNCTUATION FIX ###########################################################
-def fix_sub_punctuation_text(f_all):
+def fix_sub_punctuation_text(original_subtitle_lines):
 
-    all_ch=['?','.','!',',']
-    all_l=[]
-
-    for line in f_all.splitlines():
-
-        line_contains_html_i_tag = False
-        # Check if the line contains html <i> tags
-        if '<i>' in line and '</i>' in line:
-            line_contains_html_i_tag = True
-            # Find the start and end positions of the <i> tag
-            start_index = line.find('<i>') + len('<i>')
-            end_index = line.find('</i>')
-            # Extract the text inside the <i> tag
-            line_without_html_i_tag = line[start_index:end_index]
+    punctuation_marks = ['...', '..', '.', ',', '?', '!', ':']
+    dash_mark = '-'
+    html_i_tag_start = '<i>'
+    html_i_tag_end = '</i>'
+    modified_lines = []
+    
+    # Helper function
+    def fix_punctuation_in_text(text):
+    
+        for mark in punctuation_marks:
+            # From: "-קח את זה."
+            # To: ".קח את זה-"
+            if text.endswith(mark) and text.startswith(dash_mark):
+                # Move both "-" and mark to the opposite ends of the text
+                return mark + text[1:-len(mark)] + dash_mark
+                
+            # From: "קרובים יותר ממה שהיינו אי פעם."
+            # To: ".קרובים יותר ממה שהיינו אי פעם"
+            elif text.endswith(mark):
+                # Move the punctuation mark to the beginning of the text
+                return mark + text[:-len(mark)]
+        return text
         
-        if line_contains_html_i_tag:
-            for ch in all_ch:
-                found=False
-                if line_without_html_i_tag.endswith(ch):
-                   
-                    line_without_html_i_tag=ch+line_without_html_i_tag[:-1]
-                    # Create the original line by combining the modified text (line_without_html_i_tag) with the <i> tags
-                    line = line[:start_index] + line_without_html_i_tag + line[end_index:]
-                    all_l.append(line)
-                    found=True
-                    break
-            if not found:
-                all_l.append(line)
+    for line in original_subtitle_lines.splitlines():
+
+        # Check if the line contains html <i> tags (True/False)
+        line_contains_html_i_tag = html_i_tag_start in line and html_i_tag_end in line
         
+        if not line_contains_html_i_tag:
+            # Fix punctuation for the entire line
+            line = fix_punctuation_in_text(line)
         else:
-            for ch in all_ch:
-                found=False
-                if line.endswith(ch):
-                   
-                    line=ch+line[:-1]
-                    all_l.append(line)
-                    found=True
-                    break
-            if not found:
-                all_l.append(line)
-    f_all='\n'.join(all_l)
-    return f_all
+            # Find the start and end positions of the <i> tag
+            start_index = line.find(html_i_tag_start) + len(html_i_tag_start)
+            end_index = line.find(html_i_tag_end)
+            # Extract the text inside the <i> tag
+            text_inside_i_tag = line[start_index:end_index]
+            # Fix punctuation for the text inside the <i> tag
+            text_inside_i_tag = fix_punctuation_in_text(text_inside_i_tag)
+            # Reconstruct the original line by combining the modified text with the <i> tags
+            line = line[:start_index] + text_inside_i_tag + line[end_index:]
+            
+        modified_lines.append(line)
+                
+    return '\n'.join(modified_lines)
 
-def fix_sub_punctuation_and_write(sub_file, separate_punct_file=False):
+def fix_sub_punctuation_and_write(sub_file):
 
     try:
         # Open the file as binary data
@@ -429,14 +444,13 @@ def fix_sub_punctuation_and_write(sub_file, separate_punct_file=False):
         
         text = fix_sub_punctuation_text(text)
         
-        if separate_punct_file: sub_file = f"{sub_file}_punctuation_fix"
         with open(sub_file, mode="w", encoding="utf8") as f:
                  f.write(text)
 
         return sub_file
-    except:
+    except Exception as e:
+        log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
         return None
-        pass
 
 
 #################### MACHINE TRANSLATE WEBSITES #######################################

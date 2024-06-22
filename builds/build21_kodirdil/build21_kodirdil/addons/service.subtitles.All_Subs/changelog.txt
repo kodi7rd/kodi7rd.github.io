@@ -1,4 +1,9 @@
-﻿[COLOR yellow][B]v4.5.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.8[/B][/COLOR]
+* Switch to cleaner addon icon using Leonardo.AI image generator (https://leonardo.ai).
+* get_playing_filename - Remove file extension removal (general.py)
+* Refactor sort_subtitles function clean string and add remove file extension (engine.py).
+* Rewrite Hebrew punctuation fix and handle edge cases (engine.py).
+[COLOR yellow][B]v4.5.7[/B][/COLOR]
 * Rename "time_s" setting name to "max_search_time".
 * use "max_search_time" setting value for DEFAULT_REQUEST_TIMEOUT (general.py).
 [COLOR yellow][B]v4.5.6[/B][/COLOR]

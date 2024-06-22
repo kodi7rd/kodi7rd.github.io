@@ -402,7 +402,7 @@ def manual_search_for_imdb_id(video_data):
         log.warning(f"DEBUG | get_video_data | manual_search_for_imdb_id | manual_search_for_imdb_id | Exception: {str(e)}")
         return video_data
       
-def get_playing_filename_and_remove_extension_if_exists():
+def get_playing_filename():
 
     # Get the full path of the currently playing video and unquote it to handle any URL encoding
     file_original_path = unquote((xbmc.Player().getPlayingFile()))
@@ -412,17 +412,6 @@ def get_playing_filename_and_remove_extension_if_exists():
     
     # Extract the basename of the file from the path
     file_original_path = os.path.basename(file_original_path)
-    
-    # Extract the basename of the file from the path
-    file_name_without_extension, file_extension = os.path.splitext(file_original_path)
-    
-    # Define a list of common video file extensions
-    video_file_extensions = ['mkv', 'mp4', 'm4p', 'avi', 'mov', 'mpeg', 'mpg', 'flv', 'wmv', 'm4v', 'webm', '3gp', 'ogg', 'ogv', 'rmvb', 'divx', 'vob', 'dat', 'mts', 'm2ts', 'ts', 'yuv']
-    
-    # If the extension is in the list of video extensions, remove it
-    if file_extension.lstrip('.') in video_file_extensions:
-        file_original_path = file_name_without_extension
-        
             
     return file_original_path
     
@@ -509,7 +498,7 @@ def get_video_data_playing():
     
     
     # Get the full path of the currently playing video and remove video file extension if exists
-    video_data['file_original_path'] = get_playing_filename_and_remove_extension_if_exists()
+    video_data['file_original_path'] = get_playing_filename()
     
     
     return video_data
