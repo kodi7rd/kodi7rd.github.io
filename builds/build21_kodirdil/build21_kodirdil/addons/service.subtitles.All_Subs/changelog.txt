@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.5.8[/B][/COLOR]
+﻿[COLOR yellow][B]v4.5.9[/B][/COLOR]
+* Add [COLOR aquamarine]Subscene[/COLOR] website source (https://subscene.best).
+* OpenSubtitles - Fix languages codes incorrect usage from addon settings.
+[COLOR yellow][B]v4.5.8[/B][/COLOR]
 * Switch to cleaner addon icon using Leonardo.AI image generator (https://leonardo.ai).
 * get_playing_filename - Remove file extension removal (general.py)
 * Refactor sort_subtitles function clean string and add remove file extension (engine.py).

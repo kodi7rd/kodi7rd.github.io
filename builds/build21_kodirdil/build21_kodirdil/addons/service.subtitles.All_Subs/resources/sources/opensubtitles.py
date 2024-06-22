@@ -58,26 +58,29 @@ def api_search_subtitles(video_data):
     imdb_id = video_data.get('imdb', '')
     media_type = video_data.get('media_type', '')
     
-    lang=[]
+    selected_lang=[]
 
     # Language codes from: https://opensubtitles.stoplight.io/docs/opensubtitles-api/1de776d20e873-languages
     if Addon.getSetting("language_hebrew")=='true':
-        lang.append('he')
+        selected_lang.append('heb')
     if Addon.getSetting("language_english")=='true':
-        lang.append('en')
+        selected_lang.append('eng')
     if Addon.getSetting("language_russian")=='true':
-        lang.append('ru')
+        selected_lang.append('rus')
     if Addon.getSetting("language_arab")=='true':
-        lang.append('ar')
+        selected_lang.append('ara')
     if len(Addon.getSetting("other_lang"))>0:
         all_lang=Addon.getSetting("other_lang").split(",")
         for items in all_lang:
-            lang.append(str(items))
-    # If 'all_lang' is enabled - override lang to 'ALL' only (required 'ALL' only in new API)
+            selected_lang.append(str(items))
+    # If 'all_lang' is enabled - override selected_lang to 'ALL' only (required 'ALL' only in new API)
     if Addon.getSetting("all_lang")=='true':
-        lang = ['ALL']
+        selected_lang = ['ALL']
+    else:   
+        for index, lang_code in enumerate(selected_lang):
+            selected_lang[index] = xbmc.convertLanguage(lang_code, xbmc.ISO_639_1) or lang_code
        
-    lang_string = ','.join(lang)
+    lang_string = ','.join(selected_lang)
 
     querystring = {}
     querystring['languages'] = lang_string
