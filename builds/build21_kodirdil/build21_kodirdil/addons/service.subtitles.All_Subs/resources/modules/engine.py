@@ -74,7 +74,7 @@ def sort_subtitles(f_result,video_data):
         general.show_msg = f"מסדר כתוביות 0/{len(f_result)}"
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same percent - sort also by site_id using this order:
-    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubDL]', '[SubSource]', '[BSPlayer]']
+    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubDL]', '[SubSource]', '[Subscene]', '[BSPlayer]']
     
     # Get video quality from Kodi
     quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p" if xbmc.Player().isPlaying() else None
