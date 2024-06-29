@@ -389,11 +389,12 @@ def get_subtitles(video_data):
 #################### PUNCTUATION FIX ###########################################################
 def fix_sub_punctuation_text(original_subtitle_lines):
 
+    # Remove <i> </i> tags
+    original_subtitle_lines = original_subtitle_lines.replace('<i>', '').replace('</i>', '')
+
     import re
     punctuation_regex = re.compile(r'[.,?!:…]+$') # "…" is not three regular dots, but single Ellipsis character. https://en.wikipedia.org/wiki/Ellipsis
     hyphen_mark = '-'
-    html_i_tag_start = '<i>'
-    html_i_tag_end = '</i>'
     modified_lines = []
         
     # Helper function to check if a line contains Hebrew characters
@@ -430,25 +431,9 @@ def fix_sub_punctuation_text(original_subtitle_lines):
     ###############################################################
         
     for line in original_subtitle_lines.splitlines():
-    
         if is_hebrew(line):
-            # Check if the line contains html <i> tags (True/False)
-            line_contains_html_i_tag = html_i_tag_start in line and html_i_tag_end in line
-            
-            if not line_contains_html_i_tag:
-                # Fix punctuation for the entire line
-                line = fix_punctuation_in_text(line)
-            else:
-                # Find the start and end positions of the <i> tag
-                start_index = line.find(html_i_tag_start) + len(html_i_tag_start)
-                end_index = line.find(html_i_tag_end)
-                # Extract the text inside the <i> tag
-                text_inside_i_tag = line[start_index:end_index]
-                # Fix punctuation for the text inside the <i> tag
-                text_inside_i_tag = fix_punctuation_in_text(text_inside_i_tag)
-                # Reconstruct the original line by combining the modified text with the <i> tags
-                line = line[:start_index] + text_inside_i_tag + line[end_index:]
-            
+            # Fix punctuation for the entire line
+            line = fix_punctuation_in_text(line.rstrip())
         modified_lines.append(line)
                 
     return '\n'.join(modified_lines)
@@ -481,6 +466,48 @@ def fix_sub_punctuation_and_write(sub_file):
 
 #################### MACHINE TRANSLATE WEBSITES #######################################
 
+#################### BING WEB #########################################################
+def bing_web_send_translate(bing_translator_class, text):
+    from resources.modules import general
+    global global_sub_size,global_progress
+    
+    from_lang = 'auto-detect'
+    to_lang = 'he'
+    translation = bing_translator_class.translate(text, from_lang, to_lang)['translations'][0]['text']
+    
+    global_progress+=1
+    general.show_msg=f"Bing Web מתרגם | {str(int(((global_progress* 100.0)/(global_sub_size)) ))}%"
+    general.progress_msg=int(((global_progress* 100.0)/(global_sub_size)) )
+    return translation
+    
+def bing_web_machine_translate(text, encoding):
+    from resources.modules import general
+    global global_sub_size,global_progress
+    split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+    ax2=split_string(text,1000)
+    global_sub_size=len(ax2)
+    global_progress=0
+    log.warning('DEBUG | bing_web_machine_translate | Starting Bing Web Translation')
+
+    general.show_msg=f"Bing Web מתרגם {encoding}"
+    
+    from resources.modules.auto_translate.bing_web import BingTranslator
+    # Initalize Bing Web class session
+    bing_translator_class = BingTranslator()
+    
+    with futures.ThreadPoolExecutor() as executor:  # optimally defined number of threads
+        res = [executor.submit(bing_web_send_translate, bing_translator_class, text) for text in split_string(text,1000)] # 1000 is max chars limit for bing web
+        futures.wait(res)
+
+    general.progress_msg=0
+
+    f_sub_pre = '\n'.join((r.result() for r in res))
+
+    f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
+    f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
+    
+    return f_sub_pre
+
 #################### GOOGLE ###########################################################
 def google_send_translate(items):
     from resources.modules import general
@@ -490,8 +517,9 @@ def google_send_translate(items):
         
     translator = Translator()  
     translation=translator.translate(items, dest='he').text
+    
     global_progress+=1
-    general.show_msg=f"Google Translate מתרגם  | {str(int(((global_progress* 100.0)/(global_sub_size)) ))}%"
+    general.show_msg=f"Google Translate מתרגם | {str(int(((global_progress* 100.0)/(global_sub_size)) ))}%"
     general.progress_msg=int(((global_progress* 100.0)/(global_sub_size)) )
     return translation
     
@@ -509,13 +537,9 @@ def google_machine_translate(text, encoding):
         res = [executor.submit(google_send_translate, txt) for txt in split_string(text,3000)]
         futures.wait(res)
 
-    f_sub_pre=''
-    xx=0
-
     general.progress_msg=0
 
-    translation = '\n'.join((r.result() for r in res))
-    f_sub_pre=translation
+    f_sub_pre = '\n'.join((r.result() for r in res))
 
     f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
     f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
@@ -635,7 +659,7 @@ def yandex_machine_translate(text, encoding):
     return f_sub_pre
 
 
-#################### BING #############################################################
+#################### BING API #########################################################
 def bing_c_get_keys():
     import requests
     x=requests.get('https://kodi7rd.github.io/repository/other/DarkSubs_Bing/darksubs_bing_api.json', timeout=DEFAULT_REQUEST_TIMEOUT).json()
@@ -669,7 +693,7 @@ def bing_select_key(count_key):
     
     return x[count_key]['bing_translator_name'],x[count_key]['bing_api_key'],x[count_key]['bing_region'],len(x)
     
-def bing_machine_translate(text, encoding):
+def bing_api_machine_translate(text, encoding):
     from resources.modules import general
     general.show_msg='Bing מתרגם'
     import requests, uuid, json
@@ -779,17 +803,21 @@ def machine_translate_subs(input_file,output_file):
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
     
-    # Google
+    # Google https://translate.google.com
     if Addon.getSetting("translate_p")=='0':
         f_sub_pre = google_machine_translate(text, encoding)
         
-    # Yandex
+    # Bing Web https://www.bing.com/Translator
     elif Addon.getSetting("translate_p")=='1':
+        f_sub_pre = bing_web_machine_translate(text, encoding)
+        
+    # Yandex
+    elif Addon.getSetting("translate_p")=='2':
         f_sub_pre = yandex_machine_translate(text, encoding)
              
-    # Bing - Currently unused.
+    # Bing API - Currently unused.
     # elif Addon.getSetting("translate_p")=='2':
-        # f_sub_pre = bing_machine_translate(text, encoding)
+        # f_sub_pre = bing_api_machine_translate(text, encoding)
             
     
     f_all=f_sub_pre.replace('\r\r','\n')
