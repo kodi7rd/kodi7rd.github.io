@@ -23,8 +23,6 @@ SETTING = PLUGIN_ADDON.getSetting
 ADDON_PATH = xbmcvfs.translatePath(SCRIPT_ADDON.getAddonInfo("path"))
 ADDON_ID = SCRIPT_ADDON.getAddonInfo("id")
 ADDON_DATA_PATH = xbmcvfs.translatePath(SCRIPT_ADDON.getAddonInfo("profile"))
-# KODI-RD-IL
-KODI_VERSION = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
 
 
 def get_autocomplete_items(search_str, limit=10, provider=None):
@@ -48,13 +46,6 @@ def get_autocomplete_items(search_str, limit=10, provider=None):
         provider = LocalDictProvider(limit=limit)
     provider.limit = limit
     return provider.get_predictions(search_str)
-        
-def is_hebrew(input_str):
-    hebrew_range = (0x0590, 0x05FF)  # Hebrew Unicode range
-    for char in input_str:
-        if hebrew_range[0] <= ord(char) <= hebrew_range[1]:
-            return True
-    return False
 
 def prep_search_str(text):
     for char in text:
@@ -93,10 +84,6 @@ class BaseProvider(ABC):
             yield li
 
     def fetch_data(self, search_str):
-    
-        # KODI-RD-IL
-        if KODI_VERSION < 21.0 and is_hebrew(search_str): search_str = search_str[::-1]
-        ############
         
         url = self.build_url(quote_plus(search_str))
         

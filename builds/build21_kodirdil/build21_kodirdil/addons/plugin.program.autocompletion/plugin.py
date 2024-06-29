@@ -16,8 +16,6 @@ import AutoCompletion
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
-# KODI-RD-IL
-KODI_VERSION = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
 
 
 def get_kodi_json(method, params):
@@ -43,7 +41,7 @@ def start_info_actions(infos, params):
             xbmc.sleep(500)
             # KODI-RD-IL
             input_str = params.get("id")
-            if KODI_VERSION >= 21.0 and is_hebrew(input_str): input_str = input_str[::-1]
+            if is_hebrew(input_str): input_str = input_str[::-1]
             get_kodi_json(
                 method="Input.SendText",
                 params={"text": input_str, "done": False},
