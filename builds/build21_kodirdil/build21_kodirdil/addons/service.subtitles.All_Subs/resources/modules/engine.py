@@ -389,47 +389,65 @@ def get_subtitles(video_data):
 #################### PUNCTUATION FIX ###########################################################
 def fix_sub_punctuation_text(original_subtitle_lines):
 
-    punctuation_marks = ['...', '..', '.', ',', '?', '!', ':']
-    dash_mark = '-'
+    import re
+    punctuation_regex = re.compile(r'[.,?!:…]+$') # "…" is not three regular dots, but single Ellipsis character. https://en.wikipedia.org/wiki/Ellipsis
+    hyphen_mark = '-'
     html_i_tag_start = '<i>'
     html_i_tag_end = '</i>'
     modified_lines = []
+        
+    # Helper function to check if a line contains Hebrew characters
+    def is_hebrew(line):
+        hebrew_unicode_range = (0x0590, 0x05FF)
+        for char in line:
+            if hebrew_unicode_range[0] <= ord(char) <= hebrew_unicode_range[1]:
+                return True
+        return False
+    ###############################################################
     
-    # Helper function
+    # Helper function to fix punctuation in a text line
     def fix_punctuation_in_text(text):
+
+        # Check for hyphen at the start of the line
+        starts_with_hyphen = text.startswith(hyphen_mark)
+        
+        # Temporary remove hyphen
+        if starts_with_hyphen: text = text.lstrip(hyphen_mark)
     
-        for mark in punctuation_marks:
-            # From: "-קח את זה."
-            # To: ".קח את זה-"
-            if text.endswith(mark) and text.startswith(dash_mark):
-                # Move both "-" and mark to the opposite ends of the text
-                return mark + text[1:-len(mark)] + dash_mark
-                
-            # From: "קרובים יותר ממה שהיינו אי פעם."
-            # To: ".קרובים יותר ממה שהיינו אי פעם"
-            if text.endswith(mark):
-                # Move the punctuation mark to the beginning of the text
-                return mark + text[:-len(mark)]
+        match = punctuation_regex.search(text)
+        # From: "קרובים יותר ממה שהיינו אי פעם."
+        # To: ".קרובים יותר ממה שהיינו אי פעם"
+        if match:
+            # Move punctuation to the beginning
+            text =  match.group(0) + text[:match.start()]
+        
+        # From: "-קח את זה"
+        # To: "קח את זה-"
+        # Bring back hyphen to end of text
+        if starts_with_hyphen: text += hyphen_mark
+            
         return text
+    ###############################################################
         
     for line in original_subtitle_lines.splitlines():
-
-        # Check if the line contains html <i> tags (True/False)
-        line_contains_html_i_tag = html_i_tag_start in line and html_i_tag_end in line
-        
-        if not line_contains_html_i_tag:
-            # Fix punctuation for the entire line
-            line = fix_punctuation_in_text(line)
-        else:
-            # Find the start and end positions of the <i> tag
-            start_index = line.find(html_i_tag_start) + len(html_i_tag_start)
-            end_index = line.find(html_i_tag_end)
-            # Extract the text inside the <i> tag
-            text_inside_i_tag = line[start_index:end_index]
-            # Fix punctuation for the text inside the <i> tag
-            text_inside_i_tag = fix_punctuation_in_text(text_inside_i_tag)
-            # Reconstruct the original line by combining the modified text with the <i> tags
-            line = line[:start_index] + text_inside_i_tag + line[end_index:]
+    
+        if is_hebrew(line):
+            # Check if the line contains html <i> tags (True/False)
+            line_contains_html_i_tag = html_i_tag_start in line and html_i_tag_end in line
+            
+            if not line_contains_html_i_tag:
+                # Fix punctuation for the entire line
+                line = fix_punctuation_in_text(line)
+            else:
+                # Find the start and end positions of the <i> tag
+                start_index = line.find(html_i_tag_start) + len(html_i_tag_start)
+                end_index = line.find(html_i_tag_end)
+                # Extract the text inside the <i> tag
+                text_inside_i_tag = line[start_index:end_index]
+                # Fix punctuation for the text inside the <i> tag
+                text_inside_i_tag = fix_punctuation_in_text(text_inside_i_tag)
+                # Reconstruct the original line by combining the modified text with the <i> tags
+                line = line[:start_index] + text_inside_i_tag + line[end_index:]
             
         modified_lines.append(line)
                 
