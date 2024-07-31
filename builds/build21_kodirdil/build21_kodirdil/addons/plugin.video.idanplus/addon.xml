@@ -19,7 +19,6 @@
 			<platform>all</platform>
 			<summary lang="en">צפיה בערוצי עידן פלוס ובתכניות מהאתרים הרשמיים.</summary>
 			<description lang="en">צפיה בערוצי עידן פלוס ובתכניות מהאתרים הרשמיים.[CR]אפשרויות שונות בהגדרות ההרחבה ובקליק ימני על פריט ברשימה.</description>
-			<news>- Added i24News channel.</news>
 			<news>- Fixes for some TV channels and Radio stations.</news>
 			<supportedcontent>
 				<content>tvshows</content>
