@@ -29,7 +29,7 @@
     <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio" default="true">true</setting>
     <setting id="torrentio.bypass_filter">true</setting>
-    <setting id="provider.torrentz2">true</setting>
+    <setting id="provider.torrentz2" default="true">false</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
     <setting id="provider.ytsmx" default="true">false</setting>
