@@ -1,3 +1,9 @@
+[COLOR red][B]Version 1.0.23[/B][/COLOR]
+- Switched magnetDL to torrentquest.
+
+[COLOR red][B]Version 1.0.22[/B][/COLOR]
+- Removed magnetDL.
+
 [COLOR red][B]Version 1.0.21[/B][/COLOR]
 - Added setting to bypass title filter for torrentio results.
 - Added setting to bypass title filter for elfhosted results.

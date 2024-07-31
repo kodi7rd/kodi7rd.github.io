@@ -19,7 +19,7 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://www.magnetdl.com" # torrentquest is mirror of magnetdl
+		self.base_link = "https://www.torrentquest.com" # torrentquest is mirror of magnetdl
 		self.search_link = '/{0}/{1}'
 		self.min_seeders = 0
 
