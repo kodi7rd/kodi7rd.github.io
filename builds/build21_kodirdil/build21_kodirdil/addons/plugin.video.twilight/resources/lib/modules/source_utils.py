@@ -151,7 +151,8 @@ def seas_ep_filter(season, episode, release_title, split=False, return_match=Fal
 
 	############KODI-RD-IL###################
 	# CocoScrapers - torrentio.py - Anime results from NyaaSi (https://nyaa.si/)
-	string7 = r'(^(?=.*[.-]e?0*<<E>>[.-])(?:(?!((?:s|season)[.-]?\d+[.-x]?(?:ep?|episode)[.-]?\d+)|\d+x\d+).)*$)'
+	# https://github.com/Tikipeter/tikipeter.github.io/issues/48
+	string7 = r'(^(?=.*\.e?0*<<E>>\.)(?:(?!((?:s|season)[.-]?\d+[.-x]?(?:ep?|episode)[.-]?\d+)|\d+x\d+).)*$)'
 	#########################################
 
 	string_list = []

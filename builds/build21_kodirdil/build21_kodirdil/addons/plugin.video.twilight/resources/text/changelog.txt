@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.70[/B][/COLOR]
+- Fix source_utils.py string7 regex for anime matching. (https://github.com/Tikipeter/tikipeter.github.io/issues/48)
+
 [COLOR dodgerblue][B]Version 3.2.69[/B][/COLOR]
 - OpenSubtitles - Fix total_pages definition according to API change.
 
