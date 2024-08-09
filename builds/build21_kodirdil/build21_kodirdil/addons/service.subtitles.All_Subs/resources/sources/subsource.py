@@ -254,7 +254,7 @@ def download(download_data,MySubFolder):
     
     try:
         sub_download_response = requests.post(SUBSOURCE_DOWNLOAD_API_URL, headers=headers, json=data, timeout=DEFAULT_REQUEST_TIMEOUT)
-        log.warning(f"DEBUG | [SubSource] | SubDL DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
+        log.warning(f"DEBUG | [SubSource] | DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
         sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
         with open(subFile, 'wb') as temp_subFile:
@@ -286,4 +286,4 @@ def download(download_data,MySubFolder):
                 # sub_file=(os.path.join(MyTmp, file))
                 
     except Exception as e:
-        log.warning(f'DEBUG | [SubSource] | SubDL DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
+        log.warning(f'DEBUG | [SubSource] | DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')

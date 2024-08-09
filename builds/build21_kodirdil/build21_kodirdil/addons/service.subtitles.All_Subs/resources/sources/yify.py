@@ -209,7 +209,7 @@ def download(download_data,MySubFolder):
         
     try:
         sub_download_response = requests.get(subtitle_download_url, timeout=DEFAULT_REQUEST_TIMEOUT)
-        log.warning(f"DEBUG | [YIFY] | SubDL DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
+        log.warning(f"DEBUG | [YIFY] | DownloadSubtitles sub_download_response: {sub_download_response.status_code}")
         sub_download_response.raise_for_status()  # Raise HTTPError for bad status codes (4xx, 5xx)
 
         with open(subFile, 'wb') as temp_subFile:
@@ -217,4 +217,4 @@ def download(download_data,MySubFolder):
         sub_file=extract(subFile,MySubFolder)
         return sub_file
     except Exception as e:
-        log.warning(f'DEBUG | [YIFY] | SubDL DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
+        log.warning(f'DEBUG | [YIFY] | DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')

@@ -8,7 +8,6 @@
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
 		<setting id="opensubtitles" label="[COLOR orange][B]OpenSubtitles[/B][/COLOR] [COLOR blue](https://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
 		<setting id="yify" label="[COLOR chocolate][B]YIFY (לסרטים בלבד)[/B][/COLOR] [COLOR blue](https://yifysubtitles.ch)[/COLOR]" type="bool" default="true" />
-		<setting id="subdl" label="[COLOR plum][B]SubDL[/B][/COLOR] [COLOR blue](https://subdl.com)[/COLOR]" type="bool" default="true" />
 		<setting id="subsource" label="[COLOR deepskyblue][B]SubSource [/B][/COLOR] [COLOR blue](https://subsource.net)[/COLOR]" type="bool" default="true" />
 		<setting id="subscene" label="[COLOR aquamarine][B]Subscene[/B][/COLOR] [COLOR blue](https://subscene.best)[/COLOR]" type="bool" default="true" />
 		<setting id="bsplayer" label="[COLOR lightblue][B]BSPlayer[/B][/COLOR] [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
@@ -82,12 +81,6 @@
 		
 		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 100 הורדות ביום)" type="lsep"/>
 		<setting id="OS_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
-	
-		<setting label="[COLOR plum]SubDL[/COLOR]" type="lsep"/>
-		<setting id="dummy_setting" label="" type="action" action="" visible="true" />
-		
-		<setting label="לא חובה, אך עבור למי שמעוניין להשתמש בAPI Key אישי (מוגבל עד 2000 פניות ביום)" type="lsep"/>
-		<setting id="SUBDL_USER_API_KEY_VALUE" label="API Key" type="text" default=""/>
 	</category>
 	
 	<category label="חלון כתוביות DarkSubs">

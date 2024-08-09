@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.6.1[/B][/COLOR]
+﻿[COLOR yellow][B]v4.6.2[/B][/COLOR]
+* Deprecate SubDL source, will be brought back in the future if will be relevant.
+[COLOR yellow][B]v4.6.1[/B][/COLOR]
 * Add Bing Web machine translate source (https://www.bing.com/Translator).
 * Hebrew punctuation fix - Remove <i> tags from text.
 [COLOR yellow][B]v4.6.0[/B][/COLOR]

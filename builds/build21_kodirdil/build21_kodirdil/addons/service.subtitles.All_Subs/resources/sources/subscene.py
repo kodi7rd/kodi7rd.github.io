@@ -449,7 +449,7 @@ def download(download_data,MySubFolder):
         return sub_file
                 
     except Exception as e:
-        log.warning(f'DEBUG | [Subscene] | Subscene DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
+        log.warning(f'DEBUG | [Subscene] | DownloadSubtitles | type: {type(e)} | Exception: {repr(e)}')
         
         # TODO: Season pack support with PTN / GuessIt
         # episode_pattern = None

@@ -27,7 +27,6 @@ from resources.sources import ktuvit
 from resources.sources import wizdom
 from resources.sources import opensubtitles
 from resources.sources import yify
-from resources.sources import subdl
 from resources.sources import subsource
 from resources.sources import subscene
 from resources.sources import bsplayer
@@ -74,7 +73,7 @@ def sort_subtitles(f_result,video_data):
         general.show_msg = f"מסדר כתוביות 0/{len(f_result)}"
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same percent - sort also by site_id using this order:
-    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubDL]', '[SubSource]', '[Subscene]', '[BSPlayer]']
+    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubSource]', '[Subscene]', '[BSPlayer]']
     
     # Get video quality from Kodi
     quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p" if xbmc.Player().isPlaying() else None
@@ -239,8 +238,6 @@ def format_website_source_name(source):
         return "OpenSubtitles"
     if source == "yify":
         return "YIFY"
-    if source == "subdl":
-        return "SubDL"
     if source == "subsource":
         return "SubSource"
     if source == "subscene":
@@ -264,7 +261,6 @@ def c_get_subtitles(video_data):
     wizdom.global_var=[]
     opensubtitles.global_var=[]
     yify.global_var=[]
-    subdl.global_var=[]
     subsource.global_var=[]
     subscene.global_var=[]
     bsplayer.global_var=[]
@@ -291,10 +287,6 @@ def c_get_subtitles(video_data):
     if Addon.getSetting('yify')=='true':
         thread.append(Thread(yify.get_subs,video_data))
         all_sources.append(('yify',yify))
-        
-    if Addon.getSetting('subdl')=='true':
-        thread.append(Thread(subdl.get_subs,video_data))
-        all_sources.append(('subdl',subdl))
         
     if Addon.getSetting('subsource')=='true':
         thread.append(Thread(subsource.get_subs,video_data))
