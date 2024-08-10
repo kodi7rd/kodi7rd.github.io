@@ -135,6 +135,12 @@ class RealDebridAPI:
 		return self._get(url)
 
 	def check_cache(self, hashes):
+
+		############KODI-RD-IL###################
+		# Avoid API limits
+		hashes = hashes[:785]
+		#########################################
+
 		hash_string = '/'.join(hashes)
 		url = 'torrents/instantAvailability/%s' % hash_string
 		return self._get(url)
