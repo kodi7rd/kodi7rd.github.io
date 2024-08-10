@@ -8,6 +8,8 @@
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch" default="true">true</setting>
+    <setting id="provider.dmm" default="true">true</setting>
+    <setting id="dmm.bypass_filter">true</setting>
     <setting id="provider.elfhosted">true</setting>
     <setting id="elfhosted.bypass_filter">true</setting>
     <setting id="provider.ext" default="true">false</setting>

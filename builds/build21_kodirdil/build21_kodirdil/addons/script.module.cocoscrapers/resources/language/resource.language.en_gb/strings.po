@@ -718,3 +718,9 @@ msgstr ""
 msgctxt "#32562"
 msgid "Enabling this setting will bypass the filter removing results that do not match the title name. This may result in some incorrect sources."
 msgstr ""
+
+# KODI-RD-IL Custom Strings
+
+msgctxt "#40000"
+msgid "DMM (Debrid Media Manager | Pack Capable)"
+msgstr ""

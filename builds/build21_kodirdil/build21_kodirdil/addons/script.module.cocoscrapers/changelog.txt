@@ -1,5 +1,6 @@
 [COLOR red][B]Version 1.0.23[/B][/COLOR]
 - Switched magnetDL to torrentquest.
+- KODI-RD-IL: Added DMM (Debrid Media Manager).
 
 [COLOR red][B]Version 1.0.22[/B][/COLOR]
 - Removed magnetDL.
