@@ -14,7 +14,7 @@ import json
 
 from ..abstract_playlist import AbstractPlaylist
 from ...compatibility import xbmc
-from ...items import VideoItem, video_listitem
+from ...items import VideoItem, media_listitem
 from ...utils.methods import jsonrpc, wait
 
 
@@ -29,7 +29,7 @@ class XbmcPlaylist(AbstractPlaylist):
         'audio': xbmc.PLAYLIST_MUSIC,  # 0
     }
 
-    def __init__(self, playlist_type, context):
+    def __init__(self, playlist_type, context, retry=0):
         super(XbmcPlaylist, self).__init__()
 
         self._context = context
@@ -38,13 +38,13 @@ class XbmcPlaylist(AbstractPlaylist):
         if playlist_type:
             self._playlist = xbmc.PlayList(playlist_type)
         else:
-            self._playlist = xbmc.PlayList(self.get_playlistid())
+            self._playlist = xbmc.PlayList(self.get_playlistid(retry=retry))
 
     def clear(self):
         self._playlist.clear()
 
     def add(self, base_item):
-        uri, item, _ = video_listitem(self._context, base_item)
+        uri, item, _ = media_listitem(self._context, base_item)
         if item:
             self._playlist.add(uri, listitem=item)
 
@@ -58,7 +58,7 @@ class XbmcPlaylist(AbstractPlaylist):
         return self._playlist.size()
 
     @classmethod
-    def get_playerid(cls, retry=3):
+    def get_playerid(cls, retry=0):
         """Function to get active player playerid"""
 
         # We don't need to get playerid every time, cache and reuse instead
@@ -97,7 +97,7 @@ class XbmcPlaylist(AbstractPlaylist):
         return playerid
 
     @classmethod
-    def get_playlistid(cls):
+    def get_playlistid(cls, retry=0):
         """Function to get playlistid of active player"""
 
         # We don't need to get playlistid every time, cache and reuse instead
@@ -105,7 +105,7 @@ class XbmcPlaylist(AbstractPlaylist):
             return cls._CACHE['playlistid']
 
         result = jsonrpc(method='Player.GetProperties',
-                         params={'playerid': cls.get_playerid(),
+                         params={'playerid': cls.get_playerid(retry=retry),
                                  'properties': ['playlistid']})
 
         try:
@@ -133,7 +133,7 @@ class XbmcPlaylist(AbstractPlaylist):
             self._context.log_error('XbmcPlaylist.get_items error - |{0}: {1}|'
                                     .format(error.get('code', 'unknown'),
                                             error.get('message', 'unknown')))
-        return '[]' if dumps else []
+        return '' if dumps else []
 
     def add_items(self, items, loads=False):
         if loads:
@@ -171,12 +171,15 @@ class XbmcPlaylist(AbstractPlaylist):
         context.log_debug('Playing from playlist position: {0}'
                           .format(position))
 
+        if not resume:
+            xbmc.Player().play(self._playlist, startpos=position - 1)
+            return
         # JSON Player.Open can be too slow but is needed if resuming is enabled
         jsonrpc(method='Player.Open',
                 params={'item': {'playlistid': self._playlist.getPlayListId(),
                                  # Convert 1 indexed to 0 indexed position
                                  'position': position - 1}},
-                options={'resume': resume},
+                options={'resume': True},
                 no_response=True)
 
     def get_position(self, offset=0):
@@ -203,7 +206,7 @@ class XbmcPlaylist(AbstractPlaylist):
         position += (offset + 1)
 
         # A playlist with only one element has no next item
-        if playlist_size > 1 and position <= playlist_size:
+        if playlist_size >= 1 and position <= playlist_size:
             self._context.log_debug('playlistid: {0}, position - {1}/{2}'
                                     .format(playlistid,
                                             position,
