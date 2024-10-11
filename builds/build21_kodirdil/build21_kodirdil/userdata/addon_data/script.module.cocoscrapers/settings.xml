@@ -12,7 +12,7 @@
     <setting id="provider.dmm" default="true">true</setting>
     <setting id="dmm.bypass_filter" default="true">false</setting>
     <setting id="provider.ext" default="true">false</setting>
-    <setting id="provider.eztv" default="true">true</setting>
+    <setting id="provider.eztv">false</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
     <setting id="provider.kickass2" default="true">false</setting>
     <setting id="provider.knaben" default="true">false</setting>
@@ -23,7 +23,7 @@
     <setting id="provider.piratebay" default="true">false</setting>
     <setting id="provider.rutor" default="true">false</setting>
     <setting id="provider.torlock" default="true">false</setting>
-    <setting id="provider.torrentdownload">false</setting>
+    <setting id="provider.torrentdownload" default="true">true</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio" default="true">true</setting>
