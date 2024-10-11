@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.72[/B][/COLOR]
+- Necessary changes for CoCoScrapers 1.0.24 (Comet support).
+
 [COLOR dodgerblue][B]Version 3.2.71[/B][/COLOR]
 - Limit Real Debrid hashes check count to 785 to avoid API limits (real_debrid_api.py).
 
