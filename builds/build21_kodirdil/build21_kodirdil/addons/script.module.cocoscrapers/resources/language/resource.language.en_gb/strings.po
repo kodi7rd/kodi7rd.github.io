@@ -739,6 +739,10 @@ msgctxt "#32567"
 msgid "All Debrid"
 msgstr ""
 
+msgctxt "#32568"
+msgid "MEDIAFUSION (Pack Capable)"
+msgstr ""
+
 # KODI-RD-IL Custom Strings
 
 msgctxt "#40000"

@@ -259,6 +259,11 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="provider.mediafusion" type="boolean" label="32568" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
 				<setting id="provider.nyaa" type="boolean" label="32116" help="">
 					<level>0</level>
 					<default>false</default>

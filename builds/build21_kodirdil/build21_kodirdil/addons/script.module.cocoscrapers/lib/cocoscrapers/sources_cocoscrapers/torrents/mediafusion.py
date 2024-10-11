@@ -1,4 +1,4 @@
-# created by Venom for Fenomscrapers (updated 3-02-2022) modified by kodifitzwell
+# created by Venom for Fenomscrapers (updated 3-02-2022) modified by umbrella_dev 10-8-24
 """
 	Cocoscrapers Project
 """
@@ -10,7 +10,6 @@ from cocoscrapers.modules.control import homeWindow, sleep
 from cocoscrapers.modules import log_utils
 session = requests.Session()
 
-debrid_dict = {'Real-Debrid': 'realdebrid' , 'Premiumize.me': 'premiumize' , 'AllDebrid': 'alldebrid'}
 
 class source:
 	priority = 2
@@ -19,9 +18,11 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = 'https://comet.elfhosted.com'
-		self.movieSearch_link = '/%s/stream/movie/%s.json'
-		self.tvSearch_link = '/%s/stream/series/%s:%s:%s.json'
+		#self.base_link = 'https://mediafusion.elfhosted.com'
+		self.manifest = '/eJwB8AEP_vTC0-41NtYccYs7wZ6l1qeUToHNnQsAey_kuyGCAppcyY1b_JgPiJL_zMEUp8S1FLMb55AUklkc4UG8frNbiX2UfYRzFX4uwFcJaaj3nTmJp4chEvKy2QRhVuo2CZ36tLh9p7EhN0GIA-vW-WFRrarkaklb6xn9mdL4GtBI8PkWsF1hYuX5mW492hZHV6CjIFkUiik4i8IYTkW3oGZnfl-0p7p4GExfDnvbCBONdHuj6M_N5cqwbQD1SiU5VZ6n_h2ABOpGRytAcjzj86RkTGFvcO-flBrkQURCMh3Bl01MDO--B0Bo9DKFBgtdEww13nlI2seJp3OoTUwOc2JAqyYM_IBMKkJCyROvXrfHG-mQ_5kAqHIawgHkQU3F9GgotHbX9g8FaCFWyNR0psNTfJfNAmdSqpXWKlfAvxdwLGIK-rWxKayDCFOD0oAMQYVCG7Km43PYGXRHktz4zeeSOY34q7shmHHV3_XIgb0X04Bf4DQuo25kbawU8ez6kuu_0niSK0gfZh3HgEl6SyM70aEme91EEgu4cyKp5ateGwgRMz9ZmGAmVLYP6uKwF_XXJS6xalaY-R9X6ukUjkAquj-zTTM-VCRa8bF0_m8QZoXlupIq1U4gVDvdRCFqsyVJPX_Q_PoK-TvNYF2eMZY2CMXo8vCt'
+		self.base_link = 'https://mediafusion.elfhosted.com'+self.manifest
+		self.movieSearch_link = '/stream/movie/%s.json'
+		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
 # Currently supports BITSEARCH(+), EZTV(+), ThePirateBay(+), TheRARBG(+), YTS(+)
 
@@ -35,7 +36,7 @@ class source:
 		self.get_pack_files = False
 		sources = []
 		if not data:
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
+			homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
 			return sources
 		append = sources.append
 		self.pack_get = False
@@ -46,35 +47,37 @@ class source:
 			episode_title = data['title'] if 'tvshowtitle' in data else None
 			year = data['year']
 			imdb = data['imdb']
-			debrid_service = debrid_dict[data['debrid_service']]
-			debrid_token = data['debrid_token']
-			params = {'indexers':['bitsearch','eztv','thepiratebay','therarbg','yts'],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
-					'debridService':debrid_service,'debridApiKey':debrid_token,'debridStreamProxyPassword':''}
-			params = base64.b64encode(jsdumps(params, separators=(',', ':')).encode('utf-8')).decode('utf-8')
+			
 			if 'tvshowtitle' in data:
-				homeWindow.setProperty('cocoscrapers.comet.performing_single_scrape', 'true')
+				homeWindow.setProperty('cocoscrapers.mediafusion.performing_single_scrape', 'true')
 				season = data['season']
 				episode = data['episode']
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
-				url = '%s%s' % (self.base_link, self.tvSearch_link % (params, imdb, season, episode))
+				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
 				files = cache.get(self._get_files, 10, url)
 			else:
-				url = '%s%s' % (self.base_link, self.movieSearch_link % (params, imdb))
+				url = '%s%s' % (self.base_link, self.movieSearch_link % (imdb))
 				hdlr = year
 				files = self._get_files(url)
-			log_utils.log('comet sources url = %s' % url)
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
+			log_utils.log('mediafusion sources url = %s' % url)
+			homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
-			source_utils.scraper_error('COMET')
+			homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
+			source_utils.scraper_error('MEDIAFUSION')
 			return sources
 		for file in files:
 			try:
-				hash = file['behaviorHints']['bingeGroup'].replace('comet|', '')
-				file_title = file['title'].split('\n')
+				if 'tvshowtitle' in data:
+					hash = file['url'].split('info_hash=')[1]
+					hash = hash.split('&season=')[0]
+				else:
+					hash = file['url'].split('info_hash=')[1]
+				log_utils.log('mediafusion hash: %s' % hash)
+				file_title = file['description'].split('\n')
+				#file_title = file['behaviorHints']['filename']
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				name = source_utils.clean_name(file_title[0])
 
@@ -93,11 +96,11 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'comet', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				append({'provider': 'mediafusion', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
-				homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
-				source_utils.scraper_error('COMET')
+				homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
+				source_utils.scraper_error('MEDIAFUSION')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -107,7 +110,7 @@ class source:
 		count, finished_single_scrape = 0, False
 		sleep(2000)
 		while count < 10000 and not finished_single_scrape:
-			finished_single_scrape = homeWindow.getProperty('cocoscrapers.comet.performing_single_scrape') != 'true'
+			finished_single_scrape = homeWindow.getProperty('cocoscrapers.mediafusion.performing_single_scrape') != 'true'
 			sleep(100)
 			count += 100
 		if not finished_single_scrape: return sources
@@ -119,24 +122,19 @@ class source:
 			imdb = data['imdb']
 			year = data['year']
 			season = data['season']
-			debrid_service = debrid_dict[data['debrid_service']]
-			debrid_token = data['debrid_token']
-			params = {'indexers':['bitsearch','eztv','thepiratebay','therarbg','yts'],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
-					'debridService':debrid_service,'debridApiKey':debrid_token,'debridStreamProxyPassword':''}
-			params = base64.b64encode(jsdumps(params, separators=(',', ':')).encode('utf-8')).decode('utf-8')
-			url = '%s%s' % (self.base_link, self.tvSearch_link % (params, imdb, season, data['episode']))
+			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
 			files = cache.get(self._get_files, 10, url)
 			_INFO = re.compile(r'💾.*') # _INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('COMET')
+			source_utils.scraper_error('MEDIAFUSION')
 			return sources
 		log_title = 'Series' if search_series else 'Season'
 		for file in files:
 			try:
-				hash = file['behaviorHints']['bingeGroup'].replace('comet|', '')
-				file_title = file['torrentTitle'].split('\n')
+				file['url'].split('info_hash=')[1]
+				file_title = file['description']
 				file_info = [x for x in file['title'].split('\n') if _INFO.match(x)][0]
 
 				name = source_utils.clean_name(file_title[0])
@@ -168,12 +166,12 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'comet', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				item = {'provider': 'mediafusion', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
 			except:
-				source_utils.scraper_error('COMET')
+				source_utils.scraper_error('MEDIAFUSION')
 		return sources
 
