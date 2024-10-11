@@ -8,9 +8,9 @@ from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
+from cocoscrapers.modules import cache
 from cocoscrapers.modules import log_utils
 from cocoscrapers.modules import control
-
 
 class source:
 	priority = 1
@@ -20,24 +20,30 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = "https://torrentio.elfhosted.com"
-		# self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy|language=english/stream/movie/%s.json' # english is now default 12-09-2022
-		# self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy|language=english/stream/series/%s:%s:%s.json' # english is now default 12-09-2022
-		# self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
-		# self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
-		self.bypass_filter = control.setting('elfhosted.bypass_filter')
+		self.bypass_filter = control.setting('knightcrawler.bypass_filter')
 		self.min_seeders = 0
 
+	def _get_files(self, url):
+		if self.get_pack_files: return []
+		results = client.request(url, timeout=10)
+		files = jsloads(results)['streams']
+		return files
+
 	def sources(self, data, hostDict):
+		self.get_pack_files = False
 		sources = []
-		if not data: return sources
+		if not data:
+			control.homeWindow.clearProperty('cocoscrapers.knightcrawler.performing_single_scrape')
+			return sources
 		sources_append = sources.append
 		try:
 			aliases = data['aliases']
 			year = data['year']
 			imdb = data['imdb']
 			if 'tvshowtitle' in data:
+				control.homeWindow.setProperty('cocoscrapers.knightcrawler.performing_single_scrape', 'true')
 				title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				episode_title = data['title']
 				season = data['season']
@@ -45,23 +51,21 @@ class source:
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
 				years = None
 				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
+				files = cache.get(self._get_files, 10, url)
 			else:
 				title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				episode_title = None
 				hdlr = year
 				years = [str(int(year)-1), str(year), str(int(year)+1)]
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
-			log_utils.log('url = %s' % url)
-			results = client.request(url, timeout=5)
-			try: files = jsloads(results)['streams']
-			except: return sources
-			# _INFO = re.compile(r'👤.*')
+				files = self._get_files(url)
+			control.homeWindow.clearProperty('cocoscrapers.knightcrawler.performing_single_scrape')
 			_INFO = re.compile(r'💾.*')
-
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('ELFHOSTED')
+			control.homeWindow.clearProperty('cocoscrapers.knightcrawler.performing_single_scrape')
+			source_utils.scraper_error('KNIGHTCRAWLER')
 			return sources
 
 		for file in files:
@@ -92,15 +96,24 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				sources_append({'provider': 'elfhosted', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
+				sources_append({'provider': 'knightcrawler', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
-				source_utils.scraper_error('ELFHOSTED')
+				control.homeWindow.clearProperty('cocoscrapers.knightcrawler.performing_single_scrape')
+				source_utils.scraper_error('KNIGHTCRAWLER')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
+		self.get_pack_files = True
 		sources = []
 		if not data: return sources
+		count, finished_single_scrape = 0, False
+		control.sleep(2000)
+		while count < 10000 and not finished_single_scrape:
+			finished_single_scrape = control.homeWindow.getProperty('cocoscrapers.knightcrawler.performing_single_scrape') != 'true'
+			control.sleep(100)
+			count += 100
+		if not finished_single_scrape: return sources
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
@@ -109,15 +122,12 @@ class source:
 			year = data['year']
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
-			results = client.request(url, timeout=5)
-			try: files = jsloads(results)['streams']
-			except: return sources
-			# _INFO = re.compile(r'👤.*')
+			files = cache.get(self._get_files, 10, url)
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('ELFHOSTED')
+			source_utils.scraper_error('KNIGHTCRAWLER')
 			return sources
 
 		for file in files:
@@ -160,11 +170,11 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'elfhosted', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				item = {'provider': 'knightcrawler', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
 			except:
-				source_utils.scraper_error('ELFHOSTED')
+				source_utils.scraper_error('KNIGHTCRAWLER')
 		return sources

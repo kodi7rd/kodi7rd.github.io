@@ -412,7 +412,7 @@ msgid "MAGNET$NUMBER[4]YOU"
 msgstr ""
 
 msgctxt "#32114"
-msgid "MAGNETDL (Pack capable)"
+msgid "TORRENTQUEST (Pack capable)"
 msgstr ""
 
 msgctxt "#32115"
@@ -520,7 +520,7 @@ msgid "Clear ALL Extra Undesirables"
 msgstr ""
 
 msgctxt "#32141"
-msgid "ELFHOSTED (Pack Capable)"
+msgid "KNIGHTCRAWLER (Pack Capable)"
 msgstr ""
 
 msgctxt "#32142"
@@ -717,6 +717,26 @@ msgstr ""
 
 msgctxt "#32562"
 msgid "Enabling this setting will bypass the filter removing results that do not match the title name. This may result in some incorrect sources."
+msgstr ""
+
+msgctxt "#32563"
+msgid "COMET (Pack Capable)"
+msgstr ""
+
+msgctxt "#32564"
+msgid "Debrid Provider"
+msgstr ""
+
+msgctxt "#32565"
+msgid "Real-Debrid"
+msgstr ""
+
+msgctxt "#32566"
+msgid "Premiumize.me"
+msgstr ""
+
+msgctxt "#32567"
+msgid "All Debrid"
 msgstr ""
 
 # KODI-RD-IL Custom Strings

@@ -49,7 +49,7 @@ class source:
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('MAGNETDL')
+			source_utils.scraper_error('TORRENTQUEST')
 			return sources
 		try:
 			next_page = [i for i in rows if 'Next Page' in i]
@@ -93,10 +93,10 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'magnetdl', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
+				append({'provider': 'torrentquest', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 								'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
-				source_utils.scraper_error('MAGNETDL')
+				source_utils.scraper_error('TORRENTQUEST')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -136,7 +136,7 @@ class source:
 			[i.join() for i in threads]
 			return self.sources
 		except:
-			source_utils.scraper_error('MAGNETDL')
+			source_utils.scraper_error('TORRENTQUEST')
 			return self.sources
 
 	def get_sources_packs(self, url):
@@ -145,7 +145,7 @@ class source:
 			if not results or '<tbody' not in results: return
 			rows = client.parseDOM(results, 'tr')
 		except:
-			source_utils.scraper_error('MAGNETDL')
+			source_utils.scraper_error('TORRENTQUEST')
 			return
 		try:
 			next_page = [i for i in rows if 'Next Page' in i]
@@ -197,10 +197,10 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'magnetdl', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				item = {'provider': 'torrentquest', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
 			except:
-				source_utils.scraper_error('MAGNETDL')
+				source_utils.scraper_error('TORRENTQUEST')

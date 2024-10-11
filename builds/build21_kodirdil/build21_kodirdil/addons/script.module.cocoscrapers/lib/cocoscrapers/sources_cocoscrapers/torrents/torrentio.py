@@ -7,8 +7,8 @@
 from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
-from cocoscrapers.modules import source_utils
-from cocoscrapers.modules import control
+from cocoscrapers.modules import source_utils, cache
+from cocoscrapers.modules.control import setting as getSetting, homeWindow, sleep
 
 class source:
 	priority = 1
@@ -25,18 +25,28 @@ class source:
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
-		self.bypass_filter = control.setting('torrentio.bypass_filter')
+		self.bypass_filter = getSetting('torrentio.bypass_filter')
 # Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), HorribleSubs(+), NyaaSi(+), NyaaPantsu(+), Rutor(+), Comando(+), ComoEuBaixo(+), Lapumia(+), OndeBaixa(+), Torrent9(+).
 
+	def _get_files(self, url):
+		if self.get_pack_files: return []
+		results = client.request(url, timeout=10)
+		files = jsloads(results)['streams']
+		return files
+
 	def sources(self, data, hostDict):
+		self.get_pack_files = False
 		sources = []
-		if not data: return sources
+		if not data:
+			homeWindow.clearProperty('cocoscrapers.torrentio.performing_single_scrape')
+			return sources
 		sources_append = sources.append
 		try:
 			aliases = data['aliases']
 			year = data['year']
 			imdb = data['imdb']
 			if 'tvshowtitle' in data:
+				homeWindow.setProperty('cocoscrapers.torrentio.performing_single_scrape', 'true')
 				title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				episode_title = data['title']
 				season = data['season']
@@ -44,19 +54,20 @@ class source:
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
 				years = None
 				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
+				files = cache.get(self._get_files, 10, url)
 			else:
 				title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				episode_title = None
 				hdlr = year
 				years = [str(int(year)-1), str(year), str(int(year)+1)]
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
-			results = client.request(url, timeout=5)
-			try: files = jsloads(results)['streams']
-			except: return sources
+				files = self._get_files(url)
+			homeWindow.clearProperty('cocoscrapers.torrentio.performing_single_scrape')
 			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
+			homeWindow.clearProperty('cocoscrapers.torrentio.performing_single_scrape')
 			source_utils.scraper_error('TORRENTIO')
 			return sources
 
@@ -89,12 +100,21 @@ class source:
 				sources_append({'provider': 'torrentio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
+				homeWindow.clearProperty('cocoscrapers.torrentio.performing_single_scrape')
 				source_utils.scraper_error('TORRENTIO')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
+		self.get_pack_files = True
 		sources = []
 		if not data: return sources
+		count, finished_single_scrape = 0, False
+		sleep(2000)
+		while count < 10000 and not finished_single_scrape:
+			finished_single_scrape = homeWindow.getProperty('cocoscrapers.torrentio.performing_single_scrape') != 'true'
+			sleep(100)
+			count += 100
+		if not finished_single_scrape: return sources
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
@@ -103,9 +123,7 @@ class source:
 			year = data['year']
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
-			results = client.request(url, timeout=5)
-			try: files = jsloads(results)['streams']
-			except: return sources
+			files = cache.get(self._get_files, 10, url)
 			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
