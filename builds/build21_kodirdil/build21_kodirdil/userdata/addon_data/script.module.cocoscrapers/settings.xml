@@ -9,7 +9,7 @@
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch">false</setting>
     <setting id="provider.comet" default="true">false</setting>
-    <setting id="provider.dmm">false</setting>
+    <setting id="provider.dmm" default="true">true</setting>
     <setting id="dmm.bypass_filter" default="true">false</setting>
     <setting id="provider.ext" default="true">false</setting>
     <setting id="provider.eztv">false</setting>
