@@ -1,5 +1,6 @@
 [COLOR red][B]Version 1.0.25[/B][/COLOR]
 - Added Mediafusion
+- KODI-RD-IL: DMM Fix.
 
 [COLOR red][B]Version 1.0.24[/B][/COLOR]
 - Changed MagnetDL to Torrentquest.
