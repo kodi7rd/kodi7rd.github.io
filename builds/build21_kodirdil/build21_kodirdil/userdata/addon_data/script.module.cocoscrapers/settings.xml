@@ -8,7 +8,7 @@
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch">false</setting>
-    <setting id="provider.comet">true</setting>
+    <setting id="provider.comet" default="true">false</setting>
     <setting id="provider.dmm" default="true">true</setting>
     <setting id="dmm.bypass_filter" default="true">false</setting>
     <setting id="provider.ext" default="true">false</setting>
@@ -19,11 +19,12 @@
     <setting id="provider.knightcrawler" default="true">false</setting>
     <setting id="knightcrawler.bypass_filter" default="true">false</setting>
     <setting id="provider.limetorrents" default="true">false</setting>
-    <setting id="provider.nyaa" default="true">false</setting>
+    <setting id="provider.mediafusion" default="true">false</setting>
+    <setting id="provider.nyaa">true</setting>
     <setting id="provider.piratebay" default="true">false</setting>
     <setting id="provider.rutor" default="true">false</setting>
     <setting id="provider.torlock" default="true">false</setting>
-    <setting id="provider.torrentdownload" default="true">true</setting>
+    <setting id="provider.torrentdownload">false</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
     <setting id="provider.torrentio" default="true">true</setting>
@@ -33,7 +34,7 @@
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
     <setting id="provider.ytsmx" default="true">false</setting>
-    <setting id="debug.enabled" default="true">false</setting>
+    <setting id="debug.enabled">true</setting>
     <setting id="debug.location" default="true">1</setting>
     <setting id="debug.reversed" default="true">false</setting>
 </settings>
