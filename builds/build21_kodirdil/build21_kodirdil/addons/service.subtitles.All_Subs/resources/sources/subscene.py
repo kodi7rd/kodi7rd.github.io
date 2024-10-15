@@ -25,9 +25,9 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_subscene'))
 que=urllib.parse.quote_plus
 
 ########### Constants ###################
-SUBSCENE_URL = "https://subscene.best"
+SUBSCENE_URL = "https://subscene.cam"
 SUBSCENE_SEARCH_URL = f"{SUBSCENE_URL}/search?query="
-SUBSCENE_DOWNLOAD_URL = "https://res.subscene.best/file"
+SUBSCENE_DOWNLOAD_URL = f"{SUBSCENE_URL}/download"
 site_id = '[Subscene]'
 sub_color = 'aquamarine'
 # global subscene title_href:
@@ -294,7 +294,7 @@ def parse_search_response(selected_lang, media_type, season, episode, search_res
             if not re.search(identifier, SubFileName, re.IGNORECASE):
                 continue
     
-        # Example: https://subscene.best/subtitle/331615
+        # Example: https://subscene.cam/subtitle/331615
         download_href_url = f'{SUBSCENE_URL}{href_url}'
 
         # Example: Hebrew | English
@@ -338,24 +338,24 @@ def parse_search_response(selected_lang, media_type, season, episode, search_res
 #####################################################################################
 
 ############## SUBSCENE SUBTTILES DOWNLOAD FUNCTIONS ##################################
-def build_download_request(download_href_url):
-    href_regex = r'href="(' + re.escape(SUBSCENE_DOWNLOAD_URL) + r'/[^"]+)"'
+def build_download_request(subtitle_id):
 
-    def find_download_href(response):
-        result = re.search(href_regex, response.text)
-        if not result:
-            return None
+    # def find_download_href(response):
+        # href_regex = r'href="(' + re.escape(SUBSCENE_DOWNLOAD_URL) + r'/[^"]+)"'
+        # result = re.search(href_regex, response.text)
+        # if not result:
+            # return None
 
-        return {
-            'method': 'GET',
-            'url': result.group(1),
-            'stream': True
-        }
+        # return {
+            # 'method': 'GET',
+            # 'url': result.group(1),
+            # 'stream': True
+        # }
 
     request = {
         'method': 'GET',
-        'url': download_href_url,
-        'next': lambda response: find_download_href(response)
+        'url': f"{SUBSCENE_DOWNLOAD_URL}/{subtitle_id}"
+        # 'next': lambda response: find_download_href(response)
     }
 
     return request
@@ -439,7 +439,9 @@ def download(download_data,MySubFolder):
     log.warning(f'DEBUG | [Subscene] | Desired download_href_url: {download_href_url} | subFile: {subFile}')
         
     try:
-        download_request = build_download_request(download_href_url)
+        # Regular expression to extract the numeric ID
+        subtitle_id = re.search(r'subtitle/(\d+)', download_href_url).group(1)
+        download_request = build_download_request(subtitle_id)
         download_response = execute_request(download_request)
         log.warning(f"DEBUG | [Subscene] | download | download_response.status_code={download_response.status_code}")
 
