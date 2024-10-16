@@ -1,3 +1,5 @@
+[COLOR yellow][B]v1.6.4[/B][/COLOR]
+* Removed: Temporary migrate build name from Hebrew to English.
 [COLOR yellow][B]v1.6.3[/B][/COLOR]
 * Temporary migrate build name from Hebrew to English.
 [COLOR yellow][B]v1.6.2[/B][/COLOR]
