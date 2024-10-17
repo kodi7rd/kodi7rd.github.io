@@ -13,15 +13,17 @@
             align-items: center;
             justify-content: center;
             margin: 0;
+            background-color: #181818; /* Dark background */
+            color: #f0f0f0; /* Light text */
         }
 
         h1 {
-            color: #333;
+            color: #f0f0f0; /* Light text */
             margin-top: 0px;
         }
 
         p {
-            color: #777;
+            color: #777; /* Gray text */
             font-size: 16px;
             margin-bottom: 0px;
         }
@@ -64,11 +66,12 @@
             margin: 0;
             padding: 20px 0;
             width: 100%;
+            color: #f0f0f0; /* Light text */
         }
 
         .files-table {
             margin: 0px;
-            width 450px;
+            width: 450px;
         }
 
         table {
@@ -79,21 +82,51 @@
         th, td {
             padding: 5px;
             text-align: center;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #555; /* Darker border */
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #333; /* Dark header background */
+            color: #f0f0f0; /* Light text */
         }
 
         a {
-            color: #007BFF;
+            color: #66aaff; /* Light blue link */
             text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* Style the buttons */
+        .download-button {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 52%;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-	<u><a href="https://linktr.ee/kodi7rd" <span style="font-size: 25px">:לחצו על הקישור או סרקו את הקוד והצטרפו לקבוצת הטלגרם לפני התקנה</span></a></u>
+    <u>
+        <a href="https://linktr.ee/kodi7rd">
+            <span style="font-size: 25px">:לחצו על הקישור או סרקו את הקוד והצטרפו לקבוצת הטלגרם לפני התקנה</span>
+        </a>
+    </u>
     <div class="content-wrapper">
         <div class="qr-code">
             <img src="https://i.imgur.com/5Yb7rah.png" alt="QR Code" height="220" width="170">
@@ -105,12 +138,14 @@
                     <tr>
                         <th>Title</th>
                         <th>Version</th>
-                        <th>Filename</th>
+                        <th>Download</th>
                     </tr>
                     <tr>
                         <td>Kodi + Real Debrid Israel Windows Setup</td>
                         <td>21.1</td>
-                        <td><a href="Kodi + Real Debrid Israel 21.1 Setup.exe">Kodi + Real Debrid Israel 21.1 Setup.exe</a></td>
+                        <td>
+                            <a class="download-button" href="Kodi + Real Debrid Israel 21.1 Setup.exe">לחץ להורדה</a>
+                        </td>
                     </tr>
                 </table>
             </div>
