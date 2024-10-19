@@ -369,12 +369,12 @@ class SourcesResults(BaseDialog):
 			kodi_utils.logger("KODI-RD-IL", f"total_quality_counts: {str(total_quality_counts)}")
 
 			# Sync Percentage Matching
-			results_language_text, total_subtitles_found_text, subtitles_matched_count_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_external_subtitles_found_count, total_hebrew_embedded_subtitles_matches_count, total_subtitles_matches_count, total_quality_counts)
+			total_subtitles_found_text, subtitles_matched_count_text = hebrew_subtitles_search_utils.generate_subtitles_match_top_panel_text_for_sync_percent_match(total_external_subtitles_found_count, total_hebrew_embedded_subtitles_matches_count, total_subtitles_matches_count, total_quality_counts)
 		# ORIGINAL TWILIGHT LINE:
 		# self.setProperty('total_results', self.total_results)
 		# CUSTOM NEW LINES:
 		global twilight_total_results_panel_text
-		twilight_total_results_panel_text = ls(400011) + " | " + results_language_text + " | " + total_subtitles_found_text + "\n" + subtitles_matched_count_text if enable_hebrew_subtitles_to_twilight_sources_matching else ls(400011)
+		twilight_total_results_panel_text = ls(400011) + " | " + total_subtitles_found_text + "\n" + subtitles_matched_count_text if enable_hebrew_subtitles_to_twilight_sources_matching else ls(400011)
 		self.setProperty('total_results', self.total_results + twilight_total_results_panel_text)
 		#########################################
 

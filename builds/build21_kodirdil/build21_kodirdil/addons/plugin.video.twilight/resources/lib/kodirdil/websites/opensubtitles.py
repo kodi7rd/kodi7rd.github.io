@@ -31,7 +31,7 @@ REQUEST_TIMEOUT_IN_SECONDS = 5
 REQUEST_MAX_RETRIES_NUMBER = 8
 #########################################
             
-def search_for_subtitles(media_metadata, language='Hebrew'):
+def search_for_subtitles(media_metadata):
 
     '''Search for Hebrew subtitles for a given media using the OpenSubtitles server.
 
@@ -51,7 +51,7 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
         kodi_utils.logger("KODI-RD-IL", f"SETTING search_hebrew_subtitles_in_opensubtitles is: {search_hebrew_subtitles_in_opensubtitles}. Skipping [OPENSUBTITLES] website...")
         return []
 
-    querystring = create_querystring_to_opensubtitles_api(media_metadata, language)
+    querystring = create_querystring_to_opensubtitles_api(media_metadata)
     
     # Perform the subtitles search
     opensubtitles_subtitles_list = search_subtitles(querystring)
@@ -115,7 +115,7 @@ def search_subtitles(querystring):
             return []
 
 
-def create_querystring_to_opensubtitles_api(media_metadata, language):
+def create_querystring_to_opensubtitles_api(media_metadata):
 
     '''given: media_metadata dictionary
     return: List of dictionaries of search criteria for opensubtitles server search'''
@@ -126,11 +126,11 @@ def create_querystring_to_opensubtitles_api(media_metadata, language):
     episode = media_metadata.get("episode", DEFAULT_EPISODE)
     year = media_metadata.get("year", DEFAULT_YEAR)
     imdb_id = media_metadata.get("imdb_id", "")
-    kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES] in {language} language: media_type: '{media_type}' title: {title} year: {year} season: {season} episode: {episode} imdb_id: {imdb_id}")
+    kodi_utils.logger("KODI-RD-IL", f"Searching in [OPENSUBTITLES] in Hebrew language: media_type: '{media_type}' title: {title} year: {year} season: {season} episode: {episode} imdb_id: {imdb_id}")
 
     # Define the querystring
     querystring = {}
-    language = "he" if language == "Hebrew" else "en"
+    language = "he"
     querystring['languages'] = language
 
     # Build querystring WITH imdb_id

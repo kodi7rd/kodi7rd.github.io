@@ -14,7 +14,6 @@ from kodirdil.websites import yify
 
 ########### Settings ####################
 minimum_sync_percent = int(kodi_utils.get_setting('minimum_hebrew_subtitles_sync_percentage_match_slider', '70'))
-search_for_english_subtitles_when_no_hebrew_subtitles_found = kodi_utils.get_setting('search_for_english_subtitles_when_no_hebrew_subtitles_found', 'true') == 'true'
 search_hebrew_subtitles_in_embedded = kodi_utils.get_setting('search_hebrew_subtitles_in_embedded', 'true') == 'true'
 #########################################
 
@@ -26,11 +25,6 @@ hebrew_subtitles_websites_info = {
     'yify': {'website': yify, 'short_name': '[HEB|YIFY'}
     }
     
-english_subtitles_websites_info = {
-    'opensubtitles': {'website': opensubtitles, 'short_name': '[ENG|OPS]'},
-    'yify': {'website': yify, 'short_name': '[ENG|YIFY]'}
-    }
-    
 release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
                  'hdtv','hdtvrip','pdtv','tvrip','hdrip','hd-rip',
                  'web','web-dl','web dl','web-dlrip','webrip','web-rip',
@@ -39,43 +33,21 @@ release_names = ['blueray','bluray','blu-ray','bdrip','brrip','brip',
 
 # If "Check Before FulL Search" setting is enabled, first sources list is only CLOUD
 IS_SEARCHED_FROM_EXTERNAL = False
-# Initialize HEBREW_SUBTITLES_FOUND
-HEBREW_SUBTITLES_FOUND = False
 #########################################
 
 def search_hebrew_subtitles_on_website(website_info, media_metadata, website_subtitles_dict, lock):
-    global HEBREW_SUBTITLES_FOUND  # Declare HEBREW_SUBTITLES_FOUND as a global variable
     try:
         hebrew_subtitles_list = website_info['website'].search_for_subtitles(media_metadata)
         hebrew_subtitles_list = strip_problematic_chars_from_subtitle_names_list(hebrew_subtitles_list)
 
         with lock:
             website_subtitles_dict[website_info['short_name']] = hebrew_subtitles_list
-            
-        if hebrew_subtitles_list:  # If Hebrew subtitles are found
-            HEBREW_SUBTITLES_FOUND = True  # Set HEBREW_SUBTITLES_FOUND to True
 
         kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(hebrew_subtitles_list)}")
         kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
 
     except Exception as e:
         kodi_utils.logger("KODI-RD-IL", f"Error in searching Hebrew subtitles from {website_info['website']}: {str(e)}")
-        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-
-
-def search_english_subtitles_on_website(website_info, media_metadata, website_subtitles_dict, lock):
-    try:
-        english_subtitles_list = website_info['website'].search_for_subtitles(media_metadata, language='English')
-        english_subtitles_list = strip_problematic_chars_from_subtitle_names_list(english_subtitles_list)
-
-        with lock:
-            website_subtitles_dict[website_info['short_name']] = english_subtitles_list
-
-        kodi_utils.logger("KODI-RD-IL", f"{website_info['short_name']}_subtitles_list: {str(english_subtitles_list)}")
-        kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
-
-    except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"Error in searching English subtitles from {website_info['website']}: {str(e)}")
         kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
 
 
@@ -126,7 +98,6 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     lock = threading.Lock()  # Create a lock for thread safety
     hebrew_subtitles_search_threads = []
     website_subtitles_dict = {}
-    global HEBREW_SUBTITLES_FOUND
 
     # Hebrew subtitle search threads
     for website_info in hebrew_subtitles_websites_info.values():
@@ -137,29 +108,10 @@ def search_hebrew_subtitles_for_selected_media(media_type, title, season, episod
     for thread in hebrew_subtitles_search_threads:
         thread.join()
     
-    kodi_utils.logger("KODI-RD-IL", f"HEBREW_SUBTITLES_FOUND={HEBREW_SUBTITLES_FOUND} | SETTING search_for_english_subtitles_when_no_hebrew_subtitles_found={search_for_english_subtitles_when_no_hebrew_subtitles_found}")
-
-    # English subtitle search threads
-    if not HEBREW_SUBTITLES_FOUND and search_for_english_subtitles_when_no_hebrew_subtitles_found:
-        # Reset website_subtitles_dict
-        website_subtitles_dict = {}
-        english_subtitles_search_threads = []
-        
-        for website_info in english_subtitles_websites_info.values():
-            thread = threading.Thread(target=search_english_subtitles_on_website, args=(website_info, media_metadata, website_subtitles_dict, lock))
-            english_subtitles_search_threads.append(thread)
-            thread.start()
-
-        for thread in english_subtitles_search_threads:
-            thread.join()
-    else:
-        kodi_utils.logger("KODI-RD-IL", f"Skipping Searching for English subtitles...")
-    
     # Extract subtitles in the desired order
-    subtitles_websites_info = hebrew_subtitles_websites_info if HEBREW_SUBTITLES_FOUND else english_subtitles_websites_info
     unique_subtitles_list = []
     
-    for website_info in subtitles_websites_info.values():
+    for website_info in hebrew_subtitles_websites_info.values():
         subtitles = website_subtitles_dict.get(website_info['short_name'], [])
         unique_subtitles_list.extend(subtitle for subtitle in subtitles if subtitle not in unique_subtitles_list)
     
@@ -212,25 +164,12 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     global IS_SEARCHED_FROM_EXTERNAL
     if not IS_SEARCHED_FROM_EXTERNAL:
         return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על חיפוש מקורות מלא (בסוף הרשימה)[/COLOR]"
-        
-    HEBREW_SUBTITLES_FOUND = db_utils.hebrew_subtitles_db_has_hebrew_subtitles()
     
     total_subtitles_found_count = total_external_subtitles_found_count + total_hebrew_embedded_subtitles_matches_count
     
     hebrew_embedded_text_string = ""
     if total_hebrew_embedded_subtitles_matches_count > 0:
         hebrew_embedded_text_string = f" [COLOR cyan]({total_hebrew_embedded_subtitles_matches_count} מתרגום מובנה)[/COLOR]"
-    
-    results_language_text = "[COLOR deepskyblue]שפת חיפוש כתוביות:[/COLOR] "
-
-    if not HEBREW_SUBTITLES_FOUND and not search_for_english_subtitles_when_no_hebrew_subtitles_found:
-        results_language_text += "[COLOR deepskyblue]עברית[/COLOR]"
-    else:
-        results_language_text += (
-            "[COLOR deepskyblue]עברית[/COLOR]"
-            if HEBREW_SUBTITLES_FOUND
-            else "[COLOR deepskyblue]אנגלית[/COLOR] [COLOR red](אין חיצוניות בעברית)[/COLOR]"
-        )
 
     total_subtitles_found_text = (
     f"[COLOR FFFE9900]נמצאה כתובית אחת{hebrew_embedded_text_string}[/COLOR]"
@@ -238,7 +177,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     else (
         f"[COLOR FFFE9900]נמצאו {total_subtitles_found_count} כתוביות סך הכל{hebrew_embedded_text_string}[/COLOR]"
         if total_subtitles_found_count > 0
-        else "[COLOR red]לא נמצאו כתוביות לתוכן זה[/COLOR]"
+        else "[COLOR red]לא נמצאו כתוביות בעברית[/COLOR]"
     )
 )
     
@@ -277,7 +216,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     kodi_utils.logger("KODI-RD-IL", f"TWILIGHT sources with matched subtitles: {total_subtitles_matches_count}")
     kodi_utils.logger("KODI-RD-IL", f"###########################################################################################")
     
-    return results_language_text, total_subtitles_found_text, subtitles_matched_count_text
+    return total_subtitles_found_text, subtitles_matched_count_text
     
     
 def calculate_highest_sync_percent_and_set_match_text(total_subtitles_found_list, original_twilight_video_tagline, quality, hebrew_embedded_taglines):

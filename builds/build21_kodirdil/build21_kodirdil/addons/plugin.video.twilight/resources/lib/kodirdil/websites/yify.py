@@ -16,8 +16,7 @@ YIFY_SEARCH_URL = f"{YIFY_BASE_URL}/movie-imdb"
 DEFAULT_REQUEST_TIMEOUT = 10
 #########################################
 
-# language = Hebrew / English
-def search_for_subtitles(media_metadata, language='Hebrew'):
+def search_for_subtitles(media_metadata):
 
     # if search_hebrew_subtitles_in_yify setting is disabled - Cancel search and return empty subtitles list
     if not search_hebrew_subtitles_in_yify:
@@ -32,7 +31,7 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
         return []
     
     # Log the search parameters
-    kodi_utils.logger("KODI-RD-IL", f"Searching in [YIFY]: media_type: {media_type} imdb_id: {imdb_id} language: {language}")
+    kodi_utils.logger("KODI-RD-IL", f"Searching in [YIFY]: media_type: {media_type} imdb_id: {imdb_id} language: Hebrew")
     
     try:
         # Example: https://yifysubtitles.ch/movie-imdb/tt15239678
@@ -58,7 +57,7 @@ def search_for_subtitles(media_metadata, language='Hebrew'):
             continue
         
         # Skip if sub language is not current search language.
-        if FullLanguageName == language:
+        if FullLanguageName == "Hebrew":
             # Remove characters that might cause issues in the filename
             SubFileName = ''.join(c for c in SubFileName if c not in characters_to_remove)
           

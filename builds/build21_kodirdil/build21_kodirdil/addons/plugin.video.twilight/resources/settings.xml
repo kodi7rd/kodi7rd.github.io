@@ -9,16 +9,6 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="search_for_english_subtitles_when_no_hebrew_subtitles_found" type="boolean" label="40003" help="">
-					<level>0</level>
-					<default>true</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="enable_hebrew_subtitles_to_twilight_sources_matching">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
 			</group>
 			<group id="2" label="40004">
 				<setting id="minimum_hebrew_subtitles_sync_percentage_match_slider" type="integer" label="40005" help="">

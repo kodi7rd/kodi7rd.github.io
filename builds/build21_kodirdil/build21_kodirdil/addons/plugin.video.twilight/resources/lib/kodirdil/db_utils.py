@@ -104,37 +104,6 @@ def get_total_subtitles_found_list_from_hebrew_subtitles_db():
         # Log any errors that occur while reading the database
         kodi_utils.logger("KODI-RD-IL", f"Error while reading hebrew_subtitles_db and setting total_subtitles_found_count parameter: {str(e)}")
         return []
-
-
-def hebrew_subtitles_db_has_hebrew_subtitles():
-    """
-    Check if there is at least one entry in the 'current_subtitles_cache' table of the hebrew_subtitles_db
-    that contains "HEB" in the website_name column.
-
-    Args:
-    hebrew_subtitles_db (str): The path to the Hebrew subtitles database.
-
-    Returns:
-    bool: True if at least one entry contains "HEB" in the website_name column, False otherwise.
-    """
-    try:
-        # Connect to the database and create a cursor
-        dbcon = database.connect(hebrew_subtitles_db)
-        dbcur = dbcon.cursor()
-
-        # Execute a query to check if there is at least one entry with "HEB" in website_name
-        dbcur.execute("SELECT COUNT(*) FROM current_subtitles_cache WHERE website_name LIKE '%HEB%'")
-        count = dbcur.fetchone()[0]
-
-        # Close the database connection
-        dbcon.close()
-
-        # If count is greater than 0, there is at least one entry with "HEB" in website_name
-        return count > 0
-
-    except Exception as e:
-        kodi_utils.logger("KODI-RD-IL", f"Error in checking Hebrew subtitles in hebrew_subtitles_db: {str(e)}")
-        return False  # In case of an error, return False
         
         
 def write_current_media_metadata_to_media_metadata_db(media_type, title, season, episode, year, tmdb_id):
