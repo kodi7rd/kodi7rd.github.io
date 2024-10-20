@@ -163,7 +163,7 @@ def generate_subtitles_match_top_panel_text_for_sync_percent_match(total_externa
     
     global IS_SEARCHED_FROM_EXTERNAL
     if not IS_SEARCHED_FROM_EXTERNAL:
-        return "[COLOR yellow]מקורות שהפעלת בעבר[/COLOR]", "[COLOR yellow]לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על חיפוש מקורות מלא (בסוף הרשימה)[/COLOR]"
+        return "[COLOR yellow]מקורות שהפעלת בעבר | לרשימת מקורות מלאה עם התאמת כתוביות:[/COLOR]", "[COLOR cyan]לחץ על חיפוש מקורות מלא (בסוף הרשימה)[/COLOR]"
     
     total_subtitles_found_count = total_external_subtitles_found_count + total_hebrew_embedded_subtitles_matches_count
     
