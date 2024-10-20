@@ -17,6 +17,7 @@
     <setting id="enable_autosub_notifications">true</setting>
     <setting id="auto_place_hebrew_embedded_subs">true</setting>
     <setting id="auto_fix_sub_punctuation">true</setting>
+    <setting id="auto_remove_hi_tags">true</setting>
     <setting id="max_search_time">10</setting>
     <setting id="pause" default="true">false</setting>
     <setting id="ExcludedAddons" default="true" />

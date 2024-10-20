@@ -48,6 +48,9 @@
 		<setting label="תיקון סימני פיסוק - עבור תרגום בעברית או תרגום מכונה (לא רלוונטי לתרגום מובנה!)" type="lsep"/>
 		<setting id="auto_fix_sub_punctuation" label="תקן סימני פיסוק אוטומטית" type="bool" default="true" />
 		
+		<setting label="כתוביות לכבדי שמיעה - כתוביות עם תיאור של המתרחש בסצנה" type="lsep"/>
+		<setting id="auto_remove_hi_tags" label="נקה כתוביות לכבדי שמיעה (HI / Hearing Impaired)" type="bool" default="true" />
+		
 		<setting label="זמן חיפוש כתוביות" type="lsep"/>
 		<setting id="max_search_time" type="number" label="זמן חיפוש מקסימלי (בשניות)" default="10"/>
 		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />

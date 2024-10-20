@@ -455,6 +455,52 @@ def fix_sub_punctuation_and_write(sub_file):
         log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
         return None
 
+#################### HEARING IMPAIRED TAGS REMOVE ###########################################################
+def remove_hi_tags_and_write(sub_file):
+    
+    def remove_hi_subs(subtitle_content):
+
+        import re
+        
+        # Remove music notation symbols (♪)
+        cleaned_subs = re.sub(r'[♪]+', '', subtitle_content)
+        
+        # Remove text within square brackets (e.g., [door slams], [music playing])
+        cleaned_subs = re.sub(r'\[[^\]]*\]', '', cleaned_subs)
+        
+        # Remove text within parentheses (e.g., (whispering), (background noise))
+        cleaned_subs = re.sub(r'\([^\)]*\)', '', cleaned_subs)
+        
+        # Clean up extra spaces on each line
+        cleaned_lines = [line.strip() for line in cleaned_subs.splitlines()]
+        
+        # Remove isolated hyphens that may have been left behind
+        cleaned_lines = [re.sub(r'^\s*-\s*$', '', line) for line in cleaned_lines]
+        
+        return "\n".join(cleaned_lines)
+
+    try:
+        # Open the file as binary data
+        import chardet
+        with open(sub_file, 'rb') as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+
+        encoding=chardet.detect(text)['encoding']
+        log.warning(f"PUNCT | encoding={encoding}")
+        with open(sub_file, 'r', encoding=encoding) as f:
+            # Join binary lines for specified number of lines
+            text = f.read()
+        
+        text = remove_hi_subs(text)
+        
+        with open(sub_file, mode="w", encoding="utf8") as f:
+                 f.write(text)
+
+        return sub_file
+    except Exception as e:
+        log.warning(f"Exception in remove_hi_tags_and_write | Exception: {str(e)}")
+        return None
 
 #################### MACHINE TRANSLATE WEBSITES #######################################
 
@@ -907,21 +953,30 @@ def download_sub(source,download_data,MySubFolder,language,filename):
                 log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
                 pass
     
-    elif Addon.getSetting("auto_translate")=='true':
-        
-        f_count=0
-        for filename_o in os.listdir(TransFolder):
-            
-            f_count+=1
-        if (f_count>max_sub_cache):
+    else:
+        if Addon.getSetting("auto_translate")=='true':
+            f_count=0
             for filename_o in os.listdir(TransFolder):
-                f = os.path.join(TransFolder, filename_o)
-                os.remove(f)
-        trans_file=os.path.join(TransFolder, filename)
-        already_translated=True
-        if not os.path.exists(trans_file):
-            already_translated=False
-            machine_translate_subs(sub_file,trans_file)
-        sub_file=trans_file
+                
+                f_count+=1
+            if (f_count>max_sub_cache):
+                for filename_o in os.listdir(TransFolder):
+                    f = os.path.join(TransFolder, filename_o)
+                    os.remove(f)
+            trans_file=os.path.join(TransFolder, filename)
+            already_translated=True
+            if not os.path.exists(trans_file):
+                already_translated=False
+                machine_translate_subs(sub_file,trans_file)
+            sub_file=trans_file
+            
+        # Remove HI (Hearing Impaired) subtitle tags for non-Hebrew subs.
+        if Addon.getSetting("auto_remove_hi_tags")=='true':
+            try:
+                remove_hi_tags_and_write(sub_file)
+            except Exception as e:
+                log.warning(f"Exception in remove_hi_tags_and_write | Exception: {str(e)}")
+                pass
+            
     log.warning(f"general.break_all: {general.break_all}")
     return sub_file
