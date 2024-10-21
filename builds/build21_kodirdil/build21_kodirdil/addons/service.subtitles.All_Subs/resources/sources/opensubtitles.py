@@ -240,6 +240,8 @@ def get_subs(video_data):
             download_data['filename']=SubFileName
             download_data['id']=file_id
             download_data['format']="srt"
+            # Send Hearing Impaired (HI) flag to determine if to clean HI tags or not.
+            download_data['hearing_imp'] = hearing_impaired
             
             url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=opensubtitles" % (MyScriptID,
                                                                                                 que(SubFileName),

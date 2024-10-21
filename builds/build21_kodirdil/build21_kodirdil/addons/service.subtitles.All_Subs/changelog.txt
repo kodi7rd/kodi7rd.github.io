@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.6.4[/B][/COLOR]
+﻿[COLOR yellow][B]v4.6.5[/B][/COLOR]
+* auto remove HI (Hearing Impaired) subtitle tags: Limit to run on actual HI subtitles only.
+[COLOR yellow][B]v4.6.4[/B][/COLOR]
 * Add auto remove HI (Hearing Impaired) subtitle tags setting.
 [COLOR yellow][B]v4.6.3[/B][/COLOR]
 * Change Subscene site domain from Subscene.best to Subscene.cam + Fix download.

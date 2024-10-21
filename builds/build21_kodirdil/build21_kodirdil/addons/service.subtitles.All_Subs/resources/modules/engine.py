@@ -971,7 +971,11 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             sub_file=trans_file
             
         # Remove HI (Hearing Impaired) subtitle tags for non-Hebrew subs.
-        if Addon.getSetting("auto_remove_hi_tags")=='true':
+        hearing_imp = download_data.get('hearing_imp', 'false')
+        if hearing_imp=='true' and Addon.getSetting("auto_remove_hi_tags")=='true':
+            if Addon.getSetting("enable_autosub_notifications")=='true':
+                from resources.modules.general import notify
+                notify("כתובית לכבדי שמיעה נבחרה, מנקה...")
             try:
                 remove_hi_tags_and_write(sub_file)
             except Exception as e:

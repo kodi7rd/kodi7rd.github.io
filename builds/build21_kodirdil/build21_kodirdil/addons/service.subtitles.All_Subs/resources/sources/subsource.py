@@ -200,6 +200,8 @@ def get_subs(video_data):
                 download_data['season'] = season
                 download_data['episode'] = episode
                 download_data['format'] = "zip"
+                # Send Hearing Impaired (HI) flag to determine if to clean HI tags or not.
+                download_data['hearing_imp'] = hearing_impaired
                 
                 url = "plugin://%s/?action=download&filename=%s&language=%s&download_data=%s&source=subsource" % (MyScriptID,
                                                                                                     que(SubFileName),
