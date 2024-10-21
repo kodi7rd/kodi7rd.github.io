@@ -953,34 +953,33 @@ def download_sub(source,download_data,MySubFolder,language,filename):
                 log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
                 pass
     
-    else:
-        if Addon.getSetting("auto_translate")=='true':
-            f_count=0
-            for filename_o in os.listdir(TransFolder):
-                
-                f_count+=1
-            if (f_count>max_sub_cache):
-                for filename_o in os.listdir(TransFolder):
-                    f = os.path.join(TransFolder, filename_o)
-                    os.remove(f)
-            trans_file=os.path.join(TransFolder, filename)
-            already_translated=True
-            if not os.path.exists(trans_file):
-                already_translated=False
-                machine_translate_subs(sub_file,trans_file)
-            sub_file=trans_file
+    elif Addon.getSetting("auto_translate")=='true':
+        f_count=0
+        for filename_o in os.listdir(TransFolder):
             
-        # Remove HI (Hearing Impaired) subtitle tags for non-Hebrew subs.
-        hearing_imp = download_data.get('hearing_imp', 'false')
-        if hearing_imp=='true' and Addon.getSetting("auto_remove_hi_tags")=='true':
-            if Addon.getSetting("enable_autosub_notifications")=='true':
-                from resources.modules.general import notify
-                notify("כתובית לכבדי שמיעה נבחרה, מנקה...")
-            try:
-                remove_hi_tags_and_write(sub_file)
-            except Exception as e:
-                log.warning(f"Exception in remove_hi_tags_and_write | Exception: {str(e)}")
-                pass
+            f_count+=1
+        if (f_count>max_sub_cache):
+            for filename_o in os.listdir(TransFolder):
+                f = os.path.join(TransFolder, filename_o)
+                os.remove(f)
+        trans_file=os.path.join(TransFolder, filename)
+        already_translated=True
+        if not os.path.exists(trans_file):
+            already_translated=False
+            machine_translate_subs(sub_file,trans_file)
+        sub_file=trans_file
+            
+    # Remove HI (Hearing Impaired) subtitle tags for non-Hebrew subs.
+    hearing_imp = download_data.get('hearing_imp', 'false')
+    if hearing_imp=='true' and Addon.getSetting("auto_remove_hi_tags")=='true':
+        if Addon.getSetting("enable_autosub_notifications")=='true':
+            from resources.modules.general import notify
+            notify("כתובית לכבדי שמיעה נבחרה, מנקה...")
+        try:
+            remove_hi_tags_and_write(sub_file)
+        except Exception as e:
+            log.warning(f"Exception in remove_hi_tags_and_write | Exception: {str(e)}")
+            pass
             
     log.warning(f"general.break_all: {general.break_all}")
     return sub_file
