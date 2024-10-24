@@ -1,6 +1,7 @@
 [COLOR red][B]Version 1.0.25[/B][/COLOR]
 - Added Mediafusion
 - KODI-RD-IL: DMM Fix.
+- KODI-RD-IL: DMM: Add season-pack cache from CocoScrapers 1.0.24 update.
 
 [COLOR red][B]Version 1.0.24[/B][/COLOR]
 - Changed MagnetDL to Torrentquest.
