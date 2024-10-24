@@ -5,6 +5,7 @@
     <setting id="undesirables.settings4" default="true" />
     <setting id="filter.foreign.single.audio">false</setting>
     <setting id="provider.1337x" default="true">false</setting>
+    <setting id="provider.apropo_dmm" default="true">true</setting>
     <setting id="provider.bitcq" default="true">false</setting>
     <setting id="provider.bitlord" default="true">false</setting>
     <setting id="provider.bitsearch">false</setting>
