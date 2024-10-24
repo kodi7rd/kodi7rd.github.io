@@ -53,7 +53,6 @@
 		
 		<setting label="זמן חיפוש כתוביות" type="lsep"/>
 		<setting id="max_search_time" type="number" label="זמן חיפוש מקסימלי (בשניות)" default="10"/>
-		<setting id="pause" label="השהה וידאו בזמן חיפוש כתוביות" type="bool" default="false" />
 		
 		<setting label="החרג חיפוש כתוביות בהרחבות (עם פסיק ביניהם)" type="lsep"/>
 		<setting id="ExcludedAddons" type="text" source="video" label="הזן כאן" default="" />

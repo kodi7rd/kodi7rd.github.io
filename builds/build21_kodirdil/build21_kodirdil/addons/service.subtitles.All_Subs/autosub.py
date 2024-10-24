@@ -886,9 +886,6 @@ class KodiMonitor(xbmc.Monitor):
                   if force_download==True and not is_playing_addon_excluded:
                   
                     video_data=get_video_data()
-                   
-                    if  Addon.getSetting("pause")=='true':
-                        xbmc.Player().pause()
                     
                     if Addon.getSetting("enable_autosub_notifications")=='true':
                         general.show_msg="מוריד כתוביות"

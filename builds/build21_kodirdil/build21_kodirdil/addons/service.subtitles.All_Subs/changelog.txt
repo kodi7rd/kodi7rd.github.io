@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.6.5[/B][/COLOR]
+﻿[COLOR yellow][B]v4.6.6[/B][/COLOR]
+* Remove "pause" setting (השהה וידאו בזמן חיפוש כתוביות).
+[COLOR yellow][B]v4.6.5[/B][/COLOR]
 * auto remove HI (Hearing Impaired) subtitle tags: Limit to run on actual HI subtitles only.
 [COLOR yellow][B]v4.6.4[/B][/COLOR]
 * Add auto remove HI (Hearing Impaired) subtitle tags setting.
