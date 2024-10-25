@@ -183,6 +183,11 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="provider.apropo_pb" type="boolean" label="40002" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
 				<!-- ========== -->
 				<setting id="provider.bitcq" type="boolean" label="32137" help="">
 					<level>0</level>
