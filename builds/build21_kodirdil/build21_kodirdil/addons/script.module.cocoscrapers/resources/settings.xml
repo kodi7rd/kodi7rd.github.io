@@ -177,6 +177,13 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<!-- KODI-RD-IL -->
+				<setting id="provider.apropo_dmm" type="boolean" label="40001" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<!-- ========== -->
 				<setting id="provider.bitcq" type="boolean" label="32137" help="">
 					<level>0</level>
 					<default>false</default>

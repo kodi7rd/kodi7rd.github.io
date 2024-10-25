@@ -2,6 +2,7 @@
 - Added Mediafusion
 - KODI-RD-IL: DMM Fix.
 - KODI-RD-IL: DMM: Add season-pack cache from CocoScrapers 1.0.24 update.
+- KODI-RD-IL: Add APROPO_DMM Source - Apropo's DMM Hashlist.
 
 [COLOR red][B]Version 1.0.24[/B][/COLOR]
 - Changed MagnetDL to Torrentquest.

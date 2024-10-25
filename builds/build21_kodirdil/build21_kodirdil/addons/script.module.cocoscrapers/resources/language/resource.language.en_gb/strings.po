@@ -748,3 +748,7 @@ msgstr ""
 msgctxt "#40000"
 msgid "DMM (Debrid Media Manager | Pack Capable)"
 msgstr ""
+
+msgctxt "#40001"
+msgid "APROPO_DMM (Pack Capable)"
+msgstr ""
