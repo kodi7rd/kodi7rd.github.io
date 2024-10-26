@@ -461,23 +461,38 @@ def remove_hi_tags_and_write(sub_file):
     def remove_hi_subs(subtitle_content):
 
         import re
+
+        # Remove unwanted characters and patterns from a line.
+        def clean_line(line):
+            # Remove music notation symbols (♪)
+            line = re.sub(r'[♪]+\s?', '', line)
+            # Remove text within square brackets (e.g., [door slams], [music playing])
+            line = re.sub(r'\[[^\]]*\]\s?', '', line)
+            # Remove text within parentheses (e.g., (whispering), (background noise))
+            line = re.sub(r'\([^\)]*\)\s?', '', line)
+            return line
         
-        # Remove music notation symbols (♪)
-        cleaned_subs = re.sub(r'[♪]+', '', subtitle_content)
+        # Initialize a list to hold processed lines
+        final_lines = []
         
-        # Remove text within square brackets (e.g., [door slams], [music playing])
-        cleaned_subs = re.sub(r'\[[^\]]*\]', '', cleaned_subs)
-        
-        # Remove text within parentheses (e.g., (whispering), (background noise))
-        cleaned_subs = re.sub(r'\([^\)]*\)', '', cleaned_subs)
-        
-        # Clean up extra spaces on each line
-        cleaned_lines = [line.strip() for line in cleaned_subs.splitlines()]
-        
-        # Remove isolated hyphens that may have been left behind
-        cleaned_lines = [re.sub(r'^\s*-\s*$', '', line) for line in cleaned_lines]
-        
-        return "\n".join(cleaned_lines)
+        for original_line in subtitle_content.splitlines():
+            cleaned_line = clean_line(original_line)
+            
+            # Check if the line was modified
+            if original_line != cleaned_line:
+                
+                # Strip leading and trailing whitespace
+                cleaned_line = cleaned_line.strip()
+                
+                # Skip empty lines or lines that are just isolated "-" or ":"
+                if cleaned_line and not re.match(r'^\s*[-:]\s*$', cleaned_line):
+                    final_lines.append(cleaned_line)
+
+            else:
+                final_lines.append(original_line)
+
+        # Join lines back with newlines
+        return "\n".join(final_lines)
 
     try:
         # Open the file as binary data
