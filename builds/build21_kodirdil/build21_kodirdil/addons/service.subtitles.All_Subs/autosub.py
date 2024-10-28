@@ -27,7 +27,19 @@ video_id=""
 pre_video_id=""
 trigger=False
 que=urllib.parse.quote_plus
+
+####################################################################################
+GET_SUBTITLES_POP_KEYS = ['tmdb', 'Tagline', 'Tagline_From_Fen', 'VideoPlayer.Tagline', 'file_original_path', 'mpaa', 'is_local_media_playing', 'media_type_videoInfoTag', 'media_type_ListItem.DBTYPE']
+def temporary_pop_and_get_subtitles(video_data):
+    # Store and remove the values for the specified keys
+    temp_values = {key: video_data.pop(key) for key in GET_SUBTITLES_POP_KEYS if key in video_data}
+    log.warning(f"DEBUG | temporary_pop_and_get_subtitles | MID POP | video_data={str(video_data)}")
     
+    try:
+        return cache.get(get_subtitles, 24, video_data, table='subs')
+    finally:
+        # Restore the original values to the video_data
+        video_data.update(temp_values)
 ####################################################################################
     
 # Currently only for Hebrew/English, the most common.
@@ -152,18 +164,18 @@ def set_embedded_hebrew_sub(video_data):
         xbmc.sleep(300)
     
     
-def add_embbded_sub_if_exists(video_data, f_result, embedded_language):
+def add_embedded_sub_if_exists(video_data, f_result, embedded_language):
 
     # Avoid checking when using subtitles search from context menu (display_subtitle)
     if not xbmc.Player().isPlaying():
-        log.warning(f'DEBUG | add_embbded_sub_if_exists STOP | embedded_language={embedded_language} | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
+        log.warning(f'DEBUG | add_embedded_sub_if_exists STOP | embedded_language={embedded_language} | xbmc.Player().isPlaying(): {xbmc.Player().isPlaying()}')
         return f_result
 
     if embedded_language=='heb':
         try:
             global is_embedded_hebrew_sub_exists
             if not is_embedded_hebrew_sub_exists:
-                log.warning(f'DEBUG | add_embbded_sub_if_exists STOP | embedded_language={embedded_language} | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}')
+                log.warning(f'DEBUG | add_embedded_sub_if_exists STOP | embedded_language={embedded_language} | is_embedded_hebrew_sub_exists: {is_embedded_hebrew_sub_exists}')
                 return f_result
         except:
             pass
@@ -186,7 +198,7 @@ def add_embbded_sub_if_exists(video_data, f_result, embedded_language):
             
     subs=wait_for_video_and_return_subs_list()
     index_sub = get_embedded_sub_index(subs, embedded_language)
-    log.warning(f'add_embbded_sub_if_exists | embedded_language={embedded_language} | Embbeded subs list: {subs} | index_sub={index_sub}')
+    log.warning(f'add_embedded_sub_if_exists | embedded_language={embedded_language} | Embbeded subs list: {subs} | index_sub={index_sub}')
 
     if index_sub is not None:
         download_data={}
@@ -224,7 +236,7 @@ def add_embbded_sub_if_exists(video_data, f_result, embedded_language):
     return f_result
     
     
-def add_embbded_subs_to_subs_list(video_data, f_result):
+def add_embedded_subs_to_subs_list(video_data, f_result):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -232,12 +244,12 @@ def add_embbded_subs_to_subs_list(video_data, f_result):
     # Add Hebrew Embbeded Subtitles if exists
     search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
     if search_language_hebrew_bool:
-        f_result=add_embbded_sub_if_exists(video_data, f_result, 'heb')
+        f_result=add_embedded_sub_if_exists(video_data, f_result, 'heb')
         
     # Add English Embbeded Subtitles if exists
     search_language_english_bool = (Addon.getSetting('language_english') == 'true' or Addon.getSetting("all_lang") == 'true')
     if search_language_english_bool:
-        f_result=add_embbded_sub_if_exists(video_data, f_result, 'eng')
+        f_result=add_embedded_sub_if_exists(video_data, f_result, 'eng')
     
     return f_result
         
@@ -487,22 +499,16 @@ def sub_from_main(arg):
         
         from resources import main
         main.from_autosub=True
-        tag_original=video_data['Tagline']
-        video_data.pop('Tagline')
         
-        file_org=video_data['file_original_path']
-        video_data.pop('file_original_path')
-        
-        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-        video_data['file_original_path']=file_org
-        video_data['Tagline']=tag_original
+        # Search for subs in cache, pop unneeded values.
+        f_result = temporary_pop_and_get_subtitles(video_data)
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
         # Add embbeded subtitles to subtitles list
-        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
+        f_result = add_embedded_subs_to_subs_list(video_data, f_result)
         ############################################################
   
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
@@ -574,15 +580,8 @@ def sub_from_main(arg):
         return_result=json.dumps(action)
         notify("כתוביות בוטלו")
     elif action=='sub_window':
-        tag_original=video_data['Tagline']
-        video_data.pop('Tagline')
-        
-        file_org=video_data['file_original_path']
-        video_data.pop('file_original_path')
-        
-        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-        video_data['file_original_path']=file_org
-        video_data['Tagline']=tag_original
+        # Search for subs in cache, pop unneeded values.
+        f_result = temporary_pop_and_get_subtitles(video_data)
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
@@ -591,22 +590,15 @@ def sub_from_main(arg):
         xbmc.Player().pause()
         
         # Add embbeded subtitles to subtitles list
-        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
+        f_result = add_embedded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
         window = MySubs('DarkSubs - חלון כתוביות' ,f_result,f_result,video_data,all_subs,last_sub_name_in_cache,last_sub_language_in_cache)
         return_result=json.dumps(action)
     elif action=='sub_window_unpause':
-        tag_original=video_data['Tagline']
-        video_data.pop('Tagline')
-        
-        file_org=video_data['file_original_path']
-        video_data.pop('file_original_path')
-        
-        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-        video_data['file_original_path']=file_org
-        video_data['Tagline']=tag_original
+        # Search for subs in cache, pop unneeded values.
+        f_result = temporary_pop_and_get_subtitles(video_data)
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
@@ -614,7 +606,7 @@ def sub_from_main(arg):
         xbmc.executebuiltin('Dialog.Close(all,true)')
         
         # Add embbeded subtitles to subtitles list
-        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
+        f_result = add_embedded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
@@ -630,23 +622,16 @@ def sub_from_main(arg):
         thread.append(Thread(show_results))
 
         thread[0].start()
-    
-        tag_original=video_data['Tagline']
-        video_data.pop('Tagline')
         
-        file_org=video_data['file_original_path']
-        video_data.pop('file_original_path')
-        
-        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-        video_data['file_original_path']=file_org
-        video_data['Tagline']=tag_original
+        # Search for subs in cache, pop unneeded values.
+        f_result = temporary_pop_and_get_subtitles(video_data)
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
         # Add embbeded subtitles to subtitles list
-        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
+        f_result = add_embedded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
@@ -694,22 +679,16 @@ def sub_from_main(arg):
         thread.append(Thread(show_results))
 
         thread[0].start()
-        tag_original=video_data['Tagline']
-        video_data.pop('Tagline')
         
-        file_org=video_data['file_original_path']
-        video_data.pop('file_original_path')
-        
-        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-        video_data['file_original_path']=file_org
-        video_data['Tagline']=tag_original
+        # Search for subs in cache, pop unneeded values.
+        f_result = temporary_pop_and_get_subtitles(video_data)
         
         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
         # Avoid f_result=None error if no subs found.
         f_result = [] if not f_result else f_result
         
         # Add embbeded subtitles to subtitles list
-        f_result = add_embbded_subs_to_subs_list(video_data, f_result)
+        f_result = add_embedded_subs_to_subs_list(video_data, f_result)
         ############################################################
         
         last_sub_name_in_cache,last_sub_language_in_cache,all_subs=get_db_data(video_data)
@@ -811,14 +790,10 @@ class KodiMonitor(xbmc.Monitor):
             log.warning(video_data)
             from resources import main
             main.from_autosub=True
-            tag_original=video_data['Tagline']
-            video_data.pop('Tagline')
             
+            # Search for subs in cache, pop unneeded values.
+            f_result = temporary_pop_and_get_subtitles(video_data)
             
-            
-            f_result=cache.get(get_subtitles,24,video_data,table='subs')
-            
-            video_data['Tagline']=tag_original
             xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("fast_subs",'')
             
             
@@ -899,14 +874,8 @@ class KodiMonitor(xbmc.Monitor):
                     
                     
                     try:
-                        tag_original=video_data['Tagline']
-                        video_data.pop('Tagline')
-                        
-                        file_org=video_data['file_original_path']
-                        video_data.pop('file_original_path')
-                        f_result=cache.get(get_subtitles,24,video_data,table='subs')
-                        video_data['file_original_path']=file_org
-                        video_data['Tagline']=tag_original
+                        # Search for subs in cache, pop unneeded values.
+                        f_result = temporary_pop_and_get_subtitles(video_data)
                         
                         f_result=cache.get(sort_subtitles,24,f_result,video_data,table='subs')
                         # Avoid f_result=None error if no subs found.

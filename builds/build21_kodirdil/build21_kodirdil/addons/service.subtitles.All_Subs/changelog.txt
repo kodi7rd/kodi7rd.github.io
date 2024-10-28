@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.6.9[/B][/COLOR]
+﻿[COLOR yellow][B]v4.7.0[/B][/COLOR]
+* Subtitles cache bug fix (Move video_data.pop code to a generic function).
+[COLOR yellow][B]v4.6.9[/B][/COLOR]
 * Add "חפש כתוביות שוב בכל השפות במידה ואין תוצאות" setting. This will re-search for subtitles with all_lang=true (כל השפות) if no subs found on first search. the setting will take effect only if all_lang (חפש בכל השפות) is configured as OFF.
 [COLOR yellow][B]v4.6.8[/B][/COLOR]
 * Create dedicated generic function for extracting season/episode numbers from subtitle file name.
