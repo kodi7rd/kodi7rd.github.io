@@ -95,14 +95,17 @@ def clean_machine_translate_folders():
 # Get command line arguments
 args = sys.argv
 action = None
+do_notify = True
 
 # Check if the script is called with arguments
 if len(args) > 1:
     action = args[1]
+    if len(args) > 2:
+        do_notify = args[2].lower() != "no_notify"
 
 # Clear subs DB cache action
 if action == "clean_all_cache":
     clear_sources_db(['subs'])
     clear_database_db(['list_subs_cache'])
     clean_machine_translate_folders()
-    notify( "קאש כתוביות נוקה" )
+    if do_notify: notify( "קאש כתוביות נוקה" )

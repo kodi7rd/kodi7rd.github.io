@@ -45,7 +45,10 @@ REQUEST_MAX_RETRIES_NUMBER = 8
 REQUEST_RETRY_DELAY_IN_MS = 500
 #########################################
 
-def api_search_subtitles(video_data):
+def api_search_subtitles(video_data, all_lang_override):
+
+    # For settings changes to take effect.
+    Addon=xbmcaddon.Addon()
 
     # New OpenSubtitles.com API Search docs:
     # https://opensubtitles.stoplight.io/docs/opensubtitles-api/a172317bd5ccc-search-for-subtitles
@@ -73,8 +76,8 @@ def api_search_subtitles(video_data):
         all_lang=Addon.getSetting("other_lang").split(",")
         for items in all_lang:
             selected_lang.append(str(items))
-    # If 'all_lang' is enabled - override selected_lang to 'ALL' only (required 'ALL' only in new API)
-    if Addon.getSetting("all_lang")=='true':
+    # If 'all_lang' is enabled OR all_lang_override=True (retry search) - override selected_lang to 'ALL' only (required 'ALL' only in new API)
+    if Addon.getSetting("all_lang")=='true' or all_lang_override:
         selected_lang = ['ALL']
     else:   
         for index, lang_code in enumerate(selected_lang):
@@ -187,7 +190,7 @@ def api_search_subtitles(video_data):
             return []
        
        
-def get_subs(video_data):
+def get_subs(video_data, all_lang_override=False):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -196,7 +199,7 @@ def get_subs(video_data):
     log.warning('DEBUG | [OpenSubtitles] | Searching Opensubtitles')
     subtitle_list = []
     
-    search_data = api_search_subtitles(video_data)
+    search_data = api_search_subtitles(video_data, all_lang_override)
     
     if search_data is not None:
 

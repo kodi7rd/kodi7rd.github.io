@@ -89,7 +89,7 @@ all_lang_codes = {
 }
 #########################################
        
-def get_subs(video_data):
+def get_subs(video_data, all_lang_override=False):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -120,7 +120,7 @@ def get_subs(video_data):
         all_lang=Addon.getSetting("other_lang").split(",")
         for items in all_lang:
             selected_lang.append(str(items))
-    if Addon.getSetting("all_lang")=='true':
+    if Addon.getSetting("all_lang")=='true' or all_lang_override==True:
         selected_lang = ['ALL']
     else:
         selected_lang = [all_lang_codes[code] for code in selected_lang if code in all_lang_codes]
@@ -159,8 +159,14 @@ def get_subs(video_data):
             
             # Filter subtitles based on selected languages before entering the for loop
             if selected_lang != ['ALL']:
-                response_subtitles_list = [response_subtitle for response_subtitle in response_subtitles_list if xbmc.convertLanguage(response_subtitle['lang'], xbmc.ENGLISH_NAME) in selected_lang or response_subtitle['lang'] in selected_lang]
-
+                response_subtitles_list = [
+                    response_subtitle for response_subtitle in response_subtitles_list
+                    if 'lang' in response_subtitle and (
+                        xbmc.convertLanguage(response_subtitle['lang'], xbmc.ENGLISH_NAME) in selected_lang or
+                        response_subtitle['lang'] in selected_lang
+                    )
+                ]
+                
             # TV Shows - Filter out non matching season-episode subtitles combination
             if media_type == 'tv':
                 season_number = season.zfill(2)
@@ -173,6 +179,10 @@ def get_subs(video_data):
                 
             subsource_subtitle_list = []
             for response_subtitle in response_subtitles_list:
+            
+                # Check if 'lang' key exists
+                if 'lang' not in response_subtitle:
+                    continue  # Skip this subtitle if 'lang' key is missing
                 
                 FullLanguageName = response_subtitle['lang']
                 # Attempt language conversion; if it fails, assign the original FullLanguageName

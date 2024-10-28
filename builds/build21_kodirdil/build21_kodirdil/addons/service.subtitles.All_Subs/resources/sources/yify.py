@@ -93,7 +93,7 @@ def _parse_row(row):
     
     return SubRating, FullLanguageName, SubFileName, SubPageLink, hearing_impaired
        
-def get_subs(video_data):
+def get_subs(video_data, all_lang_override=False):
 
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
@@ -122,7 +122,7 @@ def get_subs(video_data):
         all_lang=Addon.getSetting("other_lang").split(",")
         for items in all_lang:
             selected_lang.append(str(items))
-    if Addon.getSetting("all_lang")=='true':
+    if Addon.getSetting("all_lang")=='true' or all_lang_override:
         selected_lang = ['ALL']
     else:
         selected_lang = [all_lang_codes[code] for code in selected_lang if code in all_lang_codes]

@@ -246,7 +246,10 @@ def format_website_source_name(source):
         return "BSPlayer"
     return source
         
-def c_get_subtitles(video_data):
+def c_get_subtitles(video_data, all_lang_override=False):
+        
+    log.warning(f"DEBUG | c_get_subtitles | START | all_lang_override={all_lang_override}")
+    
     # For settings changes to take effect.
     Addon=xbmcaddon.Addon()
     from resources.modules import general
@@ -257,16 +260,12 @@ def c_get_subtitles(video_data):
     source_dir = os.path.join(addonPath, 'resources', 'sources')
     thread=[]
     all_sources=[]
-    ktuvit.global_var=[]
-    wizdom.global_var=[]
-    opensubtitles.global_var=[]
-    yify.global_var=[]
-    subsource.global_var=[]
-    subscene.global_var=[]
-    bsplayer.global_var=[]
+
+    for source in [ktuvit, wizdom, opensubtitles, yify, subsource, subscene, bsplayer]:
+        source.global_var = []
     
     # Determine wether to search hebrew language
-    search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true')
+    search_language_hebrew_bool = (Addon.getSetting('language_hebrew') == 'true' or Addon.getSetting("all_lang") == 'true' or all_lang_override)
     
     # Israeli subtitles sources
     
@@ -281,19 +280,19 @@ def c_get_subtitles(video_data):
     # Global subtitles sources
         
     if Addon.getSetting('opensubtitles')=='true':
-        thread.append(Thread(opensubtitles.get_subs,video_data))
+        thread.append(Thread(opensubtitles.get_subs,video_data, all_lang_override))
         all_sources.append(('opensubtitles',opensubtitles))
         
     if Addon.getSetting('yify')=='true':
-        thread.append(Thread(yify.get_subs,video_data))
+        thread.append(Thread(yify.get_subs,video_data, all_lang_override))
         all_sources.append(('yify',yify))
         
     if Addon.getSetting('subsource')=='true':
-        thread.append(Thread(subsource.get_subs,video_data))
+        thread.append(Thread(subsource.get_subs,video_data, all_lang_override))
         all_sources.append(('subsource',subsource))
         
     if Addon.getSetting('subscene')=='true':
-        thread.append(Thread(subscene.get_subs,video_data))
+        thread.append(Thread(subscene.get_subs,video_data, all_lang_override))
         all_sources.append(('subscene',subscene))
     
     if Addon.getSetting('bsplayer')=='true' and search_language_hebrew_bool:
@@ -358,6 +357,18 @@ def c_get_subtitles(video_data):
                      threads.exit()
             break
         xbmc.sleep(10)
+        
+    #################################################### Retry all languages START ####################################################
+    # If:
+    # 1. no subtitles found.
+    # 2. retry_search_with_all_langs setting is true.
+    # 3. all_lang is set to false.
+    if not f_result and Addon.getSetting('retry_search_with_all_langs')=='true' and Addon.getSetting('all_lang')=='false' and not all_lang_override:
+        from resources.modules.general import notify
+        notify("לא נמצאו כתוביות. מחפש שוב בכל השפות...")
+        log.warning("DEBUG | c_get_subtitles | No results found, retrying with all_lang=true...")
+        f_result = c_get_subtitles(video_data, all_lang_override=True)
+    #################################################### Retry all languages END ####################################################
     
     if Addon.getSetting("enable_autosub_notifications")=='true' or not xbmc.Player().isPlaying():
         # If searching subtitles from context menu - will show the message.
