@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.6.7[/B][/COLOR]
+﻿[COLOR yellow][B]v4.6.8[/B][/COLOR]
+* Create dedicated generic function for extracting season/episode numbers from subtitle file name.
+* Apply "extract_season_episode_numbers" function on Subscene + SubSource websites (more matches).
+[COLOR yellow][B]v4.6.7[/B][/COLOR]
 * auto remove HI (Hearing Impaired) subtitle tags: Rewrite code & bug fixes.
 [COLOR yellow][B]v4.6.6[/B][/COLOR]
 * Remove "pause" setting (השהה וידאו בזמן חיפוש כתוביות).

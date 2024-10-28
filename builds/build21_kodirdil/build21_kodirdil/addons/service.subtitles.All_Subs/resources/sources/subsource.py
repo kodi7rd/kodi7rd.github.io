@@ -8,6 +8,7 @@ import requests,json
 import urllib
 from resources.modules.extract_sub import extract
 from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
+from resources.modules.general import extract_season_episode_numbers
 import xbmcvfs
 import re
 #########################################
@@ -161,16 +162,14 @@ def get_subs(video_data):
                 response_subtitles_list = [response_subtitle for response_subtitle in response_subtitles_list if xbmc.convertLanguage(response_subtitle['lang'], xbmc.ENGLISH_NAME) in selected_lang or response_subtitle['lang'] in selected_lang]
 
             # TV Shows - Filter out non matching season-episode subtitles combination
-            # Regex Options: .S01. | S01E01 | 01x01
             if media_type == 'tv':
                 season_number = season.zfill(2)
                 episode_number = episode.zfill(2)
-                episodeid = 's%se%s' % (season_number, episode_number)
-                # TODO: Bring back season pack in regex for season pack support
-                identifier = r'(%s|\b%sx%s\b)' % (episodeid, season_number, episode_number)
-                # With Season pack:
-                # identifier = r'(\.s%s\.|%s|\b%sx%s\b)' % (season_number, episodeid, season_number, episode_number)
-                response_subtitles_list = list(filter(lambda x: re.search(identifier, x['releaseName'], re.IGNORECASE), response_subtitles_list))
+
+                response_subtitles_list = [
+                    subtitle for subtitle in response_subtitles_list
+                    if extract_season_episode_numbers(subtitle['releaseName']) == (season_number, episode_number)
+                ]
                 
             subsource_subtitle_list = []
             for response_subtitle in response_subtitles_list:

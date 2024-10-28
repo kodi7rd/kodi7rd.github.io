@@ -12,6 +12,7 @@ import urllib,xbmcvfs
 import urllib.parse
 from resources.modules.extract_sub import extract
 from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
+from resources.modules.general import extract_season_episode_numbers
 from resources.modules.general import notify
 # SUBSCENE
 from resources.modules import num2ordinal
@@ -282,16 +283,13 @@ def parse_search_response(selected_lang, media_type, season, episode, search_res
             continue
 
         # TV Shows - Filter out non matching season-episode subtitles combination
-        # Regex Options: .S01. | S01E01 | 01x01
         if media_type == 'tv':
             season_number = season.zfill(2)
             episode_number = episode.zfill(2)
-            episodeid = 's%se%s' % (season_number, episode_number)
-            # TODO: Bring back season pack in regex for season pack support
-            identifier = r'(%s|\b%sx%s\b)' % (episodeid, season_number, episode_number)
-            # With Season pack:
-            # identifier = r'(\.s%s\.|%s|\b%sx%s\b)' % (season_number, episodeid, season_number, episode_number)
-            if not re.search(identifier, SubFileName, re.IGNORECASE):
+
+            # Check if the extracted numbers match the expected values
+            if extract_season_episode_numbers(SubFileName) != (season_number, episode_number):
+                # Skip this subtitle if there's no match
                 continue
     
         # Example: https://subscene.cam/subtitle/331615

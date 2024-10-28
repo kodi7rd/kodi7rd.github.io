@@ -182,6 +182,27 @@ def notify(msg_id, times=3500, icon=iconx,sound=False):
         xbmcgui.Dialog().notification(MyScriptName, f"[COLOR yellow]{msg_id}[/COLOR]", icon, int(times), sound)
         
 
+def extract_season_episode_numbers(subtitle_file_name):
+
+    import re
+    optional_separators = r'[\s._\-x+,&:]{0,2}' # 0-2 occurrences
+    optional_middle_separators = r'[\s._\-x+,&:]{0,4}' # 0-4 occurrences
+
+    regex_pattern = re.compile(
+        r'S[e]?(?:ason)?' + optional_separators +
+        '(?P<season_number>\d{1,2})' + optional_middle_separators +
+        'E[p]?(?:isode)?' + optional_separators +
+        '(?P<episode_number>\d{1,3})',
+        re.IGNORECASE
+    )
+    
+    match = regex_pattern.search(subtitle_file_name)
+    if match:
+        # Fill leading zero if needed
+        return match.group('season_number').zfill(2), match.group('episode_number').zfill(2)
+
+    return None, None
+
 def set_media_type(video_data):
 
     def _translate_media_type(media_type):
