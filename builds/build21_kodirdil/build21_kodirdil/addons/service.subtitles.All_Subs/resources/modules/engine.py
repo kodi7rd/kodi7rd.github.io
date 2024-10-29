@@ -364,8 +364,9 @@ def c_get_subtitles(video_data, all_lang_override=False):
     # 2. retry_search_with_all_langs setting is true.
     # 3. all_lang is set to false.
     if not f_result and Addon.getSetting('retry_search_with_all_langs')=='true' and Addon.getSetting('all_lang')=='false' and not all_lang_override:
-        from resources.modules.general import notify
-        notify("לא נמצאו כתוביות. מחפש שוב בכל השפות...")
+        if Addon.getSetting("enable_autosub_notifications")=='true':
+            from resources.modules.general import notify
+            notify("לא נמצאו כתוביות. מחפש שוב בכל השפות...")
         log.warning("DEBUG | c_get_subtitles | No results found, retrying with all_lang=true...")
         f_result = c_get_subtitles(video_data, all_lang_override=True)
     #################################################### Retry all languages END ####################################################

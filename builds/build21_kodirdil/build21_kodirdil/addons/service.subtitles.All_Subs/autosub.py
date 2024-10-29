@@ -761,7 +761,6 @@ xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("fast_subs",'')
 class KodiMonitor(xbmc.Monitor):
     def onSettingsChanged(self):
         Addon=xbmcaddon.Addon()
-        #notify('Settings change')
         manual_search=xbmcaddon.Addon('service.subtitles.All_Subs').getSetting("man_search_subs")
         if  manual_search!='':
 

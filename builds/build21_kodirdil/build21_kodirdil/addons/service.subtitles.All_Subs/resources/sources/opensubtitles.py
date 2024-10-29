@@ -129,7 +129,8 @@ def api_search_subtitles(video_data, all_lang_override):
     querystring['hearing_impaired'] = "include"
     querystring['ai_translated'] = "include" 
     querystring['foreign_parts_only'] = "include"
-    querystring['machine_translated'] = "exclude"
+    # Overriden API values:
+    querystring['machine_translated'] = "include"
     #################################################
     
     # Determine which API key to use for Search

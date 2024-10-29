@@ -13,7 +13,6 @@ import urllib.parse
 from resources.modules.extract_sub import extract
 from resources.modules.general import DEFAULT_REQUEST_TIMEOUT
 from resources.modules.general import extract_season_episode_numbers
-from resources.modules.general import notify
 # SUBSCENE
 from resources.modules import num2ordinal
 #########################################
