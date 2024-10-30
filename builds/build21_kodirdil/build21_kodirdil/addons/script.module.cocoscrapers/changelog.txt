@@ -1,3 +1,6 @@
+[COLOR red][B]Version 1.0.26[/B][/COLOR]
+- Quick cleanup.
+
 [COLOR red][B]Version 1.0.25[/B][/COLOR]
 - Added Mediafusion
 - KODI-RD-IL: DMM Fix.

@@ -1,8 +1,7 @@
-<addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.25" provider-name="CocoJoe">
+<addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.26" provider-name="CocoJoe">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
-		<import addon="script.module.web-pdb" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="lib/default.py">
 		<provides>executable</provides>
