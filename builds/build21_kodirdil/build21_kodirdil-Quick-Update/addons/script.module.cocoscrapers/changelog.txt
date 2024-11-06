@@ -1,5 +1,6 @@
 [COLOR red][B]Version 1.0.26[/B][/COLOR]
 - Quick cleanup.
+- KODI-RD-IL: DMM - Adjust to pages mechanism.
 
 [COLOR red][B]Version 1.0.25[/B][/COLOR]
 - Added Mediafusion
