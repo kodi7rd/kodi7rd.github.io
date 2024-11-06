@@ -1,3 +1,6 @@
-43
+44
 |||
-CocoScrapers: DMM API Changes
+1. CocoScrapers: DMM API Changes
+
+2. מעקף זמני לבאג אין מקורות מריל דבריד
+תייגו את @פרינגלס שמנת בצל (אנטי רגרסיה)
