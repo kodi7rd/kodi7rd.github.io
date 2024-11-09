@@ -38,8 +38,6 @@ except ImportError:
 
 
 SOURCE_SETTINGS = settings.getSourceSettings()
-TMDB_PARAMS = {'api_key': settings.TMDB_CLOWNCAR,
-               'language': SOURCE_SETTINGS["LANG_DETAILS"]}
 BASE_URL = 'https://api.themoviedb.org/3/{}'
 FIND_URL = BASE_URL.format('find/{}')
 TAG_RE = re.compile(r'<[^>]+>')
@@ -87,6 +85,7 @@ def _clean_plot(plot):
 def _set_cast(cast_info, vtag):
     # type: (InfoType, ListItem) -> ListItem
     """Save cast info to list item"""
+    imagerooturl, previewrooturl = settings.loadBaseUrls()
     cast = []
     for item in cast_info:
         actor = {
@@ -96,7 +95,7 @@ def _set_cast(cast_info, vtag):
         }
         thumb = None
         if safe_get(item, 'profile_path') is not None:
-            thumb = settings.IMAGEROOTURL + item['profile_path']
+            thumb = imagerooturl + item['profile_path']
         cast.append(Actor(actor['name'], actor['role'], actor['order'], thumb))
     vtag.setCast(cast)
 
@@ -192,6 +191,7 @@ def _get_names(item_list):
 def get_image_urls(image):
     # type: (Dict) -> Tuple[Text, Text]
     """Get image URLs from image information"""
+    imagerooturl, previewrooturl = settings.loadBaseUrls()
     if image.get('file_path', '').endswith('.svg'):
         return None, None
     if image.get('type') == 'fanarttv':
@@ -199,8 +199,8 @@ def get_image_urls(image):
         previewurl = theurl.replace(
             '.fanart.tv/fanart/', '.fanart.tv/preview/')
     else:
-        theurl = settings.IMAGEROOTURL + image['file_path']
-        previewurl = settings.PREVIEWROOTURL + image['file_path']
+        theurl = imagerooturl + image['file_path']
+        previewurl = previewrooturl + image['file_path']
     return theurl, previewurl
 
 
@@ -238,6 +238,7 @@ def set_show_artwork(show_info, list_item):
 def add_main_show_info(list_item, show_info, full_info=True):
     # type: (ListItem, InfoType, bool) -> ListItem
     """Add main show info to a list item"""
+    imagerooturl, previewrooturl = settings.loadBaseUrls()
     vtag = list_item.getVideoInfoTag()
     original_name = show_info.get('original_name')
     if SOURCE_SETTINGS["KEEPTITLE"] and original_name:
@@ -305,8 +306,8 @@ def add_main_show_info(list_item, show_info, full_info=True):
     else:
         image = show_info.get('poster_path', '')
         if image and not image.endswith('.svg'):
-            theurl = settings.IMAGEROOTURL + image
-            previewurl = settings.PREVIEWROOTURL + image
+            theurl = imagerooturl + image
+            previewurl = previewrooturl + image
             vtag.addAvailableArtwork(
                 theurl, arttype='poster', preview=previewurl)
     logger.debug('adding tv show information for %s to list item' % showname)
@@ -393,7 +394,8 @@ def _convert_ext_id(ext_provider, ext_id):
                       'thetvdb': 'tvdb_id',
                       'tvdb': 'tvdb_id'}
     show_url = FIND_URL.format(ext_id)
-    params = TMDB_PARAMS.copy()
+    params = {'api_key': settings.TMDB_CLOWNCAR,
+              'language': SOURCE_SETTINGS["LANG_DETAILS"]}
     provider = providers_dict.get(ext_provider)
     if provider:
         params['external_source'] = provider
