@@ -19,7 +19,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		#self.base_link = 'https://mediafusion.elfhosted.com'
-		self.manifest = '/eJwB8AEP_vTC0-41NtYccYs7wZ6l1qeUToHNnQsAey_kuyGCAppcyY1b_JgPiJL_zMEUp8S1FLMb55AUklkc4UG8frNbiX2UfYRzFX4uwFcJaaj3nTmJp4chEvKy2QRhVuo2CZ36tLh9p7EhN0GIA-vW-WFRrarkaklb6xn9mdL4GtBI8PkWsF1hYuX5mW492hZHV6CjIFkUiik4i8IYTkW3oGZnfl-0p7p4GExfDnvbCBONdHuj6M_N5cqwbQD1SiU5VZ6n_h2ABOpGRytAcjzj86RkTGFvcO-flBrkQURCMh3Bl01MDO--B0Bo9DKFBgtdEww13nlI2seJp3OoTUwOc2JAqyYM_IBMKkJCyROvXrfHG-mQ_5kAqHIawgHkQU3F9GgotHbX9g8FaCFWyNR0psNTfJfNAmdSqpXWKlfAvxdwLGIK-rWxKayDCFOD0oAMQYVCG7Km43PYGXRHktz4zeeSOY34q7shmHHV3_XIgb0X04Bf4DQuo25kbawU8ez6kuu_0niSK0gfZh3HgEl6SyM70aEme91EEgu4cyKp5ateGwgRMz9ZmGAmVLYP6uKwF_XXJS6xalaY-R9X6ukUjkAquj-zTTM-VCRa8bF0_m8QZoXlupIq1U4gVDvdRCFqsyVJPX_Q_PoK-TvNYF2eMZY2CMXo8vCt'
+		self.manifest = '/eJwBYACf_92uqrL8vhmebCYzGgX6Q2BMyNhn5SMWS_XitAKLTUul8nAqQEcj0k2wPpBs1ceClvb4mT2darthTiMrk2XGFdUx3XR4MB5WJT3hZWla9v-cQY6bloboXr6BxVJfNgTC3xazL_8='
 		self.base_link = 'https://mediafusion.elfhosted.com'+self.manifest
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
@@ -59,7 +59,7 @@ class source:
 				url = '%s%s' % (self.base_link, self.movieSearch_link % (imdb))
 				hdlr = year
 				files = self._get_files(url)
-			log_utils.log('mediafusion sources url = %s' % url)
+			#log_utils.log('mediafusion sources url = %s' % url)
 			homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
@@ -71,11 +71,13 @@ class source:
 		for file in files:
 			try:
 				if 'tvshowtitle' in data:
-					hash = file['url'].split('info_hash=')[1]
-					hash = hash.split('&season=')[0]
+					#hash = file['url'].split('info_hash=')[1]
+					#hash = hash.split('&season=')[0]
+					hash = file['infoHash']
 				else:
-					hash = file['url'].split('info_hash=')[1]
-				log_utils.log('mediafusion hash: %s' % hash)
+					#hash = file['url'].split('info_hash=')[1]
+					hash = file['infoHash']
+				#log_utils.log('mediafusion hash: %s' % hash)
 				file_title = file['description'].split('\n')
 				#file_title = file['behaviorHints']['filename']
 				file_info = [x for x in file_title if _INFO.match(x)][0]
@@ -130,12 +132,12 @@ class source:
 		except:
 			source_utils.scraper_error('MEDIAFUSION')
 			return sources
-		log_title = 'Series' if search_series else 'Season'
 		for file in files:
+			#log_utils.log('pack file: %s' % str(file),1)
 			try:
-				file['url'].split('info_hash=')[1]
+				hash = file['infoHash']
 				file_title = file['description']
-				file_info = [x for x in file['title'].split('\n') if _INFO.match(x)][0]
+				file_info = [x for x in file_title if _INFO.match(x)][0]
 
 				name = source_utils.clean_name(file_title[0])
 

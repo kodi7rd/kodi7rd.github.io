@@ -1,3 +1,7 @@
+[COLOR red][B]Version 1.0.27[/B][/COLOR]
+- Changed Mediafusion encrypted key.
+- Changed Comet to provide no indexers.
+
 [COLOR red][B]Version 1.0.26[/B][/COLOR]
 - Quick cleanup.
 - KODI-RD-IL: DMM - Adjust to pages mechanism.

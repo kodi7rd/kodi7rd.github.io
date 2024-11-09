@@ -48,7 +48,7 @@ class source:
 			imdb = data['imdb']
 			debrid_service = debrid_dict[data['debrid_service']]
 			debrid_token = data['debrid_token']
-			params = {'indexers':['bitsearch','eztv','thepiratebay','therarbg','yts'],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
+			params = {'indexers':[],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
 					'debridService':debrid_service,'debridApiKey':debrid_token,'debridStreamProxyPassword':''}
 			params = base64.b64encode(jsdumps(params, separators=(',', ':')).encode('utf-8')).decode('utf-8')
 			if 'tvshowtitle' in data:
