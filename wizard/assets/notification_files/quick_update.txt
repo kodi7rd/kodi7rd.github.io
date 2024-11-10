@@ -1,5 +1,4 @@
 45
 |||
-DarkSubs - כתוביות מהטלגרם
-כפתור כיבוי --> הגדרות DarkSubs -->
-Telegram
+כתוביות מהטלגרם - DarkSubs
+כפתור כיבוי --> הגדרות DarkSubs --> מקורות תרגום --> Telegram
