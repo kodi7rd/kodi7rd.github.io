@@ -1,4 +1,7 @@
-﻿[COLOR yellow][B]v4.7.1[/B][/COLOR]
+﻿[COLOR yellow][B]v4.7.2[/B][/COLOR]
+* Add Telegram subtitles source.
+* Change SubSource color to mediumslateblue.
+[COLOR yellow][B]v4.7.1[/B][/COLOR]
 * [COLOR orange]OpenSubtitles[/COLOR] - Include machine translated subtitles from API.
 * Small changes/fixes.
 [COLOR yellow][B]v4.7.0[/B][/COLOR]

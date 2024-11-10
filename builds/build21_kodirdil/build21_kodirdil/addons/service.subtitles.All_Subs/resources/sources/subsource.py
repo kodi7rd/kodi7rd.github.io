@@ -25,7 +25,7 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_subsource'))
 
 ########### Constants ###################
 site_id='[SubSource]'
-sub_color='deepskyblue'
+sub_color='mediumslateblue'
 SUBSOURCE_URL = "https://subsource.net"
 SUBSOURCE_BASE_API_URL = "https://api.subsource.net/api"
 SUBSOURCE_SEARCH_API_URL = f"{SUBSOURCE_BASE_API_URL}/searchMovie"

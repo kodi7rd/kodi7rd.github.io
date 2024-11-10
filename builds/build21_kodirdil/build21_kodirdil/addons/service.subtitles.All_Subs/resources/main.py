@@ -4,11 +4,32 @@ import json
 from resources.modules import log
 
 
+def run_async_task(target):
+    import threading
+    task_thread = threading.Thread(target=target)
+    task_thread.start()
+    task_thread.join()
+
+
     
 
 
 def start():
-    if len(sys.argv) >= 2: 
+    if len(sys.argv) >= 2:
+        ##### TELEGRAM ###########
+        if sys.argv[1] == "login_to_telegram":
+            from resources.sources.telegram import run_async_login_to_telegram
+            run_async_task(run_async_login_to_telegram)
+            return
+        if sys.argv[1] == "logout_from_telegram":
+            from resources.sources.telegram import run_async_logout_from_telegram
+            run_async_task(run_async_logout_from_telegram)
+            return
+        if sys.argv[1] == "telegram_helper_window":
+            from resources.sources.telegram import telegram_helper_window
+            telegram_helper_window()
+            return
+        ##########################
         #Addon = xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("get_subs",'1')
     
         xbmcaddon.Addon('service.subtitles.All_Subs').setSetting("man_search_return","")

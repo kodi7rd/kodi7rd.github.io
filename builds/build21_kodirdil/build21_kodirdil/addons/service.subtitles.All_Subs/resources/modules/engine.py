@@ -25,6 +25,7 @@ break_all=False
 
 from resources.sources import ktuvit
 from resources.sources import wizdom
+from resources.sources import telegram
 from resources.sources import opensubtitles
 from resources.sources import yify
 from resources.sources import subsource
@@ -73,7 +74,7 @@ def sort_subtitles(f_result,video_data):
         general.show_msg = f"מסדר כתוביות 0/{len(f_result)}"
                      
     # Define the specific order for json_value['site_id']. In case of multiple subtitles with same percent - sort also by site_id using this order:
-    site_id_order = ['[Ktuvit]', '[Wizdom]', '[OpenSubtitles]', '[YIFY]', '[SubSource]', '[Subscene]', '[BSPlayer]']
+    site_id_order = ['[Ktuvit]', '[Wizdom]', '[Telegram]', '[OpenSubtitles]', '[YIFY]', '[SubSource]', '[Subscene]', '[BSPlayer]']
     
     # Get video quality from Kodi
     quality = f"{xbmc.getInfoLabel('VideoPlayer.VideoResolution')}p" if xbmc.Player().isPlaying() else None
@@ -88,6 +89,7 @@ def sort_subtitles(f_result,video_data):
                       'telecine','hdts','telesync']
     
     hebrew_subtitles = []
+    telegram_hebrew_machine_translated_subtitles = []
     english_subtitles = []
     other_languages_subtitles = []
     count = 0
@@ -197,7 +199,10 @@ def sort_subtitles(f_result,video_data):
         
         
         ################### Append subtitle to corresponding language subs list #######################
-        if 'language=Hebrew' in json_value['url'] or 'Hebrew' in json_value['label']:
+        if 'language=HebrewMachineTranslated' in json_value['url'] or 'HebrewMachineTranslated' in json_value['label']:
+            append_subtitles(telegram_hebrew_machine_translated_subtitles, json_value, percent)
+            
+        elif 'language=Hebrew' in json_value['url'] or 'Hebrew' in json_value['label']:
             append_subtitles(hebrew_subtitles, json_value, percent)
        
         elif 'language=English' in json_value['url'] or 'English' in json_value['label']:
@@ -218,12 +223,13 @@ def sort_subtitles(f_result,video_data):
 
     # Sort languages
     hebrew_subtitles = custom_sort(hebrew_subtitles, site_id_order)
+    telegram_hebrew_machine_translated_subtitles = custom_sort(telegram_hebrew_machine_translated_subtitles, site_id_order)
     english_subtitles = custom_sort(english_subtitles, site_id_order)
     other_languages_subtitles = custom_sort(other_languages_subtitles, site_id_order, by_language_name=True)
 
     # Combine all sorted subtitles list
     sorted_subtitles = []
-    sorted_subtitles = hebrew_subtitles + english_subtitles + other_languages_subtitles
+    sorted_subtitles = hebrew_subtitles + telegram_hebrew_machine_translated_subtitles + english_subtitles + other_languages_subtitles
     ###############################################################################################
 
     return sorted_subtitles
@@ -234,6 +240,8 @@ def format_website_source_name(source):
         return "Ktuvit"
     if source == "wizdom":
         return "Wizdom"
+    if source == "telegram":
+        return "Telegram"
     if source == "opensubtitles":
         return "OpenSubtitles"
     if source == "yify":
@@ -261,7 +269,7 @@ def c_get_subtitles(video_data, all_lang_override=False):
     thread=[]
     all_sources=[]
 
-    for source in [ktuvit, wizdom, opensubtitles, yify, subsource, subscene, bsplayer]:
+    for source in [ktuvit, wizdom, telegram, opensubtitles, yify, subsource, subscene, bsplayer]:
         source.global_var = []
     
     # Determine wether to search hebrew language
@@ -276,6 +284,10 @@ def c_get_subtitles(video_data, all_lang_override=False):
     if Addon.getSetting('wizdom')=='true' and search_language_hebrew_bool:
         thread.append(Thread(wizdom.get_subs,video_data))
         all_sources.append(('wizdom',wizdom))
+        
+    if Addon.getSetting('telegram')=='true' and search_language_hebrew_bool:
+        thread.append(Thread(telegram.get_subs,video_data))
+        all_sources.append(('telegram',telegram))
         
     # Global subtitles sources
         
@@ -979,6 +991,16 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             except Exception as e:
                 log.warning(f"Exception in fix_sub_punctuation_and_write | Exception: {str(e)}")
                 pass
+            
+        ###### Upload to Telegram ########
+        # Upload only subtitles (not from Telegram), and are not in "Cached_subs" directory. In that case, those subtitles should already have been uploaded.
+        if Addon.getSetting('telegram')=='true' and source != "telegram" and not found_in_cache: 
+            log.warning(f"[Telegram] | upload_subtitle_to_telegram | source={source} | sub_file={sub_file}")
+            caption = ''
+            from threading import Thread
+            t = Thread(target=telegram.upload_subtitle_to_telegram, args=(sub_file,filename,caption,format_website_source_name(source),))
+            t.start()
+        ##################################
     
     elif Addon.getSetting("auto_translate")=='true':
         f_count=0
@@ -995,6 +1017,16 @@ def download_sub(source,download_data,MySubFolder,language,filename):
             already_translated=False
             machine_translate_subs(sub_file,trans_file)
         sub_file=trans_file
+        
+        ###### Upload to Telegram ########
+        # Upload only subtitles (not from Telegram), and are not in "trans_subs" directory. In that case, those subtitles should already have been uploaded.
+        if Addon.getSetting('telegram')=='true' and source != "telegram" and not already_translated:
+            log.warning(f"[Telegram] | upload_subtitle_to_telegram | source={source} | sub_file={sub_file}")
+            caption = f'\n({language} - תרגום מכונה)'
+            from threading import Thread
+            t = Thread(target=telegram.upload_subtitle_to_telegram, args=(sub_file,filename,caption,format_website_source_name(source),))
+            t.start()
+        ##################################
             
     # Remove HI (Hearing Impaired) subtitle tags for non-Hebrew subs.
     hearing_imp = download_data.get('hearing_imp', 'false')

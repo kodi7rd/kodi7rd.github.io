@@ -5,10 +5,15 @@
 		<setting label="אתרי כתוביות ישראליים" type="lsep"/>
 		<setting id="ktuvit" label="[COLOR springgreen][B]Ktuvit[/B][/COLOR] [COLOR blue](https://www.ktuvit.me)[/COLOR]" type="bool" default="true" />
 		<setting id="wizdom" label="[COLOR yellow][B]Wizdom[/B][/COLOR] [COLOR blue](https://wizdom.xyz)[/COLOR]" type="bool" default="true" />
+		<setting id="telegram" label="[COLOR deepskyblue][B]Telegram[/B][/COLOR]" type="bool" default="true" />
+		<setting label="הסבר קצר" type="action" action="RunScript(service.subtitles.All_Subs, telegram_helper_window)" visible="eq(-1,true)" />
+		<setting label="[COLOR limegreen]התחבר[/COLOR]" type="action" action="RunScript(service.subtitles.All_Subs, login_to_telegram)" visible="eq(-2,true)" />
+		<setting id="telegram_first_and_last_name" type="text" label="[B]מחובר לחשבון[/B]" default="[B]לא מחובר[/B]" visible="eq(-3,true)" enable="false" />
+		<setting label="[COLOR red]התנתק[/COLOR]" type="action" action="RunScript(service.subtitles.All_Subs, logout_from_telegram)" visible="eq(-4,true)" />
 		<setting label='אתרי כתוביות מחו"ל' type="lsep"/>
 		<setting id="opensubtitles" label="[COLOR orange][B]OpenSubtitles[/B][/COLOR] [COLOR blue](https://www.opensubtitles.com)[/COLOR]" type="bool" default="true" />
 		<setting id="yify" label="[COLOR chocolate][B]YIFY (לסרטים בלבד)[/B][/COLOR] [COLOR blue](https://yifysubtitles.ch)[/COLOR]" type="bool" default="true" />
-		<setting id="subsource" label="[COLOR deepskyblue][B]SubSource [/B][/COLOR] [COLOR blue](https://subsource.net)[/COLOR]" type="bool" default="true" />
+		<setting id="subsource" label="[COLOR mediumslateblue][B]SubSource[/B][/COLOR] [COLOR blue](https://subsource.net)[/COLOR]" type="bool" default="true" />
 		<setting id="subscene" label="[COLOR aquamarine][B]Subscene[/B][/COLOR] [COLOR blue](https://subscene.cam)[/COLOR]" type="bool" default="true" />
 		<setting id="bsplayer" label="[COLOR lightblue][B]BSPlayer[/B][/COLOR] [COLOR blue](http://bsplayer-subtitles.com)[/COLOR]" type="bool" default="true" />
 	</category>
