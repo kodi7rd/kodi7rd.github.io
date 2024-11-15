@@ -308,10 +308,10 @@ async def joinAllSubsChannel(client):
         log.warning("[Telegram] | joinAllSubsChannel | Notifications muted forever.")
         
         # Archive the joined channel
-        # await client.edit_folder([AllSubsChannel.chats[0]], folder=1)
-        # log.warning("[Telegram] | joinAllSubsChannel | Channel archived.")
+        await client.edit_folder([AllSubsChannel.chats[0]], folder=1)
+        log.warning("[Telegram] | joinAllSubsChannel | Channel archived.")
         
-        notify("צורפת לערוץ הכתוביות AllSubs בהצלחה!")
+        notify("צורפת לערוץ הכתוביות AllSubs בהצלחה! (מושתק ובארכיון)")
         
     except Exception as e:
         log.warning(f"[Telegram] | joinAllSubsChannel | ImportChatInviteRequest| Failed to join channel: {str(e)}")
@@ -407,7 +407,6 @@ def get_subs(item):
     if not imdb_id.startswith('tt'): return []
     
     search_query_list = [imdb_id] # Example: ["tt16253418"]
-    log.warning(f"[Telegram] | item={str(item)}")
     log.warning(f"[Telegram] | query={str(search_query_list)}")
     
 
