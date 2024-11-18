@@ -22,7 +22,7 @@
     <setting id="knightcrawler.bypass_filter" default="true">false</setting>
     <setting id="provider.limetorrents" default="true">false</setting>
     <setting id="provider.mediafusion" default="true">false</setting>
-    <setting id="provider.nyaa">true</setting>
+    <setting id="provider.nyaa" default="true">false</setting>
     <setting id="provider.piratebay" default="true">false</setting>
     <setting id="provider.rutor" default="true">false</setting>
     <setting id="provider.torlock" default="true">false</setting>
