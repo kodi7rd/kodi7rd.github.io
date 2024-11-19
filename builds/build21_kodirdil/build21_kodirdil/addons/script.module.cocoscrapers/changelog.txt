@@ -1,6 +1,7 @@
 [COLOR red][B]Version 1.0.27[/B][/COLOR]
 - Changed Mediafusion encrypted key.
 - Changed Comet to provide no indexers.
+- KODI-RD-IL: Add Zilean source (DMM Hashlists public ElfHosted instance).
 
 [COLOR red][B]Version 1.0.26[/B][/COLOR]
 - Quick cleanup.

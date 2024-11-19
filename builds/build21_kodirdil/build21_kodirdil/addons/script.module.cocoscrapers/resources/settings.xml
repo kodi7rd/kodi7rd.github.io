@@ -351,6 +351,23 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<!-- KODI-RD-IL -->
+				<setting id="provider.zilean" type="boolean" label="40003" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="zilean.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.zilean">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.zilean">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- ========== -->
 			</group>
 		</category>
 		<category id="debug" label="32054" help="">
