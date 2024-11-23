@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from modules.kodi_utils import external, parse_qsl, get_setting
-# from modules.kodi_utils import logger
+from modules.kodi_utils import logger
 
 def sys_exit_check():
 	if get_setting('twilight.reuse_language_invoker') == 'true' and external(): return True
@@ -253,6 +253,7 @@ def routing(sys):
 		return Sources().debridPacks(_get('provider'), _get('name'), _get('magnet_url'), _get('info_hash'))
 	if mode == 'open_settings':
 		from modules.kodi_utils import open_settings
+		logger('ROUTER query', params)
 		return open_settings(_get('query', '0.0'), _get('addon', 'plugin.video.twilight'))
 	if mode == 'hide_unhide_progress_items':
 		from modules.watched_status import hide_unhide_progress_items

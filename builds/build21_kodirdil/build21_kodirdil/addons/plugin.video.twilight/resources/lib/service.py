@@ -38,10 +38,7 @@ class TwilightMonitor(xbmc_monitor):
 		try: service_functions.AutoRun().run()
 		except: pass
 		Thread(target=service_functions.DatabaseMaintenance().run).start()
-		############KODI-RD-IL###################
-		# COMMENTED - ONLINE UPDATE CHECK UNUSED
 		# service_functions.UpdateCheck().run()
-		#########################################
 
 	def onSettingsChanged(self):
 		on_settings_changed_actions.run()

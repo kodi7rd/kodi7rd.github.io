@@ -467,8 +467,9 @@ def movie_expiry(current_date, meta):
 		if difference < 0: expiration = abs(difference) + 1
 		elif difference <= 14: expiration = EXPIRES_7_DAYS
 		elif difference <= 30: expiration = EXPIRES_14_DAYS
-		else: expiration = EXPIRES_30_DAYS
-	except: return EXPIRES_7_DAYS
+		elif difference <= 180: expiration = EXPIRES_30_DAYS
+		else: expiration = EXPIRES_182_DAYS
+	except: return EXPIRES_30_DAYS
 	return max(expiration, EXPIRES_7_DAYS)
 
 def tvshow_expiry(current_date, meta):

@@ -215,7 +215,7 @@ class Navigator:
 		self.add({'mode': 'navigator.maintenance'}, tools_ins % cl_dbs_str, 'settings2')
 		self.add({'mode': 'default_highlight_colors_choice', 'isFolder': 'false'}, tools_ins % res_hc, 'settings2')
 		self.add({'mode': 'restart_services', 'isFolder': 'false'}, tools_ins % res_serv_str, 'settings')
-		self.add({'mode': 'update_check', 'isFolder': 'false'}, tools_ins % upd_str, 'settings2')
+		# self.add({'mode': 'update_check', 'isFolder': 'false'}, tools_ins % upd_str, 'settings2')
 		self.add({'mode': 'toggle_language_invoker', 'isFolder': 'false'}, tools_ins % langinv_str, 'settings2')
 		self.end_directory()
 

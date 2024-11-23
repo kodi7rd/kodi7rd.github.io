@@ -1,5 +1,16 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.77[/B][/COLOR]
+Thank you for everything.
+- [B]Tikipeter's version 3.5.01[/B]:
+- Fixed RD compatibility.
+- Removed update service.
+- Final release of this ancient addon. So long all.
+
+[COLOR dodgerblue][B]Version 3.2.76[/B][/COLOR]
+- [B]Tikipeter's version 3.2.30[/B]:
+- Fixed compatibility with External Scrapers.
+
 [COLOR dodgerblue][B]Version 3.2.75[/B][/COLOR]
 - Tikipeter's temporary workaround for random RD no cached results API bug.
 

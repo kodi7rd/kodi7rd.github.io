@@ -135,6 +135,8 @@ class Sources():
 				else: debrid_service, debrid_token = '', ''
 				self.external_args = (self.meta, self.external_providers, self.debrid_enabled, debrid_service, debrid_token, self.internal_scraper_names,
 										self.prescrape_sources, self.progress_dialog, self.disabled_ext_ignored)
+
+
 				self.activate_providers('external', external, False)
 			if self.background: [i.join() for i in self.threads]
 		elif self.active_internal_scrapers: self.scrapers_dialog()

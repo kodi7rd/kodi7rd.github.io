@@ -4,11 +4,13 @@ from caches.main_cache import cache_object
 from modules.dom_parser import parseDOM
 from modules.kodi_utils import requests, json, get_setting, local_string as ls, sleep
 from modules.utils import imdb_sort_list, remove_accents, replace_html_codes, string_alphanum_to_num
-# from modules.kodi_utils import logger
+from modules.kodi_utils import logger
 
+# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'}
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'}
+# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 7.0; Win64; IA64; rv:86.0.4240.193) Gecko/20100101 Firefox/86.0.4240.193'}
 base_url = 'https://www.imdb.com/%s'
-watchlist_url = 'user/ur%s/watchlist'
+watchlist_url = 'user/ur%s/watchlist/?sort=date_added,desc&title_type=feature'
 user_list_movies_url = 'list/%s/?view=detail&sort=%s&title_type=movie,short,video,tvShort,tvMovie,tvSpecial&start=1&page=%s'
 user_list_tvshows_url = 'list/%s/?view=detail&sort=%s&title_type=tvSeries,tvMiniSeries&start=1&page=%s'
 keywords_movies_url = 'search/keyword/?keywords=%s&sort=moviemeter,asc&title_type=movie&page=%s'
@@ -42,7 +44,10 @@ def imdb_watchlist(media_type, foo_var, page_no):
 	string = 'imdb_watchlist_%s_%s_%s_%s' % (media_type, imdb_user, sort, page_no)
 	url = base_url % watchlist_url % imdb_user
 	params = {'url': url, 'action': 'imdb_watchlist', 'imdb_user': imdb_user, 'media_type': media_type, 'sort': sort, 'page_no': page_no}
-	return cache_object(get_imdb, string, params, False, 2)
+	test = get_imdb(params)
+	# logger('test', test)
+	return test
+	# return cache_object(get_imdb, string, params, False, 2)
 
 def imdb_user_lists(media_type):
 	imdb_user = string_alphanum_to_num(get_setting('twilight.imdb_user'))
@@ -151,16 +156,25 @@ def get_imdb(params):
 			list_url_type = user_list_movies_url if params['media_type'] == 'movie' else user_list_tvshows_url
 			if action == 'imdb_watchlist':
 				def _get_watchlist_id(dummy):
-					return parseDOM(remove_accents(requests.get(url, timeout=timeout).text), 'meta', ret='content', attrs = {'property': 'pageId'})[0]
-				url = cache_object(_get_watchlist_id, 'imdb_watchlist_id_%s' % params['imdb_user'], 'dummy', False, 672)
+					return parseDOM(remove_accents(requests.get(url, timeout=timeout, headers=headers)), 'meta', ret='content', attrs = {'property': 'pageId'})[0]
+				# url = cache_object(_get_watchlist_id, 'imdb_watchlist_id_%s' % params['imdb_user'], 'dummy', False, 672)
+				url = _get_watchlist_id('dummy')
+				logger('url', url)
+				# logger('test1', test)
+				# test = remove_accents(test.text)
+				# logger('test2', test)
+				# url = parseDOM(test, 'meta', ret='content', attrs = {'property': 'pageId'})[0]
+				# logger('id url', url)
 			url = base_url % list_url_type % (url, params['sort'], params['page_no'])
 		result = requests.get(url, timeout=timeout)
 		result = remove_accents(result.text)
 		result = result.replace('\n', ' ')
-		items = parseDOM(result, 'div', attrs={'class': '.+? lister-item'})
-		items += parseDOM(result, 'div', attrs={'class': 'lister-item .+?'})
-		items += parseDOM(result, 'div', attrs={'class': 'list_item.+?'})
-		items += parseDOM(result, 'div', attrs={'class': 'list_item .+?'})
+		# items = parseDOM(result, 'div', attrs={'class': '.+? lister-item'})
+		# items += parseDOM(result, 'div', attrs={'class': 'lister-item .+?'})
+		# items += parseDOM(result, 'div', attrs={'class': 'list_item.+?'})
+		# items += parseDOM(result, 'div', attrs={'class': 'list_item .+?'})
+		items = parseDOM(result, 'div', attrs = {'class': 'ipc-metadata-list-summary-item__tc'})
+		logger('items', item[0:5])
 		imdb_list = list(_process())
 		try:
 			result = result.replace('"class="lister-page-next', '" class="lister-page-next')

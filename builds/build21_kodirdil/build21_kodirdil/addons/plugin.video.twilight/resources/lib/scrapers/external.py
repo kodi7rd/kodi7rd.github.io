@@ -25,12 +25,13 @@ correct_pack_sizes = ('torrentio', 'knightcrawler', 'comet')
 
 class source:
 	def __init__(self, meta, source_dict, debrid_torrents, debrid_service, debrid_token, internal_scrapers, prescrape_sources, progress_dialog, disabled_ext_ignored=False):
+
+		self.debrid_service, self.debrid_token = debrid_service, debrid_token
 		self.scrape_provider = 'external'
 		self.progress_dialog = progress_dialog
 		self.meta = meta
 		self.background = self.meta.get('background', False)
 		self.debrid_torrents, self.debrid_hosters = debrid_torrents, False
-		self.debrid_service, self.debrid_token = debrid_service, debrid_token
 		self.source_dict, self.host_dict = source_dict, []
 		self.internal_scrapers, self.prescrape_sources = internal_scrapers, prescrape_sources
 		self.internal_activated, self.internal_prescraped = len(self.internal_scrapers) > 0, len(self.prescrape_sources) > 0
