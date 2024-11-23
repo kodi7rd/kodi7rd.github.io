@@ -74,7 +74,7 @@ class source:
 		for file in files:
 			try:
 				hash = file['behaviorHints']['bingeGroup'].replace('comet|', '')
-				file_title = file['title'].split('\n')
+				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				name = source_utils.clean_name(file_title[0])
 

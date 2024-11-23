@@ -1,3 +1,6 @@
+[COLOR red][B]Version 1.0.28[/B][/COLOR]
+- Fix for change in comet result format.
+
 [COLOR red][B]Version 1.0.27[/B][/COLOR]
 - Changed Mediafusion encrypted key.
 - Changed Comet to provide no indexers.
