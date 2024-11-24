@@ -108,10 +108,10 @@
     <setting id="pm.enabled" default="true">true</setting>
     <setting id="pm.account_id" default="true" />
     <setting id="store_resolved_torrent.premiumize.me" default="true">0</setting>
-    <setting id="provider.pm_cloud" default="true">false</setting>
+    <setting id="provider.pm_cloud">true</setting>
     <setting id="pm_cloud.title_filter" default="true">true</setting>
     <setting id="check.pm_cloud" default="true">false</setting>
-    <setting id="results.sort_pmcloud_first" default="true">true</setting>
+    <setting id="results.sort_pmcloud_first">false</setting>
     <setting id="pm.priority" default="true">10</setting>
     <setting id="ad.amble" default="true" />
     <setting id="ad.token" default="true" />
