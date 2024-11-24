@@ -16,14 +16,14 @@ class TwilightMonitor(xbmc_monitor):
 		except: pass
 		try: service_functions.CheckSettings().run()
 		except: pass
-		try: service_functions.FirstRunActions().run()
-		except: pass
-		try: service_functions.ReuseLanguageInvokerCheck().run()
-		except: pass
+		# try: service_functions.FirstRunActions().run()
+		# except: pass
+		# try: service_functions.ReuseLanguageInvokerCheck().run()
+		# except: pass
 		Thread(target=service_functions.TraktMonitor().run).start()
 		Thread(target=service_functions.CustomActions().run).start()
 		Thread(target=service_functions.CustomFonts().run).start()
-		Thread(target=service_functions.PremiumExpiryCheck().run).start()
+		# Thread(target=service_functions.PremiumExpiryCheck().run).start()
 
 		############KODI-RD-IL###################
 		try:
@@ -33,10 +33,10 @@ class TwilightMonitor(xbmc_monitor):
 			pass
 		#########################################
 
-		try: service_functions.ClearSubs().run()
-		except: pass
-		try: service_functions.AutoRun().run()
-		except: pass
+		# try: service_functions.ClearSubs().run()
+		# except: pass
+		# try: service_functions.AutoRun().run()
+		# except: pass
 		Thread(target=service_functions.DatabaseMaintenance().run).start()
 		# service_functions.UpdateCheck().run()
 
