@@ -244,8 +244,8 @@ msgid " [B](Track Watch Progress)[/B]"
 msgstr " [B](מעקב צפייה)[/B]"
 
 msgctxt "#400027"
-msgid " [B](Free Trial)[/B]"
-msgstr " [B](ניסיון חינם)[/B]"
+msgid " [B](Paid Subscription With Free Trial)[/B]"
+msgstr " [B](מנוי בתשלום עם ניסיון חינם)[/B]"
 
 # real_debrid.py - Real Debrid Account Info
 

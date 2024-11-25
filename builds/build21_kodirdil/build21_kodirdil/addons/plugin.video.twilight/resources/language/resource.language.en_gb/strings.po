@@ -4083,7 +4083,7 @@ msgid " [B](Track Watch Progress)[/B]"
 msgstr ""
 
 msgctxt "#400027"
-msgid " [B](Free Trial)[/B]"
+msgid " [B](Paid Subscription With Free Trial)[/B]"
 msgstr ""
 
 ###################################################################################################################################
