@@ -1,0 +1,396 @@
+# Kodi Media Center language file
+# Addon Name: Twilight
+# Addon id: plugin.video.twilight
+# Addon Provider: Twilight
+# Translator English: Twilight
+msgid ""
+msgstr ""
+
+# KODI-RD-IL Custom Hebrew Strings
+
+# Playback Options Window
+
+msgctxt "#32014"
+msgid "Rescrape & Select Source"
+msgstr "[B]חפש מקורות מחדש[/B]"
+
+msgctxt "#32185"
+msgid "Scrape with DEFAULT External Scrapers"
+msgstr "[B]חפש מקורות באתרי הטורנטים המוגדרים כברירת מחדל[/B]"
+
+msgctxt "#32006"
+msgid "Scrape with ALL External Scrapers"
+msgstr "[B]חפש מקורות בכל אתרי הטורנטים[/B]"
+
+msgctxt "#32807"
+msgid "Scrape With All Filters Ignored"
+msgstr "[B]חפש מקורות ללא הגדרות סינון[/B]"
+
+msgctxt "#32212"
+msgid "Scrape with an Alias"
+msgstr "[B]חפש מקורות עם כינוי (Alias)[/B]"
+
+msgctxt "#32135"
+msgid "Scrape with Custom Values"
+msgstr "[B]חפש מקורות עם ערכים מותאמים אישית[/B]"
+
+# Account Manager (navigator.py)
+
+msgctxt "#32057"
+msgid "Authorize"
+msgstr "לחץ כדי לחבר"
+
+msgctxt "#32059"
+msgid "Revoke Authorization"
+msgstr "מחובר (לחץ לניתוק)"
+
+msgctxt "#32515"
+msgid "Sources Folders"
+msgstr "תיקיית מקורות"
+
+msgctxt "#33104"
+msgid "Local"
+msgstr "מקומי"
+
+# Dialog Messages
+
+msgctxt "#32736"
+msgid "Cancelled"
+msgstr "בוטל"
+
+msgctxt "#32576"
+msgid "Success"
+msgstr "בוצע בהצלחה"
+
+msgctxt "#32580"
+msgid "Are you sure?"
+msgstr "האם אתה בטוח?"
+
+msgctxt "#32824"
+msgid "Yes"
+msgstr "כן"
+
+msgctxt "#32828"
+msgid "No"
+msgstr "לא"
+
+msgctxt "#32839"
+msgid "OK"
+msgstr "אישור"
+
+msgctxt "#32840"
+msgid "Cancel"
+msgstr "ביטול"
+
+msgctxt "#33090"
+msgid "Now"
+msgstr "עכשיו"
+
+# RD Cloud "Check Before Full Search" sources window
+
+msgctxt "#33023"
+msgid "[B]***START FULL SCRAPE***[/B]"
+msgstr "[B]*** לחץ לחיפוש מקורות מלא ***[/B]"
+
+# Connect Debrid/Trakt Services
+
+msgctxt "#32517"
+msgid "Authorize Debrid Services"
+msgstr "סרוק את קוד ה-QR במצלמת הטלפון שלך או"
+
+msgctxt "#32700"
+msgid "Navigate to: [B]%s[/B]"
+msgstr "היכנס ל: [B]%s[/B]"
+
+msgctxt "#32701"
+msgid "Enter the following code: [B]%s[/B]"
+msgstr "והכנס את הקוד הבא: [B]%s[/B]"
+
+# No Results
+
+msgctxt "#32760"
+msgid "No Results"
+msgstr "אין תוצאות"
+
+# No Debrid account configured
+
+msgctxt "#32854"
+msgid "No Debrid Providers Enabled"
+msgstr "יש לחבר מנוי ריל דבריד ב\"חיבור שירותים\""
+
+# Hebrew setting menu label
+
+msgctxt "#40000"
+msgid "[COLOR yellow]התאמת כתוביות[/COLOR]"
+msgstr "[COLOR yellow]התאמת כתוביות[/COLOR]"
+
+# Hebrew Subtitles Matching Settings
+
+msgctxt "#40001"
+msgid "התאמת כתוביות למקורות"
+msgstr "התאמת כתוביות למקורות"
+
+msgctxt "#40002"
+msgid "הפעל התאמת כתוביות בעת חיפוש מקורות"
+msgstr "הפעל התאמת כתוביות בעת חיפוש מקורות"
+
+msgctxt "#40004"
+msgid "חפש כתוביות עם סיכוי התאמה מעל:"
+msgstr "חפש כתוביות עם סיכוי התאמה מעל:"
+
+msgctxt "#40005"
+msgid "אחוז (%)"
+msgstr "אחוז (%)"
+
+# Subtitles Websites
+
+msgctxt "#40006"
+msgid "היכן לחפש כתוביות"
+msgstr "היכן לחפש כתוביות"
+
+msgctxt "#40007"
+msgid "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
+msgstr "Ktuvit [COLOR blue](https://www.ktuvit.me)[/COLOR]"
+
+msgctxt "#40008"
+msgid "Wizdom [COLOR blue](https://wizdom.xyz)[/COLOR]"
+msgstr "Wizdom [COLOR blue](https://wizdom.xyz)[/COLOR]"
+
+msgctxt "#40009"
+msgid "OpenSubtitles [COLOR blue](https://www.opensubtitles.com)[/COLOR]"
+msgstr "OpenSubtitles [COLOR blue](https://www.opensubtitles.com)[/COLOR]"
+
+msgctxt "#400010"
+msgid "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
+msgstr "Subscene [COLOR blue](https://subscene.com)[/COLOR]"
+
+msgctxt "#4000101"
+msgid "YIFY (לסרטים בלבד) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
+msgstr "YIFY (לסרטים בלבד) [COLOR blue](https://yifysubtitles.ch)[/COLOR]"
+
+# Twilight sources_results.xml
+
+msgctxt "#400011"
+msgid " Results"
+msgstr " מקורות"
+
+# Continue Subtitles Websites
+
+msgctxt "#400012"
+msgid "תרגום מובנה בעברית [COLOR blue](מאגר לומד)[/COLOR]"
+msgstr "תרגום מובנה בעברית [COLOR blue](מאגר לומד)[/COLOR]"
+
+# Sources FILTERS list - show sources with Hebrew subtitles matched
+
+msgctxt "#400013"
+msgid "הצג מקורות עם סיכוי התאמה לכתוביות"
+msgstr "הצג מקורות עם סיכוי התאמה לכתוביות"
+
+msgctxt "#400014"
+msgid "הצג מקורות עם התאמה מלאה לכתוביות"
+msgstr "הצג מקורות עם התאמה מלאה לכתוביות"
+
+# Twilight sources_results.xml - Season/Episode
+
+msgctxt "#400015"
+msgid "Season"
+msgstr "עונה"
+
+msgctxt "#400016"
+msgid "Episode"
+msgstr "פרק"
+
+# Twilight - MoviesOnlineDates
+
+msgctxt "#400017"
+msgid "מתי יגיע לרשת?"
+msgstr "מתי יגיע לרשת?"
+
+msgctxt "#400018"
+msgid "מה מגיע לרשת החודש?"
+msgstr "מה מגיע לרשת החודש?"
+
+# For settings menu
+msgctxt "#400019"
+msgid "[COLOR FF5CFF34]מתי יגיע לרשת?[/COLOR]"
+msgstr "[COLOR FF5CFF34]מתי יגיע לרשת?[/COLOR]"
+
+msgctxt "#400020"
+msgid "הצג בתפריט האפשרויות של סרט:"
+msgstr "הצג בתפריט האפשרויות של סרט:"
+
+msgctxt "#400021"
+msgid "הצג מידע עבור החודש הנוכחי בלבד"
+msgstr "הצג מידע עבור החודש הנוכחי בלבד"
+
+# For settings menu - Provider Accounts
+
+msgctxt "#400023"
+msgid "Notify Real Debrid Account Status on Startup"
+msgstr "Notify Real Debrid Account Status on Startup"
+
+msgctxt "#400024"
+msgid "Notify Only Under (Days Until Account Expiration)"
+msgstr "Notify Only Under (Days Until Account Expiration)"
+
+# CONTINUE Account Manager (navigator.py)
+
+msgctxt "#400025"
+msgid " [B](Paid Subscription)[/B]"
+msgstr " [B](מנוי בתשלום)[/B]"
+
+msgctxt "#400026"
+msgid " [B](Track Watch Progress)[/B]"
+msgstr " [B](מעקב צפייה)[/B]"
+
+msgctxt "#400027"
+msgid " [B](Paid Subscription With Free Trial)[/B]"
+msgstr " [B](מנוי בתשלום עם ניסיון חינם)[/B]"
+
+# real_debrid.py - Real Debrid Account Info
+
+msgctxt "#32758"
+msgid "[B]Account:[/B] %s"
+msgstr "[B][COLOR lightblue]כתובת מייל:[/COLOR][/B] %s"
+
+msgctxt "#32755"
+msgid "[B]Username:[/B] %s"
+msgstr "[B][COLOR lightblue]שם משתמש:[/COLOR][/B] %s"
+
+msgctxt "#32757"
+msgid "[B]Status:[/B] %s"
+msgstr "[B][COLOR lightblue]סטטוס:[/COLOR][/B] %s"
+
+msgctxt "#32750"
+msgid "[B]Expires:[/B] %s"
+msgstr "[B][COLOR lightblue]תוקף:[/COLOR][/B] %s"
+
+msgctxt "#32751"
+msgid "[B]Days Remaining:[/B] %s"
+msgstr "[B][COLOR lightblue]כמות ימים לסיום תוקף המנוי:[/COLOR][/B] %s"
+
+msgctxt "#32759"
+msgid "[B]Fidelity Points:[/B] %s"
+msgstr "[B][COLOR lightblue]נקודות נאמנות:[/COLOR][/B] %s"
+
+# kodi_utils.py - Log Uploader window
+
+msgctxt "#33145"
+msgid "Current Kodi Log"
+msgstr "לוג נוכחי"
+
+msgctxt "#33146"
+msgid "Previous Kodi Log"
+msgstr "לוג קודם"
+
+msgctxt "#33147"
+msgid "Choose Which Log File to Upload"
+msgstr "בחר קובץ לוג להעלאה"
+
+# meta_lists.py - Movies/TV Shows Genres
+
+msgctxt "#33057"
+msgid "Sci-Fi & Fantasy"
+msgstr "[B]מדע בדיוני ופנטזיה[/B]"
+
+msgctxt "#32548"
+msgid "Action"
+msgstr "[B]אקשן[/B]"
+
+msgctxt "#32549"
+msgid "Adventure"
+msgstr "[B]הרפתקאות[/B]"
+
+msgctxt "#32550"
+msgid "Animation"
+msgstr "[B]אנימציה[/B]"
+
+msgctxt "#32551"
+msgid "Comedy"
+msgstr "[B]קומדיה[/B]"
+
+msgctxt "#32552"
+msgid "Crime"
+msgstr "[B]פשע[/B]"
+
+msgctxt "#32553"
+msgid "Documentary"
+msgstr "[B]דוקומנטרי[/B]"
+
+msgctxt "#32554"
+msgid "Drama"
+msgstr "[B]דרמה[/B]"
+
+msgctxt "#32555"
+msgid "Family"
+msgstr "[B]משפחה[/B]"
+
+msgctxt "#32556"
+msgid "Kids"
+msgstr "[B]ילדים[/B]"
+
+msgctxt "#32557"
+msgid "Mystery"
+msgstr "[B]מסתורין[/B]"
+
+msgctxt "#32558"
+msgid "Fantasy"
+msgstr "[B]פנטזיה[/B]"
+
+msgctxt "#32559"
+msgid "History"
+msgstr "[B]היסטוריה[/B]"
+
+msgctxt "#32560"
+msgid "Horror"
+msgstr "[B]אימה[/B]"
+
+msgctxt "#32561"
+msgid "Music"
+msgstr "[B]מוזיקה[/B]"
+
+msgctxt "#32562"
+msgid "Romance"
+msgstr "[B]רומנטיקה[/B]"
+
+msgctxt "#32563"
+msgid "Science Fiction"
+msgstr "[B]מדע בדיוני[/B]"
+
+msgctxt "#32564"
+msgid "TV Movie"
+msgstr "[B]סרט טלוויזיה[/B]"
+
+msgctxt "#32565"
+msgid "Thriller"
+msgstr "[B]מותחן[/B]"
+
+msgctxt "#32566"
+msgid "War"
+msgstr "[B]מלחמה[/B]"
+
+msgctxt "#32567"
+msgid "Western"
+msgstr "[B]מערבון[/B]"
+
+msgctxt "#32568"
+msgid "News"
+msgstr "[B]חדשות[/B]"
+
+msgctxt "#32569"
+msgid "Reality"
+msgstr "[B]ריאליטי[/B]"
+
+msgctxt "#32570"
+msgid "Soap"
+msgstr "[B]אופרת סבון[/B]"
+
+msgctxt "#32571"
+msgid "Talk"
+msgstr "[B]תוכניות אירוח[/B]"
+
+msgctxt "#32572"
+msgid "War & Politics"
+msgstr "[B]מלחמה ופוליטיקה[/B]"
+
+###################################################################################################################################
