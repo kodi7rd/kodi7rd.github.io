@@ -1,10 +1,12 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
 [COLOR dodgerblue][B]Version 3.2.80[/B][/COLOR]
-- [B]Tikipeter's Fen Light version 2.0.02[/B]:
-- All Debrid API delete_transfer fix.
+- [B]Tikipeter's version 3.5.02[/B]:
+Fixes taken from Fen Light 2.0.02: Big thanks to Twilight for porting these fixes.
+- AD Fix.
 - Fix for browsing/downloading pack results through RD.
 - Quick fix to correct sequential playback.
+- Fix Parental Guide and Reviews in Twilight Extras window.
 
 [COLOR dodgerblue][B]Version 3.2.79[/B][/COLOR]
 - Change All Debrid label in Tools --> Accounts Manager.
