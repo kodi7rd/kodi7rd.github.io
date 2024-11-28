@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.81[/B][/COLOR]
+- Send debrid service/token to "TORRENTIO_CACHED" CocoScrapers source.
+- Show "CACHED 100%" label in results list - only for results from "TORRENTIO_CACHED".
+
 [COLOR dodgerblue][B]Version 3.2.80[/B][/COLOR]
 - [B]Tikipeter's version 3.5.02[/B]:
 Fixes taken from Fen Light 2.0.02: Big thanks to Twilight for porting these fixes.
