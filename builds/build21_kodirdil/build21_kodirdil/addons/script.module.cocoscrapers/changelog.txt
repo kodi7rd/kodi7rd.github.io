@@ -5,6 +5,7 @@
 - Changed Mediafusion encrypted key.
 - Changed Comet to provide no indexers.
 - KODI-RD-IL: Add Zilean source (DMM Hashlists public ElfHosted instance).
+- KODI-RD-IL: Add TORRENTIO_CACHED Source. Limited to RD only currently. Searches only for "RD+" torrents in Torrentio, ignores "RD download" torrents.
 
 [COLOR red][B]Version 1.0.26[/B][/COLOR]
 - Quick cleanup.
