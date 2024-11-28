@@ -1,5 +1,6 @@
 [COLOR red][B]Version 1.0.28[/B][/COLOR]
 - Fix for change in comet result format.
+- KODI-RD-IL: Add TORRENTIO_CACHED Source. Limited to RD only currently. Searches only for "RD+" torrents in Torrentio, ignores "RD download" torrents.
 
 [COLOR red][B]Version 1.0.27[/B][/COLOR]
 - Changed Mediafusion encrypted key.
