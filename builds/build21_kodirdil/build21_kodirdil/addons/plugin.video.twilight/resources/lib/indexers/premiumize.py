@@ -133,3 +133,21 @@ def active_days():
 		days_remaining = (expires - datetime.today()).days
 	except: days_remaining = 0
 	return days_remaining
+
+############KODI-RD-IL###################
+def active_days_notify_only():
+	if not kodi_utils.get_setting('debrid_active_days_notify_only', 'true') == 'true': return
+
+	try:
+		account_info = Premiumize.account_info()
+		expires = datetime.fromtimestamp(account_info['premium_until'])
+		days_remaining = (expires - datetime.today()).days
+		if days_remaining > int(kodi_utils.get_setting('debrid_active_days_notify_minimum_days', '365')): return
+
+		account_status_text = '[COLOR limegreen]פרימיום[/COLOR]' if days_remaining > 0 else '[COLOR red]לא בתוקף[/COLOR]'
+		days_remaining_text = f' (נותרו {str(days_remaining)} ימים)' if days_remaining > 0 else ''
+
+		notification_text = f"[B]סטטוס מנוי PM: {account_status_text}{days_remaining_text}[/B]"
+		kodi_utils.notification(notification_text, 4000)
+	except: pass
+#########################################

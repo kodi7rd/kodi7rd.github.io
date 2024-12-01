@@ -226,8 +226,8 @@ msgstr "הצג מידע עבור החודש הנוכחי בלבד"
 # For settings menu - Provider Accounts
 
 msgctxt "#400023"
-msgid "Notify Real Debrid Account Status on Startup"
-msgstr "Notify Real Debrid Account Status on Startup"
+msgid "Notify Debrid Account Status on Startup"
+msgstr "Notify Debrid Account Status on Startup"
 
 msgctxt "#400024"
 msgid "Notify Only Under (Days Until Account Expiration)"

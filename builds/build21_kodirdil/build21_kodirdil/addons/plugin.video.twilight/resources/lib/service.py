@@ -27,7 +27,8 @@ class TwilightMonitor(xbmc_monitor):
 
 		############KODI-RD-IL###################
 		try:
-			from indexers import real_debrid
+			from indexers import premiumize, real_debrid
+			Thread(target=premiumize.active_days_notify_only()).start()
 			Thread(target=real_debrid.active_days_notify_only()).start()
 		except:
 			pass

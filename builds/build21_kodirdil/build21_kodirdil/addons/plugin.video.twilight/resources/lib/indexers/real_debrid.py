@@ -174,20 +174,18 @@ def active_days():
 
 ############KODI-RD-IL###################
 def active_days_notify_only():
-	real_debrid_active_days_notify_only = kodi_utils.get_setting('real_debrid_active_days_notify_only', 'true') == 'true'
-	if not real_debrid_active_days_notify_only: return
-	real_debrid_active_days_notify_minimum_days = int(kodi_utils.get_setting('real_debrid_active_days_notify_minimum_days', '365'))
+	if not kodi_utils.get_setting('debrid_active_days_notify_only', 'true') == 'true': return
 
 	try:
 		account_info = RealDebrid.account_info()
 		expires = datetime_workaround(account_info['expiration'], '%Y-%m-%dT%H:%M:%S.%fZ')
 		days_remaining = (expires - datetime.today()).days
-		if days_remaining > real_debrid_active_days_notify_minimum_days: return
+		if days_remaining > int(kodi_utils.get_setting('debrid_active_days_notify_minimum_days', '365')): return
 
 		account_status_text = '[COLOR limegreen]פרימיום[/COLOR]' if days_remaining > 0 else '[COLOR red]לא בתוקף[/COLOR]'
 		days_remaining_text = f' (נותרו {str(days_remaining)} ימים)' if days_remaining > 0 else ''
 
-		notification_text = f"[B]סטטוס מנוי: {account_status_text}{days_remaining_text}[/B]"
+		notification_text = f"[B]סטטוס מנוי RD: {account_status_text}{days_remaining_text}[/B]"
 		kodi_utils.notification(notification_text, 4000)
 	except: pass
 #########################################

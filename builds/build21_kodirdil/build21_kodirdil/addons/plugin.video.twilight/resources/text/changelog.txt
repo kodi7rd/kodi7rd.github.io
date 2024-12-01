@@ -1,5 +1,9 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.82[/B][/COLOR]
+- Added Premiumize account expiration check to:
+[B]Provider Accounts - General - Notify Debrid Account Status on Startup[/B]
+
 [COLOR dodgerblue][B]Version 3.2.81[/B][/COLOR]
 - Send debrid service/token to "TORRENTIO_CACHED" CocoScrapers source.
 - Show "CACHED 100%" label in results list - only for results from "TORRENTIO_CACHED".

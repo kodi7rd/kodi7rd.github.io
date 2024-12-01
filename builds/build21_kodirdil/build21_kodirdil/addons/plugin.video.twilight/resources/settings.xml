@@ -1201,17 +1201,17 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="real_debrid_active_days_notify_only" type="boolean" label="400023" help="">
+				<setting id="debrid_active_days_notify_only" type="boolean" label="400023" help="">
 					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="real_debrid_active_days_notify_minimum_days" type="integer" label="400024" help="" parent="real_debrid_active_days_notify_only">
+				<setting id="debrid_active_days_notify_minimum_days" type="integer" label="400024" help="" parent="debrid_active_days_notify_only">
 					<level>0</level>
 					<default>365</default>
 					<dependencies>
 						<dependency type="visible">
-							<condition operator="is" setting="real_debrid_active_days_notify_only">true</condition>
+							<condition operator="is" setting="debrid_active_days_notify_only">true</condition>
 						</dependency>
 					</dependencies>
 					<control type="edit" format="integer">
