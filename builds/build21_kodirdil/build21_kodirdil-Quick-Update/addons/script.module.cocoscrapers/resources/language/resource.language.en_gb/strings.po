@@ -764,3 +764,7 @@ msgstr ""
 msgctxt "#40004"
 msgid "TORRENTIO CACHED (Pack capable)"
 msgstr ""
+
+msgctxt "#40005"
+msgid "Get Cached Torrents Only"
+msgstr ""

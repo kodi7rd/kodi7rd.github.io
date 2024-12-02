@@ -215,9 +215,19 @@
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="dmm.get_cached_torrents_only" type="boolean" label="40005" help="" parent="provider.dmm">
+					<level>0</level>
+					<default>true</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.dmm">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
 				<setting id="dmm.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.dmm">
 					<level>0</level>
-					<default>false</default>
+					<default>true</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="provider.dmm">true</condition>
