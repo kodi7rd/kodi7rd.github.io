@@ -242,6 +242,12 @@ class SourcesResults(BaseDialog):
 					#########################################
 
 					if scrape_provider == 'external':
+
+						############KODI-RD-IL###################
+						# From CocoScrapers sources.append.
+						cached_checked = get('cached_checked', 'false')
+						#########################################
+
 						source_site = upper(get('provider'))
 						provider = upper(get('debrid', source_site).replace('.me', ''))
 						provider_lower = lower(provider)
@@ -252,7 +258,7 @@ class SourcesResults(BaseDialog):
 								else: set_property('source_type', 'UNCACHED')
 								set_property('highlight', 'FF7C7C7C')
 							else:
-								cache_flag = '[B][COLOR orange]CACHED 100%[/COLOR][/B]' if source_site == 'TORRENTIO_CACHED' else '[B]CACHED[/B]' if provider == 'PREMIUMIZE' else 'UNCHECKED'
+								cache_flag = '[B][COLOR orange]CACHED[/COLOR][/B]' if provider == 'PREMIUMIZE' or (cached_checked == 'true' and provider == 'REAL-DEBRID') else 'UNCHECKED'
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower
 								else: key = basic_quality
