@@ -768,3 +768,7 @@ msgstr ""
 msgctxt "#40005"
 msgid "Get Cached Torrents Only"
 msgstr ""
+
+msgctxt "#40006"
+msgid "MEDIAFUSION CACHED (Pack capable)"
+msgstr ""
