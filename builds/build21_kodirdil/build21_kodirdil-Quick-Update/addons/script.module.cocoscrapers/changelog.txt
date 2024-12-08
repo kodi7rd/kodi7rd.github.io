@@ -3,6 +3,7 @@
 - KODI-RD-IL: Add TORRENTIO_CACHED Source. Limited to RD only currently. Searches only for "RD+" torrents in Torrentio, ignores "RD download" torrents.
 - KODI-RD-IL: TORRENTIO_CACHED: Utilize debridoptions=nodownloadlinks param.
 - KODI-RD-IL: DMM: Add support for cached hashes check, Add setting "Get Cached Torrents Only".
+- KODI-RD-IL: Add MEDIAFUSION_CACHED Source. Limited to RD/AD for cached results.
 
 [COLOR red][B]Version 1.0.27[/B][/COLOR]
 - Changed Mediafusion encrypted key.

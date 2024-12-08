@@ -227,7 +227,7 @@
 				</setting>
 				<setting id="dmm.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.dmm">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="provider.dmm">true</condition>
@@ -286,6 +286,23 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<!-- KODI-RD-IL -->
+				<setting id="provider.mediafusion_cached" type="boolean" label="40006" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="mediafusion_cached.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.mediafusion_cached">
+					<level>0</level>
+					<default>false</default>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.mediafusion_cached">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- ========== -->
 				<setting id="provider.nyaa" type="boolean" label="32116" help="">
 					<level>0</level>
 					<default>false</default>
@@ -336,6 +353,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
+				<!-- KODI-RD-IL -->
 				<setting id="provider.torrentio_cached" type="boolean" label="40004" help="">
 					<level>0</level>
 					<default>true</default>
@@ -343,7 +361,7 @@
 				</setting>
 				<setting id="torrentio_cached.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.torrentio_cached">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<dependencies>
 						<dependency type="visible">
 							<condition operator="is" setting="provider.torrentio_cached">true</condition>
@@ -351,6 +369,7 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
+				<!-- ========== -->
 				<setting id="provider.torrentquest" type="boolean" label="32114" help="">
 					<level>0</level>
 					<default>true</default>
