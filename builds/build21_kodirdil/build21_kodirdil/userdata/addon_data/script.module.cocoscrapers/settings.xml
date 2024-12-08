@@ -13,7 +13,7 @@
     <setting id="provider.comet" default="true">false</setting>
     <setting id="provider.dmm" default="true">true</setting>
     <setting id="dmm.get_cached_torrents_only" default="true">true</setting>
-    <setting id="dmm.bypass_filter" default="true">true</setting>
+    <setting id="dmm.bypass_filter">false</setting>
     <setting id="provider.ext" default="true">false</setting>
     <setting id="provider.eztv">false</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
@@ -33,7 +33,7 @@
     <setting id="provider.torrentio">false</setting>
     <setting id="torrentio.bypass_filter">true</setting>
     <setting id="provider.torrentio_cached" default="true">true</setting>
-    <setting id="torrentio_cached.bypass_filter" default="true">true</setting>
+    <setting id="torrentio_cached.bypass_filter">false</setting>
     <setting id="provider.torrentquest">false</setting>
     <setting id="provider.torrentz2" default="true">false</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
