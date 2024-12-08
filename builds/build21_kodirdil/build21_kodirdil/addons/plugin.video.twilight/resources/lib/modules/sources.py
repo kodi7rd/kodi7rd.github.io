@@ -129,7 +129,9 @@ class Sources():
 			[i.start() for i in self.threads]
 		if self.active_external or self.background:
 			if self.active_external:
-				if any((i[0] == 'comet' for i in self.external_providers)) or any((i[0] == 'torrentio_cached' for i in self.external_providers)):
+				############KODI-RD-IL###################
+				if any((i[0] == 'comet' for i in self.external_providers)) or any((i[0] == 'torrentio_cached' for i in self.external_providers)) or any((i[0] == 'mediafusion_cached' for i in self.external_providers)):
+				############KODI-RD-IL###################
 					debrid_service = self.debrid_enabled[0]
 					debrid_token = get_setting('twilight.%s' % debrid_token_dict[debrid_service])
 				else: debrid_service, debrid_token = '', ''
