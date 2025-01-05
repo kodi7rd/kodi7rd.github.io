@@ -40,11 +40,14 @@ def geturl(title):
 	if not title: return
 	try:
 		title = title.lower().rstrip()
-		try: title = title.translate(None, ':*?"\'\.<>|&!,')
+		#try: title = title.translate(None, ':*?"\'\.<>|&!,')
+		try:title = title.translate(str.maketrans('', '', ':*?"\'\\.<>|&!,'))
 		except:
-			try: title = title.translate(title.maketrans('', '', ':*?"\'\.<>|&!,'))
+			#try: title = title.translate(title.maketrans('', '', ':*?"\'\.<>|&!,'))
+			try: title = title.translate(title.maketrans('', '', ':*?"\'\\.<>|&!,'))
 			except:
-				for c in ':*?"\'\.<>|&!,': title = title.replace(c, '')
+				#for c in ':*?"\'\.<>|&!,': title = title.replace(c, '')
+				for c in ':*?"\'\\.<>|&!,': title = title.replace(c, '')
 		title = title.replace('/', '-').replace(' ', '-').replace('--', '-').replace('–', '-').replace('!', '')
 		return title
 	except:

@@ -26,7 +26,6 @@ class source:
         self.tvSearch_link = '/%s/stream/series/%s:%s:%s.json'
         self.min_seeders = 0
         self.bypass_filter = getSetting('mediafusion_cached.bypass_filter')
-# Currently supports BITSEARCH(+), EZTV(+), ThePirateBay(+), TheRARBG(+), YTS(+)
 
 
     def _get_mediafusion_encrypted_secret(self, debrid_service, debrid_token):
@@ -39,7 +38,7 @@ class source:
             '"download_via_browser":false,"only_show_cached_streams":true},"selected_catalogs":[],'
             '"selected_resolutions":["4k","2160p","1440p","1080p","720p","576p","480p","360p","240p",null],'
             '"enable_catalogs":false,"enable_imdb_metadata":true,"max_size":"inf","max_streams_per_resolution":"999",'
-            '"torrent_sorting_priority":[],"show_full_torrent_name":true,"nudity_filter":["Disable"],'
+            '"torrent_sorting_priority":[],"show_full_torrent_name":true,"show_language_country_flag":false,"nudity_filter":["Disable"],'
             '"certification_filter":["Disable"],"language_sorting":["English","Tamil","Hindi","Malayalam","Kannada",'
             '"Telugu","Chinese","Russian","Arabic","Japanese","Korean","Taiwanese","Latino","French","Spanish",'
             '"Portuguese","Italian","German","Ukrainian","Polish","Czech","Thai","Indonesian","Vietnamese",'
@@ -125,9 +124,8 @@ class source:
         for file in files:
             try:
                 if 'url' in file:
-                    query = requests.utils.urlparse(file['url']).query
-                    params = dict(i.split('=') for i in query.split('&'))
-                    hash = params['info_hash']
+                    path = requests.utils.urlparse(file['url']).path.split('/')
+                    hash = path[path.index('stream') + 1]
                 else: hash = file['infoHash']
                 #log_utils.log('mediafusion hash: %s' % hash)
                 file_title = file['description'].split('\n')
@@ -198,9 +196,8 @@ class source:
             #log_utils.log('pack file: %s' % str(file),1)
             try:
                 if 'url' in file:
-                    query = requests.utils.urlparse(file['url']).query
-                    params = dict(i.split('=') for i in query.split('&'))
-                    hash = params['info_hash']
+                    path = requests.utils.urlparse(file['url']).path.split('/')
+                    hash = path[path.index('stream') + 1]
                 else: hash = file['infoHash']
                 file_title = file['description'].split('\n')
                 file_info = [x for x in file_title if _INFO.match(x)][0]
