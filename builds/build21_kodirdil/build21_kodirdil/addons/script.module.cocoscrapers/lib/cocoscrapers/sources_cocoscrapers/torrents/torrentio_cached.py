@@ -13,7 +13,6 @@ from cocoscrapers.modules.control import setting as getSetting, homeWindow, slee
 ############KODI-RD-IL###################
 import requests
 debrid_dict = {'Real-Debrid': 'realdebrid' , 'Premiumize.me': 'premiumize' , 'AllDebrid': 'alldebrid'}
-debrid_short_dict = {'Real-Debrid': 'RD+' , 'Premiumize.me': 'PM+' , 'AllDebrid': 'AD+'}
 ############KODI-RD-IL###################
 
 class source:
@@ -28,10 +27,11 @@ class source:
         #self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy|language=english/stream/series/%s:%s:%s.json' #found this to be broken 12-9-22 umbrelladev
         #self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
         #self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
-        self.movieSearch_link = '%s=%s/stream/movie/%s.json'
-        self.tvSearch_link = '%s=%s/stream/series/%s:%s:%s.json'
+        self.movieSearch_link = 'realdebrid=%s/stream/movie/%s.json'
+        self.tvSearch_link = 'realdebrid=%s/stream/series/%s:%s:%s.json'
         self.min_seeders = 0
         self.bypass_filter = getSetting('torrentio_cached.bypass_filter')
+        self.debrid_fake_token = "1111111111111111111111111111111111111111111111111111"
 # Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), HorribleSubs(+), NyaaSi(+), NyaaPantsu(+), Rutor(+), Comando(+), ComoEuBaixo(+), Lapumia(+), OndeBaixa(+), Torrent9(+).
 
     def _get_files(self, url):
@@ -51,7 +51,6 @@ class source:
         debrid_service = debrid_dict[data['debrid_service']]
         # Currently Torrentio caches only RD sources. Maybe AD next.
         if debrid_service != "realdebrid": return sources
-        debrid_token = data['debrid_token']
         ############KODI-RD-IL###################
 
         sources_append = sources.append
@@ -67,14 +66,14 @@ class source:
                 episode = data['episode']
                 hdlr = 'S%02dE%02d' % (int(season), int(episode))
                 years = None
-                url = '%s%s' % (self.base_link, self.tvSearch_link % (debrid_service, debrid_token, imdb, season, episode))
+                url = '%s%s' % (self.base_link, self.tvSearch_link % (self.debrid_fake_token, imdb, season, episode))
                 files = cache.get(self._get_files, 10, url)
             else:
                 title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
                 episode_title = None
                 hdlr = year
                 years = [str(int(year)-1), str(year), str(int(year)+1)]
-                url = '%s%s' % (self.base_link, self.movieSearch_link % (debrid_service, debrid_token, imdb))
+                url = '%s%s' % (self.base_link, self.movieSearch_link % (self.debrid_fake_token, imdb))
                 files = self._get_files(url)
             homeWindow.clearProperty('cocoscrapers.torrentio_cached.performing_single_scrape')
             _INFO = re.compile(r'👤.*')
@@ -88,8 +87,6 @@ class source:
         for file in files:
             try:
                 ############KODI-RD-IL###################
-                # RD+ / AD+
-                # if not debrid_short_dict[data['debrid_service']] in file['name']: continue
                 hash = requests.utils.urlparse(file['url']).path.split('/')[3]
                 ############KODI-RD-IL###################
                 file_title = file['title'].split('\n')
@@ -131,7 +128,6 @@ class source:
         debrid_service = debrid_dict[data['debrid_service']]
         # Currently Torrentio caches only RD sources. Maybe AD next.
         if debrid_service != "realdebrid": return sources
-        debrid_token = data['debrid_token']
         ############KODI-RD-IL###################
 
         count, finished_single_scrape = 0, False
@@ -148,7 +144,7 @@ class source:
             imdb = data['imdb']
             year = data['year']
             season = data['season']
-            url = '%s%s' % (self.base_link, self.tvSearch_link % (debrid_service, debrid_token, imdb, season, data['episode']))
+            url = '%s%s' % (self.base_link, self.tvSearch_link % (self.debrid_fake_token, imdb, season, data['episode']))
             files = cache.get(self._get_files, 10, url)
             _INFO = re.compile(r'👤.*')
             undesirables = source_utils.get_undesirables()
@@ -161,7 +157,6 @@ class source:
             try:
                 ############KODI-RD-IL###################
                 # RD+ / AD+
-                # if not debrid_short_dict[data['debrid_service']] in file['name']: continue
                 hash = requests.utils.urlparse(file['url']).path.split('/')[3]
                 ############KODI-RD-IL###################
                 file_title = file['title'].split('\n')

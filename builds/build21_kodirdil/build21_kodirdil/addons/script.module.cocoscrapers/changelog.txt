@@ -4,6 +4,7 @@
 - KODI-RD-IL: MEDIAFUSION_CACHED: Fix stream hash parsing, "Add show_language_country_flag=false" setting.
 - KODI-RD-IL: MEDIAFUSION_CACHED: Use self-made mediafusion_encrypted_secret using expired RD API Key (instead of POST request to "encrypt-user-data" every time).
 - KODI-RD-IL: Fix DMM.
+- KODI-RD-IL: TORRENTIO_CACHED: Use fake RD API Key instead of user's API Key.
 
 [COLOR red][B]Version 1.0.28[/B][/COLOR]
 - Fix for change in comet result format.
