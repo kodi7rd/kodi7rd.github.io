@@ -2,6 +2,7 @@
 - Fix for Python 3.12 breaking module detection.
 - Fix for some regular expressions in source_utils and cleantitle.
 - KODI-RD-IL: MEDIAFUSION_CACHED: Fix stream hash parsing, "Add show_language_country_flag=false" setting.
+- KODI-RD-IL: MEDIAFUSION_CACHED: Use self-made mediafusion_encrypted_secret using expired RD API Key (instead of POST request to "encrypt-user-data" every time).
 - KODI-RD-IL: Fix DMM.
 
 [COLOR red][B]Version 1.0.28[/B][/COLOR]

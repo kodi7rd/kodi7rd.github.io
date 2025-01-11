@@ -22,48 +22,50 @@ class source:
     def __init__(self):
         self.language = ['en']
         self.base_link = 'https://mediafusion.elfhosted.com'
+        # mediafusion_encrypted_secret settings: Expired RD API Key | only_show_cached_streams:true | max_streams_per_resolution:999 | No sorting options | No nudity/certification filter | show_full_torrent_name:true | show_language_country_flag:false
+        self.mediafusion_encrypted_secret = "D-MsqOk5Q1moSiVAYZw8RmHhmuqtfCpU-J06SlHDJH0kfNVEAqHepRqYKH9IDMdKUIES7mGWe-UQ1noze2U9HLkU-rv6QLqXUtU8k68yVpDYzpJ0N4FeaN301ZCj6OyZG-l-KRb4gvkx758sDB2P236O0urgd6TwKRGe9RPojRGrt1n3kZTxnYf-gkswJ01GxBfIYvGwc49AJmtapHHEhyFMysa3EeN8EKO_JpYlRd_Hw"
         self.movieSearch_link = '/%s/stream/movie/%s.json'
         self.tvSearch_link = '/%s/stream/series/%s:%s:%s.json'
         self.min_seeders = 0
         self.bypass_filter = getSetting('mediafusion_cached.bypass_filter')
 
 
-    def _get_mediafusion_encrypted_secret(self, debrid_service, debrid_token):
+    # def _get_mediafusion_encrypted_secret(self, debrid_service, debrid_token):
     
         # Important settings:
         # only_show_cached_streams=true
         # max_streams_per_resolution=999
-        mediafusion_user_settings = (
-            '{"streaming_provider":{"token":"%s","service":"%s","enable_watchlist_catalogs":false,'
-            '"download_via_browser":false,"only_show_cached_streams":true},"selected_catalogs":[],'
-            '"selected_resolutions":["4k","2160p","1440p","1080p","720p","576p","480p","360p","240p",null],'
-            '"enable_catalogs":false,"enable_imdb_metadata":true,"max_size":"inf","max_streams_per_resolution":"999",'
-            '"torrent_sorting_priority":[],"show_full_torrent_name":true,"show_language_country_flag":false,"nudity_filter":["Disable"],'
-            '"certification_filter":["Disable"],"language_sorting":["English","Tamil","Hindi","Malayalam","Kannada",'
-            '"Telugu","Chinese","Russian","Arabic","Japanese","Korean","Taiwanese","Latino","French","Spanish",'
-            '"Portuguese","Italian","German","Ukrainian","Polish","Czech","Thai","Indonesian","Vietnamese",'
-            '"Dutch","Bengali","Turkish","Greek",null],"quality_filter":["BluRay/UHD","WEB/HD","DVD/TV/SAT",'
-            '"CAM/Screener","Unknown"],"api_password":null,"mediaflow_config":null,"rpdb_config":null,'
-            '"live_search_streams":false,"contribution_streams":false}'
-        ) % (debrid_token, debrid_service)
+        # mediafusion_user_settings = (
+            # '{"streaming_provider":{"token":"%s","service":"%s","enable_watchlist_catalogs":false,'
+            # '"download_via_browser":false,"only_show_cached_streams":true},"selected_catalogs":[],'
+            # '"selected_resolutions":["4k","2160p","1440p","1080p","720p","576p","480p","360p","240p",null],'
+            # '"enable_catalogs":false,"enable_imdb_metadata":true,"max_size":"inf","max_streams_per_resolution":"999",'
+            # '"torrent_sorting_priority":[],"show_full_torrent_name":true,"show_language_country_flag":false,"nudity_filter":["Disable"],'
+            # '"certification_filter":["Disable"],"language_sorting":["English","Tamil","Hindi","Malayalam","Kannada",'
+            # '"Telugu","Chinese","Russian","Arabic","Japanese","Korean","Taiwanese","Latino","French","Spanish",'
+            # '"Portuguese","Italian","German","Ukrainian","Polish","Czech","Thai","Indonesian","Vietnamese",'
+            # '"Dutch","Bengali","Turkish","Greek",null],"quality_filter":["BluRay/UHD","WEB/HD","DVD/TV/SAT",'
+            # '"CAM/Screener","Unknown"],"api_password":null,"mediaflow_config":null,"rpdb_config":null,'
+            # '"live_search_streams":false,"contribution_streams":false}'
+        # ) % (debrid_token, debrid_service)
 
-        mediafusion_encrypted_secret = "invalid_configuration"
-        try:
-            response = requests.post(
-                f"{self.base_link}/encrypt-user-data",
-                headers={"Content-Type": "application/json"},
-                data=mediafusion_user_settings,
-                timeout=10
-            )
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("status") == "success":
-                    mediafusion_encrypted_secret = result.get("encrypted_str", "invalid_configuration")
-        except Exception as e:
-            log_utils.log(f"Exception: {e}", level=log_utils.LOGDEBUG)
-            pass
+        # mediafusion_encrypted_secret = "invalid_configuration"
+        # try:
+            # response = requests.post(
+                # f"{self.base_link}/encrypt-user-data",
+                # headers={"Content-Type": "application/json"},
+                # data=mediafusion_user_settings,
+                # timeout=10
+            # )
+            # if response.status_code == 200:
+                # result = response.json()
+                # if result.get("status") == "success":
+                    # mediafusion_encrypted_secret = result.get("encrypted_str", "invalid_configuration")
+        # except Exception as e:
+            # log_utils.log(f"Exception: {e}", level=log_utils.LOGDEBUG)
+            # pass
 
-        return mediafusion_encrypted_secret
+        # return mediafusion_encrypted_secret
 
     def _get_files(self, url):
         ############KODI-RD-IL###################
@@ -82,9 +84,7 @@ class source:
 
         ############KODI-RD-IL###################
         debrid_service = debrid_dict[data['debrid_service']]
-        if debrid_service not in ["realdebrid", "alldebrid"]: return sources
-        debrid_token = data['debrid_token']
-        mediafusion_encrypted_secret = self._get_mediafusion_encrypted_secret(debrid_service, debrid_token)
+        if debrid_service!="realdebrid": return sources
         ############KODI-RD-IL###################
 
         append = sources.append
@@ -103,12 +103,12 @@ class source:
                 episode = data['episode']
                 hdlr = 'S%02dE%02d' % (int(season), int(episode))
                 ############KODI-RD-IL###################
-                url = '%s%s' % (self.base_link, self.tvSearch_link % (mediafusion_encrypted_secret, imdb, season, episode))
+                url = '%s%s' % (self.base_link, self.tvSearch_link % (self.mediafusion_encrypted_secret, imdb, season, episode))
                 ############KODI-RD-IL###################
                 files = cache.get(self._get_files, 10, url)
             else:
                 ############KODI-RD-IL###################
-                url = '%s%s' % (self.base_link, self.movieSearch_link % (mediafusion_encrypted_secret, imdb))
+                url = '%s%s' % (self.base_link, self.movieSearch_link % (self.mediafusion_encrypted_secret, imdb))
                 ############KODI-RD-IL###################
                 hdlr = year
                 files = self._get_files(url)
@@ -162,9 +162,7 @@ class source:
 
         ############KODI-RD-IL###################
         debrid_service = debrid_dict[data['debrid_service']]
-        if debrid_service not in ["realdebrid", "alldebrid"]: return sources
-        debrid_token = data['debrid_token']
-        mediafusion_encrypted_secret = self._get_mediafusion_encrypted_secret(debrid_service, debrid_token)
+        if debrid_service!="realdebrid": return sources
         ############KODI-RD-IL###################
 
         # count, finished_single_scrape = 0, False
@@ -183,7 +181,7 @@ class source:
             year = data['year']
             season = data['season']
             ############KODI-RD-IL###################
-            url = '%s%s' % (self.base_link, self.tvSearch_link % (mediafusion_encrypted_secret, imdb, season, data['episode']))
+            url = '%s%s' % (self.base_link, self.tvSearch_link % (self.mediafusion_encrypted_secret, imdb, season, data['episode']))
             ############KODI-RD-IL###################
             files = cache.get(self._get_files, 10, url)
             _INFO = re.compile(r'💾.*') # _INFO = re.compile(r'👤.*')
