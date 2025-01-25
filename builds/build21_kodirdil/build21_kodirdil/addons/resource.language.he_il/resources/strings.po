@@ -5116,6 +5116,21 @@ msgctxt "#12395"
 msgid "Battery level"
 msgstr "רמת סוללה"
 
+#. Label of button in the System Info screen asking for donations. "Thank you!" is used to convey gratitude to the users of our beloved software.
+msgctxt "#12396"
+msgid "Thank you!"
+msgstr ""
+
+#. Label of text box asking for donations
+msgctxt "#12397"
+msgid "Kodi is brought to you with love from the Kodi Foundation, a 501(c)(3) nonprofit organization. Thank you for using our software!"
+msgstr ""
+
+#. URL for donations. Do not translate.
+msgctxt "#12398"
+msgid "kodi.tv/donate"
+msgstr ""
+
 msgctxt "#12600"
 msgid "Weather"
 msgstr "מזג אוויר"
@@ -5894,6 +5909,10 @@ msgctxt "#13391"
 msgid "Eject / Load"
 msgstr "הוצאה / טעינה"
 
+msgctxt "#13392"
+msgid "Stream selection"
+msgstr ""
+
 msgctxt "#13393"
 msgid "Calculate size"
 msgstr "חישוב נפח"
@@ -6039,10 +6058,6 @@ msgctxt "#13427"
 msgid "Allow hardware acceleration - DXVA2"
 msgstr "אפשר האצת חומרה - DXVA2"
 
-msgctxt "#13428"
-msgid "Allow hardware acceleration - CrystalHD"
-msgstr "אפשר האצת חומרה - CrystalHD"
-
 msgctxt "#13429"
 msgid "Allow hardware acceleration - VTBDecoder"
 msgstr "אפשר האצת חומרה - VTBDecoder"
@@ -6168,6 +6183,16 @@ msgstr "מאפשר האצת חומרה לקודק VP9. אם מנוטרל יבו�
 msgctxt "#13457"
 msgid "Prefer VAAPI render method"
 msgstr "העדפת עיבוד ע״י VAAPI"
+
+#. This filter disables certain Android software decoders, leaving only hardware decoders available for video playback.
+msgctxt "#13458"
+msgid "Use Decoder filter"
+msgstr ""
+
+#. Description of setting with label #13458 "Use Decoder filter"
+msgctxt "#13459"
+msgid "Enable/Disable the filter that blocks certain Android software decoders. This filter is configurable via the [userdata]/decoderfilter.xml file."
+msgstr ""
 
 msgctxt "#13460"
 msgid "Use HEVC VAAPI"
@@ -8038,7 +8063,7 @@ msgctxt "#19053"
 msgid "Recording information"
 msgstr "פרטי הקלטה"
 
-#. header label for hide channel confirmation message box
+#. Header label for hide channel confirmation message box and context menu item label
 msgctxt "#19054"
 msgid "Hide channel"
 msgstr "הסתרת ערוץ"
@@ -15264,11 +15289,6 @@ msgctxt "#35254"
 msgid "Save the game automatically during game play, if supported. Resume playing where you left off."
 msgstr ""
 
-#. Label for showing which emulator the game was saved with
-msgctxt "#35255"
-msgid "Saved with:"
-msgstr ""
-
 #. Error message when a game client fails to install when a game is being launched
 msgctxt "#35256"
 msgid "Failed to install add-on."
@@ -15344,6 +15364,11 @@ msgstr ""
 #. Description for notification event regarding unsuccessful RetroAchievements login
 msgctxt "#35270"
 msgid "Your account is not verified. Please check your email to complete your sign up."
+msgstr ""
+
+#. Error message shown when an OpenGL game is played, as OpenGL is not currently supported
+msgctxt "#35271"
+msgid "This game requires OpenGL support for 3D rendering. OpenGL support is still under development."
 msgstr ""
 
 #. connection state "host unreachable"
@@ -15888,11 +15913,6 @@ msgstr "כאשר מופעל, ערך \"ערכת סרטים\" משמש גם אם �
 msgctxt "#36158"
 msgid "Enable DXVA2 hardware decoding of video files."
 msgstr "מאפשר פענוח וידאו חומרתי דרך DXVA2."
-
-#. Description of setting with label #13428 "Allow hardware acceleration (CrystalHD)"
-msgctxt "#36159"
-msgid "Enable CrystalHD decoding of video files."
-msgstr "מאפשר פענוח וידאו חומרתי דרך CrystalHD."
 
 #. Description of setting with label #13429 "Allow hardware acceleration (VDADecoder)"
 msgctxt "#36160"
@@ -17799,7 +17819,7 @@ msgstr "גרסת פרוטוקול מזערית"
 
 #. Description of setting with label #36628 "Minimum protocol version"
 msgctxt "#36629"
-msgid "Set the minimum SMB protocol version to negotiate when making connections. Forcing SMBv2 may be required to prevent SMBv1 use on some OS."
+msgid "Set the minimum SMB protocol version to negotiate when making connections. Forcing SMBv2 may be required to prevent SMBv1 use on some systems. Only SMBv2.1 and SMBv3 support Large MTU (chunk size > 64 KB)."
 msgstr ""
 
 #. Label of a setting, sets additional config required for some proprietary SMBv1 implementations (mostly routers)
@@ -17835,6 +17855,11 @@ msgstr ""
 #. Text in error dialog when trying to enter an invalid web server configuration by enabling authentication without a password set
 msgctxt "#36636"
 msgid "You must first enter a password before web server authentication can be enabled."
+msgstr ""
+
+#. Values for setting with label #36621 and #36628 "Minimum/Maximum protocol version"
+msgctxt "#36637"
+msgid "SMBv2 and Large MTU"
 msgstr ""
 
 #. Menuitem at "Settings -> System -> Add-ons"
@@ -19446,6 +19471,16 @@ msgctxt "#39203"
 msgid "Adjust the space between lines of text. Setting a value too low may cause boxes to overlap when the \"Background type\" setting is used."
 msgstr ""
 
+#. Setting to make CC subtitles for hearing impaired only
+msgctxt "#39204"
+msgid "Set CC subtitles only for the hearing impaired"
+msgstr ""
+
+#. Help text for setting of label #39204
+msgctxt "#39205"
+msgid "By enabling it, CC subtitles will be labeled for the hearing impaired; this will affect the automatic selection of subtitles, which unless otherwise specified will not be displayed by default."
+msgstr ""
+
 # 40000 to 40800 are reserved for Video Versions feature
 #. Generic video versions label (plural)
 msgctxt "#40000"
@@ -19635,6 +19670,16 @@ msgstr ""
 #. Addition of new version: the default version of a movie with multiple versions cannot be turned into a version of another movie.
 msgctxt "#40038"
 msgid "The default version of a movie with multiple versions cannot be added to another movie. Please move or remove the other versions first."
+msgstr ""
+
+#. Remove video extra dialog title
+msgctxt "#40039"
+msgid "Remove video extra"
+msgstr ""
+
+#. Remove video extra dialog text
+msgctxt "#40040"
+msgid "Are you sure to remove the extra \"{0:s}\"?"
 msgstr ""
 
 #. Select default video version setting
@@ -19873,6 +19918,14 @@ msgstr ""
 msgctxt "#40802"
 msgid "If enabled, a confirmation dialog will be displayed when files shall be deleted. If disabled, files will be deleted without user confirmation."
 msgstr ""
+
+#~ msgctxt "#13428"
+#~ msgid "Allow hardware acceleration - CrystalHD"
+#~ msgstr "אפשר האצת חומרה - CrystalHD"
+
+#~ msgctxt "#36159"
+#~ msgid "Enable CrystalHD decoding of video files."
+#~ msgstr "מאפשר פענוח וידאו חומרתי דרך CrystalHD."
 
 #~ msgctxt "#462"
 #~ msgid "Subtitle"
