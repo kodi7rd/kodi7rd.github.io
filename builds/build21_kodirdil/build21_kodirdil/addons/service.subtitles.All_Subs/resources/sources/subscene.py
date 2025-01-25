@@ -25,7 +25,7 @@ MyTmp = xbmc_tranlate_path(os.path.join(__profile__, 'temp_subscene'))
 que=urllib.parse.quote_plus
 
 ########### Constants ###################
-SUBSCENE_URL = "https://subscene.cam"
+SUBSCENE_URL = "https://sub-scene.com"
 SUBSCENE_SEARCH_URL = f"{SUBSCENE_URL}/search?query="
 SUBSCENE_DOWNLOAD_URL = f"{SUBSCENE_URL}/download"
 site_id = '[Subscene]'
@@ -291,7 +291,7 @@ def parse_search_response(selected_lang, media_type, season, episode, search_res
                 # Skip this subtitle if there's no match
                 continue
     
-        # Example: https://subscene.cam/subtitle/331615
+        # Example: https://sub-scene.com/subtitle/331615
         download_href_url = f'{SUBSCENE_URL}{href_url}'
 
         # Example: Hebrew | English

@@ -1,4 +1,6 @@
-﻿[COLOR yellow][B]v4.7.3[/B][/COLOR]
+﻿[COLOR yellow][B]v4.7.4[/B][/COLOR]
+* Change Subscene site domain from subscene.cam to sub-scene.com.
+[COLOR yellow][B]v4.7.3[/B][/COLOR]
 * Telegram source - mute and archive AllSubs channel at join.
 [COLOR yellow][B]v4.7.2[/B][/COLOR]
 * Add Telegram subtitles source.
