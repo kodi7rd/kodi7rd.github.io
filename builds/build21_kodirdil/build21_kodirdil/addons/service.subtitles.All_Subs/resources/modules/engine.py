@@ -579,9 +579,6 @@ def bing_web_machine_translate(text, encoding):
     general.progress_msg=0
 
     f_sub_pre = '\n'.join((r.result() for r in res))
-
-    f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
-    f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
     
     return f_sub_pre
 
@@ -618,8 +615,17 @@ def google_machine_translate(text, encoding):
 
     f_sub_pre = '\n'.join((r.result() for r in res))
 
-    f_sub_pre=f_sub_pre.replace('\r\n','\n') # Fix Subscene bug - replace CRLF with LF
-    f_sub_pre=f_sub_pre.replace('\r','\n') # Replace CR with LF
+    ########################################################################################################
+    # SRT Format FIX
+    # Fix timestamp format: Ensure proper format for 'HH:MM:SS,SSS --> HH:MM:SS,SSS'
+    import re
+    f_sub_pre = re.sub(r'(\d{2}):\s?(\d{2}):\s?(\d{2}),\s?(\d{3})\s?-{1,2}>\s?(\d{2}):\s?(\d{2}):\s?(\d{2}),\s?(\d{3})',
+                       r'\1:\2:\3,\4 --> \5:\6:\7,\8', f_sub_pre)
+                       
+    # MAYBE USEFUL IN THE FUTURE:
+    # Add \r\n for empty lines, retain non-empty lines as they are
+    # f_sub_pre = '\n'.join(line if len(line) > 1 else line + "\r\n" for line in f_sub_pre.splitlines())
+    ########################################################################################################
     
     return f_sub_pre
 
