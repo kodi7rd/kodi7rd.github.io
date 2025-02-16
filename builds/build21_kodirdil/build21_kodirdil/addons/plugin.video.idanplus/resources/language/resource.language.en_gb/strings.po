@@ -271,6 +271,10 @@ msgctxt "#30613"
 msgid "כנסת 99"
 msgstr ""
 
+msgctxt "#30614"
+msgid "כנסת 99 - לקויי שמיעה"
+msgstr ""
+
 msgctxt "#30619"
 msgid "כלכלה 10"
 msgstr ""
@@ -565,4 +569,16 @@ msgstr ""
 
 msgctxt "#32005"
 msgid "נוקה"
+msgstr ""
+
+msgctxt "#32001"
+msgid "ניגון ערוץ טלויזיה בפתיחת קודי"
+msgstr ""
+
+msgctxt "#32002"
+msgid "ניגון ערוץ רדיו בפתיחת קודי"
+msgstr ""
+
+msgctxt "#32003"
+msgid "ללא"
 msgstr ""

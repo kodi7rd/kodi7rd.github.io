@@ -2,6 +2,8 @@
 <settings>
 	<category label="32000">
 		<setting id="actUpdateEPG" type="action" label="30014" action="RunPlugin(plugin://plugin.video.idanplus/?mode=3&amp;module=epg)" option="close" />
+		<setting id="startup_ch" type="labelenum" label="32001" lvalues="32003|30602|30633|30637|30603|30605|30626|30604|30634|30644|30631|30606|30619|30607|30639|30608|30621|30625|30609|30641|30610|30612|30613|30622|30624|30632|30726|30734|30629|30635|30643|30645|30646|30647" default="32003" />
+		<setting id="startup_rd" type="labelenum" label="32002" lvalues="32003|30702|30703|30724|30725|30704|30726|30727|30728|30705|30729|30706|30730|30731|30707|30708|30709|30710|30711|30712|30738|30632|30713|30734|30737|30714|30733|30739|30740|30741|30742|30743|30745" default="32003" />
 	</category>
 	<category label="30600">
 		<setting label="30601" type="lsep"/>
@@ -27,6 +29,7 @@
 		<setting id="ch_66" type="labelenum" label="30610" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="10" />
 		<setting id="ch_97" type="labelenum" label="30612" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="11" />
 		<setting id="ch_99" type="labelenum" label="30613" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="12" />
+		<setting id="ch_99c" type="labelenum" label="30614" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="12" />
 		<setting id="ch_ynet" type="labelenum" label="30622" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="13" />
 		<setting id="ch_walla" type="labelenum" label="30624" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="14" />
 		<setting id="ch_sport5" type="labelenum" label="30632" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23" default="15" />
@@ -57,6 +60,7 @@
 		<setting id="ch_66_res" type="text" label="30610" default="" />
 		<setting id="ch_97_res" type="text" label="30612" default="" />
 		<setting id="ch_99_res" type="text" label="30613" default="" />
+		<setting id="ch_99c_res" type="text" label="30614" default="" />
 		<setting id="ch_ynet_res" type="text" label="30622" default="" />
 		<setting id="ch_walla_res" type="text" label="30624" default="" />
 		<setting id="ch_kabru_res" type="text" label="30629" default="" />
