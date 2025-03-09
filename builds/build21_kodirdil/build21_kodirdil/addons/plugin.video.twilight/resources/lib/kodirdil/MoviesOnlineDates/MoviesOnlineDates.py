@@ -57,13 +57,13 @@ def reformat_message_content(message_content):
     message_content = re.sub(r'\n+', '\n', message_content)
     
     # Movie label
-    message_content = re.sub(f'🎬\s*(.*)\s*🎬', r'[B][COLOR yellow]\1[/COLOR][/B]', message_content)
+    message_content = re.sub(r'🎬\s*(.*)\s*🎬', r'[B][COLOR yellow]\1[/COLOR][/B]', message_content)
     
     # Bold headers
     bold_headers = ["ז'אנר:", "בימוי:", "שחקנים:", "תקציר:", "תאריך יציאה לקולנוע:", "תאריך יציאה לרשת:"]
     for bold_header in bold_headers:
         # Use regular expression to capture the pattern and replace it with [B][I]pattern[/I][/B]
-        message_content = re.sub(f'({bold_header})', r'[B]\1[/B]', message_content)
+        message_content = re.sub(rf'({bold_header})', r'[B]\1[/B]', message_content)
     
     # Make "עדכון 1 לגבי הסרט..." bold
     message_content = re.sub(r'עדכון (\d+) לגבי הסרט "(.*?)"', r'[B]עדכון \1 לגבי הסרט "\2"[/B]', message_content)
@@ -89,7 +89,7 @@ def reformat_message_content(message_content):
             pass
         
     # Remove any YouTube trailer link
-    message_content = re.sub(r'\[טריילר\]\(https://(?:www\.youtube\.com/watch\?v=|youtu\.be/)([^?)]+)[^)]*\)', '', message_content)
+    message_content = re.sub(r'\[טריילר\]\(https?://(?:www\.youtube\.com/watch\?v=|youtu\.be/)([^?)]+)[^)]*\)', '', message_content)
             
     message_content = message_content.rstrip()
     
