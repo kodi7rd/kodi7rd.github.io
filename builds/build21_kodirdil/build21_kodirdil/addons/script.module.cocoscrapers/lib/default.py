@@ -89,6 +89,10 @@ elif action == 'tools_viewLogFile':
 	from cocoscrapers.modules import log_utils
 	log_utils.view_LogFile(params.get('name'))
 
+elif action == 'tools_viewTorrentStats':
+	from cocoscrapers.modules import log_utils
+	log_utils.view_TorrentStats(params.get('name'))
+
 elif action == 'tools_uploadLogFile':
 	from cocoscrapers.modules import log_utils
 	log_utils.upload_LogFile()
@@ -121,3 +125,13 @@ elif action == 'ProwlarrIndexers':
 	from cocoscrapers.modules.prowlarr import Prowlarr
 	prowlarr = Prowlarr()
 	prowlarr.get_indexers()
+
+elif action == 'mediafusionAuth':
+	from cocoscrapers.modules.mediafusion import MediaFusion
+	mediafusion = MediaFusion()
+	mediafusion.auth()
+
+elif action == 'mediafusionReset':
+	from cocoscrapers.modules.mediafusion import MediaFusion
+	mediafusion = MediaFusion()
+	mediafusion.clear()

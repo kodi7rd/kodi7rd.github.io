@@ -403,10 +403,6 @@ msgctxt "#32111"
 msgid "KICKASS2 (Pack Capable)"
 msgstr ""
 
-msgctxt "#32112"
-msgid "LIMETORRENTS (Pack capable)"
-msgstr ""
-
 msgctxt "#32113"
 msgid "MAGNET$NUMBER[4]YOU"
 msgstr ""
@@ -439,10 +435,6 @@ msgctxt "#32120"
 msgid "TOPNOW"
 msgstr ""
 
-msgctxt "#32121"
-msgid "TORLOCK"
-msgstr ""
-
 msgctxt "#32122"
 msgid "TORRENTAPI (Pack capable)"
 msgstr ""
@@ -473,10 +465,6 @@ msgstr ""
 
 msgctxt "#32129"
 msgid "BTDB (Pack capable)"
-msgstr ""
-
-msgctxt "#32130"
-msgid "TORRENTZ2  (Pack capable)"
 msgstr ""
 
 msgctxt "#32131"
@@ -517,14 +505,6 @@ msgstr ""
 
 msgctxt "#32140"
 msgid "Clear ALL Extra Undesirables"
-msgstr ""
-
-msgctxt "#32141"
-msgid "KNIGHTCRAWLER (Pack Capable)"
-msgstr ""
-
-msgctxt "#32142"
-msgid "RUTOR (Pack capable)"
 msgstr ""
 
 msgctxt "#32513"
@@ -741,6 +721,30 @@ msgstr ""
 
 msgctxt "#32568"
 msgid "MEDIAFUSION (Pack Capable)"
+msgstr ""
+
+msgctxt "#32569"
+msgid "View CocoScrapers torrent stats"
+msgstr ""
+
+msgctxt "#32570"
+msgid "Setup Using Device Code"
+msgstr ""
+
+msgctxt "#32571"
+msgid "Mediafusion URL"
+msgstr ""
+
+msgctxt "#32572"
+msgid "Use Custom Mediafusion URL"
+msgstr ""
+
+msgctxt "#32573"
+msgid "Secret String"
+msgstr ""
+
+msgctxt "#32574"
+msgid "Reset Secret"
 msgstr ""
 
 # KODI-RD-IL Custom Strings

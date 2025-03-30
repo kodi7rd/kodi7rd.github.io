@@ -9,6 +9,8 @@ from cocoscrapers.modules import source_utils, cache
 from cocoscrapers.modules.control import homeWindow, sleep
 from cocoscrapers.modules import log_utils
 session = requests.Session()
+from time import time
+
 
 debrid_dict = {'Real-Debrid': 'realdebrid' , 'Premiumize.me': 'premiumize' , 'AllDebrid': 'alldebrid'}
 
@@ -22,6 +24,13 @@ class source:
 		self.base_link = 'https://comet.elfhosted.com'
 		self.movieSearch_link = '/%s/stream/movie/%s.json'
 		self.tvSearch_link = '/%s/stream/series/%s:%s:%s.json'
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.min_seeders = 0
 # Currently supports BITSEARCH(+), EZTV(+), ThePirateBay(+), TheRARBG(+), YTS(+)
 
@@ -40,6 +49,7 @@ class source:
 		append = sources.append
 		self.pack_get = False
 		try:
+			startTime = time()
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
 			aliases = data['aliases']
@@ -95,9 +105,18 @@ class source:
 
 				append({'provider': 'comet', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality]+=1
 			except:
 				homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
 				source_utils.scraper_error('COMET')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - COMET found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		if not logged: log_utils.log('#STATS - COMET found nothing')
+		endTime = time()
+		log_utils.log('#STATS - COMET took %.2f seconds' % (endTime - startTime))
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -114,6 +133,7 @@ class source:
 		sleep(1000)
 		sources_append = sources.append
 		try:
+			startTime = time()
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
 			aliases = data['aliases']
 			imdb = data['imdb']
@@ -173,7 +193,16 @@ class source:
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('COMET')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - COMET(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		if not logged: log_utils.log('#STATS - COMET(pack) found nothing')
+		endTime = time()
+		log_utils.log('#STATS - COMET(pack) took %.2f seconds' % (endTime - startTime))
 		return sources
 

@@ -8,7 +8,8 @@ import re
 from urllib.parse import quote_plus, unquote_plus
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
-from cocoscrapers.modules import workers
+from cocoscrapers.modules import log_utils
+from time import time
 SERVER_ERROR = ('something went wrong', 'Connection timed out', '521: Web server is down', '503 Service Unavailable')
 
 
@@ -21,6 +22,13 @@ class source:
 		self.language = ['en']
 		self.base_link = "https://bitcq.com"
 		self.search_link = "/search?q=%s&category[]=1"
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -28,6 +36,7 @@ class source:
 		if not data: return sources
 		sources_append = sources.append
 		try:
+			startTime = time()
 			aliases = data['aliases']
 			year = data['year']
 			if 'tvshowtitle' in data:
@@ -85,8 +94,17 @@ class source:
 
 				sources_append({'provider': 'bitcq', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('BITCQ')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - BITCQ found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		if not logged: log_utils.log('#STATS - BITCQ found nothing')
+		endTime = time()
+		log_utils.log('#STATS - BITCQ took %.2f seconds' % (endTime - startTime))
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -94,6 +112,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
+			startTime = time()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
@@ -114,16 +133,24 @@ class source:
 				queries = [
 						self.search_link % quote_plus(query + ' Season'),
 						self.search_link % quote_plus(query + ' Complete')]
-			threads = []
-			append = threads.append
+			from cocoscrapers.modules.Thread_pool import run_and_wait
+			from functools import partial
+			bound_get_sources_packs = partial(self.get_sources_packs)
+			links = []
 			for url in queries:
-				link = '%s%s' % (self.base_link, url)
-				append(workers.Thread(self.get_sources_packs, link))
-			[i.start() for i in threads]
-			[i.join() for i in threads]
+				links.append('%s%s' % (self.base_link, url))
+			run_and_wait(bound_get_sources_packs, links)
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - BITCQ(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - BITCQ(pack) found nothing')
+			endTime = time()
+			log_utils.log('#STATS - BITCQ(pack) took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
-			source_utils.scraper_error('GLODLS')
+			source_utils.scraper_error('BITCQ')
 			return self.sources
 
 	def get_sources_packs(self, link):
@@ -180,5 +207,6 @@ class source:
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('BITCQ')

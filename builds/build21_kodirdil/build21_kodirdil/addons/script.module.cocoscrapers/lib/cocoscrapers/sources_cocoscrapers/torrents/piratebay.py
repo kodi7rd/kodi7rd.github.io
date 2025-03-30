@@ -8,6 +8,8 @@ from json import loads as jsloads
 import re
 from urllib.parse import quote
 from cocoscrapers.modules import client, source_utils
+from cocoscrapers.modules import log_utils
+from time import time
 
 
 class source:
@@ -26,6 +28,7 @@ class source:
 # 205=video-TV Shows
 # 208=video-HD TV Shows
 # 299=other
+		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0 }
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -33,6 +36,7 @@ class source:
 		if not data: return sources
 		sources_append = sources.append
 		try:
+			startTime = time()
 			aliases = data['aliases']
 			year = data['year']
 			if 'tvshowtitle' in data:
@@ -92,8 +96,17 @@ class source:
 
 				sources_append({'provider': 'piratebay', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality] += 1
 			except:
 				source_utils.scraper_error('PIRATEBAY')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - PIRATEBAY found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		if not logged: log_utils.log('#STATS - PIRATEBAY found nothing')
+		endTime = time()
+		log_utils.log('#STATS - PIRATEBAY took %.2f seconds' % (endTime - startTime))
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -101,6 +114,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
+			startTime = time()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
@@ -123,14 +137,21 @@ class source:
 				queries = [
 						self.search_link % quote(query + ' S%s' % self.season_xx),
 						self.search_link % quote(query + ' Season %s' % self.season_x)]
-			threads = []
-			thrds_append = threads.append
-			from cocoscrapers.modules import workers
+			from cocoscrapers.modules.Thread_pool import run_and_wait
+			from functools import partial
+			bound_get_sources_packs = partial(self.get_sources_packs)
+			links = []
 			for url in queries:
-				link = '%s%s' % (self.base_link, url)
-				thrds_append(workers.Thread(self.get_sources_packs, link))
-			[i.start() for i in threads]
-			[i.join() for i in threads]
+				links.append('%s%s' % (self.base_link, url))
+			run_and_wait(bound_get_sources_packs, links)
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - PIRATEBAY(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - PIRATEBAY(pack) found nothing')
+			endTime = time()
+			log_utils.log('#STATS - PIRATEBAY(pack) took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('PIRATEBAY')
@@ -187,5 +208,6 @@ class source:
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
+				self.item_totals[quality] += 1
 			except:
 				source_utils.scraper_error('PIRATEBAY')

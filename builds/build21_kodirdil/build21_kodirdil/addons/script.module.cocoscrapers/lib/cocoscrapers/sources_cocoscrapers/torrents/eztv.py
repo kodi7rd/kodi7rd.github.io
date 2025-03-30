@@ -20,6 +20,7 @@ class source:
 		self.base_link = "https://eztvx.to/"
 		# eztv has api but it sucks. Site query returns more results vs. api (eztv db seems to be missing the imdb_id for many so they are dropped)
 		self.search_link = '/search/%s'
+		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0 }
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -86,8 +87,15 @@ class source:
 
 				sources_append({'provider': 'eztv', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 								'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('EZTV')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - EZTV found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+		if not logged: log_utils.log('#STATS - EZTV found nothing')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -161,6 +169,13 @@ class source:
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('EZTV')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - EZTV(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+		if not logged: log_utils.log('#STATS - EZTV(pack) found nothing')
 		return sources

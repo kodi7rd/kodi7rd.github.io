@@ -8,6 +8,8 @@ from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils, cache
+from cocoscrapers.modules import log_utils
+from time import time
 from cocoscrapers.modules.control import setting as getSetting, homeWindow, sleep
 
 class source:
@@ -23,6 +25,7 @@ class source:
 		#self.movieSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/movie/%s.json'
 		#self.tvSearch_link = '/providers=yts,eztv,rarbg,1337x,thepiratebay,kickasstorrents,torrentgalaxy/stream/series/%s:%s:%s.json'
 		self.movieSearch_link = '/stream/movie/%s.json'
+		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0 }
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
 		self.bypass_filter = getSetting('torrentio.bypass_filter')
@@ -42,6 +45,7 @@ class source:
 			return sources
 		sources_append = sources.append
 		try:
+			startTime = time()
 			aliases = data['aliases']
 			year = data['year']
 			imdb = data['imdb']
@@ -99,9 +103,18 @@ class source:
 
 				sources_append({'provider': 'torrentio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality] += 1
 			except:
 				homeWindow.clearProperty('cocoscrapers.torrentio.performing_single_scrape')
 				source_utils.scraper_error('TORRENTIO')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - TORRENTIO found {0:2.0f} {1}'.format(self.item_totals[quality], quality))
+				logged = True
+		if not logged: log_utils.log('#STATS - TORRENTIO found nothing')
+		endTime = time()
+		log_utils.log('#STATS - TORRENTIO took %.2f seconds' % (endTime - startTime))
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -117,6 +130,7 @@ class source:
 		if not finished_single_scrape: return sources
 		sources_append = sources.append
 		try:
+			startTime = time()
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 			aliases = data['aliases']
 			imdb = data['imdb']
@@ -176,6 +190,15 @@ class source:
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
+				self.item_totals[quality] += 1
 			except:
 				source_utils.scraper_error('TORRENTIO')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - TORRENTIO(pack) found {0:2.0f} {1}'.format(self.item_totals[quality], quality))
+				logged = True
+		if not logged: log_utils.log('#STATS - TORRENTIO(pack) found nothing')
+		endTime = time()
+		log_utils.log('#STATS - TORRENTIO(pack) took %.2f seconds' % (endTime - startTime))
 		return sources

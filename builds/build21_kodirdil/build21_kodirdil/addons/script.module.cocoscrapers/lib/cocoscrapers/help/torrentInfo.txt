@@ -65,3 +65,36 @@ extratorrent (torrent) removed 11-12-21 proxy returns cloudflare v2 challenge
 limetorrents (torrent)
 torrentapi (torrent)  removed RARBG quit. 06-27-23
 torrentgalaxy (torrent)
+
+Updates Early 2025
+------------------
+
+Updating the thread usage and checking each torrent py to see if they still work, if they don't they get deleted
+
+1337x - Updated to use thread_pool singleton, finished, tested
+bitcq - Updated to use thread_pool singleton, finished, tested
+bitlord - Updated to use thread_pool singleton, finished, tested
+bitsearch - Updated to use thread_pool singleton, finished, tested
+comet - finished, tested
+ext - Fails, removed
+
+eztv - finished
+isohunt2 - Updated, finished
+Kickass2 - Updated, finished
+Knaben - Updated, finished
+Knightcrawler - Updated for stats, fails, removed
+Limetorrents - fails, removed
+Mediafusion - no threads, updated for stats, finished
+nyaa - added stats, finished
+piratebay - finished
+rutor - removed
+torlock - removed
+torrentdownload - finished
+torrentfunk - finished
+torrentgalaxy - finished
+torrentio - finished
+torrentproject2 - finished
+torrentquest - finished
+torrentz2 - removed
+yourbittorrent - finished
+ytsmx - finished, movies only

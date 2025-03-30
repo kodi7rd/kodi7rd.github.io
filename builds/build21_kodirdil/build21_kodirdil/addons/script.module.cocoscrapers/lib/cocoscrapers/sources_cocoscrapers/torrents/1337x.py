@@ -8,7 +8,8 @@ import re
 from urllib.parse import quote, unquote_plus
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
-from cocoscrapers.modules import workers
+from cocoscrapers.modules import log_utils
+from time import time
 
 
 class source:
@@ -19,6 +20,13 @@ class source:
 	def __init__(self):
 		self.language = ['en', 'de', 'fr', 'ko', 'pl', 'pt', 'ru']
 		self.domains = ['1337x.to', '1337x.st', '1337x.ws', '1337x.eu', '1337x.se', '1337x.is'] # all are behind cloudflare except .to
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.base_link = "https://1337x.to"
 		self.tvsearch = '/sort-category-search/%s/TV/size/desc/1/'
 		self.moviesearch = '/sort-category-search/%s/Movies/size/desc/1/'
@@ -31,6 +39,7 @@ class source:
 		self.items = []
 		self.items_append = self.items.append
 		try:
+			startTime = time()
 			self.aliases = data['aliases']
 			self.year = data['year']
 			if 'tvshowtitle' in data:
@@ -51,18 +60,20 @@ class source:
 			# log_utils.log('urls = %s' % urls)
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
-			threads = []
-			append = threads.append
-			for url in urls:
-				append(workers.Thread(self.get_items, url))
-			[i.start() for i in threads]
-			[i.join() for i in threads]
-			threads2 = []
-			append2 = threads2.append
-			for i in self.items:
-				append2(workers.Thread(self.get_sources, i))
-			[i.start() for i in threads2]
-			[i.join() for i in threads2]
+			from cocoscrapers.modules.Thread_pool import run_and_wait
+			from functools import partial
+			bound_get_items = partial(self.get_items)
+			run_and_wait(bound_get_items, urls)
+			bound_get_sources = partial(self.get_sources)
+			run_and_wait(bound_get_sources, self.items)
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - 1337x.to found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - 1337x.to found nothing')
+			endTime = time()
+			log_utils.log('#STATS - 1337x took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('1337X')
@@ -77,6 +88,7 @@ class source:
 		except:
 			source_utils.scraper_error('1337X')
 			return
+		item_results = []
 		for row in rows:
 			try:
 				columns = re.findall(r'<td.*?>(.+?)</td>', row, re.DOTALL)
@@ -119,5 +131,6 @@ class source:
 			hash = re.search(r'btih:(.*?)&', url, re.I).group(1)
 			self.sources_append({'provider': '1337x', 'source': 'torrent', 'seeders': item[5], 'hash': hash, 'name': item[0], 'name_info': item[1],
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': item[4]})
+			self.item_totals[quality]+=1
 		except:
 			source_utils.scraper_error('1337X')

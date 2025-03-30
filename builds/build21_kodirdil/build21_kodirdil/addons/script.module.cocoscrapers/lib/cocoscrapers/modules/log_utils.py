@@ -128,6 +128,25 @@ def view_LogFile(name):
 	except:
 		error()
 
+def view_TorrentStats(name):
+	try:
+		from cocoscrapers.windows.textviewer import TextViewerXML
+		from cocoscrapers.modules.control import addonPath
+		log_file = joinPath(LOGPATH, '%s.log' % name.lower())
+		if not existsPath(log_file):
+			from cocoscrapers.modules.control import notification
+			return notification(message='Log File not found, likely logging is not enabled.')
+		f = open(log_file, 'r', encoding='utf-8', errors='ignore')
+		text = f.read()
+		f.close()
+		stats_lines = '\n'.join([line for line in text.splitlines() if '#STATS' in line])
+		heading = '[B]%s -  LogFile[/B]' % name
+		windows = TextViewerXML('textviewer.xml', addonPath(), heading=heading, text=stats_lines)
+		windows.run()
+		del windows
+	except:
+		error()
+
 def upload_LogFile():
 	from cocoscrapers.modules.control import notification
 	url = 'https://paste.kodi.tv/'

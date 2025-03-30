@@ -5,6 +5,7 @@
 
 import xbmc
 from cocoscrapers.modules import control
+from cocoscrapers.modules.Thread_pool import shutdown_executor
 window = control.homeWindow
 LOGINFO = 1 # (LOGNOTICE(2) deprecated in 19, use LOGINFO(1))
 
@@ -62,6 +63,7 @@ def main():
 			xbmc.log('[ script.module.cocoscrapers ]  Settings file cleaned complete', LOGINFO)
 		break
 	SettingsMonitor().waitForAbort()
+	shutdown_executor()
 	xbmc.log('[ script.module.cocoscrapers ]  Service Stopped', LOGINFO)
 
 main()

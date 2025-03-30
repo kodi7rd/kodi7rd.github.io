@@ -8,7 +8,9 @@ import base64, re, requests
 from cocoscrapers.modules import source_utils, cache
 from cocoscrapers.modules.control import homeWindow, sleep
 from cocoscrapers.modules import log_utils
+from cocoscrapers.modules import control
 session = requests.Session()
+from time import time
 
 
 class source:
@@ -18,17 +20,35 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		#self.base_link = 'https://mediafusion.elfhosted.com'
-		self.manifest = '/eJwBYACf_92uqrL8vhmebCYzGgX6Q2BMyNhn5SMWS_XitAKLTUul8nAqQEcj0k2wPpBs1ceClvb4mT2darthTiMrk2XGFdUx3XR4MB5WJT3hZWla9v-cQY6bloboXr6BxVJfNgTC3xazL_8='
-		self.base_link = 'https://mediafusion.elfhosted.com'+self.manifest
+		if control.setting('mediafusion.usecustomurl') == 'true': 
+			self.base_link = control.setting('mediafusion.customurl')
+		else:
+			self.base_link = 'https://mediafusion.elfhosted.com'
+		if self.base_link == '':
+			self.base_link = 'https://mediafusion.elfhosted.com'
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.min_seeders = 0
 # Currently supports BITSEARCH(+), EZTV(+), ThePirateBay(+), TheRARBG(+), YTS(+)
 
 	def _get_files(self, url):
+		if control.setting('mediafusion_user_data') == '':
+			headers = {
+				'encoded_user_data': 'eyJlbmFibGVfY2F0YWxvZ3MiOiBmYWxzZSwgIm1heF9zdHJlYW1zX3Blcl9yZXNvbHV0aW9uIjogOTksICJ0b3JyZW50X3NvcnRpbmdfcHJpb3JpdHkiOiBbXSwgImNlcnRpZmljYXRpb25fZmlsdGVyIjogWyJEaXNhYmxlIl0sICJudWRpdHlfZmlsdGVyIjogWyJEaXNhYmxlIl19'
+			}
+		else:
+			headers = {
+				'encoded_user_data': control.setting('mediafusion_user_data')
+			}
 		if self.get_pack_files: return []
-		results = session.get(url, timeout=10)
+		results = session.get(url, headers=headers, timeout=10)
 		files = results.json()['streams']
 		return files
 
@@ -41,6 +61,7 @@ class source:
 		append = sources.append
 		self.pack_get = False
 		try:
+			startTime = time()
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
 			aliases = data['aliases']
@@ -100,9 +121,18 @@ class source:
 
 				append({'provider': 'mediafusion', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality] += 1
 			except:
 				homeWindow.clearProperty('cocoscrapers.mediafusion.performing_single_scrape')
 				source_utils.scraper_error('MEDIAFUSION')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - MEDIAFUSION found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		endTime = time()
+		if not logged: log_utils.log('#STATS - MEDIASEARCH found nothing')
+		log_utils.log('#STATS - MEDIAFUSION took %.2f seconds' % (endTime - startTime))
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -110,6 +140,7 @@ class source:
 		sources = []
 		if not data: return sources
 		count, finished_single_scrape = 0, False
+		startTime = time()
 		sleep(2000)
 		while count < 10000 and not finished_single_scrape:
 			finished_single_scrape = homeWindow.getProperty('cocoscrapers.mediafusion.performing_single_scrape') != 'true'
@@ -172,8 +203,17 @@ class source:
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
+				self.item_totals[quality] += 1
 				sources_append(item)
 			except:
 				source_utils.scraper_error('MEDIAFUSION')
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - MEDIAFUSION(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		endTime = time()
+		if not logged: log_utils.log('#STATS - MEDIAFUSION(pack) found nothing')
+		log_utils.log('#STATS - MEDIAFUSION(pack) took %.2f seconds' % (endTime - startTime))
 		return sources
 

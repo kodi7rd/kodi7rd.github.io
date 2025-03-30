@@ -8,6 +8,8 @@ from json import loads as jsloads
 import re
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
+from cocoscrapers.modules import log_utils
+from time import time
 
 
 class source:
@@ -19,6 +21,7 @@ class source:
 		self.language = ['en']
 		self.base_link = "https://yts.mx"
 		self.search_link = '/api/v2/list_movies.json?query_term=%s' # accepts imdb_id as query_term
+		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0 }
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -26,6 +29,7 @@ class source:
 		if not data: return sources
 		sources_append = sources.append
 		try:
+			startTime = time()
 			title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 			aliases = data['aliases']
 			hdlr = year = data['year']
@@ -73,6 +77,14 @@ class source:
 
 				sources_append({'provider': 'ytsmx', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 											'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality] += 1
 			except:
 				source_utils.scraper_error('YTSMX')
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - YTSMX found %s %s' % (self.item_totals[quality], quality))
+				logged = True
+		if not logged: log_utils.log('#STATS - YTSMX nothing found')
+		endTime = time()
+		log_utils.log('#STATS - YTSMX took %s' % (endTime - startTime))
 		return sources

@@ -1,3 +1,12 @@
+[COLOR red][B]Version 1.0.32[/B][/COLOR]
+- Changed mediafusion to allow for custom url, custom strings, and kodi code authorization.
+
+[COLOR red][B]Version 1.0.31[/B][/COLOR]
+- Added mediafusion changes to send encrypted user token as header instead of url.
+
+[COLOR red][B]Version 1.0.30[/B][/COLOR]
+- Some updates to threading
+
 [COLOR red][B]Version 1.0.29[/B][/COLOR]
 - Fix for Python 3.12 breaking module detection.
 - Fix for some regular expressions in source_utils and cleantitle.

@@ -236,11 +236,6 @@
 					<control type="toggle"/>
 				</setting>
 				<!-- ========== -->
-				<setting id="provider.ext" type="boolean" label="32131" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
 				<setting id="provider.eztv" type="boolean" label="32107" help="">
 					<level>0</level>
 					<default>true</default>
@@ -257,31 +252,6 @@
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.knaben" type="boolean" label="32545" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.knightcrawler" type="boolean" label="32141" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="knightcrawler.bypass_filter" type="boolean" label="32561" help="32562" parent="provider.knightcrawler">
-					<level>0</level>
-					<default>false</default>
-					<dependencies>
-						<dependency type="visible">
-							<condition operator="is" setting="provider.knightcrawler">true</condition>
-						</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.limetorrents" type="boolean" label="32112" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.mediafusion" type="boolean" label="32568" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -303,22 +273,84 @@
 					<control type="toggle"/>
 				</setting>
 				<!-- ========== -->
+				<setting id="provider.mediafusion" type="boolean" label="32568" help="">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="mediafusion.usecustomurl" type="boolean" label="32572" help="" parent="provider.mediafusion">
+					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="mediafusion.customurl" type="string" label="32571" help="" parent="provider.mediafusion">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="mediafusion.usecustomurl">true</condition>
+							<condition operator="is" setting="provider.mediafusion">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32571</heading>
+					</control>
+				</setting>
+				<setting id="mediafusion.userdata" type="string" label="32573" help="" parent="provider.mediafusion">
+					<level>0</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.mediafusion">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>32573</heading>
+					</control>
+				</setting>
+				<setting id="mediafusiondevice" type="action" label="32570" help="" parent="provider.mediafusion">
+					<level>0</level>
+					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=mediafusionAuth)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.mediafusion">true</condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
+				<setting id="mediafusionreset" type="action" label="32574" help="" parent="provider.mediafusion">
+					<level>0</level>
+					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=mediafusionReset)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<condition operator="is" setting="provider.mediafusion">true</condition>
+							<condition operator="!is" setting="mediafusion.userdata"></condition>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action">
+						<close>true</close>
+					</control>
+				</setting>
 				<setting id="provider.nyaa" type="boolean" label="32116" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.piratebay" type="boolean" label="32117" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.rutor" type="boolean" label="32142" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.torlock" type="boolean" label="32121" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
@@ -373,11 +405,6 @@
 				<setting id="provider.torrentquest" type="boolean" label="32114" help="">
 					<level>0</level>
 					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="provider.torrentz2" type="boolean" label="32130" help="">
-					<level>0</level>
-					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.torrentproject2" type="boolean" label="32136" help="">
@@ -445,6 +472,22 @@
 				<setting id="clearLogFileButton" type="action" label="32056" help="">
 					<level>0</level>
 					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=tools_clearLogFile)</data>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="visible">
+							<and>
+								<condition operator="is" setting="debug.enabled">true</condition>
+								<condition operator="is" setting="debug.location">1</condition>
+							</and>
+						</dependency>
+					</dependencies>
+					<control type="button" format="action"/>
+				</setting>
+				<setting id="viewStatusFileButton" type="action" label="32569" help="">
+					<level>0</level>
+					<data>RunPlugin(plugin://script.module.cocoscrapers/?action=tools_viewTorrentStats&amp;name=CocoScrapers)</data>
 					<constraints>
 						<allowempty>true</allowempty>
 					</constraints>

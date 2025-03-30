@@ -9,6 +9,8 @@ from urllib.parse import quote_plus, unquote_plus
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
 from cocoscrapers.modules import workers
+from cocoscrapers.modules import log_utils
+from time import time
 
 
 class source:
@@ -22,6 +24,13 @@ class source:
 		# self.search_link = '/search?q=%s&category=1&subcat=2&sort=seeders'
 # (1=other/video, 2=movies, 3=TV) but seem to produce bogus results, do not use
 		self.search_link = '/search?q=%s&sort=size'
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -29,6 +38,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
+			startTime = time()
 			self.aliases = data['aliases']
 			self.year = data['year']
 			if 'tvshowtitle' in data:
@@ -47,12 +57,18 @@ class source:
 			# log_utils.log('urls = %s' % urls)
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
-			threads = []
-			append = threads.append
-			for url in urls:
-				append(workers.Thread(self.get_sources, url))
-			[i.start() for i in threads]
-			[i.join() for i in threads]
+			from cocoscrapers.modules.Thread_pool import run_and_wait
+			from functools import partial
+			bound_get_sources = partial(self.get_sources)
+			run_and_wait(bound_get_sources, urls)
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - BITSEARCH found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - BITSEARCH found nothing')
+			endTime = time()
+			log_utils.log('#STATS - BITSEARCH took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('BITSEARCH')
@@ -102,6 +118,7 @@ class source:
 
 				self.sources_append({'provider': 'bitsearch', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('BITSEARCH')
 
@@ -110,6 +127,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
+			startTime = time()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
@@ -132,13 +150,21 @@ class source:
 				queries = [
 						self.search_link % quote_plus(query + ' S%s' % self.season_xx),
 						self.search_link % quote_plus(query + ' Season %s' % self.season_x)]
-			threads = []
-			append = threads.append
+			from cocoscrapers.modules.Thread_pool import run_and_wait
+			from functools import partial
+			bound_get_sources_packs = partial(self.get_sources_packs)
+			links = []
 			for url in queries:
-				link = '%s%s' % (self.base_link, url)
-				append(workers.Thread(self.get_sources_packs, link))
-			[i.start() for i in threads]
-			[i.join() for i in threads]
+				links.append('%s%s' % (self.base_link, url))
+			run_and_wait(bound_get_sources_packs, links)
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - BITSEARCH(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - BITSEARCH(pack) found nothing')
+			endTime = time()
+			log_utils.log('#STATS - BITSEARCH(pack) took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('BITSEARCH')
@@ -200,5 +226,6 @@ class source:
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('BITSEARCH')

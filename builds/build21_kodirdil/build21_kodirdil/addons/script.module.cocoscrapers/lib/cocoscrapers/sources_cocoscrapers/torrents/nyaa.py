@@ -9,7 +9,8 @@ from urllib.parse import quote_plus, unquote_plus
 from cocoscrapers.modules import cleantitle
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
-
+from cocoscrapers.modules import log_utils
+from time import time
 
 class source:
 	priority = 5
@@ -20,6 +21,13 @@ class source:
 		self.language = ['en']
 		self.base_link = "https://nyaa.si"
 		self.search_link = '/?f=0&c=0_0&q=%s'
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
 		self.min_seeders = 1
 
 	def sources(self, data, hostDict):
@@ -27,6 +35,7 @@ class source:
 		if not data: return sources
 		append = sources.append
 		try:
+			startTime = time()
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 			aliases = data['aliases']
@@ -93,7 +102,16 @@ class source:
 
 						append({'provider': 'nyaa', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'quality': quality,
 										'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+						self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('NYAA')
 				return sources
+		logged = False
+		for quality in self.item_totals:
+			if self.item_totals[quality] > 0:
+				log_utils.log('#STATS - NYAA found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+				logged = True
+		if not logged: log_utils.log('#STATS - NYAA found nothing')
+		endTime = time()
+		log_utils.log('#STATS - NYAA took %.2f seconds' % (endTime - startTime))
 		return sources
