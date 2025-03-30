@@ -14,21 +14,18 @@
     <setting id="provider.dmm" default="true">true</setting>
     <setting id="dmm.get_cached_torrents_only" default="true">true</setting>
     <setting id="dmm.bypass_filter">false</setting>
-    <setting id="provider.ext" default="true">false</setting>
     <setting id="provider.eztv">false</setting>
     <setting id="provider.isohunt2" default="true">false</setting>
     <setting id="provider.kickass2" default="true">false</setting>
     <setting id="provider.knaben" default="true">false</setting>
-    <setting id="provider.knightcrawler" default="true">false</setting>
-    <setting id="knightcrawler.bypass_filter" default="true">false</setting>
-    <setting id="provider.limetorrents" default="true">false</setting>
-    <setting id="provider.mediafusion" default="true">false</setting>
     <setting id="provider.mediafusion_cached" default="true">true</setting>
     <setting id="mediafusion_cached.bypass_filter" default="true">false</setting>
+    <setting id="provider.mediafusion" default="true">false</setting>
+    <setting id="mediafusion.usecustomurl" default="true">false</setting>
+    <setting id="mediafusion.customurl" default="true" />
+    <setting id="mediafusion.userdata" default="true" />
     <setting id="provider.nyaa" default="true">false</setting>
     <setting id="provider.piratebay" default="true">false</setting>
-    <setting id="provider.rutor" default="true">false</setting>
-    <setting id="provider.torlock" default="true">false</setting>
     <setting id="provider.torrentdownload">false</setting>
     <setting id="provider.torrentfunk" default="true">false</setting>
     <setting id="provider.torrentgalaxy" default="true">false</setting>
@@ -37,7 +34,6 @@
     <setting id="provider.torrentio_cached" default="true">true</setting>
     <setting id="torrentio_cached.bypass_filter">false</setting>
     <setting id="provider.torrentquest">false</setting>
-    <setting id="provider.torrentz2" default="true">false</setting>
     <setting id="provider.torrentproject2" default="true">false</setting>
     <setting id="provider.yourbittorrent" default="true">false</setting>
     <setting id="provider.ytsmx" default="true">false</setting>
