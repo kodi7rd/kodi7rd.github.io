@@ -72,7 +72,7 @@ msgid "מעבר לדף ע\"פ בחירה"
 msgstr ""
 
 msgctxt "#30014"
-msgid "הורדת מדריך שידורים ידנית"
+msgid "רענון מדריך שידורים"
 msgstr ""
 
 msgctxt "#30015"
@@ -347,6 +347,18 @@ msgctxt "#30643"
 msgid "i24news"
 msgstr ""
 
+msgctxt "#30648"
+msgid "i24news en"
+msgstr ""
+
+msgctxt "#30649"
+msgid "i24news fr"
+msgstr ""
+
+msgctxt "#30650"
+msgid "i24news ar"
+msgstr ""
+
 msgctxt "#30645"
 msgid "13 ערוץ הקומדיות"
 msgstr ""
@@ -581,4 +593,24 @@ msgstr ""
 
 msgctxt "#32003"
 msgid "ללא"
+msgstr ""
+
+msgctxt "#32006"
+msgid "בחירה"
+msgstr ""
+
+msgctxt "#32007"
+msgid "ביטול ניגון ערוץ טלויזיה בפתיחת קודי"
+msgstr ""
+
+msgctxt "#32008"
+msgid "ביטול ניגון ערוץ רדיו בפתיחת קודי"
+msgstr ""
+
+msgctxt "#32009"
+msgid "רענון מקורות שידור לערוצים"
+msgstr ""
+
+msgctxt "#32010"
+msgid "רענון מקורות שידור אוטומטי לערוצים כל מספר שעות"
 msgstr ""

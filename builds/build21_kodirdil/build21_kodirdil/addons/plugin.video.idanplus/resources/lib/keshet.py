@@ -8,7 +8,7 @@ module = 'keshet'
 moduleIcon = common.GetIconFullPath("mako.png")
 baseUrl = 'https://www.mako.co.il'
 endings = 'platform=responsive'
-programUrl = "{0}/_next/data/5.9.0/{{0}}/{{1}}.json?mako_vod_channel={{0}}&program={{1}}".format(baseUrl)
+programUrl = "{0}/_next/data/6.1.0/{{0}}/{{1}}.json?mako_vod_channel={{0}}&program={{1}}".format(baseUrl)
 entitlementsServices = 'https://mass.mako.co.il/ClicksStatistics/entitlementsServicesV2.jsp'
 UA = common.GetUserAgent()
 
@@ -152,13 +152,7 @@ def GetChannels(url, iconimage):
 		common.addDir(name, url, 5, iconimage, infos, contextMenu=[(common.GetLocaleString(30005), 'RunPlugin({0}?url={1}&name={2}&mode=5&iconimage={3}&moredata=choose&module=keshet)'.format(sys.argv[0], common.quote_plus(url), common.quote_plus(name), common.quote_plus(iconimage)))], moreData=bitrate, module='keshet', isFolder=False, isPlayable=True)
 
 def WatchLive(url, name='', iconimage='', quality='best'):
-	channels = {
-		'12': '{0}/mako-vod-live-tv/VOD-6540b8dcb64fd31006.htm'.format(baseUrl),
-		'12b': 'vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD&videoChannelId=d1d6f5dfc8517810VgnVCM100000700a10acRCRD',
-		'12c': '{0}/mako-vod-live-tv/VOD-319a699f834e661006.htm'.format(baseUrl),
-		'24': '{0}/mako-vod-live-tv/VOD-b3480d2eff3fd31006.htm'.format(baseUrl),
-		'2025': '{0}/mako-vod-live-tv/VOD-7469dcd71dcb761006.htm'.format(baseUrl)
-	}
+	channels = common.GetChannelsLinks("tv", module)
 	if url == '12b':
 		Play(channels[url], name, iconimage, quality, swichCdn=True)
 	else:

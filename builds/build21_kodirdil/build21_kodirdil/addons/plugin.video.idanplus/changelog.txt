@@ -1,3 +1,22 @@
+v3.7.7 -  12/03/2025
+- Fix Keshet-VOD episode lists.
+
+v3.7.6 -  26/02/2025
+- Added an option to refresh remote channels links immediately.
+
+v3.7.5 -  25/02/2025
+- Fix 102Eilat radio station.
+- Added remote channels links.
+
+v3.7.4 -  23/02/2025
+- Fix i24News Hebrew channel.
+
+v3.7.3 -  23/02/2025
+- Added i24News channels in English, French and Arabic.
+
+v3.7.2 -  19/02/2025
+- Add or remove autoplay channel on Kodi start from context menu.
+
 v3.7.1 -  13/02/2025
 - Fix knesset 99 channel.
 - Add knesset 99 cc channel.
