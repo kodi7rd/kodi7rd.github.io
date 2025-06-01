@@ -974,4 +974,10 @@ msgctxt "#700044"
 msgid "Update Kodi Version"
 msgstr "עדכון גרסת קודי"
 
+# Kodi CoreELEC Reboot In Power Menu - DialogButtonMenu.xml
+
+msgctxt "#700045"
+msgid "CoreELEC - Reboot to Android TV"
+msgstr "CoreELEC - ריבוט לאנדרואיד טיוי"
+
 ################################################################
