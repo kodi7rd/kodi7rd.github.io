@@ -11675,6 +11675,21 @@ msgctxt "#21347"
 msgid "MIME type: \"{0:s}\""
 msgstr ""
 
+#. Used to show a special in episode list, eg. 'Special 33 - The Interview'
+msgctxt "#21348"
+msgid "Special {0:d} - {1:s}"
+msgstr ""
+
+#. Used to show an episode in episode list, eg. 'Episode 4 - The Return'
+msgctxt "#21349"
+msgid "Episode {0:d} - {1:s}"
+msgstr ""
+
+#. Used to show a special in episode list
+msgctxt "#21350"
+msgid "Special"
+msgstr ""
+
 msgctxt "#21358"
 msgid "Enable UPnP support"
 msgstr "אפשר תמיכה ב-UPnP"
@@ -13599,6 +13614,21 @@ msgstr "דילוג אוטומטי דלוק"
 msgctxt "#25014"
 msgid "Manual"
 msgstr "ידני"
+
+#. Used to ask user if they want to use a playlist already assigned to an episode
+msgctxt "#25015"
+msgid "Selected playlist is already in use. Associate with this episode instead?"
+msgstr ""
+
+#. Inform user that no valid movie playlist has been found on disc
+msgctxt "#25016"
+msgid "No valid movie playlist has been found."
+msgstr ""
+
+#. Inform user that no valid episode playlist has been found on disc
+msgctxt "#25017"
+msgid "No valid episode playlist has been found."
+msgstr ""
 
 msgctxt "#29801"
 msgid "QWERTY keyboard"
