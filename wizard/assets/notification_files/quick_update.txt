@@ -1,9 +1,3 @@
-59
+60
 |||
-הוספת כפתור ריבוט לAndroid TV עבור משתמשי CoreELEC.
-הכפתור נוסף בשני הסקינים Estuary + FENtastic.
-@Joel Str
-@אורן
-@Dark Angel
-
-אתם עדיין פה ולא בסטרמיו אפרופו? הבילד הזה מת חחחחחחחחח
+תיקון מקור MEDIAFUSION_CACHED
