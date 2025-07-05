@@ -87,7 +87,7 @@ class source:
         for file in files:
             try:
                 ############KODI-RD-IL###################
-                hash = requests.utils.urlparse(file['url']).path.split('/')[3]
+                hash = requests.utils.urlparse(file['url']).path.split('/')[4]
                 ############KODI-RD-IL###################
                 file_title = file['title'].split('\n')
                 file_info = [x for x in file_title if _INFO.match(x)][0]
@@ -157,7 +157,7 @@ class source:
             try:
                 ############KODI-RD-IL###################
                 # RD+ / AD+
-                hash = requests.utils.urlparse(file['url']).path.split('/')[3]
+                hash = requests.utils.urlparse(file['url']).path.split('/')[4]
                 ############KODI-RD-IL###################
                 file_title = file['title'].split('\n')
                 file_info = [x for x in file_title if _INFO.match(x)][0]
