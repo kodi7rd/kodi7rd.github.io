@@ -156,7 +156,7 @@ def trakt_refresh_token():
 		manage_settings_reset()
 		set_setting('trakt.token', response["access_token"])
 		set_setting('trakt.refresh', response["refresh_token"])
-		set_setting('trakt.expires', str(time.time() + 7776000))
+		set_setting('trakt.expires', str(time.time() + 86400)) # KODI-RD-IL - Changed from 7776000 (3 months)
 		manage_settings_reset(True)
 
 def trakt_authenticate(dummy=''):

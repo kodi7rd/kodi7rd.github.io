@@ -1,5 +1,8 @@
 [B]Please utilize Twilight Tips (Tools->Tips for Twilight Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
 
+[COLOR dodgerblue][B]Version 3.2.87[/B][/COLOR]
+- Adjusted Trakt token refresh to 24 hours.
+
 [COLOR dodgerblue][B]Version 3.2.86[/B][/COLOR]
 - MoviesOnlineDates - Remove YouTube trailers regex fix.
 
