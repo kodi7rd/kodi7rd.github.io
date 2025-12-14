@@ -1,0 +1,11 @@
+2.1.3
+
+- Kodi 20+21 Hebrew fix
+
+1.0.1
+
+- cleanup, take over some listitem work from AutoCompletion lib
+
+1.0.0
+
+- Initial release

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>9000</defaultcontrol>
+	<include>Animation_DialogPopupOpenClose</include>
+	<controls>
+		<control type="group">
+			<centerleft>50%</centerleft>
+			<width>600</width>
+			<centertop>50%</centertop>
+			<height>700</height>
+			<include content="DialogBackgroundCommons">
+				<param name="width" value="600" />
+				<param name="height" value="80" />
+				<param name="header_label" value="$LOCALIZE[31072]" />
+				<param name="header_id" value="2" />
+			</include>
+			<control type="panel" id="9000">
+				<include>ButtonMenuList</include>
+				<content>
+					<!-- KODI-RD-IL CHANGES -->
+					<item>
+						<!-- CoreELEC only - Reboot to Android TV -->
+						<label>[B][COLOR blue]$LOCALIZE[700045][/COLOR][/B]</label>
+						<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
+						<onclick>Reset()</onclick>
+						<visible>System.PathExist("/usr/sbin/rebootfromnand")</visible>
+					</item>
+					<item>
+						<label>[B][COLOR blue]$LOCALIZE[13012][/COLOR][/B]</label>
+						<!-- Original - <onclick>Quit()</onclick> -->
+						<!-- Force Close Kodi Script:  -->
+						<onclick>RunScript(&quot;plugin.close.kodi&quot;)</onclick>
+						<visible>System.ShowExitButton</visible>
+					</item>
+					<item>
+						<!-- Open POV Settings  -->
+						<label>[B][COLOR blue]$LOCALIZE[700031][/COLOR][/B]</label>
+						<onclick>Addon.OpenSettings(plugin.video.pov)</onclick>
+					</item>
+					<item>
+						<!-- Open DarkSubs Settings  -->
+						<label>[B][COLOR blue]$LOCALIZE[700032][/COLOR][/B]</label>
+						<onclick>Addon.OpenSettings(service.subtitles.All_Subs)</onclick>
+					</item>
+					<item>
+						<!-- Clear POV Cache  -->
+						<label>[B][COLOR blue]$LOCALIZE[700033][/COLOR][/B]</label>
+						<onclick>PlayMedia("plugin://plugin.video.pov/?mode=clear_all_cache&amp;name=%5BB%5DCLEAR+ALL+CACHE%5B%2FB%5D&amp;isFolder=false&amp;iconImage=special%3A%2F%2Fhome%2Faddons%2Fplugin.video.pov%2Fresources%2Fskins%2FDefault%2Fmedia%2Ftools.png")</onclick>
+					</item>
+					<item>
+						<!-- Clear DarkSubs Cache  -->
+						<label>[B][COLOR blue]$LOCALIZE[700034][/COLOR][/B]</label>
+						<onclick>RunScript(special://home/addons/service.subtitles.All_Subs/resources/modules/clean_cache_functions.py, clean_all_cache)</onclick>
+					</item>
+					<item>
+						<!-- KODI ANDORID/WINDOWS Update Check -->
+						<label>[B][COLOR blue]$LOCALIZE[700044][/COLOR][/B]</label>
+						<onclick>Dialog.Close(all)</onclick>
+						<onclick>PlayMedia(&quot;plugin://plugin.program.kodirealdebridisraelwizard/?mode=install&amp;action=kodi_version_update_check&amp;kodi_version_update_check_manual=true&quot;)</onclick>
+						<!-- Android/Windows only -->
+						<visible>System.Platform.Android | System.Platform.Windows</visible>
+					</item>
+					<!-- ##################### -->
+				</content>
+			</control>
+		</control>
+	</controls>
+</window>

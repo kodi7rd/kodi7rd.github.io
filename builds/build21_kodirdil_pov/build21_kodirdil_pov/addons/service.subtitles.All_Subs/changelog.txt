@@ -1,0 +1,326 @@
+﻿[COLOR yellow][B]v4.7.5[/B][/COLOR]
+* Fix Google Translate broken SRT timestamp format.
+[COLOR yellow][B]v4.7.4[/B][/COLOR]
+* Change Subscene site domain from subscene.cam to sub-scene.com.
+[COLOR yellow][B]v4.7.3[/B][/COLOR]
+* Telegram source - mute and archive AllSubs channel at join.
+[COLOR yellow][B]v4.7.2[/B][/COLOR]
+* Add Telegram subtitles source.
+* Change SubSource color to mediumslateblue.
+[COLOR yellow][B]v4.7.1[/B][/COLOR]
+* [COLOR orange]OpenSubtitles[/COLOR] - Include machine translated subtitles from API.
+* Small changes/fixes.
+[COLOR yellow][B]v4.7.0[/B][/COLOR]
+* Subtitles cache bug fix (Move video_data.pop code to a generic function).
+[COLOR yellow][B]v4.6.9[/B][/COLOR]
+* Add "חפש כתוביות שוב בכל השפות במידה ואין תוצאות" setting. This will re-search for subtitles with all_lang=true (כל השפות) if no subs found on first search. the setting will take effect only if all_lang (חפש בכל השפות) is configured as OFF.
+[COLOR yellow][B]v4.6.8[/B][/COLOR]
+* Create dedicated generic function for extracting season/episode numbers from subtitle file name.
+* Apply "extract_season_episode_numbers" function on Subscene + SubSource websites (more matches).
+[COLOR yellow][B]v4.6.7[/B][/COLOR]
+* auto remove HI (Hearing Impaired) subtitle tags: Rewrite code & bug fixes.
+[COLOR yellow][B]v4.6.6[/B][/COLOR]
+* Remove "pause" setting (השהה וידאו בזמן חיפוש כתוביות).
+[COLOR yellow][B]v4.6.5[/B][/COLOR]
+* auto remove HI (Hearing Impaired) subtitle tags: Limit to run on actual HI subtitles only.
+[COLOR yellow][B]v4.6.4[/B][/COLOR]
+* Add auto remove HI (Hearing Impaired) subtitle tags setting.
+[COLOR yellow][B]v4.6.3[/B][/COLOR]
+* Change Subscene site domain from Subscene.best to Subscene.cam + Fix download.
+[COLOR yellow][B]v4.6.2[/B][/COLOR]
+* Deprecate SubDL source, will be brought back in the future if will be relevant.
+[COLOR yellow][B]v4.6.1[/B][/COLOR]
+* Add Bing Web machine translate source (https://www.bing.com/Translator).
+* Hebrew punctuation fix - Remove <i> tags from text.
+[COLOR yellow][B]v4.6.0[/B][/COLOR]
+* Hebrew punctuation fix - Improve performance and accuracy, handle all hyphen edge cases (engine.py).
+[COLOR yellow][B]v4.5.9[/B][/COLOR]
+* Add [COLOR aquamarine]Subscene[/COLOR] website source (https://subscene.best).
+* OpenSubtitles - Fix languages codes incorrect usage from addon settings.
+[COLOR yellow][B]v4.5.8[/B][/COLOR]
+* Switch to cleaner addon icon using Leonardo.AI image generator (https://leonardo.ai).
+* get_playing_filename - Remove file extension removal (general.py)
+* Refactor sort_subtitles function clean string and add remove file extension (engine.py).
+* Rewrite Hebrew punctuation fix and handle edge cases (engine.py).
+[COLOR yellow][B]v4.5.7[/B][/COLOR]
+* Rename "time_s" setting name to "max_search_time".
+* use "max_search_time" setting value for DEFAULT_REQUEST_TIMEOUT (general.py).
+[COLOR yellow][B]v4.5.6[/B][/COLOR]
+* BUG FIX: sort_subtitles function - quality comparison (engine.py).
+[COLOR yellow][B]v4.5.5[/B][/COLOR]
+* [COLOR orange]OpenSubtitles[/COLOR] - Fix total_pages definition according to API change.
+[COLOR yellow][B]v4.5.4[/B][/COLOR]
+* Refactor [COLOR lightblue]BSPlayer[/COLOR] Code.
+* [COLOR springgreen]Ktuvit[/COLOR]: Improve subtitle_row_regex to handle "כתובית מתוקנת" flag in subtitle name (burekas fix).
+* Add "_remove_diacritics" function to remove diacritics - Handles titles such as "Shôgun", "Narcos: México" from IMDB/TMDB - To match title in Ktuvit (general.py)
+[COLOR yellow][B]v4.5.3[/B][/COLOR]
+* Add "set_media_type" function and support InfoTagVideo API / ListItem.DBTYPE param. Example supporting addons: Telemedia, Mando, Fen, Fen Light, Cobra, Kitana, Twilight, Otaku (general.py).
+* BUG FIX: Remove color tags for Telemedia ListItem titles. (general.py)
+* Rename "current_list_item" to "playing_addon" + Add "get_playing_addon" function (autosub.py + general.py)
+[COLOR yellow][B]v4.5.2[/B][/COLOR]
+* Rewrite and refactor sort_subtitles function (engine.py).
+* Add getVideoInfoTag example for future usage (general.py).
+[COLOR yellow][B]v4.5.1[/B][/COLOR]
+* Add [COLOR deepskyblue]SubSource[/COLOR] website source (https://subsource.net).
+[COLOR yellow][B]v4.5.0[/B][/COLOR]
+* [COLOR chocolate]YIFY Subtitles[/COLOR] - Small bug fix + site_id rename.
+[COLOR yellow][B]v4.4.9[/B][/COLOR]
+* Add [COLOR chocolate]YIFY Subtitles[/COLOR] website source (https://yifysubtitles.ch).
+[COLOR yellow][B]v4.4.8[/B][/COLOR]
+* [COLOR orange]OpenSubtitles[/COLOR] - Optimize multiple subtitles pages API requests performance.
+* [COLOR orange]OpenSubtitles[/COLOR] - Get accurate subtitle release as subtitle name.
+[COLOR yellow][B]v4.4.7[/B][/COLOR]
+* SubDL - Add hearing impaired flag from API.
+* Ktuvit - add sub name characters_to_remove, comment out manual EngName/HebName results matching.
+[COLOR yellow][B]v4.4.6[/B][/COLOR]
+* Ktuvit - add constant scraping URLs.
+[COLOR yellow][B]v4.4.5[/B][/COLOR]
+* Limit remove_release_year_from_title_if_exists function for playing local media only.
+* Wizdom code refactor.
+* Ktuvit total code rewrite and refactor.
+* Rename "item" to "video_data"
+[COLOR yellow][B]v4.4.4[/B][/COLOR]
+* Fix hidden labels in addon settings.
+* Remove bing_translate_keys_method setting.
+* OpenSubtitles / SubDL random API Key choice refactor.
+[COLOR yellow][B]v4.4.3[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Movies - Add subtitles re-search by title if no results found through OriginalTitle search.
+[COLOR yellow][B]v4.4.2[/B][/COLOR]
+* autosub.py onNotification - Run get_video_data function only after isPlayingAddonExcluded check.
+* autosub.py onNotification - Remove mpaa heb check (covered in isPlayingAddonExcluded).
+[COLOR yellow][B]v4.4.1[/B][/COLOR]
+* Remove Subscene website :(
+[COLOR yellow][B]v4.4.0[/B][/COLOR]
+* Small SubDL change.
+[COLOR yellow][B]v4.3.9[/B][/COLOR]
+* Remove redundant call to get_video_data function and reduce API calls to TMDb (general.py | save_file_name/get_db_data).
+[COLOR yellow][B]v4.3.8[/B][/COLOR]
+* Add subtitles support for local media / Kodi as an external player.
+* Manual IMDb ID search - get year if not exists.
+* Bug fixes.
+[COLOR yellow][B]v4.3.7[/B][/COLOR]
+* autosub.py - "add_embbded_sub_if_exists" usage refactor.
+[COLOR yellow][B]v4.3.6[/B][/COLOR]
+* Rewrite Hebrew embedded subtitles code + add support for English embedded subtitles.
+* Remove IMDb ID from DarkSub's sub_window top label.
+* Small OpenSubtitles settings change bug fix.
+[COLOR yellow][B]v4.3.5[/B][/COLOR]
+* autosub.py - Remove "manual_fix_sub_punctuation" button.
+[COLOR yellow][B]v4.3.4[/B][/COLOR]
+* engine.py - Refactor machine translate code.
+[COLOR yellow][B]v4.3.3[/B][/COLOR]
+* engine.py + general.py - Small code refactor.
+[COLOR yellow][B]v4.3.2[/B][/COLOR]
+* Remove redundant code [get_db_data(f_result), add_demo_embbded].
+[COLOR yellow][B]v4.3.1[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Add subtitles re-search by TVShowTitle if no results found through OriginalTitle search.
+* [COLOR springgreen]Ktuvit[/COLOR]: Code refactor.
+[COLOR yellow][B]v4.3.0[/B][/COLOR]
+* Change context menu label to "חפש כתוביות (DarkSubs)"
+[COLOR yellow][B]v4.2.9[/B][/COLOR]
+* Set default timeout for requests (10s).
+[COLOR yellow][B]v4.2.8[/B][/COLOR]
+* [COLOR springgreen]Ktuvit[/COLOR]: Add website's title mismatch dictionary mapping.
+* BUG FIX: "man_search_subs" setting reset (search/download actions ran twice).
+[COLOR yellow][B]v4.2.7[/B][/COLOR]
+* Subscene langauge filter bug fixes and code refactor.
+* video_data - Remove release year from title if exists.
+[COLOR yellow][B]v4.2.6[/B][/COLOR]
+* Complete rewrite of subscene code: Bug fixes, speed improvement, and proper langauge filter (whitelist instead of blacklist)
+* Improve manual IMDb ID search and search by title accuracy for all websites.
+[COLOR yellow][B]v4.2.5[/B][/COLOR]
+* DarkSubs's sub window labels bug fix.
+[COLOR yellow][B]v4.2.4[/B][/COLOR]
+* Rewrite get_video_data function to improve metadata identification.
+* Implement manual IMDb ID search when it is not provided by video addon (using media title/year and TMDB API).
+* Add IMDb ID to sub_window label (if exists).
+* Ktuvit/Wizdom/OpenSubtitles code refactor and bug fixes.
+* Remove redundant code (format_website_source_name).
+[COLOR yellow][B]v4.2.0[/B][/COLOR]
+* Add SubDL subtitles website (https://subdl.com)
+* Add user setting to add your own SubDL API key (Optional).
+[COLOR yellow][B]v4.1.9[/B][/COLOR]
+* Small cached subs bug fix.
+[COLOR yellow][B]v4.1.8[/B][/COLOR]
+* Extract sub function: add .ass extension.
+[COLOR yellow][B]v4.1.7[/B][/COLOR]
+* Colorized website names in addon settings.
+[COLOR yellow][B]v4.1.6[/B][/COLOR]
+* Deleted unnecessary code files.
+* DarkSubs's sub window bug fix (cached subs).
+* Rearranged some settings labels.
+* Small code refactor.
+[COLOR yellow][B]v4.1.5[/B][/COLOR]
+* Change site_id parameter in subtitle name to full website name.
+* Change selected subtitle caption color to [COLOR FFFF00FE][B][I]כתובית נוכחית[/I][/B][/COLOR].
+* Change default sub window width setting.
+[COLOR yellow][B]v4.1.4[/B][/COLOR]
+* Slightly improve subtitles to source percentage matching accuracy.
+* Ktuvit TV Shows search bug fix.
+[COLOR yellow][B]v4.1.3[/B][/COLOR]
+* Bring back 4.1.1 "Massive speed improvement of Google machine translate".
+* BUG FIX: Subscene Cloudflare bypass.
+* BUG FIX: Subscene machine translate doesn't appear.
+[COLOR yellow][B]v4.1.2[/B][/COLOR]
+* BUG FIX: Subscene Google machine translate - [B]Temporary[/B] revert "Massive speed improvement of Google machine translate" (4.1.1)
+[COLOR yellow][B]v4.1.1[/B][/COLOR]
+* Massive speed improvement of Google machine translate.
+* Add setting to automatically fix Hebrew subtitles punctuation: (for Machine Translate / External Hebrew subtitles only)
+[B]הגדרות - הגדרות כלליות - תקן סימני פיסוק אוטומטית[/B]
+* Small Ktuvit search bug fix.
+[COLOR yellow][B]v4.0.9[/B][/COLOR]
+* BUG FIX: Handle correct Hebrew punctuation fixing when subtitle contains html <i> tags.
+[COLOR yellow][B]v4.0.8[/B][/COLOR]
+* Add "תיקון סימני פיסוק עבור תרגום נוכחי" button in Kodi's subtitles window.
+[COLOR yellow][B]v4.0.7[/B][/COLOR]
+* Reorganize DarkSubs buttons in Kodi's subtitles window.
+* Change subtitles websites colors.
+[COLOR yellow][B]v4.0.6[/B][/COLOR]
+* Rewrite OpenSubtitles code to use new OpenSubtitles.com API.
+  https://opensubtitles.stoplight.io/
+* Add user setting to add your own OpenSubtitles API key (Optional).
+[COLOR yellow][B]v4.0.4[/B][/COLOR]
+* Fix Yandex machine translate progress text.
+* Remove Bing machine translate.
+* Other small fixes.
+[COLOR yellow][B]v4.0.0[/B][/COLOR]
+* BUG FIX: Limit "write_heb_embedded_taglines_check" function to Twilight addon.
+* Remove empty log line (autosub.py)
+[COLOR yellow][B]v3.9.9[/B][/COLOR]
+* BUG FIX: Update "requests_toolbelt" dependency version (urllib3 2.1.0 compatibility).
+[COLOR yellow][B]v3.9.8[/B][/COLOR]
+* Add DarkSubs icon in Kodi subtitle window (logo.png)
+[COLOR yellow][B]v3.9.7[/B][/COLOR]
+* Change OpenSubtitles label from [Op] to [Ops].
+[COLOR yellow][B]v3.9.6[/B][/COLOR]
+* Change settings default value.
+[COLOR yellow][B]v3.9.5[/B][/COLOR]
+* Added notification for fault sub event.
+[COLOR yellow][B]v3.9.4[/B][/COLOR]
+* OpenSubtitles XMLRPC download bug fix.
+Might break at end of 2023, migration to new REST API needed:
+https://opensubtitles.stoplight.io/docs/opensubtitles-api/e3750fd63a100-getting-started
+[COLOR yellow][B]v3.9.3[/B][/COLOR]
+* Small [COLOR limegreen][KTUVIT][/COLOR] website code fix.
+[COLOR yellow][B]v3.9.2[/B][/COLOR]
+* Add obf "write_heb_embedded_taglines_check" function.
+[COLOR yellow][B]v3.9.0[/B][/COLOR]
+* Remove OpenSubtitles account settings.
+[COLOR yellow][B]v3.8.9[/B][/COLOR]
+* Rename "כתובית מובנית" to "תרגום מובנה"
+[COLOR yellow][B]v3.8.8[/B][/COLOR]
+* Smaller [COLOR limegreen][KTUVIT][/COLOR] website code refactor =)
+[COLOR yellow][B]v3.8.7[/B][/COLOR]
+* Small [COLOR limegreen][KTUVIT][/COLOR] website code refactor
+[COLOR yellow][B]v3.8.6[/B][/COLOR]
+* BUG FIX - Ktuvit website subtitles search
+[COLOR yellow][B]v3.8.5[/B][/COLOR]
+* Always trigger autosub, even when replaying the same content.
+[COLOR yellow][B]v3.8.4[/B][/COLOR]
+* Sort subtitles by Hebrew, English, and then other languages (sorted by langauges internally).
+[COLOR yellow][B]v3.8.3[/B][/COLOR]
+* Small code refactor. (write_heb_embedded_taglines)
+[COLOR yellow][B]v3.8.2[/B][/COLOR]
+* Add setting to enable/disable Russian langauge in subtitle search:
+[B]הגדרות - שפות - רוסית[/B]
+[COLOR yellow][B]v3.8.1[/B][/COLOR]
+* Add setting to enable/disable Hebrew langauge in subtitle search:
+[B]הגדרות - שפות - עברית[/B]
+[COLOR yellow][B]v3.8.0[/B][/COLOR]
+* Small autosub-place_sub function code fix (for loop).
+[COLOR yellow][B]v3.7.8[/B][/COLOR]
+* Fix small error when searching for subtitles from context menu.
+[COLOR yellow][B]v3.7.7[/B][/COLOR]
+* Small code refactor. (determine_placeHebrewEmbeddedSub function)
+[COLOR yellow][B]v3.7.6[/B][/COLOR]
+* Fix bug when local Hebrew embedded showing in subtitles list when it doesn't exist.
+[COLOR yellow][B]v3.7.5[/B][/COLOR]
+* Fix Ktuvit subtitle download bug.
+[COLOR yellow][B]v3.7.4[/B][/COLOR]
+* Added media_type parameter (movie/tv) to video data array.
+[COLOR yellow][B]v3.7.3[/B][/COLOR]
+* Changed [COLOR orange][LOC] כתובית מובנית 101%[/COLOR] subtitle color to [COLOR cyan]cyan[/COLOR].
+* Removed "ExcludeTime" setting (don't download for videos shorter than...)
+* Added setting to improve Twilight Hebrew embedded subtitles repo.
+* Added more Ktuvit debug logs to identify fault response bug.
+[COLOR yellow][B]v3.7.0[/B][/COLOR]
+* Add setting to enable/disable autosub notification messages:
+[B]הגדרות - הגדרות כלליות - הצג הודעות מידע בעת חיפוש כתוביות[/B]
+* Add setting to enable/disable automatic download of embedded Hebrew subtitles:
+[B]הגדרות - הגדרות כלליות - אפשר הורדה אוטומטית של כתובית מובנית בעברית (אם קיימת)[/B]
+* When the setting is [B][COLOR limegreen]ON[/COLOR][/B] - Will always choose embedded Hebrew subtitles when exists ([B][COLOR yellow]UNLESS[/COLOR][/B] you have different subtitles selected in cache).
+* When the setting is [B][COLOR red]OFF[/COLOR][/B] - Will prioritize external subtitles over embedded Hebrew subtitles ([B][COLOR yellow]UNLESS[/COLOR][/B] no Hebrew subtitles found / you have different subtitles selected in cache).
+* Improve subtitles cache accuracy per specific video source played.
+* Slightly improve subtitles sorting by sync percentage.
+[COLOR yellow][B]v3.5.1[/B][/COLOR]
+* Add setting to auto clean cache on Kodi startup:
+הגדרות - הגדרות קאש - נקה קאש אוטומטית בעת הפעלת קודי
+[COLOR yellow][B]v3.5.0[/B][/COLOR]
+* Add clean cache button in addon settings:
+הגדרות - הגדרות קאש - לחץ כדי לנקות קאש כתוביות
+[COLOR yellow][B]v3.4.9[/B][/COLOR]
+* Fix machine translate progress not showing in DarkSubs sub window.
+[COLOR yellow][B]v3.4.8[/B][/COLOR]
+* Rearrange settings window order + labels.
+[COLOR yellow][B]v3.4.6[/B][/COLOR]
+* Subtitles sorting now sorts by sync percentage then by site_id (website source name) by a specific order: [Kt], [Wiz], [Op], [SS], [Bs].
+[COLOR yellow][B]v3.4.5[/B][/COLOR]
+* Add setting to Bing machine translate - search available key by rising/random order.
+[COLOR yellow][B]v3.4.4[/B][/COLOR]
+* Improve Ktuvit website subtitle search code.
+* Adjust general.show_msg labels appearance.
+[COLOR yellow][B]v3.4.1[/B][/COLOR]
+* Improve embedded Hebrew subtitles code.
+* Add user notification for chosen subtitle. Example: Hebrew | ktuvit | 57% | John.Wick.1080p.RARBG.srt
+[COLOR yellow][B]v3.3.8[/B][/COLOR]
+* Auto select embedded Hebrew subtitles if exists.
+* Also supports choosing embedded subtitles from DarkSubs sub window.
+[COLOR yellow][B]v3.2.6[/B][/COLOR]
+* Adjust sub_window labels.
+* Small fixes.
+[COLOR yellow][B]v3.2.4[/B][/COLOR]
+* Bing machine translate now supports multiple API keys for high translations usage.
+[COLOR yellow][B]v3.2.3[/B][/COLOR]
+* Fix Bing machine translate bug for long subtitles.
+[COLOR yellow][B]v3.2.2[/B][/COLOR]
+* Add Bing machine translate support. (initial release)
+[COLOR yellow][B]v3.2.1[/B][/COLOR]
+* Fix Yandex machine translate special character bug.
+[COLOR yellow][B]v3.1.8[/B][/COLOR]
+* Fix Yandex machine translate duplicate lines bug.
+[COLOR yellow][B]v3.1.7[/B][/COLOR]
+* Improve machine translate from Yandex website translation speed.
+[COLOR yellow][B]v3.1.6[/B][/COLOR]
+* Add support for English subtitles from Subscene website.
+* Fix machine translate from Yandex website.
+[COLOR yellow][B]v3.1.5[/B][/COLOR]
+* Fix download subtitle from Wizdom error
+[COLOR yellow][B]v3.1.4[/B][/COLOR]
+* Improve subtitles matching by sync percentage
+* Improve Subtitles Window Look (Add playing file name + total subtitles found count)
+* Fix autosub.py movieFullPath = xbmc.Player().getPlayingFile() Error (wrap in try:except)
+[COLOR yellow][B]v3.1.3[/B][/COLOR]
+* Disable autosub on PVR (IPTV Client)
+[COLOR yellow][B]v3.1.2[/B][/COLOR]
+* Fix Subtitles auto link matching results sorting for FEN
+* Fix BSPlayer subtitles download errors.
+[COLOR yellow][B]v3.0.9[/B][/COLOR]
+* upgrade BSPlayer source to api v3.
+* improve addon speed.
+* when using mando (from version 6.2.7), the subtitle search will start when you click the movie.
+[COLOR yellow][B]v3.0.8[/B][/COLOR]
+* fix autosub work for Idan Plus.
+[COLOR yellow][B]v3.0.6[/B][/COLOR]
+* fix subtitle window not downloading subs.
+* if the subtitle download is faulty the autodownload will skip to the next one.
+* add support to FEN file name.
+* better subtitle cache- will save the download sub for future use.
+* download fault will tell the reason.
+[COLOR yellow][B]v3.0.5[/B][/COLOR]
+* remove xml.elementree for better stability
+* fix error on diable/update addon.
+[COLOR yellow][B]v3.0.4[/B][/COLOR]
+* fix special characters location in translated sub.
+* fix translated sub cache.
+[COLOR yellow][B]v3.0.3[/B][/COLOR]
+* Fix Subscene source for tv shows

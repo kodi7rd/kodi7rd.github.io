@@ -1,0 +1,33 @@
+Note: If Anyone has not gotten a migration dialog when getting this major update, Please go to your maintenance catagory of the addon settings and run the migration script.
+Thank you
+
+
+Welcome to the New Era of Otaku!
+
+Hi everyone,
+
+We’re thrilled to announce a major milestone: Otaku has officially migrated to its new version!
+This is the biggest update in Otaku’s history, bringing over everything from Otaku Testing and making it the new standard.
+
+What’s New?
+- Expanded content: Movies, TV Shows, Shorts, Specials, OVAs, ONAs, and Music Videos
+- Fully working Debrid & Cloud services (thanks to @joezito129 & @adamosborne83)
+- Easy Debrid support
+- Enhanced filtering & search for more accurate scraping
+- MyAnimeList menus added alongside AniList
+- New sorting system for finer control of sources
+- Faster, smoother playback (subtitles, audio, intro/outro skip)
+- Watchlist completion: finished anime auto-added to your completed list
+- Seamless watchlist migration—no reconfiguration needed
+- Uncached source support for Debrid services
+- Kodi 20+ compatibility (Kodi 19 is no longer supported)
+
+Why the Change?
+After surveying our users, it became clear that almost everyone had already moved on from Python 2/Kodi 18. With this update, we’re fully embracing Kodi 20+, ensuring Otaku is future-proof, faster, and more reliable.
+
+Thanks & Support
+We want to thank the entire community for helping us get here, especially our contributors. If you encounter issues or want to share feedback, visit our wiki on Github
+
+This migration marks a new era for Otaku, and we can’t wait to hear what you think. Happy watching!
+
+— Team Otaku
